@@ -271,5 +271,16 @@ to a live course site read by students:
 - Commit freely. **Do not `git push` without the instructor's go-ahead**,
   unless the change is verified and clearly safe.
 - Never push a slide deck you have not rendered and opened.
-- `bd dolt push` is only meaningful once a beads remote is configured; it
-  is not, so skip it.
+- **Ignore `bd dolt push`.** No Dolt remote is configured. The underlying
+  Dolt database in `.beads/embeddeddolt/` is git-ignored and lives only on
+  this machine.
+- **The backlog survives in git only through `.beads/issues.jsonl`.**
+  Whenever you create, edit or close issues, run:
+
+  ```bash
+  bd export -o .beads/issues.jsonl
+  ```
+
+  and commit the result alongside your other changes. `bd import` reads
+  that file by default, so it is what restores the backlog in a fresh
+  clone. Skipping this silently loses the work.
