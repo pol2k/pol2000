@@ -1,115 +1,906 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plan de cours - POL2000</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plan de cours — POL-2000 — Automne 2026</title>
+    <meta name="description" content="Plan de cours POL-2000 Méthodologie quantitative, Université Laval, automne 2026." />
     <style>
+      :root {
+        --rouge: #c8102e;
+        --rouge-fonce: #a10d26;
+        --jaune: #f2c94c;
+        --texte: #24202a;
+        --doux: #5d5866;
+        --trait: #e3e0e6;
+        --fond: #ffffff;
+        --fond-doux: #faf8f7;
+      }
+      * { box-sizing: border-box; }
       body {
         margin: 0;
-        background: #fffdf7;
-        color: #4a1824;
+        background: var(--fond-doux);
+        color: var(--texte);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        font-size: 17px;
+        line-height: 1.65;
       }
       .container {
-        max-width: 1000px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-        font-family:
-          system-ui,
-          -apple-system,
-          sans-serif;
-      }
-      .pdf-container {
-        width: 100%;
-        height: 800px;
-        margin: 1rem 0;
-        border: 1px solid #f0dcc0;
-        border-radius: 4px;
-        background: #fff;
-      }
-      .button-container {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-      }
-      .download-button,
-      .back-button {
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        background-color: #c8102e;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-        margin: 1rem 0;
-        transition: background-color 0.2s ease;
-      }
-      .download-button:hover,
-      .back-button:hover {
-        background-color: #a10d26;
-      }
-      .back-button {
-        background-color: #f2c94c;
-        color: #4a1824;
-      }
-      .back-button:hover {
-        background-color: #e4b74a;
-      }
-      .accessibility-info {
-        color: #666;
-        font-size: 0.9rem;
-        margin: 1rem 0;
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 5rem;
       }
       .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+      .back-button {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: var(--jaune);
+        color: #4a1824;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+      }
+      .back-button:hover { background-color: #e4b74a; }
+      .titre-cours {
+        background: var(--fond);
+        border-top: 5px solid var(--rouge);
+        border-radius: 6px;
+        padding: 1.5rem 1.5rem 1.25rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      }
+      .titre-cours h1 { margin: 0 0 .35rem; font-size: 1.7rem; line-height: 1.25; }
+      .titre-cours .session { color: var(--rouge); font-weight: 700; }
+      .titre-cours .etab { color: var(--doux); font-size: .95rem; margin: .35rem 0 0; }
+      .contenu {
+        background: var(--fond);
+        border-radius: 6px;
+        padding: 1.75rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      }
+      .contenu h1 { display: none; }
+      .contenu h2 {
+        font-size: 1.35rem;
+        margin: 2.25rem 0 .75rem;
+        padding-bottom: .4rem;
+        border-bottom: 2px solid var(--rouge);
+      }
+      .contenu h2:first-of-type { margin-top: .25rem; }
+      .contenu h3 { font-size: 1.1rem; margin: 1.75rem 0 .5rem; }
+      .contenu h4 {
+        font-size: 1rem;
+        margin: 1.5rem 0 .5rem;
+        color: var(--rouge-fonce);
+      }
+      .contenu p, .contenu li { margin: .5rem 0; }
+      .contenu a { color: var(--rouge-fonce); }
+      .contenu hr { border: 0; border-top: 1px solid var(--trait); margin: 2rem 0; }
+      .contenu blockquote {
+        margin: 1rem 0;
+        padding: .75rem 1rem;
+        background: #fff9e6;
+        border-left: 4px solid var(--jaune);
+        border-radius: 0 4px 4px 0;
+      }
+      .contenu blockquote p { margin: 0; }
+      .table-wrap { overflow-x: auto; margin: 1rem 0; }
+      .contenu table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: .95rem;
+      }
+      .contenu th, .contenu td {
+        border: 1px solid var(--trait);
+        padding: .5rem .65rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      .contenu th { background: #f4f1f5; font-weight: 700; }
+      .contenu tbody tr:nth-child(even) td { background: #fbfafc; }
+      .avis {
+        margin-top: 2.5rem;
+        padding: 1rem 1.25rem;
+        background: var(--fond);
+        border-left: 4px solid var(--rouge);
+        border-radius: 0 4px 4px 0;
+        color: var(--doux);
+        font-size: .93rem;
+      }
+      .avis strong { color: var(--texte); }
+      @media (max-width: 640px) {
+        body { font-size: 16px; }
+        .contenu { padding: 1.1rem; }
+      }
+      @media print {
+        body { background: #fff; }
+        .back-button, .header { display: none; }
+        .contenu, .titre-cours { box-shadow: none; padding: 0; }
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>Plan de cours</h1>
-        <a href="../index.html" class="back-button">
-          Retour à l'accueil
-        </a>
+        <span></span>
+        <a href="../index.html" class="back-button">Retour à l'accueil</a>
       </div>
-      <!-- PDF Viewer using PDF.js -->
-      <iframe
-        src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://raw.githubusercontent.com/fas1001/syllabus/main/fas1001_syllabus.pdf"
-        class="pdf-container"
-        title="Visualiseur de plan de cours"
-        aria-label="Visualiseur de plan de cours"
-      >
-      </iframe>
-      <!-- Download Option -->
-      <div class="button-container">
-        <a
-          href="https://raw.githubusercontent.com/fas1001/syllabus/main/fas1001_syllabus.pdf"
-          download
-          class="download-button"
-          aria-label="Télécharger le plan de cours en PDF"
-        >
-          Télécharger la version PDF
-        </a>
+
+      <div class="titre-cours">
+        <h1>POL-2000 — Méthodologie quantitative</h1>
+        <p class="session">Plan de cours · Automne 2026</p>
+        <p class="etab">Université Laval · Faculté des sciences sociales · Département de science politique</p>
       </div>
-      <!-- Accessibility Information -->
-      <div class="accessibility-info">
-        <p>
-          Ce plan de cours est disponible en format PDF. Si vous utilisez un
-          lecteur d'écran ou avez besoin d'un format alternatif, vous pouvez :
-        </p>
-        <ul>
-          <li>
-            Télécharger le PDF en utilisant le bouton ci-dessus pour le
-            consulter avec votre lecteur PDF préféré
-          </li>
-          <li>
-            Me contacter à l'adresse mail@mfoisy.com pour obtenir un format
-            alternatif
-          </li>
-        </ul>
+
+      <main class="contenu">
+<h1 id="pol-2000-méthodologie-quantitative">POL-2000 : Méthodologie
+quantitative</h1>
+<p><strong>Plan de cours — Automne 2026</strong></p>
+<p>Université Laval · Faculté des sciences sociales · Département de
+science politique</p>
+<hr />
+<h2 id="identification">Identification</h2>
+<div class="table-wrap"><table>
+<tbody>
+<tr>
+<td><strong>Sigle</strong></td>
+<td>POL-2000 — Méthodologie quantitative</td>
+</tr>
+<tr>
+<td><strong>NRC</strong></td>
+<td><em>à confirmer</em></td>
+</tr>
+<tr>
+<td><strong>Session</strong></td>
+<td>Automne 2026 (31 août au 11 décembre 2026)</td>
+</tr>
+<tr>
+<td><strong>Crédits</strong></td>
+<td>3</td>
+</tr>
+<tr>
+<td><strong>Temps consacré</strong></td>
+<td>3-0-6</td>
+</tr>
+<tr>
+<td><strong>Formule d’enseignement</strong></td>
+<td><strong>En présentiel</strong></td>
+</tr>
+<tr>
+<td><strong>Plage horaire</strong></td>
+<td><strong>Jeudi, 15h30 à 18h20</strong></td>
+</tr>
+<tr>
+<td><strong>Local</strong></td>
+<td><em>à confirmer</em></td>
+</tr>
+<tr>
+<td><strong>Site de cours</strong></td>
+<td>monPortail — <em>lien à confirmer</em></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Préalables :</strong> ((POL 1000 à 4999, crédits exigés : 9
+ET POL 1010) OU SOC 1005 OU SVS 1004 OU ANT 1002 OU LNG 1002 OU ORT 1001
+OU GPL 1001 OU GPL 1009)</p>
+<h2 id="coordonnées-et-disponibilités">Coordonnées et
+disponibilités</h2>
+<p><strong>Laurence-Olivier M. Foisy</strong> — Enseignant Courriel : <a
+href="mailto:mail@mfoisy.com">mail@mfoisy.com</a> Disponibilités : sur
+rendez-vous, ainsi que lors des semaines de rencontres individuelles
+prévues au calendrier. Écrivez-moi pour convenir d’un moment.</p>
+<p><strong>Auxiliaires d’enseignement :</strong> <em>à
+confirmer</em></p>
+<h3 id="soutien-technique">Soutien technique</h3>
+<p>CSTIP — Centre de services en TI et pédagogie Pavillon Charles-De
+Koninck, local 0248 · <a
+href="mailto:aide@cstip.ulaval.ca">aide@cstip.ulaval.ca</a> 418-656-2131
+poste 405222 · 418-656-5222</p>
+<hr />
+<h2 id="description-du-cours">Description du cours</h2>
+<h3 id="introduction">Introduction</h3>
+<p>Ce cours s’adresse aux étudiant.e.s du premier cycle souhaitant se
+familiariser avec un aspect fondamental de la recherche en sciences
+sociales : l’analyse de données portant sur un grand nombre de cas. Vous
+allez apprendre les différentes techniques statistiques qui permettent
+de décrire une variable, de dégager les relations entre deux variables
+ou plus et de tirer des conclusions sur les caractéristiques d’une
+population à partir de l’observation d’un échantillon, sans toutefois
+approfondir les fondements mathématiques de ces techniques. Vous
+apprendrez aussi le langage de programmation R, les limites de l’analyse
+causale et les techniques pour y outrepasser.</p>
+<p><strong>Préalables mathématiques :</strong> aucun cours de
+mathématique ni de statistique en dehors du curriculum obligatoire du
+niveau secondaire n’est requis.</p>
+<h3 id="buts-et-objectifs-généraux">Buts et objectifs généraux</h3>
+<p>Au terme de ce cours, l’étudiant.e sera en mesure de :</p>
+<ul>
+<li>maîtriser les différents concepts et techniques propres à l’analyse
+statistique;</li>
+<li>utiliser les fonctions de base du langage de programmation R et du
+logiciel RStudio pour le traitement de données;</li>
+<li>comprendre et critiquer des articles scientifiques à l’aide de
+techniques statistiques;</li>
+<li>comprendre la logique de l’analyse causale et ses limites;</li>
+<li>concevoir et réaliser son propre projet de recherche.</li>
+</ul>
+<h3 id="contenu-du-cours">Contenu du cours</h3>
+<p>Le cours est divisé en trois thématiques.</p>
+<p><strong>Première partie — Introduction aux concepts statistiques de
+base</strong></p>
+<ul>
+<li>Comment opérationnaliser une question de recherche de façon
+quantitative</li>
+<li>Les types de variables</li>
+<li>Les distributions de fréquences et de pourcentages</li>
+<li>Les mesures de tendance centrale</li>
+<li>Les mesures de variation</li>
+</ul>
+<p><strong>Deuxième partie — Régression linéaire bivariée et
+multiple</strong></p>
+<ul>
+<li>Comprendre la logique derrière la régression linéaire</li>
+<li>Savoir interpréter des coefficients de variables continues, binaires
+et catégoriques</li>
+<li>Savoir interpréter le niveau de signification statistique</li>
+<li>Savoir interpréter les tableaux bivariés</li>
+<li>La régression et la corrélation simple avec R</li>
+<li>Interpréter des coefficients lorsqu’il y a plus d’une variable
+explicative</li>
+<li>L’analyse tabulaire multivariée</li>
+</ul>
+<p><strong>Troisième partie — L’inférence causale</strong></p>
+<ul>
+<li>Comprendre le problème fondamental de l’inférence causale</li>
+<li>Comprendre le concept de variables de contrôle et savoir quelles
+variables ajouter (ou pas) à une régression</li>
+<li>Comprendre la pertinence des graphes orientés acycliques (GOA) pour
+outrepasser ces problèmes</li>
+<li>Comprendre les biais possibles et leurs effets potentiels sur la
+régression linéaire</li>
+</ul>
+<h3 id="approche-pédagogique">Approche pédagogique</h3>
+<p>Chaque séance suit la forme d’un cours magistral <strong>en
+classe</strong>. Les échanges entre les étudiant.e.s et l’enseignant
+sont fortement encouragés : c’est l’avantage principal du format en
+présentiel, et j’ai l’intention de m’en servir. À cette fin, les
+étudiant.e.s sont incité.e.s à faire les lectures indiquées avant chaque
+séance.</p>
+<p>Dans l’objectif de mettre leurs connaissances en application,
+<strong>les étudiant.e.s doivent apporter leur ordinateur portable à
+chaque séance</strong>. Régulièrement, je ferai des démonstrations avec
+R et RStudio que vous pourrez suivre en direct.</p>
+<p>Chaque semaine présente :</p>
+<ul>
+<li>les objectifs spécifiques;</li>
+<li>les lectures préalables;</li>
+<li>les exercices Datacamp;</li>
+<li>les diapositives du cours.</li>
+</ul>
+<p>Un glossaire des notions clefs accompagne le cours.</p>
+<h3 id="livre-obligatoire">Livre obligatoire</h3>
+<p>Arel-Bundock, Vincent. 2021. <em>Analyse causale et méthodes
+quantitatives : Une introduction avec R, Stata et SPSS</em>. Presses de
+l’Université de Montréal.</p>
+<p>Le livre est <strong>disponible gratuitement en format PDF</strong>
+sur le site des Presses de l’Université de Montréal. Une version papier
+peut être achetée chez Coop Zone.</p>
+<h3 id="informations-concernant-les-logiciels-r-et-rstudio">Informations
+concernant les logiciels R et RStudio</h3>
+<p>Les logiciels statistiques obligatoires dans ce cours sont
+<strong>R</strong> et <strong>RStudio</strong>. R est un langage de
+programmation gratuit de plus en plus utilisé par les chercheurs
+quantitatifs en sciences sociales, mais aussi par de nombreux analystes
+de données. RStudio est une plateforme qui vous permet d’utiliser R plus
+facilement. Il est nécessaire de télécharger ces deux logiciels dans le
+cadre de ce cours.</p>
+<p>La séance d’introduction à R a lieu à la <strong>semaine 4 (jeudi 24
+septembre 2026)</strong>. Il est essentiel d’avoir installé les deux
+logiciels avant cette séance.</p>
+<p>Des devoirs sur la plateforme datacamp.com vous seront proposés
+chaque semaine pour développer rapidement vos compétences en R. Je vous
+recommande donc fortement d’installer R et RStudio dès le début de la
+session.</p>
+<blockquote>
+<p><strong>Points bonis.</strong> Les étudiant.e.s qui installent les
+deux logiciels avant le <strong>jeudi 17 septembre 2026 à 23h59</strong>
+et m’envoient une capture d’écran comme preuve avant cette date se
+verront allouer <strong>2 points bonis</strong> à la note finale du
+cours.</p>
+</blockquote>
+<h3 id="datacamp">Datacamp</h3>
+<p>Des devoirs obligatoires vous seront partagés chaque semaine sur
+Datacamp. Pour obtenir votre 10 % complet, vous devrez réaliser tous les
+devoirs proposés pendant la première moitié de la session avant le
+<strong>25 octobre 2026 à 23h59</strong> (premier 5 %). Les devoirs de
+la seconde moitié de la session — en incluant ceux de la première moitié
+— devront être réalisés avant le <strong>18 décembre 2026 à
+23h59</strong> (deuxième 5 %).</p>
+<h3 id="politique-de-retard">Politique de retard</h3>
+<p>Une pénalité de <strong>10 % par jour</strong> de la note obtenue
+sera appliquée à toute évaluation remise en retard sans justification
+valable. Après trois jours de retard, la note sera de 0.</p>
+<hr />
+<h2 id="contenu-et-activités">Contenu et activités</h2>
+<p>Le tableau ci-dessous présente les séances prévues dans le cadre du
+cours. La session d’automne 2026 compte <strong>14 séances</strong> le
+jeudi, aucune ne tombant sur un jour férié.</p>
+<div class="table-wrap"><table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Séance</th>
+<th>Date</th>
+<th>Titre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>jeudi 3 septembre 2026</td>
+<td>Introduction</td>
+</tr>
+<tr>
+<td>2</td>
+<td>jeudi 10 septembre 2026</td>
+<td>Les éléments fondamentaux de la recherche</td>
+</tr>
+<tr>
+<td>3</td>
+<td>jeudi 17 septembre 2026</td>
+<td>Les statistiques descriptives</td>
+</tr>
+<tr>
+<td>4</td>
+<td>jeudi 24 septembre 2026</td>
+<td>Introduction à R</td>
+</tr>
+<tr>
+<td>5</td>
+<td>jeudi 1er octobre 2026</td>
+<td>L’inférence statistique</td>
+</tr>
+<tr>
+<td>6</td>
+<td>jeudi 8 octobre 2026</td>
+<td>Rencontres individuelles — aucun cours magistral</td>
+</tr>
+<tr>
+<td>7</td>
+<td>jeudi 15 octobre 2026</td>
+<td>La régression linéaire simple</td>
+</tr>
+<tr>
+<td>8</td>
+<td>jeudi 22 octobre 2026</td>
+<td><strong>Examen 2</strong> (1re heure) puis atelier de préparation au
+travail de mi-session</td>
+</tr>
+<tr>
+<td>—</td>
+<td>jeudi 29 octobre 2026</td>
+<td><strong>Semaine de lecture — aucun cours</strong> (26 au 30
+octobre)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>jeudi 5 novembre 2026</td>
+<td>La régression linéaire multiple</td>
+</tr>
+<tr>
+<td>10</td>
+<td>jeudi 12 novembre 2026</td>
+<td>La régression linéaire avec R</td>
+</tr>
+<tr>
+<td>11</td>
+<td>jeudi 19 novembre 2026</td>
+<td>Les graphes orientés acycliques (GOA)</td>
+</tr>
+<tr>
+<td>12</td>
+<td>jeudi 26 novembre 2026</td>
+<td>Le problème fondamental de l’inférence causale</td>
+</tr>
+<tr>
+<td>13</td>
+<td>jeudi 3 décembre 2026</td>
+<td>Les biais</td>
+</tr>
+<tr>
+<td>14</td>
+<td>jeudi 10 décembre 2026</td>
+<td>Les expériences et révision — <strong>Examen 3</strong> (1re
+heure)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Remises et échéances</strong></p>
+<ul>
+<li><strong>Examen 1</strong> — ouvre le jeudi 24 septembre 2026, remise
+au plus tard le <strong>dimanche 4 octobre 2026 à 23h59</strong></li>
+<li><strong>Travail de mi-session</strong> et <strong>Datacamp (1re
+partie)</strong> — <strong>dimanche 25 octobre 2026 à
+23h59</strong></li>
+<li><strong>Travail final</strong> et <strong>Datacamp (1re + 2e
+partie)</strong> — <strong>vendredi 18 décembre 2026 à
+23h59</strong></li>
+</ul>
+<p><strong>Dates institutionnelles à retenir</strong></p>
+<ul>
+<li>Fin de la période de modification du choix de cours : mardi 8
+septembre 2026</li>
+<li>Abandon avec remboursement : lundi 14 septembre 2026</li>
+<li>Abandon sans mention d’échec et sans remboursement : lundi 9
+novembre 2026</li>
+<li>Semaine de lecture : 26 au 30 octobre 2026</li>
+<li>Fin des cours : vendredi 11 décembre 2026</li>
+</ul>
+<hr />
+<h2 id="évaluations-et-résultats">Évaluations et résultats</h2>
+<h3 id="liste-des-évaluations">Liste des évaluations</h3>
+<div class="table-wrap"><table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Regroupement</th>
+<th>Évaluation</th>
+<th>Date</th>
+<th>Mode</th>
+<th>Pondération</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Examens</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>45 %</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Examen 1 — Analyser des données avec R</td>
+<td>du 24 sept. au 4 oct. 2026, 23h59</td>
+<td>Individuel</td>
+<td>15 %</td>
+</tr>
+<tr>
+<td></td>
+<td>Examen 2 — Les statistiques descriptives</td>
+<td>jeudi 22 oct. 2026, 15h30–16h30</td>
+<td>Individuel</td>
+<td>15 %</td>
+</tr>
+<tr>
+<td></td>
+<td>Examen 3 — Régressions linéaires simple et multiple</td>
+<td>jeudi 10 déc. 2026, 15h30–16h30</td>
+<td>Individuel</td>
+<td>15 %</td>
+</tr>
+<tr>
+<td><strong>Travaux</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>45 %</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Travail de mi-session</td>
+<td>dim. 25 oct. 2026, 23h59</td>
+<td>Individuel</td>
+<td>20 %</td>
+</tr>
+<tr>
+<td></td>
+<td>Travail final</td>
+<td>ven. 18 déc. 2026, 23h59</td>
+<td>Individuel</td>
+<td>25 %</td>
+</tr>
+<tr>
+<td><strong>Exercices</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>10 %</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Datacamp (1re partie)</td>
+<td>dim. 25 oct. 2026, 23h59</td>
+<td>Individuel</td>
+<td>5 %</td>
+</tr>
+<tr>
+<td></td>
+<td>Datacamp (1re + 2e partie)</td>
+<td>ven. 18 déc. 2026, 23h59</td>
+<td>Individuel</td>
+<td>5 %</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ce cours comporte quatre types d’évaluations :</p>
+<ol type="1">
+<li><strong>deux examens en classe et un à distance</strong> (45
+%);</li>
+<li><strong>travail de mi-session</strong> (20 %);</li>
+<li><strong>travail final</strong> (25 %);</li>
+<li><strong>devoirs sur Datacamp</strong> (10 %).</li>
+</ol>
+<p>Des questionnaires facultatifs vous permettent de mettre vos
+connaissances en application. Ils ne comptent pas dans votre note
+finale.</p>
+<h3 id="informations-détaillées">Informations détaillées</h3>
+<h4 id="examen-1-analyser-des-données-avec-r-15">Examen 1 — Analyser des
+données avec R (15 %)</h4>
+<div class="table-wrap"><table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr>
+<td><strong>Date</strong></td>
+<td>Du jeudi 24 septembre 2026 au dimanche 4 octobre 2026 à 23h59</td>
+</tr>
+<tr>
+<td><strong>Mode de travail</strong></td>
+<td>Individuel</td>
+</tr>
+<tr>
+<td><strong>Remise</strong></td>
+<td>Boîte de dépôt sur le site de cours</td>
+</tr>
+</tbody>
+</table></div>
+<p>Examen pratique à faire chez vous, sur ordinateur, à la suite de la
+séance d’introduction à R. Il évalue votre capacité à importer,
+manipuler et décrire des données avec R et RStudio.</p>
+<h4 id="examen-2-les-statistiques-descriptives-15">Examen 2 — Les
+statistiques descriptives (15 %)</h4>
+<div class="table-wrap"><table>
+<tbody>
+<tr>
+<td><strong>Date</strong></td>
+<td>Jeudi 22 octobre 2026, de 15h30 à 16h30</td>
+</tr>
+<tr>
+<td><strong>Mode de travail</strong></td>
+<td>Individuel</td>
+</tr>
+<tr>
+<td><strong>Lieu</strong></td>
+<td><strong>En classe, au local du cours</strong></td>
+</tr>
+<tr>
+<td><strong>Matériel autorisé</strong></td>
+<td>Papier et crayon seulement</td>
+</tr>
+</tbody>
+</table></div>
+<p>Examen d’une heure écrit <strong>pendant la période de cours
+habituelle</strong>. Aucune inscription à un centre d’examen n’est
+requise : le cours étant donné en présentiel, l’examen se déroule
+directement en classe. Le reste de la séance est consacré à un atelier
+de préparation au travail de mi-session.</p>
+<h4 id="examen-3-régressions-linéaires-simple-et-multiple-15">Examen 3 —
+Régressions linéaires simple et multiple (15 %)</h4>
+<div class="table-wrap"><table>
+<tbody>
+<tr>
+<td><strong>Date</strong></td>
+<td>Jeudi 10 décembre 2026, de 15h30 à 16h30</td>
+</tr>
+<tr>
+<td><strong>Mode de travail</strong></td>
+<td>Individuel</td>
+</tr>
+<tr>
+<td><strong>Lieu</strong></td>
+<td><strong>En classe, au local du cours</strong></td>
+</tr>
+<tr>
+<td><strong>Matériel autorisé</strong></td>
+<td>Papier et crayon seulement</td>
+</tr>
+</tbody>
+</table></div>
+<p>Examen d’une heure écrit en classe lors de la dernière séance. Le
+reste de la séance est consacré à la matière sur les expériences et à la
+révision de fin de session.</p>
+<h4 id="travail-de-mi-session-20">Travail de mi-session (20 %)</h4>
+<div class="table-wrap"><table>
+<tbody>
+<tr>
+<td><strong>Date de remise</strong></td>
+<td>Dimanche 25 octobre 2026 à 23h59</td>
+</tr>
+<tr>
+<td><strong>Mode de travail</strong></td>
+<td>Individuel</td>
+</tr>
+<tr>
+<td><strong>Remise</strong></td>
+<td>Boîte de dépôt, format PDF</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le travail de mi-session est une version courte de votre travail
+final. Il se veut une première version simplifiée, à l’image d’un devis
+de recherche, pour obtenir une rétroaction de ma part avant la remise
+finale. La remise est fixée juste avant la semaine de lecture afin que
+vous receviez cette rétroaction à temps pour la suite.</p>
+<p>Vous devrez :</p>
+<ul>
+<li>concevoir une question de recherche mettant en relation une variable
+dépendante et une variable indépendante;</li>
+<li>présenter une courte revue de la littérature avec des théories
+permettant de dériver des hypothèses testables empiriquement;</li>
+<li>formuler une ou des hypothèses (et leur hypothèse nulle) sur la
+relation entre les deux variables;</li>
+<li>présenter la base de données et les variables sélectionnées pour
+tester les hypothèses;</li>
+<li>justifier la pertinence et l’originalité de la question de
+recherche;</li>
+<li>ajouter la contribution souhaitée à la littérature
+scientifique;</li>
+<li>conclure par une justification personnelle du choix de la
+recherche.</li>
+</ul>
+<p>La présentation et la citation des sources seront prises en compte
+dans votre note. Les consignes complètes seront déposées sur le site de
+cours après la semaine 4.</p>
+<h4 id="travail-final-25">Travail final (25 %)</h4>
+<div class="table-wrap"><table>
+<tbody>
+<tr>
+<td><strong>Date de remise</strong></td>
+<td>Vendredi 18 décembre 2026 à 23h59</td>
+</tr>
+<tr>
+<td><strong>Mode de travail</strong></td>
+<td>Individuel</td>
+</tr>
+<tr>
+<td><strong>Remise</strong></td>
+<td>Boîte de dépôt, format PDF</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le travail final est la création d’un projet de recherche et a pour
+objectif de vous initier aux étapes de la recherche quantitative.
+Tou.te.s les étudiant.e.s travaillent avec une banque de données
+fournie. À partir de cette banque de données, vous devrez :</p>
+<ul>
+<li>concevoir une question de recherche mettant en relation une variable
+dépendante et une variable indépendante;</li>
+<li>présenter une revue de la littérature bonifiée avec des théories
+permettant de dériver des hypothèses testables empiriquement;</li>
+<li>formuler une hypothèse (et une hypothèse nulle) sur la relation
+entre vos deux variables;</li>
+<li>présenter la base de données et les variables sélectionnées pour
+tester les hypothèses;</li>
+<li>inclure un <strong>graphe orienté acyclique (GOA)</strong>;</li>
+<li>présenter des <strong>statistiques descriptives</strong>;</li>
+<li>exécuter une <strong>régression linéaire</strong> pour estimer la
+relation entre les variables et présenter le tableau de régression;</li>
+<li><strong>interpréter les résultats</strong>;</li>
+<li>considérer les <strong>biais potentiels</strong>, discuter des
+limites de votre analyse et réfléchir à une méthode alternative (dans
+une recherche future) pour estimer l’effet causal qui vous
+intéresse.</li>
+</ul>
+<p>Vous devrez vous servir de l’interface <strong>RStudio</strong> pour
+réaliser ce travail. La présentation et la citation des sources seront
+prises en compte dans votre note.</p>
+<h4 id="datacamp-2-5">Datacamp (2 × 5 %)</h4>
+<div class="table-wrap"><table>
+<tbody>
+<tr>
+<td><strong>1re partie</strong></td>
+<td>Dimanche 25 octobre 2026 à 23h59 — 5 %</td>
+</tr>
+<tr>
+<td><strong>1re + 2e partie</strong></td>
+<td>Vendredi 18 décembre 2026 à 23h59 — 5 %</td>
+</tr>
+<tr>
+<td><strong>Remise</strong></td>
+<td>datacamp.com</td>
+</tr>
+</tbody>
+</table></div>
+<p>Des devoirs obligatoires vous sont partagés chaque semaine. Pour
+obtenir la totalité des points, tous les devoirs de la période concernée
+doivent être complétés à l’échéance.</p>
+<h3 id="barème-de-conversion">Barème de conversion</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Cote</th>
+<th>% minimum</th>
+<th>% maximum</th>
+<th></th>
+<th>Cote</th>
+<th>% minimum</th>
+<th>% maximum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A+</td>
+<td>90</td>
+<td>100</td>
+<td></td>
+<td>C+</td>
+<td>66</td>
+<td>69,99</td>
+</tr>
+<tr>
+<td>A</td>
+<td>85</td>
+<td>89,99</td>
+<td></td>
+<td>C</td>
+<td>63</td>
+<td>65,99</td>
+</tr>
+<tr>
+<td>A-</td>
+<td>80</td>
+<td>84,99</td>
+<td></td>
+<td>C-</td>
+<td>60</td>
+<td>62,99</td>
+</tr>
+<tr>
+<td>B+</td>
+<td>76</td>
+<td>79,99</td>
+<td></td>
+<td>D+</td>
+<td>55</td>
+<td>59,99</td>
+</tr>
+<tr>
+<td>B</td>
+<td>73</td>
+<td>75,99</td>
+<td></td>
+<td>D</td>
+<td>50</td>
+<td>54,99</td>
+</tr>
+<tr>
+<td>B-</td>
+<td>70</td>
+<td>72,99</td>
+<td></td>
+<td>E</td>
+<td>0</td>
+<td>49,99</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="règlements-et-politiques-institutionnels">Règlements et
+politiques institutionnels</h3>
+<p>Les règlements institutionnels de l’Université Laval s’appliquent,
+notamment le Règlement disciplinaire à l’intention des étudiants de
+l’Université Laval en matière de plagiat et de fraude académique.</p>
+<h3
+id="étudiant.e.s-ayant-une-situation-de-handicap-liée-à-une-limitation-fonctionnelle">Étudiant.e.s
+ayant une situation de handicap liée à une limitation fonctionnelle</h3>
+<p>Les étudiant.e.s ayant une situation de handicap liée à une
+limitation fonctionnelle sont invité.e.s à communiquer avec le Centre
+d’aide aux étudiants pour mettre en place les mesures d’accommodement
+nécessaires. Écrivez-moi également afin que nous puissions en
+discuter.</p>
+<hr />
+<h2 id="matériel-didactique">Matériel didactique</h2>
+<h3 id="matériel-obligatoire">Matériel obligatoire</h3>
+<ul>
+<li>Arel-Bundock, Vincent. 2021. <em>Analyse causale et méthodes
+quantitatives : Une introduction avec R, Stata et SPSS</em>. Presses de
+l’Université de Montréal. (gratuit en PDF)</li>
+<li><strong>R</strong> — <a
+href="https://cran.r-project.org">cran.r-project.org</a></li>
+<li><strong>RStudio</strong> — <a
+href="https://posit.co/download/rstudio-desktop/">posit.co/download/rstudio-desktop</a></li>
+<li>Un <strong>ordinateur portable</strong> à apporter à chaque
+séance.</li>
+</ul>
+<h3 id="spécifications-technologiques">Spécifications
+technologiques</h3>
+<p>R et RStudio fonctionnent sous Windows, macOS et Linux. Si vous
+n’avez pas accès à un ordinateur portable, communiquez avec moi dès le
+début de la session : des solutions existent.</p>
+<hr />
+<h2 id="ce-qui-change-par-rapport-à-loffre-précédente-hiver-2024">Ce qui
+change par rapport à l’offre précédente (Hiver 2024)</h2>
+<p>Ce plan de cours reprend la structure de l’offre H24 en l’adaptant à
+l’enseignement en présentiel :</p>
+<div class="table-wrap"><table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>Hiver 2024</th>
+<th>Automne 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Formule</td>
+<td>À distance, classe virtuelle synchrone</td>
+<td><strong>En présentiel</strong></td>
+</tr>
+<tr>
+<td>Horaire</td>
+<td>Mercredi 15h30–18h20</td>
+<td><strong>Jeudi 15h30–18h20</strong></td>
+</tr>
+<tr>
+<td>Examens 2 et 3</td>
+<td>En soirée, dans un centre d’examen à réserver</td>
+<td><strong>En classe, pendant la période de cours</strong></td>
+</tr>
+<tr>
+<td>Rencontres individuelles</td>
+<td>Deux semaines dédiées</td>
+<td>Une semaine dédiée (semaine 6) + disponibilités sur rendez-vous</td>
+</tr>
+<tr>
+<td>Séance 8</td>
+<td>—</td>
+<td>Examen 2 suivi d’un atelier de préparation au travail de
+mi-session</td>
+</tr>
+<tr>
+<td>Nombre de séances</td>
+<td>15 semaines</td>
+<td>14 séances (aucune ne tombe sur un jour férié)</td>
+</tr>
+</tbody>
+</table></div>
+<p>La structure des évaluations, leurs pondérations, le livre
+obligatoire et les exercices Datacamp demeurent inchangés.</p>
+
+      </main>
+
+      <div class="avis">
+        <p><strong>Accessibilité.</strong> Cette page est lisible par les lecteurs
+        d'écran et s'imprime proprement (utilisez l'impression de votre navigateur
+        pour en produire un PDF). Si vous avez besoin d'un autre format, écrivez-moi
+        à <a href="mailto:mail@mfoisy.com">mail@mfoisy.com</a>.</p>
+        <p>En cas de divergence, la version officielle du plan de cours déposée sur
+        monPortail fait foi.</p>
       </div>
     </div>
   </body>

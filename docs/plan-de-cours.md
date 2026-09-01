@@ -1,16 +1,65 @@
 # POL-2000 — Méthodologie quantitative — plan de cours (référence)
 
-> **Source of truth for course content.** Extracted from
-> `reference/POL-2000_H24_18043.pdf` (NRC 18043, Hiver 2024).
-> That PDF is a *previous* offering taught by another instructor. The
-> **course description, objectives and three-part content structure are
-> institutionally fixed** and carry over. The **calendar, dates, NRC,
-> teaching staff and evaluation weights are from H24 and must be
-> re-confirmed** for the current offering before anything student-facing
-> is published.
+> **Source of truth for course content.**
 >
-> When course content is in question, this file wins over anything found
-> in `slides/`. See `AGENTS.md`.
+> The **current offering is Automne 2026**, and the authoritative,
+> student-facing document is **`syllabus/plan-de-cours-A26.md`** (rendered
+> for students at `pol2000.com/syllabus/`). Read that first.
+>
+> This file is the agent-facing summary. `reference/POL-2000_H24_18043.pdf`
+> is the previous (Hiver 2024) offering by a different instructor, kept
+> because the course description, objectives and three-part content
+> structure are institutionally fixed and carry over. Its dates, staff and
+> delivery format are stale — A26 is taught **in person**, H24 was remote.
+>
+> When the site and this file disagree about the course, this file wins.
+> When this file and `syllabus/plan-de-cours-A26.md` disagree, the syllabus
+> wins. See `AGENTS.md`.
+
+## Current offering — Automne 2026
+
+- **Session**: 31 August – 11 December 2026
+- **Meetings**: Thursdays 15h30–18h20, **in person**
+- **Instructor**: Laurence-Olivier M. Foisy — mail@mfoisy.com
+- **14 teaching Thursdays**, none lost to a statutory holiday
+- **Reading week**: 26–30 October 2026 (no class Thursday 29 October)
+- Still unconfirmed: NRC, classroom, teaching assistants, monPortail site link
+
+### A26 calendar
+
+| # | Date | Topic |
+|---|---|---|
+| 1 | Thu 3 Sep 2026 | Introduction |
+| 2 | Thu 10 Sep 2026 | Les éléments fondamentaux de la recherche |
+| 3 | Thu 17 Sep 2026 | Les statistiques descriptives |
+| 4 | Thu 24 Sep 2026 | Introduction à R |
+| 5 | Thu 1 Oct 2026 | L'inférence statistique |
+| 6 | Thu 8 Oct 2026 | Rencontres individuelles (no lecture) |
+| 7 | Thu 15 Oct 2026 | La régression linéaire simple |
+| 8 | Thu 22 Oct 2026 | Examen 2 (1st hour) + mi-session workshop |
+| — | Thu 29 Oct 2026 | Reading week — no class |
+| 9 | Thu 5 Nov 2026 | La régression linéaire multiple |
+| 10 | Thu 12 Nov 2026 | La régression linéaire avec R |
+| 11 | Thu 19 Nov 2026 | Les graphes orientés acycliques (GOA) |
+| 12 | Thu 26 Nov 2026 | Le problème fondamental de l'inférence causale |
+| 13 | Thu 3 Dec 2026 | Les biais |
+| 14 | Thu 10 Dec 2026 | Les expériences et révision — Examen 3 (1st hour) |
+
+### A26 evaluation dates
+
+| Evaluation | Date | Weight |
+|---|---|---|
+| Examen 1 — R (take-home) | 24 Sep → Sun 4 Oct 2026, 23h59 | 15 % |
+| Examen 2 — Stats descriptives (in class) | Thu 22 Oct 2026, 15h30–16h30 | 15 % |
+| Travail de mi-session | Sun 25 Oct 2026, 23h59 | 20 % |
+| Datacamp (1re partie) | Sun 25 Oct 2026, 23h59 | 5 % |
+| Examen 3 — Régressions (in class) | Thu 10 Dec 2026, 15h30–16h30 | 15 % |
+| Travail final | Fri 18 Dec 2026, 23h59 | 25 % |
+| Datacamp (1re + 2e partie) | Fri 18 Dec 2026, 23h59 | 5 % |
+
+Weights, textbook and Datacamp are unchanged from H24. What changed: delivery
+is in person, Examens 2 and 3 are written during class instead of at a booked
+exam centre, and there is one individual-meeting week instead of two.
 
 ## Identification
 
@@ -79,7 +128,7 @@ Au terme du cours, l'étudiant.e sera en mesure de :
 - Les graphes orientés acycliques (GOA / DAG)
 - Les biais possibles et leurs effets sur la régression linéaire
 
-## Calendrier H24 (gabarit — dates à refaire)
+## Calendrier H24 (historique — remplacé par le calendrier A26 ci-dessus)
 
 15 semaines. Dates ci-dessous = offre H24, conservées pour la **structure**
 seulement.
@@ -105,7 +154,7 @@ seulement.
 Note : l'ordre H24 introduit R à la semaine 4, après les statistiques
 descriptives à la semaine 3.
 
-## Évaluations H24 (à reconfirmer)
+## Évaluations H24 (historique — voir les dates A26 ci-dessus)
 
 | Regroupement | Évaluation | Pondération | Modalité |
 |---|---|---|---|
@@ -161,14 +210,11 @@ démonstrations avec R et RStudio à suivre en direct. Chaque semaine
 présente : objectifs spécifiques, lectures préalables, exercices, et les
 diapositives. Un glossaire des notions clefs accompagne le cours.
 
-## Décisions ouvertes pour l'offre actuelle
+## Décisions encore ouvertes
 
-Ces points ne sont **pas** tranchés par le PDF H24 et attendent une
-décision de l'enseignant — voir les issues beads correspondantes.
+Resolved for A26: session and dates, delivery format (in person), Thursday
+15h30 slot, in-class exams, Datacamp retained, textbook retained.
 
-- Session et dates exactes (le PDF est H24; `course_config.json` contient
-  encore un calendrier hérité de janvier 2026).
-- Maintien ou non de Datacamp.
-- Maintien du format des examens en présence (papier et crayon).
-- Banque de données imposée pour le travail final.
-- Formule d'enseignement (H24 : à distance, classe virtuelle synchrone).
+Still needed from the instructor: NRC, classroom assignment, teaching
+assistants, monPortail site link, and the data set imposed for the travail
+final. Tracked in beads.
