@@ -176,11 +176,16 @@ POL-2000.
 - `CNAME` and `.nojekyll` are vestigial GitHub Pages artifacts, kept only
   until the Cloudflare cutover is confirmed. They have no effect on
   Cloudflare Pages.
-- Cloudflare Pages does not publish paths beginning with a dot, so
-  `.beads/` and `.git/` stay private. Everything else in the repo root is
-  publicly reachable — including `docs/`, `reference/` and `mockup.html`.
-  Do not put anything confidential (exam keys, student data, grades) in
-  this repo.
+- **This GitHub repository is public, and Cloudflare Pages publishes the
+  entire committed tree — dot-directories included.** Verified:
+  `pol2000.com/.beads/issues.jsonl` is served with HTTP 200. `docs/`,
+  `reference/` and `mockup.html` are likewise world-readable.
+  **Never commit anything confidential** — exam keys, unreleased exam
+  content, student data, grades or credentials. There is no private
+  corner of this repo.
+- Pages serves `.html` files at their extensionless path and 308-redirects
+  the `.html` URL to it. Links ending in `.html` (as in `course_config.json`)
+  still work; they just take one redirect.
 
 ## Issue tracking
 
