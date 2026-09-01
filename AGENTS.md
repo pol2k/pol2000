@@ -11,16 +11,11 @@ Instructor: Laurence-Olivier M. Foisy (mail@mfoisy.com).
 
 - Live at **https://pol2000.com**
 - Repository: `github.com/pol2k/pol2000`
-- **Hosting is mid-migration. Two pipelines are live at once:**
-  - `pol2000.com` is currently served by **GitHub Pages** (legacy build,
-    from `main`). This is still the production domain.
-  - `pol2000.pages.dev` is served by **Cloudflare Pages**, git-connected to
-    this repo. This is where the domain is going.
-- **Both rebuild automatically on push to `main`.** There is no staging
-  environment and no review gate on either.
-- The cutover is finished by repointing DNS at Cloudflare; until then
-  `CNAME` and `.nojekyll` are **still load-bearing for GitHub Pages** and
-  must not be deleted. Tracked in beads under the migration epic.
+- Hosted on **Cloudflare Pages**, git-connected to this repo. GitHub Pages
+  has been disabled; the migration is complete.
+- **Pushing to `main` triggers a Cloudflare build and publishes to the live
+  site automatically.** There is no staging environment and no review gate.
+- Served at `pol2000.com`, `www.pol2000.com` and `pol2000.pages.dev`.
 - Cloudflare runs **no build command**; the output directory is the repo
   root. It publishes the committed tree exactly as it stands.
 - Static site (HTML/CSS/JS) plus Quarto/reveal.js slide decks.
@@ -178,9 +173,10 @@ POL-2000.
 - Commit a rendered deck in the same commit as its `.qmd`, so source and
   published page never drift.
 - Do not force-push. Do not rewrite published history.
-- `CNAME` and `.nojekyll` are **required by GitHub Pages, which still
-  serves the production domain**. Do not delete them until DNS has been
-  cut over to Cloudflare and verified. They have no effect on Cloudflare.
+- **Missing paths do not 404.** Cloudflare Pages falls back to
+  `index.html` with HTTP 200 when a path is not found and no `404.html`
+  exists at the root. A broken link therefore looks healthy to browsers
+  and link checkers — verify page content, not status codes.
 - **This GitHub repository is public, and Cloudflare Pages publishes the
   entire committed tree — dot-directories included.** Verified:
   `pol2000.com/.beads/issues.jsonl` is served with HTTP 200. `docs/`,
