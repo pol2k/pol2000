@@ -50,6 +50,17 @@
         transition: background-color 0.2s ease;
       }
       .back-button:hover { background-color: #e4b74a; }
+      .pdf-button {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: var(--rouge);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+      }
+      .pdf-button:hover { background-color: var(--rouge-fonce); }
       .titre-cours {
         background: var(--fond);
         border-top: 5px solid var(--rouge);
@@ -130,7 +141,7 @@
   <body>
     <div class="container">
       <div class="header">
-        <span></span>
+        <a href="POL-2000_A26.pdf" class="pdf-button" download>Télécharger la version PDF</a>
         <a href="../index.html" class="back-button">Retour à l'accueil</a>
       </div>
 
@@ -896,9 +907,10 @@ obligatoire et les exercices Datacamp demeurent inchangés.</p>
 
       <div class="avis">
         <p><strong>Accessibilité.</strong> Cette page est lisible par les lecteurs
-        d'écran et s'imprime proprement (utilisez l'impression de votre navigateur
-        pour en produire un PDF). Si vous avez besoin d'un autre format, écrivez-moi
-        à <a href="mailto:mail@mfoisy.com">mail@mfoisy.com</a>.</p>
+        d'écran et s'imprime proprement. Une <a href="POL-2000_A26.pdf">version PDF</a>
+        reprenant la présentation officielle est également disponible. Si vous avez
+        besoin d'un autre format, écrivez-moi à
+        <a href="mailto:mail@mfoisy.com">mail@mfoisy.com</a>.</p>
         <p>En cas de divergence, la version officielle du plan de cours déposée sur
         monPortail fait foi.</p>
       </div>

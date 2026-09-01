@@ -1,0 +1,546 @@
+% POL-2000 — Plan de cours — Automne 2026
+% Visual reproduction of the monPortail (Universite Laval) plan de cours layout.
+% Build: xelatex -interaction=nonstopmode plan-de-cours-A26.tex
+\documentclass[10pt]{article}
+
+\usepackage{fontspec}
+\usepackage[letterpaper,top=0.5in,bottom=0.75in,left=0.5in,right=0.5in,footskip=0.35in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{ragged2e}
+\usepackage{needspace}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+
+% ---- Brand colours sampled from the original PDF -------------------------
+\definecolor{ulred}{HTML}{C6102E}
+\definecolor{ulgold}{HTML}{FFC103}
+\definecolor{ulgrey}{HTML}{F3F1EF}
+\definecolor{ulrule}{HTML}{CFCDCB}
+\definecolor{ullink}{HTML}{147ED6}
+\definecolor{ulfoot}{HTML}{C6C6C6}
+\definecolor{ulsub}{HTML}{5A5A5A}
+
+\hypersetup{colorlinks=true,urlcolor=ullink,linkcolor=black,pdftitle={POL-2000 Plan de cours Automne 2026},pdfauthor={Laurence-Olivier M. Foisy}}
+
+% ---- Fonts: closest free analogues to Arial Narrow / Source Sans Pro -----
+\setmainfont{Roboto Condensed}[ItalicFont={Roboto Condensed Italic},BoldFont={Roboto Condensed Bold}]
+\newfontfamily\headfont{Open Sans}
+\newfontfamily\narrowfont{Roboto Condensed}
+
+\frenchspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.25}
+
+% ---- Footer on every page ------------------------------------------------
+\fancypagestyle{ulplain}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+  \fancyfoot[L]{\color{ulfoot}\footnotesize\copyright{} Université Laval}%
+  \fancyfoot[R]{\color{ulfoot}\footnotesize Page \thepage{} de \pageref*{LastPage}}%
+}
+\pagestyle{ulplain}
+
+% ---- Headings ------------------------------------------------------------
+\newcommand{\ulsection}[1]{%
+  \needspace{4\baselineskip}%
+  \vspace{14pt}%
+  {\headfont\fontsize{17}{20}\selectfont #1}\par
+  \vspace{3pt}%
+  {\color{ulrule}\hrule height 0.5pt}%
+  \vspace{6pt}%
+}
+\newcommand{\ulsub}[1]{%
+  \needspace{3\baselineskip}%
+  \vspace{10pt}%
+  {\headfont\fontsize{12.5}{15}\selectfont #1}\par
+  \vspace{2pt}%
+}
+\newcommand{\ulsubsub}[1]{%
+  \needspace{3\baselineskip}%
+  \vspace{8pt}%
+  {\headfont\fontsize{11}{13}\selectfont\bfseries #1}\par
+  \vspace{1pt}%
+}
+
+\setlist[itemize]{leftmargin=1.4em,topsep=2pt,itemsep=1pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.6em,topsep=2pt,itemsep=1pt,parsep=0pt}
+
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+
+\begin{document}
+
+% ==========================================================================
+% PAGE 1
+% ==========================================================================
+\thispagestyle{ulplain}
+
+% Red + gold banner
+\noindent\textcolor{ulred}{\rule{5.02in}{6.5pt}}\textcolor{ulgold}{\rule{2.48in}{6.5pt}}
+
+\vspace{6pt}
+\noindent
+\begin{minipage}[b]{4.6in}
+  \fontsize{9}{11.5}\selectfont
+  Faculté des sciences sociales\\
+  Département de science politique
+\end{minipage}\hfill
+\begin{minipage}[b]{2.8in}
+  \raggedleft\includegraphics[height=0.52in]{ulaval-logo.png}
+\end{minipage}
+
+\vspace{22pt}
+
+% Title block with left rule
+\noindent
+{\color{ulrule}\vrule width 2pt height 0.72in depth 0pt}\hspace{10pt}%
+\begin{minipage}[t]{6.9in}
+  \vspace{-0.70in}
+  {\headfont\fontsize{12}{14}\selectfont\bfseries PLAN DE COURS}\par
+  \vspace{6pt}
+  {\color{ulred}\headfont\fontsize{19}{22}\selectfont POL-2000 : Méthodologie quantitative}\par
+  \vspace{6pt}
+  {\color{ulsub}\fontsize{10.5}{13}\selectfont NRC \emph{à confirmer} \ \textbar{} \ Automne 2026}
+\end{minipage}
+
+\vspace{26pt}
+
+% Prerequisites / format table
+{\setlength{\arrayrulewidth}{0.4pt}\arrayrulecolor{ulrule}%
+\noindent\begin{tabular}{|L{3.68in}|L{3.68in}|}
+\hline
+\multicolumn{2}{|L{7.44in}|}{\fontsize{9.5}{12}\selectfont Préalables : ((POL 1000 à 4999, Crédits exigés : 9 ET POL 1010) OU SOC 1005* OU SVS 1004 OU ANT 1002 OU LNG 1002* OU ORT 1001* OU GPL 1001* OU GPL 1009*)}\\
+\hline
+\multicolumn{2}{|L{7.44in}|}{\fontsize{9.5}{12}\selectfont Formule d'enseignement : \textbf{En présentiel}}\\
+\hline
+\fontsize{9.5}{12}\selectfont Temps consacré : 3-0-6 & \fontsize{9.5}{12}\selectfont Crédit(s) : 3\\
+\hline
+\end{tabular}}
+
+\vspace{10pt}
+
+{\fontsize{9.5}{12.5}\selectfont
+Ce cours vise à introduire les étudiants aux méthodes de la recherche quantitative en sciences sociales. Après un survol des principales notions de l'analyse quantitative (notamment les notions d'échantillon et de population, de variable et de constante, de niveau mesure et de types de données), on y étudie les différentes techniques statistiques qui permettent de décrire une variable (analyse univariée), de dégager les relations entre deux ou plusieurs variables (analyses bivariée et multivariée) et de tirer des conclusions sur les caractéristiques d'une population à partir de l'observation d'un échantillon (statistiques inférentielles). Aucune connaissance avancée des mathématiques n'est nécessaire à l'atteinte des objectifs de ce cours.
+\par}
+
+\ulsub{Plage horaire}
+{\setlength{\arrayrulewidth}{0.4pt}\arrayrulecolor{ulrule}%
+\noindent\begin{tabular}{|L{0.95in}|L{1.25in}|L{2.25in}|}
+\hline
+\multicolumn{3}{|L{4.794in}|}{\cellcolor{ulgrey}\fontsize{9.5}{12}\selectfont Cours en présentiel}\\
+\hline
+\fontsize{9.5}{12}\selectfont jeudi & \fontsize{9.5}{12}\selectfont 15h30 à 18h20 & \fontsize{9.5}{12}\selectfont Du 3 sept. 2026 au 10 déc. 2026\\
+\hline
+\end{tabular}}
+
+\vspace{6pt}
+{\fontsize{8.5}{11}\selectfont Local : \emph{à confirmer}. Il se peut que l'horaire du cours ait été modifié depuis la dernière synchronisation avec Capsule. Vérifier l'horaire dans Capsule.\par}
+
+\ulsub{Site de cours}
+{\fontsize{9.5}{12}\selectfont Site monPortail : \emph{lien à confirmer}\par}
+
+\ulsub{Coordonnées et disponibilités}
+\noindent
+\begin{minipage}[t]{3.6in}
+  {\fontsize{9.5}{12.5}\selectfont
+  Laurence-Olivier M. Foisy\\
+  \emph{Enseignant}\\
+  \href{mailto:mail@mfoisy.com}{mail@mfoisy.com}\par
+  \vspace{6pt}
+  \emph{Disponibilités}\\
+  Sur rendez-vous, ainsi que lors de la semaine de rencontres individuelles prévue au calendrier (semaine 6). Écrivez-moi pour convenir d'un moment.\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{3.6in}
+  {\fontsize{9.5}{12.5}\selectfont
+  \emph{Auxiliaire(s) d'enseignement}\\
+  \emph{à confirmer}\par}
+\end{minipage}
+
+\ulsub{Soutien technique}
+{\fontsize{9.5}{12.5}\selectfont
+CSTIP --- Centre de services en TI et pédagogie\\
+Pavillon Charles-De Koninck, local 0248\\
+\href{mailto:aide@cstip.ulaval.ca}{aide@cstip.ulaval.ca}\\
+Téléphone : 418-656-2131 poste 405222 \textbar{} 418-656-5222\par}
+
+\newpage
+
+% ==========================================================================
+\ulsection{Description du cours}
+
+\ulsub{Introduction}
+{\fontsize{9.5}{12.5}\selectfont
+Ce cours s'adresse aux étudiant.e.s du premier cycle souhaitant se familiariser avec un aspect fondamental de la recherche en sciences sociales : l'analyse de données portant sur un grand nombre de cas. Vous allez apprendre les différentes techniques statistiques qui permettent de décrire une variable, de dégager les relations entre deux variables ou plus et de tirer des conclusions sur les caractéristiques d'une population à partir de l'observation d'un échantillon, sans toutefois approfondir les fondements mathématiques de ces techniques. Vous apprendrez aussi le langage de programmation R, les limites de l'analyse causale et les techniques pour y outrepasser.\par
+\vspace{6pt}
+\textbf{Prérequis :} aucun cours de mathématique ni de statistique en dehors du curriculum obligatoire du niveau secondaire n'est requis pour le cours Méthodologie quantitative.\par}
+
+\ulsub{Buts et objectifs généraux du cours}
+{\fontsize{9.5}{12.5}\selectfont
+Le but de ce cours est de permettre à l'étudiant.e d'acquérir les connaissances de base de l'analyse de données portant sur un grand nombre de cas. Plus spécifiquement, au terme de ce cours, l'étudiant.e sera en mesure de :
+\begin{itemize}
+  \item maîtriser les différents concepts et techniques propres à l'analyse statistique;
+  \item utiliser les fonctions de base du langage de programmation R et du logiciel RStudio pour le traitement de données;
+  \item comprendre et critiquer des articles scientifiques à l'aide de techniques statistiques;
+  \item comprendre la logique de l'analyse causale et ses limites;
+  \item concevoir et réaliser son propre projet de recherche.
+\end{itemize}\par}
+
+\ulsub{Contenu du cours}
+{\fontsize{9.5}{12.5}\selectfont
+Afin de mieux aborder les concepts clefs, le cours est divisé en trois thématiques.\par
+\vspace{6pt}
+\textbf{Première partie : Introduction aux concepts statistiques de base}
+\begin{itemize}
+  \item Comment opérationnaliser une question de recherche de façon quantitative;
+  \item Les types de variables;
+  \item Les distributions de fréquences et de pourcentages;
+  \item Les mesures de tendance centrale;
+  \item Les mesures de variation.
+\end{itemize}
+\vspace{6pt}
+\textbf{Deuxième partie : Régression linéaire bivariée et multiple}
+\begin{itemize}
+  \item Comprendre la logique derrière la régression linéaire;
+  \item Savoir interpréter des coefficients de variables continues, binaires et catégoriques;
+  \item Savoir interpréter le niveau de signification statistique;
+  \item Savoir interpréter les tableaux bivariés;
+  \item La régression et la corrélation simple avec R;
+  \item Savoir interpréter des coefficients lorsqu'il y a plus d'une variable explicative;
+  \item L'analyse tabulaire multivariée.
+\end{itemize}
+\vspace{6pt}
+\textbf{Troisième partie : L'inférence causale}
+\begin{itemize}
+  \item Comprendre le problème fondamental de l'inférence causale;
+  \item Comprendre le concept de variables de contrôle et savoir quelles variables ajouter (ou pas) à une régression;
+  \item Comprendre la pertinence des graphes orientés acycliques pour outrepasser ces problèmes;
+  \item Comprendre les biais possibles et leurs effets potentiels sur la régression linéaire.
+\end{itemize}\par}
+
+\ulsub{Approche pédagogique}
+{\fontsize{9.5}{12.5}\selectfont
+Chaque séance suivra la forme d'un cours magistral \textbf{en classe}. Ceci étant dit, les échanges entre les étudiant.e.s et l'enseignant sont fortement encouragés : c'est l'avantage principal du format en présentiel. À cette fin, les étudiant.e.s sont incité.e.s à faire les lectures indiquées avant chaque séance.\par
+\vspace{6pt}
+Dans l'objectif de mettre leurs connaissances en application, \textbf{les étudiant.e.s doivent apporter leur ordinateur portable à chaque séance}. Régulièrement, l'enseignant fera des exemples avec R et RStudio que les étudiant.e.s pourront suivre en direct.\par
+\vspace{6pt}
+Le cours est divisé en 14 séances accessibles sous l'icône « Feuille de route ». Chaque semaine présente :
+\begin{itemize}
+  \item les objectifs spécifiques;
+  \item les lectures préalables;
+  \item les cours Datacamp;
+  \item les diapositives du professeur.
+\end{itemize}
+Il existe aussi un glossaire contenant les notions clefs du cours.\par}
+
+\ulsub{Livre obligatoire}
+{\fontsize{9.5}{12.5}\selectfont
+Le livre obligatoire pour ce cours est disponible gratuitement en format PDF au lien ci-bas. Si vous souhaitez en obtenir une version papier, il est également possible de l'acheter chez Coop Zone.\par
+\vspace{4pt}
+\textbullet\ Arel-Bundock, Vincent. 2021. « Analyse causale et méthodes quantitatives : Une introduction avec R, Stata et SPSS ». Presses de l'Université de Montréal.\par}
+
+\ulsub{Informations concernant les logiciels R et RStudio}
+{\fontsize{9.5}{12.5}\selectfont
+Les logiciels statistiques obligatoires dans ce cours sont R et RStudio. R est un langage de programmation gratuit de plus en plus utilisé par les chercheurs quantitatifs en sciences sociales, mais aussi par de nombreux analystes de données. RStudio est une plateforme qui vous permet de plus facilement utiliser le logiciel R. Il est nécessaire de télécharger ces deux logiciels dans le cadre de ce cours.\par
+\vspace{6pt}
+La séance d'introduction à R se situe lors de la \textbf{semaine 4 (jeudi 24 septembre 2026)}. Il est essentiel de télécharger ces deux logiciels avant cette classe.\par
+\vspace{6pt}
+Des devoirs sur la plateforme datacamp.com vous seront proposés chaque semaine pour développer rapidement vos compétences en R. Ainsi, je vous recommande fortement de télécharger R et RStudio avant même le début de la session.\par
+\vspace{6pt}
+Les étudiant.e.s qui téléchargent ces logiciels avant le \textbf{jeudi 17 septembre 2026 à 23h59} et envoient une capture d'écran comme preuve au professeur avant cette date se verront allouer \textbf{2 points bonis} à la note finale du cours.\par}
+
+\ulsub{Évaluations}
+{\fontsize{9.5}{12.5}\selectfont
+Ce cours comporte quatre types d'évaluations :
+\begin{enumerate}
+  \item 2 examens en classe et un à distance (45 \%)
+  \item Travail de mi-session (20 \%)
+  \item Travail final (25 \%)
+  \item Devoirs sur Datacamp (10 \%)
+\end{enumerate}
+Vous pouvez aussi mettre vos connaissances en application en accédant aux questionnaires facultatifs. Ces questionnaires ne comptent pas dans votre note finale.\par}
+
+\ulsub{Datacamp}
+{\fontsize{9.5}{12.5}\selectfont
+Des devoirs obligatoires vous seront partagés chaque semaine sur Datacamp. Pour obtenir votre 10 \% complet, vous devrez réaliser tous les devoirs proposés pendant la première moitié de la session pour le \textbf{25 octobre 2026 à 23h59} (pour le premier 5 \%). Les devoirs de la seconde moitié de la session (en incluant ceux de la 1\textsuperscript{re} moitié) devront être réalisés avant le \textbf{18 décembre 2026 à 23h59} (pour le deuxième 5 \%).\par}
+
+\ulsub{Politique de retard}
+{\fontsize{9.5}{12.5}\selectfont
+Une pénalité de 10 \% par jour de la note obtenue sera appliquée à toute évaluation en retard sans justification valable. Après trois jours de retard, la note sera 0.\par}
+
+\newpage
+
+% ==========================================================================
+\ulsection{Contenu et activités}
+
+{\fontsize{9.5}{12.5}\selectfont Le tableau ci-dessous présente les séances prévues dans le cadre du cours.\par}
+
+\vspace{4pt}
+{\setlength{\arrayrulewidth}{0.4pt}\arrayrulecolor{ulrule}\fontsize{9.5}{12}\selectfont
+\noindent\begin{longtable}{|L{5.72in}|L{1.42in}|}
+\hline
+\cellcolor{ulgrey}Titre & \cellcolor{ulgrey}Date\\
+\hline
+\endfirsthead
+\hline
+\cellcolor{ulgrey}Titre & \cellcolor{ulgrey}Date\\
+\hline
+\endhead
+Semaine 1 : Introduction & jeudi 3 sept. 2026\\
+\hline
+Semaine 2 : Les éléments fondamentaux de la recherche & jeudi 10 sept. 2026\\
+\hline
+Semaine 3 : Les statistiques descriptives & jeudi 17 sept. 2026\\
+\hline
+Semaine 4 : Introduction à R\newline Ouverture de l'examen \#1 sur R (à distance) à la fin de la séance. & jeudi 24 sept. 2026\\
+\hline
+Semaine 5 : L'inférence statistique\newline Remise de l'examen \#1 sur R (à distance) avant le dimanche 4 octobre à 23h59. & jeudi 1\textsuperscript{er} oct. 2026\\
+\hline
+Semaine 6 : Rencontres individuelles\newline Aucun cours magistral. Écrivez-moi pour prendre rendez-vous. & jeudi 8 oct. 2026\\
+\hline
+Semaine 7 : La régression linéaire simple & jeudi 15 oct. 2026\\
+\hline
+Semaine 8 : Examen \#2 en classe (15h30 à 16h30), suivi d'un atelier de préparation au travail de mi-session.\newline Travail de mi-session à déposer avant le dimanche 25 octobre 2026 à 23h59 sur le portail. Avoir terminé les premiers Datacamp de la session pour le dimanche 25 octobre 2026 à 23h59. & jeudi 22 oct. 2026\\
+\hline
+Semaine de lecture\newline Aucun cours (26 au 30 octobre 2026). & jeudi 29 oct. 2026\\
+\hline
+Semaine 9 : La régression linéaire multiple & jeudi 5 nov. 2026\\
+\hline
+Semaine 10 : La régression linéaire avec R & jeudi 12 nov. 2026\\
+\hline
+Semaine 11 : Les graphes orientés acycliques (GOA) & jeudi 19 nov. 2026\\
+\hline
+Semaine 12 : Le problème fondamental de l'inférence causale & jeudi 26 nov. 2026\\
+\hline
+Semaine 13 : Les biais & jeudi 3 déc. 2026\\
+\hline
+Semaine 14 : Les expériences et révision\newline Examen \#3 en classe (15h30 à 16h30). Travail final à remettre le vendredi 18 décembre 2026 à 23h59 en ligne. Avoir terminé les derniers Datacamp de la session pour le 18 décembre 2026 à 23h59. & jeudi 10 déc. 2026\\
+\hline
+\end{longtable}}
+
+{\fontsize{8.5}{11}\selectfont Note : Veuillez vous référer à la section \emph{Contenu et activités} de votre site de cours pour de plus amples détails.\par}
+
+\vspace{10pt}
+\ulsub{Dates institutionnelles à retenir}
+{\fontsize{9.5}{12.5}\selectfont
+\begin{itemize}
+  \item Début de la session d'automne 2026 : lundi 31 août 2026
+  \item Fin de la période de modification du choix de cours : mardi 8 septembre 2026
+  \item Abandon avec remboursement : lundi 14 septembre 2026
+  \item Semaine de lecture : du 26 au 30 octobre 2026
+  \item Abandon sans mention d'échec et sans remboursement : lundi 9 novembre 2026
+  \item Fin des cours : vendredi 11 décembre 2026
+\end{itemize}\par}
+
+\newpage
+
+% ==========================================================================
+\ulsection{Évaluations et résultats}
+
+\ulsub{Liste des évaluations}
+{\setlength{\arrayrulewidth}{0.4pt}\arrayrulecolor{ulrule}\fontsize{9.5}{12}\selectfont
+\noindent\begin{tabular}{|L{3.05in}|L{2.05in}|L{1.05in}|L{0.85in}|}
+\hline
+\multicolumn{4}{|L{7.44in}|}{\cellcolor{ulgrey}\textbf{Obligatoires}}\\
+\hline
+\cellcolor{ulgrey}Titre & \cellcolor{ulgrey}Date & \cellcolor{ulgrey}Mode de travail & \cellcolor{ulgrey}Pondération\\
+\hline
+\textbf{Examens} (Somme des évaluations de ce regroupement) & & & \textbf{45 \%}\\
+\hline
+\hspace{8pt}Examen 1 --- Analyser des données avec R & Du 24 sept. 2026 au 4 oct. 2026 à 23h59 & Individuel & 15 \%\\
+\hline
+\hspace{8pt}Examen 2 --- Les statistiques descriptives & Le 22 oct. 2026 de 15h30 à 16h30 & Individuel & 15 \%\\
+\hline
+\hspace{8pt}Examen 3 --- Régressions linéaires simple et multiple & Le 10 déc. 2026 de 15h30 à 16h30 & Individuel & 15 \%\\
+\hline
+\textbf{Travail} (Somme des évaluations de ce regroupement) & & & \textbf{45 \%}\\
+\hline
+\hspace{8pt}Travail de mi-session & Dû le 25 oct. 2026 à 23h59 & Individuel & 20 \%\\
+\hline
+\hspace{8pt}Travail final & Dû le 18 déc. 2026 à 23h59 & Individuel & 25 \%\\
+\hline
+\textbf{Exercices} (Somme des évaluations de ce regroupement) & & & \textbf{10 \%}\\
+\hline
+\hspace{8pt}Datacamp (1\textsuperscript{re} partie) & Dû le 25 oct. 2026 à 23h59 & Individuel & 5 \%\\
+\hline
+\hspace{8pt}Datacamp (1\textsuperscript{re} + 2\textsuperscript{e} partie) & Dû le 18 déc. 2026 à 23h59 & Individuel & 5 \%\\
+\hline
+\end{tabular}}
+
+\vspace{12pt}
+\ulsub{Informations détaillées sur les évaluations sommatives}
+
+\ulsubsub{Examen 1 --- Analyser des données avec R}
+{\fontsize{9.5}{12.5}\selectfont
+\begin{tabular}{@{}L{1.9in}L{5.4in}@{}}
+Date : & Du jeudi 24 septembre 2026 au dimanche 4 octobre 2026 à 23h59\\
+Mode de travail : & Individuel\\
+Pondération : & 15 \%\\
+Remise de l'évaluation : & Boîte de dépôt\\
+\end{tabular}\par
+\vspace{4pt}
+Examen pratique réalisé à distance, sur ordinateur, à la suite de la séance d'introduction à R. Il évalue votre capacité à importer, manipuler et décrire des données avec R et RStudio.\par}
+
+\ulsubsub{Examen 2 --- Les statistiques descriptives}
+{\fontsize{9.5}{12.5}\selectfont
+\begin{tabular}{@{}L{1.9in}L{5.4in}@{}}
+Date : & Le jeudi 22 octobre 2026 de 15h30 à 16h30\\
+Mode de travail : & Individuel\\
+Pondération : & 15 \%\\
+Remise de l'évaluation : & \textbf{En classe, au local du cours.} Aucune inscription à un lieu d'examen n'est requise.\\
+Matériel autorisé : & Papier et crayon seulement.\\
+\end{tabular}\par
+\vspace{4pt}
+Examen d'une heure écrit pendant la période de cours habituelle. Le reste de la séance est consacré à un atelier de préparation au travail de mi-session.\par}
+
+\ulsubsub{Examen 3 --- Régressions linéaires simple et multiple}
+{\fontsize{9.5}{12.5}\selectfont
+\begin{tabular}{@{}L{1.9in}L{5.4in}@{}}
+Date : & Le jeudi 10 décembre 2026 de 15h30 à 16h30\\
+Mode de travail : & Individuel\\
+Pondération : & 15 \%\\
+Remise de l'évaluation : & \textbf{En classe, au local du cours.} Aucune inscription à un lieu d'examen n'est requise.\\
+Matériel autorisé : & Papier et crayon seulement.\\
+\end{tabular}\par
+\vspace{4pt}
+Examen d'une heure écrit en classe lors de la dernière séance. Le reste de la séance est consacré à la matière sur les expériences et à la révision de fin de session.\par}
+
+\ulsubsub{Travail de mi-session}
+{\fontsize{9.5}{12.5}\selectfont
+\begin{tabular}{@{}L{1.9in}L{5.4in}@{}}
+Date de remise : & 25 octobre 2026 à 23h59\\
+Mode de travail : & Individuel\\
+Pondération : & 20 \%\\
+Remise de l'évaluation : & Boîte de dépôt\\
+\end{tabular}\par
+\vspace{4pt}
+Le travail de mi-session est une version courte de votre travail final.\par
+\vspace{4pt}
+Il se veut une première version simplifiée de votre travail, à l'image d'un devis de recherche, pour obtenir une rétroaction du professeur avant la remise finale. La remise est fixée juste avant la semaine de lecture afin que cette rétroaction vous parvienne à temps.\par
+\vspace{4pt}
+À l'intérieur de ce travail, vous devrez :
+\begin{itemize}
+  \item concevoir une question de recherche mettant en relation une variable dépendante et une variable indépendante;
+  \item présenter une courte revue de la littérature avec des théories permettant de dériver des hypothèses testables empiriquement;
+  \item formuler une ou des hypothèses (et leur hypothèse nulle) sur la relation entre les deux variables;
+  \item présenter la base de données et les variables sélectionnées pour tester les hypothèses;
+  \item justifier la pertinence et l'originalité de la question de recherche;
+  \item ajouter la contribution souhaitée à la littérature scientifique;
+  \item conclure par une justification personnelle du choix de la recherche.
+\end{itemize}
+Le travail est à remettre en format PDF sur le portail. Je vous suggère aussi très fortement de consulter les consignes et le guide pour la présentation des travaux. La présentation et la citation des sources seront prises en compte dans votre note.\par
+\vspace{4pt}
+Les consignes complètes seront déposées sur le portail après la semaine 4.\par}
+
+\newpage
+
+\ulsubsub{Travail final}
+{\fontsize{9.5}{12.5}\selectfont
+\begin{tabular}{@{}L{1.9in}L{5.4in}@{}}
+Date de remise : & 18 décembre 2026 à 23h59\\
+Mode de travail : & Individuel\\
+Pondération : & 25 \%\\
+Remise de l'évaluation : & Boîte de dépôt\\
+\end{tabular}\par
+\vspace{4pt}
+Le travail final est la création d'un projet de recherche et a pour objectif de vous initier aux étapes de la recherche quantitative. Tou.te.s les étudiant.e.s devront travailler avec une banque de données préalablement fournie. À partir de cette banque de données, vous devrez :
+\begin{itemize}
+  \item concevoir une question de recherche mettant en relation une variable dépendante et une variable indépendante;
+  \item présenter une revue de la littérature bonifiée avec des théories permettant de dériver des hypothèses testables empiriquement;
+  \item formuler une hypothèse (et une hypothèse nulle) sur la relation entre vos deux variables;
+  \item présenter la base de données et les variables sélectionnées pour tester les hypothèses;
+  \item inclure un graphe orienté acyclique (GOA);
+  \item présenter des statistiques descriptives;
+  \item exécuter une régression linéaire pour estimer la relation entre les variables et présenter le tableau de régression;
+  \item interpréter les résultats;
+  \item considérer les biais potentiels, discuter des limites de votre analyse et réfléchir sur une méthode alternative (dans une recherche future) pour estimer l'effet causal qui vous intéresse.
+\end{itemize}
+Le travail est à remettre en format PDF sur le portail au plus tard le 18/12/2026, à 23h59. Veuillez prendre note que vous devrez vous servir de l'interface RStudio pour exécuter ce travail. La présentation et la citation des sources seront prises en compte dans votre note.\par}
+
+\ulsubsub{Datacamp (1\textsuperscript{re} partie)}
+{\fontsize{9.5}{12.5}\selectfont
+\begin{tabular}{@{}L{1.9in}L{5.4in}@{}}
+Date de remise : & 25 octobre 2026 à 23h59\\
+Mode de travail : & Individuel\\
+Pondération : & 5 \%\\
+Remise de l'évaluation : & Datacamp.com\\
+\end{tabular}\par
+\vspace{4pt}
+Des devoirs obligatoires vous seront partagés chaque semaine sur Datacamp. Pour obtenir votre 10 \% complet, vous devrez réaliser tous les devoirs proposés pendant la première moitié de la session pour le 25/10/26 à 23h59 (pour le premier 5 \%).\par}
+
+\ulsubsub{Datacamp (1\textsuperscript{re} + 2\textsuperscript{e} partie)}
+{\fontsize{9.5}{12.5}\selectfont
+\begin{tabular}{@{}L{1.9in}L{5.4in}@{}}
+Date de remise : & 18 décembre 2026 à 23h59\\
+Mode de travail : & Individuel\\
+Pondération : & 5 \%\\
+Remise de l'évaluation : & Datacamp.com\\
+\end{tabular}\par
+\vspace{4pt}
+Les devoirs de la seconde moitié de la session (en incluant ceux de la 1\textsuperscript{re} moitié) devront être réalisés avant le 18/12/26 à 23h59 (pour le deuxième 5 \%).\par}
+
+\vspace{10pt}
+\ulsub{Barème de conversion}
+{\setlength{\arrayrulewidth}{0.4pt}\arrayrulecolor{ulrule}\fontsize{9.5}{12}\selectfont
+\noindent\begin{tabular}{|L{0.7in}|L{1.05in}|L{1.05in}|L{0.35in}|L{0.7in}|L{1.05in}|L{1.05in}|}
+\hline
+\cellcolor{ulgrey}Cote & \cellcolor{ulgrey}\% minimum & \cellcolor{ulgrey}\% maximum & \cellcolor{ulgrey} & \cellcolor{ulgrey}Cote & \cellcolor{ulgrey}\% minimum & \cellcolor{ulgrey}\% maximum\\
+\hline
+A+ & 90 & 100 & & C+ & 66 & 69,99\\
+\hline
+A & 85 & 89,99 & & C & 63 & 65,99\\
+\hline
+A- & 80 & 84,99 & & C- & 60 & 62,99\\
+\hline
+B+ & 76 & 79,99 & & D+ & 55 & 59,99\\
+\hline
+B & 73 & 75,99 & & D & 50 & 54,99\\
+\hline
+B- & 70 & 72,99 & & E & 0 & 49,99\\
+\hline
+\end{tabular}}
+
+\ulsub{Règlements et politiques institutionnels}
+{\fontsize{9.5}{12.5}\selectfont
+Les règlements institutionnels de l'Université Laval s'appliquent, notamment le Règlement disciplinaire à l'intention des étudiants de l'Université Laval en matière de plagiat et de fraude académique.\par}
+
+\ulsub{Étudiants ayant une situation de handicap liée à une limitation fonctionnelle}
+{\fontsize{9.5}{12.5}\selectfont
+Les étudiant.e.s ayant une situation de handicap liée à une limitation fonctionnelle sont invité.e.s à communiquer avec le Centre d'aide aux étudiants afin de mettre en place les mesures d'accommodement nécessaires. Écrivez-moi également afin que nous puissions en discuter.\par}
+
+\newpage
+
+% ==========================================================================
+\ulsection{Matériel didactique}
+
+\ulsub{Liste du matériel obligatoire}
+{\fontsize{9.5}{12.5}\selectfont
+\begin{itemize}
+  \item Arel-Bundock, Vincent. 2021. « Analyse causale et méthodes quantitatives : Une introduction avec R, Stata et SPSS ». Presses de l'Université de Montréal. (gratuit en format PDF)
+  \item R --- \href{https://cran.r-project.org}{cran.r-project.org}
+  \item RStudio --- \href{https://posit.co/download/rstudio-desktop/}{posit.co/download/rstudio-desktop}
+  \item Un ordinateur portable, à apporter à chaque séance.
+\end{itemize}\par}
+
+\ulsub{Spécifications technologiques}
+{\fontsize{9.5}{12.5}\selectfont
+R et RStudio fonctionnent sous Windows, macOS et Linux. Si vous n'avez pas accès à un ordinateur portable, communiquez avec moi dès le début de la session : des solutions existent.\par}
+
+\ulsection{Bibliographie et annexes}
+{\fontsize{9.5}{12.5}\selectfont
+Arel-Bundock, Vincent. 2021. \emph{Analyse causale et méthodes quantitatives : Une introduction avec R, Stata et SPSS}. Montréal : Presses de l'Université de Montréal.\par}
+
+\vspace{18pt}
+{\color{ulrule}\hrule height 0.5pt}
+\vspace{6pt}
+{\fontsize{8.5}{11}\selectfont\color{ulsub}
+Ce document reprend la structure du plan de cours POL-2000 de l'offre Hiver 2024 (NRC 18043) et l'adapte à la session d'automne 2026, en enseignement présentiel. En cas de divergence, la version officielle déposée sur monPortail fait foi.\par}
+
+\end{document}
