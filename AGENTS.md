@@ -11,11 +11,16 @@ Instructor: Laurence-Olivier M. Foisy (mail@mfoisy.com).
 
 - Live at **https://pol2000.com**
 - Repository: `github.com/pol2k/pol2000`
-- Hosted on **Cloudflare Pages** (account `mail@mfoisy.com`), **git-connected**
-  to the GitHub repo. **Not GitHub Pages** — that was the original setup and
-  was migrated away from.
-- **Pushing to `main` triggers a Cloudflare build and publishes to the live
-  site automatically.** There is no staging environment and no review gate.
+- **Hosting is mid-migration. Two pipelines are live at once:**
+  - `pol2000.com` is currently served by **GitHub Pages** (legacy build,
+    from `main`). This is still the production domain.
+  - `pol2000.pages.dev` is served by **Cloudflare Pages**, git-connected to
+    this repo. This is where the domain is going.
+- **Both rebuild automatically on push to `main`.** There is no staging
+  environment and no review gate on either.
+- The cutover is finished by repointing DNS at Cloudflare; until then
+  `CNAME` and `.nojekyll` are **still load-bearing for GitHub Pages** and
+  must not be deleted. Tracked in beads under the migration epic.
 - Cloudflare runs **no build command**; the output directory is the repo
   root. It publishes the committed tree exactly as it stands.
 - Static site (HTML/CSS/JS) plus Quarto/reveal.js slide decks.
@@ -173,9 +178,9 @@ POL-2000.
 - Commit a rendered deck in the same commit as its `.qmd`, so source and
   published page never drift.
 - Do not force-push. Do not rewrite published history.
-- `CNAME` and `.nojekyll` are vestigial GitHub Pages artifacts, kept only
-  until the Cloudflare cutover is confirmed. They have no effect on
-  Cloudflare Pages.
+- `CNAME` and `.nojekyll` are **required by GitHub Pages, which still
+  serves the production domain**. Do not delete them until DNS has been
+  cut over to Cloudflare and verified. They have no effect on Cloudflare.
 - **This GitHub repository is public, and Cloudflare Pages publishes the
   entire committed tree — dot-directories included.** Verified:
   `pol2000.com/.beads/issues.jsonl` is served with HTTP 200. `docs/`,
