@@ -23,7 +23,9 @@
 - **Instructor**: Laurence-Olivier M. Foisy — mail@mfoisy.com
 - **14 teaching Thursdays**, none lost to a statutory holiday
 - **Reading week**: 26–30 October 2026 (no class Thursday 29 October)
-- Still unconfirmed: NRC, classroom, teaching assistants, monPortail site link
+- **NRC / groupe**: 87892 (confirmed from the Brio course site)
+- **Local**: Pavillon Charles-De Koninck, DKN-3159 (confirmed from Brio)
+- Still unconfirmed: teaching assistants, monPortail site link
 
 ### A26 calendar
 
@@ -215,6 +217,6 @@ diapositives. Un glossaire des notions clefs accompagne le cours.
 Resolved for A26: session and dates, delivery format (in person), Thursday
 15h30 slot, in-class exams, Datacamp retained, textbook retained.
 
-Still needed from the instructor: NRC, classroom assignment, teaching
+Still needed from the instructor: teaching
 assistants, monPortail site link, and the data set imposed for the travail
 final. Tracked in beads.

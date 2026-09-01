@@ -11,13 +11,13 @@ Université Laval · Faculté des sciences sociales · Département de science p
 | | |
 |---|---|
 | **Sigle** | POL-2000 — Méthodologie quantitative |
-| **NRC** | *à confirmer* |
+| **NRC** | 87892 |
 | **Session** | Automne 2026 (31 août au 11 décembre 2026) |
 | **Crédits** | 3 |
 | **Temps consacré** | 3-0-6 |
 | **Formule d'enseignement** | **En présentiel** |
 | **Plage horaire** | **Jeudi, 15h30 à 18h20** |
-| **Local** | *à confirmer* |
+| **Local** | Pavillon Charles-De Koninck, DKN-3159 |
 | **Site de cours** | monPortail — *lien à confirmer* |
 
 **Préalables :** ((POL 1000 à 4999, crédits exigés : 9 ET POL 1010) OU SOC 1005 OU
