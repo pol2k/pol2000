@@ -1,277 +1,231 @@
 {
+  "_comment": "Control plane for index.html, read at runtime by assets/js/course_logic.js. POL-2000, session d'automne 2026.",
   "slides": {
-    "cours_1": true,
-    "cours_2": true,
-    "cours_3": true,
-    "cours_4": true,
-    "cours_5": true,
-    "cours_6": true,
-    "cours_7": true,
-    "cours_8": true,
-    "cours_9": true,
-    "resume": true
+    "cours_1": false,
+    "cours_2": false,
+    "cours_3": false,
+    "cours_4": false,
+    "cours_5": false,
+    "cours_6": false,
+    "cours_7": false,
+    "cours_8": false,
+    "cours_9": false,
+    "cours_10": false,
+    "cours_11": false,
+    "cours_12": false,
+    "cours_13": false,
+    "cours_14": false
   },
   "slide_links": {
-    "_comment": "Links used by the static Diapositives grid in index.html.",
-    "cours_1": "slides/1_introduction/cours_1_intro.html",
-    "cours_2": "slides/2_introduction_r/index.html",
-    "cours_3": "slides/3_introduction_git_github/git_github.html",
-    "cours_4": "slides/4_sondages/cours_4_sondages.html",
-    "cours_5": "slides/5_mesures_latentes/cours_5_mesures.html",
-    "cours_6": "slides/6_analyse_textuelle/cours_6_analyse_textuelle.html",
-    "cours_7": "slides/7_web_scraping/cours_7_web_scraping.html",
-    "cours_8": "slides/8_llms/cours_8_llms.html",
-    "cours_9": "slides/9_llms_agentique/cours_9_llm_agentique.html",
-    "resume": "slides/10_resume/resume_semestre.html"
-  },
-  "exercises": {
-    "intro_r": true,
-    "cleaning": true,
-    "analyse": true,
-    "textuelle": true,
-    "scraping": true,
-    "llm": true,
-    "site_web": true
+    "_comment": "Deck id -> rendered .html path. Empty until the A26 decks are written; slides.* stays false meanwhile."
   },
   "evaluations": {
-    "_comment": "Status options: 'pending' (À venir - Blue), 'active' (En cours - Green), 'completed' (Terminé - Grey). You can also use an object: { \"status\": \"active\", \"url\": \"https://...\" }",
-    "tp1": {
-      "status": "completed",
-      "url": "https://classroom.github.com/a/uYp8EeSF"
-    },
-    "quiz1": {
-      "status": "completed",
-      "url": "https://classroom.github.com/a/hSChWl6D"
-    },
-    "tp2": {
-      "status": "completed",
-      "url": "https://classroom.github.com/a/dnUufquH"
-    },
-    "quiz2": {
+    "_comment": "Status: 'pending' (À venir), 'active' (En cours), 'completed' (Terminé). Object form adds a url button when active.",
+    "examen1": {
       "status": "pending",
       "url": ""
     },
-    "tp3": {
-      "status": "active",
-      "url": "https://classroom.github.com/a/gD5GCaqW"
+    "examen2": {
+      "status": "pending",
+      "url": ""
+    },
+    "misession": {
+      "status": "pending",
+      "url": ""
+    },
+    "datacamp1": {
+      "status": "pending",
+      "url": ""
+    },
+    "examen3": {
+      "status": "pending",
+      "url": ""
+    },
+    "final": {
+      "status": "pending",
+      "url": ""
+    },
+    "datacamp2": {
+      "status": "pending",
+      "url": ""
     }
   },
   "rencontres": {
-    "link": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3gafqpwbfqtRoTayW1p6fGuhT6M5d1znZcOEs7vYX5egNGMgtZutpZ3LP5TaroBzE8cl1lqTTV?gv=true"
+    "link": ""
   },
   "schedule": [
     {
       "week": 1,
-      "date": "2026-01-08",
+      "date": "2026-09-03",
       "title": "Introduction",
-      "description": "Mégadonnées en sciences sociales, plan de cours et installation des outils.",
-      "type": "lecture",
-      "slide": {
-        "image": "images/cours_1.png",
-        "url": "slides/1_introduction/cours_1_intro.html"
-      }
+      "description": "Présentation du cours, du plan de cours et de la démarche quantitative.",
+      "type": "lecture"
     },
     {
       "week": 2,
-      "date": "2026-01-15",
-      "title": "Introduction à R",
-      "description": "Importation, manipulation (dplyr) et types de données.",
-      "type": "lecture",
-      "slide": {
-        "image": "images/cours_2.png",
-        "url": "slides/2_introduction_r/index.html"
-      }
+      "date": "2026-09-10",
+      "title": "Les éléments fondamentaux de la recherche",
+      "description": "Population et échantillon, variables et constantes, niveaux de mesure.",
+      "type": "lecture"
     },
     {
       "week": 3,
-      "date": "2026-01-22",
-      "title": "Git, GitHub et Quarto",
-      "description": "Contrôle de version, collaboration et documents dynamiques.",
-      "type": "lecture",
-      "slide": {
-        "image": "images/cours_3.png",
-        "url": "slides/3_introduction_git_github/git_github.html"
-      }
-    },
-    {
-      "week": "Remise",
-      "date": "2026-01-28",
-      "title": "Remise du TP1",
-      "description": "Date limite pour le TP1 (Introduction).",
-      "type": "important-eval",
-      "anchor": "eval-tp1"
+      "date": "2026-09-17",
+      "title": "Les statistiques descriptives",
+      "description": "Distributions de fréquences, mesures de tendance centrale et de variation.",
+      "type": "lecture"
     },
     {
       "week": 4,
-      "date": "2026-01-29",
-      "title": "Les données structurées",
-      "description": "Données de sondages, nettoyage (tidydata) et éthique.",
-      "type": "lecture",
-      "tags": [
-        {
-          "text": "TP1 (28 Jan)",
-          "type": "eval"
-        }
-      ],
-      "slide": {
-        "image": "images/cours_4.png",
-        "url": "slides/4_sondages/cours_4_sondages.html"
-      }
+      "date": "2026-09-24",
+      "title": "Introduction à R",
+      "description": "R et RStudio à partir de zéro. Installez les deux logiciels avant la séance.",
+      "type": "lecture"
     },
     {
       "week": 5,
-      "date": "2026-02-05",
-      "title": "Quiz 1",
-      "description": "Évaluation en classe (3 heures).",
+      "date": "2026-10-01",
+      "title": "L'inférence statistique",
+      "description": "Échantillonnage, intervalles de confiance et tests d'hypothèses.",
+      "type": "lecture"
+    },
+    {
+      "week": "Remise",
+      "date": "2026-10-04",
+      "title": "Remise de l'examen 1",
+      "description": "Examen sur R à distance, à remettre avant 23h59.",
       "type": "important-eval",
       "tags": [
         {
-          "text": "Quiz 1",
+          "text": "Examen 1 (4 oct)",
           "type": "eval"
         }
       ],
-      "anchor": "eval-quiz1"
+      "anchor": "eval-examen1"
     },
     {
       "week": 6,
-      "date": "2026-02-12",
-      "title": "Les mesures et les régressions",
-      "description": "Analyse factorielle et introduction aux régressions.",
-      "type": "lecture",
-      "slide": {
-        "image": "images/cours_5.png",
-        "url": "slides/5_mesures_latentes/cours_5_mesures.html"
-      }
+      "date": "2026-10-08",
+      "title": "Rencontres individuelles",
+      "description": "Aucun cours magistral. Temps réservé au travail de mi-session.",
+      "type": "break",
+      "tags": [
+        {
+          "text": "Rencontres",
+          "type": "break"
+        }
+      ]
     },
     {
       "week": 7,
-      "date": "2026-02-19",
-      "title": "Rencontres individuelles",
-      "description": "Retour sur TP1/Quiz 1 et discussion des travaux.",
-      "type": "break",
-      "tags": [
-        {
-          "text": "Rencontres",
-          "type": "break"
-        }
-      ]
+      "date": "2026-10-15",
+      "title": "La régression linéaire simple",
+      "description": "Logique de la régression, interprétation des coefficients et de la signification.",
+      "type": "lecture"
     },
     {
       "week": 8,
-      "date": "2026-02-26",
-      "title": "Données textuelles",
-      "description": "Manipulation de texte, analyse de sentiment et modélisation.",
-      "type": "lecture",
-      "slide": {
-        "image": "images/cours_6.png",
-        "url": "slides/6_analyse_textuelle/cours_6_analyse_textuelle.html"
-      }
-    },
-    {
-      "week": 9,
-      "date": "2026-03-05",
-      "title": "Semaine de lecture",
-      "description": "Pas de cours magistral. Travail sur le TP2.",
-      "type": "break"
-    },
-    {
-      "week": "Remise",
-      "date": "2026-03-11",
-      "title": "Remise du TP2",
-      "description": "Date limite pour le TP2 (Travail de mi-session).",
+      "date": "2026-10-22",
+      "title": "Examen 2 et atelier de mi-session",
+      "description": "Examen sur les statistiques descriptives de 15h30 à 16h30, puis atelier.",
       "type": "important-eval",
-      "anchor": "eval-tp2"
-    },
-    {
-      "week": 10,
-      "date": "2026-03-12",
-      "title": "Web Scraping",
-      "description": "Collecte de données (rvest), API et éthique.",
-      "type": "lecture",
       "tags": [
         {
-          "text": "TP2 (11 Mars)",
+          "text": "Examen 2",
           "type": "eval"
         }
       ],
-      "slide": {
-        "image": "images/cours_7.png",
-        "url": "slides/7_web_scraping/cours_7_web_scraping.html"
-      }
+      "anchor": "eval-examen2"
     },
     {
-      "week": 11,
-      "date": "2026-03-19",
-      "title": "LLM",
-      "description": "Grands modèles linguistiques, prompts et biais.",
-      "type": "lecture",
-      "slide": {
-        "image": "images/cours_8.png",
-        "url": "slides/8_llms/cours_8_llms.html"
-      }
+      "week": "Remise",
+      "date": "2026-10-25",
+      "title": "Remise du travail de mi-session",
+      "description": "Travail de mi-session et Datacamp (1re partie) avant 23h59.",
+      "type": "important-eval",
+      "tags": [
+        {
+          "text": "Mi-session (25 oct)",
+          "type": "eval"
+        }
+      ],
+      "anchor": "eval-misession"
     },
     {
-      "week": 12,
-      "date": "2026-03-26",
-      "title": "Rencontres individuelles",
-      "description": "Consultations pour le travail final et préparation au Quiz 2.",
+      "week": "Relâche",
+      "date": "2026-10-29",
+      "title": "Semaine de lecture",
+      "description": "Aucun cours du 26 au 30 octobre 2026.",
       "type": "break",
       "tags": [
         {
-          "text": "Rencontres",
+          "text": "Semaine de lecture",
           "type": "break"
         }
       ]
     },
     {
+      "week": 9,
+      "date": "2026-11-05",
+      "title": "La régression linéaire multiple",
+      "description": "Plus d'une variable explicative et analyse tabulaire multivariée.",
+      "type": "lecture"
+    },
+    {
+      "week": 10,
+      "date": "2026-11-12",
+      "title": "La régression linéaire avec R",
+      "description": "Estimer une régression et produire un tableau de résultats dans R.",
+      "type": "lecture"
+    },
+    {
+      "week": 11,
+      "date": "2026-11-19",
+      "title": "Les graphes orientés acycliques (GOA)",
+      "description": "Choisir les variables de contrôle à inclure — ou à exclure — d'une régression.",
+      "type": "lecture"
+    },
+    {
+      "week": 12,
+      "date": "2026-11-26",
+      "title": "Le problème fondamental de l'inférence causale",
+      "description": "Contrefactuels et limites de l'inférence causale.",
+      "type": "lecture"
+    },
+    {
       "week": 13,
-      "date": "2026-04-02",
-      "title": "IA agentique",
-      "description": "Utiliser les agents IA pour effectuer des actions",
-      "type": "lecture",
-      "slide": {
-        "image": "images/cours_9.png",
-        "url": "slides/9_llms_agentique/cours_9_llm_agentique.html"
-      }
+      "date": "2026-12-03",
+      "title": "Les biais",
+      "description": "Types de biais et effets sur l'estimation par régression linéaire.",
+      "type": "lecture"
     },
     {
       "week": 14,
-      "date": "2026-04-09",
-      "title": "Conclusion",
-      "description": "Revue des concepts clés et applications futures des mégadonnées.",
-      "type": "lecture",
-      "slide": {
-        "icon": "fas fa-book-reader",
-        "url": "slides/10_resume/resume_semestre.html"
-      }
-    },
-    {
-      "week": 15,
-      "date": "2026-04-16",
-      "title": "Quiz 2",
-      "description": "Évaluation finale en classe (3 heures).",
+      "date": "2026-12-10",
+      "title": "Les expériences et révision",
+      "description": "Examen 3 de 15h30 à 16h30, puis expériences et révision de fin de session.",
       "type": "important-eval",
       "tags": [
         {
-          "text": "Quiz 2",
+          "text": "Examen 3",
           "type": "eval"
         }
       ],
-      "anchor": "eval-quiz2"
+      "anchor": "eval-examen3"
     },
     {
       "week": "Remise",
-      "date": "2026-04-30",
-      "title": "Remise du TP3",
-      "description": "Date limite finale pour le travail de session.",
+      "date": "2026-12-18",
+      "title": "Remise du travail final",
+      "description": "Travail final et Datacamp (1re + 2e partie) avant 23h59.",
       "type": "important-eval",
       "tags": [
         {
-          "text": "TP3 (30 Avr)",
+          "text": "Travail final (18 déc)",
           "type": "eval"
         }
       ],
-      "anchor": "eval-tp3"
+      "anchor": "eval-final"
     }
   ]
 }

@@ -1134,3 +1134,37 @@ footer {
 .sticker-card:hover .sticker-title {
   color: var(--text-accent);
 }
+
+/* Slide placeholders — shown before a deck is published (POL-2000 A26) */
+.slide-placeholder {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.4rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, rgba(200, 16, 46, 0.06), rgba(242, 201, 76, 0.08));
+    border-bottom: 1px solid var(--border);
+}
+.slide-placeholder-num {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-accent, #c8102e);
+}
+.slide-placeholder h4 {
+    margin: 0;
+    font-size: 1.02rem;
+    line-height: 1.3;
+}
+.slide-placeholder-tag {
+    margin-top: 0.15rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    color: #9a6700;
+    background: rgba(242, 201, 76, 0.3);
+}
