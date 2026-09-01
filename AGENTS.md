@@ -11,12 +11,14 @@ Instructor: Laurence-Olivier M. Foisy (mail@mfoisy.com).
 
 - Live at **https://pol2000.com**
 - Repository: `github.com/pol2k/pol2000`
-- Hosted on **Cloudflare Pages** (account `mail@mfoisy.com`), deployed from
-  `main`. **Not GitHub Pages** — that was the original setup and was
-  migrated away from.
+- Hosted on **Cloudflare Pages** (account `mail@mfoisy.com`), **git-connected**
+  to the GitHub repo. **Not GitHub Pages** — that was the original setup and
+  was migrated away from.
+- **Pushing to `main` triggers a Cloudflare build and publishes to the live
+  site automatically.** There is no staging environment and no review gate.
+- Cloudflare runs **no build command**; the output directory is the repo
+  root. It publishes the committed tree exactly as it stands.
 - Static site (HTML/CSS/JS) plus Quarto/reveal.js slide decks.
-- Pushing to `main` publishes to the live site. There is no staging
-  environment.
 
 ## ⚠️ Provenance — read this before editing any content
 
