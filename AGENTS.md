@@ -9,10 +9,14 @@ The public course site for **POL-2000 — Méthodologie quantitative**,
 Université Laval, Département de science politique. Undergraduate.
 Instructor: Laurence-Olivier M. Foisy (mail@mfoisy.com).
 
-- Live at **https://pol2000.com** — GitHub Pages, served from `main` of
-  `github.com/pol2k/pol2k.github.io`.
+- Live at **https://pol2000.com**
+- Repository: `github.com/pol2k/pol2000`
+- Hosted on **Cloudflare Pages** (account `mail@mfoisy.com`), deployed from
+  `main`. **Not GitHub Pages** — that was the original setup and was
+  migrated away from.
 - Static site (HTML/CSS/JS) plus Quarto/reveal.js slide decks.
-- Pushing to `main` publishes immediately. There is no staging environment.
+- Pushing to `main` publishes to the live site. There is no staging
+  environment.
 
 ## ⚠️ Provenance — read this before editing any content
 
@@ -79,19 +83,20 @@ slides/N_topic/*.html     rendered output (committed, never hand-edited)
 slides/N_topic/*_files/   vendored reveal.js per deck — do not read
 images/                   deck thumbnails and logos
 grilles/, tp_1/, tp_pdf/  assignments and grading grids
-.beads/                   issue tracker database
+.beads/                   issue tracker database (not published)
 ```
 
 ## Search hygiene — important
 
-This repo is ~460 MB and most of it is vendored third-party assets. A naive
-`grep -r` or a subagent file sweep will drown in minified JavaScript.
+This repo is ~250 MB of working tree and most of it is vendored
+third-party assets. A naive `grep -r` or a subagent file sweep will drown
+in minified JavaScript.
 
 **Never read, grep, or open files under:**
 
 - `slides/*/*_files/` — vendored reveal.js, one full copy per deck
 - `assets/webfonts/`, `assets/css/`, `assets/js/*.min.js`, `assets/sass/`
-- `.git/`
+- `.git/`, `.beads/`
 
 **Exception:** `assets/js/course_logic.js` and `assets/js/app.js` are
 first-party and worth reading.
@@ -112,12 +117,21 @@ quarto render slides/1_introduction/cours_1_intro.qmd
 ```
 
 - Rendering writes `<name>.html` and `<name>_files/` beside the source.
-- **Both MUST be committed.** GitHub Pages has `.nojekyll` and serves these
-  files directly. Adding them to `.gitignore` breaks the live site. This is
-  the single most damaging mistake possible in this repo.
+- **Both MUST be committed.** Cloudflare Pages deploys the committed tree
+  with **no build step** — nothing regenerates these files server-side.
+  Adding them to `.gitignore` breaks the live site. This is the single
+  most damaging mistake possible in this repo.
 - Never hand-edit a rendered `.html`. Edit the `.qmd` and re-render.
-- Verify a deck renders before committing it. A broken deck is live within
-  a minute of `git push`.
+- Verify a deck renders before committing it. A broken deck goes live
+  within a minute or two of `git push`.
+
+### Cloudflare Pages limits — check before committing large files
+
+- **25 MB per file.** A larger file fails the deployment.
+- **20,000 files per deployment.** Currently ~1,000, so headroom is fine,
+  but each rendered deck adds a full vendored reveal.js copy.
+- Keep raw teaching data sets small. If a data set is genuinely large,
+  host it outside the repo rather than shipping it to the CDN.
 
 ## Previewing the site locally
 
@@ -149,49 +163,46 @@ week- or evaluation-related.
 Every value in this file is currently inherited from FAS1001 and wrong for
 POL-2000.
 
-## Issue tracking — beads
+## Deployment and git
 
-Work is tracked with [beads](https://github.com/steveyegge/beads) in
-`.beads/`. Issue prefix: `pol-`.
-
-```bash
-bd ready                 # what is unblocked and claimable right now
-bd list --status open    # everything open
-bd show pol-1            # full detail on one issue
-bd create "Title" -t task -p 1 -d "Description"
-bd update pol-1 --status in_progress
-bd close pol-1
-bd dep add pol-2 pol-1   # pol-2 depends on pol-1
-```
-
-Conventions:
-
-- **Start every session with `bd ready`.** It reflects dependencies; a
-  plain `bd list` does not.
-- Issues are written in English, titled imperatively ("Rewrite the calendar
-  for the current session").
-- Mark an issue `in_progress` when you start and close it when the work is
-  actually verified, not when it looks done.
-- File new work as issues rather than expanding the scope of the current
-  one. Use `--deps discovered-from:pol-N` when the work surfaced while
-  doing something else.
-- Content decisions that need the instructor's judgement belong in an issue
-  with the `needs-decision` label, not in a guess committed to `main`.
-
-## Git conventions
-
+- `main` is the published branch. Anything pushed there is public within
+  minutes — there is no review gate between `git push` and students.
 - Commit messages in English, imperative mood.
-- `main` is the published branch. Anything merged there is public
-  immediately — check rendered decks before pushing.
+- Commit a rendered deck in the same commit as its `.qmd`, so source and
+  published page never drift.
 - Do not force-push. Do not rewrite published history.
-- Large rendered artifacts belong in the same commit as their `.qmd`, so
-  the source and the published page never drift.
+- `CNAME` and `.nojekyll` are vestigial GitHub Pages artifacts, kept only
+  until the Cloudflare cutover is confirmed. They have no effect on
+  Cloudflare Pages.
+- Cloudflare Pages does not publish paths beginning with a dot, so
+  `.beads/` and `.git/` stay private. Everything else in the repo root is
+  publicly reachable — including `docs/`, `reference/` and `mockup.html`.
+  Do not put anything confidential (exam keys, student data, grades) in
+  this repo.
+
+## Issue tracking
+
+Work is tracked with **beads** in `.beads/`. Issue prefix `pol`; IDs look
+like `pol-a3f2dd`, not `pol-1`.
+
+Conventions for this repo:
+
+- **Start every session with `bd ready`.** It respects dependencies; a
+  plain `bd list` does not.
+- Issues are written in English, titled imperatively ("Rewrite the
+  calendar for the current session").
+- File new work as a new issue rather than expanding the scope of the
+  current one. Use `--deps discovered-from:pol-xxxxx` when work surfaced
+  while doing something else.
+- Content decisions needing the instructor's judgement get the
+  `needs-decision` label. Do not guess and commit to `main`.
 
 ## Things that will bite you
 
 1. **Editing a rendered `.html` instead of the `.qmd`** — silently
    overwritten on the next render.
-2. **Gitignoring `*_files/`** — breaks every deck on the live site.
+2. **Gitignoring `*_files/`** — breaks every deck on the live site, since
+   Cloudflare runs no build step.
 3. **Treating an inherited FAS1001 deck as course material** — see
    Provenance above.
 4. **Opening `index.html` from disk** and concluding the calendar is
@@ -200,6 +211,7 @@ Conventions:
    explicitly forbids requiring it.
 6. **Writing student-facing text in English** — the entire audience is
    francophone.
+7. **Committing a file over 25 MB** — the Cloudflare deployment fails.
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
 ## Beads Issue Tracker
@@ -247,3 +259,15 @@ bd close <id>         # Complete work
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
 <!-- END BEADS INTEGRATION -->
+
+## Override to the beads session protocol above
+
+The generic beads block mandates pushing at the end of every session. **In
+this repository that rule is overridden**, because `main` deploys straight
+to a live course site read by students:
+
+- Commit freely. **Do not `git push` without the instructor's go-ahead**,
+  unless the change is verified and clearly safe.
+- Never push a slide deck you have not rendered and opened.
+- `bd dolt push` is only meaningful once a beads remote is configured; it
+  is not, so skip it.
