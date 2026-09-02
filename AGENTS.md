@@ -83,6 +83,7 @@ assets/{css,sass,webfonts,js}  vendored theme — do not read or edit
 deck/                     SvelteKit source of the A26 decks (edit this)
 deck/src/routes/seance-N/ one deck per séance
 deck/src/lib/deck/        the deck engine (Deck, Slide, Carte, Deux, …) + deck.css
+deck/src/lib/deck/visuels/ bespoke SVG figures for POL-2000 (Axe, Frise, Points, …)
 slides/seance-N/          exported deck (committed, never hand-edited)
 slides/_app/              shared build bundle for all decks (committed)
 slides/N_topic/           ❌ inherited FAS1001 Quarto decks — placeholder shell
@@ -129,6 +130,13 @@ CHROMIUM=/usr/sbin/chromium node outils/deborde.mjs http://127.0.0.1:PORT/seance
 npm run exporter                              # → ../slides/seance-N/ + ../slides/_app/
 ```
 
+- **Less text, more visual — the instructor's standing rule.** People read
+  a text-heavy slide instead of listening. One idea per slide, one spoken
+  line at most; draw the rest as a small Svelte/SVG component in
+  `deck/src/lib/deck/visuels/`. Figures are schematic and deterministic
+  (no `Math.random`), and never imply data that was not measured.
+- French typography: narrow no-break space (U+202F) before `? : ! ;` in
+  slide text, or a lone `?` wraps onto its own line in a title.
 - One route per séance: `deck/src/routes/seance-N/+page.svelte`, with
   `const TOTAL = <slide count>` kept equal to the number of `<Slide>`s.
 - The build uses **relative paths** (`svelte.config.js`), so an exported

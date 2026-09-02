@@ -3,12 +3,12 @@
    * POL-2000 — Séance 1 · Introduction et les éléments fondamentaux de la recherche
    * Jeudi 3 septembre 2026, 15h30–18h20, DKN-3159.
    *
-   * Doctrine héritée du deck EIOM: la question avant l'outil, le mot avant la
-   * technologie, aucune valeur inventée pour la figure. Le tableau de régression
-   * de l'ouverture est volontairement vide — les étudiant.e.s le rempliront
-   * eux-mêmes en novembre.
+   * Doctrine: moins de texte, plus de figure. Une idée par diapo, une phrase
+   * parlée au plus; le reste se dessine. Rien n'est inventé pour une figure —
+   * les visuels sont schématiques et dits tels; les dates et pondérations
+   * viennent du plan de cours A26. Le tableau de régression de l'ouverture
+   * est vide, volontairement.
    */
-  import { base } from '$app/paths';
   import Deck from '$lib/deck/Deck.svelte';
   import Slide from '$lib/deck/Slide.svelte';
   import Carte from '$lib/deck/Carte.svelte';
@@ -17,16 +17,23 @@
   import Grand from '$lib/deck/Grand.svelte';
   import Citation from '$lib/deck/Citation.svelte';
   import Code from '$lib/deck/Code.svelte';
+  import Picto from '$lib/deck/Picto.svelte';
+  import Axe from '$lib/deck/visuels/Axe.svelte';
+  import Silhouette from '$lib/deck/visuels/Silhouette.svelte';
+  import Parcours from '$lib/deck/visuels/Parcours.svelte';
+  import Frise from '$lib/deck/visuels/Frise.svelte';
+  import Ponderation from '$lib/deck/visuels/Ponderation.svelte';
+  import Retard from '$lib/deck/visuels/Retard.svelte';
+  import Equipe from '$lib/deck/visuels/Equipe.svelte';
+  import Entonnoir from '$lib/deck/visuels/Entonnoir.svelte';
+  import Points from '$lib/deck/visuels/Points.svelte';
+  import Niveaux from '$lib/deck/visuels/Niveaux.svelte';
+  import Hypotheses from '$lib/deck/visuels/Hypotheses.svelte';
+  import Varie from '$lib/deck/visuels/Varie.svelte';
+  import Ordre from '$lib/deck/visuels/Ordre.svelte';
 
-  const TOTAL = 44;
+  const TOTAL = 43;
   const D = 'POL-2000 · séance 1 · jeu 3 sept';
-
-  // Noms de variables réels de l'Étude électorale canadienne 2025 (Dataverse
-  // de Harvard, fichier Stata). Montrés pour leur forme, pas pour leurs valeurs.
-  const c_variables = `cps25_lr_scale_bef_1   placement gauche-droite, de 0 à 10
-cps25_education        plus haut niveau de scolarité atteint
-cps25_age_in_years     âge, en années
-cps25_income           revenu du ménage`;
 
   const c_verif = `R.version.string
 # [1] "R version 4.x.x (2026-..-..)"
@@ -54,24 +61,24 @@ install.packages("tidyverse")
 
     <Slide droite={D}>
       <h2 class="e">Qui suis-je</h2>
-      <ul class="e">
-        <li><strong>Laurence-Olivier M. Foisy</strong> — chargé de ce cours au Département de science politique.</li>
-        <li>J'ai donné deux fois <em>Introduction à l'analyse des mégadonnées</em> (FAS1001) à l'Université de Montréal.</li>
-        <li>La semaine dernière : le parcours <em>L'intelligence artificielle et la recherche</em> de l'EIOM, ici à Laval.</li>
-        <li>Courriel : <code>mail@mfoisy.com</code> — pour les deux premières semaines. Ensuite, Slack.</li>
-      </ul>
+      <div class="frise-moi e">
+        <div><span class="an">2025 · 2026</span><strong>Université de Montréal</strong><span>FAS1001 · mégadonnées, deux fois</span></div>
+        <div class="fl">→</div>
+        <div><span class="an">août 2026</span><strong>EIOM · Laval</strong><span>l'IA et la recherche</span></div>
+        <div class="fl">→</div>
+        <div class="ici"><span class="an">aujourd'hui</span><strong>POL-2000</strong><span>avec vous</span></div>
+      </div>
+      <p class="e"><code>mail@mfoisy.com</code> — deux semaines. Ensuite, Slack.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Et vous ?</h2>
-      <p class="lead e">À main levée.</p>
-      <ul class="qs e">
-        <li>Qui a suivi un cours de statistiques au cégep ?</li>
-        <li>Qui a déjà écrit une ligne de code, n'importe laquelle ?</li>
-        <li>Qui utilise ChatGPT, Claude ou Gemini au moins une fois par semaine ?</li>
-        <li>Qui redoute ce cours ?</li>
-      </ul>
-      <p class="e">Retenez vos réponses. On y revient en décembre.</p>
+      <h2 class="e">À main levée</h2>
+      <ol class="mains e">
+        <li><span>Un cours de statistiques au cégep ?</span></li>
+        <li><span>Une ligne de code, n'importe laquelle ?</span></li>
+        <li><span>ChatGPT, Claude ou Gemini chaque semaine ?</span></li>
+        <li><span>Ce cours vous fait peur ?</span></li>
+      </ol>
     </Slide>
 
 
@@ -79,26 +86,16 @@ install.packages("tidyverse")
     <Slide fond="encre" droite={D}>
       <h1 class="e">Une question, pour commencer</h1>
       <hr class="filet" />
-      <p class="lead e">Avant toute méthode, une curiosité.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">L'éducation rend-elle plus à gauche ?</h2>
-      <div class="compare-p e">
-        <div class="p"><span class="et">OUI</span><p class="txt">L'université expose à des idées, à des gens et à des débats qui déplacent vers la gauche.</p></div>
-        <div class="p"><span class="et">NON</span><p class="txt">Les diplômé.e.s gagnent plus, et le revenu tire vers la droite. L'effet net serait nul, ou inverse.</p></div>
-      </div>
-      <div class="compare-p e" style="margin-top:0.6em">
-        <div class="p solide"><span class="et">C'EST PLUS COMPLIQUÉ</span><p class="txt">Les plus scolarisé.e.s sont aussi plus jeunes. Est-ce l'école, ou l'âge ?</p></div>
-        <div class="p"><span class="et">ET SURTOUT</span><p class="txt"><strong>Comment le saurait-on ?</strong> Avec quoi, mesuré comment, chez qui ?</p></div>
-      </div>
+      <h2 class="e">L'éducation rend-elle plus à gauche ?</h2>
+      <Axe />
     </Slide>
 
     <Slide droite={D}>
       <h2 class="e">Ce qu'il faudrait pour répondre</h2>
-      <p class="lead e">L'<strong>Étude électorale canadienne 2025</strong> : des milliers de répondant.e.s, interrogé.e.s pendant la campagne. Quatre colonnes nous intéressent.</p>
-      <Code src={c_variables} brut />
-      <p class="e">Ces noms sont réels. Vous les manipulerez vous-mêmes.</p>
+      <Silhouette />
     </Slide>
 
     <Slide droite={D}>
@@ -112,57 +109,51 @@ install.packages("tidyverse")
           <tr><td>Constante</td><td>?</td><td>?</td><td>?</td></tr>
         </tbody>
       </table>
-      <p class="lead e">En décembre, vous saurez <strong>le lire</strong>, <strong>le produire</strong> — et dire pourquoi il <strong>ne prouve pas</strong> ce qu'on croit.</p>
+      <p class="lead e">Le lire. Le produire. Dire pourquoi il <strong>ne prouve pas</strong> ce qu'on croit.</p>
     </Slide>
 
     <Slide droite={D}>
       <h2 class="e">Le parcours, en trois temps</h2>
-      <div class="trois e">
-        <Carte ton="ciel" titre="1 · Décrire">Une variable à la fois. Qu'est-ce qu'une distribution, une moyenne, un écart ? Et comment les calculer dans R.</Carte>
-        <Carte ton="ambre" titre="2 · Relier">Deux variables, puis plusieurs. La régression : la ligne qui résume une relation, et ce que ses chiffres veulent dire.</Carte>
-        <Carte ton="accent" titre="3 · Causer">Quand une relation est-elle une cause ? Le problème fondamental, les graphes, les biais — et les expériences.</Carte>
-      </div>
-      <p class="e">Chaque temps répond à une question qu'on se posait déjà au temps précédent.</p>
+      <Parcours />
     </Slide>
 
 
     <!-- ================= 2 · LA MAUVAISE RÉPUTATION ================= -->
     <Slide fond="encre" droite={D}>
-      <h1 class="e">Parlons-en : ce cours a mauvaise réputation</h1>
+      <h1 class="e">Ce cours a mauvaise réputation</h1>
       <hr class="filet" />
-      <p class="lead e">Trois raisons, et ce qu'on fait autrement.</p>
+      <p class="lead e">Parlons-en.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Pourquoi on le redoute</h2>
-      <Deux>
-        <div>
-          <p class="surtitre">LES RAISONS</p>
-          <ol class="qs-num serre">
-            <li><span>Des mathématiques que personne n'a demandées.</span></li>
-            <li><span>Un logiciel qu'on découvre la semaine de l'examen.</span></li>
-            <li><span>Des chiffres sans question derrière.</span></li>
-          </ol>
+      <h2 class="e">Trois peurs, trois réponses</h2>
+      <div class="peurs e">
+        <div class="peur">
+          <div class="glyphe barre">∑ β̂ σ²</div>
+          <span class="fix">Aucune formule à dériver.</span>
+          <small>Préalable : le secondaire.</small>
         </div>
-        <div>
-          <p class="surtitre">CETTE SESSION</p>
-          <ol class="qs-num serre">
-            <li><span><strong>Aucune formule à dériver.</strong> Le seul préalable est le secondaire.</span></li>
-            <li><span><strong>R dès jeudi prochain</strong>, et à presque toutes les séances ensuite.</span></li>
-            <li><span><strong>Chaque technique part d'une question</strong> — comme celle d'il y a trois diapos.</span></li>
-          </ol>
+        <div class="peur">
+          <div class="glyphe"><s>sem. 4</s> <strong>sem. 2</strong></div>
+          <span class="fix">R dès jeudi prochain.</span>
+          <small>Et à presque toutes les séances.</small>
         </div>
-      </Deux>
+        <div class="peur">
+          <div class="glyphe"><s>0,032</s> <strong>?</strong></div>
+          <span class="fix">La question d'abord.</span>
+          <small>Le chiffre ensuite.</small>
+        </div>
+      </div>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Ce que je vous demande en échange</h2>
-      <ul class="e">
-        <li><strong>L'ordinateur, à chaque séance.</strong> Vous suivez les démonstrations sur votre propre machine.</li>
-        <li><strong>Les Datacamp, chaque semaine.</strong> C'est là que R devient un réflexe, pas en classe.</li>
-        <li><strong>Les questions « bêtes ».</strong> Elles ne le sont pas, et cent personnes ont la même.</li>
-        <li><strong>Me dire quand ça décroche.</strong> En classe, sur Slack, en rencontre. Tôt.</li>
-      </ul>
+      <h2 class="e">En échange</h2>
+      <div class="quatre e">
+        <div><Picto nom="terminal" taille="2.6em" /><strong>L'ordinateur</strong><span>à chaque séance</span></div>
+        <div><Picto nom="horloge" taille="2.6em" /><strong>Les Datacamp</strong><span>chaque semaine</span></div>
+        <div><Picto nom="humain" taille="2.6em" /><strong>Les questions « bêtes »</strong><span>cent personnes ont la même</span></div>
+        <div><Picto nom="oeil" taille="2.6em" /><strong>Me dire quand ça décroche</strong><span>tôt</span></div>
+      </div>
     </Slide>
 
 
@@ -170,7 +161,7 @@ install.packages("tidyverse")
     <Slide fond="encre" droite={D}>
       <h1 class="e">Le plan de cours</h1>
       <hr class="filet" />
-      <p class="lead e">Vous pouvez le contester aujourd'hui. Ensuite, il devient le contrat.</p>
+      <p class="lead e">Contestable aujourd'hui. Ensuite, c'est le contrat.</p>
       <p class="lead e"><code>pol2000.com/syllabus</code></p>
     </Slide>
 
@@ -183,180 +174,121 @@ install.packages("tidyverse")
         <Etiquette>Jeudi 15h30–18h20</Etiquette>
         <Etiquette>DKN-3159</Etiquette>
         <Etiquette ton="ambre">En présentiel</Etiquette>
+        <Etiquette>14 séances</Etiquette>
+        <Etiquette>Préalable mathématique : aucun</Etiquette>
       </div>
-      <p class="lead e" style="margin-top:0.9em">Quatorze séances, du 3 septembre au 10 décembre. Aucune ne tombe un jour férié. Semaine de lecture du 26 au 30 octobre.</p>
-      <p class="e">Préalable mathématique : <strong>aucun</strong> au-delà du secondaire.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Au terme du cours, vous serez en mesure de</h2>
+      <h2 class="e">En décembre, vous saurez</h2>
       <ol class="qs-num e">
-        <li><span>Maîtriser les concepts et techniques propres à l'analyse statistique;</span></li>
-        <li><span>Utiliser les fonctions de base de R et de Positron pour le traitement de données;</span></li>
-        <li><span>Comprendre et critiquer des articles scientifiques qui font appel à ces techniques;</span></li>
-        <li><span>Comprendre la logique de l'analyse causale — et ses limites;</span></li>
-        <li><span>Concevoir et réaliser votre propre projet de recherche.</span></li>
+        <li><span>Maîtriser les concepts de l'analyse statistique</span></li>
+        <li><span>Utiliser R et Positron</span></li>
+        <li><span>Critiquer un article quantitatif</span></li>
+        <li><span>Raisonner en termes de causes — et de limites</span></li>
+        <li><span>Mener votre propre projet</span></li>
       </ol>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Trois parties</h2>
-      <table class="e">
-        <thead><tr><th>Partie</th><th>Séances</th><th>Ce qu'on apprend</th></tr></thead>
-        <tbody>
-          <tr><td><strong>1 · Concepts de base</strong></td><td>1 à 5</td><td>Opérationnaliser une question, les types de variables, décrire une distribution, et l'inférence : de l'échantillon à la population.</td></tr>
-          <tr><td><strong>2 · Régression</strong></td><td>7 à 10</td><td>La logique de la régression linéaire, lire des coefficients et leur signification, une puis plusieurs variables explicatives — dans R.</td></tr>
-          <tr><td><strong>3 · Inférence causale</strong></td><td>11 à 14</td><td>Le problème fondamental, quelles variables contrôler (ou pas), les graphes orientés acycliques, les biais, les expériences.</td></tr>
-        </tbody>
-      </table>
-    </Slide>
-
-    <Slide droite={D} d={0.92}>
-      <h2 class="e">Calendrier · première moitié</h2>
-      <table class="e calendrier">
-        <tbody>
-          <tr><td>1</td><td>3 sept.</td><td>Introduction et les éléments fondamentaux de la recherche</td></tr>
-          <tr><td>2</td><td>10 sept.</td><td><strong>Introduction à R et à Positron</strong> — apportez l'ordinateur, installé</td></tr>
-          <tr><td>3</td><td>17 sept.</td><td>Les statistiques descriptives et la visualisation des données</td></tr>
-          <tr><td>4</td><td>24 sept.</td><td>Préparer ses données avec R · <em>ouverture de l'examen 1</em></td></tr>
-          <tr><td>5</td><td>1<sup>er</sup> oct.</td><td>L'inférence statistique · <em>examen 1 à remettre le dim. 4 oct.</em></td></tr>
-          <tr><td>6</td><td>8 oct.</td><td>Rencontres individuelles — aucun cours magistral</td></tr>
-          <tr><td>7</td><td>15 oct.</td><td>La régression linéaire simple</td></tr>
-          <tr><td>8</td><td>22 oct.</td><td><strong>Examen 2</strong> (15h30–16h30), puis atelier de préparation au travail de mi-session</td></tr>
-          <tr><td>—</td><td>29 oct.</td><td>Semaine de lecture — aucun cours</td></tr>
-        </tbody>
-      </table>
-    </Slide>
-
-    <Slide droite={D} d={0.92}>
-      <h2 class="e">Calendrier · seconde moitié</h2>
-      <table class="e calendrier">
-        <tbody>
-          <tr><td>9</td><td>5 nov.</td><td>La régression linéaire multiple</td></tr>
-          <tr><td>10</td><td>12 nov.</td><td>De la question au tableau de régression : à la main, puis avec l'IA</td></tr>
-          <tr><td>11</td><td>19 nov.</td><td>Les graphes orientés acycliques (GOA)</td></tr>
-          <tr><td>12</td><td>26 nov.</td><td>Le problème fondamental de l'inférence causale</td></tr>
-          <tr><td>13</td><td>3 déc.</td><td>Les biais</td></tr>
-          <tr><td>14</td><td>10 déc.</td><td>Les expériences et révision · <strong>Examen 3</strong> (15h30–16h30)</td></tr>
-          <tr><td>—</td><td>18 déc.</td><td><em>Travail final et Datacamp à remettre, 23h59</em></td></tr>
-        </tbody>
-      </table>
-    </Slide>
-
-    <Slide droite={D} d={0.94}>
-      <h2 class="e">Les évaluations</h2>
-      <table class="e">
-        <thead><tr><th>Évaluation</th><th>Quand</th><th>Où</th><th>Poids</th></tr></thead>
-        <tbody>
-          <tr><td>Examen 1 — Analyser des données avec R</td><td>24 sept. → dim. 4 oct., 23h59</td><td>Chez vous, boîte de dépôt</td><td>15 %</td></tr>
-          <tr><td>Examen 2 — Statistiques descriptives</td><td>jeu. 22 oct., 15h30–16h30</td><td>En classe, papier-crayon</td><td>15 %</td></tr>
-          <tr><td>Travail de mi-session</td><td>dim. 25 oct., 23h59</td><td>PDF, boîte de dépôt</td><td>20 %</td></tr>
-          <tr><td>Datacamp, 1<sup>re</sup> partie</td><td>dim. 25 oct., 23h59</td><td>datacamp.com</td><td>5 %</td></tr>
-          <tr><td>Examen 3 — Régressions simple et multiple</td><td>jeu. 10 déc., 15h30–16h30</td><td>En classe, papier-crayon</td><td>15 %</td></tr>
-          <tr><td>Travail final</td><td>ven. 18 déc., 23h59</td><td>PDF, boîte de dépôt</td><td>25 %</td></tr>
-          <tr><td>Datacamp, 1<sup>re</sup> + 2<sup>e</sup> parties</td><td>ven. 18 déc., 23h59</td><td>datacamp.com</td><td>5 %</td></tr>
-        </tbody>
-      </table>
-      <p class="e">Examens 45 % · travaux 45 % · exercices 10 %. Une échelle de A+ à E, détaillée dans le plan.</p>
+      <h2 class="e">La session</h2>
+      <Frise />
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Trois examens, deux formes</h2>
+      <h2 class="e">… et ce qui s'y évalue</h2>
+      <Frise evaluations />
+    </Slide>
+
+    <Slide droite={D}>
+      <h2 class="e">Cent points</h2>
+      <Ponderation />
+    </Slide>
+
+    <Slide droite={D}>
+      <h2 class="e">Trois examens</h2>
       <div class="trois e">
-        <Carte ton="ciel" titre="Examen 1 · à distance">Ouvre le 24 septembre, se remet le 4 octobre. Sur ordinateur, avec R : importer, manipuler, décrire des données. Vous aurez eu deux séances de R.</Carte>
-        <Carte ton="ambre" titre="Examen 2 · en classe">22 octobre, une heure, papier et crayon. Les statistiques descriptives. Pas de centre d'examen à réserver : c'est ici, à l'heure du cours.</Carte>
-        <Carte ton="ambre" titre="Examen 3 · en classe">10 décembre, une heure, papier et crayon. Les régressions simple et multiple. Le reste de la séance : les expériences, et la révision.</Carte>
+        <Carte titre="1 · chez vous">Sur R. Ouvre le 24 sept., se remet le 4 oct.</Carte>
+        <Carte ton="accent" titre="2 · en classe">22 oct. Une heure. Papier, crayon.</Carte>
+        <Carte ton="accent" titre="3 · en classe">10 déc. Une heure. Papier, crayon.</Carte>
       </div>
+      <p class="e">Pas de centre d'examen : c'est ici, à l'heure du cours.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Deux travaux, un seul projet</h2>
-      <Deux>
-        <Carte ton="ciel" titre="Mi-session · 20 % · 25 octobre">Un <strong>devis de recherche</strong> : une question qui relie une variable dépendante et une variable indépendante, une courte revue de la littérature, des hypothèses (et leur nulle), la base de données et les variables choisies. Vous recevez une rétroaction avant de continuer.</Carte>
-        <Carte ton="accent" titre="Final · 25 % · 18 décembre">Le même projet, mené à terme sur une banque de données fournie : un graphe orienté acyclique, des statistiques descriptives, une régression et son tableau, l'interprétation, les biais et les limites. <strong>Positron obligatoire.</strong></Carte>
-      </Deux>
-      <p class="e">Le mi-session n'est pas un travail de plus : c'est la première moitié du final, corrigée à temps pour la deuxième.</p>
+      <h2 class="e">Un seul projet, en deux temps</h2>
+      <div class="croissance e">
+        <div class="doc petit-doc">
+          <span class="et">MI-SESSION · 20 % · 25 OCT.</span>
+          <ul><li>la question</li><li>X et Y</li><li>les hypothèses</li><li>les données</li></ul>
+        </div>
+        <div class="fl">→</div>
+        <div class="doc grand-doc">
+          <span class="et acc">FINAL · 25 % · 18 DÉC.</span>
+          <ul><li>la question</li><li>X et Y</li><li>les hypothèses</li><li>les données</li><li class="plus">+ le graphe orienté acyclique</li><li class="plus">+ les descriptives</li><li class="plus">+ la régression et son tableau</li><li class="plus">+ l'interprétation, les biais, les limites</li></ul>
+        </div>
+      </div>
+      <p class="e">Le mi-session revient corrigé <strong>avant</strong> que vous écriviez la suite.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Datacamp · 10 %</h2>
-      <Deux ratio="1fr 1.4fr">
-        <Grand valeur="10 %" legende="en deux moitiés de 5 %" />
-        <div>
-          <ul>
-            <li>Des devoirs partagés <strong>chaque semaine</strong>, à faire chez vous.</li>
-            <li>Tous ceux de la première moitié : <strong>dimanche 25 octobre</strong>, 23h59.</li>
-            <li>Tous ceux de la session, première moitié incluse : <strong>vendredi 18 décembre</strong>, 23h59.</li>
-            <li>C'est là que R s'apprend vraiment : par répétition, à votre rythme, avec une correction immédiate.</li>
-          </ul>
+      <h2 class="e">Datacamp</h2>
+      <Deux ratio="1fr 1.6fr">
+        <Grand valeur="10 %" legende="5 + 5" />
+        <div class="dc e">
+          <div class="semaines">
+            {#each Array.from({ length: 14 }) as _, i}
+              <i class:jalon={i === 7 || i === 13}></i>
+            {/each}
+          </div>
+          <div class="jalons"><span>dim. 25 oct.</span><span>ven. 18 déc.</span></div>
+          <p>Un devoir par semaine, chez vous. C'est là que R devient un réflexe.</p>
         </div>
       </Deux>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Retards</h2>
-      <Deux ratio="1fr 1.4fr">
-        <Grand valeur="−10 %" legende="par jour de retard" />
-        <div>
-          <p class="lead">De la note obtenue, pour toute évaluation remise en retard sans justification valable.</p>
-          <p class="lead">Après <strong>trois jours</strong>, la note est 0.</p>
-          <p>Une demande de délai se fait <strong>avant</strong> l'échéance, avec les motifs. Une absence à un examen relève de la politique du Département.</p>
-        </div>
-      </Deux>
+      <h2 class="e">Un retard</h2>
+      <Retard />
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">L'intelligence artificielle générative</h2>
-      <p class="lead e">Ce cours ne l'interdit pas. Il vous apprend à vous en servir correctement.</p>
-      <div class="trois e">
-        <Carte ton="vert" titre="Permis, si déclaré">Obtenir de l'aide pour <strong>écrire, comprendre ou déboguer du code R</strong>.</Carte>
-        <Carte ton="accent" titre="Non permis">L'<strong>interprétation</strong> des résultats et la <strong>rédaction</strong> des travaux. Ce que vous affirmez, vous devez pouvoir le défendre.</Carte>
-        <Carte ton="ambre" titre="Selon l'évaluation">Chaque examen et chaque travail précise ses propres consignes. Lisez-les.</Carte>
+      <h2 class="e">L'intelligence artificielle</h2>
+      <div class="feux e">
+        <div class="feu ok"><span class="signe">✓</span><strong>Le code R</strong><small>permis, si déclaré</small></div>
+        <div class="feu non"><span class="signe">✗</span><strong>L'interprétation. La rédaction.</strong><small>jamais</small></div>
+        <div class="feu selon"><span class="signe">≈</span><strong>Chaque évaluation</strong><small>ses propres consignes</small></div>
       </div>
-      <Citation source="La question à se poser, chaque fois">L'aurais-je accepté d'un assistant humain sans vérifier son travail ?</Citation>
+      <Citation source="La question, chaque fois">L'aurais-je accepté d'un assistant humain sans vérifier son travail ?</Citation>
     </Slide>
 
     <Slide droite={D}>
       <h2 class="e">Matériel</h2>
-      <Deux>
-        <div>
-          <p class="surtitre">OBLIGATOIRE</p>
-          <ul>
-            <li><strong>R</strong> — <code>cran.r-project.org</code></li>
-            <li><strong>Positron</strong> — <code>positron.posit.co</code></li>
-            <li>Un <strong>ordinateur portable</strong>, à chaque séance.</li>
-          </ul>
-        </div>
-        <div>
-          <p class="surtitre">OUVRAGE DE RÉFÉRENCE · NON OBLIGATOIRE</p>
-          <p>Arel-Bundock, Vincent. 2021. <em>Analyse causale et méthodes quantitatives</em>. Presses de l'Université de Montréal.</p>
-          <p>Gratuit en PDF. Il couvre toute la matière, dans le même ordre : quand une notion vous échappe, c'est là qu'elle est expliquée une deuxième fois, autrement.</p>
-        </div>
-      </Deux>
-      <p class="e">Pas d'ordinateur ? Écrivez-moi dès cette semaine : des solutions existent.</p>
+      <div class="materiel e">
+        <div class="item"><span class="grosR">R</span><strong>gratuit</strong></div>
+        <div class="item"><span class="grosP">Positron</span><strong>gratuit</strong></div>
+        <div class="item"><Picto nom="terminal" taille="2.8em" /><strong>votre portable</strong></div>
+        <div class="item livre"><span class="couv">Arel-Bundock<br />2021</span><strong>référence, gratuit en PDF</strong><small>rien d'obligatoire à lire</small></div>
+      </div>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Encadrement</h2>
-      <ul class="e">
-        <li><strong>Slack</strong> est le canal du cours. Je réponds aux courriels pendant deux semaines; ensuite, Slack et Slack seulement.</li>
-        <li><strong>Auxiliaires d'enseignement :</strong> Jules Piral et Marc-Antoine Dupuis. <strong>Tuteur :</strong> Adam Ménard. Vous pouvez leur écrire en tout temps.</li>
-        <li><strong>Rencontres individuelles</strong> le jeudi 8 octobre, avec moi, les auxiliaires et le tuteur — pour le travail de mi-session, et pour quiconque décroche.</li>
-        <li><strong>Rendez-vous</strong> dans les plages publiées sur <code>pol2000.com</code>.</li>
-      </ul>
-    </Slide>
-
-    <Slide droite={D}>
-      <h2 class="e">Enregistrement et diffusion</h2>
-      <p class="lead e">Les séances ne sont <strong>ni enregistrées ni diffusées</strong>. Ce cours se donne en classe, et c'est un choix.</p>
-      <p class="lead e">Une version <strong>en ligne, asynchrone</strong> du cours est offerte à la session d'hiver. Si le présentiel ne vous convient pas, c'est là qu'il faut aller.</p>
-      <p class="e">Aucun point n'est retiré pour la qualité de la langue. Mais elle reste le premier indice de la qualité d'un travail, et j'en tiens compte.</p>
+      <h2 class="e">L'équipe</h2>
+      <Equipe />
+      <p class="e">Rencontres individuelles le <strong>8 octobre</strong>. Rendez-vous : <code>pol2000.com</code>.</p>
     </Slide>
 
     <Slide fond="encre" droite={D}>
-      <h1 class="e">Des objections ?</h1>
+      <div class="deuxgrands e">
+        <div><span class="signe non">✗</span><strong>Enregistrement</strong><small>ce cours se donne ici</small></div>
+        <div><span class="signe">↻</span><strong>Hiver</strong><small>la version en ligne, asynchrone</small></div>
+      </div>
+    </Slide>
+
+    <Slide fond="encre" droite={D}>
+      <h1 class="e">Des objections ?</h1>
       <hr class="filet" />
-      <p class="lead e">Sur les dates, les pondérations, les règles. C'est maintenant : ce qu'on convient aujourd'hui, on le garde.</p>
+      <p class="lead e">C'est maintenant.</p>
     </Slide>
 
 
@@ -365,156 +297,117 @@ install.packages("tidyverse")
       <h1 class="e">Pause</h1>
       <hr class="filet" />
       <p class="lead e">Quinze minutes.</p>
-      <p class="e">Au retour : ce qu'il faut savoir avant de toucher à une seule donnée.</p>
     </Slide>
 
 
     <!-- ================= 4 · LES ÉLÉMENTS FONDAMENTAUX ================= -->
     <Slide fond="encre" droite={D}>
-      <h1 class="e">Les éléments fondamentaux de la recherche</h1>
+      <h1 class="e">Les éléments fondamentaux</h1>
       <hr class="filet" />
-      <p class="lead e">Le vocabulaire qu'on utilisera jusqu'en décembre.</p>
+      <p class="lead e">Le vocabulaire d'ici décembre.</p>
     </Slide>
 
     <Slide droite={D}>
       <h2 class="e">De la curiosité à la question</h2>
-      <div class="trois e">
-        <Carte ton="gris" titre="Un sujet">« La participation électorale des jeunes. »<br /><span class="petit">On ne peut pas y répondre. On peut seulement en parler.</span></Carte>
-        <Carte ton="ambre" titre="Une question">« Pourquoi les jeunes votent-ils moins ? »<br /><span class="petit">Mieux. Mais « pourquoi » ouvre sur mille réponses.</span></Carte>
-        <Carte ton="accent" titre="Une question testable">« L'âge est-il associé à la probabilité de voter, chez les électeur.rice.s du Québec en 2022 ? »<br /><span class="petit">Deux choses à mesurer, une population, un lien à vérifier.</span></Carte>
-      </div>
-      <p class="e">Une question testable dit <strong>quoi</strong> mesurer, <strong>chez qui</strong>, et <strong>quel lien</strong> on cherche.</p>
+      <Entonnoir />
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Variable dépendante, variable indépendante</h2>
-      <Deux>
-        <Carte ton="accent" titre="Dépendante · Y">Ce qu'on veut <strong>expliquer</strong>. Elle « dépend » du reste.<br /><br />Voter ou non. Le placement gauche-droite. Le taux de chômage d'une région.</Carte>
-        <Carte ton="ciel" titre="Indépendante · X">Ce qui, selon nous, <strong>explique</strong>. Elle varie d'elle-même.<br /><br />L'âge. La scolarité. Le parti au pouvoir.</Carte>
-      </Deux>
-      <p class="lead e">Une question de recherche, c'est au minimum <strong>un X et un Y</strong>. Le travail de mi-session commence exactement là.</p>
+      <div class="xy e">
+        <div class="x"><span class="lettre">X</span><strong>indépendante</strong><small>ce qui explique</small><em>l'âge</em></div>
+        <div class="fl">→</div>
+        <div class="y"><span class="lettre">Y</span><strong>dépendante</strong><small>ce qu'on explique</small><em>voter</em></div>
+      </div>
+      <p class="lead e centre">Une question de recherche, c'est au minimum un X et un Y.</p>
     </Slide>
 
     <Slide droite={D}>
       <h2 class="e">Une variable varie</h2>
-      <p class="lead e">Ça semble évident. C'est l'erreur la plus fréquente dans un premier devis.</p>
-      <Deux>
-        <div>
-          <p class="surtitre">VARIABLE</p>
-          <p>Prend des valeurs <strong>différentes</strong> d'un cas à l'autre dans <em>vos</em> données.</p>
-          <p>Dans un sondage pancanadien : la province.</p>
-        </div>
-        <div>
-          <p class="surtitre">CONSTANTE</p>
-          <p>Prend la <strong>même</strong> valeur pour tous les cas observés.</p>
-          <p>Dans un sondage mené auprès d'étudiant.e.s de l'Université Laval : « être inscrit.e à Laval ». On ne peut rien en tirer.</p>
-        </div>
-      </Deux>
-      <p class="e">On n'explique jamais une variable par une constante.</p>
+      <Varie />
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Population et échantillon</h2>
-      <Deux>
-        <Carte ton="ciel" titre="La population">Tous les cas qui nous intéressent. Tou.te.s les électeur.rice.s du Québec. Tous les pays membres de l'ONU. Tous les tweets d'une campagne.</Carte>
-        <Carte ton="accent" titre="L'échantillon">Les cas qu'on a <strong>réellement observés</strong>. Deux mille répondant.e.s. Quarante pays. Dix mille tweets.</Carte>
-      </Deux>
-      <p class="lead e">Toute la statistique inférentielle tient dans une question : <strong>ce que je vois dans l'échantillon, puis-je le dire de la population ?</strong></p>
-      <p class="e">Séance 5. On y passera un après-midi entier.</p>
+      <h2 class="e">Population, échantillon</h2>
+      <Points />
+      <p class="e">Ce que je vois ici, puis-je le dire de tout ça ? <span class="pale">Séance 5.</span></p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">L'unité d'analyse</h2>
-      <p class="lead e">De <em>quoi</em> chaque ligne de vos données est-elle faite ?</p>
-      <table class="e">
-        <thead><tr><th>Unité</th><th>Une ligne =</th><th>Exemple de Y</th></tr></thead>
-        <tbody>
-          <tr><td>Individu</td><td>une personne sondée</td><td>a voté, ou non</td></tr>
-          <tr><td>Pays</td><td>un pays, une année</td><td>indice de démocratie</td></tr>
-          <tr><td>Parti</td><td>un parti à une élection</td><td>part des voix</td></tr>
-          <tr><td>Texte</td><td>un discours, un tweet</td><td>ton, positif ou négatif</td></tr>
-        </tbody>
-      </table>
-      <p class="e">Mélanger les unités est une faute qu'aucun logiciel ne signale.</p>
+      <h2 class="e">Une ligne, c'est quoi ?</h2>
+      <div class="unites e">
+        <div><Picto nom="humain" taille="2.4em" /><strong>une personne</strong><span>a voté, ou non</span></div>
+        <div><span class="glyphe-u">◯</span><strong>un pays, une année</strong><span>indice de démocratie</span></div>
+        <div><span class="glyphe-u">▣</span><strong>un parti, une élection</strong><span>part des voix</span></div>
+        <div><span class="glyphe-u">❝</span><strong>un discours, un tweet</strong><span>ton positif ou négatif</span></div>
+      </div>
+      <p class="e">L'unité d'analyse. On ne les mélange pas — et aucun logiciel ne vous le dira.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Les niveaux de mesure</h2>
-      <table class="e">
-        <thead><tr><th>Niveau</th><th>Ce que les valeurs permettent</th><th>Exemple</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Nominal</strong></td><td>Distinguer des catégories. Aucun ordre.</td><td>Le parti pour lequel on a voté</td></tr>
-          <tr><td><strong>Ordinal</strong></td><td>Ordonner. Mais les écarts ne sont pas égaux.</td><td>Niveau de scolarité : secondaire, collégial, universitaire</td></tr>
-          <tr><td><strong>Intervalle / ratio</strong></td><td>Ordonner <em>et</em> mesurer des écarts égaux. On peut calculer.</td><td>L'âge en années; un revenu; une échelle de 0 à 10</td></tr>
-        </tbody>
-      </table>
-      <p class="lead e">Le niveau de mesure décide de <strong>ce qu'on a le droit de calculer</strong>. Une moyenne de partis politiques n'existe pas.</p>
-      <p class="e">Séance 3.</p>
+      <h2 class="e">Ce que les chiffres permettent</h2>
+      <Niveaux />
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Hypothèse, et hypothèse nulle</h2>
-      <Deux>
-        <Carte ton="accent" titre="L'hypothèse · H₁">Ce qu'on s'attend à observer, dans une direction. « Plus une personne est âgée, plus elle est susceptible de voter. »</Carte>
-        <Carte ton="gris" titre="L'hypothèse nulle · H₀">Il n'y a <strong>aucune relation</strong>. L'âge ne change rien à la participation.</Carte>
-      </Deux>
-      <p class="lead e">On ne prouve jamais H₁. On demande aux données si elles suffisent à <strong>rejeter H₀</strong>. La nuance est toute la séance 5.</p>
+      <h2 class="e">L'hypothèse, et sa nulle</h2>
+      <Hypotheses />
+      <p class="e">On ne prouve jamais H₁. On demande aux données de <strong>rejeter H₀</strong>.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">Opérationnaliser : du concept à la mesure</h2>
+      <h2 class="e">Opérationnaliser</h2>
       <div class="chaine e">
         <div><span class="et">CONCEPT</span><strong>« Être à gauche »</strong></div>
         <div class="fl">→</div>
-        <div><span class="et">DÉFINITION</span><strong>Se situer soi-même sur un axe gauche-droite</strong></div>
+        <div><span class="et">DÉFINITION</span><strong>Se situer soi-même sur un axe</strong></div>
         <div class="fl">→</div>
-        <div><span class="et">MESURE</span><strong>Une échelle de 0 (gauche) à 10 (droite)</strong></div>
+        <div><span class="et">MESURE</span><strong>0 ······ 5 ······ 10</strong></div>
       </div>
-      <p class="lead e">Chaque flèche perd quelque chose. Une bonne mesure dit <strong>ce qu'elle perd</strong>.</p>
-      <p class="e">Quelqu'un qui se place à 5 est-il centriste, indifférent, ou mal à l'aise avec la question ? Le chiffre ne le dit pas.</p>
+      <p class="lead e">Chaque flèche perd quelque chose.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">La fiche d'une recherche</h2>
+      <h2 class="e">La fiche</h2>
       <Deux>
         <div class="fiche vide">
-          <p class="surtitre">VIDE</p>
           <dl>
             <dt>Question</dt><dd>—</dd>
-            <dt>Variable dépendante</dt><dd>—</dd>
-            <dt>Variable indépendante</dt><dd>—</dd>
+            <dt>Y</dt><dd>—</dd>
+            <dt>X</dt><dd>—</dd>
             <dt>Population</dt><dd>—</dd>
-            <dt>Unité d'analyse</dt><dd>—</dd>
-            <dt>Niveaux de mesure</dt><dd>—</dd>
-            <dt>Hypothèse · H₀</dt><dd>—</dd>
+            <dt>Unité</dt><dd>—</dd>
+            <dt>Mesure</dt><dd>—</dd>
+            <dt>H₁ · H₀</dt><dd>—</dd>
           </dl>
         </div>
         <div class="fiche pleine">
-          <p class="surtitre">REMPLIE</p>
           <dl>
-            <dt>Question</dt><dd>L'éducation rend-elle plus à gauche ?</dd>
-            <dt>Variable dépendante</dt><dd>Placement gauche-droite</dd>
-            <dt>Variable indépendante</dt><dd>Scolarité</dd>
-            <dt>Population</dt><dd>Électeur.rice.s canadien.ne.s, 2025</dd>
-            <dt>Unité d'analyse</dt><dd>La personne sondée</dd>
-            <dt>Niveaux de mesure</dt><dd>Y : échelle 0–10 · X : ordinal</dd>
-            <dt>Hypothèse · H₀</dt><dd>Plus scolarisé, plus à gauche · aucune relation</dd>
+            <dt>Question</dt><dd>L'éducation rend-elle plus à gauche ?</dd>
+            <dt>Y</dt><dd>placement gauche-droite</dd>
+            <dt>X</dt><dd>scolarité</dd>
+            <dt>Population</dt><dd>électeur.rice.s, Canada, 2025</dd>
+            <dt>Unité</dt><dd>la personne sondée</dd>
+            <dt>Mesure</dt><dd>Y : 0–10 · X : ordinal</dd>
+            <dt>H₁ · H₀</dt><dd>plus scolarisé, plus à gauche · aucune relation</dd>
           </dl>
         </div>
       </Deux>
-      <p class="lead e">Votre travail de mi-session, c'est cette fiche — remplie, et justifiée.</p>
+      <p class="lead e">Votre mi-session, c'est la fiche de droite.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">À vous : trois questions, à voix haute</h2>
-      <p class="lead e">Proposez une question de recherche en science politique. Pour chacune, on cherche ensemble :</p>
-      <ul class="qs e">
-        <li>la variable dépendante, la variable indépendante;</li>
-        <li>l'unité d'analyse et la population;</li>
-        <li>le niveau de mesure de chaque variable;</li>
-        <li>l'hypothèse — et sa nulle.</li>
-      </ul>
-      <p class="e">Si l'une des quatre résiste, la question n'est pas encore testable. C'est normal : c'est le travail.</p>
+      <h2 class="e">À vous</h2>
+      <p class="lead e">Une question de recherche. On remplit la fiche ensemble.</p>
+      <div class="fiche pleine e grande">
+        <dl>
+          <dt>Question</dt><dd>&nbsp;</dd>
+          <dt>Y</dt><dd>&nbsp;</dd>
+          <dt>X</dt><dd>&nbsp;</dd>
+          <dt>Population · unité</dt><dd>&nbsp;</dd>
+          <dt>Mesure</dt><dd>&nbsp;</dd>
+          <dt>H₁ · H₀</dt><dd>&nbsp;</dd>
+        </dl>
+      </div>
     </Slide>
 
 
@@ -522,34 +415,32 @@ install.packages("tidyverse")
     <Slide fond="encre" droite={D}>
       <h1 class="e">Avant jeudi prochain</h1>
       <hr class="filet" />
-      <p class="lead e">Trois choses à faire. La première est la seule qui compte.</p>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">1 · Installer R, puis Positron</h2>
-      <ol class="qs-num serre e">
-        <li><span><strong>R</strong> d'abord — <code>cran.r-project.org</code>. Choisissez votre système; sous Windows, prenez « base ».</span></li>
-        <li><span><strong>Positron</strong> ensuite — <code>positron.posit.co/download.html</code>. C'est l'éditeur; R est le moteur.</span></li>
-        <li><span>Ouvrez Positron. En bas à droite, il doit avoir trouvé R tout seul.</span></li>
-      </ol>
-      <Carte ton="accent" titre="Le piège classique">Installer Positron <em>avant</em> R. Positron s'ouvre, ne trouve rien, et tout semble cassé. Refaites l'ordre : R, puis Positron.</Carte>
+      <h2 class="e">Dans cet ordre</h2>
+      <Ordre />
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">2 · Vérifier que ça marche</h2>
-      <p class="lead e">Dans la <strong>console</strong> de Positron, tapez ceci, une ligne à la fois, puis Entrée.</p>
-      <Code src={c_verif} brut />
-      <Carte ton="vert" titre="Points bonis · 2 points sur la note finale">Une capture d'écran de ces deux résultats, envoyée <strong>avant le jeudi 17 septembre, 23h59</strong>. Ça n'a rien de difficile : c'est exactement pour ça que ça vaut des points.</Carte>
+      <h2 class="e">Preuve que ça marche</h2>
+      <Deux ratio="1.5fr 1fr">
+        <Code src={c_verif} brut />
+        <div class="bonus">
+          <Grand valeur="+2" legende="points, sur la note finale" />
+          <p>Une capture d'écran de ces deux résultats, avant le <strong>jeudi 17 septembre, 23h59</strong>.</p>
+        </div>
+      </Deux>
     </Slide>
 
     <Slide droite={D}>
-      <h2 class="e">3 · Rejoindre le cours</h2>
-      <ul class="e">
-        <li><strong>Slack</strong> — le lien d'invitation arrive par courriel cette semaine. Rejoignez-le avant jeudi.</li>
-        <li><strong>Datacamp</strong> — l'invitation aussi. Le premier devoir sera prêt pour la semaine 2.</li>
-        <li><strong>pol2000.com</strong> — le plan de cours, le calendrier à jour, les diapositives de chaque séance.</li>
-      </ul>
-      <p class="lead e">Un blocage à l'installation ? Écrivez <strong>avant</strong> jeudi, pas jeudi. Un ordinateur qui ne marche pas à la séance 2, c'est une séance perdue.</p>
+      <h2 class="e">Trois liens</h2>
+      <div class="liens e">
+        <div><strong>Slack</strong><span>l'invitation arrive par courriel</span></div>
+        <div><strong>Datacamp</strong><span>idem · premier devoir en semaine 2</span></div>
+        <div><strong>pol2000.com</strong><span>plan, calendrier, diapositives</span></div>
+      </div>
+      <p class="lead e">Un blocage ? Écrivez <strong>avant</strong> jeudi.</p>
     </Slide>
 
     <Slide fond="encre" droite={D}>
@@ -563,36 +454,128 @@ install.packages("tidyverse")
 </Deck>
 
 <style>
-  /* Trois cartes côte à côte, poids égal. */
   .trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9em; align-items: stretch; }
-  .etiqs { display: flex; flex-wrap: wrap; gap: 0.5em; }
-  .petit { font-size: 0.8em; color: var(--dk-gris); }
-  /* Liste numérotée serrée: trois items de deux lignes tiennent dans une colonne. */
-  :global(.qs-num.serre li) { font-size: 1.02em; line-height: 1.35; }
-  :global(.qs-num.serre) { gap: 0.5em; }
-  /* Le thème ignore les tons; on ne garde qu'une distinction: la carte qui compte. */
+  .etiqs { display: flex; flex-wrap: wrap; gap: 0.6em; font-size: 1.15em; }
+  .pale { color: var(--dk-gris); }
+  .centre { text-align: center; max-width: none; }
   :global(.carte-d.accent) { border-color: var(--dk-accent); }
   :global(.carte-d.accent h4) { color: var(--dk-accent); }
+  :global(.qs-num li) { font-size: 1.5em; }
 
-  /* Le tableau de l'ouverture: des cases vides, volontairement. */
-  .tableau-vide td:not(:first-child) { text-align: center; color: var(--dk-gris-2); font-weight: 600; }
+  /* Qui suis-je: trois étapes. */
+  .frise-moi { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0.8em; align-items: stretch; margin-bottom: 1em; }
+  .frise-moi > div:not(.fl) { border: 2px solid var(--dk-filet); padding: 0.7em 0.9em; display: flex; flex-direction: column; gap: 0.2em; }
+  .frise-moi .ici { border: 3px solid var(--dk-accent); }
+  .frise-moi .an { font-size: 0.6em; letter-spacing: 0.16em; font-weight: 600; color: var(--dk-gris); }
+  .frise-moi strong { font-size: 1.15em; }
+  .frise-moi span:last-child { font-size: 0.75em; color: var(--dk-gris); }
+  .fl { align-self: center; font-size: 2em; color: var(--dk-accent); }
 
-  /* Calendrier: numéro et date serrés, titre qui respire. */
-  .calendrier td:first-child { width: 2.2em; color: var(--dk-accent); font-weight: 600; text-align: right; }
-  .calendrier td:nth-child(2) { width: 5.5em; white-space: nowrap; color: var(--dk-gris); }
+  /* À main levée: quatre questions, très grandes. */
+  .mains { list-style: none; padding: 0; margin: 0; counter-reset: m; display: flex; flex-direction: column; gap: 0.5em; }
+  .mains li { counter-increment: m; display: grid; grid-template-columns: 1.4em 1fr; gap: 0.6em; align-items: baseline; font-size: 1.7em; line-height: 1.25; }
+  .mains li::before { content: counter(m); color: var(--dk-accent); font-weight: 600; }
 
-  /* Chaîne concept → définition → mesure. */
+  /* Tableau vide. */
+  .tableau-vide td:not(:first-child) { text-align: center; color: var(--dk-gris-2); font-weight: 600; font-size: 1.3em; }
+
+  /* Peurs. */
+  .peurs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em; }
+  .peur { display: flex; flex-direction: column; gap: 0.3em; border: 2px solid var(--dk-encre); padding: 0.7em 0.8em; }
+  .glyphe { font-family: var(--dk-mono); font-size: 2.2em; line-height: 1; color: var(--dk-gris-2); margin-bottom: 0.3em; }
+  .glyphe.barre { text-decoration: line-through; text-decoration-color: var(--dk-accent); text-decoration-thickness: 4px; }
+  .glyphe s { text-decoration-color: var(--dk-accent); text-decoration-thickness: 4px; }
+  .glyphe strong { color: var(--dk-accent); }
+  .fix { font-size: 1.1em; font-weight: 600; }
+  .peur small { font-size: 0.72em; color: var(--dk-gris); }
+
+  /* Quatre pictos. */
+  .quatre, .unites { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; }
+  .quatre > div, .unites > div { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.35em; border: 2px solid var(--dk-encre); padding: 1em 0.6em; }
+  .quatre strong, .unites strong { font-size: 1em; }
+  .quatre span, .unites span:not(.glyphe-u) { font-size: 0.72em; color: var(--dk-gris); }
+  .glyphe-u { font-size: 2.4em; line-height: 1; color: var(--dk-encre); }
+
+  /* Un projet en deux temps. */
+  .croissance { display: grid; grid-template-columns: 1fr auto 1.4fr; gap: 1em; align-items: end; }
+  .doc { border: 2px solid var(--dk-encre); padding: 0.7em 0.9em; }
+  .grand-doc { border: 3px solid var(--dk-accent); }
+  .doc .et { display: block; font-size: 0.58em; letter-spacing: 0.16em; font-weight: 600; color: var(--dk-gris); margin-bottom: 0.4em; }
+  .doc .et.acc { color: var(--dk-accent); }
+  .doc ul { margin: 0; padding: 0; list-style: none; }
+  .doc li { font-size: 0.85em; line-height: 1.5; }
+  .doc li.plus { color: var(--dk-accent); font-weight: 600; }
+
+  /* Datacamp: quatorze semaines. */
+  .dc .semaines { display: flex; gap: 0.35em; }
+  .dc .semaines i { flex: 1; height: 1.4em; background: var(--dk-gris-2); }
+  .dc .semaines i.jalon { background: var(--dk-accent); }
+  .dc .jalons { display: flex; justify-content: space-between; font-size: 0.65em; color: var(--dk-accent); font-weight: 600; margin: 0.25em 0 0.6em; padding-left: 47%; }
+  .dc p { font-size: 0.95em; }
+
+  /* IA: trois feux. */
+  .feux { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em; margin-bottom: 0.8em; }
+  .feu { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.2em; padding: 0.9em 0.6em; border: 2px solid var(--dk-encre); }
+  .feu .signe { font-family: var(--dk-mono); font-size: 3em; line-height: 1; font-weight: 600; }
+  .feu.ok .signe { color: var(--dk-encre); }
+  .feu.non { border-color: var(--dk-accent); border-width: 3px; }
+  .feu.non .signe { color: var(--dk-accent); }
+  .feu.selon .signe { color: var(--dk-gris); }
+  .feu small { font-size: 0.72em; color: var(--dk-gris); }
+
+  /* Matériel. */
+  .materiel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; }
+  .item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.4em; border: 2px solid var(--dk-encre); padding: 1em 0.6em; justify-content: flex-end; }
+  .grosR { font-family: var(--dk-mono); font-size: 3.4em; line-height: 1; font-weight: 600; color: var(--dk-accent); }
+  .grosP { font-family: var(--dk-mono); font-size: 1.4em; line-height: 1; font-weight: 600; padding: 0.5em 0.4em; border: 3px solid var(--dk-encre); }
+  .couv { display: flex; align-items: center; justify-content: center; text-align: center; width: 4.2em; height: 5.4em; border: 3px solid var(--dk-encre); font-size: 0.62em; font-weight: 600; line-height: 1.3; }
+  .item small { font-size: 0.68em; color: var(--dk-gris); }
+  .item strong { font-size: 0.9em; }
+
+  /* Deux grands, sur encre. */
+  .deuxgrands { display: grid; grid-template-columns: 1fr 1fr; gap: 2em; }
+  .deuxgrands > div { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.3em; }
+  .deuxgrands .signe { font-family: var(--dk-mono); font-size: 5em; line-height: 1; font-weight: 600; color: var(--dk-accent-clair); }
+  .deuxgrands .signe.non { color: var(--dk-accent); }
+  .deuxgrands strong { font-size: 1.8em; }
+  .deuxgrands small { font-size: 0.85em; opacity: 0.8; }
+
+  /* X → Y. */
+  .xy { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.2em; align-items: center; margin: 0.6em 0 1em; }
+  .xy > div:not(.fl) { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.15em; border: 3px solid var(--dk-encre); padding: 1em; }
+  .xy .y { border-color: var(--dk-accent); }
+  .xy .lettre { font-family: var(--dk-mono); font-size: 5em; line-height: 1; font-weight: 600; }
+  .xy .y .lettre { color: var(--dk-accent); }
+  .xy strong { font-size: 1.2em; }
+  .xy small { font-size: 0.75em; color: var(--dk-gris); }
+  .xy em { font-size: 0.85em; color: var(--dk-accent); font-style: normal; font-weight: 600; margin-top: 0.3em; }
+  .xy .fl { font-size: 4em; }
+
+  /* Chaîne concept → mesure. */
   .chaine { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0.6em; align-items: stretch; margin: 0.6em 0 0.9em; }
-  .chaine > div:not(.fl) { border: 2px solid var(--dk-filet); padding: 0.6em 0.8em; display: flex; flex-direction: column; gap: 0.35em; }
-  .chaine > div:last-child { border-color: var(--dk-accent); }
+  .chaine > div:not(.fl) { border: 2px solid var(--dk-filet); padding: 0.7em 0.9em; display: flex; flex-direction: column; gap: 0.35em; }
+  .chaine > div:last-child { border-color: var(--dk-accent); border-width: 3px; }
   .chaine .et { font-size: 0.58em; letter-spacing: 0.16em; font-weight: 600; color: var(--dk-gris); }
-  .chaine .fl { display: flex; align-items: center; font-size: 1.6em; color: var(--dk-accent); }
+  .chaine strong { font-size: 1.05em; }
+  .chaine .fl { font-size: 1.8em; }
 
-  /* La fiche: vide contre remplie. */
-  .fiche { border: 2px solid var(--dk-filet); padding: 0.7em 0.9em; }
-  .fiche.pleine { border-color: var(--dk-accent); }
-  .fiche dl { display: grid; grid-template-columns: auto 1fr; gap: 0.25em 0.9em; margin: 0.3em 0 0; font-size: 0.78em; }
+  /* La fiche. */
+  .fiche { border: 2px solid var(--dk-filet); padding: 0.8em 1em; }
+  .fiche.pleine { border: 3px solid var(--dk-accent); }
+  .fiche dl { display: grid; grid-template-columns: auto 1fr; gap: 0.35em 1em; margin: 0; font-size: 0.85em; }
   .fiche dt { color: var(--dk-gris); font-weight: 600; white-space: nowrap; }
   .fiche dd { margin: 0; }
   .fiche.vide dd { color: var(--dk-gris-2); }
+  .fiche.grande dl { font-size: 1.05em; gap: 0.7em 1.2em; }
+  .fiche.grande dd { border-bottom: 2px dotted var(--dk-filet); min-height: 1.4em; }
+
+  /* Bonus. */
+  .bonus { display: flex; flex-direction: column; gap: 0.6em; justify-content: center; }
+  .bonus p { font-size: 0.9em; margin: 0; }
+
+  /* Trois liens. */
+  .liens { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em; margin-bottom: 1em; }
+  .liens > div { border: 2px solid var(--dk-encre); padding: 1em 0.9em; display: flex; flex-direction: column; gap: 0.25em; }
+  .liens strong { font-size: 1.3em; }
+  .liens span { font-size: 0.75em; color: var(--dk-gris); }
 </style>
