@@ -10,3 +10,8 @@
 
 # Local design scratch file, not part of the published site
 mockup.html
+
+# SvelteKit deck source lives in deck/; only its exported build (slides/) is published
+deck/node_modules/
+deck/build/
+deck/.svelte-kit/

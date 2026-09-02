@@ -1,7 +1,7 @@
 {
   "_comment": "Control plane for index.html, read at runtime by assets/js/course_logic.js. POL-2000, session d'automne 2026.",
   "slides": {
-    "cours_1": false,
+    "cours_1": true,
     "cours_2": false,
     "cours_3": false,
     "cours_4": false,
@@ -17,7 +17,8 @@
     "cours_14": false
   },
   "slide_links": {
-    "_comment": "Deck id -> rendered .html path. Empty until the A26 decks are written; slides.* stays false meanwhile."
+    "_comment": "Deck id -> rendered .html path. Empty until the A26 decks are written; slides.* stays false meanwhile.",
+    "cours_1": "slides/seance-1/"
   },
   "evaluations": {
     "_comment": "Status: 'pending' (À venir), 'active' (En cours), 'completed' (Terminé). Object form adds a url button when active.",
@@ -59,7 +60,11 @@
       "date": "2026-09-03",
       "title": "Introduction et les éléments fondamentaux de la recherche",
       "description": "Présentation du cours et du plan de cours, puis les notions de base : question de recherche, variables, population et échantillon, niveaux de mesure. Marche à suivre pour installer R et Positron.",
-      "type": "lecture"
+      "type": "lecture",
+      "slide": {
+        "icon": "fas fa-chalkboard",
+        "url": "slides/seance-1/"
+      }
     },
     {
       "week": 2,

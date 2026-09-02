@@ -80,9 +80,12 @@ course_config.json        site control plane — see below
 index.html                landing page; chrome is static, calendar is injected
 assets/js/course_logic.js reads course_config.json and builds the DOM
 assets/{css,sass,webfonts,js}  vendored theme — do not read or edit
-slides/N_topic/*.qmd      deck source (edit this)
-slides/N_topic/*.html     rendered output (committed, never hand-edited)
-slides/N_topic/*_files/   vendored reveal.js per deck — do not read
+deck/                     SvelteKit source of the A26 decks (edit this)
+deck/src/routes/seance-N/ one deck per séance
+deck/src/lib/deck/        the deck engine (Deck, Slide, Carte, Deux, …) + deck.css
+slides/seance-N/          exported deck (committed, never hand-edited)
+slides/_app/              shared build bundle for all decks (committed)
+slides/N_topic/           ❌ inherited FAS1001 Quarto decks — placeholder shell
 images/                   deck thumbnails and logos
 grilles/, tp_1/, tp_pdf/  assignments and grading grids
 .beads/                   issue tracker database (not published)
@@ -97,6 +100,7 @@ in minified JavaScript.
 **Never read, grep, or open files under:**
 
 - `slides/*/*_files/` — vendored reveal.js, one full copy per deck
+- `slides/_app/`, `deck/node_modules/`, `deck/build/`, `deck/.svelte-kit/` — build output
 - `assets/webfonts/`, `assets/css/`, `assets/js/*.min.js`, `assets/sass/`
 - `.git/`, `.beads/`
 
@@ -109,23 +113,42 @@ truth; the rendered `.html` is a build artifact.
 
 ## Building slides
 
-Each deck is a standalone Quarto reveal.js document. There is currently
-**no `_quarto.yml`** — every deck repeats its own YAML header, and those
-headers still say `institute: Université de Montréal` with a UdeM logo.
-Treat that as a known defect, tracked in beads.
+A26 decks are **SvelteKit pages**, not Quarto. The engine and visual
+language are lifted from the instructor's EIOM 2026 decks
+(`~/Projects/eiom/eiom-ia.github.io`) and re-themed for Université Laval
+(red `#c6102e` accent on paper, gold `#ffc103` on ink; contrasts are
+computed in the header of `deck/src/lib/deck/deck.css`). The inherited
+FAS1001 Quarto decks under `slides/N_topic/` are a foreign shell and are
+not built from anything in this repo.
 
 ```bash
-quarto render slides/1_introduction/cours_1_intro.qmd
+cd deck
+npm install                                   # once
+npm run build                                 # → deck/build/
+CHROMIUM=/usr/sbin/chromium node outils/deborde.mjs http://127.0.0.1:PORT/seance-1/ 1920 1080
+npm run exporter                              # → ../slides/seance-N/ + ../slides/_app/
 ```
 
-- Rendering writes `<name>.html` and `<name>_files/` beside the source.
-- **Both MUST be committed.** Cloudflare Pages deploys the committed tree
-  with **no build step** — nothing regenerates these files server-side.
-  Adding them to `.gitignore` breaks the live site. This is the single
-  most damaging mistake possible in this repo.
-- Never hand-edit a rendered `.html`. Edit the `.qmd` and re-render.
-- Verify a deck renders before committing it. A broken deck goes live
-  within a minute or two of `git push`.
+- One route per séance: `deck/src/routes/seance-N/+page.svelte`, with
+  `const TOTAL = <slide count>` kept equal to the number of `<Slide>`s.
+- The build uses **relative paths** (`svelte.config.js`), so an exported
+  deck works from any folder and from `file://` on a laptop with no
+  network. Every deck shares one `slides/_app/` bundle; re-export after
+  any rebuild or the decks drift from the bundle.
+- **Both `slides/seance-N/` and `slides/_app/` MUST be committed.**
+  Cloudflare Pages deploys the committed tree with **no build step**.
+  `deck/node_modules`, `deck/build` and `deck/.svelte-kit` are ignored.
+- **Run `outils/deborde.mjs` before committing.** A slide that overflows
+  is a slide cut off on the projector. Serve `deck/build/` with any static
+  server first; the tool needs a URL. Check 1920×1080 and 1280×720.
+- Known engine trap: `.qs-num li` is a two-column grid. Wrap each item's
+  content in a single `<span>` or inline markup splits into extra cells.
+- Never hand-edit `slides/seance-N/index.html`. Edit the `.svelte` and
+  re-export.
+- Wire a new deck into the site through `course_config.json`
+  (`slides.cours_N = true`, `slide_links.cours_N`, and `schedule[].slide`)
+  and flip the static "À venir" tag on the `#slide-cours_N` card in
+  `index.html`.
 
 ### Cloudflare Pages limits — check before committing large files
 
@@ -207,8 +230,8 @@ Conventions for this repo:
 
 ## Things that will bite you
 
-1. **Editing a rendered `.html` instead of the `.qmd`** — silently
-   overwritten on the next render.
+1. **Editing an exported `slides/seance-N/index.html` instead of the
+   `.svelte` source** — silently overwritten on the next export.
 2. **Gitignoring `*_files/`** — breaks every deck on the live site, since
    Cloudflare runs no build step.
 3. **Treating an inherited FAS1001 deck as course material** — see

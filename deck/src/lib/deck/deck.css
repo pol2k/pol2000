@@ -1,0 +1,1453 @@
+/* ==================================================================
+   DECK — Brutalisme de terminal, fond clair
+   ------------------------------------------------------------------
+   Doctrine assumée: monospace intégral, contraste franc, angles vifs,
+   aplats. Aucune ombre, aucun dégradé, aucun coin arrondi, aucune
+   trame de fond. La structure est montrée plutôt que masquée.
+
+   Version POL-2000 (Université Laval): l'accent passe du bleu au rouge
+   de l'Université, et l'or de l'Université sert d'accent sur les aplats
+   d'encre. Contrastes calculés, pas estimés:
+     #0c0e0f  17,9:1   encre sur fond #f6f6f3
+     #5c6367   5,7:1   gris secondaire sur fond
+     #c6102e   5,5:1   accent (rouge UL) sur fond — AA texte normal
+     #ffc103  11,9:1   accent clair (or UL) sur aplat encre #0c0e0f
+   L'or ne va jamais sur le fond clair: 1,5:1, illisible.
+
+   Les variables sont locales au deck: le site n'est pas touché.
+   ================================================================== */
+
+/* Le chrome (barre, pied) est frère de .deck dans le composant: sans cette
+   liste, les variables ne l'atteignent pas et le pied devient illisible.
+   Constaté par capture sur une diapo encre. */
+.deck,
+.deck-barre,
+.deck-pied,
+.pause-app,
+.pause-voile {
+  --dk-fond: #f6f6f3;
+  --dk-fond-2: #eeeee9;
+  --dk-encre: #0c0e0f;
+  --dk-gris: #5c6367;
+  --dk-gris-2: #8b918f;
+  --dk-filet: #d5d5cf;
+  --dk-accent: #c6102e;
+  --dk-aplat: #c6102e;
+  --dk-accent-clair: #ffc103;
+  --dk-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+.deck {
+  height: 100dvh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  background: var(--dk-fond);
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck { scroll-behavior: auto; }
+}
+
+/* ---------- La diapositive ---------- */
+
+.diapo {
+  /* Toute la typographie du deck est en em et dérive de cette taille.
+     min(vw, vh) garantit que le contenu suive la fenêtre sur les deux
+     axes. --d est le facteur propre à la diapo, mesuré par
+     outils/ajuster.mjs; --zoom est le réglage clavier. */
+  font-size: calc(clamp(15px, min(1.6vw, 2.8vh), 32px) * var(--zoom, 1) * var(--d, 1));
+
+  height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  background: var(--dk-fond);
+  color: var(--dk-encre);
+  font-family: var(--dk-mono);
+  position: relative;
+}
+
+.diapo.encre { background: var(--dk-encre); color: var(--dk-fond); }
+.diapo.terminal { background: #050706; color: #f5f7f4; }
+.diapo.terminal .diapo-bandeau { display: none; }
+.diapo.terminal .diapo-in { max-width: none; padding: 0; }
+
+/* Le bandeau: repère de section, toujours au même endroit. */
+.diapo-bandeau {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.85em 1.6em;
+  border-bottom: 2px solid var(--dk-encre);
+  font-size: 0.6em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  flex: 0 0 auto;
+  color: var(--dk-encre);
+}
+.diapo-bandeau .droite { color: var(--dk-accent); }
+.diapo.encre .diapo-bandeau { border-bottom-color: var(--dk-fond); color: var(--dk-fond); }
+.diapo.encre .diapo-bandeau .droite { color: var(--dk-accent-clair); }
+
+.diapo-in {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.72em;
+  padding: 1.4em 1.6em 2.2em;
+  width: 100%;
+  max-width: 40em;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.diapo-in > :first-child { margin-top: 0; }
+
+/* La mesure de lecture vaut pour la prose. Un tableau, un bloc de code ou
+   un schéma n'a pas de raison d'y être contraint: on les laisse respirer. */
+.diapo-in:has(> table) { max-width: 52em; }
+.diapo-in:has(> table.large) { max-width: 62em; }
+.diapo-in:has(> .biblio) { max-width: 56em; }
+.diapo-in:has(> .bloc-code) { max-width: 50em; }
+.diapo-in:has(> figure.schema) { max-width: 52em; }
+.diapo-in:has(> .semaine-bande) { max-width: 54em; }
+.diapo-in:has(> .arbre) { max-width: 56em; }
+.diapo-in:has(> .capture) { max-width: 64em; }
+.diapo-in:has(> .bcl) { max-width: 58em; }
+.diapo-in:has(> .mcp) { max-width: 58em; }
+.diapo-in:has(> .trm) { max-width: 58em; }
+.diapo-in:has(> .trmn) { max-width: 52em; }
+.diapo-in:has(> .ctx2) { max-width: 56em; }
+.diapo-in:has(> .dcl) { max-width: 54em; }
+.diapo-in:has(> .prt) { max-width: 62em; }
+.diapo-in:has(> .pgrid) { max-width: 54em; }
+.diapo-in:has(> .pduo) { max-width: 50em; }
+.diapo-in:has(> .collage) { max-width: none; padding: 0; }
+.diapo-in:has(> .gal-3) { max-width: 58em; }
+.diapo-in:has(> .gal-2) { max-width: 56em; }
+.diapo-in:has(> .pl) { max-width: 50em; }
+.diapo-in:has(> .api) { max-width: 54em; }
+.diapo-in:has(> .ctx) { max-width: 56em; }
+.diapo-in:has(> .bia) { max-width: 58em; }
+.diapo-in:has(> .temp) { max-width: 54em; }
+.diapo-in:has(> .cps) { max-width: 56em; }
+.diapo-in:has(> .ext) { max-width: 54em; }
+.diapo-in:has(> .mod) { max-width: 56em; }
+.diapo-in:has(> .arn) { max-width: 54em; }
+.diapo-in:has(> .mes) { max-width: 54em; }
+.diapo-in:has(> .qs-num) { max-width: 52em; }
+.diapo-in:has(> .ctr) { max-width: 56em; }
+.diapo-in:has(> .prx) { max-width: 56em; }
+.diapo-in:has(> .don) { max-width: 56em; }
+.diapo-in:has(> .pds) { max-width: 54em; }
+.diapo-in:has(> .con) { max-width: 54em; }
+.diapo-in:has(> .ana) { max-width: 52em; }
+.diapo-in:has(> .compare-p) { max-width: 54em; }
+.diapo-in:has(> .ech) { max-width: 50em; }
+.diapo-in:has(> .gen) { max-width: 54em; }
+.diapo-in:has(> .mur) { max-width: 56em; }
+.diapo-in:has(> .fi) { max-width: 52em; }
+.diapo-in:has(> .clf) { max-width: 58em; }
+.diapo-in:has(> .hal) { max-width: 56em; }
+.diapo-in:has(> .sur) { max-width: 54em; }
+.diapo-in:has(> .barres) { max-width: 44em; }
+.diapo-in:has(> .compare) { max-width: 44em; }
+.diapo-in:has(> .deux) { max-width: 50em; }
+
+/* ---------- Typographie ---------- */
+
+.diapo h1 {
+  font-family: var(--dk-mono);
+  font-size: 3em;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.048em;
+  margin: 0;
+  color: inherit;
+}
+
+.diapo h2 {
+  font-family: var(--dk-mono);
+  font-size: 1.8em;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.032em;
+  margin: 0;
+  color: inherit;
+}
+
+.diapo h3 {
+  font-family: var(--dk-mono);
+  font-size: 0.96em;
+  font-weight: 500;
+  margin: 0 0 0.2em;
+  color: inherit;
+}
+
+.diapo p, .diapo li { font-size: 0.88em; line-height: 1.55; color: inherit; margin: 0; }
+.diapo ul, .diapo ol { padding-left: 1.1em; margin: 0; }
+.diapo li { margin-bottom: 0.28em; }
+.diapo strong { font-weight: 600; }
+.diapo em { font-style: italic; }
+
+/* Le surtitre subsiste pour les diapos qui n'ont pas de bandeau. */
+.diapo .surtitre {
+  font-size: 0.6em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dk-gris);
+  margin: 0;
+}
+.diapo.encre .surtitre { color: var(--dk-gris-2); }
+
+.diapo .lead { font-size: 1.18em; line-height: 1.42; max-width: 34em; }
+
+.diapo .filet {
+  width: 5em;
+  height: 0.34em;
+  background: var(--dk-aplat);
+  border: 0;
+  margin: 0.1em 0 0.15em;
+}
+
+.diapo code {
+  font-family: var(--dk-mono);
+  background: var(--dk-fond-2);
+  padding: 0.05em 0.28em;
+  font-size: 0.94em;
+}
+.diapo.encre code { background: rgba(246, 246, 243, 0.14); }
+
+/* ---------- Colonnes ---------- */
+
+.deux { display: grid; gap: 1em; align-items: stretch; width: 100%; }
+@media (max-width: 46rem) { .deux { grid-template-columns: 1fr !important; } }
+
+/* ---------- Blocs (ex-cartes) ---------- */
+
+/* Deux traitements seulement, jamais cinq pastels: un bloc filaire, et
+   un aplat encre pour ce qui doit trancher. Le ton « rose » — réservé
+   dans le contenu aux avertissements — prend l'aplat. */
+.carte-d {
+  border: 2px solid var(--dk-encre);
+  padding: 0.72em 0.85em;
+  font-size: 0.9em;
+  background: transparent;
+}
+.carte-d h4 {
+  font-family: var(--dk-mono);
+  font-size: 0.66em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 0.5em;
+  color: var(--dk-accent);
+}
+.carte-d h4::before { content: '[ '; }
+.carte-d h4::after { content: ' ]'; }
+.carte-d p, .carte-d li { font-size: 0.9em; margin: 0 0 0.35em; }
+.carte-d :last-child { margin-bottom: 0; }
+.carte-d ul, .carte-d ol { padding-left: 0; list-style: none; }
+.carte-d li { padding-left: 1em; text-indent: -1em; }
+.carte-d li::before { content: '> '; color: var(--dk-accent); }
+
+/* Aucun bloc en aplat sombre: testé en salle, ça alourdit la diapo sans
+   rien clarifier. Tous les blocs sont filaires; l'emphase passe par le
+   texte et par la position, pas par un pavé noir. */
+
+/* ---------- Liste en commandes de terminal ---------- */
+
+.cmd-liste { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.55em; }
+.cmd-liste li { margin: 0; padding-left: 1.5em; text-indent: -1.5em; font-size: 1em; line-height: 1.45; }
+.cmd-liste li::before {
+  content: '> ';
+  color: var(--dk-accent);
+  font-weight: 600;
+}
+/* L'établissement passe à la ligne, comme la sortie d'une commande:
+   plus lisible qu'un retour à la ligne au milieu d'un nom propre. */
+.cmd-liste .lieu {
+  display: block;
+  color: var(--dk-gris);
+  text-indent: 0;
+  margin-top: 0.08em;
+  font-size: 0.92em;
+}
+.diapo.encre .cmd-liste li::before { color: var(--dk-accent-clair); }
+.diapo.encre .cmd-liste .lieu { color: var(--dk-gris-2); }
+
+/* ---------- Étiquettes ---------- */
+
+.etiq {
+  display: inline-block;
+  font-family: var(--dk-mono);
+  font-size: 0.66em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dk-accent);
+  border: 0;
+  padding: 0;
+  background: none;
+}
+.etiq::before { content: '[ '; }
+.etiq::after { content: ' ]'; }
+.diapo.encre .etiq { color: var(--dk-accent-clair); }
+
+.logo-ecole { margin: 0; display: flex; align-items: center; justify-content: flex-end; }
+.logo-ecole img { display: block; width: 100%; max-width: 9em; height: auto; }
+
+/* Les questions ouvertes d'une diapositive de passation. */
+.qs { list-style: none; padding: 0; margin: 0 0 0.7em; display: flex; flex-direction: column; gap: 0.3em; }
+.qs li { font-size: 1.15em; font-weight: 600; color: var(--dk-accent); }
+.diapo.encre .qs li { color: var(--dk-accent-clair); }
+
+/* La bibliographie tient rarement sur une hauteur d'écran: on la fait défiler
+   plutôt que de la réduire jusqu'à l'illisible. */
+.biblio-boite { overflow-y: auto; max-height: 62vh; border: 2px solid var(--dk-filet); padding: 0.6em 0.9em; }
+.diapo-in:has(> .biblio-boite) { max-width: 58em; }
+
+/* Deux prompts côte à côte: la longueur même des blocs est l'argument. */
+.compare-p { display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.1em; }
+.compare-p .p { border: 2px solid var(--dk-filet); padding: 0.6em 0.8em 0.7em; display: flex; flex-direction: column; gap: 0.3em; }
+.compare-p .p.solide { border-color: var(--dk-accent); }
+.compare-p .et { font-size: 0.58em; letter-spacing: 0.16em; font-weight: 600; color: var(--dk-gris); }
+.compare-p .p.solide .et { color: var(--dk-accent); }
+.compare-p .txt { margin: 0; font-size: 0.68em; line-height: 1.45; color: var(--dk-encre); }
+.compare-p .pourquoi { margin: 0.2em 0 0; font-size: 0.58em; color: var(--dk-gris); }
+
+/* Présentation d'un paquet: le logo porte l'identité, le texte reste court. */
+.ell { display: grid; grid-template-columns: auto 1fr; gap: 1.4em; align-items: center; margin-bottom: 0.7em; }
+.ell-logo { margin: 0; }
+.ell-logo img { display: block; width: 100%; max-width: 7em; height: auto; }
+.ell-txt { display: flex; flex-direction: column; gap: 0.15em; }
+.ell-txt h2 { margin: 0; }
+.ell-sous { margin: 0 0 0.3em; font-size: 0.8em; color: var(--dk-gris); }
+.ell-pts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.15em; }
+.ell-pts li { font-size: 0.68em; color: var(--dk-encre); padding-left: 1em; text-indent: -1em; }
+.ell-pts li::before { content: '· '; color: var(--dk-accent); font-weight: 600; }
+.ell-cmd { margin: 0.4em 0 0; font-size: 0.66em; color: var(--dk-accent); border: 2px solid var(--dk-accent); padding: 0.25em 0.6em; align-self: flex-start; }
+.diapo-in:has(> .ell) { max-width: 54em; }
+
+/* Deux questions posées à la salle, numérotées et rien d'autre. */
+.qs-num { list-style: none; padding: 0; margin: 0; counter-reset: q; display: flex; flex-direction: column; gap: 0.75em; }
+.qs-num li { counter-increment: q; display: grid; grid-template-columns: 1.6em 1fr; gap: 0.7em; align-items: baseline; font-size: 1.35em; line-height: 1.3; }
+.qs-num li::before { content: counter(q); color: var(--dk-accent); font-weight: 600; }
+.diapo.encre .qs-num li::before { color: var(--dk-accent-clair); }
+
+/* ---------- Grand chiffre ---------- */
+
+.grand { display: flex; flex-direction: column; gap: 0.1em; }
+.grand .v {
+  font-family: var(--dk-mono);
+  font-size: 3em;
+  font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  color: var(--dk-accent);
+}
+.grand .l {
+  font-size: 0.6em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dk-gris);
+}
+.diapo.encre .grand .v { color: var(--dk-accent-clair); }
+.diapo.encre .grand .l { color: var(--dk-gris-2); }
+
+/* ---------- Citation ---------- */
+
+.cit {
+  border-left: 0.34em solid var(--dk-aplat);
+  padding: 0.15em 0 0.15em 0.8em;
+  font-size: 0.98em;
+  font-style: normal;
+  margin: 0;
+  color: inherit;
+}
+.cit cite {
+  display: block;
+  margin-top: 0.45em;
+  font-style: normal;
+  font-size: 0.66em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dk-gris);
+}
+.diapo.encre .cit cite { color: var(--dk-gris-2); }
+
+/* ---------- Code ---------- */
+
+.bloc-code { margin: 0; }
+.bloc-code figcaption {
+  font-family: var(--dk-mono);
+  font-size: 0.6em;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--dk-gris);
+  margin-bottom: 0.35em;
+}
+.bloc-code pre {
+  background: var(--dk-fond-2);
+  border: 2px solid var(--dk-encre);
+  border-left-width: 0.34em;
+  border-left-color: var(--dk-aplat);
+  padding: 0.72em 0.9em;
+  overflow-x: auto;
+  font-family: var(--dk-mono);
+  font-size: 0.72em;
+  line-height: 1.6;
+  color: var(--dk-encre);
+  margin: 0;
+}
+.bloc-code.petit pre { font-size: 0.62em; }
+
+/* Bouton « copier »: confort seulement. Sans JavaScript il n'est pas rendu,
+   et le bloc de code reste exactement ce qu'il était. */
+.bloc-code .enveloppe { position: relative; }
+.copier {
+  font-family: var(--dk-mono);
+  font-size: 0.52em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dk-gris);
+  background: var(--dk-fond);
+  border: 2px solid var(--dk-filet);
+  padding: 0.25em 0.6em;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+}
+.bloc-code .copier { position: absolute; top: 0.5em; right: 0.5em; }
+.bloc-code .enveloppe:hover .copier,
+.copier:focus-visible { opacity: 1; }
+.copier:hover { opacity: 1; color: var(--dk-accent); border-color: var(--dk-accent); }
+.copier:focus-visible { outline: 2px solid var(--dk-accent); outline-offset: 2px; }
+.copier.fait {
+  opacity: 1;
+  color: var(--dk-fond);
+  background: var(--dk-accent);
+  border-color: var(--dk-accent);
+}
+.copier.rate { opacity: 1; color: var(--dk-encre); border-color: var(--dk-encre); }
+
+.diapo.encre .bloc-code .copier { background: #16191a; color: var(--dk-gris-2); border-color: var(--dk-gris); }
+.diapo.encre .bloc-code .copier:hover { color: var(--dk-accent-clair); border-color: var(--dk-accent-clair); }
+.diapo.encre .bloc-code .copier.fait { color: #0c0e0f; background: var(--dk-accent-clair); border-color: var(--dk-accent-clair); }
+.diapo.encre .bloc-code pre {
+  background: #16191a;
+  border-color: var(--dk-fond);
+  border-left-color: var(--dk-aplat);
+  color: var(--dk-fond);
+}
+.diapo.encre .bloc-code figcaption { color: var(--dk-gris-2); }
+
+/* Coloration: sobre, deux teintes plus le gris. Pas un arc-en-ciel. */
+.r-com { color: var(--dk-gris); font-style: italic; }
+.r-str { color: var(--dk-accent); }
+.r-num { color: var(--dk-accent); }
+.r-fn  { color: var(--dk-encre); font-weight: 600; }
+.r-cle { color: var(--dk-accent); font-weight: 600; }
+.r-op  { color: var(--dk-gris); }
+.diapo.encre .r-com { color: var(--dk-gris-2); }
+.diapo.encre .r-str,
+.diapo.encre .r-num,
+.diapo.encre .r-cle { color: var(--dk-accent-clair); }
+.diapo.encre .r-fn { color: var(--dk-fond); }
+.diapo.encre .r-op { color: var(--dk-gris-2); }
+
+/* ---------- Tableaux ---------- */
+
+.diapo table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.84em;
+  font-variant-numeric: tabular-nums;
+}
+.diapo th {
+  text-align: left;
+  font-family: var(--dk-mono);
+  font-size: 0.72em;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dk-gris);
+  border-top: 2px solid var(--dk-encre);
+  border-bottom: 1px solid var(--dk-gris-2);
+  padding: 0.5em 0.7em 0.45em 0;
+}
+.diapo td {
+  padding: 0.45em 0.7em 0.45em 0;
+  border-bottom: 1px solid var(--dk-filet);
+}
+.diapo tr:last-child td { border-bottom: 0; }
+.diapo td:last-child, .diapo th:last-child { padding-right: 0; }
+/* La première colonne porte souvent une année ou un rang: on lui garantit
+   un peu d'air, sinon l'en-tête se colle à la colonne suivante. */
+.diapo th:first-child, .diapo td:first-child { padding-right: 1.6em; }
+.diapo .num-c { text-align: right; }
+.diapo.encre th { color: var(--dk-gris-2); border-top-color: var(--dk-fond); border-bottom-color: var(--dk-gris); }
+.diapo.encre td { border-bottom-color: #2a2e30; }
+
+/* ---------- Bande de la semaine ---------- */
+
+/* Une bande d'horaire, pas un schéma de flux: les séances se suivent dans
+   le temps, elles ne s'enchaînent pas mécaniquement. */
+.semaine-bande {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: 100%;
+  border-top: 2px solid var(--dk-encre);
+}
+.semaine-bande > div {
+  padding: 0.85em 0.9em 1.1em 0;
+  border-right: 1px solid var(--dk-filet);
+}
+.semaine-bande > div:last-child { border-right: 0; }
+.semaine-bande > div + div { padding-left: 0.9em; }
+.semaine-bande .sb-jour {
+  font-size: 0.62em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dk-gris);
+  margin: 0 0 0.5em;
+}
+.semaine-bande .sb-titre {
+  font-size: 0.94em;
+  line-height: 1.25;
+  margin: 0;
+}
+.semaine-bande .mien .sb-jour { color: var(--dk-accent); }
+.semaine-bande .mien .sb-titre { font-weight: 600; }
+.diapo.encre .semaine-bande { border-top-color: var(--dk-fond); }
+.diapo.encre .semaine-bande > div { border-right-color: var(--dk-gris); }
+.diapo.encre .semaine-bande .mien .sb-jour { color: var(--dk-accent-clair); }
+
+/* ---------- Portrait ---------- */
+
+/* Cadre franc, pas de cercle: le brutalisme n'a pas de coin arrondi. */
+.portrait { margin: 0; }
+.portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--dk-encre);
+}
+.diapo.encre .portrait img { border-color: var(--dk-fond); }
+
+/* ---------- Schémas ---------- */
+
+.diapo figure.schema { margin: 0; display: flex; flex-direction: column; gap: 0.4em; align-items: center; }
+.diapo figure.schema img { max-width: 100%; max-height: 14em; object-fit: contain; }
+.diapo figure.schema figcaption {
+  font-family: var(--dk-mono);
+  font-size: 0.6em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dk-gris);
+}
+
+/* ---------- Chrome de navigation ---------- */
+
+/* Aucune animation d'entrée pilotée par le défilement: testé, un élément
+   pouvait rester figé à mi-opacité quand la diapo était au repos. */
+.diapo .e { opacity: 1; }
+
+.deck-barre {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0;
+  z-index: 100;
+  background: var(--dk-aplat);
+  transition: width 0.25s ease;
+}
+
+.deck-pied {
+  position: fixed; bottom: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; gap: 0.9rem;
+  font-family: var(--dk-mono); font-size: 0.68rem;
+  color: var(--dk-gris);
+  background: var(--dk-fond);
+  border-top: 2px solid var(--dk-encre);
+  border-left: 2px solid var(--dk-encre);
+  padding: 0.4rem 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.deck-points { display: flex; gap: 3px; }
+.point {
+  width: 5px; height: 5px; border-radius: 0;
+  background: var(--dk-filet); border: 0; padding: 0; cursor: pointer;
+}
+.point.on { background: var(--dk-aplat); }
+.deck-pied .zoom { color: var(--dk-accent); }
+.deck-pied.sans-js .deck-points { display: none; }
+
+/* ---------- Impression ---------- */
+
+@media print {
+  .deck { height: auto; overflow: visible; }
+  .deck-barre, .deck-pied { display: none; }
+  .diapo { height: 100vh; break-after: page; }
+}
+
+/* ---------- Citations ---------- */
+
+.cite {
+  font-size: 0.62em;
+  letter-spacing: 0.06em;
+  color: var(--dk-accent);
+  white-space: nowrap;
+}
+.cite::before { content: '('; }
+.cite::after { content: ')'; }
+.cite.manquante { color: #b00; }
+.diapo.encre .cite { color: var(--dk-accent-clair); }
+
+.biblio {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em 1.6em;
+}
+.biblio li { margin: 0; font-size: 0.7em; line-height: 1.35; }
+.biblio .b-auteurs { color: var(--dk-encre); }
+.biblio .b-titre { font-style: italic; }
+.biblio .b-detail { color: var(--dk-gris); }
+.diapo.encre .biblio .b-auteurs { color: var(--dk-fond); }
+.diapo.encre .biblio .b-detail { color: var(--dk-gris-2); }
+
+/* ---------- Définitions lettrées ---------- */
+
+.defs { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.72em; }
+.defs li {
+  display: grid;
+  grid-template-columns: 1.9em 1fr;
+  gap: 0.7em;
+  align-items: baseline;
+  margin: 0;
+}
+.defs .lettre {
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--dk-gris-2);
+}
+.defs .retenue .lettre { color: var(--dk-accent); }
+.defs .q { font-size: 1.06em; line-height: 1.3; }
+.diapo.encre .defs .lettre { color: var(--dk-gris); }
+.diapo.encre .defs .retenue .lettre { color: var(--dk-accent-clair); }
+.diapo .credits { font-size: 0.66em; color: var(--dk-gris); line-height: 1.4; }
+
+/* ---------- Horaire ---------- */
+
+.horaire { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
+.horaire li {
+  display: grid;
+  grid-template-columns: 5.2em 1fr;
+  gap: 1.1em;
+  align-items: baseline;
+  padding: 0.5em 0;
+  border-bottom: 1px solid var(--dk-filet);
+  margin: 0;
+}
+.horaire li:first-child { border-top: 2px solid var(--dk-encre); }
+.horaire li:last-child { border-bottom: 0; }
+.horaire .h {
+  font-family: var(--dk-mono);
+  font-weight: 600;
+  color: var(--dk-accent);
+  font-variant-numeric: tabular-nums;
+}
+.horaire .quoi { font-size: 1em; }
+.horaire .pause .h,
+.horaire .pause .quoi { color: var(--dk-gris); font-weight: 400; }
+.diapo.encre .horaire li { border-bottom-color: #2a2e30; }
+.diapo.encre .horaire li:first-child { border-top-color: var(--dk-fond); }
+.diapo.encre .horaire .h { color: var(--dk-accent-clair); }
+.diapo.encre .horaire .pause .h,
+.diapo.encre .horaire .pause .quoi { color: var(--dk-gris-2); }
+
+/* ---------- Barres de proportion ---------- */
+
+.barres { display: flex; flex-direction: column; gap: 0.42em; width: 100%; }
+.barres li { display: grid; grid-template-columns: 9em 1fr 3.4em; gap: 0.9em; align-items: center; margin: 0; }
+.barres { list-style: none; padding: 0; margin: 0; }
+.barres .src { font-size: 0.9em; }
+.barres .piste-b { height: 1.5em; background: var(--dk-fond-2); }
+.barres .rempli { display: block; height: 100%; background: var(--dk-encre); }
+.barres li.majeur .rempli { background: var(--dk-accent); }
+.barres li.majeur .src { font-weight: 600; color: var(--dk-accent); }
+.barres .pct {
+  font-family: var(--dk-mono); font-size: 0.86em; text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.diapo.encre .barres .piste-b { background: #22282a; }
+.diapo.encre .barres .rempli { background: var(--dk-fond); }
+.diapo.encre .barres li.majeur .rempli { background: var(--dk-accent-clair); }
+
+/* ---------- Grille de comparaison ---------- */
+
+.compare { width: 100%; border-collapse: collapse; }
+.compare th, .compare td { padding: 0.55em 0.9em 0.55em 0; text-align: left; }
+.compare thead th {
+  font-family: var(--dk-mono); font-size: 0.72em; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  border-bottom: 2px solid var(--dk-encre);
+}
+.compare thead th.a { color: var(--dk-encre); }
+.compare thead th.b { color: var(--dk-accent); }
+.compare tbody td { border-bottom: 1px solid var(--dk-filet); font-size: 0.94em; }
+.compare tbody tr:last-child td { border-bottom: 0; }
+.compare .crit { color: var(--dk-gris); font-size: 0.86em; }
+.compare .val-b { color: var(--dk-accent); }
+
+/* ---------- Animations de classification (Classifieur, Dictionnaire) ----------
+   Les deux animations partagent exactement la même mise en page: c'est la
+   condition pour que la comparaison entre l'ancienne et la nouvelle façon se
+   lise. Le style vit donc ici plutôt que dans l'un des deux composants. */
+  .clf {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55em;
+  }
+
+  .clf-tete {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1em;
+    border-bottom: 2px solid var(--dk-encre);
+    padding-bottom: 0.28em;
+  }
+  .pas-t {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--dk-accent);
+  }
+  .src {
+    font-size: 0.64em;
+    color: var(--dk-gris);
+    white-space: nowrap;
+  }
+
+  .clf-t {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.64em;
+    table-layout: fixed;
+  }
+  .clf-t th {
+    position: relative;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dk-gris);
+    border-bottom: 2px solid var(--dk-filet);
+    padding: 0.22em 0.5em;
+    white-space: nowrap;
+  }
+  .clf-t th.neuve {
+    color: var(--dk-accent);
+  }
+  .clf-t td {
+    padding: 0.26em 0.5em;
+    border-bottom: 1px solid var(--dk-filet);
+  }
+  .clf-t th:nth-child(1),
+  .clf-t td:nth-child(1) {
+    width: 12%;
+  }
+  .clf-t th:nth-child(2),
+  .clf-t td:nth-child(2) {
+    width: 42%;
+  }
+  .clf-t th:nth-child(3),
+  .clf-t td:nth-child(3) {
+    width: 20%;
+    text-align: center;
+  }
+  .clf-t th:nth-child(4),
+  .clf-t td:nth-child(4) {
+    width: 26%;
+  }
+
+  /* La colonne entre en scène: elle glisse depuis la droite et son filet se
+     trace. La largeur, elle, reste réservée — un tableau qui se réagence
+     déplacerait les quais sous la puce. */
+  .entrant {
+    opacity: 0;
+    transform: translateX(0.9em);
+    transition:
+      opacity 0.42s ease-out,
+      transform 0.42s ease-out;
+  }
+  .entrant.vue {
+    opacity: 1;
+    transform: none;
+  }
+  .soulign {
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 2px;
+    width: 0;
+    background: var(--dk-accent);
+    transition: width 0.5s ease-out;
+  }
+  .soulign.vue {
+    width: 100%;
+  }
+
+  .cellule {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cible-in {
+    min-height: 1.3em;
+  }
+  .clf-t td.mono,
+  .clf-t td.num {
+    color: var(--dk-gris);
+  }
+  .clf-t tr.active td {
+    background: var(--dk-fond-2);
+  }
+  .clf-t tr.active td.txt .cellule {
+    opacity: 0.25;
+  }
+  .clf-t tr.reste td {
+    color: var(--dk-gris-2);
+    border-bottom: none;
+  }
+  .cible .val {
+    color: var(--dk-accent);
+    font-weight: 600;
+  }
+
+  .stations {
+    display: flex;
+    align-items: stretch;
+    gap: 0.45em;
+  }
+  .st {
+    flex: 1;
+    border: 2px solid var(--dk-filet);
+    padding: 0.35em 0.55em 0.45em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.12em;
+    min-width: 0;
+  }
+  .st.on {
+    border-color: var(--dk-accent);
+  }
+  .st-n {
+    font-size: 0.58em;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    color: var(--dk-gris);
+  }
+  .st.on .st-n {
+    color: var(--dk-accent);
+  }
+  .st-d {
+    font-size: 0.56em;
+    color: var(--dk-gris-2);
+    line-height: 1.3;
+    min-height: 2.3em;
+  }
+  /* La valeur qu'on va extraire s'allume dans le JSON pendant l'analyse. */
+  .extrait {
+    transition: all 0.3s;
+  }
+  .extrait.tire {
+    color: var(--dk-fond);
+    background: var(--dk-accent);
+    font-weight: 600;
+    padding: 0 0.2em;
+  }
+  .quai {
+    display: block;
+    height: 1.6em;
+    border: 1px dashed var(--dk-filet);
+  }
+  .st.on .quai {
+    border-color: var(--dk-accent);
+  }
+  .fl {
+    align-self: center;
+    color: var(--dk-gris-2);
+    font-size: 0.75em;
+  }
+
+  .code-r {
+    margin: 0;
+    border-left: 3px solid var(--dk-accent);
+    background: var(--dk-fond-2);
+    padding: 0.4em 0.7em;
+    min-height: 3.1em;
+  }
+  .code-r pre {
+    margin: 0;
+  }
+  .code-r code {
+    font-family: var(--dk-mono);
+    font-size: 0.62em;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+
+  .pas-n {
+    color: var(--dk-accent);
+    font-variant-numeric: tabular-nums;
+    margin-left: 0.6em;
+  }
+  .puce {
+    position: absolute;
+    left: 0;
+    top: 0;
+    max-width: 30%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.6em;
+    padding: 0.28em 0.55em;
+    border: 2px solid var(--dk-accent);
+    background: var(--dk-fond);
+    color: var(--dk-accent);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.25s linear;
+  }
+  .puce.vis {
+    opacity: 1;
+  }
+  .puce.saut {
+    transition: none;
+  }
+  .puce.brut {
+    max-width: 26%;
+  }
+  .puce.val {
+    background: var(--dk-accent);
+    color: var(--dk-fond);
+    font-weight: 600;
+    max-width: 20%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .puce {
+      transition: opacity 0.2s linear;
+    }
+    .entrant,
+    .soulign {
+      transition: none;
+    }
+  }
+
+/* ---------- Galeries d'images — deck « IA agentique » ----------
+   Les images viennent d'une présentation revealjs où elles étaient posées en
+   absolu. Ici elles tiennent dans une grille: rien ne se chevauche, rien ne
+   dépend d'une résolution. La hauteur est bornée en em, donc elle suit le
+   facteur d'échelle de la diapo comme le reste. */
+
+.gal-3,
+.gal-2 {
+  display: grid;
+  gap: 1.4em;
+  align-items: end;
+  width: 100%;
+}
+.gal-3 { grid-template-columns: repeat(3, 1fr); }
+.gal-2 { grid-template-columns: repeat(2, 1fr); }
+
+.gal-3 figure,
+.gal-2 figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  align-items: center;
+}
+.gal-3 img,
+.gal-2 img {
+  display: block;
+  max-width: 100%;
+  max-height: 11em;
+  object-fit: contain;
+}
+.gal-3 figcaption,
+.gal-2 figcaption {
+  font-size: 0.8em;
+  color: var(--dk-gris);
+  letter-spacing: 0.04em;
+}
+
+/* Le cluster de logos de la diapositive de section MCP. */
+.gal-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6em;
+  align-items: center;
+  margin-top: 0.4em;
+}
+.gal-logos img {
+  display: block;
+  height: 3.4em;
+  width: auto;
+}
+
+/* Une capture d'écran occupe la diapositive: c'est elle qu'on commente.
+   Le filet la détache du fond clair, sinon les captures sombres flottent. */
+.capture {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.capture img {
+  display: block;
+  max-width: 100%;
+  max-height: 30em;
+  object-fit: contain;
+  border: 2px solid var(--dk-filet);
+}
+/* Le logo d'OpenClaw est un lettrage, pas une capture: pas de cadre. */
+.capture img[src$='openclaw.png'] {
+  border: none;
+  max-height: 9em;
+}
+
+/* ---------- Collage d'agents — repris de la présentation FAS1001 ----------
+   On reproduit le mécanisme de revealjs plutôt que de réinterpréter la mise
+   en page: scène de 1050 x 700 en pixels, mise à l'échelle par transform.
+
+   Les images débordent de la scène et ne sont PAS coupées à son bord —
+   reveal les laisse déborder, c'est la fenêtre qui coupe. Le rognage se fait
+   donc sur la diapositive, qui joue le rôle de la fenêtre. */
+
+.collage {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+/* Le rognage se fait ici plutôt qu'au bord de l'écran: l'original n'avait pas
+   de bandeau, nous si, et une image qui le recouvre se lit comme un défaut. */
+.collage-cadre {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.collage-scene {
+  position: relative;
+  width: 1050px;
+  height: 700px;
+  flex: none;
+}
+
+.collage-scene .col-titre {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1050px;
+  margin: 0;
+  font-size: 64px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--dk-encre);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.collage-scene .col-im {
+  position: absolute;
+  height: auto;
+  display: block;
+  opacity: 0;
+  transform: rotate(var(--rot, 0deg)) scale(0.96);
+  transition:
+    opacity 0.28s ease-out,
+    transform 0.28s ease-out;
+}
+.collage-scene .col-im.vue {
+  opacity: 1;
+  transform: rotate(var(--rot, 0deg)) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collage-scene .col-im {
+    transition: none;
+    transform: rotate(var(--rot, 0deg));
+  }
+}
+
+/* ---------- La boucle: le modèle seul, puis le harnais ----------
+   Deux diapositives sur une seule scène. La leçon tient dans la différence
+   entre les deux images, donc elles sont superposables: mêmes zones, mêmes
+   fichiers, même couloir. Seul le pont apparaît. */
+
+.bcl {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+.bcl svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.bcl text {
+  font-family: var(--dk-mono);
+}
+
+.bcl .lieu {
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  fill: var(--dk-gris);
+}
+.bcl .zone {
+  fill: none;
+  stroke: var(--dk-encre);
+  stroke-width: 2.5;
+}
+
+.bcl .fchip {
+  fill: var(--dk-fond-2);
+  stroke: var(--dk-gris-2);
+  stroke-width: 2;
+  transition: fill 0.25s ease-out, stroke 0.25s ease-out;
+}
+.bcl .fchip-t {
+  font-size: 17px;
+  fill: var(--dk-gris);
+  transition: fill 0.25s ease-out;
+}
+/* Quand le harnais agit, ce sont ces fichiers-là qu'il touche. */
+.bcl .fich.touche .fchip {
+  fill: var(--dk-fond);
+  stroke: var(--dk-accent);
+}
+.bcl .fich.touche .fchip-t {
+  fill: var(--dk-accent);
+}
+
+.bcl .hbox {
+  fill: none;
+  stroke: var(--dk-encre);
+  stroke-width: 2.5;
+  transition: stroke 0.25s ease-out;
+}
+.bcl .harn.actif .hbox {
+  stroke: var(--dk-accent);
+  stroke-width: 4;
+}
+.bcl .hn {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  fill: var(--dk-encre);
+  transition: fill 0.25s ease-out;
+}
+.bcl .harn.actif .hn {
+  fill: var(--dk-accent);
+}
+.bcl .hd {
+  font-size: 16px;
+  fill: var(--dk-gris);
+}
+
+.bcl .mod {
+  fill: var(--dk-accent);
+  stroke: var(--dk-accent);
+  stroke-width: 2.5;
+}
+.bcl .mod-t {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: var(--dk-fond);
+}
+.bcl .mod-d {
+  font-size: 17px;
+  fill: var(--dk-accent-clair);
+}
+
+.bcl .note {
+  font-size: 16px;
+  fill: var(--dk-gris-2);
+}
+
+.bcl .fx {
+  stroke: var(--dk-filet);
+  stroke-width: 2.5;
+  fill: none;
+}
+/* La flèche interne: le harnais qui agit sur les fichiers. */
+.bcl .fx-int {
+  stroke: var(--dk-accent);
+  stroke-width: 3;
+  fill: none;
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+.bcl .fx-int.on {
+  opacity: 1;
+}
+
+.bcl .quoi {
+  font-size: 17px;
+  fill: var(--dk-gris-2);
+  transition: fill 0.25s ease-out;
+}
+.bcl .quoi.on {
+  fill: var(--dk-accent);
+  font-weight: 600;
+}
+
+.bcl .paq {
+  fill: var(--dk-accent);
+  transform-box: view-box;
+}
+.bcl .paq.va {
+  animation: bcl-va 1.5s ease-in-out infinite;
+}
+.bcl .paq.vient {
+  animation: bcl-vient 1.5s ease-in-out infinite;
+}
+@keyframes bcl-va {
+  0% { transform: translateX(0); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateX(205px); opacity: 0; }
+}
+@keyframes bcl-vient {
+  0% { transform: translateX(0); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateX(-205px); opacity: 0; }
+}
+
+/* Ce qui ne traverse pas: un fichier, barré, au milieu du couloir. */
+.bcl .bloque {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+.bcl .bloque.on {
+  opacity: 1;
+}
+.bcl .croix {
+  stroke: var(--dk-encre);
+  stroke-width: 3;
+}
+.bcl .mur-t {
+  font-size: 17px;
+  letter-spacing: 0.1em;
+  fill: var(--dk-encre);
+  font-weight: 600;
+}
+
+.bcl-leg {
+  margin: 0;
+  min-height: 1.5em;
+  font-size: 0.94em;
+  color: var(--dk-encre);
+}
+.bcl-leg.vide {
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bcl .paq { animation: none; opacity: 1; }
+}
+
+/* ---------- Rangées de pictogrammes ----------
+   Elles existent pour remplacer de la prose. Un pictogramme et deux mots
+   tiennent la place d'une phrase, et la salle peut écouter pendant qu'elle
+   regarde — ce qu'elle ne fait plus quand elle lit. */
+
+.pgrid {
+  display: grid;
+  gap: 1.1em 1.8em;
+  width: 100%;
+}
+.pgrid.c2 { grid-template-columns: 1fr 1fr; }
+.pgrid.c3 { grid-template-columns: repeat(3, 1fr); }
+.pgrid.c4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Un item: le pictogramme, puis deux ou trois mots. Jamais une phrase. */
+.pit {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  color: var(--dk-encre);
+}
+.pit .picto { color: var(--dk-accent); }
+.pit-t {
+  font-size: 0.92em;
+  line-height: 1.3;
+}
+.pit-t .s {
+  display: block;
+  font-size: 0.76em;
+  color: var(--dk-gris);
+  letter-spacing: 0.02em;
+}
+
+/* Colonne étiquetée, pour opposer deux séries. */
+.pcol {
+  border: 2px solid var(--dk-encre);
+  padding: 0.8em 1em 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+}
+.pcol > h4 {
+  margin: 0 0 0.1em;
+  font-size: 0.76em;
+  letter-spacing: 0.16em;
+  color: var(--dk-accent);
+  font-weight: 600;
+}
+.pcol > h4::before { content: '[ '; }
+.pcol > h4::after { content: ' ]'; }
+.pcol.sourd .pit .picto { color: var(--dk-gris-2); }
+.pcol.sourd .pit { color: var(--dk-gris); }
+
+/* Une opposition en deux blocs, pictogramme dominant. */
+.pduo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.8em;
+}
+.pduo > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+  text-align: center;
+  border: 2px solid var(--dk-encre);
+  padding: 1.1em 1em 1.2em;
+}
+.pduo .picto { color: var(--dk-accent); }
+.pduo h4 {
+  margin: 0;
+  font-size: 0.8em;
+  letter-spacing: 0.14em;
+  color: var(--dk-accent);
+}
+.pduo p {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+/* Une cellule de tableau qui porte un logo et un nom. */
+.nomlogo {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+}
+
+.carte-d .logo-l { margin: 0 0 0.5em; }
+
+/* ---- La minuterie de pause, appelable depuis n'importe quelle diapositive ---- */
+.pause-app {
+  position: fixed;
+  left: 1.1rem;
+  bottom: 1.1rem;
+  z-index: 40;
+  width: 2.1rem;
+  height: 2.1rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--dk-filet);
+  border-radius: 50%;
+  background: var(--dk-fond);
+  color: var(--dk-gris-2);
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity 0.2s, color 0.2s, border-color 0.2s;
+}
+.pause-app:hover,
+.pause-app:focus-visible {
+  opacity: 1;
+  color: var(--dk-accent);
+  border-color: var(--dk-accent);
+}
+.pause-app svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.pause-voile {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: var(--dk-encre);
+  color: var(--dk-fond);
+}
+.pause-compte {
+  margin: 0;
+  font-family: var(--dk-mono);
+  font-size: clamp(5rem, 22vw, 16rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--dk-fond);
+}
+.pause-compte.fini { color: var(--dk-accent-clair); }
+.pause-mot {
+  margin: 0;
+  font-family: var(--dk-mono);
+  font-size: clamp(1rem, 3vw, 2rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--dk-gris-2);
+}
+.pause-choix { display: flex; gap: 0.6rem; margin-top: 1rem; }
+.pause-choix button {
+  padding: 0.5rem 1.1rem;
+  border: 2px solid var(--dk-gris);
+  background: none;
+  color: var(--dk-fond);
+  font: inherit;
+  font-family: var(--dk-mono);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.pause-choix button:hover { border-color: var(--dk-accent-clair); color: var(--dk-accent-clair); }
+.pause-fermer {
+  margin-top: 0.8rem;
+  border: 0;
+  background: none;
+  color: var(--dk-gris);
+  font: inherit;
+  font-family: var(--dk-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+.pause-fermer:hover { color: var(--dk-fond); }
+@media print { .pause-app, .pause-voile { display: none; } }
