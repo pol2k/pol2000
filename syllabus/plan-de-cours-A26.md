@@ -108,8 +108,9 @@ principal du format en présentiel, et j'ai l'intention de m'en servir. À cette
 les étudiant.e.s sont incité.e.s à faire les lectures indiquées avant chaque séance.
 
 Dans l'objectif de mettre leurs connaissances en application, **les étudiant.e.s
-doivent apporter leur ordinateur portable à chaque séance**. Régulièrement, je ferai
-des démonstrations avec R et Positron que vous pourrez suivre en direct.
+doivent apporter leur ordinateur portable à chaque séance**. À partir de la séance 2,
+la plupart des séances comportent des démonstrations en direct avec R et Positron,
+que vous pourrez suivre sur votre propre ordinateur.
 
 Chaque semaine présente :
 
@@ -120,13 +121,19 @@ Chaque semaine présente :
 
 Un glossaire des notions clefs accompagne le cours.
 
-### Livre obligatoire
+### Ouvrage de référence
+
+Aucune lecture obligatoire n'est imposée dans ce cours. L'ouvrage suivant sert
+toutefois de **référence pour l'ensemble de la session** : il couvre la matière vue
+en classe et vous y trouverez, au besoin, une présentation plus détaillée de chaque
+notion.
 
 Arel-Bundock, Vincent. 2021. *Analyse causale et méthodes quantitatives : Une
 introduction avec R, Stata et SPSS*. Presses de l'Université de Montréal.
 
 Le livre est **disponible gratuitement en format PDF** sur le site des Presses de
-l'Université de Montréal. Une version papier peut être achetée chez Coop Zone.
+l'Université de Montréal. Une version papier peut être achetée chez Coop Zone par
+celles et ceux qui le souhaitent.
 
 ### Informations concernant les logiciels R et Positron
 
@@ -137,8 +144,10 @@ Positron est un environnement de développement gratuit et libre, conçu par Pos
 qui vous permet d'utiliser R plus facilement. Il est
 nécessaire de télécharger ces deux logiciels dans le cadre de ce cours.
 
-La séance d'introduction à R a lieu à la **semaine 4 (jeudi 24 septembre 2026)**.
-Il est essentiel d'avoir installé les deux logiciels avant cette séance.
+La séance d'introduction à R a lieu dès la **semaine 2 (jeudi 10 septembre 2026)**,
+et une seconde séance consacrée à la préparation des données avec R suit à la
+semaine 4. Il est essentiel d'avoir installé les deux logiciels avant la séance 2 :
+la marche à suivre sera présentée à la séance 1.
 
 Des devoirs sur la plateforme datacamp.com vous seront proposés chaque semaine pour
 développer rapidement vos compétences en R. Je vous recommande donc fortement
@@ -156,6 +165,25 @@ la première moitié de la session avant le **25 octobre 2026 à 23h59** (premie
 Les devoirs de la seconde moitié de la session — en incluant ceux de la première
 moitié — devront être réalisés avant le **18 décembre 2026 à 23h59** (deuxième 5 %).
 
+### Utilisation de l'intelligence artificielle générative
+
+Les outils d'intelligence artificielle générative (ChatGPT, Claude, Gemini, Copilot
+et autres) font désormais partie de l'environnement de travail de toute personne qui
+analyse des données. Ce cours ne les interdit pas : il vous apprend à vous en servir
+correctement.
+
+- **Permis, à condition de le déclarer :** obtenir de l'aide pour écrire, comprendre
+  ou déboguer du code R.
+- **Non permis :** l'interprétation des résultats et la rédaction des travaux. Ce que
+  vous affirmez, vous devez pouvoir le défendre.
+- **Chaque évaluation précise ses propres consignes** quant à l'utilisation permise de
+  ces outils.
+
+Deux séances abordent directement ces outils : la séance 2 (utiliser un assistant
+d'IA pour apprendre R) et la séance 10 (produire, puis vérifier, une analyse complète
+réalisée par un agent d'IA). La règle de base tient en une question : *l'aurais-je
+accepté d'un assistant humain sans vérifier son travail ?*
+
 ### Politique de retard
 
 Une pénalité de **10 % par jour** de la note obtenue sera appliquée à toute
@@ -171,17 +199,17 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 
 | Séance | Date | Titre |
 |---|---|---|
-| 1 | jeudi 3 septembre 2026 | Introduction |
-| 2 | jeudi 10 septembre 2026 | Les éléments fondamentaux de la recherche |
-| 3 | jeudi 17 septembre 2026 | Les statistiques descriptives |
-| 4 | jeudi 24 septembre 2026 | Introduction à R |
+| 1 | jeudi 3 septembre 2026 | Introduction et les éléments fondamentaux de la recherche |
+| 2 | jeudi 10 septembre 2026 | Introduction à R et à Positron |
+| 3 | jeudi 17 septembre 2026 | Les statistiques descriptives et la visualisation des données |
+| 4 | jeudi 24 septembre 2026 | Préparer ses données avec R |
 | 5 | jeudi 1er octobre 2026 | L'inférence statistique |
 | 6 | jeudi 8 octobre 2026 | Rencontres individuelles — aucun cours magistral |
 | 7 | jeudi 15 octobre 2026 | La régression linéaire simple |
 | 8 | jeudi 22 octobre 2026 | **Examen 2** (1re heure) puis atelier de préparation au travail de mi-session |
 | — | jeudi 29 octobre 2026 | **Semaine de lecture — aucun cours** (26 au 30 octobre) |
 | 9 | jeudi 5 novembre 2026 | La régression linéaire multiple |
-| 10 | jeudi 12 novembre 2026 | La régression linéaire avec R |
+| 10 | jeudi 12 novembre 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
 | 11 | jeudi 19 novembre 2026 | Les graphes orientés acycliques (GOA) |
 | 12 | jeudi 26 novembre 2026 | Le problème fondamental de l'inférence causale |
 | 13 | jeudi 3 décembre 2026 | Les biais |
@@ -241,8 +269,8 @@ application. Ils ne comptent pas dans votre note finale.
 | **Mode de travail** | Individuel |
 | **Remise** | Boîte de dépôt sur le site de cours |
 
-Examen pratique à faire chez vous, sur ordinateur, à la suite de la séance
-d'introduction à R. Il évalue votre capacité à importer, manipuler et décrire des
+Examen pratique à faire chez vous, sur ordinateur, à la suite des séances 2 et 4
+consacrées à R. Il évalue votre capacité à importer, manipuler et décrire des
 données avec R et Positron.
 
 #### Examen 2 — Les statistiques descriptives (15 %)
@@ -372,12 +400,15 @@ en discuter.
 
 ### Matériel obligatoire
 
-- Arel-Bundock, Vincent. 2021. *Analyse causale et méthodes quantitatives : Une
-  introduction avec R, Stata et SPSS*. Presses de l'Université de Montréal.
-  (gratuit en PDF)
 - **R** — [cran.r-project.org](https://cran.r-project.org)
 - **Positron** — [positron.posit.co](https://positron.posit.co/download.html)
 - Un **ordinateur portable** à apporter à chaque séance.
+
+### Ouvrage de référence (non obligatoire)
+
+- Arel-Bundock, Vincent. 2021. *Analyse causale et méthodes quantitatives : Une
+  introduction avec R, Stata et SPSS*. Presses de l'Université de Montréal.
+  (gratuit en PDF)
 
 ### Spécifications technologiques
 
@@ -400,6 +431,9 @@ en présentiel :
 | Rencontres individuelles | Deux semaines dédiées | Une semaine dédiée (semaine 6) + disponibilités sur rendez-vous |
 | Séance 8 | — | Examen 2 suivi d'un atelier de préparation au travail de mi-session |
 | Nombre de séances | 15 semaines | 14 séances (aucune ne tombe sur un jour férié) |
+| Introduction à R | Semaine 4 | **Semaine 2**, suivie d'une seconde séance sur la préparation des données (semaine 4) |
+| Livre | Obligatoire | Ouvrage de référence, non obligatoire |
+| Intelligence artificielle générative | — | Abordée aux séances 2 et 10; consignes précisées pour chaque évaluation |
 
-La structure des évaluations, leurs pondérations, le livre obligatoire et les
-exercices Datacamp demeurent inchangés.
+La structure des évaluations, leurs pondérations et les exercices Datacamp demeurent
+inchangés.

@@ -59,17 +59,17 @@ Au terme du cours, l'étudiant.e sera en mesure de :
 
 | Séance | Date | Sujet |
 |---|---|---|
-| 1 | 3 septembre 2026 | Introduction |
-| 2 | 10 septembre 2026 | Les éléments fondamentaux de la recherche |
-| 3 | 17 septembre 2026 | Les statistiques descriptives |
-| 4 | 24 septembre 2026 | Introduction à R |
+| 1 | 3 septembre 2026 | Introduction et les éléments fondamentaux de la recherche |
+| 2 | 10 septembre 2026 | Introduction à R et à Positron |
+| 3 | 17 septembre 2026 | Les statistiques descriptives et la visualisation des données |
+| 4 | 24 septembre 2026 | Préparer ses données avec R |
 | 5 | 1er octobre 2026 | L'inférence statistique |
 | 6 | 8 octobre 2026 | Rencontres individuelles (aucun cours magistral) |
 | 7 | 15 octobre 2026 | La régression linéaire simple |
 | 8 | 22 octobre 2026 | Examen 2, puis atelier de mi-session |
 | — | 26 au 30 octobre 2026 | Semaine de lecture — aucun cours |
 | 9 | 5 novembre 2026 | La régression linéaire multiple |
-| 10 | 12 novembre 2026 | La régression linéaire avec R |
+| 10 | 12 novembre 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
 | 11 | 19 novembre 2026 | Les graphes orientés acycliques (GOA) |
 | 12 | 26 novembre 2026 | Le problème fondamental de l'inférence causale |
 | 13 | 3 décembre 2026 | Les biais |
@@ -91,11 +91,24 @@ Politique de retard : pénalité de 10 % par jour; après trois jours, la note e
 
 ## Matériel obligatoire
 
+- R (cran.r-project.org) et Positron (positron.posit.co) — à installer **avant la séance 2**.
+- Un ordinateur portable, à apporter à chaque séance.
+
+## Ouvrage de référence (non obligatoire)
+
 - Arel-Bundock, Vincent. 2021. *Analyse causale et méthodes quantitatives :
   Une introduction avec R, Stata et SPSS*. Presses de l'Université de Montréal.
-  Gratuit en format PDF.
-- R (cran.r-project.org) et Positron (positron.posit.co) — à installer **avant la séance 4**.
-- Un ordinateur portable, à apporter à chaque séance.
+  Gratuit en format PDF. Aucune lecture obligatoire n'est imposée; ce livre
+  sert de référence pour l'ensemble de la session.
+
+## Utilisation de l'intelligence artificielle générative
+
+- **Permis, à condition de le déclarer :** obtenir de l'aide pour écrire,
+  comprendre ou déboguer du code R.
+- **Non permis :** l'interprétation des résultats et la rédaction des travaux.
+- **Chaque évaluation précise ses propres consignes.**
+
+Les séances 2 et 10 abordent directement ces outils.
 
 **Points bonis :** 2 points à la note finale pour l'installation de R et Positron
 avant le 17 septembre 2026, 23h59, avec capture d'écran comme preuve.

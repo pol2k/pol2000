@@ -31,17 +31,17 @@
 
 | # | Date | Topic |
 |---|---|---|
-| 1 | Thu 3 Sep 2026 | Introduction |
-| 2 | Thu 10 Sep 2026 | Les éléments fondamentaux de la recherche |
-| 3 | Thu 17 Sep 2026 | Les statistiques descriptives |
-| 4 | Thu 24 Sep 2026 | Introduction à R |
+| 1 | Thu 3 Sep 2026 | Introduction et les éléments fondamentaux de la recherche |
+| 2 | Thu 10 Sep 2026 | Introduction à R et à Positron |
+| 3 | Thu 17 Sep 2026 | Les statistiques descriptives et la visualisation des données |
+| 4 | Thu 24 Sep 2026 | Préparer ses données avec R |
 | 5 | Thu 1 Oct 2026 | L'inférence statistique |
 | 6 | Thu 8 Oct 2026 | Rencontres individuelles (no lecture) |
 | 7 | Thu 15 Oct 2026 | La régression linéaire simple |
 | 8 | Thu 22 Oct 2026 | Examen 2 (1st hour) + mi-session workshop |
 | — | Thu 29 Oct 2026 | Reading week — no class |
 | 9 | Thu 5 Nov 2026 | La régression linéaire multiple |
-| 10 | Thu 12 Nov 2026 | La régression linéaire avec R |
+| 10 | Thu 12 Nov 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
 | 11 | Thu 19 Nov 2026 | Les graphes orientés acycliques (GOA) |
 | 12 | Thu 26 Nov 2026 | Le problème fondamental de l'inférence causale |
 | 13 | Thu 3 Dec 2026 | Les biais |
@@ -59,9 +59,20 @@
 | Travail final | Fri 18 Dec 2026, 23h59 | 25 % |
 | Datacamp (1re + 2e partie) | Fri 18 Dec 2026, 23h59 | 5 % |
 
-Weights, textbook and Datacamp are unchanged from H24. What changed: delivery
-is in person, Examens 2 and 3 are written during class instead of at a booked
-exam centre, and there is one individual-meeting week instead of two.
+Weights and Datacamp are unchanged from H24. What changed: delivery is in
+person, Examens 2 and 3 are written during class instead of at a booked exam
+centre, there is one individual-meeting week instead of two, **R moves from
+séance 4 to séance 2** (with a second data-preparation session at séance 4),
+the fundamentals of research merge into séance 1, séance 3 adds visualisation,
+séance 10 becomes the end-to-end pipeline done by hand and then by an AI agent,
+**the textbook is now a non-mandatory reference**, and the plan de cours carries
+an explicit generative-AI policy (allowed for R code with disclosure; not for
+interpretation or writing; per-evaluation rules). Decided 2 Sept 2026 with the
+instructor; rationale in the session transcript, not in the repo.
+
+Lecture-only constraint: ~100 students in a lecture hall. No lab halves. R is
+taught through live projector demos students follow on their own laptops, plus
+at-home material (fas1001 `introduction_r/` kit, Datacamp).
 
 ## Identification
 
@@ -197,7 +208,7 @@ mi-session :
 
 ## Matériel
 
-- **Livre obligatoire** : Arel-Bundock, Vincent. 2021. *Analyse causale et
+- **Ouvrage de référence (non obligatoire)** : Arel-Bundock, Vincent. 2021. *Analyse causale et
   méthodes quantitatives : Une introduction avec R, Stata et SPSS*.
   Presses de l'Université de Montréal. Disponible gratuitement en PDF.
 - **Logiciels** : R et Positron.

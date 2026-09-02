@@ -57,29 +57,29 @@
     {
       "week": 1,
       "date": "2026-09-03",
-      "title": "Introduction",
-      "description": "Présentation du cours, du plan de cours et de la démarche quantitative.",
+      "title": "Introduction et les éléments fondamentaux de la recherche",
+      "description": "Présentation du cours et du plan de cours, puis les notions de base : question de recherche, variables, population et échantillon, niveaux de mesure. Marche à suivre pour installer R et Positron.",
       "type": "lecture"
     },
     {
       "week": 2,
       "date": "2026-09-10",
-      "title": "Les éléments fondamentaux de la recherche",
-      "description": "Population et échantillon, variables et constantes, niveaux de mesure.",
+      "title": "Introduction à R et à Positron",
+      "description": "R et Positron à partir de zéro, en direct. Installez les deux logiciels avant la séance. Utiliser un assistant d'IA pour apprendre R.",
       "type": "lecture"
     },
     {
       "week": 3,
       "date": "2026-09-17",
-      "title": "Les statistiques descriptives",
-      "description": "Distributions de fréquences, mesures de tendance centrale et de variation.",
+      "title": "Les statistiques descriptives et la visualisation des données",
+      "description": "Distributions, mesures de tendance centrale et de variation, et premiers graphiques, démontrés dans R.",
       "type": "lecture"
     },
     {
       "week": 4,
       "date": "2026-09-24",
-      "title": "Introduction à R",
-      "description": "R et Positron à partir de zéro. Installez les deux logiciels avant la séance.",
+      "title": "Préparer ses données avec R",
+      "description": "Lire un codebook, recoder des variables, gérer les valeurs manquantes et structurer un jeu de données. Ouverture de l'examen 1.",
       "type": "lecture"
     },
     {
@@ -174,8 +174,8 @@
     {
       "week": 10,
       "date": "2026-11-12",
-      "title": "La régression linéaire avec R",
-      "description": "Estimer une régression et produire un tableau de résultats dans R.",
+      "title": "De la question au tableau de régression : à la main, puis avec l'IA",
+      "description": "Le travail final du début à la fin : d'abord à la main dans Positron, puis confié à un agent d'IA — et vérifié.",
       "type": "lecture"
     },
     {
