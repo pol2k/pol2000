@@ -63,7 +63,7 @@ Au terme de ce cours, l'étudiant.e sera en mesure de :
 
 - maîtriser les différents concepts et techniques propres à l'analyse statistique;
 - utiliser les fonctions de base du langage de programmation R et du logiciel
-  RStudio pour le traitement de données;
+  Positron pour le traitement de données;
 - comprendre et critiquer des articles scientifiques à l'aide de techniques
   statistiques;
 - comprendre la logique de l'analyse causale et ses limites;
@@ -109,7 +109,7 @@ les étudiant.e.s sont incité.e.s à faire les lectures indiquées avant chaque
 
 Dans l'objectif de mettre leurs connaissances en application, **les étudiant.e.s
 doivent apporter leur ordinateur portable à chaque séance**. Régulièrement, je ferai
-des démonstrations avec R et RStudio que vous pourrez suivre en direct.
+des démonstrations avec R et Positron que vous pourrez suivre en direct.
 
 Chaque semaine présente :
 
@@ -128,12 +128,13 @@ introduction avec R, Stata et SPSS*. Presses de l'Université de Montréal.
 Le livre est **disponible gratuitement en format PDF** sur le site des Presses de
 l'Université de Montréal. Une version papier peut être achetée chez Coop Zone.
 
-### Informations concernant les logiciels R et RStudio
+### Informations concernant les logiciels R et Positron
 
-Les logiciels statistiques obligatoires dans ce cours sont **R** et **RStudio**. R
+Les logiciels statistiques obligatoires dans ce cours sont **R** et **Positron**. R
 est un langage de programmation gratuit de plus en plus utilisé par les chercheurs
 quantitatifs en sciences sociales, mais aussi par de nombreux analystes de données.
-RStudio est une plateforme qui vous permet d'utiliser R plus facilement. Il est
+Positron est un environnement de développement gratuit et libre, conçu par Posit,
+qui vous permet d'utiliser R plus facilement. Il est
 nécessaire de télécharger ces deux logiciels dans le cadre de ce cours.
 
 La séance d'introduction à R a lieu à la **semaine 4 (jeudi 24 septembre 2026)**.
@@ -141,7 +142,7 @@ Il est essentiel d'avoir installé les deux logiciels avant cette séance.
 
 Des devoirs sur la plateforme datacamp.com vous seront proposés chaque semaine pour
 développer rapidement vos compétences en R. Je vous recommande donc fortement
-d'installer R et RStudio dès le début de la session.
+d'installer R et Positron dès le début de la session.
 
 > **Points bonis.** Les étudiant.e.s qui installent les deux logiciels avant le
 > **jeudi 17 septembre 2026 à 23h59** et m'envoient une capture d'écran comme preuve
@@ -242,7 +243,7 @@ application. Ils ne comptent pas dans votre note finale.
 
 Examen pratique à faire chez vous, sur ordinateur, à la suite de la séance
 d'introduction à R. Il évalue votre capacité à importer, manipuler et décrire des
-données avec R et RStudio.
+données avec R et Positron.
 
 #### Examen 2 — Les statistiques descriptives (15 %)
 
@@ -326,7 +327,7 @@ avec une banque de données fournie. À partir de cette banque de données, vous
   à une méthode alternative (dans une recherche future) pour estimer l'effet causal qui
   vous intéresse.
 
-Vous devrez vous servir de l'interface **RStudio** pour réaliser ce travail. La
+Vous devrez vous servir de l'interface **Positron** pour réaliser ce travail. La
 présentation et la citation des sources seront prises en compte dans votre note.
 
 #### Datacamp (2 × 5 %)
@@ -375,12 +376,12 @@ en discuter.
   introduction avec R, Stata et SPSS*. Presses de l'Université de Montréal.
   (gratuit en PDF)
 - **R** — [cran.r-project.org](https://cran.r-project.org)
-- **RStudio** — [posit.co/download/rstudio-desktop](https://posit.co/download/rstudio-desktop/)
+- **Positron** — [positron.posit.co](https://positron.posit.co/download.html)
 - Un **ordinateur portable** à apporter à chaque séance.
 
 ### Spécifications technologiques
 
-R et RStudio fonctionnent sous Windows, macOS et Linux. Si vous n'avez pas accès à un
+R et Positron fonctionnent sous Windows, macOS et Linux. Si vous n'avez pas accès à un
 ordinateur portable, communiquez avec moi dès le début de la session : des solutions
 existent.
 

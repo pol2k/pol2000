@@ -62,7 +62,7 @@ These come from the official course description and are not negotiable:
 - **No mathematics prerequisite beyond secondary school.** Do not derive
   formulas, do not lean on calculus or linear algebra notation. Teach the
   intuition and the interpretation.
-- Students learn **R and RStudio**; assume zero prior programming.
+- Students learn **R and Positron**; assume zero prior programming.
 - The arc is: describe one variable → relate two or more → infer from
   sample to population → reason about causality and its limits.
 - Content is organized in three parts (concepts de base → régression

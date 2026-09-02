@@ -38,7 +38,7 @@ Aucune connaissance avancée des mathématiques n'est nécessaire.
 Au terme du cours, l'étudiant.e sera en mesure de :
 
 - maîtriser les concepts et techniques propres à l'analyse statistique;
-- utiliser les fonctions de base de R et de RStudio pour le traitement de données;
+- utiliser les fonctions de base de R et de Positron pour le traitement de données;
 - comprendre et critiquer des articles scientifiques à l'aide de techniques statistiques;
 - comprendre la logique de l'analyse causale et ses limites;
 - concevoir et réaliser son propre projet de recherche.
@@ -94,10 +94,10 @@ Politique de retard : pénalité de 10 % par jour; après trois jours, la note e
 - Arel-Bundock, Vincent. 2021. *Analyse causale et méthodes quantitatives :
   Une introduction avec R, Stata et SPSS*. Presses de l'Université de Montréal.
   Gratuit en format PDF.
-- R (cran.r-project.org) et RStudio (posit.co) — à installer **avant la séance 4**.
+- R (cran.r-project.org) et Positron (positron.posit.co) — à installer **avant la séance 4**.
 - Un ordinateur portable, à apporter à chaque séance.
 
-**Points bonis :** 2 points à la note finale pour l'installation de R et RStudio
+**Points bonis :** 2 points à la note finale pour l'installation de R et Positron
 avant le 17 septembre 2026, 23h59, avec capture d'écran comme preuve.
 
 ---

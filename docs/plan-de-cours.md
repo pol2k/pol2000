@@ -94,7 +94,7 @@ mathématiques ne sont pas approfondis.
 Au terme du cours, l'étudiant.e sera en mesure de :
 
 1. Maîtriser les concepts et techniques propres à l'analyse statistique;
-2. Utiliser les fonctions de base de R et de RStudio pour le traitement de
+2. Utiliser les fonctions de base de R et de Positron pour le traitement de
    données;
 3. Comprendre et critiquer des articles scientifiques faisant appel à des
    techniques statistiques;
@@ -164,7 +164,7 @@ descriptives à la semaine 3.
 | | Examen 2 — Les statistiques descriptives | 15 % | En classe, 1 h, papier et crayon seulement |
 | | Examen 3 — Régressions simple et multiple | 15 % | En classe, 1 h, papier et crayon seulement |
 | Travaux (45 %) | Travail de mi-session | 20 % | Individuel, PDF |
-| | Travail final | 25 % | Individuel, PDF, RStudio obligatoire |
+| | Travail final | 25 % | Individuel, PDF, Positron obligatoire |
 | Exercices (10 %) | Datacamp 1re partie | 5 % | Datacamp.com |
 | | Datacamp 1re + 2e partie | 5 % | Datacamp.com |
 
@@ -200,7 +200,7 @@ mi-session :
 - **Livre obligatoire** : Arel-Bundock, Vincent. 2021. *Analyse causale et
   méthodes quantitatives : Une introduction avec R, Stata et SPSS*.
   Presses de l'Université de Montréal. Disponible gratuitement en PDF.
-- **Logiciels** : R et RStudio.
+- **Logiciels** : R et Positron.
 - **Exercices** : Datacamp (H24 — à reconfirmer, licence institutionnelle
   requise).
 
@@ -208,7 +208,7 @@ mi-session :
 
 Cours magistral, échanges encouragés. Les étudiant.e.s suivent le cours sur
 leur ordinateur personnel; le professeur fait régulièrement des
-démonstrations avec R et RStudio à suivre en direct. Chaque semaine
+démonstrations avec R et Positron à suivre en direct. Chaque semaine
 présente : objectifs spécifiques, lectures préalables, exercices, et les
 diapositives. Un glossaire des notions clefs accompagne le cours.
 
