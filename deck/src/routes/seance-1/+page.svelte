@@ -194,12 +194,12 @@ install.packages("tidyverse")
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">Les examens : sur papier</h2>
+      <h2 class="e">Les examens</h2>
       <Examens />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">Un seul projet, en deux temps</h2>
+      <h2 class="e">Les travaux personnels (TP) : un seul projet en deux temps</h2>
       <Projet />
     </Slide>
 
@@ -375,6 +375,9 @@ install.packages("tidyverse")
   /* Bande d'identité en pied du titre: sol clair pour la marque, séparateur
      rouge, département en petites capitales. */
   .titre { padding-bottom: 5.2em; }
+  /* Le logo de la CLESSN a un fond blanc pur: la diapo prend la même
+     couleur, sinon on voit la boîte du logo sur le papier grisé. */
+  :global(.diapo:has(.clessn)) { background: #fff; }
   .clessn { display: grid; grid-template-columns: auto 1fr; gap: 2.2em; align-items: center; }
   .clessn img { width: 13em; height: auto; }
   .clessn h1 { margin: 0.1em 0 0.2em; }

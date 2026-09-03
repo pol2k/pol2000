@@ -4,8 +4,11 @@
    * (DataCamp Light) que sur pol2000.com. Le script est injecté une seule
    * fois; il repère les blocs data-datacamp-exercise au chargement. Le jeu
    * de données est fourni avec R: `presidents`, la cote d'approbation
-   * trimestrielle des présidents américains, 1945-1974. Sans réseau, le
-   * cadre reste vide: c'est un outil en ligne.
+   * trimestrielle des présidents américains, 1945-1974 (vérifié: Run
+   * l'affiche, mean() donne 56,3). Le premier Run montre les données, pour
+   * qu'on voie tout de suite que ça marche. Datacamp perd les accents dans
+   * les messages du SCT: on les écrit en \u. Sans réseau, le cadre reste
+   * vide: c'est un outil en ligne.
    */
   import { base } from '$app/paths';
   const SRC = 'https://cdn.datacamp.com/datacamp-light-latest.min.js';
@@ -31,14 +34,17 @@
   <div class="exercice">
     <div data-datacamp-exercise data-lang="r" data-height="380" data-show-run-button="true">
       <code data-type="pre-exercise-code">data(presidents)</code>
-      <code data-type="sample-code"># Le jeu de données `presidents` est chargé : la cote d'approbation
-# des présidents américains, chaque trimestre de 1945 à 1974.
-# Calculez la cote moyenne avec mean(). Attention : il y a des valeurs
-# manquantes (NA). Ajoutez na.rm = TRUE.
+      <code data-type="sample-code"># `presidents` : la cote d'approbation des présidents américains,
+# chaque trimestre, de 1945 à 1974. Cliquez Run pour la voir.
+presidents
+
+# À vous : calculez la cote moyenne avec mean().
+# Il y a des valeurs manquantes (NA) : ajoutez na.rm = TRUE.
 </code>
-      <code data-type="solution">mean(presidents, na.rm = TRUE)</code>
+      <code data-type="solution">presidents
+mean(presidents, na.rm = TRUE)</code>
       <code data-type="sct">test_function("mean", args = c("x", "na.rm"))
-success_msg("Bravo ! Votre premier calcul en R, sur de vraies données politiques.")</code>
+success_msg("Bravo ! Votre premier calcul en R, sur de vraies donn&amp;eacute;es politiques.")</code>
     </div>
   </div>
   <div class="semaines">

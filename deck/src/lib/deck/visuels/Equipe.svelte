@@ -2,19 +2,20 @@
   /**
    * L'équipe, en quatre cartes: qui, quel rôle, pour quoi on lui écrit. Slack
    * en bandeau au-dessus: un seul canal pour tout le monde. Les noms viennent
-   * de l'enseignant.
+   * de l'enseignant. Photos: eiom.ca (Foisy, Dupuis), chaire-epi.ulaval.ca
+   * (Piral); aucune photo publique d'Adam Ménard, d'où les initiales.
    */
   import { base } from '$app/paths';
   const GENS = [
     { ini: 'LOF', photo: 'photo-foisy.jpg', nom: 'Laurence-Olivier M. Foisy', role: 'Enseignant', pour: 'le cours, le plan, les notes, les cas particuliers', grand: true },
-    { ini: 'JP', nom: 'Jules Piral', role: 'Auxiliaire', pour: 'R, les exercices, les travaux' },
+    { ini: 'JP', photo: 'photo-piral.jpg', nom: 'Jules Piral', role: 'Auxiliaire', pour: 'R, les exercices, les travaux' },
     { ini: 'MAD', photo: 'photo-dupuis.jpg', nom: 'Marc-Antoine Dupuis', role: 'Auxiliaire', pour: 'R, les exercices, les travaux' },
     { ini: 'AM', nom: 'Adam Ménard', role: 'Tuteur', pour: 'quand ça décroche : on reprend depuis le début' }
   ];
 </script>
 
 <div class="visuel equipe">
-  <div class="canal"><span class="hash">#</span><strong>Slack</strong><span>un seul canal, pour toute l'équipe, en tout temps</span></div>
+  <div class="canal"><span class="hash">#</span><strong>Slack</strong><span>un seul endroit, pour toute l'équipe, en tout temps</span></div>
   <div class="cartes">
     {#each GENS as g}
       <div class="carte" class:grand={g.grand}>

@@ -34,7 +34,7 @@ export function brancherTemps(hote, { total, lire, ecrire }) {
   diapo.addEventListener('click', avancer);
 
   function auClavier(ev) {
-    if (!surCetteDiapo()) return;
+    if (dansUnChamp(ev) || !surCetteDiapo()) return;
     if (AVANT.includes(ev.key) && lire() < total) {
       ev.preventDefault();
       ev.stopPropagation();
@@ -65,4 +65,13 @@ export function brancherTemps(hote, { total, lire, ecrire }) {
     window.removeEventListener('keydown', auClavier, true);
     clearTimeout(t);
   };
+}
+
+/** Vrai si la touche a été tapée dans un champ de saisie (textarea, input,
+ *  contenteditable — l'éditeur Datacamp, entre autres). Le deck ne doit
+ *  alors ni avancer ni ouvrir la pause. */
+export function dansUnChamp(ev) {
+  const t = ev.target;
+  if (!t || t === window || t === document) return false;
+  return !!(t.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(t.tagName));
 }

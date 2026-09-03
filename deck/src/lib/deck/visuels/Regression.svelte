@@ -17,6 +17,8 @@
   });
   const fmt = (v) => v.toLocaleString('fr-CA', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
   const p = (v) => (v < 0.001 ? '< 0,001' : v.toLocaleString('fr-CA', { maximumFractionDigits: 3 }));
+  // Les étoiles de R: *** p < 0,001, ** p < 0,01, * p < 0,05.
+  const etoiles = (v) => (v < 0.001 ? '***' : v < 0.01 ? '**' : v < 0.05 ? '*' : '');
   const nom = { '(Intercept)': 'Constante', income: 'Revenu (tranche 1 à 8)' };
   const pts = (v) => (100 * v).toLocaleString('fr-CA', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const X0 = 60, X1 = 900, x = (v) => X0 + (v / 50) * (X1 - X0);
@@ -30,10 +32,10 @@
       <thead><tr><th></th><th>Coefficient</th><th>Erreur-type</th><th>t</th><th>p</th></tr></thead>
       <tbody>
         {#each REG.coefs as c}
-          <tr class:cle={c.term === 'income'}><td>{nom[c.term]}</td><td>{fmt(c.estimate)}</td><td>{fmt(c.se)}</td><td>{c.t.toLocaleString('fr-CA')}</td><td>{p(c.p)}</td></tr>
+          <tr class:cle={c.term === 'income'}><td>{nom[c.term]}</td><td>{fmt(c.estimate)}<span class="etoiles">{etoiles(c.p)}</span></td><td>{fmt(c.se)}</td><td>{c.t.toLocaleString('fr-CA')}</td><td>{p(c.p)}</td></tr>
         {/each}
       </tbody>
-      <tfoot><tr><td colspan="5">N = {REG.n.toLocaleString('fr-CA')} · R² = {REG.r2.toLocaleString('fr-CA', { minimumFractionDigits: 4 })} · lecture : <strong>+{pts(REG.coefs[1].estimate)} point de pourcentage</strong> de vote conservateur par tranche de revenu</td></tr></tfoot>
+      <tfoot><tr><td colspan="5">N = {REG.n.toLocaleString('fr-CA')} · R² = {REG.r2.toLocaleString('fr-CA', { minimumFractionDigits: 4 })} · lecture : <strong>+{pts(REG.coefs[1].estimate)} point de pourcentage</strong> de vote conservateur par tranche de revenu<br />*** p &lt; 0,001 · ** p &lt; 0,01 · * p &lt; 0,05</td></tr></tfoot>
     </table>
   </div>
 
@@ -50,7 +52,7 @@
         <text x={x(m.pct)} y={34 + (i % 2) * 22} class="lib">{m.income}</text>
       </g>
     {/each}
-    <text x="480" y="18" class="legende">Part réelle de vote conservateur par tranche de revenu, 1 à 8 : de {Math.min(...MOYENNES.map((m) => m.pct)).toLocaleString('fr-CA')} % à {Math.max(...MOYENNES.map((m) => m.pct)).toLocaleString('fr-CA')} %.</text>
+    <text x="480" y="18" class="legende">Part réelle de vote conservateur par tranche de revenu, 1 à 8.</text>
   </svg>
 </div>
 
@@ -66,6 +68,7 @@
   th:first-child, td:first-child { text-align: left; }
   td { text-align: right; padding: 0.35em 0.6em; border-bottom: 1px solid var(--dk-filet); font-variant-numeric: tabular-nums; }
   tr.cle td { font-weight: 600; color: var(--dk-accent); }
+  .etoiles { display: inline-block; width: 1.9em; text-align: left; padding-left: 0.3em; font-weight: 600; }
   tfoot td { color: var(--dk-gris); border-bottom: 0; text-align: left; font-size: 0.85em; }
   .moy { width: 100%; height: auto; display: block; }
   .moy .pt { opacity: 0; transition: opacity 0.5s; }

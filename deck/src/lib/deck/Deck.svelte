@@ -1,5 +1,6 @@
 <script>
   import { untrack } from 'svelte';
+  import { dansUnChamp } from './temps.js';
   import { allerA, creerDeck, etiquette, precedent, progression, suivant } from './navigation.js';
   import '@fontsource/ibm-plex-mono/400.css';
   import '@fontsource/ibm-plex-mono/500.css';
@@ -57,6 +58,9 @@
   }
 
   function auClavier(e) {
+    // Tapé dans un champ (l'éditeur Datacamp, par exemple): ce n'est pas
+    // une commande du deck, on laisse passer.
+    if (dansUnChamp(e)) return;
     // Pendant une pause, le clavier ne fait plus avancer le deck: on ne veut
     // pas changer de diapositive en frôlant la télécommande.
     if (pause) {

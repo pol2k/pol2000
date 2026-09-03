@@ -34,7 +34,7 @@
 {#if quoi === 'positron'}
   <div class="visuel outil positron">
     <img src="{base}/img/positron-logo.png" alt="Positron" class="plogo" />
-    <p class="ligne-haut">L'éditeur, par Posit. Gratuit. Là où vous écrirez, verrez et corrigerez votre code, chaque semaine.</p>
+    <p class="ligne-haut">L'éditeur, par Posit. Gratuit. Là où vous écrirez, verrez et corrigerez votre code.</p>
     <div class="editeur">
       <div class="gouttiere"><span>1</span><span>2</span></div>
       <div class="code">
@@ -65,11 +65,11 @@
     <aside>
       <div class="ws"><strong>POL-2000 · A26</strong><span>▾</span></div>
       <div class="sec">Canaux</div>
-      <div class="ch on"># général</div>
-      <div class="ch"># r-et-positron</div>
-      <div class="ch"># travaux</div>
-      <div class="ch"># examens</div>
+      <div class="ch on"># general</div>
+      <div class="ch"># aide-metho</div>
+      <div class="ch"># diapositives</div>
       <div class="ch"># datacamp</div>
+      <div class="ch"># examens</div>
       <div class="sec">Messages directs</div>
       <div class="ch dm"><i class="pt"></i>Laurence-Olivier M. Foisy</div>
       <div class="ch dm"><i class="pt"></i>Jules Piral</div>
@@ -77,14 +77,14 @@
       <div class="ch dm"><i class="pt"></i>Adam Ménard</div>
     </aside>
     <main>
-      <div class="tete"><strong># général</strong><span>Tout le monde · le seul canal du cours</span></div>
+      <div class="tete"><strong># general</strong><span>Tout le monde · annonces et questions générales</span></div>
       <div class="msgs">
         <div class="msg m1"><img src="{base}/img/photo-foisy.jpg" alt="" /><div><b>Laurence-Olivier M. Foisy</b><small>aujourd'hui, 15h30</small><p>Bienvenue dans POL-2000. À partir de la semaine 3, c'est ici qu'on se parle : questions, blocages, rendez-vous. Je ne réponds plus aux courriels.</p></div></div>
         <div class="msg m2"><span class="sys">Jules Piral, Marc-Antoine Dupuis et Adam Ménard ont rejoint le canal.</span></div>
-        <div class="msg m3"><img src="{base}/img/photo-dupuis.jpg" alt="" /><div><b>Marc-Antoine Dupuis</b><small>15h34</small><p>Le canal <b>#r-et-positron</b> est pour tout ce qui ne marche pas sur votre machine. On y répond vite.</p></div></div>
+        <div class="msg m3"><img src="{base}/img/photo-dupuis.jpg" alt="" /><div><b>Marc-Antoine Dupuis</b><small>15h34</small><p>Le canal <b>#aide-metho</b> est pour que vous puissiez poser vos questions sur la méthodologie et les exercices.</p></div></div>
         <div class="tape"><i></i><i></i><i></i><span>Jules Piral est en train d'écrire…</span></div>
       </div>
-      <div class="saisie"><span>Message #général</span><b>⏎</b></div>
+      <div class="saisie"><span>Message #general</span><b>⏎</b></div>
     </main>
   </div>
 
@@ -95,15 +95,15 @@
       <strong>R</strong>
       <span class="role">LE LANGAGE</span>
       <p>C'est lui qui calcule. Il lit vos données, fait la régression, dessine le graphique. Sans lui, rien ne se passe.</p>
-      <em>le moteur</em>
+      <em>la calculatrice</em>
     </div>
     <div class="et">+</div>
     <div class="colonne">
       <img src="{base}/img/positron-logo.png" alt="Positron" class="plogo2" />
       <strong>Positron</strong>
       <span class="role">L'ÉDITEUR</span>
-      <p>C'est là que vous écrivez, que vous voyez vos données et vos graphiques, que vous corrigez. Il parle à R pour vous.</p>
-      <em>le tableau de bord</em>
+      <p>C'est là que vous travaillez : vous écrivez, vous voyez vos données et vos graphiques, vous corrigez. La calculatrice est posée dessus.</p>
+      <em>le bureau de travail</em>
     </div>
     <p class="note">Positron vous propose d'installer R s'il ne le trouve pas. Deux outils, gratuits, sur Windows, macOS et Linux.</p>
   </div>

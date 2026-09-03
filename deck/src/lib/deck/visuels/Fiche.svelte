@@ -37,8 +37,6 @@
   </dl>
   {#if mode === 'remplie'}
     <p class="bas" class:vu={e >= LIGNES.length}>Votre travail de mi-session, c'est cette fiche — remplie, et justifiée.</p>
-  {:else}
-    <p class="bas vu">Une question de la salle. On remplit ensemble. Si une ligne résiste, la question n'est pas encore testable — c'est normal, c'est le travail.</p>
   {/if}
 </div>
 
