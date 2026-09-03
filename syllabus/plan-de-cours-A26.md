@@ -153,10 +153,6 @@ Des devoirs sur la plateforme datacamp.com vous seront proposés chaque semaine 
 développer rapidement vos compétences en R. Je vous recommande donc fortement
 d'installer R et Positron dès le début de la session.
 
-> **Points bonis.** Les étudiant.e.s qui installent les deux logiciels avant le
-> **jeudi 17 septembre 2026 à 23h59** et m'envoient une capture d'écran comme preuve
-> avant cette date se verront allouer **2 points bonis** à la note finale du cours.
-
 ### Datacamp
 
 Des devoirs obligatoires vous seront partagés chaque semaine sur Datacamp. Pour
@@ -178,6 +174,8 @@ correctement.
   vous affirmez, vous devez pouvoir le défendre.
 - **Chaque évaluation précise ses propres consignes** quant à l'utilisation permise de
   ces outils.
+- **Les examens 2 et 3 se font sur papier, à livre ouvert**, précisément pour cette
+  raison : vos notes sont permises, aucun appareil ne l'est.
 
 Deux séances abordent directement ces outils : la séance 2 (utiliser un assistant
 d'IA pour apprendre R) et la séance 10 (produire, puis vérifier, une analyse complète
@@ -280,7 +278,7 @@ données avec R et Positron.
 | **Date** | Jeudi 22 octobre 2026, de 15h30 à 16h30 |
 | **Mode de travail** | Individuel |
 | **Lieu** | **En classe, au local du cours** |
-| **Matériel autorisé** | Papier et crayon seulement |
+| **Matériel autorisé** | Papier, crayon et vos notes personnelles — l'examen est à livre ouvert. Aucun appareil électronique. |
 
 Examen d'une heure écrit **pendant la période de cours habituelle**. Aucune
 inscription à un centre d'examen n'est requise : le cours étant donné en présentiel,
@@ -294,7 +292,7 @@ atelier de préparation au travail de mi-session.
 | **Date** | Jeudi 10 décembre 2026, de 15h30 à 16h30 |
 | **Mode de travail** | Individuel |
 | **Lieu** | **En classe, au local du cours** |
-| **Matériel autorisé** | Papier et crayon seulement |
+| **Matériel autorisé** | Papier, crayon et vos notes personnelles — l'examen est à livre ouvert. Aucun appareil électronique. |
 
 Examen d'une heure écrit en classe lors de la dernière séance. Le reste de la séance
 est consacré à la matière sur les expériences et à la révision de fin de session.
