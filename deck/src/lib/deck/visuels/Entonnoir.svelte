@@ -10,7 +10,7 @@
   ];
 </script>
 
-<div class="entonnoir" role="img" aria-label="Du sujet à la question testable, en trois bandes de plus en plus étroites.">
+<div class="visuel entonnoir" role="img" aria-label="Du sujet à la question testable, en trois bandes de plus en plus étroites.">
   {#each ETAGES as e, i}
     <div class="etage" style="width: {e.w}%" class:fin={i === 2}>
       <span class="et">{e.et}</span>

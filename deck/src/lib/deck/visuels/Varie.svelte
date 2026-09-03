@@ -7,7 +7,7 @@
   const H = [40, 72, 22, 58, 90, 35, 66, 48, 80, 28, 60, 44];
 </script>
 
-<div class="varie" role="img" aria-label="Une rangée de barres de hauteurs différentes: une variable. Une rangée de barres identiques: une constante.">
+<div class="visuel varie" role="img" aria-label="Une rangée de barres de hauteurs différentes: une variable. Une rangée de barres identiques: une constante.">
   <div class="rangee">
     <span class="et acc">VARIABLE</span>
     <div class="cas">{#each H as h}<i style="height: {h}%"></i>{/each}</div>

@@ -6,7 +6,7 @@
    */
 </script>
 
-<div class="niveaux" role="img" aria-label="Nominal: des catégories sans ordre. Ordinal: un ordre, des écarts inégaux. Intervalle ou ratio: une règle à écarts égaux.">
+<div class="visuel niveaux" role="img" aria-label="Nominal: des catégories sans ordre. Ordinal: un ordre, des écarts inégaux. Intervalle ou ratio: une règle à écarts égaux.">
   <div class="niv">
     <svg viewBox="0 0 300 170">
       <rect x="20" y="30" width="80" height="34" class="boite" /><text x="60" y="53" class="lib">PLQ</text>

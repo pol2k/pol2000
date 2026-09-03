@@ -5,7 +5,7 @@
    */
 </script>
 
-<svg viewBox="0 0 1080 330" class="equipe" role="img" aria-label="L'enseignant, deux auxiliaires et un tuteur, tous reliés par Slack.">
+<svg viewBox="0 0 1080 330" class="visuel equipe" role="img" aria-label="L'enseignant, deux auxiliaires et un tuteur, tous reliés par Slack.">
   <!-- le canal -->
   <rect x="330" y="120" width="300" height="70" class="canal" />
   <text x="480" y="152" class="canal-t">SLACK</text>

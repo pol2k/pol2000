@@ -19,12 +19,15 @@
   import Citation from '$lib/deck/Citation.svelte';
   import Code from '$lib/deck/Code.svelte';
   import Picto from '$lib/deck/Picto.svelte';
-  import Axe from '$lib/deck/visuels/Axe.svelte';
-  import Silhouette from '$lib/deck/visuels/Silhouette.svelte';
-  import Parcours from '$lib/deck/visuels/Parcours.svelte';
-  import Frise from '$lib/deck/visuels/Frise.svelte';
-  import Ponderation from '$lib/deck/visuels/Ponderation.svelte';
+  import Revenu from '$lib/deck/visuels/Revenu.svelte';
+  import Reponses from '$lib/deck/visuels/Reponses.svelte';
+  import Regression from '$lib/deck/visuels/Regression.svelte';
+  import Seance from '$lib/deck/visuels/Seance.svelte';
+  import Evaluations from '$lib/deck/visuels/Evaluations.svelte';
   import Retard from '$lib/deck/visuels/Retard.svelte';
+  import Examens from '$lib/deck/visuels/Examens.svelte';
+  import Projet from '$lib/deck/visuels/Projet.svelte';
+  import Datacamp from '$lib/deck/visuels/Datacamp.svelte';
   import Equipe from '$lib/deck/visuels/Equipe.svelte';
   import Entonnoir from '$lib/deck/visuels/Entonnoir.svelte';
   import Points from '$lib/deck/visuels/Points.svelte';
@@ -33,7 +36,7 @@
   import Varie from '$lib/deck/visuels/Varie.svelte';
   import Ordre from '$lib/deck/visuels/Ordre.svelte';
 
-  const TOTAL = 43;
+  const TOTAL = 48;
   const D = 'POL-2000 · séance 1 · jeu 3 sept';
 
   const c_verif = `R.version.string
@@ -53,18 +56,20 @@ install.packages("tidyverse")
 
     <!-- ================= OUVERTURE ================= -->
     <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
-      <Deux ratio="2.4fr 1fr">
-        <div>
-          <p class="surtitre e">POL-2000 · Méthodologie quantitative</p>
-          <h1 class="e">Introduction et les éléments fondamentaux de la recherche</h1>
-          <hr class="filet" />
-          <p class="lead e">Séance 1 · jeudi 3 septembre 2026</p>
-          <p class="lead e">Science politique · Automne 2026</p>
-        </div>
-        <figure class="logo-ecole">
-          <img src="{base}/img/ulaval-logo.png" alt="Université Laval" />
-        </figure>
-      </Deux>
+      <div class="titre">
+        <p class="surtitre e">POL-2000 · Méthodologie quantitative</p>
+        <h1 class="e">Introduction et les éléments fondamentaux de la recherche</h1>
+        <hr class="filet" />
+        <p class="lead e">Séance 1 · jeudi 3 septembre 2026</p>
+      </div>
+      <!-- La marque ne se recolore pas: on lui donne son propre sol, une bande
+           claire en pied de diapo, comme un en-tête de lettre. -->
+      <div class="entete-ul e">
+        <img src="{base}/img/ulaval-logo.png" alt="Université Laval" />
+        <span class="sep"></span>
+        <span class="dept">Département de science politique<br />Faculté des sciences sociales</span>
+        <span class="session">Automne 2026</span>
+      </div>
     </Slide>
 
     <Slide bandeau="À propos de moi" droite={D}>
@@ -74,6 +79,7 @@ install.packages("tidyverse")
           <p class="lead e">Laurence-Olivier M. Foisy</p>
           <hr class="filet" />
           <ul class="cmd-liste e">
+            <li>Enseignement du parcours <em>L'intelligence artificielle et la recherche</em><span class="lieu">Université Laval · EIOM 2026</span></li>
             <li>Enseignement du cours Introduction aux mégadonnées en sciences sociales<span class="lieu">Université de Montréal · FAS-1001</span></li>
             <li>Doctorat en science politique, en cours<span class="lieu">Université Laval</span></li>
             <li>Maîtrise en études de la paix internationale<span class="lieu">Université Soka, Japon</span></li>
@@ -92,175 +98,125 @@ install.packages("tidyverse")
       <ol class="mains e">
         <li><span>Un cours de statistiques au cégep ?</span></li>
         <li><span>Une ligne de code, n'importe laquelle ?</span></li>
-        <li><span>ChatGPT, Claude ou Gemini chaque semaine ?</span></li>
+        <li><span>Qui paye pour un abonnement IA ?</span></li>
         <li><span>Ce cours vous fait peur ?</span></li>
       </ol>
     </Slide>
 
-
     <!-- ================= 1 · UNE QUESTION ================= -->
-    <Slide fond="encre" bandeau="Une question" droite={D}>
-      <h1 class="e">Une question, pour commencer</h1>
-      <hr class="filet" />
+
+    <Slide bandeau="Une question" droite={D}>
+      <h2 class="e">Le revenu affecte-t-il l'idéologie politique ?</h2>
+      <Revenu />
     </Slide>
 
     <Slide bandeau="Une question" droite={D}>
-      <h2 class="e">L'éducation rend-elle plus à gauche ?</h2>
-      <Axe />
+      <h2 class="e">Comment le saurait-on ?</h2>
+      <Reponses />
     </Slide>
 
     <Slide bandeau="Une question" droite={D}>
-      <h2 class="e">Ce qu'il faudrait pour répondre</h2>
-      <Silhouette />
+      <h2 class="e">Compter : 20 180 personnes, deux colonnes</h2>
+      <figure class="capture e">
+        <img src="{base}/img/ces-viewer.png" alt="Les premières lignes de l'Étude électorale canadienne 2025, telles qu'elles apparaissent dans un visualiseur de données : âge, scolarité, revenu, placement gauche-droite." />
+        <figcaption>Étude électorale canadienne 2025 · 20 180 répondant.e.s · 1 440 colonnes, dont ces quatre</figcaption>
+      </figure>
     </Slide>
 
     <Slide bandeau="Une question" droite={D}>
-      <h2 class="e">Ce tableau, vous le produirez en novembre</h2>
-      <table class="e tableau-vide">
-        <thead><tr><th>Placement gauche-droite (0–10)</th><th>Coefficient</th><th>Erreur-type</th><th>p</th></tr></thead>
-        <tbody>
-          <tr><td>Scolarité</td><td>?</td><td>?</td><td>?</td></tr>
-          <tr><td>Âge</td><td>?</td><td>?</td><td>?</td></tr>
-          <tr><td>Revenu</td><td>?</td><td>?</td><td>?</td></tr>
-          <tr><td>Constante</td><td>?</td><td>?</td><td>?</td></tr>
-        </tbody>
-      </table>
-      <p class="lead e">Le lire. Le produire. Dire pourquoi il <strong>ne prouve pas</strong> ce qu'on croit.</p>
-    </Slide>
-
-    <Slide bandeau="Une question" droite={D}>
-      <h2 class="e">Le parcours, en trois temps</h2>
-      <Parcours />
+      <h2 class="e">Une ligne de R</h2>
+      <p class="lead e">Pas de panique : vous n'avez pas à faire le calcul. Seulement à savoir que la fonction existe.</p>
+      <Regression />
     </Slide>
 
 
-    <!-- ================= 2 · LA MAUVAISE RÉPUTATION ================= -->
-    <Slide fond="encre" bandeau="Mauvaise réputation" droite={D}>
-      <h1 class="e">Ce cours a mauvaise réputation</h1>
-      <hr class="filet" />
-      <p class="lead e">Parlons-en.</p>
-    </Slide>
-
-    <Slide bandeau="Mauvaise réputation" droite={D}>
-      <h2 class="e">Trois peurs, trois réponses</h2>
-      <div class="peurs e">
-        <div class="peur">
-          <div class="glyphe barre">∑ β̂ σ²</div>
-          <span class="fix">Aucune formule à dériver.</span>
-          <small>Préalable : le secondaire.</small>
-        </div>
-        <div class="peur">
-          <div class="glyphe"><s>sem. 4</s> <strong>sem. 2</strong></div>
-          <span class="fix">R dès jeudi prochain.</span>
-          <small>Et à presque toutes les séances.</small>
-        </div>
-        <div class="peur">
-          <div class="glyphe"><s>0,032</s> <strong>?</strong></div>
-          <span class="fix">La question d'abord.</span>
-          <small>Le chiffre ensuite.</small>
-        </div>
-      </div>
-    </Slide>
-
-    <Slide bandeau="Mauvaise réputation" droite={D}>
-      <h2 class="e">En échange</h2>
-      <div class="quatre e">
-        <div><Picto nom="terminal" taille="2.6em" /><strong>L'ordinateur</strong><span>à chaque séance</span></div>
-        <div><Picto nom="horloge" taille="2.6em" /><strong>Les Datacamp</strong><span>chaque semaine</span></div>
-        <div><Picto nom="humain" taille="2.6em" /><strong>Les questions « bêtes »</strong><span>cent personnes ont la même</span></div>
-        <div><Picto nom="oeil" taille="2.6em" /><strong>Me dire quand ça décroche</strong><span>tôt</span></div>
-      </div>
-    </Slide>
 
 
     <!-- ================= 3 · LE PLAN DE COURS ================= -->
     <Slide fond="encre" bandeau="Le plan de cours" droite={D}>
       <h1 class="e">Le plan de cours</h1>
       <hr class="filet" />
-      <p class="lead e">Contestable aujourd'hui. Ensuite, c'est le contrat.</p>
       <p class="lead e"><code>pol2000.com/syllabus</code></p>
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">Identification</h2>
-      <div class="etiqs e">
-        <Etiquette ton="accent">POL-2000</Etiquette>
-        <Etiquette>NRC 87892</Etiquette>
-        <Etiquette>3 crédits · 3-0-6</Etiquette>
-        <Etiquette>Jeudi 15h30–18h20</Etiquette>
-        <Etiquette>DKN-3159</Etiquette>
-        <Etiquette ton="ambre">En présentiel</Etiquette>
-        <Etiquette>14 séances</Etiquette>
-        <Etiquette>Préalable mathématique : aucun</Etiquette>
-      </div>
+      <Seance n={1} titre="Introduction et les éléments fondamentaux de la recherche" date="jeudi 3 septembre" quoi="Une question, les mots pour la poser, et ce qu'il faut installer." />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">En décembre, vous saurez</h2>
-      <ol class="qs-num e">
-        <li><span>Maîtriser les concepts de l'analyse statistique</span></li>
-        <li><span>Utiliser R et Positron</span></li>
-        <li><span>Critiquer un article quantitatif</span></li>
-        <li><span>Raisonner en termes de causes — et de limites</span></li>
-        <li><span>Mener votre propre projet</span></li>
-      </ol>
+      <Seance n={2} titre="Introduction à R et à Positron" date="jeudi 10 septembre" quoi="R à partir de zéro, en direct, sur votre ordinateur." note="Apportez l'ordinateur — installé." />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">La session</h2>
-      <Frise />
+      <Seance n={3} titre="Les statistiques descriptives et la visualisation des données" date="jeudi 17 septembre" quoi="Décrire une variable : la forme d'une distribution, son centre, sa dispersion. Et la dessiner." />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">… et ce qui s'y évalue</h2>
-      <Frise evaluations />
+      <Seance n={4} titre="Préparer ses données avec R" date="jeudi 24 septembre" quoi="Lire un codebook, recoder, gérer les valeurs manquantes. Le vrai travail." note="L'examen 1 ouvre aujourd'hui." />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">Cent points</h2>
-      <Ponderation />
+      <Seance n={5} titre="L'inférence statistique" date="jeudi 1er octobre" quoi="Ce que je vois dans un échantillon, puis-je le dire de toute la population ?" note="Examen 1 à remettre dimanche 4 octobre." />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">Trois examens</h2>
-      <div class="trois e">
-        <Carte titre="1 · chez vous">Sur R. Ouvre le 24 sept., se remet le 4 oct.</Carte>
-        <Carte ton="accent" titre="2 · en classe">22 oct. Une heure. Papier, crayon.</Carte>
-        <Carte ton="accent" titre="3 · en classe">10 déc. Une heure. Papier, crayon.</Carte>
-      </div>
-      <p class="e">Pas de centre d'examen : c'est ici, à l'heure du cours.</p>
+      <Seance n={6} titre="Rencontres individuelles" date="jeudi 8 octobre" quoi="Pas de cours magistral : on se voit, un.e à la fois, avec les auxiliaires et le tuteur." />
+    </Slide>
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <Seance n={7} titre="La régression linéaire simple" date="jeudi 15 octobre" quoi="Une droite qui résume une relation — et ce que ses chiffres veulent dire." />
+    </Slide>
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <Seance n={8} titre="Examen 2, puis atelier de mi-session" date="jeudi 22 octobre" quoi="Une heure d'examen sur papier, puis on travaille votre devis, ensemble." note="Mi-session à remettre dimanche 25 octobre." />
+    </Slide>
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <Seance n={9} titre="La régression linéaire multiple" date="jeudi 5 novembre" quoi="Plusieurs variables explicatives à la fois. Ce que « contrôler pour » veut dire." />
+    </Slide>
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <Seance n={10} titre="De la question au tableau de régression : à la main, puis avec l'IA" date="jeudi 12 novembre" quoi="Le travail final, du début à la fin. D'abord vous, puis un agent d'IA — et on le vérifie." />
+    </Slide>
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <Seance n={11} titre="Les graphes orientés acycliques (GOA)" date="jeudi 19 novembre" quoi="Dessiner ses hypothèses causales. Décider quoi contrôler — ou pas." />
+    </Slide>
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <Seance n={12} titre="Le problème fondamental de l'inférence causale" date="jeudi 26 novembre" quoi="On ne voit jamais les deux mondes à la fois. Tout part de là." />
+    </Slide>
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <Seance n={13} titre="Les biais" date="jeudi 3 décembre" quoi="Variable omise, sélection, mesure, simultanéité : ce qui fausse une régression." />
+    </Slide>
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <Seance n={14} titre="Les expériences, et révision" date="jeudi 10 décembre" quoi="Le hasard comme méthode. Puis on revoit tout." note="Examen 3 en classe · travail final vendredi 18 décembre." />
+    </Slide>
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <h2 class="e">Les évaluations</h2>
+      <Evaluations />
+    </Slide>
+
+
+
+
+    <Slide bandeau="Le plan de cours" droite={D}>
+      <h2 class="e">Les examens : sur papier, exprès</h2>
+      <Examens />
+      <p class="e">Les modèles de langue ne passent pas l'examen à votre place. Vos notes, oui. L'IA, c'est pour les travaux.</p>
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Un seul projet, en deux temps</h2>
-      <div class="croissance e">
-        <div class="doc petit-doc">
-          <span class="et">MI-SESSION · 20 % · 25 OCT.</span>
-          <ul><li>la question</li><li>X et Y</li><li>les hypothèses</li><li>les données</li></ul>
-        </div>
-        <div class="fl">→</div>
-        <div class="doc grand-doc">
-          <span class="et acc">FINAL · 25 % · 18 DÉC.</span>
-          <ul><li>la question</li><li>X et Y</li><li>les hypothèses</li><li>les données</li><li class="plus">+ le graphe orienté acyclique</li><li class="plus">+ les descriptives</li><li class="plus">+ la régression et son tableau</li><li class="plus">+ l'interprétation, les biais, les limites</li></ul>
-        </div>
-      </div>
-      <p class="e">Le mi-session revient corrigé <strong>avant</strong> que vous écriviez la suite.</p>
+      <Projet />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Datacamp</h2>
-      <Deux ratio="1fr 1.6fr">
-        <Grand valeur="10 %" legende="5 + 5" />
-        <div class="dc e">
-          <div class="semaines">
-            {#each Array.from({ length: 14 }) as _, i}
-              <i class:jalon={i === 7 || i === 13}></i>
-            {/each}
-          </div>
-          <div class="jalons"><span>dim. 25 oct.</span><span>ven. 18 déc.</span></div>
-          <p>Un devoir par semaine, chez vous. C'est là que R devient un réflexe.</p>
-        </div>
-      </Deux>
+      <Datacamp />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
@@ -307,14 +263,12 @@ install.packages("tidyverse")
       <p class="lead e">C'est maintenant.</p>
     </Slide>
 
-
     <!-- ================= PAUSE ================= -->
     <Slide fond="encre" bandeau="Pause" droite={D}>
       <h1 class="e">Pause</h1>
       <hr class="filet" />
       <p class="lead e">Quinze minutes.</p>
     </Slide>
-
 
     <!-- ================= 4 · LES ÉLÉMENTS FONDAMENTAUX ================= -->
     <Slide fond="encre" bandeau="Les éléments fondamentaux" droite={D}>
@@ -426,7 +380,6 @@ install.packages("tidyverse")
       </div>
     </Slide>
 
-
     <!-- ================= 5 · AVANT JEUDI PROCHAIN ================= -->
     <Slide fond="encre" bandeau="Avant jeudi prochain" droite={D}>
       <h1 class="e">Avant jeudi prochain</h1>
@@ -436,17 +389,6 @@ install.packages("tidyverse")
     <Slide bandeau="Avant jeudi prochain" droite={D}>
       <h2 class="e">Dans cet ordre</h2>
       <Ordre />
-    </Slide>
-
-    <Slide bandeau="Avant jeudi prochain" droite={D}>
-      <h2 class="e">Preuve que ça marche</h2>
-      <Deux ratio="1.5fr 1fr">
-        <Code src={c_verif} brut />
-        <div class="bonus">
-          <Grand valeur="+2" legende="points, sur la note finale" />
-          <p>Une capture d'écran de ces deux résultats, avant le <strong>jeudi 17 septembre, 23h59</strong>.</p>
-        </div>
-      </Deux>
     </Slide>
 
     <Slide bandeau="Avant jeudi prochain" droite={D}>
@@ -470,7 +412,18 @@ install.packages("tidyverse")
 </Deck>
 
 <style>
-  :global(.logo-ecole img) { background: #fff; padding: 0.7em 0.9em; border: 2px solid var(--dk-fond); }
+  /* Bande d'identité en pied du titre: sol clair pour la marque, séparateur
+     rouge, département en petites capitales. */
+  .titre { padding-bottom: 5.2em; }
+  .entete-ul { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 1.2em;
+    background: var(--dk-fond); color: var(--dk-encre); padding: 0.8em 2.6em 0.8em 2.6em; border-top: 6px solid var(--dk-accent); }
+  .entete-ul img { height: 2.6em; width: auto; display: block; }
+  .entete-ul .sep { width: 2px; align-self: stretch; background: var(--dk-encre); }
+  .entete-ul .dept { font-size: 0.62em; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.45; font-weight: 600; }
+  .entete-ul .session { margin-left: auto; font-size: 0.72em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dk-accent); font-weight: 600; }
+  .capture { margin: 0; }
+  .capture img { display: block; width: 100%; height: auto; border: 2px solid var(--dk-encre); }
+  .capture figcaption { margin-top: 0.4em; font-size: 0.7em; color: var(--dk-gris); }
   .trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9em; align-items: stretch; }
   .etiqs { display: flex; flex-wrap: wrap; gap: 0.6em; font-size: 1.15em; }
   .pale { color: var(--dk-gris); }

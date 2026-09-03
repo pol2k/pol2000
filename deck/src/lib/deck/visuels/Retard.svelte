@@ -8,7 +8,7 @@
   ];
 </script>
 
-<div class="retard" role="img" aria-label="Note conservée selon le retard: 100, 90, 80, 70 pour cent, puis zéro.">
+<div class="visuel retard" role="img" aria-label="Note conservée selon le retard: 100, 90, 80, 70 pour cent, puis zéro.">
   {#each J as [l, v], i}
     <div class="col">
       <div class="colonne"><div class="plein" class:zero={v === 0} style="height: {v}%"></div></div>

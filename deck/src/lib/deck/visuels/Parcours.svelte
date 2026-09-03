@@ -7,7 +7,7 @@
   let { actif = 0 } = $props(); // 0 = tous, 1..3 = un seul en évidence
 </script>
 
-<div class="parcours" role="img" aria-label="Trois temps: décrire, relier, causer.">
+<div class="visuel parcours" role="img" aria-label="Trois temps: décrire, relier, causer.">
   <div class="temps" class:pale={actif && actif !== 1}>
     <svg viewBox="0 0 200 140">
       {#each [30, 70, 120, 95, 55, 25] as h, i}

@@ -25,7 +25,7 @@
   ];
 </script>
 
-<div class="frise" role="img" aria-label="Les quatorze séances de la session, en trois parties, avec les examens et les remises.">
+<div class="visuel frise" role="img" aria-label="Les quatorze séances de la session, en trois parties, avec les examens et les remises.">
   <div class="bande">
     {#each S as s}
       <div class="case p{s.p}" class:vide={s.p === -1} class:hors={s.p === 0}>

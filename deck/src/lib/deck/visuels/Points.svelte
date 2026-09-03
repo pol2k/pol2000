@@ -12,7 +12,7 @@
   while (pris.size < k) pris.add(Math.floor(r() * n));
 </script>
 
-<svg viewBox="0 0 960 392" class="pts" role="img" aria-label="Un nuage de points, dont quelques-uns sont mis en évidence: la population et l'échantillon.">
+<svg viewBox="0 0 960 392" class="visuel pts" role="img" aria-label="Un nuage de points, dont quelques-uns sont mis en évidence: la population et l'échantillon.">
   <rect x="20" y="10" width="920" height="340" class="cadre" />
   {#each pts as p, i}
     <circle cx={p.x} cy={p.y} r={pris.has(i) ? 9 : 4.5} class={pris.has(i) ? 'ech' : 'pop'} />

@@ -5,7 +5,7 @@
    */
 </script>
 
-<div class="ordre" role="img" aria-label="Installer R, puis Positron. L'ordre inverse est barré.">
+<div class="visuel ordre" role="img" aria-label="Installer R, puis Positron. L'ordre inverse est barré.">
   <div class="rang bon">
     <div class="boite"><span class="n">1</span><strong>R</strong><small>cran.r-project.org</small><em>le moteur</em></div>
     <div class="fl">→</div>

@@ -25,7 +25,7 @@
   const W = 900, x = (j) => 40 + (j / 110) * (W - 80);
 </script>
 
-<div class="pond" role="img" aria-label="Répartition des cent points et calendrier des échéances.">
+<div class="visuel pond" role="img" aria-label="Répartition des cent points et calendrier des échéances.">
   <div class="barre">
     {#each POIDS as p}
       <div class="part {p.g}" style="flex: {p.v}"><span>{p.k}</span><strong>{p.v} %</strong></div>

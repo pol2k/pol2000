@@ -7,7 +7,7 @@
   const H0 = [[30,84],[55,66],[80,98],[105,58],[130,92],[155,72],[180,100],[205,62],[230,88],[255,70],[270,94]];
 </script>
 
-<div class="hyp" role="img" aria-label="H1: les points montent avec X. H0: un nuage plat, aucune relation.">
+<div class="visuel hyp" role="img" aria-label="H1: les points montent avec X. H0: un nuage plat, aucune relation.">
   <div class="panneau">
     <span class="et acc">H₁ · L'HYPOTHÈSE</span>
     <svg viewBox="0 0 300 160">

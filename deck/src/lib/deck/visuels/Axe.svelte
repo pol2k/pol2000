@@ -7,7 +7,7 @@
    */
 </script>
 
-<svg viewBox="0 0 960 360" class="axe" role="img" aria-label="Un axe gauche-droite de 0 à 10; une personne diplômée placée sur un point d'interrogation, tirée vers la gauche par les idées et vers la droite par le revenu; l'âge en embuscade.">
+<svg viewBox="0 0 960 360" class="visuel axe" role="img" aria-label="Un axe gauche-droite de 0 à 10; une personne diplômée placée sur un point d'interrogation, tirée vers la gauche par les idées et vers la droite par le revenu; l'âge en embuscade.">
   <!-- axe -->
   <line x1="80" y1="250" x2="880" y2="250" class="trait" />
   {#each Array.from({ length: 11 }) as _, i}

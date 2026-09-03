@@ -16,7 +16,7 @@
   const largeur = (l, c) => 28 + ((l * 7 + c * 13) % 5) * 9;
 </script>
 
-<div class="silhouette" role="img" aria-label="La forme d'une table de données: quatre colonnes nommées, des milliers de lignes.">
+<div class="visuel silhouette" role="img" aria-label="La forme d'une table de données: quatre colonnes nommées, des milliers de lignes.">
   <div class="entete">
     {#each colonnes as [nom, sens]}
       <div><code>{nom}</code><span>{sens}</span></div>
