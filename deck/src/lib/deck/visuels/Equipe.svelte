@@ -1,63 +1,49 @@
 <script>
   /**
-   * L'équipe du cours et le canal qui la relie. Un seul mot par personne:
-   * son rôle. Les noms viennent de l'enseignant.
+   * L'équipe, en quatre cartes: qui, quel rôle, pour quoi on lui écrit. Slack
+   * en bandeau au-dessus: un seul canal pour tout le monde. Les noms viennent
+   * de l'enseignant.
    */
+  const GENS = [
+    { ini: 'LOF', nom: 'Laurence-Olivier M. Foisy', role: 'Enseignant', pour: 'le cours, le plan, les notes, les cas particuliers', grand: true },
+    { ini: 'JP', nom: 'Jules Piral', role: 'Auxiliaire', pour: 'R, les exercices, les travaux' },
+    { ini: 'MAD', nom: 'Marc-Antoine Dupuis', role: 'Auxiliaire', pour: 'R, les exercices, les travaux' },
+    { ini: 'AM', nom: 'Adam Ménard', role: 'Tuteur', pour: 'quand ça décroche : on reprend depuis le début' }
+  ];
 </script>
 
-<svg viewBox="0 0 1080 330" class="visuel equipe" role="img" aria-label="L'enseignant, deux auxiliaires et un tuteur, tous reliés par Slack.">
-  <!-- le canal -->
-  <rect x="330" y="120" width="300" height="70" class="canal" />
-  <text x="480" y="152" class="canal-t">SLACK</text>
-  <text x="480" y="176" class="canal-s">le canal du cours</text>
-
-  <!-- l'enseignant -->
-  <g transform="translate(120 155)">
-    <circle r="46" class="p prof" />
-    <text y="-58" class="role">ENSEIGNANT</text>
-    <text y="76" class="nom">Laurence-Olivier</text>
-    <text y="98" class="nom">M. Foisy</text>
-  </g>
-  <line x1="170" y1="155" x2="326" y2="155" class="lien" />
-
-  <!-- auxiliaires + tuteur -->
-  <g transform="translate(760 60)">
-    <circle r="34" class="p" />
-    <text x="48" y="-4" class="role g">AUXILIAIRE</text>
-    <text x="48" y="18" class="nom g">Jules Piral</text>
-  </g>
-  <g transform="translate(760 165)">
-    <circle r="34" class="p" />
-    <text x="48" y="-4" class="role g">AUXILIAIRE</text>
-    <text x="48" y="18" class="nom g">Marc-Antoine Dupuis</text>
-  </g>
-  <g transform="translate(760 270)">
-    <circle r="34" class="p tut" />
-    <text x="48" y="-4" class="role g">TUTEUR</text>
-    <text x="48" y="18" class="nom g">Adam Ménard</text>
-  </g>
-  <line x1="634" y1="140" x2="722" y2="70" class="lien" />
-  <line x1="634" y1="160" x2="722" y2="165" class="lien" />
-  <line x1="634" y1="180" x2="722" y2="260" class="lien" />
-
-  <!-- vous -->
-  <g transform="translate(480 268)">
-    <text class="vous">VOUS</text>
-  </g>
-  <line x1="480" y1="194" x2="480" y2="240" class="lien" />
-</svg>
+<div class="visuel equipe">
+  <div class="canal"><span class="hash">#</span><strong>Slack</strong><span>un seul canal, pour toute l'équipe, en tout temps</span></div>
+  <div class="cartes">
+    {#each GENS as g}
+      <div class="carte" class:grand={g.grand}>
+        <div class="avatar" class:acc={g.grand}>{g.ini}</div>
+        <span class="role">{g.role}</span>
+        <strong>{g.nom}</strong>
+        <span class="pour">{g.pour}</span>
+      </div>
+    {/each}
+  </div>
+  <div class="bas">
+    <span><strong>8 octobre</strong> · rencontres individuelles, toute l'équipe</span>
+    <span><strong>pol2000.com</strong> · rendez-vous dans les plages publiées</span>
+  </div>
+</div>
 
 <style>
-  .equipe { width: 100%; height: auto; max-height: 58vh; display: block; }
-  .canal { fill: var(--dk-accent); }
-  .canal-t { font-family: var(--dk-mono); font-size: 26px; font-weight: 600; letter-spacing: 0.2em; text-anchor: middle; fill: var(--dk-fond); }
-  .canal-s { font-family: var(--dk-mono); font-size: 15px; text-anchor: middle; fill: var(--dk-fond); opacity: 0.9; }
-  .p { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 4; }
-  .p.prof { stroke-width: 6; }
-  .p.tut { stroke-dasharray: 7 5; }
-  .role { font-family: var(--dk-mono); font-size: 15px; letter-spacing: 0.16em; font-weight: 600; text-anchor: middle; fill: var(--dk-gris); }
-  .nom { font-family: var(--dk-mono); font-size: 20px; text-anchor: middle; fill: var(--dk-encre); }
-  .role.g, .nom.g { text-anchor: start; }
-  .lien { stroke: var(--dk-encre); stroke-width: 3; }
-  .vous { font-family: var(--dk-mono); font-size: 30px; font-weight: 600; letter-spacing: 0.2em; text-anchor: middle; fill: var(--dk-encre); }
+  .equipe { display: flex; flex-direction: column; gap: 0.9em; }
+  .canal { display: flex; align-items: baseline; gap: 0.6em; background: var(--dk-encre); color: var(--dk-fond); padding: 0.5em 1em; }
+  .canal .hash { font-family: var(--dk-mono); font-size: 1.6em; color: var(--dk-accent-clair); font-weight: 600; }
+  .canal strong { font-size: 1.2em; }
+  .canal span:last-child { font-size: 0.8em; opacity: 0.85; }
+  .cartes { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 0.8em; }
+  .carte { border: 2px solid var(--dk-encre); padding: 1em 0.9em; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.25em; }
+  .carte.grand { border-width: 3px; border-color: var(--dk-accent); }
+  .avatar { width: 3.4em; height: 3.4em; border-radius: 50%; border: 3px solid var(--dk-encre); display: flex; align-items: center; justify-content: center; font-family: var(--dk-mono); font-weight: 600; font-size: 0.85em; margin-bottom: 0.4em; }
+  .avatar.acc { border-color: var(--dk-accent); color: var(--dk-accent); }
+  .role { font-size: 0.6em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dk-gris); font-weight: 600; }
+  .carte strong { font-size: 0.95em; line-height: 1.2; }
+  .pour { font-size: 0.72em; color: var(--dk-gris); line-height: 1.35; margin-top: 0.2em; }
+  .bas { display: flex; justify-content: space-between; gap: 1em; font-size: 0.78em; color: var(--dk-gris); }
+  .bas strong { color: var(--dk-accent); }
 </style>

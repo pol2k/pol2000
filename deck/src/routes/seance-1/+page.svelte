@@ -26,17 +26,24 @@
   import Evaluations from '$lib/deck/visuels/Evaluations.svelte';
   import Retard from '$lib/deck/visuels/Retard.svelte';
   import Examens from '$lib/deck/visuels/Examens.svelte';
+  import IA from '$lib/deck/visuels/IA.svelte';
+  import Materiel from '$lib/deck/visuels/Materiel.svelte';
   import Projet from '$lib/deck/visuels/Projet.svelte';
   import Datacamp from '$lib/deck/visuels/Datacamp.svelte';
   import Equipe from '$lib/deck/visuels/Equipe.svelte';
   import Entonnoir from '$lib/deck/visuels/Entonnoir.svelte';
+  import XY from '$lib/deck/visuels/XY.svelte';
+  import Unites from '$lib/deck/visuels/Unites.svelte';
+  import Chaine from '$lib/deck/visuels/Chaine.svelte';
+  import Fiche from '$lib/deck/visuels/Fiche.svelte';
   import Points from '$lib/deck/visuels/Points.svelte';
   import Niveaux from '$lib/deck/visuels/Niveaux.svelte';
   import Hypotheses from '$lib/deck/visuels/Hypotheses.svelte';
   import Varie from '$lib/deck/visuels/Varie.svelte';
   import Ordre from '$lib/deck/visuels/Ordre.svelte';
+  import Liens from '$lib/deck/visuels/Liens.svelte';
 
-  const TOTAL = 48;
+  const TOTAL = 53;
   const D = 'POL-2000 · séance 1 · jeu 3 sept';
 
   const c_verif = `R.version.string
@@ -226,34 +233,48 @@ install.packages("tidyverse")
 
     <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">L'intelligence artificielle</h2>
-      <div class="feux e">
-        <div class="feu ok"><span class="signe">✓</span><strong>Le code R</strong><small>permis, si déclaré</small></div>
-        <div class="feu non"><span class="signe">✗</span><strong>L'interprétation. La rédaction.</strong><small>jamais</small></div>
-        <div class="feu selon"><span class="signe">≈</span><strong>Chaque évaluation</strong><small>ses propres consignes</small></div>
-      </div>
-      <Citation source="La question, chaque fois">L'aurais-je accepté d'un assistant humain sans vérifier son travail ?</Citation>
+      <IA />
     </Slide>
 
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">Matériel</h2>
-      <div class="materiel e">
-        <div class="item"><span class="grosR">R</span><strong>gratuit</strong></div>
-        <div class="item"><span class="grosP">Positron</span><strong>gratuit</strong></div>
-        <div class="item"><Picto nom="terminal" taille="2.8em" /><strong>votre portable</strong></div>
-        <div class="item livre"><span class="couv">Arel-Bundock<br />2021</span><strong>référence, gratuit en PDF</strong><small>rien d'obligatoire à lire</small></div>
-      </div>
+    <Slide bandeau="Le matériel" droite={D}>
+      <h2 class="e">R, et Positron</h2>
+      <Materiel quoi="r" />
+    </Slide>
+
+    <Slide bandeau="Le matériel" droite={D}>
+      <h2 class="e">Un ordinateur portable, à chaque séance</h2>
+      <Materiel quoi="ordi" />
+    </Slide>
+
+    <Slide bandeau="Le matériel" droite={D}>
+      <h2 class="e">Slack</h2>
+      <Materiel quoi="slack" />
+    </Slide>
+
+    <Slide bandeau="Le matériel" droite={D}>
+      <h2 class="e">Datacamp</h2>
+      <Datacamp />
+    </Slide>
+
+    <Slide bandeau="Le matériel" droite={D}>
+      <h2 class="e">Le livre</h2>
+      <Materiel quoi="livre" />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">L'équipe</h2>
       <Equipe />
-      <p class="e">Rencontres individuelles le <strong>8 octobre</strong>. Rendez-vous : <code>pol2000.com</code>.</p>
     </Slide>
 
     <Slide fond="encre" bandeau="Le plan de cours" droite={D}>
-      <div class="deuxgrands e">
-        <div><span class="signe non">✗</span><strong>Enregistrement</strong><small>ce cours se donne ici</small></div>
-        <div><span class="signe">↻</span><strong>Hiver</strong><small>la version en ligne, asynchrone</small></div>
+      <div class="enreg e">
+        <svg viewBox="0 0 120 80" class="camera" aria-hidden="true">
+          <rect x="8" y="22" width="70" height="44" rx="4" /><path d="M 78 36 L 110 24 L 110 64 L 78 52 Z" /><circle cx="43" cy="44" r="12" class="obj" />
+          <line x1="6" y1="8" x2="114" y2="76" class="barre" />
+        </svg>
+        <p class="l1">Ce cours n'est pas enregistré.</p>
+        <p class="l2">Il se donne ici, le jeudi, à 15h30.</p>
+        <p class="l3">La version en ligne, asynchrone, existe — <strong>à l'hiver</strong>.</p>
       </div>
     </Slide>
 
@@ -283,12 +304,8 @@ install.packages("tidyverse")
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
-      <div class="xy e">
-        <div class="x"><span class="lettre">X</span><strong>indépendante</strong><small>ce qui explique</small><em>l'âge</em></div>
-        <div class="fl">→</div>
-        <div class="y"><span class="lettre">Y</span><strong>dépendante</strong><small>ce qu'on explique</small><em>voter</em></div>
-      </div>
-      <p class="lead e centre">Une question de recherche, c'est au minimum un X et un Y.</p>
+      <h2 class="e">X, et Y</h2>
+      <XY />
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
@@ -299,18 +316,11 @@ install.packages("tidyverse")
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">Population, échantillon</h2>
       <Points />
-      <p class="e">Ce que je vois ici, puis-je le dire de tout ça ? <span class="pale">Séance 5.</span></p>
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
-      <h2 class="e">Une ligne, c'est quoi ?</h2>
-      <div class="unites e">
-        <div><Picto nom="humain" taille="2.4em" /><strong>une personne</strong><span>a voté, ou non</span></div>
-        <div><span class="glyphe-u">◯</span><strong>un pays, une année</strong><span>indice de démocratie</span></div>
-        <div><span class="glyphe-u">▣</span><strong>un parti, une élection</strong><span>part des voix</span></div>
-        <div><span class="glyphe-u">❝</span><strong>un discours, un tweet</strong><span>ton positif ou négatif</span></div>
-      </div>
-      <p class="e">L'unité d'analyse. On ne les mélange pas — et aucun logiciel ne vous le dira.</p>
+      <h2 class="e">Une ligne, c'est quoi ?</h2>
+      <Unites />
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
@@ -321,63 +331,21 @@ install.packages("tidyverse")
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">L'hypothèse, et sa nulle</h2>
       <Hypotheses />
-      <p class="e">On ne prouve jamais H₁. On demande aux données de <strong>rejeter H₀</strong>.</p>
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">Opérationnaliser</h2>
-      <div class="chaine e">
-        <div><span class="et">CONCEPT</span><strong>« Être à gauche »</strong></div>
-        <div class="fl">→</div>
-        <div><span class="et">DÉFINITION</span><strong>Se situer soi-même sur un axe</strong></div>
-        <div class="fl">→</div>
-        <div><span class="et">MESURE</span><strong>0 ······ 5 ······ 10</strong></div>
-      </div>
-      <p class="lead e">Chaque flèche perd quelque chose.</p>
+      <Chaine />
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">La fiche</h2>
-      <Deux>
-        <div class="fiche vide">
-          <dl>
-            <dt>Question</dt><dd>—</dd>
-            <dt>Y</dt><dd>—</dd>
-            <dt>X</dt><dd>—</dd>
-            <dt>Population</dt><dd>—</dd>
-            <dt>Unité</dt><dd>—</dd>
-            <dt>Mesure</dt><dd>—</dd>
-            <dt>H₁ · H₀</dt><dd>—</dd>
-          </dl>
-        </div>
-        <div class="fiche pleine">
-          <dl>
-            <dt>Question</dt><dd>L'éducation rend-elle plus à gauche ?</dd>
-            <dt>Y</dt><dd>placement gauche-droite</dd>
-            <dt>X</dt><dd>scolarité</dd>
-            <dt>Population</dt><dd>électeur.rice.s, Canada, 2025</dd>
-            <dt>Unité</dt><dd>la personne sondée</dd>
-            <dt>Mesure</dt><dd>Y : 0–10 · X : ordinal</dd>
-            <dt>H₁ · H₀</dt><dd>plus scolarisé, plus à gauche · aucune relation</dd>
-          </dl>
-        </div>
-      </Deux>
-      <p class="lead e">Votre mi-session, c'est la fiche de droite.</p>
+      <Fiche mode="remplie" />
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">À vous</h2>
-      <p class="lead e">Une question de recherche. On remplit la fiche ensemble.</p>
-      <div class="fiche pleine e grande">
-        <dl>
-          <dt>Question</dt><dd>&nbsp;</dd>
-          <dt>Y</dt><dd>&nbsp;</dd>
-          <dt>X</dt><dd>&nbsp;</dd>
-          <dt>Population · unité</dt><dd>&nbsp;</dd>
-          <dt>Mesure</dt><dd>&nbsp;</dd>
-          <dt>H₁ · H₀</dt><dd>&nbsp;</dd>
-        </dl>
-      </div>
+      <Fiche mode="vide" />
     </Slide>
 
     <!-- ================= 5 · AVANT JEUDI PROCHAIN ================= -->
@@ -393,12 +361,8 @@ install.packages("tidyverse")
 
     <Slide bandeau="Avant jeudi prochain" droite={D}>
       <h2 class="e">Trois liens</h2>
-      <div class="liens e">
-        <div><strong>Slack</strong><span>l'invitation arrive par courriel</span></div>
-        <div><strong>Datacamp</strong><span>idem · premier devoir en semaine 2</span></div>
-        <div><strong>pol2000.com</strong><span>plan, calendrier, diapositives</span></div>
-      </div>
-      <p class="lead e">Un blocage ? Écrivez <strong>avant</strong> jeudi.</p>
+      <Liens />
+      <p class="lead e">Un blocage ? Écrivez <strong>avant</strong> jeudi. Un ordinateur qui ne marche pas à la séance 2, c'est une séance perdue.</p>
     </Slide>
 
     <Slide fond="encre" bandeau="Avant jeudi prochain" droite={D}>
@@ -408,6 +372,21 @@ install.packages("tidyverse")
       <p class="lead e">Apportez l'ordinateur. <strong>Installé.</strong></p>
     </Slide>
 
+    <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
+      <div class="titre merci">
+        <h1 class="e">Merci.</h1>
+        <hr class="filet" />
+        <p class="lead e">Des questions ? Maintenant, ou sur Slack.</p>
+        <p class="lead e"><code>mail@mfoisy.com</code> · <code>pol2000.com</code></p>
+      </div>
+      <div class="entete-ul e">
+        <img src="{base}/img/ulaval-logo.png" alt="Université Laval" />
+        <span class="sep"></span>
+        <span class="dept">Département de science politique<br />Faculté des sciences sociales</span>
+        <span class="session">POL-2000 · Automne 2026</span>
+      </div>
+    </Slide>
+
   {/snippet}
 </Deck>
 
@@ -415,6 +394,7 @@ install.packages("tidyverse")
   /* Bande d'identité en pied du titre: sol clair pour la marque, séparateur
      rouge, département en petites capitales. */
   .titre { padding-bottom: 5.2em; }
+  .merci h1 { font-size: 3.4em; }
   .entete-ul { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 1.2em;
     background: var(--dk-fond); color: var(--dk-encre); padding: 0.8em 2.6em 0.8em 2.6em; border-top: 6px solid var(--dk-accent); }
   .entete-ul img { height: 2.6em; width: auto; display: block; }
@@ -502,6 +482,17 @@ install.packages("tidyverse")
   .item small { font-size: 0.68em; color: var(--dk-gris); }
   .item strong { font-size: 0.9em; }
 
+  /* Enregistrement: une caméra barrée, trois lignes. */
+  .enreg { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em; }
+  .camera { width: 6em; height: auto; margin-bottom: 0.6em; }
+  .camera rect, .camera path { fill: none; stroke: var(--dk-fond); stroke-width: 4; stroke-linejoin: round; }
+  .camera .obj { fill: none; stroke: var(--dk-fond); stroke-width: 3; }
+  .camera .barre { stroke: var(--dk-accent); stroke-width: 6; stroke-linecap: round; }
+  .enreg p { margin: 0; }
+  .l1 { font-size: 2em; font-weight: 600; line-height: 1.15; }
+  .l2 { font-size: 1.2em; }
+  .l3 { font-size: 1.2em; opacity: 0.85; }
+  .l3 strong { color: var(--dk-accent-clair); }
   /* Deux grands, sur encre. */
   .deuxgrands { display: grid; grid-template-columns: 1fr 1fr; gap: 2em; }
   .deuxgrands > div { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.3em; }
