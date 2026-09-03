@@ -1,34 +1,19 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { color-scheme: light; }
+html { color-scheme: light; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--police-texte);
-  line-height: 1.65;
+  background: var(--fond);
+  color: var(--encre);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
 }
 
-h1, h2, h3 {
-  font-family: var(--police-display);
-  color: var(--ink);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  font-weight: 600;
-}
-
-h1 { font-size: clamp(2rem, 4vw, 3.2rem); }
-h2 { font-size: clamp(1.4rem, 2.6vw, 2.1rem); }
-h3 { font-size: clamp(1.05rem, 1.5vw, 1.25rem); }
-
-p, li { color: var(--ink-2); }
-
-code, pre { font-family: var(--police-mono); font-size: 0.88em; }
-
-a { color: var(--accent); text-underline-offset: 3px; }
-
-/* Grain de papier: donne de la matière sans coûter une requête réseau. */
+/* Grain de papier: sur tout, sous rien. */
 body::before {
   content: '';
   position: fixed;
@@ -39,9 +24,88 @@ body::before {
 }
 body > * { position: relative; z-index: 2; }
 
-::selection { background: var(--ink); color: var(--paper); }
+h1, h2, h3, h4 { font-family: var(--mono); color: var(--encre); font-weight: 600; line-height: 1.08; letter-spacing: -0.035em; }
+p, li, td, th, dd, dt { color: inherit; }
+a { color: var(--accent); text-decoration: none; text-underline-offset: 3px; }
+a:hover { text-decoration: underline; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+img { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 
-h1 { letter-spacing: -0.035em; font-weight: 600; }
+::selection { background: var(--encre); color: var(--fond); }
 
-/* Chiffres tabulaires partout: les numéros de séance doivent s'aligner. */
-.mono, code, pre { font-variant-numeric: tabular-nums; }
+/* ---------- Vocabulaire partagé du site ---------- */
+
+/* L'étiquette entre crochets, comme dans le deck: [ examen 2 ]. */
+.etiq {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.etiq::before { content: '[ '; }
+.etiq::after { content: ' ]'; }
+.etiq.gris { color: var(--gris); }
+.etiq.encre { color: var(--encre); }
+
+/* Le surtitre de section: petites capitales espacées, un filet qui court. */
+.surtitre {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gris);
+}
+.surtitre::after { content: ''; flex: 1; height: 2px; background: var(--encre); }
+.surtitre .n { color: var(--accent); }
+
+/* Le filet rouge sous un titre. */
+.filet { width: 5rem; height: 0.34rem; background: var(--accent); border: 0; }
+
+/* Le bouton: un cadre encre, ou un aplat encre. Jamais d'arrondi. */
+.bouton {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  font-family: var(--mono); font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--encre); background: transparent;
+  border: 2px solid var(--encre); padding: 0.6em 1em;
+  text-decoration: none; cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.bouton:hover { background: var(--encre); color: var(--fond); text-decoration: none; }
+.bouton.plein { background: var(--encre); color: var(--fond); }
+.bouton.plein:hover { background: var(--accent); border-color: var(--accent); }
+.bouton.rouge { border-color: var(--accent); color: var(--accent); }
+.bouton.rouge:hover { background: var(--accent); color: var(--fond); }
+.bouton.inactif { color: var(--gris-2); border-color: var(--filet); pointer-events: none; }
+.bouton .fl { transition: transform 0.2s var(--courbe); }
+.bouton:hover .fl { transform: translateX(3px); }
+
+/* Le cadre filaire (ex-carte). */
+.cadre { border: var(--trait); padding: 1.1rem 1.2rem; background: transparent; }
+.cadre.rouge { border-color: var(--accent); border-width: 3px; }
+
+/* Une liste en commandes de terminal. */
+.cmd { list-style: none; padding: 0; margin: 0; }
+.cmd li { padding-left: 1.5em; text-indent: -1.5em; }
+.cmd li::before { content: '> '; color: var(--accent); font-weight: 600; }
+
+/* Prose sobre. */
+.lead { font-size: 1.05rem; line-height: 1.5; max-width: var(--mesure); }
+.gris { color: var(--gris); }
+.petit { font-size: 0.8rem; }
+
+/* Une apparition à l'entrée dans la fenêtre, sans bibliothèque. */
+@keyframes monte {
+  from { opacity: 0; transform: translateY(0.5em); }
+  to { opacity: 1; transform: none; }
+}
+.monte { animation: monte 0.7s var(--courbe) both; }
+@media (prefers-reduced-motion: reduce) { .monte { animation: none; } }

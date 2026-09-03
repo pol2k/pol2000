@@ -11,40 +11,34 @@ Instructor: Laurence-Olivier M. Foisy (mail@mfoisy.com).
 
 - Live at **https://pol2000.com**
 - Repository: `github.com/pol2k/pol2000`
-- Hosted on **Cloudflare Pages**, git-connected to this repo. GitHub Pages
-  has been disabled; the migration is complete.
+- Hosted on **Cloudflare Pages**, git-connected to this repo.
 - **Pushing to `main` triggers a Cloudflare build and publishes to the live
   site automatically.** There is no staging environment and no review gate.
 - Served at `pol2000.com`, `www.pol2000.com` and `pol2000.pages.dev`.
 - Cloudflare runs **no build command**; the output directory is the repo
   root. It publishes the committed tree exactly as it stands.
-- Static site (HTML/CSS/JS) plus Quarto/reveal.js slide decks.
+- The site and the slide decks are **one SvelteKit project in `deck/`**,
+  built locally and exported to the repo root (see Building below). Both
+  speak the same visual language: IBM Plex Mono throughout, paper and ink,
+  Université Laval red `#c6102e` (gold `#ffc103` only on ink), 2 px rules,
+  square corners, no shadows, no gradients, schematic self-drawing figures.
 
-## ⚠️ Provenance — read this before editing any content
-
-This repo was created by **copying the site of a different course
-(FAS1001, Université de Montréal)** purely as a fast way to get a working
-site skeleton. It was never a content starting point.
-
-**Everything under `slides/` is a foreign shell, not POL-2000 material.**
-The existing decks teach mégadonnées, web scraping, LLMs, analyse
-textuelle and analyse d'images. POL-2000 teaches none of that. Do not
-"improve", translate or extend those decks as if they were course content.
-Do not cite them as evidence of what the course covers.
+## Sources of truth
 
 | Path | Status |
 |---|---|
-| `docs/plan-de-cours.md` | ✅ **Source of truth for course content.** |
-| `reference/POL-2000_H24_18043.pdf` | ✅ Official syllabus (H24 offering, different instructor). Authoritative for objectives and structure; its dates and staff are stale. |
-| `slides/**` | ❌ Inherited FAS1001 decks. Placeholder shell. To be replaced. |
-| `course_config.json` | ❌ Inherited calendar (Jan 2026 dates), stale GitHub Classroom links, FAS1001 topic titles. |
-| `README.md` | ❌ Still says "Site du cours fas1001". |
-| `images/cours_*.png`, `images/fas1001_logo.svg` | ❌ FAS1001 deck thumbnails and logo. |
-| `tp_1/`, `tp_pdf/`, `grilles/` | ❌ FAS1001 assignments and grading grids. |
-| `index.html`, `assets/**` | ⚠️ Reusable site chrome. Structure is fine; the *text* still describes FAS1001. |
+| `syllabus/plan-de-cours-A26.md` | ✅ **Student-facing plan de cours.** Rendered to `/syllabus/` at build. Wins over everything else. |
+| `docs/plan-de-cours.md` | ✅ Agent-facing summary of the offering and its decisions. |
+| `deck/src/lib/data/cours.js` | ✅ Everything the site shows: session facts, 14 séances, 7 evaluations, team, links. Must agree with the syllabus. |
+| `reference/POL-2000_H24_18043.pdf` | ✅ Official H24 syllabus (different instructor). Authoritative for objectives and structure; dates and staff are stale. |
+| `docs/superpowers/specs/` | Design specs, dated. |
 
 **Rule: when the site and the syllabus disagree about the course, the
-syllabus wins.** Read `docs/plan-de-cours.md` first.
+syllabus wins.** Read `syllabus/plan-de-cours-A26.md` first.
+
+History: this repo started as a copy of the FAS1001 (Université de
+Montréal) site. That shell was removed on 3 September 2026 (issue
+`pol-zef`); nothing FAS1001 remains and nothing here should cite it.
 
 ## Language
 
@@ -52,8 +46,11 @@ syllabus wins.** Read `docs/plan-de-cours.md` first.
   `courriel`, not `email`). Slides, site copy, assignments, grading grids,
   data-set documentation.
 - **Everything else is English**: commit messages, beads issues, code
-  comments, this file, `docs/`, variable names.
-- Slide decks set `lang: fr` in their YAML header. Keep it.
+  comments in this file and `docs/`, variable names. Comments inside
+  `deck/src/` follow the deck's convention and are in French.
+- Slide decks set `lang: fr`. Keep it.
+- French typography: narrow no-break space (U+202F) before `? : ! ;` in
+  student-facing text, or a lone `?` wraps onto its own line in a title.
 
 ## Pedagogical constraints
 
@@ -66,158 +63,131 @@ These come from the official course description and are not negotiable:
 - The arc is: describe one variable → relate two or more → infer from
   sample to population → reason about causality and its limits.
 - Content is organized in three parts (concepts de base → régression
-  bivariée et multiple → inférence causale). See `docs/plan-de-cours.md`.
-- Required textbook: Arel-Bundock (2021), *Analyse causale et méthodes
-  quantitatives*. Prefer its vocabulary and notation for consistency.
+  bivariée et multiple → inférence causale).
+- Reference textbook (not mandatory): Arel-Bundock (2021), *Analyse causale
+  et méthodes quantitatives*. Prefer its vocabulary for consistency.
+- Figures are schematic and deterministic (no `Math.random`), and never
+  imply data that was not measured. Fictitious data is captioned as such.
 
 ## Repository layout
 
 ```
-AGENTS.md                 this file (CLAUDE.md is a symlink to it)
-docs/plan-de-cours.md     ✅ course content source of truth
-reference/                official syllabus PDF and other source documents
-course_config.json        site control plane — see below
-index.html                landing page; chrome is static, calendar is injected
-assets/js/course_logic.js reads course_config.json and builds the DOM
-assets/{css,sass,webfonts,js}  vendored theme — do not read or edit
-deck/                     SvelteKit source of the A26 decks (edit this)
-deck/src/routes/seance-N/ one deck per séance
-deck/src/lib/deck/        the deck engine (Deck, Slide, Carte, Deux, …) + deck.css
-deck/src/lib/deck/visuels/ bespoke SVG figures for POL-2000 (Axe, Frise, Points, …)
-slides/seance-N/          exported deck (committed, never hand-edited)
-slides/_app/              shared build bundle for all decks (committed)
-slides/N_topic/           ❌ inherited FAS1001 Quarto decks — placeholder shell
-images/                   deck thumbnails and logos
-grilles/, tp_1/, tp_pdf/  assignments and grading grids
-.beads/                   issue tracker database (not published)
+AGENTS.md                      this file (CLAUDE.md is a symlink to it)
+README.md                      short public readme
+syllabus/plan-de-cours-A26.md  ✅ student-facing plan de cours (source of /syllabus/)
+syllabus/POL-2000_A26.pdf      the PDF students download (built by syllabus/pdf/build.sh)
+syllabus/index.html            GENERATED — exported from deck/, never hand-edited
+docs/                          agent-facing notes and design specs
+reference/                     official H24 syllabus PDF
+deck/                          the SvelteKit project: site + decks (edit here)
+deck/src/lib/data/cours.js     ✅ site data: séances, evaluations, team, links
+deck/src/lib/site/             site components (Bandeau, Arc, Semaine, Frise, Evaluations, …)
+deck/src/lib/site/dates.js     date logic for « Maintenant » (next séance, deadlines, status)
+deck/src/lib/styles/           site tokens and base CSS (same palette as the deck)
+deck/src/routes/+page.svelte   the landing page
+deck/src/routes/syllabus/      renders the plan de cours markdown with marked
+deck/src/routes/slides/        slides/+page.svelte (deck list) and slides/seance-N/ (one deck each)
+deck/src/lib/deck/             the deck engine (Deck, Slide, Carte, Deux, …) + deck.css
+deck/src/lib/deck/visuels/     bespoke SVG figures for the decks
+deck/static/img/               images used by site and decks
+deck/outils/                   exporter.sh, deborde.mjs (overflow check), capture.mjs
+index.html, _app/, img/, slides/, syllabus/index.html   GENERATED by deck/outils/exporter.sh
+.beads/                        issue tracker database (not published)
 ```
+
+Generated files at the root are committed because Cloudflare has no build
+step. **Never hand-edit them.** Edit the source in `deck/`, rebuild, export.
 
 ## Search hygiene — important
 
-This repo is ~250 MB of working tree and most of it is vendored
-third-party assets. A naive `grep -r` or a subagent file sweep will drown
-in minified JavaScript.
+Vendored and generated trees drown a naive `grep -r` in minified
+JavaScript. **Never read, grep, or open files under:**
 
-**Never read, grep, or open files under:**
+- `_app/`, `slides/_app/` (if it ever reappears), `deck/build/`,
+  `deck/.svelte-kit/`, `deck/node_modules/`
+- `.git/`, `.beads/embeddeddolt/`
 
-- `slides/*/*_files/` — vendored reveal.js, one full copy per deck
-- `slides/_app/`, `deck/node_modules/`, `deck/build/`, `deck/.svelte-kit/` — build output
-- `assets/webfonts/`, `assets/css/`, `assets/js/*.min.js`, `assets/sass/`
-- `.git/`, `.beads/`
+Root `index.html`, `syllabus/index.html` and `slides/**/index.html` are
+build output: read the `.svelte` source instead.
 
-**Exception:** `assets/js/course_logic.js` and `assets/js/app.js` are
-first-party and worth reading.
+When searching for course content, restrict to `syllabus/*.md`, `docs/`,
+`deck/src/lib/data/`, `deck/src/routes/` and `deck/src/lib/site/`.
 
-When searching for course content, restrict to `*.qmd`, `*.md`,
-`course_config.json`, and `index.html`. The `.qmd` is always the source of
-truth; the rendered `.html` is a build artifact.
-
-## Building slides
-
-A26 decks are **SvelteKit pages**, not Quarto. The engine and visual
-language are lifted from the instructor's EIOM 2026 decks
-(`~/Projects/eiom/eiom-ia.github.io`) and re-themed for Université Laval
-(red `#c6102e` accent on paper, gold `#ffc103` on ink; contrasts are
-computed in the header of `deck/src/lib/deck/deck.css`). The inherited
-FAS1001 Quarto decks under `slides/N_topic/` are a foreign shell and are
-not built from anything in this repo.
+## Building the site and the decks
 
 ```bash
 cd deck
 npm install                                   # once
 npm run build                                 # → deck/build/
-CHROMIUM=/usr/sbin/chromium node outils/deborde.mjs http://127.0.0.1:PORT/seance-1/ 1920 1080
-npm run exporter                              # → ../slides/seance-N/ + ../slides/_app/
+# serve deck/build/ (or the repo root after export) with any static server, then:
+CHROMIUM=/usr/sbin/chromium node outils/deborde.mjs http://127.0.0.1:PORT/slides/seance-1/ 1920 1080
+npm run exporter                              # → repo root: index.html, syllabus/index.html, slides/, _app/, img/
 ```
 
 - **Less text, more visual — the instructor's standing rule.** People read
   a text-heavy slide instead of listening. One idea per slide, one spoken
   line at most; draw the rest as a small Svelte/SVG component in
-  `deck/src/lib/deck/visuels/`. Figures are schematic and deterministic
-  (no `Math.random`), and never imply data that was not measured.
-- French typography: narrow no-break space (U+202F) before `? : ! ;` in
-  slide text, or a lone `?` wraps onto its own line in a title.
-- One route per séance: `deck/src/routes/seance-N/+page.svelte`, with
-  `const TOTAL = <slide count>` kept equal to the number of `<Slide>`s.
+  `deck/src/lib/deck/visuels/`.
+- One route per séance: `deck/src/routes/slides/seance-N/+page.svelte`,
+  with `const TOTAL = <slide count>` kept equal to the number of `<Slide>`s.
 - The build uses **relative paths** (`svelte.config.js`), so an exported
   deck works from any folder and from `file://` on a laptop with no
-  network. Every deck shares one `slides/_app/` bundle; re-export after
-  any rebuild or the decks drift from the bundle.
-- **Both `slides/seance-N/` and `slides/_app/` MUST be committed.**
-  Cloudflare Pages deploys the committed tree with **no build step**.
-  `deck/node_modules`, `deck/build` and `deck/.svelte-kit` are ignored.
-- **Run `outils/deborde.mjs` before committing.** A slide that overflows
-  is a slide cut off on the projector. Serve `deck/build/` with any static
-  server first; the tool needs a URL. Check 1920×1080 and 1280×720.
+  network. Site and decks share one `_app/` bundle; **re-export after any
+  rebuild** or the pages drift from the bundle.
+- **Everything the exporter writes MUST be committed** (`index.html`,
+  `_app/`, `img/`, `slides/`, `syllabus/index.html`). `deck/node_modules`,
+  `deck/build` and `deck/.svelte-kit` are ignored.
+- **Run `outils/deborde.mjs` before committing a deck.** A slide that
+  overflows is a slide cut off on the projector. Check 1920×1080 and
+  1280×720.
 - Known engine trap: `.qs-num li` is a two-column grid. Wrap each item's
   content in a single `<span>` or inline markup splits into extra cells.
-- Never hand-edit `slides/seance-N/index.html`. Edit the `.svelte` and
-  re-export.
-- Wire a new deck into the site through `course_config.json`
-  (`slides.cours_N = true`, `slide_links.cours_N`, and `schedule[].slide`)
-  and flip the static "À venir" tag on the `#slide-cours_N` card in
-  `index.html`.
+- To publish a new deck: add `deck: 'slides/seance-N/'` to the séance in
+  `deck/src/lib/data/cours.js`. The landing page, the « Maintenant » panel
+  and `slides/` pick it up.
+- The landing page computes « Maintenant » from today's date at build time
+  and again in the browser. Dates live in `cours.js`; status logic in
+  `deck/src/lib/site/dates.js`.
+- Links the instructor has not provided yet (Slack, monPortail, Datacamp
+  classroom) are empty strings in `LIENS` in `cours.js`; the site shows
+  « lien à venir » until filled.
 
 ### Cloudflare Pages limits — check before committing large files
 
 - **25 MB per file.** A larger file fails the deployment.
-- **20,000 files per deployment.** Currently ~1,000, so headroom is fine,
-  but each rendered deck adds a full vendored reveal.js copy.
+- **20,000 files per deployment.** Currently well under 200.
 - Keep raw teaching data sets small. If a data set is genuinely large,
   host it outside the repo rather than shipping it to the CDN.
 
-## Previewing the site locally
-
-`course_logic.js` fetches `course_config.json` over HTTP, so opening
-`index.html` via `file://` shows an error box instead of the calendar.
+## Previewing locally
 
 ```bash
-python3 -m http.server 8000    # then open http://localhost:8000
+python3 -m http.server 8000    # from the repo root, after export; then open http://localhost:8000
 ```
 
-## course_config.json — the site control plane
-
-`index.html` contains no calendar markup. `assets/js/course_logic.js`
-fetches this JSON at page load and builds the schedule, the evaluation
-badges and the slide grid. **Edit the JSON, not the HTML**, for anything
-week- or evaluation-related.
-
-| Key | Purpose |
-|---|---|
-| `slides` | Per-deck boolean — whether the deck appears in the grid |
-| `slide_links` | Deck id → path of the rendered `.html` |
-| `exercises` | Per-exercise boolean visibility |
-| `evaluations` | Per-evaluation `status` (`pending` / `active` / `completed`) and optional `url` |
-| `rencontres.link` | Google Calendar appointment booking URL |
-| `schedule` | Array of week objects: `week`, `date` (ISO), `title`, `description`, `type`, optional `slide`, `tags`, `anchor` |
-
-`type` values in use: `lecture`, `break`, `important-eval`.
-
-Every value in this file is currently inherited from FAS1001 and wrong for
-POL-2000.
+or `npm run dev` in `deck/` for live reload. `file://` works for decks but
+not for the site's absolute anchors.
 
 ## Deployment and git
 
 - `main` is the published branch. Anything pushed there is public within
   minutes — there is no review gate between `git push` and students.
 - Commit messages in English, imperative mood.
-- Commit a rendered deck in the same commit as its `.qmd`, so source and
-  published page never drift.
+- Commit the exported output in the same commit as its `.svelte` source, so
+  source and published page never drift.
 - Do not force-push. Do not rewrite published history.
 - **Missing paths do not 404.** Cloudflare Pages falls back to
   `index.html` with HTTP 200 when a path is not found and no `404.html`
   exists at the root. A broken link therefore looks healthy to browsers
   and link checkers — verify page content, not status codes.
 - **This GitHub repository is public, and Cloudflare Pages publishes the
-  entire committed tree — dot-directories included.** Verified:
-  `pol2000.com/.beads/issues.jsonl` is served with HTTP 200. `docs/`,
-  `reference/` and `mockup.html` are likewise world-readable.
+  entire committed tree — dot-directories included.** `docs/`,
+  `reference/` and `.beads/issues.jsonl` are world-readable.
   **Never commit anything confidential** — exam keys, unreleased exam
   content, student data, grades or credentials. There is no private
   corner of this repo.
 - Pages serves `.html` files at their extensionless path and 308-redirects
-  the `.html` URL to it. Links ending in `.html` (as in `course_config.json`)
-  still work; they just take one redirect.
+  the `.html` URL to it.
 
 ## Issue tracking
 
@@ -238,21 +208,19 @@ Conventions for this repo:
 
 ## Things that will bite you
 
-1. **Editing an exported `slides/seance-N/index.html` instead of the
-   `.svelte` source** — silently overwritten on the next export.
-2. **Gitignoring `*_files/`** — breaks every deck on the live site, since
-   Cloudflare runs no build step.
-3. **Treating an inherited FAS1001 deck as course material** — see
-   Provenance above.
-4. **Opening `index.html` from disk** and concluding the calendar is
-   broken — you need an HTTP server.
-5. **Adding maths to explain a statistical concept** — the course
+1. **Editing a generated file** (`index.html`, `syllabus/index.html`,
+   `slides/seance-N/index.html`) instead of the `.svelte` or `.md` source —
+   silently overwritten on the next export.
+2. **Rebuilding without re-exporting** — the committed pages reference
+   bundle files that no longer exist.
+3. **Adding maths to explain a statistical concept** — the course
    explicitly forbids requiring it.
-6. **Writing student-facing text in English** — the entire audience is
+4. **Writing student-facing text in English** — the entire audience is
    francophone.
-7. **Committing a file over 25 MB** — the Cloudflare deployment fails.
+5. **Committing a file over 25 MB** — the Cloudflare deployment fails.
+6. **Changing a date in `cours.js` without changing the syllabus** (or the
+   reverse) — the two must agree; the syllabus wins.
 
-<!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
 ## Beads Issue Tracker
 
 This project uses **bd (beads)** for issue tracking. Run `bd prime` to see full workflow context and commands.
@@ -297,8 +265,6 @@ bd close <id>         # Complete work
 - NEVER stop before pushing - that leaves work stranded locally
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
-<!-- END BEADS INTEGRATION -->
-
 ## Override to the beads session protocol above
 
 The generic beads block mandates pushing at the end of every session. **In

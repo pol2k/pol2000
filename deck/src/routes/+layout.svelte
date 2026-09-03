@@ -1,9 +1,9 @@
 <script>
-  import '@fontsource/fraunces/400.css';
-  import '@fontsource/fraunces/600.css';
-  import '@fontsource/libre-franklin/400.css';
-  import '@fontsource/libre-franklin/600.css';
-  import '@fontsource/jetbrains-mono/400.css';
+  // Une seule famille sur tout le site et dans les decks: IBM Plex Mono.
+  import '@fontsource/ibm-plex-mono/400.css';
+  import '@fontsource/ibm-plex-mono/500.css';
+  import '@fontsource/ibm-plex-mono/600.css';
+  import '@fontsource/ibm-plex-mono/400-italic.css';
   import '$lib/styles/tokens.css';
   import '$lib/styles/base.css';
 

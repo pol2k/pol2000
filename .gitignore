@@ -11,7 +11,7 @@
 # Local design scratch file, not part of the published site
 mockup.html
 
-# SvelteKit deck source lives in deck/; only its exported build (slides/) is published
+# SvelteKit source of site and decks lives in deck/; only its export (root, slides/, _app/) is published
 deck/node_modules/
 deck/build/
 deck/.svelte-kit/

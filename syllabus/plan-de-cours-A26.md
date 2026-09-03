@@ -25,8 +25,8 @@ SVS 1004 OU ANT 1002 OU LNG 1002 OU ORT 1001 OU GPL 1001 OU GPL 1009)
 
 ## Coordonnées et disponibilités
 
-**Laurence-Olivier M. Foisy** — Enseignant
-Courriel : [mail@mfoisy.com](mailto:mail@mfoisy.com)
+**Laurence-Olivier M. Foisy** — Enseignant  
+Courriel : [mail@mfoisy.com](mailto:mail@mfoisy.com)  
 Disponibilités : sur rendez-vous, ainsi que lors des semaines de rencontres
 individuelles prévues au calendrier. Écrivez-moi pour convenir d'un moment.
 
@@ -34,8 +34,8 @@ individuelles prévues au calendrier. Écrivez-moi pour convenir d'un moment.
 
 ### Soutien technique
 
-CSTIP — Centre de services en TI et pédagogie
-Pavillon Charles-De Koninck, local 0248 · [aide@cstip.ulaval.ca](mailto:aide@cstip.ulaval.ca)
+CSTIP — Centre de services en TI et pédagogie  
+Pavillon Charles-De Koninck, local 0248 · [aide@cstip.ulaval.ca](mailto:aide@cstip.ulaval.ca)  
 418-656-2131 poste 405222 · 418-656-5222
 
 ---
