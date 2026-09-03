@@ -86,7 +86,7 @@
     <h2 class="surtitre" id="t-evaluations"><span class="n">02</span> Les évaluations</h2>
     <div class="entete">
       <h3 class="grand">Trois examens, deux travaux, Datacamp.</h3>
-      <p class="lead">Un seul projet de recherche, en deux temps : un devis à la mi-session, l'analyse complète à la fin. Les examens 2 et 3 s'écrivent en classe, sur papier.</p>
+      <p class="lead">Un seul projet de recherche, en deux temps : un devis à la mi-session, l'analyse complète à la fin. Les examens 2 et 3 s'écrivent en classe, sur papier, en fin de séance : le cours d'abord, une pause, puis une heure d'examen.</p>
     </div>
     <Evaluations />
   </section>

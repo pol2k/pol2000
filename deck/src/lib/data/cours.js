@@ -50,22 +50,22 @@ export const SEANCES = [
   { n: 3, court: 'Décrire', date: '2026-09-17', partie: 1, titre: 'Les statistiques descriptives et la visualisation des données', resume: "Décrire une variable : la forme d'une distribution, son centre, sa dispersion. Et la dessiner." },
   { n: 4, court: 'Données', date: '2026-09-24', partie: 1, titre: 'Préparer ses données avec R', resume: 'Lire un codebook, recoder, gérer les valeurs manquantes.', note: "L'examen 1 ouvre aujourd'hui." },
   { n: 5, court: 'Inférence', date: '2026-10-01', partie: 1, titre: "L'inférence statistique", resume: 'Ce que je vois dans un échantillon, puis-je le dire de toute la population ?', note: 'Examen 1 à remettre dimanche 4 octobre.' },
-  { n: 6, court: 'Rencontres', date: '2026-10-08', partie: 0, titre: 'Rencontres individuelles', resume: "Pas de cours magistral : on se voit, un.e à la fois, avec les auxiliaires et le tuteur." },
+  { n: 6, court: 'Rencontres', date: '2026-10-08', partie: 0, titre: 'Rencontres individuelles', resume: "Pas de cours de la semaine : on se voit, un.e à la fois, avec les auxiliaires et le tuteur, pour le travail de mi-session." },
   { n: 7, court: 'Régression', date: '2026-10-15', partie: 2, titre: 'La régression linéaire simple', resume: 'Une droite qui résume une relation, et ce que ses chiffres veulent dire.' },
-  { n: 8, court: 'Examen 2', date: '2026-10-22', partie: 2, titre: 'Examen 2, puis atelier de mi-session', resume: "Une heure d'examen sur papier, puis on travaille votre devis, ensemble.", note: 'Mi-session à remettre dimanche 25 octobre.', examen: true },
+  { n: 8, court: 'Multiple', date: '2026-10-22', partie: 2, titre: 'La régression linéaire multiple', resume: 'Plusieurs variables explicatives à la fois. Ce que « contrôler pour » veut dire.', note: 'Travail de mi-session à remettre dimanche 25 octobre.' },
   { lecture: true, date: '2026-10-29', titre: 'Semaine de lecture', resume: 'Aucun cours du 26 au 30 octobre.' },
-  { n: 9, court: 'Multiple', date: '2026-11-05', partie: 2, titre: 'La régression linéaire multiple', resume: 'Plusieurs variables explicatives à la fois. Ce que « contrôler pour » veut dire.' },
-  { n: 10, court: 'Main, puis IA', date: '2026-11-12', partie: 2, titre: "De la question au tableau de régression : à la main, puis avec l'IA", resume: "Le travail final, du début à la fin. D'abord vous, puis un agent d'IA, et on le vérifie." },
+  { n: 9, court: 'Main, puis IA', date: '2026-11-05', partie: 2, titre: "De la question au tableau de régression : à la main, puis avec l'IA", resume: "Le travail final, du début à la fin. D'abord vous, puis un agent d'IA, et on le vérifie." },
+  { n: 10, court: 'Causalité', date: '2026-11-12', partie: 3, titre: "Le problème fondamental de l'inférence causale", resume: 'On ne voit jamais les deux mondes à la fois. Tout part de là.', note: 'Examen 2 en classe, de 17h20 à 18h20, après le cours.', examen: true },
   { n: 11, court: 'GOA', date: '2026-11-19', partie: 3, titre: 'Les graphes orientés acycliques (GOA)', resume: 'Dessiner ses hypothèses causales. Décider quoi contrôler, ou pas.' },
-  { n: 12, court: 'Causalité', date: '2026-11-26', partie: 3, titre: "Le problème fondamental de l'inférence causale", resume: 'On ne voit jamais les deux mondes à la fois. Tout part de là.' },
+  { n: 12, court: 'Rencontres', date: '2026-11-26', partie: 0, titre: 'Rencontres individuelles', resume: "Pas de cours de la semaine : on revient sur l'examen 2 et on avance votre travail final, un.e à la fois." },
   { n: 13, court: 'Biais', date: '2026-12-03', partie: 3, titre: 'Les biais', resume: 'Variable omise, sélection, mesure, simultanéité : ce qui fausse une régression.' },
-  { n: 14, court: 'Expériences', date: '2026-12-10', partie: 3, titre: 'Les expériences, et révision', resume: 'Le hasard comme méthode. Puis on revoit tout.', note: 'Examen 3 en classe · travail final vendredi 18 décembre.', examen: true }
+  { n: 14, court: 'Expériences', date: '2026-12-10', partie: 3, titre: 'Les expériences, et révision', resume: 'Le hasard comme méthode. Puis on revoit tout.', note: 'Examen 3 en classe, de 17h20 à 18h20, après le cours · travail final vendredi 18 décembre.', examen: true }
 ];
 
 export const PARTIES = [
   { n: 1, nom: 'Concepts de base', de: 1, a: 5 },
-  { n: 2, nom: 'Régression', de: 7, a: 10 },
-  { n: 3, nom: 'Inférence causale', de: 11, a: 14 }
+  { n: 2, nom: 'Régression', de: 7, a: 9 },
+  { n: 3, nom: 'Inférence causale', de: 10, a: 14 }
 ];
 
 /**
@@ -75,10 +75,10 @@ export const PARTIES = [
  */
 export const EVALUATIONS = [
   { id: 'examen1', nom: 'Examen 1 · Analyser des données avec R', court: 'Examen 1', groupe: 'ex', poids: 15, ouvre: '2026-09-24', date: '2026-10-04', heure: '23h59', mode: 'À distance, sur ordinateur · boîte de dépôt' },
-  { id: 'examen2', nom: 'Examen 2 · Les statistiques descriptives', court: 'Examen 2', groupe: 'ex', poids: 15, date: '2026-10-22', heure: '15h30 à 16h30', mode: 'En classe, sur papier, à livre ouvert · aucun appareil' },
   { id: 'misession', nom: 'Travail de mi-session', court: 'Mi-session', groupe: 'tr', poids: 20, date: '2026-10-25', heure: '23h59', mode: 'Individuel · PDF, boîte de dépôt' },
   { id: 'datacamp1', nom: 'Datacamp · 1re partie', court: 'DC 1', groupe: 'dc', poids: 5, date: '2026-10-25', heure: '23h59', mode: 'Tous les devoirs de la première moitié' },
-  { id: 'examen3', nom: 'Examen 3 · Régressions linéaires simple et multiple', court: 'Examen 3', groupe: 'ex', poids: 15, date: '2026-12-10', heure: '15h30 à 16h30', mode: 'En classe, sur papier, à livre ouvert · aucun appareil' },
+  { id: 'examen2', nom: 'Examen 2 · Les statistiques descriptives', court: 'Examen 2', groupe: 'ex', poids: 15, date: '2026-11-12', heure: '17h20 à 18h20', mode: 'En classe, après le cours · sur papier, à livre ouvert · aucun appareil' },
+  { id: 'examen3', nom: 'Examen 3 · Régressions linéaires simple et multiple', court: 'Examen 3', groupe: 'ex', poids: 15, date: '2026-12-10', heure: '17h20 à 18h20', mode: 'En classe, après le cours · sur papier, à livre ouvert · aucun appareil' },
   { id: 'final', nom: 'Travail final', court: 'Final', groupe: 'tr', poids: 25, date: '2026-12-18', heure: '23h59', mode: 'Individuel · PDF, boîte de dépôt · Positron obligatoire' },
   { id: 'datacamp2', nom: 'Datacamp · 1re et 2e parties', court: 'DC 2', groupe: 'dc', poids: 5, date: '2026-12-18', heure: '23h59', mode: 'Tous les devoirs de la session' }
 ];

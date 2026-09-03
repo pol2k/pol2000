@@ -52,7 +52,7 @@
     </div>
     <div class="cadre">
       <span class="etiq">Les examens 2 et 3</span>
-      <p>Sur papier, en classe, à livre ouvert : vos notes, oui. Un appareil, non.</p>
+      <p>Sur papier, en classe, à livre ouvert : vos notes, oui. Un appareil, non. Le cours d'abord (15h30 à 17h05), une pause, puis l'examen (17h20 à 18h20).</p>
     </div>
     <div class="cadre">
       <span class="etiq">Consignes</span>

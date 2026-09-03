@@ -27,7 +27,7 @@
       </div>
     {/each}
   </div>
-  <p class="bas"><strong>Jeudi 8 octobre</strong> · rencontres individuelles avec toute l'équipe, pas de cours magistral. Autrement, sur rendez-vous : écrivez-nous.</p>
+  <p class="bas"><strong>Semaines du 8 octobre et du 26 novembre</strong> · rencontres individuelles avec toute l'équipe, pas de cours. Autrement, sur rendez-vous : écrivez-nous.</p>
 </div>
 
 <style>
