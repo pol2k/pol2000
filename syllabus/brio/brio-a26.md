@@ -80,10 +80,10 @@ Au terme du cours, l'étudiant.e sera en mesure de :
 | Évaluation | Date | Pondération |
 |---|---|---|
 | Examen 1 — Analyser des données avec R (à distance) | remise le 4 octobre 2026, 23h59 | 15 % |
-| Examen 2 — Les statistiques descriptives (en classe) | 22 octobre 2026, 15h30–16h30 | 15 % |
+| Examen 2 — Les statistiques descriptives (en classe, sur papier, à livre ouvert) | 22 octobre 2026, 15h30–16h30 | 15 % |
 | Travail de mi-session | 25 octobre 2026, 23h59 | 20 % |
 | Datacamp — 1re partie | 25 octobre 2026, 23h59 | 5 % |
-| Examen 3 — Régressions simple et multiple (en classe) | 10 décembre 2026, 15h30–16h30 | 15 % |
+| Examen 3 — Régressions simple et multiple (en classe, sur papier, à livre ouvert) | 10 décembre 2026, 15h30–16h30 | 15 % |
 | Travail final | 18 décembre 2026, 23h59 | 25 % |
 | Datacamp — 1re + 2e partie | 18 décembre 2026, 23h59 | 5 % |
 
@@ -109,9 +109,6 @@ Politique de retard : pénalité de 10 % par jour; après trois jours, la note e
 - **Chaque évaluation précise ses propres consignes.**
 
 Les séances 2 et 10 abordent directement ces outils.
-
-**Points bonis :** 2 points à la note finale pour l'installation de R et Positron
-avant le 17 septembre 2026, 23h59, avec capture d'écran comme preuve.
 
 ---
 

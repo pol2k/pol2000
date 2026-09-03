@@ -70,6 +70,12 @@ an explicit generative-AI policy (allowed for R code with disclosure; not for
 interpretation or writing; per-evaluation rules). Decided 2 Sept 2026 with the
 instructor; rationale in the session transcript, not in the repo.
 
+Decided 2 Sept 2026 (evening): Examens 2 and 3 are on paper and open book
+(personal notes allowed, no devices) — deliberately, because of LLMs; the
+2-point install bonus is dropped (untrackable at 100 students). Open question
+for the instructor: whether Examen 1 (take-home, on R) should also move to
+paper in class.
+
 Lecture-only constraint: ~100 students in a lecture hall. No lab halves. R is
 taught through live projector demos students follow on their own laptops, plus
 at-home material (fas1001 `introduction_r/` kit, Datacamp).
@@ -172,8 +178,8 @@ descriptives à la semaine 3.
 | Regroupement | Évaluation | Pondération | Modalité |
 |---|---|---|---|
 | Examens (45 %) | Examen 1 — Analyser des données avec R | 15 % | À distance, boîte de dépôt, fenêtre de ~10 jours |
-| | Examen 2 — Les statistiques descriptives | 15 % | En classe, 1 h, papier et crayon seulement |
-| | Examen 3 — Régressions simple et multiple | 15 % | En classe, 1 h, papier et crayon seulement |
+| | Examen 2 — Les statistiques descriptives | 15 % | En classe, 1 h, sur papier, à livre ouvert (A26: notes permises, aucun appareil) |
+| | Examen 3 — Régressions simple et multiple | 15 % | En classe, 1 h, sur papier, à livre ouvert (A26: notes permises, aucun appareil) |
 | Travaux (45 %) | Travail de mi-session | 20 % | Individuel, PDF |
 | | Travail final | 25 % | Individuel, PDF, Positron obligatoire |
 | Exercices (10 %) | Datacamp 1re partie | 5 % | Datacamp.com |

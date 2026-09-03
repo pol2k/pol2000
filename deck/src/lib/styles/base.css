@@ -1,0 +1,47 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { color-scheme: light; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--police-texte);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--police-display);
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); }
+h2 { font-size: clamp(1.4rem, 2.6vw, 2.1rem); }
+h3 { font-size: clamp(1.05rem, 1.5vw, 1.25rem); }
+
+p, li { color: var(--ink-2); }
+
+code, pre { font-family: var(--police-mono); font-size: 0.88em; }
+
+a { color: var(--accent); text-underline-offset: 3px; }
+
+/* Grain de papier: donne de la matière sans coûter une requête réseau. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: var(--grain);
+}
+body > * { position: relative; z-index: 2; }
+
+::selection { background: var(--ink); color: var(--paper); }
+
+h1 { letter-spacing: -0.035em; font-weight: 600; }
+
+/* Chiffres tabulaires partout: les numéros de séance doivent s'aligner. */
+.mono, code, pre { font-variant-numeric: tabular-nums; }
