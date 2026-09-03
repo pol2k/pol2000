@@ -33,7 +33,7 @@ export const LIENS = {
   syllabusPdf: 'syllabus/POL-2000_A26.pdf',
   datacamp: 'https://app.datacamp.com',
   // À remplir par l'enseignant.
-  slack: '',
+  slack: 'https://join.slack.com/t/pol2000-a26/shared_invite/zt-48voagw8i-YppuX_W~yQEuofzMIuVlCQ',
   monportail: '',
   datacampClasse: '',
   rencontres: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ3gafqpwbfqtRoTayW1p6fGuhT6M5d1znZcOEs7vYX5egNGMgtZutpZ3LP5TaroBzE8cl1lqTTV?gv=true'
@@ -90,22 +90,25 @@ export const EQUIPE = [
   { nom: 'Adam Ménard', role: 'Tuteur', photo: 'photo-menard.jpg', pour: 'quand ça décroche : on reprend depuis le début' }
 ];
 
-export const DATACAMP = [
-  { groupe: 'Les bases de R', cours: [
-    ['Introduction à R', 'https://app.datacamp.com/learn/courses/free-introduction-to-r'],
-    ['R intermédiaire', 'https://app.datacamp.com/learn/courses/intermediate-r'],
-    ['Introduction au tidyverse', 'https://app.datacamp.com/learn/courses/introduction-to-the-tidyverse']
-  ] },
-  { groupe: 'Décrire les données', cours: [
-    ['Nettoyage de données', 'https://app.datacamp.com/learn/courses/cleaning-data-in-r'],
-    ['Manipulation avec dplyr', 'https://app.datacamp.com/learn/courses/data-manipulation-with-dplyr'],
-    ['Statistiques descriptives', 'https://app.datacamp.com/learn/courses/introduction-to-statistics-in-r'],
-    ['Analyse exploratoire', 'https://app.datacamp.com/learn/courses/exploratory-data-analysis-in-r']
-  ] },
-  { groupe: 'Inférence et régression', cours: [
-    ['Échantillonnage', 'https://app.datacamp.com/learn/courses/sampling-in-r'],
-    ["Fondements de l'inférence", 'https://app.datacamp.com/learn/courses/foundations-of-inference-in-r'],
-    ['Régression linéaire simple', 'https://app.datacamp.com/learn/courses/introduction-to-regression-in-r'],
-    ['Régression multiple', 'https://app.datacamp.com/learn/courses/intermediate-regression-in-r']
-  ] }
+/**
+ * Un chapitre Datacamp par séance, dans l'ordre où Adrien Cloutier les a
+ * donnés à l'hiver 2024 (liste épinglée sur Slack, reprise diapo après
+ * diapo), posé sur le calendrier A26. Les semaines de rencontres et la
+ * semaine de lecture n'ont rien. Deux échéances seulement : la 1re partie
+ * (séances 1 à 8) au 25 octobre, tout (1re + 2e) au 18 décembre. Les noms
+ * sont ceux de Datacamp, en anglais, pour qu'on les retrouve tels quels.
+ */
+const DC = 'https://app.datacamp.com/learn/courses/';
+export const DEVOIRS = [
+  { seance: 1, cours: 'Introduction to R', chapitre: 'Intro to basics', url: DC + 'free-introduction-to-r' },
+  { seance: 2, cours: 'Introduction to R', chapitre: 'Vectors', url: DC + 'free-introduction-to-r' },
+  { seance: 3, cours: 'Introduction to Statistics in R', chapitre: 'Summary Statistics', url: DC + 'introduction-to-statistics-in-r' },
+  { seance: 4, cours: 'Intermediate R', chapitre: 'Conditionals and Control Flow', url: DC + 'intermediate-r' },
+  { seance: 5, cours: 'Introduction to the Tidyverse', chapitre: 'Data Wrangling · Grouping and Summarizing', url: DC + 'introduction-to-the-tidyverse' },
+  { seance: 7, cours: 'Introduction to Data Visualization with ggplot2', chapitre: 'Introduction · Aesthetics', url: DC + 'introduction-to-data-visualization-with-ggplot2' },
+  { seance: 8, cours: 'Introduction to Data Visualization with ggplot2', chapitre: 'Geometries · Themes', url: DC + 'introduction-to-data-visualization-with-ggplot2' },
+  { seance: 9, cours: 'Introduction to Regression in R', chapitre: 'Simple Linear Regression', url: DC + 'introduction-to-regression-in-r' },
+  { seance: 10, cours: 'Introduction to Regression in R', chapitre: 'Predictions and model objects', url: DC + 'introduction-to-regression-in-r' },
+  { seance: 11, cours: 'Introduction to Regression in R', chapitre: 'Assessing model fit', url: DC + 'introduction-to-regression-in-r' },
+  { seance: 13, cours: 'Introduction to Regression in R', chapitre: 'Simple logistic regression', url: DC + 'introduction-to-regression-in-r' }
 ];
