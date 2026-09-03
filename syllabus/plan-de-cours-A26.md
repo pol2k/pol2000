@@ -178,7 +178,7 @@ correctement.
   raison : vos notes sont permises, aucun appareil ne l'est.
 
 Deux séances abordent directement ces outils : la séance 2 (utiliser un assistant
-d'IA pour apprendre R) et la séance 10 (produire, puis vérifier, une analyse complète
+d'IA pour apprendre R) et la séance 9 (produire, puis vérifier, une analyse complète
 réalisée par un agent d'IA). La règle de base tient en une question : *l'aurais-je
 accepté d'un assistant humain sans vérifier son travail ?*
 
@@ -202,16 +202,16 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 | 3 | jeudi 17 septembre 2026 | Les statistiques descriptives et la visualisation des données |
 | 4 | jeudi 24 septembre 2026 | Préparer ses données avec R |
 | 5 | jeudi 1er octobre 2026 | L'inférence statistique |
-| 6 | jeudi 8 octobre 2026 | Rencontres individuelles — aucun cours magistral |
+| 6 | jeudi 8 octobre 2026 | Rencontres individuelles — aucun cours (travail de mi-session) |
 | 7 | jeudi 15 octobre 2026 | La régression linéaire simple |
-| 8 | jeudi 22 octobre 2026 | **Examen 2** (1re heure) puis atelier de préparation au travail de mi-session |
+| 8 | jeudi 22 octobre 2026 | La régression linéaire multiple |
 | — | jeudi 29 octobre 2026 | **Semaine de lecture — aucun cours** (26 au 30 octobre) |
-| 9 | jeudi 5 novembre 2026 | La régression linéaire multiple |
-| 10 | jeudi 12 novembre 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
+| 9 | jeudi 5 novembre 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
+| 10 | jeudi 12 novembre 2026 | Le problème fondamental de l'inférence causale, puis **Examen 2** (17h20 à 18h20) |
 | 11 | jeudi 19 novembre 2026 | Les graphes orientés acycliques (GOA) |
-| 12 | jeudi 26 novembre 2026 | Le problème fondamental de l'inférence causale |
+| 12 | jeudi 26 novembre 2026 | Rencontres individuelles — aucun cours (retour sur l'examen 2, travail final) |
 | 13 | jeudi 3 décembre 2026 | Les biais |
-| 14 | jeudi 10 décembre 2026 | Les expériences et révision — **Examen 3** (1re heure) |
+| 14 | jeudi 10 décembre 2026 | Les expériences et révision, puis **Examen 3** (17h20 à 18h20) |
 
 **Remises et échéances**
 
@@ -238,8 +238,8 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 |---|---|---|---|---|
 | **Examens** | | | | **45 %** |
 | | Examen 1 — Analyser des données avec R | du 24 sept. au 4 oct. 2026, 23h59 | Individuel | 15 % |
-| | Examen 2 — Les statistiques descriptives | jeudi 22 oct. 2026, 15h30–16h30 | Individuel | 15 % |
-| | Examen 3 — Régressions linéaires simple et multiple | jeudi 10 déc. 2026, 15h30–16h30 | Individuel | 15 % |
+| | Examen 2 — Les statistiques descriptives | jeudi 12 nov. 2026, 17h20–18h20 | Individuel | 15 % |
+| | Examen 3 — Régressions linéaires simple et multiple | jeudi 10 déc. 2026, 17h20–18h20 | Individuel | 15 % |
 | **Travaux** | | | | **45 %** |
 | | Travail de mi-session | dim. 25 oct. 2026, 23h59 | Individuel | 20 % |
 | | Travail final | ven. 18 déc. 2026, 23h59 | Individuel | 25 % |
@@ -275,27 +275,28 @@ données avec R et Positron.
 
 | | |
 |---|---|
-| **Date** | Jeudi 22 octobre 2026, de 15h30 à 16h30 |
+| **Date** | Jeudi 12 novembre 2026, de 17h20 à 18h20 |
 | **Mode de travail** | Individuel |
 | **Lieu** | **En classe, au local du cours** |
 | **Matériel autorisé** | Papier, crayon et vos notes personnelles — l'examen est à livre ouvert. Aucun appareil électronique. |
 
 Examen d'une heure écrit **pendant la période de cours habituelle**. Aucune
 inscription à un centre d'examen n'est requise : le cours étant donné en présentiel,
-l'examen se déroule directement en classe. Le reste de la séance est consacré à un
-atelier de préparation au travail de mi-session.
+l'examen se déroule directement en classe. La séance commence par le cours
+(15h30 à 17h05), suivi d'une pause de 15 minutes; l'examen occupe la dernière heure.
 
 #### Examen 3 — Régressions linéaires simple et multiple (15 %)
 
 | | |
 |---|---|
-| **Date** | Jeudi 10 décembre 2026, de 15h30 à 16h30 |
+| **Date** | Jeudi 10 décembre 2026, de 17h20 à 18h20 |
 | **Mode de travail** | Individuel |
 | **Lieu** | **En classe, au local du cours** |
 | **Matériel autorisé** | Papier, crayon et vos notes personnelles — l'examen est à livre ouvert. Aucun appareil électronique. |
 
-Examen d'une heure écrit en classe lors de la dernière séance. Le reste de la séance
-est consacré à la matière sur les expériences et à la révision de fin de session.
+Examen d'une heure écrit en classe lors de la dernière séance. La séance commence par
+la matière sur les expériences et la révision de fin de session (15h30 à 17h05), suivie
+d'une pause de 15 minutes; l'examen occupe la dernière heure.
 
 #### Travail de mi-session (20 %)
 
@@ -426,12 +427,12 @@ en présentiel :
 | Formule | À distance, classe virtuelle synchrone | **En présentiel** |
 | Horaire | Mercredi 15h30–18h20 | **Jeudi 15h30–18h20** |
 | Examens 2 et 3 | En soirée, dans un centre d'examen à réserver | **En classe, pendant la période de cours** |
-| Rencontres individuelles | Deux semaines dédiées | Une semaine dédiée (semaine 6) + disponibilités sur rendez-vous |
-| Séance 8 | — | Examen 2 suivi d'un atelier de préparation au travail de mi-session |
+| Rencontres individuelles | Deux semaines dédiées | Deux semaines dédiées (semaines 6 et 12) + disponibilités sur rendez-vous |
+| Semaines d'examen | — | Le cours d'abord (1 h 35), une pause, puis l'examen (1 h) |
 | Nombre de séances | 15 semaines | 14 séances (aucune ne tombe sur un jour férié) |
 | Introduction à R | Semaine 4 | **Semaine 2**, suivie d'une seconde séance sur la préparation des données (semaine 4) |
 | Livre | Obligatoire | Ouvrage de référence, non obligatoire |
-| Intelligence artificielle générative | — | Abordée aux séances 2 et 10; consignes précisées pour chaque évaluation |
+| Intelligence artificielle générative | — | Abordée aux séances 2 et 9; consignes précisées pour chaque évaluation |
 
 La structure des évaluations, leurs pondérations et les exercices Datacamp demeurent
 inchangés.

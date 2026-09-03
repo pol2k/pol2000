@@ -36,35 +36,35 @@
 | 3 | Thu 17 Sep 2026 | Les statistiques descriptives et la visualisation des données |
 | 4 | Thu 24 Sep 2026 | Préparer ses données avec R |
 | 5 | Thu 1 Oct 2026 | L'inférence statistique |
-| 6 | Thu 8 Oct 2026 | Rencontres individuelles (no lecture) |
+| 6 | Thu 8 Oct 2026 | Rencontres individuelles (whole week, no lecture; for the travail de mi-session) |
 | 7 | Thu 15 Oct 2026 | La régression linéaire simple |
-| 8 | Thu 22 Oct 2026 | Examen 2 (1st hour) + mi-session workshop |
+| 8 | Thu 22 Oct 2026 | La régression linéaire multiple |
 | — | Thu 29 Oct 2026 | Reading week — no class |
-| 9 | Thu 5 Nov 2026 | La régression linéaire multiple |
-| 10 | Thu 12 Nov 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
+| 9 | Thu 5 Nov 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
+| 10 | Thu 12 Nov 2026 | Le problème fondamental de l'inférence causale (1 h 35), break, then Examen 2 (17h20–18h20) |
 | 11 | Thu 19 Nov 2026 | Les graphes orientés acycliques (GOA) |
-| 12 | Thu 26 Nov 2026 | Le problème fondamental de l'inférence causale |
+| 12 | Thu 26 Nov 2026 | Rencontres individuelles (whole week, no lecture; examen 2 debrief and the travail final) |
 | 13 | Thu 3 Dec 2026 | Les biais |
-| 14 | Thu 10 Dec 2026 | Les expériences et révision — Examen 3 (1st hour) |
+| 14 | Thu 10 Dec 2026 | Les expériences et révision (1 h 35), break, then Examen 3 (17h20–18h20) |
 
 ### A26 evaluation dates
 
 | Evaluation | Date | Weight |
 |---|---|---|
 | Examen 1 — R (take-home) | 24 Sep → Sun 4 Oct 2026, 23h59 | 15 % |
-| Examen 2 — Stats descriptives (in class) | Thu 22 Oct 2026, 15h30–16h30 | 15 % |
+| Examen 2 — Stats descriptives (in class) | Thu 12 Nov 2026, 17h20–18h20 | 15 % |
 | Travail de mi-session | Sun 25 Oct 2026, 23h59 | 20 % |
 | Datacamp (1re partie) | Sun 25 Oct 2026, 23h59 | 5 % |
-| Examen 3 — Régressions (in class) | Thu 10 Dec 2026, 15h30–16h30 | 15 % |
+| Examen 3 — Régressions (in class) | Thu 10 Dec 2026, 17h20–18h20 | 15 % |
 | Travail final | Fri 18 Dec 2026, 23h59 | 25 % |
 | Datacamp (1re + 2e partie) | Fri 18 Dec 2026, 23h59 | 5 % |
 
 Weights and Datacamp are unchanged from H24. What changed: delivery is in
 person, Examens 2 and 3 are written during class instead of at a booked exam
-centre, there is one individual-meeting week instead of two, **R moves from
+centre, **R moves from
 séance 4 to séance 2** (with a second data-preparation session at séance 4),
 the fundamentals of research merge into séance 1, séance 3 adds visualisation,
-séance 10 becomes the end-to-end pipeline done by hand and then by an AI agent,
+séance 9 becomes the end-to-end pipeline done by hand and then by an AI agent,
 **the textbook is now a non-mandatory reference**, and the plan de cours carries
 an explicit generative-AI policy (allowed for R code with disclosure; not for
 interpretation or writing; per-evaluation rules). Decided 2 Sept 2026 with the
@@ -75,6 +75,17 @@ Decided 2 Sept 2026 (evening): Examens 2 and 3 are on paper and open book
 2-point install bonus is dropped (untrackable at 100 students). Open question
 for the instructor: whether Examen 1 (take-home, on R) should also move to
 paper in class.
+
+Decided 3 Sept 2026 (calendar v3): **two** individual-meeting weeks, whole
+weeks with no lecture (8 Oct for the travail de mi-session, 26 Nov for the
+examen 2 debrief and the travail final). In-class exam weeks run **content
+first (15h30–17h05), a 15-minute break, then the 1-hour exam (17h20–18h20)**,
+so nobody leaves at the break and no lecture is taught to a room that just
+wrote an exam. Examen 2 therefore moves to 12 Nov, after the PFIC lecture
+(the most conceptual session, fine at 1 h 35); régression simple/multiple sit
+on 15/22 Oct at full length; the AI session is séance 9 (5 Nov); no
+"atelier de mi-session" anywhere. Also decided: no em dashes in any
+student-facing text (Brio, plan de cours, slides).
 
 Lecture-only constraint: ~100 students in a lecture hall. No lab halves. R is
 taught through live projector demos students follow on their own laptops, plus

@@ -56,12 +56,6 @@
       {/each}
       <line x1="45" y1="245" x2="375" y2="85" class="moy" />
       <line x1="40" y1="260" x2="380" y2="260" class="l" /><line x1="40" y1="260" x2="40" y2="60" class="l" />
-    {:else if n === 8}
-      <rect x="70" y="50" width="180" height="230" class="fen" />
-      {#each [90, 120, 150, 180, 210] as y}<line x1="95" y1={y} x2={y === 210 ? 160 : 225} y2={y} class="ligne" />{/each}
-      <circle cx="310" cy="110" r="46" class="c" /><line x1="310" y1="110" x2="310" y2="80" class="l" /><line x1="310" y1="110" x2="332" y2="118" class="l" />
-      <text x="310" y="200" class="lib centre">1 h · papier</text>
-      <text x="310" y="228" class="lib centre pale-t">puis atelier</text>
     {:else if n === 9}
       <circle cx="320" cy="160" r="30" class="c" /><text x="320" y="167" class="lettre">Y</text>
       <circle cx="80" cy="80" r="26" class="c" /><text x="80" y="87" class="lettre">X₁</text>
