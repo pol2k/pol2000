@@ -39,8 +39,8 @@
       <text x="70" y="194" class="lib">secondaire</text>
       <text x="170" y="123" class="lib">collégial</text>
       <text x="280" y="28" class="lib">universitaire</text>
-      <line x1="120" y1="175" x2="120" y2="135" class="ecart" /><text x="132" y="162" class="petit">petit</text>
-      <line x1="220" y1="135" x2="220" y2="40" class="ecart" /><text x="232" y="95" class="petit">grand ?</text>
+      <line x1="120" y1="175" x2="120" y2="135" class="ecart" /><text x="150" y="160" class="petit">petit</text>
+      <line x1="220" y1="135" x2="220" y2="40" class="ecart" /><text x="262" y="92" class="petit">grand ?</text>
     </svg>
     <strong>Ordinal</strong>
     <span>Un ordre. Des écarts inégaux.</span>

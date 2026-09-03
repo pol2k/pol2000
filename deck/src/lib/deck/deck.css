@@ -74,6 +74,8 @@
 .diapo.terminal { background: #050706; color: #f5f7f4; }
 .diapo.terminal .diapo-bandeau { display: none; }
 .diapo.terminal .diapo-in { max-width: none; padding: 0; }
+/* plein: un contenu qui occupe toute la diapo sous le bandeau (sites incorporés). */
+.diapo.plein .diapo-in { max-width: none; padding: 0.5em 0.8em 2.4em; justify-content: flex-start; }
 
 /* Le bandeau: repère de section, toujours au même endroit. */
 .diapo-bandeau {

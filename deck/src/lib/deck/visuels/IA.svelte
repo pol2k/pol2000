@@ -24,7 +24,7 @@
 
     <!-- chemin du haut: meilleur -->
     <path d="M 190 190 C 330 190, 380 90, 520 90 L 640 90" class="chemin haut" marker-end="url(#fia)" />
-    <text x="400" y="118" class="lib haut">faire mieux</text>
+    <text x="400" y="66" class="lib haut">faire mieux</text>
     <g class="doc bon" transform="translate(680 40)">
       <rect x="0" y="0" width="170" height="110" />
       {#each [22, 42, 62, 82] as y}<line x1="18" y1={y} x2={y === 82 ? 100 : 150} y2={y} class="ligne nette" />{/each}
@@ -33,7 +33,7 @@
 
     <!-- chemin du bas: plus facile -->
     <path d="M 190 210 C 330 210, 380 310, 520 310 L 640 310" class="chemin bas" marker-end="url(#fia)" />
-    <text x="400" y="342" class="lib bas">en faire moins</text>
+    <text x="400" y="360" class="lib bas">en faire moins</text>
     <g class="doc mou" transform="translate(680 260)">
       <rect x="0" y="0" width="170" height="110" />
       {#each [22, 42, 62, 82] as y, k}<path d="M 18 {y} q 20 {k % 2 ? 6 : -6} 40 0 t 40 0 t 40 0" class="ligne molle" />{/each}
@@ -42,7 +42,7 @@
   </svg>
   <div class="regle" class:vu={e === 1}>
     <strong>L'IA pour faire mieux, pas pour en faire moins.</strong>
-    <span>Un travail paresseux avec l'IA se repère en dix secondes. L'effort compte dans la note — et son absence aussi.</span>
+    <span>Un travail paresseux avec l'IA se repère en dix secondes. L'effort compte dans la note. Son absence aussi.</span>
   </div>
 </div>
 

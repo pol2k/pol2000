@@ -13,26 +13,28 @@
    */
   import { base } from '$app/paths';
   import { brancherTemps } from '../temps.js';
-  let { url, titre, sous, capture, note = '' } = $props();
+  let { url, titre, sous, capture, note = '', plein = false } = $props();
   let e = $state(0);
   let monte = $state(false);
   let hote = $state(null);
   $effect(() => {
     if (!hote) return;
+    if (plein) { e = 1; monte = true; return; }   // en direct tout de suite, sans temps
     e = 0;
     return brancherTemps(hote, { total: 1, lire: () => e, ecrire: (v) => { e = v; if (v === 1) monte = true; } });
   });
   const domaine = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
 </script>
 
-<div class="visuel site" bind:this={hote}>
-  <div class="entete">
+<div class="visuel site" class:plein bind:this={hote}>
+  <div class="entete" class:cache={plein}>
     <div><strong>{titre}</strong><span>{sous}</span></div>
     <span class="etat" class:direct={e === 1}>{e === 1 ? '● EN DIRECT' : 'CAPTURE · cliquez pour le direct'}</span>
   </div>
   <div class="nav">
     <div class="barre"><i></i><i></i><i></i></div>
     <div class="url"><span class="cadenas">🔒</span>{domaine}</div>
+    {#if plein}<span class="titre-plein">{titre}<em>{sous}</em></span>{/if}
   </div>
   <div class="cadre">
     <img src="{base}/img/{capture}" alt="Capture d'écran de {titre}" class:cache={e === 1} />
@@ -61,4 +63,10 @@
   .cadre iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity 0.4s; }
   .cadre iframe.vu { opacity: 1; }
   .note { margin: 0; font-size: 0.72em; color: var(--dk-gris); }
+  /* plein: pas d'entête, la barre d'adresse porte le titre, le cadre prend toute la hauteur */
+  .site.plein { height: 100%; gap: 0; }
+  .entete.cache { display: none; }
+  .site.plein .cadre { flex: 1; aspect-ratio: auto; max-height: none; height: calc(100vh - 8.2em); }
+  .titre-plein { font-family: var(--dk-mono); font-size: 0.68em; color: var(--dk-fond); white-space: nowrap; }
+  .titre-plein em { font-style: normal; color: var(--dk-gris-2); margin-left: 0.8em; }
 </style>

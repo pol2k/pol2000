@@ -4,7 +4,7 @@
   let { fond = 'papier', d = 1, bandeau = '', droite = '', children } = $props();
 </script>
 
-<section class="diapo {fond === 'encre' ? 'encre' : ''} {fond === 'terminal' ? 'terminal' : ''}" style={d === 1 ? undefined : `--d: ${d}`}>
+<section class="diapo {fond === 'encre' ? 'encre' : ''} {fond === 'terminal' ? 'terminal' : ''} {fond === 'plein' ? 'plein' : ''}" style={d === 1 ? undefined : `--d: ${d}`}>
   <div class="diapo-bandeau">
     <span>{bandeau}</span>
     <span class="droite">{droite}</span>

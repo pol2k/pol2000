@@ -8,7 +8,7 @@
   import { brancherTemps } from '../temps.js';
 
   const VOIES = [
-    { k: 'voxpop', t: 'Un vox pop', s: 'dix personnes, un micro' },
+    { k: 'voxpop', t: 'Demander à des gens dans la rue', s: '' },
     { k: 'articles', t: 'Lire ce qui est écrit', s: 'journaux, essais, chroniques' },
     { k: 'entrevues', t: 'Des entrevues', s: 'longues, en profondeur' },
     { k: 'opinion', t: 'Demander autour de soi', s: 'sa famille, ses ami.e.s' },

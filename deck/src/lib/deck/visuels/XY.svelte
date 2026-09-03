@@ -12,7 +12,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
   });
 </script>
 
@@ -33,8 +33,7 @@
     </div>
     <div class="q" class:vu={e === 0}>?</div>
   </div>
-  <p class="lead" class:vu={e >= 2}>Une question de recherche <strong>quantitative</strong>, c'est très au minimum un X et un Y.</p>
-  <p class="nuance" class:vu={e === 3}>Et une question seulement <strong>descriptive</strong> ? « Combien de jeunes votent ? » — un Y, sans X. Elle existe, elle est utile. Mais dès qu'on veut <em>expliquer</em>, il faut un X.</p>
+  <p class="lead" class:vu={e >= 2}>Une question de recherche <strong>quantitative</strong> sera presque toujours, au minimum, un X et un Y.</p>
 </div>
 
 <style>

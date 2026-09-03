@@ -8,13 +8,13 @@
   import { brancherTemps } from '../temps.js';
   let { mode = 'remplie' } = $props();
   const LIGNES = [
-    ['La question', 'Le revenu affecte-t-il l’idéologie politique ?'],
-    ['Y · dépendante', 'placement gauche-droite, 0 à 10'],
+    ['La question', 'Le revenu influence-t-il le vote ?'],
+    ['Y · dépendante', 'voter conservateur, oui ou non'],
     ['X · indépendante', 'revenu du ménage, 8 tranches'],
     ['Population', 'les électeur.rice.s canadien.ne.s, 2025'],
     ['Unité d’analyse', 'la personne sondée'],
-    ['Niveaux de mesure', 'Y : intervalle · X : ordinal'],
-    ['H₁ · H₀', 'plus riche, plus à droite · aucune relation']
+    ['Niveaux de mesure', 'Y : nominal (oui/non) · X : ordinal'],
+    ['H₁ · H₀', 'plus riche, plus conservateur · aucune relation']
   ];
   let e = $state(0);
   let hote = $state(null);

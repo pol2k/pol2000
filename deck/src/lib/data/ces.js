@@ -1,24 +1,27 @@
-/* Généré par ces_fit.R sur l'Étude électorale canadienne 2025 (Dataverse 13958997).
-   Aucune valeur ici n'est écrite à la main. */
+/* Généré par ces_fit2.R sur l'Étude électorale canadienne 2025 (Dataverse 13958997).
+   Y = 1 si la personne compte voter conservateur, 0 sinon (parmi celles qui ont un choix);
+   X = tranche de revenu du ménage, 1 à 8. Aucune valeur ici n'est écrite à la main. */
 export const REG = {
-  "n": 15590,
-  "r2": 0.0004,
+  "n": 12816,
+  "r2": 0.0014,
   "n_total": 20180,
   "n_cols": 1440,
+  "y": "conservateur",
+  "x": "income",
   "coefs": [
     {
       "term": "(Intercept)",
-      "estimate": 4.837,
-      "se": 0.054,
-      "t": 89.86,
-      "p": 0
+      "estimate": 0.2836,
+      "se": 0.0117,
+      "t": 24.31,
+      "p": 1.25e-127
     },
     {
       "term": "income",
-      "estimate": 0.026,
-      "se": 0.011,
-      "t": 2.41,
-      "p": 0.0159
+      "estimate": 0.01,
+      "se": 0.0023,
+      "t": 4.3,
+      "p": 0
     }
   ],
   "income_labels": [
@@ -35,42 +38,42 @@ export const REG = {
 export const MOYENNES = [
   {
     "income": 1,
-    "mean": 5.102,
-    "n": 108
+    "pct": 25.7,
+    "n": 70
   },
   {
     "income": 2,
-    "mean": 4.876,
-    "n": 1679
+    "pct": 29.5,
+    "n": 1340
   },
   {
     "income": 3,
-    "mean": 4.903,
-    "n": 2982
+    "pct": 30.4,
+    "n": 2470
   },
   {
     "income": 4,
-    "mean": 4.977,
-    "n": 3195
+    "pct": 33.6,
+    "n": 2629
   },
   {
     "income": 5,
-    "mean": 4.928,
-    "n": 2233
+    "pct": 34.4,
+    "n": 1816
   },
   {
     "income": 6,
-    "mean": 5.033,
-    "n": 2564
+    "pct": 36.1,
+    "n": 2166
   },
   {
     "income": 7,
-    "mean": 4.852,
-    "n": 1638
+    "pct": 31.2,
+    "n": 1350
   },
   {
     "income": 8,
-    "mean": 5.192,
-    "n": 1191
+    "pct": 36.9,
+    "n": 975
   }
 ];

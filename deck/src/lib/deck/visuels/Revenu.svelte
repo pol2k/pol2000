@@ -1,6 +1,6 @@
 <script>
   /**
-   * « Le revenu affecte-t-il l'idéologie politique ? » — en quatre temps.
+   * « Le revenu influence-t-il le vote ? » — en quatre temps.
    *
    *   0  huit tranches de revenu attendent sous un axe gauche-droite;
    *   1  l'hypothèse la plus répandue: plus on gagne, plus on va à droite;
@@ -14,9 +14,9 @@
   import { brancherTemps } from '../temps.js';
 
   const LEG = [
-    'Huit tranches de revenu. Où se placent-elles ?',
-    'Hypothèse : plus on gagne, plus on est à droite.',
-    'Ou l’inverse : les plus riches, plus à gauche ?',
+    'Huit tranches de revenu. Combien votent conservateur, dans chacune ?',
+    'Hypothèse : plus on gagne, plus on vote conservateur.',
+    'Ou l’inverse : les plus riches, moins conservateurs ?',
     'On ne le sait pas. Comment le saurait-on ?'
   ];
   let e = $state(0);
@@ -40,15 +40,15 @@
 </script>
 
 <div class="visuel revenu" bind:this={hote}>
-  <svg viewBox="0 0 960 395" role="img" aria-label="Un axe gauche-droite; huit tranches de revenu qui se placent selon l'hypothèse choisie, puis toutes sur un point d'interrogation.">
+  <svg viewBox="0 0 960 395" role="img" aria-label="Un axe de 0 à 100 % de vote conservateur; huit tranches de revenu qui se placent selon l'hypothèse choisie, puis toutes sur un point d'interrogation.">
     <!-- axe -->
     <line x1={X0} y1="150" x2={X1} y2="150" class="axe" />
     {#each Array.from({ length: 11 }) as _, i}
       <line x1={x(i)} y1="142" x2={x(i)} y2="158" class="axe" />
-      <text x={x(i)} y="182" class="tick">{i}</text>
+      <text x={x(i)} y="182" class="tick">{i * 10}</text>
     {/each}
-    <text x={X0} y="212" class="pole">GAUCHE</text>
-    <text x={X1} y="212" class="pole fin">DROITE</text>
+    <text x={X0} y="212" class="pole">0 % VOTENT CONSERVATEUR</text>
+    <text x={X1} y="212" class="pole fin">100 %</text>
 
     <!-- le « ? » au centre, temps 3 -->
     <text x={x(5)} y="330" class="q" class:vu={e === 3}>?</text>

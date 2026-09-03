@@ -22,14 +22,16 @@
   import Revenu from '$lib/deck/visuels/Revenu.svelte';
   import Reponses from '$lib/deck/visuels/Reponses.svelte';
   import Regression from '$lib/deck/visuels/Regression.svelte';
-  import Seance from '$lib/deck/visuels/Seance.svelte';
+  import Session from '$lib/deck/visuels/Session.svelte';
   import Evaluations from '$lib/deck/visuels/Evaluations.svelte';
   import Retard from '$lib/deck/visuels/Retard.svelte';
   import Examens from '$lib/deck/visuels/Examens.svelte';
   import IA from '$lib/deck/visuels/IA.svelte';
   import Materiel from '$lib/deck/visuels/Materiel.svelte';
   import Projet from '$lib/deck/visuels/Projet.svelte';
-  import Datacamp from '$lib/deck/visuels/Datacamp.svelte';
+  import DatacampLight from '$lib/deck/visuels/DatacampLight.svelte';
+  import Outils from '$lib/deck/visuels/Outils.svelte';
+  import Tidy from '$lib/deck/visuels/Tidy.svelte';
   import Equipe from '$lib/deck/visuels/Equipe.svelte';
   import Entonnoir from '$lib/deck/visuels/Entonnoir.svelte';
   import XY from '$lib/deck/visuels/XY.svelte';
@@ -40,12 +42,11 @@
   import Niveaux from '$lib/deck/visuels/Niveaux.svelte';
   import Hypotheses from '$lib/deck/visuels/Hypotheses.svelte';
   import Varie from '$lib/deck/visuels/Varie.svelte';
-  import Ordre from '$lib/deck/visuels/Ordre.svelte';
   import Liens from '$lib/deck/visuels/Liens.svelte';
-  import Pourquoi from '$lib/deck/visuels/Pourquoi.svelte';
+  import Raisons from '$lib/deck/visuels/Raisons.svelte';
   import Site from '$lib/deck/visuels/Site.svelte';
 
-  const TOTAL = 59;
+  const TOTAL = 46;
   const D = 'POL-2000 · séance 1 · jeu 3 sept';
 
   const c_verif = `R.version.string
@@ -88,7 +89,7 @@ install.packages("tidyverse")
           <p class="lead e">Laurence-Olivier M. Foisy</p>
           <hr class="filet" />
           <ul class="cmd-liste e">
-            <li>Enseignement du parcours <em>L'intelligence artificielle et la recherche</em><span class="lieu">Université Laval · EIOM 2026</span></li>
+            <li>Enseignement du parcours L'intelligence artificielle et la recherche<span class="lieu">Université Laval · EIOM 2026</span></li>
             <li>Enseignement du cours Introduction aux mégadonnées en sciences sociales<span class="lieu">Université de Montréal · FAS-1001</span></li>
             <li>Doctorat en science politique, en cours<span class="lieu">Université Laval</span></li>
             <li>Maîtrise en études de la paix internationale<span class="lieu">Université Soka, Japon</span></li>
@@ -115,42 +116,46 @@ install.packages("tidyverse")
     <!-- ================= 0 · POURQUOI ================= -->
     <Slide fond="encre" bandeau="Pourquoi ce cours" droite={D}>
       <p class="surtitre e">La vraie question</p>
-      <h1 class="e">« Pourquoi diable devrais-je m'en soucier ? »</h1>
+      <h1 class="e">« Pourquoi est-ce que je suis obligé de suivre ce maudit cours là ? »</h1>
       <hr class="filet" />
       <p class="lead e">« Je ne veux même pas faire de recherche. »</p>
     </Slide>
 
     <Slide bandeau="Pourquoi ce cours" droite={D}>
-      <h2 class="e">Douze réponses</h2>
-      <Pourquoi />
+      <h2 class="e">Onze réponses</h2>
+      <Raisons />
     </Slide>
 
     <!-- ================= 0b · AU CLESSN ================= -->
-    <Slide fond="encre" bandeau="Pourquoi ce cours" droite={D}>
-      <p class="surtitre e">Ce qu'on fait avec ça, concrètement</p>
-      <h1 class="e">Au CLESSN</h1>
-      <hr class="filet" />
-      <p class="lead e">Chaire de leadership en enseignement des sciences sociales numériques · Université Laval</p>
-      <p class="lead e">Trois projets en ligne, en ce moment.</p>
+    <Slide bandeau="La CLESSN" droite={D}>
+      <div class="clessn e">
+        <img src="{base}/img/logo_clessn.png" alt="CLESSN" />
+        <div>
+          <p class="surtitre">Ce qu'on fait avec ça, concrètement</p>
+          <h1>La CLESSN</h1>
+          <hr class="filet" />
+          <p class="lead">Chaire de leadership en enseignement des sciences sociales numériques · Université Laval</p>
+          <p class="lead">Trois projets en ligne, en ce moment.</p>
+        </div>
+      </div>
     </Slide>
 
-    <Slide bandeau="Au CLESSN" droite={D}>
-      <Site url="https://quebec.datagotchi.com" titre="Datagotchi" sous="Québec 2026 · un sondage illustré qui prédit votre vote d'après vos habitudes de vie" capture="site-datagotchi.png" />
+    <Slide fond="plein" bandeau="La CLESSN" droite={D}>
+      <Site plein url="https://quebec.datagotchi.com" titre="Datagotchi" sous="Québec 2026 · un sondage illustré qui prédit votre vote d'après vos habitudes de vie" capture="site-datagotchi.png" />
     </Slide>
 
-    <Slide bandeau="Au CLESSN" droite={D}>
-      <Site url="https://vitrinedemocratique.com" titre="La Vitrine démocratique" sous="avec le CAPP · médias et discours politiques du Québec, analysés six fois par jour" capture="site-vitrine.png" />
+    <Slide fond="plein" bandeau="La CLESSN" droite={D}>
+      <Site plein url="https://vitrinedemocratique.com" titre="La Vitrine démocratique" sous="avec le CAPP · médias et discours politiques du Québec, analysés six fois par jour" capture="site-vitrine.png" />
     </Slide>
 
-    <Slide bandeau="Au CLESSN" droite={D}>
-      <Site url="https://prof-datagotchi.com" titre="Prof. Datagotchi" sous="un assistant fondé sur 153 entrevues des cinq partis — mot pour mot, horodatage à l'appui" capture="site-prof-datagotchi.png" note="Site protégé par mot de passe. Avant la séance : ouvrir prof-datagotchi.com dans un onglet et s'identifier — le direct s'affiche ensuite ici." />
+    <Slide fond="plein" bandeau="La CLESSN" droite={D}>
+      <Site plein url="https://prof-datagotchi.com" titre="Prof. Datagotchi" sous="un assistant fondé sur 153 entrevues des cinq partis — mot pour mot, horodatage à l'appui" capture="site-prof-datagotchi.png" />
     </Slide>
-
 
     <!-- ================= 1 · UNE QUESTION ================= -->
 
     <Slide bandeau="Une question" droite={D}>
-      <h2 class="e">Le revenu affecte-t-il l'idéologie politique ?</h2>
+      <h2 class="e">Le revenu influence-t-il le vote ?</h2>
       <Revenu />
     </Slide>
 
@@ -159,11 +164,10 @@ install.packages("tidyverse")
       <Reponses />
     </Slide>
 
-    <Slide bandeau="Une question" droite={D}>
-      <h2 class="e">Compter : 20 180 personnes, deux colonnes</h2>
-      <figure class="capture e">
-        <img src="{base}/img/ces-viewer.png" alt="Les premières lignes de l'Étude électorale canadienne 2025, telles qu'elles apparaissent dans un visualiseur de données : âge, scolarité, revenu, placement gauche-droite." />
-        <figcaption>Étude électorale canadienne 2025 · 20 180 répondant.e.s · 1 440 colonnes, dont ces quatre</figcaption>
+    <Slide fond="plein" bandeau="Une question" droite={D}>
+      <figure class="capture plein e">
+        <img src="{base}/img/ces-viewer.png" alt="Les premières lignes de l'Étude électorale canadienne 2025, telles qu'elles apparaissent dans un visualiseur de données : âge, scolarité, revenu, intention de vote." />
+        <figcaption>Compter : l'Étude électorale canadienne 2025 · 20 180 répondant.e.s · 1 440 colonnes, dont ces quatre</figcaption>
       </figure>
     </Slide>
 
@@ -173,9 +177,6 @@ install.packages("tidyverse")
       <Regression />
     </Slide>
 
-
-
-
     <!-- ================= 3 · LE PLAN DE COURS ================= -->
     <Slide fond="encre" bandeau="Le plan de cours" droite={D}>
       <h1 class="e">Le plan de cours</h1>
@@ -184,59 +185,7 @@ install.packages("tidyverse")
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={1} titre="Introduction et les éléments fondamentaux de la recherche" date="jeudi 3 septembre" quoi="Une question, les mots pour la poser, et ce qu'il faut installer." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={2} titre="Introduction à R et à Positron" date="jeudi 10 septembre" quoi="R à partir de zéro, en direct, sur votre ordinateur." note="Apportez l'ordinateur — installé." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={3} titre="Les statistiques descriptives et la visualisation des données" date="jeudi 17 septembre" quoi="Décrire une variable : la forme d'une distribution, son centre, sa dispersion. Et la dessiner." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={4} titre="Préparer ses données avec R" date="jeudi 24 septembre" quoi="Lire un codebook, recoder, gérer les valeurs manquantes. Le vrai travail." note="L'examen 1 ouvre aujourd'hui." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={5} titre="L'inférence statistique" date="jeudi 1er octobre" quoi="Ce que je vois dans un échantillon, puis-je le dire de toute la population ?" note="Examen 1 à remettre dimanche 4 octobre." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={6} titre="Rencontres individuelles" date="jeudi 8 octobre" quoi="Pas de cours magistral : on se voit, un.e à la fois, avec les auxiliaires et le tuteur." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={7} titre="La régression linéaire simple" date="jeudi 15 octobre" quoi="Une droite qui résume une relation — et ce que ses chiffres veulent dire." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={8} titre="Examen 2, puis atelier de mi-session" date="jeudi 22 octobre" quoi="Une heure d'examen sur papier, puis on travaille votre devis, ensemble." note="Mi-session à remettre dimanche 25 octobre." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={9} titre="La régression linéaire multiple" date="jeudi 5 novembre" quoi="Plusieurs variables explicatives à la fois. Ce que « contrôler pour » veut dire." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={10} titre="De la question au tableau de régression : à la main, puis avec l'IA" date="jeudi 12 novembre" quoi="Le travail final, du début à la fin. D'abord vous, puis un agent d'IA — et on le vérifie." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={11} titre="Les graphes orientés acycliques (GOA)" date="jeudi 19 novembre" quoi="Dessiner ses hypothèses causales. Décider quoi contrôler — ou pas." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={12} titre="Le problème fondamental de l'inférence causale" date="jeudi 26 novembre" quoi="On ne voit jamais les deux mondes à la fois. Tout part de là." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={13} titre="Les biais" date="jeudi 3 décembre" quoi="Variable omise, sélection, mesure, simultanéité : ce qui fausse une régression." />
-    </Slide>
-
-    <Slide bandeau="Le plan de cours" droite={D}>
-      <Seance n={14} titre="Les expériences, et révision" date="jeudi 10 décembre" quoi="Le hasard comme méthode. Puis on revoit tout." note="Examen 3 en classe · travail final vendredi 18 décembre." />
+      <Session />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
@@ -244,13 +193,9 @@ install.packages("tidyverse")
       <Evaluations />
     </Slide>
 
-
-
-
     <Slide bandeau="Le plan de cours" droite={D}>
-      <h2 class="e">Les examens : sur papier, exprès</h2>
+      <h2 class="e">Les examens : sur papier</h2>
       <Examens />
-      <p class="e">Les modèles de langue ne passent pas l'examen à votre place. Vos notes, oui. L'IA, c'est pour les travaux.</p>
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
@@ -260,7 +205,7 @@ install.packages("tidyverse")
 
     <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Datacamp</h2>
-      <Datacamp />
+      <DatacampLight />
     </Slide>
 
     <Slide bandeau="Le plan de cours" droite={D}>
@@ -274,23 +219,18 @@ install.packages("tidyverse")
     </Slide>
 
     <Slide bandeau="Le matériel" droite={D}>
-      <h2 class="e">R, et Positron</h2>
-      <Materiel quoi="r" />
+      <h2 class="e">Positron</h2>
+      <Outils quoi="positron" />
     </Slide>
 
     <Slide bandeau="Le matériel" droite={D}>
-      <h2 class="e">Un ordinateur portable, à chaque séance</h2>
-      <Materiel quoi="ordi" />
+      <h2 class="e">L'ordinateur</h2>
+      <Outils quoi="ordi" />
     </Slide>
 
     <Slide bandeau="Le matériel" droite={D}>
       <h2 class="e">Slack</h2>
-      <Materiel quoi="slack" />
-    </Slide>
-
-    <Slide bandeau="Le matériel" droite={D}>
-      <h2 class="e">Datacamp</h2>
-      <Datacamp />
+      <Outils quoi="slack" />
     </Slide>
 
     <Slide bandeau="Le matériel" droite={D}>
@@ -346,13 +286,17 @@ install.packages("tidyverse")
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
-      <h2 class="e">Une variable varie</h2>
       <Varie />
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">Population, échantillon</h2>
       <Points />
+    </Slide>
+
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
+      <h2 class="e">Des données bien rangées</h2>
+      <Tidy />
     </Slide>
 
     <Slide bandeau="Les éléments fondamentaux" droite={D}>
@@ -392,8 +336,8 @@ install.packages("tidyverse")
     </Slide>
 
     <Slide bandeau="Avant jeudi prochain" droite={D}>
-      <h2 class="e">Dans cet ordre</h2>
-      <Ordre />
+      <h2 class="e">R et Positron : lequel fait quoi ?</h2>
+      <Outils quoi="rvs" />
     </Slide>
 
     <Slide bandeau="Avant jeudi prochain" droite={D}>
@@ -414,7 +358,7 @@ install.packages("tidyverse")
         <h1 class="e">Merci.</h1>
         <hr class="filet" />
         <p class="lead e">Des questions ? Maintenant, ou sur Slack.</p>
-        <p class="lead e"><code>mail@mfoisy.com</code> · <code>pol2000.com</code></p>
+        <p class="lead e"><code>pol2000.com</code></p>
       </div>
       <div class="entete-ul e">
         <img src="{base}/img/ulaval-logo.png" alt="Université Laval" />
@@ -431,9 +375,12 @@ install.packages("tidyverse")
   /* Bande d'identité en pied du titre: sol clair pour la marque, séparateur
      rouge, département en petites capitales. */
   .titre { padding-bottom: 5.2em; }
+  .clessn { display: grid; grid-template-columns: auto 1fr; gap: 2.2em; align-items: center; }
+  .clessn img { width: 13em; height: auto; }
+  .clessn h1 { margin: 0.1em 0 0.2em; }
   .merci h1 { font-size: 3.4em; }
   .entete-ul { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 1.2em;
-    background: var(--dk-fond); color: var(--dk-encre); padding: 0.8em 2.6em 0.8em 2.6em; border-top: 6px solid var(--dk-accent); }
+    background: #fff; color: var(--dk-encre); padding: 0.8em 2.6em 0.8em 2.6em; border-top: 6px solid var(--dk-accent); }
   .entete-ul img { height: 2.6em; width: auto; display: block; }
   .entete-ul .sep { width: 2px; align-self: stretch; background: var(--dk-encre); }
   .entete-ul .dept { font-size: 0.62em; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.45; font-weight: 600; }
@@ -441,6 +388,9 @@ install.packages("tidyverse")
   .capture { margin: 0; }
   .capture img { display: block; width: 100%; height: auto; border: 2px solid var(--dk-encre); }
   .capture figcaption { margin-top: 0.4em; font-size: 0.7em; color: var(--dk-gris); }
+  .capture.plein { display: flex; flex-direction: column; height: 100%; }
+  .capture.plein img { flex: 1; min-height: 0; object-fit: contain; object-position: top; }
+  .capture.plein figcaption { font-size: 0.85em; color: var(--dk-encre); padding: 0.3em 0; }
   .trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9em; align-items: stretch; }
   .etiqs { display: flex; flex-wrap: wrap; gap: 0.6em; font-size: 1.15em; }
   .pale { color: var(--dk-gris); }

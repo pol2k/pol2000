@@ -1,21 +1,9 @@
 <script>
-  /**
-   * Une séance, une diapo: le numéro, le titre du plan de cours, la date, une
-   * phrase — et un glyphe dessiné pour ce qu'on y fait. Quatorze glyphes,
-   * tous schématiques. Les dates et titres viennent du plan de cours A26.
-   */
-  let { n, titre, date, quoi, note = '' } = $props();
+  /** Le glyphe d'une séance (1 à 14), extrait de Seance.svelte pour la ligne du temps. Schématique. */
+  let { n } = $props();
 </script>
 
-<div class="visuel seance">
-  <div class="texte">
-    <span class="num">{String(n).padStart(2, '0')}</span>
-    <span class="date">{date}</span>
-    <h2>{titre}</h2>
-    <p class="quoi">{quoi}</p>
-    {#if note}<p class="note">{note}</p>{/if}
-  </div>
-  <svg viewBox="0 0 400 320" class="glyphe" role="img" aria-label="Glyphe de la séance {n}">
+<svg viewBox="0 0 400 320" class="glyphe" role="img" aria-label="Glyphe de la séance {n}">
     {#if n === 1}
       <circle cx="200" cy="150" r="110" class="c" />
       <text x="200" y="196" class="grand">?</text>
@@ -118,17 +106,9 @@
     {/if}
     <defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="pointe" /></marker></defs>
   </svg>
-</div>
 
 <style>
-  .seance { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2em; align-items: center; }
-  .texte { display: flex; flex-direction: column; gap: 0.3em; }
-  .num { font-family: var(--dk-mono); font-size: 4.2em; line-height: 1; font-weight: 600; color: var(--dk-accent); }
-  .date { font-size: 0.72em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dk-gris); font-weight: 600; }
-  .texte h2 { margin: 0.1em 0 0.2em; font-size: 1.6em; line-height: 1.15; }
-  .quoi { margin: 0; font-size: 1.05em; line-height: 1.45; max-width: 22em; }
-  .note { margin: 0.5em 0 0; font-size: 0.78em; color: var(--dk-accent); font-weight: 600; }
-  .glyphe { width: 100%; height: auto; max-height: 64vh; }
+  svg { width: 100%; height: auto; }
   .c { fill: none; stroke: var(--dk-encre); stroke-width: 4; }
   .c.z { stroke: var(--dk-accent); stroke-dasharray: 7 5; }
   .l { fill: none; stroke: var(--dk-encre); stroke-width: 4; stroke-linecap: round; }

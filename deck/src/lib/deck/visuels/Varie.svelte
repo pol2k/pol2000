@@ -17,6 +17,7 @@
 </script>
 
 <div class="visuel varie" bind:this={hote}>
+  <h2>{e === 2 ? "Une variable qui ne varie pas, c'est une constante." : "Une variable varie"}</h2>
   <div class="scene">
     <div class="cas">
       {#each H as h, i}
@@ -34,6 +35,7 @@
 
 <style>
   .varie { display: flex; flex-direction: column; gap: 1em; }
+  .varie h2 { margin: 0 0 0.2em; }
   .scene { position: relative; }
   .cas { display: flex; gap: 0.7em; height: 13em; align-items: flex-end; padding: 0 0.4em; }
   .col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 0.3em; }

@@ -30,10 +30,10 @@
       {@const dans = pris.has(i)}
       <circle cx={p.x} cy={p.y} r={dans && e >= 1 ? 10 : 4.5} class={dans && e >= 1 ? 'ech' : 'pop'} class:pale={e >= 1 && !dans} style="transition-delay: {dans ? (i % 7) * 60 : 0}ms" />
     {/each}
-    <text x="22" y="410" class="et">POPULATION · tous les cas qui nous intéressent</text>
-    <text x="1078" y="410" class="et fin" class:vu={e >= 1}>ÉCHANTILLON · ceux qu'on a observés</text>
+    <text x="22" y="410" class="et" class:cache={e === 2}>POPULATION · tous les cas qui nous intéressent</text>
+    <text x="1078" y="410" class="et fin" class:vu={e === 1}>ÉCHANTILLON · ceux qu'on a observés</text>
     <g class="inf" class:vu={e === 2}>
-      <path d="M 550 455 C 550 430, 550 400, 550 385" class="fl" marker-end="url(#fp)" />
+      <path d="M 550 440 L 550 392" class="fl" marker-end="url(#fp)" />
       <text x="550" y="462" class="q">ce que je vois ici, puis-je le dire de tous ?</text>
     </g>
     <defs><marker id="fp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="pointe" /></marker></defs>
@@ -51,6 +51,8 @@
   .et { font-family: var(--dk-mono); font-size: 16px; letter-spacing: 0.12em; font-weight: 600; fill: var(--dk-encre); }
   .et.fin { text-anchor: end; fill: var(--dk-accent); opacity: 0; transition: opacity 0.5s; }
   .et.fin.vu { opacity: 1; }
+  .et.cache { opacity: 0; }
+  .et { transition: opacity 0.4s; }
   .inf { opacity: 0; transition: opacity 0.5s; }
   .inf.vu { opacity: 1; }
   .fl { fill: none; stroke: var(--dk-accent); stroke-width: 5; }

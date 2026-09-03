@@ -77,10 +77,10 @@
     <div class="deux livre">
       <img src="{base}/img/acmq_couverture.png" alt="Couverture du livre Analyse causale et méthodes quantitatives, de Vincent Arel-Bundock" class="couv" />
       <div class="bloc gauche">
-        <span class="sur">OUVRAGE DE RÉFÉRENCE · RIEN D'OBLIGATOIRE</span>
+        <span class="sur">OUVRAGE DE RÉFÉRENCE</span>
         <strong>Analyse causale et méthodes quantitatives</strong>
         <span>Vincent Arel-Bundock · Presses de l'Université de Montréal · 2021</span>
-        <p>Toute la matière du cours, dans le même ordre. Quand une notion vous échappe en classe, elle est expliquée là une deuxième fois, autrement.</p>
+        <p>Toute la matière du cours, dans le même ordre.</p>
         <code>gratuit en PDF · pum.umontreal.ca</code>
       </div>
     </div>
