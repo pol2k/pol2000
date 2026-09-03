@@ -19,9 +19,9 @@
   const LIENS_NAV = [
     { href: '#seances', texte: 'Séances' },
     { href: '#evaluations', texte: 'Évaluations' },
-    { href: '#rencontres', texte: 'Rencontres' },
     { href: '#datacamp', texte: 'Datacamp' },
     { href: '#equipe', texte: 'Équipe' },
+    { href: '#rencontres', texte: 'Rencontres' },
     { href: `${base}/syllabus/`, texte: 'Plan de cours', phare: true }
   ];
   const DESCRIPTION = "POL-2000 Méthodologie quantitative, Université Laval, automne 2026. Décrire, relier, inférer, raisonner sur la causalité, avec R et Positron. Aucune mathématique au-delà du secondaire.";
@@ -67,20 +67,20 @@
     <Evaluations />
   </section>
 
-  <section class="bloc" id="rencontres" aria-labelledby="t-rencontres">
-    <h2 class="surtitre" id="t-rencontres"><span class="n">03</span> Rencontres individuelles</h2>
-    <Rencontres />
-  </section>
-
   <section class="bloc" id="datacamp" aria-labelledby="t-datacamp">
-    <h2 class="surtitre" id="t-datacamp"><span class="n">04</span> Exercices Datacamp</h2>
+    <h2 class="surtitre" id="t-datacamp"><span class="n">03</span> Exercices Datacamp</h2>
     <Datacamp />
   </section>
 
   <section class="bloc" id="equipe" aria-labelledby="t-equipe">
-    <h2 class="surtitre" id="t-equipe"><span class="n">05</span> L'équipe</h2>
+    <h2 class="surtitre" id="t-equipe"><span class="n">04</span> L'équipe</h2>
     <Equipe />
   </section>
+  <section class="bloc" id="rencontres" aria-labelledby="t-rencontres">
+    <h2 class="surtitre" id="t-rencontres"><span class="n">05</span> Rencontres individuelles</h2>
+    <Rencontres />
+  </section>
+
 </main>
 
 <Pied />
