@@ -273,9 +273,12 @@
           <div class="section-header">
             <h2>DataCamp</h2>
             <p>
-              Les devoirs Datacamp comptent pour 10 % de la note finale, en deux
-              volets : la première moitié de la session pour le 25 octobre 2026,
-              puis l'ensemble des devoirs pour le 18 décembre 2026.
+              Des devoirs obligatoires sont partagés chaque semaine sur Datacamp.
+              Ils comptent pour 10 % de la note finale, en deux volets : tous les
+              devoirs de la première moitié de la session avant le dimanche
+              25 octobre 2026 à 23h59 (5 %), puis l'ensemble des devoirs, ceux de
+              la première moitié inclus, avant le vendredi 18 décembre 2026 à
+              23h59 (5 %).
             </p>
           </div>
 
@@ -288,23 +291,24 @@
               <div>
                 <h3>Défi Interactif</h3>
                 <p>
-                  Essayez R maintenant. Calculez la moyenne de la consommation
-                  (mpg) des voitures.
+                  Essayez R maintenant. La cote d'approbation des présidents
+                  américains, chaque trimestre de 1945 à 1974 : calculez la moyenne.
                 </p>
               </div>
             </div>
-            <div data-datacamp-exercise data-lang="r" data-height="350">
-              <code data-type="pre-exercise-code">data(mtcars)</code>
-              <code data-type="sample-code">
-                # Le jeu de données 'mtcars' est charge. # Utilisez la fonction
-                mean() sur la variable mtcars$mpg. # Ecrivez votre code
-                ci-dessous:
-              </code>
-              <code data-type="solution"> mean(mtcars$mpg) </code>
-              <code data-type="sct">
-                test_function("mean", args = "x") success_msg("Bravo! Vous avez
-                exécuté votre premier code R.")
-              </code>
+            <div data-datacamp-exercise data-lang="r" data-height="380">
+              <code data-type="pre-exercise-code">data(presidents)</code>
+              <code data-type="sample-code"># `presidents` : la cote d'approbation des présidents américains,
+# chaque trimestre, de 1945 à 1974. Cliquez Run pour la voir.
+presidents
+
+# À vous : calculez la cote moyenne avec mean().
+# Il y a des valeurs manquantes (NA) : ajoutez na.rm = TRUE.
+</code>
+              <code data-type="solution">presidents
+mean(presidents, na.rm = TRUE)</code>
+              <code data-type="sct">test_function("mean", args = c("x", "na.rm"))
+success_msg("Bravo ! Votre premier calcul en R, sur de vraies donn&amp;eacute;es politiques.")</code>
             </div>
           </div>
 
@@ -505,7 +509,7 @@
                 <div class="slide-placeholder">
                   <span class="slide-placeholder-num">Séance 6</span>
                   <h4>Rencontres individuelles</h4>
-                  <span class="slide-placeholder-tag">À venir</span>
+                  <span class="slide-placeholder-tag">Aucun cours</span>
                 </div>
               </a>
             </article>
@@ -565,7 +569,7 @@
                 <div class="slide-placeholder">
                   <span class="slide-placeholder-num">Séance 12</span>
                   <h4>Rencontres individuelles</h4>
-                  <span class="slide-placeholder-tag">À venir</span>
+                  <span class="slide-placeholder-tag">Aucun cours</span>
                 </div>
               </a>
             </article>
@@ -597,8 +601,8 @@
     <footer>
       <div class="container footer-content">
         <p>
-          &copy; 2026 POL2000. Propulsé par
-          <a href="https://pages.github.com/">GitHub Pages</a>.
+          &copy; 2026 POL-2000 · Université Laval. Hébergé sur
+          <a href="https://pages.cloudflare.com/">Cloudflare Pages</a>.
         </p>
         <div class="footer-social">
           <a href="https://github.com/pol2k"><i class="fab fa-github"></i></a>

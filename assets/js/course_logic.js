@@ -283,7 +283,7 @@ function renderCalendar(schedule, config) {
             <div class="roadmap-content-wrapper">
                 <div class="roadmap-card">
                     <div class="roadmap-header">
-                        <span class="roadmap-week">${typeof item.week === 'number' ? 'Semaine ' + item.week : item.week}</span>
+                        <span class="roadmap-week">${typeof item.week === 'number' ? 'Séance ' + item.week : item.week}</span>
                         <span class="roadmap-date">${dateStr}</span>
                     </div>
                     <div class="roadmap-body">
