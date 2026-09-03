@@ -7,7 +7,8 @@
   import '@fontsource/ibm-plex-mono/400-italic.css';
   import './deck.css';
 
-  let { total, children } = $props();
+  // logo = image affichée dans le pied, sur chaque diapo (identité de l'établissement).
+  let { total, logo = '', children } = $props();
 
   // Le deck est navigable sans JavaScript: cet état ne sert qu'au confort
   // (barre de progression, pastilles, compteur). Il ne commande jamais la
@@ -103,6 +104,7 @@
 <div class="deck-barre" style="width: {progression(deck) * 100}%"></div>
 
 <div class="deck-pied" class:sans-js={!js}>
+  {#if logo}<img class="deck-logo" src={logo} alt="Université Laval" />{/if}
   <div class="deck-points">
     {#each Array.from({ length: deck.total }) as _, i}
       <button

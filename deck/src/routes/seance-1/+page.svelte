@@ -9,6 +9,7 @@
    * viennent du plan de cours A26. Le tableau de régression de l'ouverture
    * est vide, volontairement.
    */
+  import { base } from '$app/paths';
   import Deck from '$lib/deck/Deck.svelte';
   import Slide from '$lib/deck/Slide.svelte';
   import Carte from '$lib/deck/Carte.svelte';
@@ -47,31 +48,46 @@ install.packages("tidyverse")
   <title>POL-2000 · Séance 1 — Introduction et les éléments fondamentaux de la recherche</title>
 </svelte:head>
 
-<Deck total={TOTAL}>
+<Deck total={TOTAL} logo="{base}/img/ulaval-logo.png">
   {#snippet children()}
 
     <!-- ================= OUVERTURE ================= -->
-    <Slide fond="encre" droite={D}>
-      <p class="surtitre e">POL-2000 · Méthodologie quantitative · Automne 2026</p>
-      <h1 class="e">Introduction et les éléments fondamentaux de la recherche</h1>
-      <hr class="filet" />
-      <p class="lead e">Séance 1 · jeudi 3 septembre 2026</p>
-      <p class="lead e">Laurence-Olivier M. Foisy · Université Laval</p>
+    <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
+      <Deux ratio="2.4fr 1fr">
+        <div>
+          <p class="surtitre e">POL-2000 · Méthodologie quantitative</p>
+          <h1 class="e">Introduction et les éléments fondamentaux de la recherche</h1>
+          <hr class="filet" />
+          <p class="lead e">Séance 1 · jeudi 3 septembre 2026</p>
+          <p class="lead e">Science politique · Automne 2026</p>
+        </div>
+        <figure class="logo-ecole">
+          <img src="{base}/img/ulaval-logo.png" alt="Université Laval" />
+        </figure>
+      </Deux>
     </Slide>
 
-    <Slide droite={D}>
-      <h2 class="e">Qui suis-je</h2>
-      <div class="frise-moi e">
-        <div><span class="an">2025 · 2026</span><strong>Université de Montréal</strong><span>FAS1001 · mégadonnées, deux fois</span></div>
-        <div class="fl">→</div>
-        <div><span class="an">août 2026</span><strong>EIOM · Laval</strong><span>l'IA et la recherche</span></div>
-        <div class="fl">→</div>
-        <div class="ici"><span class="an">aujourd'hui</span><strong>POL-2000</strong><span>avec vous</span></div>
-      </div>
-      <p class="e"><code>mail@mfoisy.com</code> — deux semaines. Ensuite, Slack.</p>
+    <Slide bandeau="À propos de moi" droite={D}>
+      <Deux ratio="1.85fr 1fr">
+        <div>
+          <h2 class="e">À propos de moi</h2>
+          <p class="lead e">Laurence-Olivier M. Foisy</p>
+          <hr class="filet" />
+          <ul class="cmd-liste e">
+            <li>Enseignement du cours Introduction aux mégadonnées en sciences sociales<span class="lieu">Université de Montréal · FAS-1001</span></li>
+            <li>Doctorat en science politique, en cours<span class="lieu">Université Laval</span></li>
+            <li>Maîtrise en études de la paix internationale<span class="lieu">Université Soka, Japon</span></li>
+            <li>Baccalauréat en études est-asiatiques<span class="lieu">Université de Montréal</span></li>
+          </ul>
+          <p class="e" style="margin-top: 1em"><code>mail@mfoisy.com</code> — deux semaines. Ensuite, Slack.</p>
+        </div>
+        <figure class="portrait">
+          <img src="{base}/img/portrait-lomf.jpg" alt="Portrait de Laurence-Olivier M. Foisy" />
+        </figure>
+      </Deux>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Un tour de salle" droite={D}>
       <h2 class="e">À main levée</h2>
       <ol class="mains e">
         <li><span>Un cours de statistiques au cégep ?</span></li>
@@ -83,22 +99,22 @@ install.packages("tidyverse")
 
 
     <!-- ================= 1 · UNE QUESTION ================= -->
-    <Slide fond="encre" droite={D}>
+    <Slide fond="encre" bandeau="Une question" droite={D}>
       <h1 class="e">Une question, pour commencer</h1>
       <hr class="filet" />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Une question" droite={D}>
       <h2 class="e">L'éducation rend-elle plus à gauche ?</h2>
       <Axe />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Une question" droite={D}>
       <h2 class="e">Ce qu'il faudrait pour répondre</h2>
       <Silhouette />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Une question" droite={D}>
       <h2 class="e">Ce tableau, vous le produirez en novembre</h2>
       <table class="e tableau-vide">
         <thead><tr><th>Placement gauche-droite (0–10)</th><th>Coefficient</th><th>Erreur-type</th><th>p</th></tr></thead>
@@ -112,20 +128,20 @@ install.packages("tidyverse")
       <p class="lead e">Le lire. Le produire. Dire pourquoi il <strong>ne prouve pas</strong> ce qu'on croit.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Une question" droite={D}>
       <h2 class="e">Le parcours, en trois temps</h2>
       <Parcours />
     </Slide>
 
 
     <!-- ================= 2 · LA MAUVAISE RÉPUTATION ================= -->
-    <Slide fond="encre" droite={D}>
+    <Slide fond="encre" bandeau="Mauvaise réputation" droite={D}>
       <h1 class="e">Ce cours a mauvaise réputation</h1>
       <hr class="filet" />
       <p class="lead e">Parlons-en.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Mauvaise réputation" droite={D}>
       <h2 class="e">Trois peurs, trois réponses</h2>
       <div class="peurs e">
         <div class="peur">
@@ -146,7 +162,7 @@ install.packages("tidyverse")
       </div>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Mauvaise réputation" droite={D}>
       <h2 class="e">En échange</h2>
       <div class="quatre e">
         <div><Picto nom="terminal" taille="2.6em" /><strong>L'ordinateur</strong><span>à chaque séance</span></div>
@@ -158,14 +174,14 @@ install.packages("tidyverse")
 
 
     <!-- ================= 3 · LE PLAN DE COURS ================= -->
-    <Slide fond="encre" droite={D}>
+    <Slide fond="encre" bandeau="Le plan de cours" droite={D}>
       <h1 class="e">Le plan de cours</h1>
       <hr class="filet" />
       <p class="lead e">Contestable aujourd'hui. Ensuite, c'est le contrat.</p>
       <p class="lead e"><code>pol2000.com/syllabus</code></p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Identification</h2>
       <div class="etiqs e">
         <Etiquette ton="accent">POL-2000</Etiquette>
@@ -179,7 +195,7 @@ install.packages("tidyverse")
       </div>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">En décembre, vous saurez</h2>
       <ol class="qs-num e">
         <li><span>Maîtriser les concepts de l'analyse statistique</span></li>
@@ -190,22 +206,22 @@ install.packages("tidyverse")
       </ol>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">La session</h2>
       <Frise />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">… et ce qui s'y évalue</h2>
       <Frise evaluations />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Cent points</h2>
       <Ponderation />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Trois examens</h2>
       <div class="trois e">
         <Carte titre="1 · chez vous">Sur R. Ouvre le 24 sept., se remet le 4 oct.</Carte>
@@ -215,7 +231,7 @@ install.packages("tidyverse")
       <p class="e">Pas de centre d'examen : c'est ici, à l'heure du cours.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Un seul projet, en deux temps</h2>
       <div class="croissance e">
         <div class="doc petit-doc">
@@ -231,7 +247,7 @@ install.packages("tidyverse")
       <p class="e">Le mi-session revient corrigé <strong>avant</strong> que vous écriviez la suite.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Datacamp</h2>
       <Deux ratio="1fr 1.6fr">
         <Grand valeur="10 %" legende="5 + 5" />
@@ -247,12 +263,12 @@ install.packages("tidyverse")
       </Deux>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Un retard</h2>
       <Retard />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">L'intelligence artificielle</h2>
       <div class="feux e">
         <div class="feu ok"><span class="signe">✓</span><strong>Le code R</strong><small>permis, si déclaré</small></div>
@@ -262,7 +278,7 @@ install.packages("tidyverse")
       <Citation source="La question, chaque fois">L'aurais-je accepté d'un assistant humain sans vérifier son travail ?</Citation>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">Matériel</h2>
       <div class="materiel e">
         <div class="item"><span class="grosR">R</span><strong>gratuit</strong></div>
@@ -272,20 +288,20 @@ install.packages("tidyverse")
       </div>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Le plan de cours" droite={D}>
       <h2 class="e">L'équipe</h2>
       <Equipe />
       <p class="e">Rencontres individuelles le <strong>8 octobre</strong>. Rendez-vous : <code>pol2000.com</code>.</p>
     </Slide>
 
-    <Slide fond="encre" droite={D}>
+    <Slide fond="encre" bandeau="Le plan de cours" droite={D}>
       <div class="deuxgrands e">
         <div><span class="signe non">✗</span><strong>Enregistrement</strong><small>ce cours se donne ici</small></div>
         <div><span class="signe">↻</span><strong>Hiver</strong><small>la version en ligne, asynchrone</small></div>
       </div>
     </Slide>
 
-    <Slide fond="encre" droite={D}>
+    <Slide fond="encre" bandeau="Le plan de cours" droite={D}>
       <h1 class="e">Des objections ?</h1>
       <hr class="filet" />
       <p class="lead e">C'est maintenant.</p>
@@ -293,7 +309,7 @@ install.packages("tidyverse")
 
 
     <!-- ================= PAUSE ================= -->
-    <Slide fond="encre" droite={D}>
+    <Slide fond="encre" bandeau="Pause" droite={D}>
       <h1 class="e">Pause</h1>
       <hr class="filet" />
       <p class="lead e">Quinze minutes.</p>
@@ -301,18 +317,18 @@ install.packages("tidyverse")
 
 
     <!-- ================= 4 · LES ÉLÉMENTS FONDAMENTAUX ================= -->
-    <Slide fond="encre" droite={D}>
+    <Slide fond="encre" bandeau="Les éléments fondamentaux" droite={D}>
       <h1 class="e">Les éléments fondamentaux</h1>
       <hr class="filet" />
       <p class="lead e">Le vocabulaire d'ici décembre.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">De la curiosité à la question</h2>
       <Entonnoir />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <div class="xy e">
         <div class="x"><span class="lettre">X</span><strong>indépendante</strong><small>ce qui explique</small><em>l'âge</em></div>
         <div class="fl">→</div>
@@ -321,18 +337,18 @@ install.packages("tidyverse")
       <p class="lead e centre">Une question de recherche, c'est au minimum un X et un Y.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">Une variable varie</h2>
       <Varie />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">Population, échantillon</h2>
       <Points />
       <p class="e">Ce que je vois ici, puis-je le dire de tout ça ? <span class="pale">Séance 5.</span></p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">Une ligne, c'est quoi ?</h2>
       <div class="unites e">
         <div><Picto nom="humain" taille="2.4em" /><strong>une personne</strong><span>a voté, ou non</span></div>
@@ -343,18 +359,18 @@ install.packages("tidyverse")
       <p class="e">L'unité d'analyse. On ne les mélange pas — et aucun logiciel ne vous le dira.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">Ce que les chiffres permettent</h2>
       <Niveaux />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">L'hypothèse, et sa nulle</h2>
       <Hypotheses />
       <p class="e">On ne prouve jamais H₁. On demande aux données de <strong>rejeter H₀</strong>.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">Opérationnaliser</h2>
       <div class="chaine e">
         <div><span class="et">CONCEPT</span><strong>« Être à gauche »</strong></div>
@@ -366,7 +382,7 @@ install.packages("tidyverse")
       <p class="lead e">Chaque flèche perd quelque chose.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">La fiche</h2>
       <Deux>
         <div class="fiche vide">
@@ -395,7 +411,7 @@ install.packages("tidyverse")
       <p class="lead e">Votre mi-session, c'est la fiche de droite.</p>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Les éléments fondamentaux" droite={D}>
       <h2 class="e">À vous</h2>
       <p class="lead e">Une question de recherche. On remplit la fiche ensemble.</p>
       <div class="fiche pleine e grande">
@@ -412,17 +428,17 @@ install.packages("tidyverse")
 
 
     <!-- ================= 5 · AVANT JEUDI PROCHAIN ================= -->
-    <Slide fond="encre" droite={D}>
+    <Slide fond="encre" bandeau="Avant jeudi prochain" droite={D}>
       <h1 class="e">Avant jeudi prochain</h1>
       <hr class="filet" />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Avant jeudi prochain" droite={D}>
       <h2 class="e">Dans cet ordre</h2>
       <Ordre />
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Avant jeudi prochain" droite={D}>
       <h2 class="e">Preuve que ça marche</h2>
       <Deux ratio="1.5fr 1fr">
         <Code src={c_verif} brut />
@@ -433,7 +449,7 @@ install.packages("tidyverse")
       </Deux>
     </Slide>
 
-    <Slide droite={D}>
+    <Slide bandeau="Avant jeudi prochain" droite={D}>
       <h2 class="e">Trois liens</h2>
       <div class="liens e">
         <div><strong>Slack</strong><span>l'invitation arrive par courriel</span></div>
@@ -443,7 +459,7 @@ install.packages("tidyverse")
       <p class="lead e">Un blocage ? Écrivez <strong>avant</strong> jeudi.</p>
     </Slide>
 
-    <Slide fond="encre" droite={D}>
+    <Slide fond="encre" bandeau="Avant jeudi prochain" droite={D}>
       <h1 class="e">Jeudi prochain</h1>
       <hr class="filet" />
       <p class="lead e">R et Positron, à partir de zéro.</p>
@@ -454,6 +470,7 @@ install.packages("tidyverse")
 </Deck>
 
 <style>
+  :global(.logo-ecole img) { background: #fff; padding: 0.7em 0.9em; border: 2px solid var(--dk-fond); }
   .trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9em; align-items: stretch; }
   .etiqs { display: flex; flex-wrap: wrap; gap: 0.6em; font-size: 1.15em; }
   .pale { color: var(--dk-gris); }

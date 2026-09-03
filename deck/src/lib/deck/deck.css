@@ -564,6 +564,10 @@
   transition: width 0.25s ease;
 }
 
+/* Le logo de l'établissement, dans le pied: une tuile blanche bordée, comme
+   les logos de marque — on ne recolore pas une identité visuelle. */
+.deck-logo { display: block; height: 1.15rem; width: auto; background: #fff; padding: 0.15rem 0.3rem; border: 1.5px solid var(--dk-encre); }
+
 .deck-pied {
   position: fixed; bottom: 0; right: 0; z-index: 100;
   display: flex; align-items: center; gap: 0.9rem;
