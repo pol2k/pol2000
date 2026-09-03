@@ -42,8 +42,10 @@
   import Varie from '$lib/deck/visuels/Varie.svelte';
   import Ordre from '$lib/deck/visuels/Ordre.svelte';
   import Liens from '$lib/deck/visuels/Liens.svelte';
+  import Pourquoi from '$lib/deck/visuels/Pourquoi.svelte';
+  import Site from '$lib/deck/visuels/Site.svelte';
 
-  const TOTAL = 53;
+  const TOTAL = 59;
   const D = 'POL-2000 · séance 1 · jeu 3 sept';
 
   const c_verif = `R.version.string
@@ -109,6 +111,41 @@ install.packages("tidyverse")
         <li><span>Ce cours vous fait peur ?</span></li>
       </ol>
     </Slide>
+
+    <!-- ================= 0 · POURQUOI ================= -->
+    <Slide fond="encre" bandeau="Pourquoi ce cours" droite={D}>
+      <p class="surtitre e">La vraie question</p>
+      <h1 class="e">« Pourquoi diable devrais-je m'en soucier ? »</h1>
+      <hr class="filet" />
+      <p class="lead e">« Je ne veux même pas faire de recherche. »</p>
+    </Slide>
+
+    <Slide bandeau="Pourquoi ce cours" droite={D}>
+      <h2 class="e">Douze réponses</h2>
+      <Pourquoi />
+    </Slide>
+
+    <!-- ================= 0b · AU CLESSN ================= -->
+    <Slide fond="encre" bandeau="Pourquoi ce cours" droite={D}>
+      <p class="surtitre e">Ce qu'on fait avec ça, concrètement</p>
+      <h1 class="e">Au CLESSN</h1>
+      <hr class="filet" />
+      <p class="lead e">Chaire de leadership en enseignement des sciences sociales numériques · Université Laval</p>
+      <p class="lead e">Trois projets en ligne, en ce moment.</p>
+    </Slide>
+
+    <Slide bandeau="Au CLESSN" droite={D}>
+      <Site url="https://quebec.datagotchi.com" titre="Datagotchi" sous="Québec 2026 · un sondage illustré qui prédit votre vote d'après vos habitudes de vie" capture="site-datagotchi.png" />
+    </Slide>
+
+    <Slide bandeau="Au CLESSN" droite={D}>
+      <Site url="https://vitrinedemocratique.com" titre="La Vitrine démocratique" sous="avec le CAPP · médias et discours politiques du Québec, analysés six fois par jour" capture="site-vitrine.png" />
+    </Slide>
+
+    <Slide bandeau="Au CLESSN" droite={D}>
+      <Site url="https://prof-datagotchi.com" titre="Prof. Datagotchi" sous="un assistant fondé sur 153 entrevues des cinq partis — mot pour mot, horodatage à l'appui" capture="site-prof-datagotchi.png" note="Site protégé par mot de passe. Avant la séance : ouvrir prof-datagotchi.com dans un onglet et s'identifier — le direct s'affiche ensuite ici." />
+    </Slide>
+
 
     <!-- ================= 1 · UNE QUESTION ================= -->
 
