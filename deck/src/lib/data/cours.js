@@ -36,7 +36,7 @@ export const LIENS = {
   slack: '',
   monportail: '',
   datacampClasse: '',
-  rencontres: ''
+  rencontres: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ3gafqpwbfqtRoTayW1p6fGuhT6M5d1znZcOEs7vYX5egNGMgtZutpZ3LP5TaroBzE8cl1lqTTV?gv=true'
 };
 
 /**
