@@ -4,7 +4,7 @@
    * examens, rouge pour les travaux, gris pour Datacamp — comme sur la
    * diapositive 16), puis la liste datée, avec l'état d'après la date.
    */
-  import { EVALUATIONS, LIENS } from '$lib/data/cours.js';
+  import { EVALUATIONS } from '$lib/data/cours.js';
   import { aujourdhui, moyenne, statut } from './dates.js';
 
   let ref = $state(aujourdhui());
@@ -45,20 +45,6 @@
     {/each}
   </ol>
 
-  <div class="regles">
-    <div class="cadre">
-      <span class="etiq">Un retard</span>
-      <p><strong>10 % par jour</strong> de la note obtenue. Après trois jours, 0.</p>
-    </div>
-    <div class="cadre">
-      <span class="etiq">Les examens 2 et 3</span>
-      <p>Sur papier, en classe, à livre ouvert : vos notes, oui. Un appareil, non. Le cours d'abord (15h30 à 17h05), une pause, puis l'examen (17h20 à 18h20).</p>
-    </div>
-    <div class="cadre">
-      <span class="etiq">Consignes</span>
-      <p>Les consignes des travaux sont déposées sur le site de cours après la séance 4.{#if !LIENS.monportail} <span class="gris">Lien monPortail à venir.</span>{:else} <a href={LIENS.monportail}>monPortail →</a>{/if}</p>
-    </div>
-  </div>
 </div>
 
 <style>
@@ -89,14 +75,10 @@
   .droite { display: flex; align-items: center; gap: 1.2rem; }
   .poids { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.03em; min-width: 3.2rem; text-align: right; }
   li.ex .poids { color: var(--encre); } li.tr .poids { color: var(--accent); } li.dc .poids { color: var(--gris); }
-  .regles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 1.4rem; }
-  .regles .cadre { display: flex; flex-direction: column; gap: 0.5rem; }
-  .regles p { font-size: 0.86rem; line-height: 1.45; }
   @media (max-width: 46rem) {
     .liste li { grid-template-columns: minmax(0, 1fr) auto; gap: 0.6rem 1rem; }
     .quand { grid-column: 1 / -1; flex-direction: row; gap: 0.6rem; align-items: baseline; }
     .droite { flex-direction: column; align-items: flex-end; gap: 0.3rem; }
     .poids { min-width: 0; }
-    .regles { grid-template-columns: 1fr; }
   }
 </style>
