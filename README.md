@@ -1,49 +1,27 @@
-# POL-2000 — Méthodologie quantitative
+# pol2000.com
 
-Site du cours **POL-2000 : Méthodologie quantitative**, Université Laval,
-Département de science politique.
+Site du cours **POL-2000 — Méthodologie quantitative**, Université Laval,
+Département de science politique. Automne 2026.
 
-- **Site public :** <https://pol2000.com>
-- **Session :** automne 2026 — jeudis 15h30 à 18h20, en présentiel
-- **Enseignant :** Laurence-Olivier M. Foisy — <mail@mfoisy.com>
+- Site : https://pol2000.com
+- Plan de cours : https://pol2000.com/syllabus/
+- Diapositives : https://pol2000.com/slides/
 
-## Contenu du dépôt
+## Comment c'est fait
 
-| Chemin | Rôle |
-|---|---|
-| `index.html` | Page d'accueil. Le calendrier, les évaluations et la grille des diapositives sont injectés à l'exécution. |
-| `course_config.json` | Source des données du site : calendrier, évaluations, diapositives, rencontres. **Modifier ce fichier plutôt que le HTML.** |
-| `assets/js/course_logic.js` | Lit `course_config.json` et construit le DOM. |
-| `syllabus/` | Plan de cours : page web, source Markdown, PDF et sources LaTeX. |
-| `docs/plan-de-cours.md` | Référence de contenu pour le travail sur le dépôt. |
-| `reference/` | Plan de cours officiel de l'offre précédente (H24). |
-| `slides/` | Diapositives Quarto/reveal.js. |
-
-## Développement
-
-Le site est statique. `course_config.json` est chargé par requête HTTP, donc
-ouvrir `index.html` directement depuis le disque ne fonctionne pas :
+Le site et les diapositives sont un seul projet SvelteKit, dans `deck/`.
+La construction est exportée à la racine du dépôt, que Cloudflare Pages
+publie telle quelle, sans étape de construction.
 
 ```bash
-python3 -m http.server 8000   # puis http://localhost:8000
+cd deck
+npm install          # une fois
+npm run build        # → deck/build/
+npm run exporter     # → index.html, syllabus/index.html, slides/, _app/, img/
 ```
 
-Reconstruire le PDF du plan de cours :
+Tout ce que le site affiche sur l'offre (séances, évaluations, équipe,
+liens) vient de `deck/src/lib/data/cours.js`. Le plan de cours est écrit
+une fois, dans `syllabus/plan-de-cours-A26.md`, et rendu à la construction.
 
-```bash
-./syllabus/pdf/build.sh
-```
-
-## Déploiement
-
-Hébergé sur **Cloudflare Pages**, connecté à ce dépôt GitHub. Toute poussée sur
-`main` déclenche une reconstruction et publie immédiatement sur pol2000.com. Il
-n'y a aucun environnement de préproduction.
-
-Voir `AGENTS.md` pour les conventions de travail dans ce dépôt.
-
-## Crédits
-
-Le gabarit visuel est **Prologue** par [HTML5 UP](https://html5up.net)
-(@ajlkn), utilisé sous licence [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
-Voir `README.txt` et `LICENSE.txt`.
+Les consignes pour les agents sont dans `AGENTS.md`.

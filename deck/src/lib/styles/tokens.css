@@ -1,43 +1,48 @@
-/* Source unique de vérité pour l'apparence du site ET des diapos.
-   Aucune couleur ne doit être écrite en dur ailleurs. */
+/* ==================================================================
+   pol2000.com — jetons du site
+   ------------------------------------------------------------------
+   Le site parle la langue du deck (deck/src/lib/deck/deck.css):
+   monospace intégral, papier et encre, rouge et or de l'Université,
+   filets de 2 px, angles vifs, aucune ombre, aucun dégradé. Les valeurs
+   sont les mêmes; elles vivent ici sur :root pour que les pages du site
+   les voient, et sous les noms --dk-* pour que les visuels du deck
+   puissent être réutilisés tels quels sur une page.
+
+   Contrastes (calculés, deck.css):
+     encre #0c0e0f sur fond #f6f6f3   17,9:1
+     gris  #5c6367 sur fond           5,7:1
+     rouge #c6102e sur fond           5,5:1   AA texte normal
+     or    #ffc103 sur encre          11,9:1  — jamais sur le fond clair
+   ================================================================== */
 :root {
-  --paper: #f6f3ec;
-  --paper-2: #efece3;
-  --ink: #16202c;
-  --ink-2: #3a4553;
-  --ink-3: #6b7684;
-  --rule: #ddd8cc;
-  --rule-2: #e9e5db;
+  --fond: #f6f6f3;
+  --fond-2: #eeeee9;
+  --encre: #0c0e0f;
+  --gris: #5c6367;
+  --gris-2: #8b918f;
+  --filet: #d5d5cf;
+  --accent: #c6102e;
+  --accent-clair: #ffc103;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --accent: #c8102e;
-  --accent-clair: #fbe9ec;
+  --dk-fond: var(--fond);
+  --dk-fond-2: var(--fond-2);
+  --dk-encre: var(--encre);
+  --dk-gris: var(--gris);
+  --dk-gris-2: var(--gris-2);
+  --dk-filet: var(--filet);
+  --dk-accent: var(--accent);
+  --dk-aplat: var(--accent);
+  --dk-accent-clair: var(--accent-clair);
+  --dk-mono: var(--mono);
 
-  --ciel: #0077b6;
-  --ciel-clair: #e8f4f8;
-  --ambre: #b45309;
-  --ambre-clair: #fdf3e3;
-  --violet: #5b21b6;
-  --violet-clair: #ede9f8;
-  --rose: #9f1239;
-  --rose-clair: #fde8ee;
-  --vert: #166534;
-  --vert-clair: #e8f5ee;
+  --trait: 2px solid var(--encre);
+  --trait-fin: 1px solid var(--filet);
+  --mesure: 36rem;
+  --largeur: 74rem;
+  --marge: clamp(18px, 4vw, 44px);
+  --courbe: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  --police-display: 'Fraunces', Georgia, serif;
-  --police-texte: 'Libre Franklin', system-ui, sans-serif;
-  --police-mono: 'JetBrains Mono', ui-monospace, monospace;
-
-  --rayon: 4px;
-  --ombre: 0 1px 3px rgba(22, 32, 44, 0.06), 0 4px 16px rgba(22, 32, 44, 0.05);
-  --ombre-sm: 0 1px 2px rgba(22, 32, 44, 0.05);
-
-  --pas: 8px;
-}
-
-/* Échelle typographique et texture — direction « revue scientifique ». */
-:root {
-  --mesure: 34rem;
-  --filet: 1px solid var(--rule);
-  --filet-fort: 2px solid var(--ink);
+  /* Grain de papier: de la matière sans requête réseau. */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
 }
