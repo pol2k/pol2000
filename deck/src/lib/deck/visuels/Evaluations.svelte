@@ -9,7 +9,7 @@
   const MOIS = [[0, 'septembre'], [30, 'octobre'], [61, 'novembre'], [91, 'décembre']];
   const EV = [
     { j: jour(10, 4), k: 'Examen 1 · R', d: 'dim. 4 oct.', v: 15, g: 'ex', h: 1 },
-    { j: jour(10, 22), k: 'Examen 2', d: 'jeu. 22 oct. · en classe', v: 15, g: 'ex', h: 2 },
+    { j: jour(11, 12), k: 'Examen 2', d: 'jeu. 12 nov. · en classe', v: 15, g: 'ex', h: 1 },
     { j: jour(10, 25), k: 'Travail de mi-session', d: 'dim. 25 oct.', v: 20, g: 'tr', h: -1 },
     { j: jour(10, 25), k: 'Datacamp 1', d: 'dim. 25 oct.', v: 5, g: 'dc', h: -2 },
     { j: jour(12, 10), k: 'Examen 3', d: 'jeu. 10 déc. · en classe', v: 15, g: 'ex', h: 1 },

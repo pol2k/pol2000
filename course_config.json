@@ -112,7 +112,7 @@
       "week": 6,
       "date": "2026-10-08",
       "title": "Rencontres individuelles",
-      "description": "Aucun cours magistral. Temps réservé au travail de mi-session.",
+      "description": "Aucun cours. Rencontres individuelles toute la semaine, pour le travail de mi-session.",
       "type": "break",
       "tags": [
         {
@@ -131,16 +131,9 @@
     {
       "week": 8,
       "date": "2026-10-22",
-      "title": "Examen 2 et atelier de mi-session",
-      "description": "Examen sur les statistiques descriptives de 15h30 à 16h30, puis atelier.",
-      "type": "important-eval",
-      "tags": [
-        {
-          "text": "Examen 2",
-          "type": "eval"
-        }
-      ],
-      "anchor": "eval-examen2"
+      "title": "La régression linéaire multiple",
+      "description": "Plus d'une variable explicative et analyse tabulaire multivariée.",
+      "type": "lecture"
     },
     {
       "week": "Remise",
@@ -172,30 +165,43 @@
     {
       "week": 9,
       "date": "2026-11-05",
-      "title": "La régression linéaire multiple",
-      "description": "Plus d'une variable explicative et analyse tabulaire multivariée.",
+      "title": "De la question au tableau de régression : à la main, puis avec l'IA",
+      "description": "Le travail final du début à la fin : d'abord à la main dans Positron, puis confié à un agent d'IA, puis vérifié.",
       "type": "lecture"
     },
     {
       "week": 10,
       "date": "2026-11-12",
-      "title": "De la question au tableau de régression : à la main, puis avec l'IA",
-      "description": "Le travail final du début à la fin : d'abord à la main dans Positron, puis confié à un agent d'IA — et vérifié.",
-      "type": "lecture"
+      "title": "Le problème fondamental de l'inférence causale, puis Examen 2",
+      "description": "Contrefactuels et limites de l'inférence causale (15h30 à 17h05), pause, puis examen 2 sur les statistiques descriptives de 17h20 à 18h20.",
+      "type": "important-eval",
+      "tags": [
+        {
+          "text": "Examen 2",
+          "type": "eval"
+        }
+      ],
+      "anchor": "eval-examen2"
     },
     {
       "week": 11,
       "date": "2026-11-19",
       "title": "Les graphes orientés acycliques (GOA)",
-      "description": "Choisir les variables de contrôle à inclure — ou à exclure — d'une régression.",
+      "description": "Choisir les variables de contrôle à inclure (ou à exclure) d'une régression.",
       "type": "lecture"
     },
     {
       "week": 12,
       "date": "2026-11-26",
-      "title": "Le problème fondamental de l'inférence causale",
-      "description": "Contrefactuels et limites de l'inférence causale.",
-      "type": "lecture"
+      "title": "Rencontres individuelles",
+      "description": "Aucun cours. Retour sur l'examen 2 et rencontres individuelles toute la semaine, pour le travail final.",
+      "type": "break",
+      "tags": [
+        {
+          "text": "Rencontres",
+          "type": "break"
+        }
+      ]
     },
     {
       "week": 13,
@@ -207,8 +213,8 @@
     {
       "week": 14,
       "date": "2026-12-10",
-      "title": "Les expériences et révision",
-      "description": "Examen 3 de 15h30 à 16h30, puis expériences et révision de fin de session.",
+      "title": "Les expériences et révision, puis Examen 3",
+      "description": "Expériences et révision de fin de session (15h30 à 17h05), pause, puis examen 3 de 17h20 à 18h20.",
       "type": "important-eval",
       "tags": [
         {

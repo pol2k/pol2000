@@ -28,7 +28,7 @@
     {/each}
   </div>
   <div class="bas">
-    <span><strong>8 octobre</strong> · rencontres individuelles, toute l'équipe</span>
+    <span><strong>8 octobre</strong> et <strong>26 novembre</strong> · rencontres individuelles, toute l'équipe</span>
     <span><strong>pol2000.com</strong> · rendez-vous dans les plages publiées</span>
   </div>
 </div>

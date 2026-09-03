@@ -64,31 +64,31 @@ Au terme du cours, l'étudiant.e sera en mesure de :
 | 3 | 17 septembre 2026 | Les statistiques descriptives et la visualisation des données |
 | 4 | 24 septembre 2026 | Préparer ses données avec R |
 | 5 | 1er octobre 2026 | L'inférence statistique |
-| 6 | 8 octobre 2026 | Rencontres individuelles (aucun cours magistral) |
+| 6 | 8 octobre 2026 | Rencontres individuelles (aucun cours; travail de mi-session) |
 | 7 | 15 octobre 2026 | La régression linéaire simple |
-| 8 | 22 octobre 2026 | Examen 2 (1 h), puis cours (1 h 45) |
+| 8 | 22 octobre 2026 | La régression linéaire multiple |
 |  | 26 au 30 octobre 2026 | Semaine de lecture, aucun cours |
-| 9 | 5 novembre 2026 | La régression linéaire multiple |
-| 10 | 12 novembre 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
+| 9 | 5 novembre 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
+| 10 | 12 novembre 2026 | Le problème fondamental de l'inférence causale, puis Examen 2 (17h20 à 18h20) |
 | 11 | 19 novembre 2026 | Les graphes orientés acycliques (GOA) |
-| 12 | 26 novembre 2026 | Le problème fondamental de l'inférence causale |
+| 12 | 26 novembre 2026 | Rencontres individuelles (aucun cours; retour sur l'examen 2, travail final) |
 | 13 | 3 décembre 2026 | Les biais |
-| 14 | 10 décembre 2026 | Examen 3 (1 h), puis les expériences et révision (1 h 45) |
+| 14 | 10 décembre 2026 | Les expériences et révision, puis Examen 3 (17h20 à 18h20) |
 
 ## Évaluations
 
 | Évaluation | Date | Pondération |
 |---|---|---|
 | Examen 1 : analyser des données avec R (à distance) | remise le 4 octobre 2026, 23h59 | 15 % |
-| Examen 2 : les statistiques descriptives (en classe, sur papier, à livre ouvert) | 22 octobre 2026, 15h30–16h30 | 15 % |
+| Examen 2 : les statistiques descriptives (en classe, sur papier, à livre ouvert) | 12 novembre 2026, 17h20 à 18h20 | 15 % |
 | Travail de mi-session | 25 octobre 2026, 23h59 | 20 % |
 | Datacamp, 1re partie | 25 octobre 2026, 23h59 | 5 % |
-| Examen 3 : régressions simple et multiple (en classe, sur papier, à livre ouvert) | 10 décembre 2026, 15h30–16h30 | 15 % |
+| Examen 3 : régressions simple et multiple (en classe, sur papier, à livre ouvert) | 10 décembre 2026, 17h20 à 18h20 | 15 % |
 | Travail final | 18 décembre 2026, 23h59 | 25 % |
 | Datacamp, 1re et 2e parties | 18 décembre 2026, 23h59 | 5 % |
 
-Les examens 2 et 3 durent une heure, en début de séance. Après une pause de
-15 minutes, le cours reprend pour 1 h 45.
+Les examens 2 et 3 durent une heure, en fin de séance : le cours d'abord (15h30 à
+17h05), une pause de 15 minutes, puis l'examen (17h20 à 18h20).
 
 Politique de retard : pénalité de 10 % par jour; après trois jours, la note est 0.
 
@@ -111,7 +111,7 @@ Politique de retard : pénalité de 10 % par jour; après trois jours, la note e
 - **Non permis :** l'interprétation des résultats et la rédaction des travaux.
 - **Chaque évaluation précise ses propres consignes.**
 
-Les séances 2 et 10 abordent directement ces outils.
+Les séances 2 et 9 abordent directement ces outils.
 
 ---
 

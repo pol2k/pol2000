@@ -16,13 +16,13 @@
     { n: 5, d: 'jeudi 1er octobre', c: '1 oct', p: 1, t: "L'inférence statistique", q: 'Ce que je vois dans un échantillon, puis-je le dire de toute la population ?', note: 'Examen 1 à remettre dimanche 4 octobre.' },
     { n: 6, d: 'jeudi 8 octobre', c: '8 oct', p: 0, t: 'Rencontres individuelles', q: 'Pas de cours magistral : on se voit, un.e à la fois, avec les auxiliaires et le tuteur.' },
     { n: 7, d: 'jeudi 15 octobre', c: '15 oct', p: 2, t: 'La régression linéaire simple', q: 'Une droite qui résume une relation, et ce que ses chiffres veulent dire.' },
-    { n: 8, d: 'jeudi 22 octobre', c: '22 oct', p: 2, t: 'Examen 2, puis atelier de mi-session', q: "Une heure d'examen sur papier, puis on travaille votre devis, ensemble.", note: 'Mi-session à remettre dimanche 25 octobre.' },
-    { n: 9, d: 'jeudi 5 novembre', c: '5 nov', p: 2, t: 'La régression linéaire multiple', q: 'Plusieurs variables explicatives à la fois. Ce que « contrôler pour » veut dire.' },
-    { n: 10, d: 'jeudi 12 novembre', c: '12 nov', p: 2, t: "De la question au tableau de régression : à la main, puis avec l'IA", q: "Le travail final, du début à la fin. D'abord vous, puis un agent d'IA, et on le vérifie." },
+    { n: 8, g: 9, d: 'jeudi 22 octobre', c: '22 oct', p: 2, t: 'La régression linéaire multiple', q: 'Plusieurs variables explicatives à la fois. Ce que « contrôler pour » veut dire.', note: 'Travail de mi-session à remettre dimanche 25 octobre.' },
+    { n: 9, g: 10, d: 'jeudi 5 novembre', c: '5 nov', p: 2, t: "De la question au tableau de régression : à la main, puis avec l'IA", q: "Le travail final, du début à la fin. D'abord vous, puis un agent d'IA, et on le vérifie." },
+    { n: 10, g: 12, d: 'jeudi 12 novembre', c: '12 nov', p: 3, t: "Le problème fondamental de l'inférence causale", q: 'On ne voit jamais les deux mondes à la fois. Tout part de là.', note: 'Examen 2 en classe, de 17h20 à 18h20, après le cours.' },
     { n: 11, d: 'jeudi 19 novembre', c: '19 nov', p: 3, t: 'Les graphes orientés acycliques (GOA)', q: 'Dessiner ses hypothèses causales. Décider quoi contrôler, ou pas.' },
-    { n: 12, d: 'jeudi 26 novembre', c: '26 nov', p: 3, t: "Le problème fondamental de l'inférence causale", q: 'On ne voit jamais les deux mondes à la fois. Tout part de là.' },
+    { n: 12, g: 6, d: 'jeudi 26 novembre', c: '26 nov', p: 0, t: 'Rencontres individuelles', q: "Pas de cours : on revient sur l'examen 2 et on avance votre travail final, un.e à la fois." },
     { n: 13, d: 'jeudi 3 décembre', c: '3 déc', p: 3, t: 'Les biais', q: 'Variable omise, sélection, mesure, simultanéité : ce qui fausse une régression.' },
-    { n: 14, d: 'jeudi 10 décembre', c: '10 déc', p: 3, t: 'Les expériences, et révision', q: 'Le hasard comme méthode. Puis on revoit tout.', note: 'Examen 3 en classe · travail final vendredi 18 décembre.' }
+    { n: 14, d: 'jeudi 10 décembre', c: '10 déc', p: 3, t: 'Les expériences, et révision', q: 'Le hasard comme méthode. Puis on revoit tout.', note: 'Examen 3 en classe, de 17h20 à 18h20 · travail final vendredi 18 décembre.' }
   ];
   const PARTIES = ['', 'Concepts de base', 'Régression', 'Inférence causale'];
   let e = $state(0);
@@ -61,8 +61,8 @@
     <!-- parties -->
     <g class="parties">
       <line x1={x(0)} y1="130" x2={x(4)} y2="130" class="p1" /><text x={(x(0) + x(4)) / 2} y="154" class="pl">1 · Concepts de base</text>
-      <line x1={x(6)} y1="130" x2={x(9)} y2="130" class="p2" /><text x={(x(6) + x(9)) / 2} y="154" class="pl">2 · Régression</text>
-      <line x1={x(10)} y1="130" x2={x(13)} y2="130" class="p3" /><text x={(x(10) + x(13)) / 2} y="154" class="pl">3 · Inférence causale</text>
+      <line x1={x(6)} y1="130" x2={x(8)} y2="130" class="p2" /><text x={(x(6) + x(8)) / 2} y="154" class="pl">2 · Régression</text>
+      <line x1={x(9)} y1="130" x2={x(13)} y2="130" class="p3" /><text x={(x(9) + x(13)) / 2} y="154" class="pl">3 · Inférence causale</text>
     </g>
   </svg>
 
@@ -76,7 +76,7 @@
           <p class="quoi">{cur.q}</p>
           {#if cur.note}<p class="note">{cur.note}</p>{/if}
         </div>
-        <div class="glyphe"><Glyphe n={cur.n} /></div>
+        <div class="glyphe"><Glyphe n={cur.g ?? cur.n} /></div>
       </div>
     {/key}
   {:else}
