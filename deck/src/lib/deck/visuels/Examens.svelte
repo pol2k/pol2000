@@ -33,8 +33,8 @@
   </svg>
   <div class="liste">
     <div class="ex"><span class="n">1</span><div><strong>Chez vous, sur R</strong><small>24 sept. → dim. 4 oct. · l'outil, c'est l'ordinateur</small></div></div>
-    <div class="ex papier"><span class="n">2</span><div><strong>En classe, sur papier</strong><small>jeu. 22 oct. · 1 h · cahier ouvert</small></div></div>
-    <div class="ex papier"><span class="n">3</span><div><strong>En classe, sur papier</strong><small>jeu. 10 déc. · 1 h · cahier ouvert</small></div></div>
+    <div class="ex papier"><span class="n">2</span><div><strong>En classe, sur papier</strong><small>jeu. 12 nov. · 17h20 · 1 h · cahier ouvert</small></div></div>
+    <div class="ex papier"><span class="n">3</span><div><strong>En classe, sur papier</strong><small>jeu. 10 déc. · 17h20 · 1 h · cahier ouvert</small></div></div>
   </div>
 </div>
 
