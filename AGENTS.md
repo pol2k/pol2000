@@ -189,22 +189,78 @@ not for the site's absolute anchors.
 - Pages serves `.html` files at their extensionless path and 308-redirects
   the `.html` URL to it.
 
-## Issue tracking
+## Issue tracking with beads (`bd`)
 
 Work is tracked with **beads** in `.beads/`. Issue prefix `pol`; IDs look
-like `pol-a3f2dd`, not `pol-1`.
+like `pol-a3f2dd`, not `pol-1`. `bd` is the only task tracker in this
+repo: no TodoWrite, no TaskCreate, no markdown TODO lists. Run `bd prime`
+for the full command reference.
 
-Conventions for this repo:
+### Session lifecycle
 
-- **Start every session with `bd ready`.** It respects dependencies; a
-  plain `bd list` does not.
+1. **Start with `bd ready`.** It respects dependencies; a plain `bd list`
+   does not. `bd show <id>` gives the details and the blockers.
+2. **Create an issue before writing code**, even for work the instructor
+   just asked for in chat:
+
+   ```bash
+   bd create --title="Imperative English title" \
+             --description="Why this exists and what needs to be done" \
+             --type=task|bug|feature --priority=2      # 0=critical … 4=backlog
+   ```
+
+3. **Claim it**: `bd update <id> --claim`. Record decisions as you go with
+   `--notes`, `--design`, `--description` (never `bd edit`, which opens an
+   editor and blocks the agent).
+4. **Close it when the work is verified**: `bd close <id> [<id2> …]`,
+   optionally `--reason="…"`. Anything left over becomes a new issue.
+5. **Export before committing.** The Dolt database is local and
+   git-ignored; the backlog reaches git only through:
+
+   ```bash
+   bd export -o .beads/issues.jsonl
+   ```
+
+   Commit that file alongside the code. Skipping it silently loses the
+   work. Ignore `bd dolt push`; no Dolt remote is configured.
+
+### Conventions
+
 - Issues are written in English, titled imperatively ("Rewrite the
   calendar for the current session").
 - File new work as a new issue rather than expanding the scope of the
   current one. Use `--deps discovered-from:pol-xxxxx` when work surfaced
-  while doing something else.
+  while doing something else; `bd dep add <issue> <depends-on>` for
+  ordering.
 - Content decisions needing the instructor's judgement get the
-  `needs-decision` label. Do not guess and commit to `main`.
+  `needs-decision` label (`bd human <id>` also flags it). Do not guess
+  and commit to `main`.
+- Persistent knowledge about the project goes in `bd remember "…"` and is
+  found with `bd memories <keyword>`.
+- `bd stats`, `bd stale`, `bd orphans` and `bd preflight` are the hygiene
+  commands; run `bd doctor` when something looks out of sync.
+
+## Skills: review after every task, propose new ones
+
+Skills (`Skill` tool, `.claude/skills/`, plugin skills) are how repeated
+know-how is packaged. Keeping them sharp is part of finishing a task.
+
+- **At the end of every completed task, review the skills you used.**
+  Say which skills were invoked, whether each one actually helped, and
+  where it fell short: missing steps, stale commands, wrong assumptions
+  about this repo, guidance you had to override. For each gap, **propose
+  a concrete update** (which skill, what to change, why).
+- **When you notice recurring work, propose a new skill.** If the same
+  sequence came up more than once (in this session or across issues:
+  rebuild-and-export a deck, run the overflow check, add a séance route,
+  sync `cours.js` with the syllabus, export the beads backlog…), describe
+  the skill you would write: name, trigger, steps, and what it would save.
+- **Propose, never implement.** Skill edits and new skills are the
+  instructor's call. Put the suggestions in the final report of the task
+  under a short "Skills" heading. Do not create or edit skill files, and
+  do not file beads issues for them, unless asked.
+- If nothing is worth changing, say so in one line rather than inventing
+  a suggestion.
 
 ## Things that will bite you
 
