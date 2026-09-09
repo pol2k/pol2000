@@ -1,35 +1,31 @@
 <script>
   /**
-   * Ce que l'IA coûte à l'environnement : six chiffres, chacun avec sa
-   * source. Rien ici n'est estimé par nous ; chaque nombre est repris tel
-   * quel d'une étude évaluée par les pairs, ou d'un rapport officiel quand
-   * c'est dit (AIE, Google). Les comparaisons sont celles des auteurs.
+   * Ce que l'IA coûte à l'environnement : six chiffres, trois sources, et
+   * seulement des sources qui mesurent. Les estimations, projections et
+   * scénarios (eau, 2027, effets indirects) existent mais reposent sur des
+   * hypothèses ; on les nomme sur la diapo suivante sans les chiffrer.
    *
-   * Vérifié le 9 septembre 2026 :
-   *   AIE, Energy and AI (avril 2025) : 415 TWh en 2024 (~1,5 %), ~945 TWh
-   *     en 2030 (un peu moins de 3 %).
-   *   Google (août 2025), rapport technique : message texte médian Gemini
-   *     0,24 Wh, 0,26 mL d'eau, 0,03 g CO2e. Auto-déclaré, non évalué.
-   *   Luccioni, Jernite & Strubell (2024), FAccT : 2,907 kWh par 1 000
-   *     images (moyenne), 0,047 kWh par 1 000 textes ; le modèle d'image le
-   *     moins efficace = 522 recharges de téléphone par 1 000 images.
-   *   Li, Yang, Islam & Ren (2025), Comm. ACM : 700 000 L évaporés pour
-   *     entraîner GPT-3 ; 4,2 à 6,6 milliards de m³ prélevés pour l'IA en
-   *     2027, soit 4 à 6 fois le Danemark.
-   *   Luccioni, Viguier & Ligozat (2023), JMLR : BLOOM, 24,7 t CO2e
-   *     (entraînement seul) à 50,5 t (cycle de vie).
-   *   Ren, Tomlinson, Black & Torrance (2024), Scientific Reports : écrire
-   *     une page avec Llama-3-70B coûte 40 à 150 fois moins qu'un humain
-   *     (énergie, CO2, eau), effet rebond non compté.
+   * Vérifié le 9 septembre 2026 sur les sites des revues et de l'AIE :
+   *   AIE, Energy and AI (avril 2025) : 415 TWh pour les centres de données
+   *     en 2024, ~1,5 % de l'électricité mondiale ; ~945 TWh en 2030 dans
+   *     le scénario de base (cette projection-là est un scénario, dit tel).
+   *   Luccioni, Viguier & Ligozat (2023), JMLR : BLOOM, 176 G paramètres,
+   *     entraînement mesuré : 24,7 t CO2e ; 50,5 t en comptant la
+   *     fabrication du matériel et la consommation hors calcul.
+   *   Luccioni, Jernite & Strubell (2024), ACM FAccT : énergie mesurée pour
+   *     1 000 inférences sur une carte A100 : classification de texte
+   *     0,002 kWh ; génération de texte 0,047 kWh ; génération d'images
+   *     2,907 kWh en moyenne ; le modèle d'image le moins efficace,
+   *     11,49 kWh = 522 recharges de téléphone (0,012 kWh la recharge, EPA).
    */
   import { brancherTemps } from '../temps.js';
   const F = [
-    { v: '1,5 %', u: 'de l’électricité mondiale', q: 'Les centres de données en 2024. Le double en 2030, tirés par l’IA.', s: 'AIE, Energy and AI, 2025 · rapport officiel' },
-    { v: '0,24 Wh', u: 'un message texte', q: 'Neuf secondes de télévision. C’est Google qui le mesure, sur ses propres serveurs.', s: 'Google, 2025 · auto-déclaré, non évalué' },
-    { v: '½ recharge', u: 'de téléphone par image générée', q: 'Le pire modèle testé. Générer une image coûte en moyenne 60 fois plus qu’un texte.', s: 'Luccioni, Jernite & Strubell, 2024 · FAccT' },
-    { v: '700 000 L', u: 'd’eau pour entraîner GPT-3', q: 'Évaporée pour refroidir. En 2027, l’IA prélèverait 4 à 6 fois l’eau du Danemark.', s: 'Li, Yang, Islam & Ren, 2025 · Comm. ACM' },
-    { v: '25 à 50 t', u: 'de CO₂e pour entraîner BLOOM', q: 'Un seul modèle, 176 milliards de paramètres, mesuré de bout en bout.', s: 'Luccioni, Viguier & Ligozat, 2023 · JMLR' },
-    { v: '40 à 150 ×', u: 'moins qu’un humain, par page écrite', q: 'Le contre-argument : l’humain qui écrit consomme aussi. L’effet rebond n’est pas compté.', s: 'Ren, Tomlinson, Black & Torrance, 2024 · Sci. Reports' }
+    { v: '1,5 %', u: 'de l’électricité mondiale', q: 'Les centres de données en 2024 : 415 TWh, mesurés. Tout le numérique, pas seulement l’IA.', s: 'AIE, Energy and AI, 2025' },
+    { v: '× 2', u: 'd’ici 2030', q: 'Le scénario de base de l’AIE : 945 TWh. L’IA en est le premier moteur. C’est une projection, pas une mesure.', s: 'AIE, Energy and AI, 2025' },
+    { v: '25 t', u: 'de CO₂e pour entraîner BLOOM', q: 'Un modèle de 176 milliards de paramètres, entraînement mesuré au compteur. 50 t en comptant la fabrication du matériel.', s: 'Luccioni, Viguier & Ligozat, 2023 · JMLR' },
+    { v: '0,05 Wh', u: 'par texte généré', q: 'Mesuré sur une carte graphique de recherche, 1 000 fois. Peu de chose, une fois.', s: 'Luccioni, Jernite & Strubell, 2024 · FAccT' },
+    { v: '60 ×', u: 'plus pour une image que pour un texte', q: '2,9 kWh par 1 000 images en moyenne, contre 0,047 kWh par 1 000 textes. Le pire modèle : une demi-recharge de téléphone par image.', s: 'Luccioni, Jernite & Strubell, 2024 · FAccT' },
+    { v: '24 ×', u: 'plus pour un modèle génératif que pour un modèle spécialisé', q: 'Générer un texte contre classer un texte. Le modèle à tout faire coûte des dizaines de fois le modèle fait pour une tâche.', s: 'Luccioni, Jernite & Strubell, 2024 · FAccT' }
   ];
   let e = $state(0);
   let hote = $state(null);
@@ -43,7 +39,7 @@
 <div class="visuel empreinte" bind:this={hote}>
   <div class="grille">
     {#each F as f, i}
-      <div class="fait" class:contre={i === 5} style="animation-delay: {i * 100}ms">
+      <div class="fait" class:scenario={i === 1} style="animation-delay: {i * 100}ms">
         <span class="v">{f.v}</span>
         <span class="u">{f.u}</span>
         <p>{f.q}</p>
@@ -51,16 +47,16 @@
       </div>
     {/each}
   </div>
-  <p class="morale" class:vu={e === 1}>Un message ne coûte presque rien. Des milliards par jour, si. Et personne ne publie les chiffres complets.</p>
+  <p class="morale" class:vu={e === 1}>Une requête ne coûte presque rien. Des milliards par jour, si. Et l’image coûte bien plus que le texte.</p>
 </div>
 
 <style>
   .empreinte { display: flex; flex-direction: column; gap: 0.8em; }
   .grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8em; }
   .fait { border: 2px solid var(--dk-encre); padding: 0.8em 0.9em 0.7em; display: flex; flex-direction: column; gap: 0.15em; animation: fondu 0.5s both; }
-  .fait.contre { border-style: dashed; }
+  .fait.scenario { border-style: dashed; }
   .v { font-family: var(--dk-mono); font-size: 2em; font-weight: 600; line-height: 1; letter-spacing: -0.04em; color: var(--dk-accent); font-variant-numeric: tabular-nums; }
-  .contre .v { color: var(--dk-encre); }
+  .scenario .v { color: var(--dk-encre); }
   .u { font-size: 0.78em; font-weight: 600; line-height: 1.25; margin-top: 0.2em; }
   .fait p { margin: 0.3em 0 0; font-size: 0.7em; line-height: 1.4; color: var(--dk-gris); }
   .s { margin-top: auto; padding-top: 0.5em; font-size: 0.56em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dk-gris); }

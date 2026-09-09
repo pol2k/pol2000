@@ -410,12 +410,12 @@ lm(Fertility ~ Education, data = df)
     </Slide>
 
     <Slide bandeau="L'assistant d'IA · l'empreinte" droite={D}>
-      <h2 class="e">Six chiffres</h2>
+      <h2 class="e">Six chiffres, trois sources</h2>
       <Empreinte />
     </Slide>
 
     <Slide bandeau="L'assistant d'IA · l'empreinte" droite={D}>
-      <h2 class="e">Les études, évaluées par les pairs</h2>
+      <h2 class="e">Les sources, et ce qu’on a écarté</h2>
       <Etudes />
     </Slide>
 
