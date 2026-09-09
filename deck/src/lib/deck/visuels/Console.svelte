@@ -24,32 +24,29 @@
   });
 </script>
 
+<!-- Pas de fausse fenêtre: un bloc de code du deck (papier grisé, filet
+     d'encre, règle rouge à gauche), le chevron de R en tête de chaque ligne.
+     Imiter Positron, c'est faire un dessin laid d'une chose que la salle a
+     sous les yeux; on montre seulement ce qui se tape et ce qui répond. -->
 <div class="visuel console" class:petit bind:this={hote}>
-  <div class="fenetre">
-    <div class="barre"><span></span><span></span><span></span><em>Console · R</em></div>
-    <div class="corps">
-      {#each lignes as l, i}
-        <div class="paire" class:vu={i < visibles}>
-          <pre class="in"><span class="prompt">&gt;</span> {@html surlignerR(l.in)}</pre>
-          {#if l.out}<pre class="out">{l.out}</pre>{/if}
-          {#if l.note}<p class="note">{l.note}</p>{/if}
-        </div>
-      {/each}
-      {#if visibles < lignes.length}
-        <pre class="in attente"><span class="prompt">&gt;</span> <b class="curseur">▍</b></pre>
-      {/if}
-    </div>
+  <div class="corps">
+    {#each lignes as l, i}
+      <div class="paire" class:vu={i < visibles}>
+        <pre class="in"><span class="prompt">&gt;</span> {@html surlignerR(l.in)}</pre>
+        {#if l.out}<pre class="out">{l.out}</pre>{/if}
+        {#if l.note}<p class="note">{l.note}</p>{/if}
+      </div>
+    {/each}
+    {#if visibles < lignes.length}
+      <pre class="in attente"><span class="prompt">&gt;</span> <b class="curseur">▍</b></pre>
+    {/if}
   </div>
   {#if legende}<p class="legende">{legende}</p>{/if}
 </div>
 
 <style>
   .console { display: flex; flex-direction: column; gap: 0.5em; }
-  .fenetre { border: 3px solid var(--dk-encre); background: var(--dk-fond); }
-  .barre { display: flex; align-items: center; gap: 0.4em; padding: 0.35em 0.7em; border-bottom: 2px solid var(--dk-encre); background: var(--dk-fond-2); }
-  .barre span { width: 0.6em; height: 0.6em; border: 2px solid var(--dk-encre); }
-  .barre em { margin-left: 0.6em; font-style: normal; font-size: 0.6em; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dk-gris); }
-  .corps { padding: 0.5em 0.9em 0.6em; display: flex; flex-direction: column; gap: 0.25em; min-height: 6em; }
+  .corps { background: var(--dk-fond-2); border: 2px solid var(--dk-encre); border-left-width: 0.34em; border-left-color: var(--dk-accent); padding: 0.7em 0.9em 0.75em; display: flex; flex-direction: column; gap: 0.3em; min-height: 6em; }
   .paire { display: none; flex-direction: column; gap: 0.1em; animation: fondu 0.3s both; }
   .paire.vu { display: flex; }
   pre { margin: 0; font-family: var(--dk-mono); font-size: 0.88em; line-height: 1.5; white-space: pre; overflow-x: auto; }

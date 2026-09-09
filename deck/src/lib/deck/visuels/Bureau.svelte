@@ -23,8 +23,9 @@
 </script>
 
 <div class="visuel bureau" bind:this={hote}>
+  <!-- Un plan des quatre zones, pas une imitation de la fenêtre: aucune
+       barre de titre, aucun bouton. La salle a le vrai Positron devant elle. -->
   <div class="ecran">
-    <div class="haut"><span class="titre">Positron</span><span class="fichier">seance2.R</span><span class="r">R 4.6</span></div>
     <div class="zones">
       <div class="zone editeur" class:on={e === 1}>
         <span class="et">Éditeur</span>
@@ -63,13 +64,9 @@
 <style>
   .bureau { display: grid; grid-template-columns: 1.7fr 1fr; gap: 1.6em; align-items: center; }
   .ecran { border: 3px solid var(--dk-encre); background: var(--dk-fond); }
-  .haut { display: flex; gap: 1em; align-items: center; padding: 0.35em 0.8em; border-bottom: 2px solid var(--dk-encre); background: var(--dk-fond-2); font-size: 0.62em; letter-spacing: 0.12em; text-transform: uppercase; }
-  .haut .titre { font-weight: 600; }
-  .haut .fichier { color: var(--dk-gris); }
-  .haut .r { margin-left: auto; color: var(--dk-accent); font-weight: 600; }
   .zones { display: grid; grid-template-columns: 1.5fr 1fr; grid-template-rows: 1fr 1fr; gap: 0; }
-  .zone { position: relative; padding: 1.5em 0.8em 0.6em; border: 1px solid var(--dk-filet); min-height: 6.4em; transition: box-shadow 0.3s, background 0.3s; }
-  .zone.on { box-shadow: inset 0 0 0 4px var(--dk-accent); background: #fff; }
+  .zone { position: relative; padding: 1.5em 0.8em 0.6em; border: 1px solid var(--dk-encre); min-height: 6.4em; transition: box-shadow 0.3s, background 0.3s; }
+  .zone.on { box-shadow: inset 0 0 0 4px var(--dk-accent); background: var(--dk-fond-2); }
   .zone .et { position: absolute; top: 0.4em; left: 0.8em; font-size: 0.56em; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dk-gris); font-weight: 600; transition: color 0.3s; }
   .zone.on .et { color: var(--dk-accent); }
   pre { margin: 0; font-family: var(--dk-mono); font-size: 0.7em; line-height: 1.6; white-space: pre; }
