@@ -37,8 +37,10 @@
   import Nuage from '$lib/deck/visuels/Nuage.svelte';
   import Prompt from '$lib/deck/visuels/Prompt.svelte';
   import Verifier from '$lib/deck/visuels/Verifier.svelte';
+  import Empreinte from '$lib/deck/visuels/Empreinte.svelte';
+  import Etudes from '$lib/deck/visuels/Etudes.svelte';
 
-  const TOTAL = 45;
+  const TOTAL = 48;
   const D = 'POL-2000 · séance 2 · jeu 10 sept';
 
   // ---- Les consoles. Sorties copiées de R 4.6.1, jamais tapées à la main. ----
@@ -398,6 +400,25 @@ lm(Fertility ~ Education, data = df)
       <IA />
     </Slide>
 
+    <!-- L'empreinte environnementale: position, chiffres, études. -->
+    <Slide fond="encre" bandeau="L'assistant d'IA" droite={D}>
+      <p class="surtitre e">Ce que ça coûte</p>
+      <h1 class="e">Je suis partial.</h1>
+      <hr class="filet" />
+      <p class="lead e">Ma carrière repose sur l’IA. Je pense que vous devez l’apprendre pour vous placer dans un monde qui change vite.</p>
+      <p class="lead e">Mais elle a un prix, et ce ne sont pas ceux qui la vendent qui le paient. Voici ce que disent les études, pas moi.</p>
+    </Slide>
+
+    <Slide bandeau="L'assistant d'IA · l'empreinte" droite={D}>
+      <h2 class="e">Six chiffres</h2>
+      <Empreinte />
+    </Slide>
+
+    <Slide bandeau="L'assistant d'IA · l'empreinte" droite={D}>
+      <h2 class="e">Les études, évaluées par les pairs</h2>
+      <Etudes />
+    </Slide>
+
     <Slide bandeau="L'assistant d'IA" droite={D}>
       <h2 class="e">La bonne question</h2>
       <Prompt />
@@ -484,7 +505,7 @@ lm(Fertility ~ Education, data = df)
   .vars dd { margin: 0; font-size: 0.85em; color: var(--dk-gris); }
 
   /* Trois choses: pleine largeur, comme un visuel. */
-  :global(.diapo-in:has(> .trois)) { max-width: 60em; }
+  :global(.diapo-in:has(> .trois)) { max-width: 60em; }
   .trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em; }
   .trois > div { border: 2px solid var(--dk-encre); padding: 1.1em 1em 1em; display: flex; flex-direction: column; gap: 0.4em; }
   .trois > div:first-child { border: 3px solid var(--dk-accent); }

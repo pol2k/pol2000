@@ -21,17 +21,22 @@ const MAX_TEMPS = 12;
 const mesurer = (n) =>
   p.evaluate((n) => {
     const d = document.querySelectorAll('.diapo, .proto-deck > section')[n];
-    // On mesure le conteneur de contenu contre lui-meme: s'il defile,
-    // c'est qu'il deborde. Independant du placement des marges et de
-    // la presence d'un bandeau.
+    // On compare les enfants du conteneur de contenu a sa boite de contenu.
+    // scrollHeight ne suffit pas: .diapo-in centre ses enfants (flex,
+    // justify-content: center), et ce qui depasse par le haut n'est pas
+    // compte dans scrollHeight. Constate sur une diapo dont le titre
+    // passait sous le bandeau alors que la mesure disait zero.
     const inner = d.querySelector('.diapo-in') ?? d.querySelector('.corps') ?? d;
-    const debord =
-      inner === d
-        ? Math.round(
-            [...d.children].reduce((a, c) => a + c.getBoundingClientRect().height, 0) -
-              d.clientHeight
-          )
-        : Math.round(inner.scrollHeight - inner.clientHeight);
+    const r = inner.getBoundingClientRect();
+    const cs = getComputedStyle(inner);
+    const haut = r.top + parseFloat(cs.paddingTop);
+    const bas = r.bottom - parseFloat(cs.paddingBottom);
+    // Les enfants positionnes en absolu (bande d'identite en pied de titre)
+    // ne participent pas au flux: on les ignore.
+    const enfants = [...inner.children].filter((c) => !['absolute', 'fixed'].includes(getComputedStyle(c).position));
+    const t = Math.min(...enfants.map((c) => c.getBoundingClientRect().top));
+    const b = Math.max(...enfants.map((c) => c.getBoundingClientRect().bottom));
+    const debord = enfants.length ? Math.round(Math.max(0, haut - t) + Math.max(0, b - bas)) : 0;
     const titre = d.querySelector('h1, h2')?.textContent.trim().slice(0, 46) ?? '(sans titre)';
     return { debord, titre };
   }, n);
