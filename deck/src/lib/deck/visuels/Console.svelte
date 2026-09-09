@@ -49,8 +49,8 @@
   .corps { background: var(--dk-fond-2); border: 2px solid var(--dk-encre); border-left-width: 0.34em; border-left-color: var(--dk-accent); padding: 0.7em 0.9em 0.75em; display: flex; flex-direction: column; gap: 0.3em; min-height: 6em; }
   .paire { display: none; flex-direction: column; gap: 0.1em; animation: fondu 0.3s both; }
   .paire.vu { display: flex; }
-  pre { margin: 0; font-family: var(--dk-mono); font-size: 0.88em; line-height: 1.5; white-space: pre; overflow-x: auto; }
-  .petit pre { font-size: 0.72em; }
+  pre { margin: 0; font-family: var(--dk-mono); font-size: 1em; line-height: 1.5; white-space: pre; overflow-x: auto; }
+  .petit pre { font-size: 0.8em; }
   .prompt { color: var(--dk-accent); font-weight: 600; }
   .out { color: var(--dk-gris); padding-left: 1.1em; }
   .note { margin: 0.1em 0 0.3em 1.1em; font-size: 0.72em; color: var(--dk-accent); font-weight: 600; }

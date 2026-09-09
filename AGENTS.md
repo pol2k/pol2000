@@ -139,7 +139,12 @@ npm run exporter                              # → repo root: index.html, sylla
   `deck/build` and `deck/.svelte-kit` are ignored.
 - **Run `outils/deborde.mjs` before committing a deck.** A slide that
   overflows is a slide cut off on the projector. Check 1920×1080 and
-  1280×720.
+  1280×720. The checker steps every slide through its click states
+  (`brancherTemps`) and reports the worst one, so a figure that grows on
+  click is measured at its final size, not just on arrival.
+- **Code on slides must be readable from the back of the room.** No
+  `petit` variant on a teaching slide; if the code does not fit at normal
+  size, split the slide (see séance 2, "Explorer" and "Regarder").
 - Known engine trap: `.qs-num li` is a two-column grid. Wrap each item's
   content in a single `<span>` or inline markup splits into extra cells.
 - To publish a new deck: add `deck: 'slides/seance-N/'` to the séance in

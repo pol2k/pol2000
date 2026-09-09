@@ -38,7 +38,7 @@
   import Prompt from '$lib/deck/visuels/Prompt.svelte';
   import Verifier from '$lib/deck/visuels/Verifier.svelte';
 
-  const TOTAL = 43;
+  const TOTAL = 45;
   const D = 'POL-2000 · séance 2 · jeu 10 sept';
 
   // ---- Les consoles. Sorties copiées de R 4.6.1, jamais tapées à la main. ----
@@ -132,6 +132,15 @@ ggplot(df, aes(x = Education, y = Fertility)) +
 lm(Fertility ~ Education, data = df)
 
 # 7. À vous : remplacez Education par Agriculture, partout. Que change-t-il ?`;
+  // Trop long pour une seule diapo à taille lisible: deux diapos, coupées
+  // entre l'exploration (1 à 3) et la manipulation (4 à 7).
+  const coupe = script.indexOf('\n# 4. ');
+  const script1 = script.slice(0, coupe);
+  const script2 = script.slice(coupe + 1);
+  // Même raison pour l'exploration du tableau: les compteurs d'un côté,
+  // le tableau lui-même de l'autre.
+  const c_explorer1 = c_explorer.slice(0, 4);
+  const c_regarder = c_explorer.slice(4);
 </script>
 
 <svelte:head>
@@ -324,12 +333,17 @@ lm(Fertility ~ Education, data = df)
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Explorer</h2>
-      <Console lignes={c_explorer} petit />
+      <Console lignes={c_explorer1} />
+    </Slide>
+
+    <Slide bandeau="Un jeu de données" droite={D}>
+      <h2 class="e">Regarder</h2>
+      <Console lignes={c_regarder} />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Une variable</h2>
-      <Console lignes={c_variable} petit />
+      <Console lignes={c_variable} />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
@@ -339,7 +353,7 @@ lm(Fertility ~ Education, data = df)
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Choisir des colonnes, garder des lignes</h2>
-      <Console lignes={c_dplyr} petit />
+      <Console lignes={c_dplyr} />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
@@ -363,8 +377,13 @@ lm(Fertility ~ Education, data = df)
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
-      <h2 class="e">Le script entier</h2>
-      <Code src={script} titre="seance2.R · à refaire chez vous, puis à modifier" petit />
+      <h2 class="e">Le script entier, 1 de 2</h2>
+      <Code src={script1} titre="seance2.R · à refaire chez vous, puis à modifier" />
+    </Slide>
+
+    <Slide bandeau="Un jeu de données" droite={D}>
+      <h2 class="e">Le script entier, 2 de 2</h2>
+      <Code src={script2} titre="seance2.R · la suite" />
     </Slide>
 
     <!-- ================= 5 · L'IA ================= -->
