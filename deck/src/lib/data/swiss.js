@@ -1,0 +1,56 @@
+/* Généré par outils/swiss_data.R à partir du jeu `swiss` livré avec R.
+   R version 4.6.1 (2026-06-24). Aucune valeur ici n'est écrite à la main. */
+export const SWISS = [
+  { nom: "Courtelary", fertilite: 80.2, agriculture: 17, examen: 15, education: 12, catholique: 9.96, mortalite: 22.2 },
+  { nom: "Delemont", fertilite: 83.1, agriculture: 45.1, examen: 6, education: 9, catholique: 84.84, mortalite: 22.2 },
+  { nom: "Franches-Mnt", fertilite: 92.5, agriculture: 39.7, examen: 5, education: 5, catholique: 93.4, mortalite: 20.2 },
+  { nom: "Moutier", fertilite: 85.8, agriculture: 36.5, examen: 12, education: 7, catholique: 33.77, mortalite: 20.3 },
+  { nom: "Neuveville", fertilite: 76.9, agriculture: 43.5, examen: 17, education: 15, catholique: 5.16, mortalite: 20.6 },
+  { nom: "Porrentruy", fertilite: 76.1, agriculture: 35.3, examen: 9, education: 7, catholique: 90.57, mortalite: 26.6 },
+  { nom: "Broye", fertilite: 83.8, agriculture: 70.2, examen: 16, education: 7, catholique: 92.85, mortalite: 23.6 },
+  { nom: "Glane", fertilite: 92.4, agriculture: 67.8, examen: 14, education: 8, catholique: 97.16, mortalite: 24.9 },
+  { nom: "Gruyere", fertilite: 82.4, agriculture: 53.3, examen: 12, education: 7, catholique: 97.67, mortalite: 21 },
+  { nom: "Sarine", fertilite: 82.9, agriculture: 45.2, examen: 16, education: 13, catholique: 91.38, mortalite: 24.4 },
+  { nom: "Veveyse", fertilite: 87.1, agriculture: 64.5, examen: 14, education: 6, catholique: 98.61, mortalite: 24.5 },
+  { nom: "Aigle", fertilite: 64.1, agriculture: 62, examen: 21, education: 12, catholique: 8.52, mortalite: 16.5 },
+  { nom: "Aubonne", fertilite: 66.9, agriculture: 67.5, examen: 14, education: 7, catholique: 2.27, mortalite: 19.1 },
+  { nom: "Avenches", fertilite: 68.9, agriculture: 60.7, examen: 19, education: 12, catholique: 4.43, mortalite: 22.7 },
+  { nom: "Cossonay", fertilite: 61.7, agriculture: 69.3, examen: 22, education: 5, catholique: 2.82, mortalite: 18.7 },
+  { nom: "Echallens", fertilite: 68.3, agriculture: 72.6, examen: 18, education: 2, catholique: 24.2, mortalite: 21.2 },
+  { nom: "Grandson", fertilite: 71.7, agriculture: 34, examen: 17, education: 8, catholique: 3.3, mortalite: 20 },
+  { nom: "Lausanne", fertilite: 55.7, agriculture: 19.4, examen: 26, education: 28, catholique: 12.11, mortalite: 20.2 },
+  { nom: "La Vallee", fertilite: 54.3, agriculture: 15.2, examen: 31, education: 20, catholique: 2.15, mortalite: 10.8 },
+  { nom: "Lavaux", fertilite: 65.1, agriculture: 73, examen: 19, education: 9, catholique: 2.84, mortalite: 20 },
+  { nom: "Morges", fertilite: 65.5, agriculture: 59.8, examen: 22, education: 10, catholique: 5.23, mortalite: 18 },
+  { nom: "Moudon", fertilite: 65, agriculture: 55.1, examen: 14, education: 3, catholique: 4.52, mortalite: 22.4 },
+  { nom: "Nyone", fertilite: 56.6, agriculture: 50.9, examen: 22, education: 12, catholique: 15.14, mortalite: 16.7 },
+  { nom: "Orbe", fertilite: 57.4, agriculture: 54.1, examen: 20, education: 6, catholique: 4.2, mortalite: 15.3 },
+  { nom: "Oron", fertilite: 72.5, agriculture: 71.2, examen: 12, education: 1, catholique: 2.4, mortalite: 21 },
+  { nom: "Payerne", fertilite: 74.2, agriculture: 58.1, examen: 14, education: 8, catholique: 5.23, mortalite: 23.8 },
+  { nom: "Paysd'enhaut", fertilite: 72, agriculture: 63.5, examen: 6, education: 3, catholique: 2.56, mortalite: 18 },
+  { nom: "Rolle", fertilite: 60.5, agriculture: 60.8, examen: 16, education: 10, catholique: 7.72, mortalite: 16.3 },
+  { nom: "Vevey", fertilite: 58.3, agriculture: 26.8, examen: 25, education: 19, catholique: 18.46, mortalite: 20.9 },
+  { nom: "Yverdon", fertilite: 65.4, agriculture: 49.5, examen: 15, education: 8, catholique: 6.1, mortalite: 22.5 },
+  { nom: "Conthey", fertilite: 75.5, agriculture: 85.9, examen: 3, education: 2, catholique: 99.71, mortalite: 15.1 },
+  { nom: "Entremont", fertilite: 69.3, agriculture: 84.9, examen: 7, education: 6, catholique: 99.68, mortalite: 19.8 },
+  { nom: "Herens", fertilite: 77.3, agriculture: 89.7, examen: 5, education: 2, catholique: 100, mortalite: 18.3 },
+  { nom: "Martigwy", fertilite: 70.5, agriculture: 78.2, examen: 12, education: 6, catholique: 98.96, mortalite: 19.4 },
+  { nom: "Monthey", fertilite: 79.4, agriculture: 64.9, examen: 7, education: 3, catholique: 98.22, mortalite: 20.2 },
+  { nom: "St Maurice", fertilite: 65, agriculture: 75.9, examen: 9, education: 9, catholique: 99.06, mortalite: 17.8 },
+  { nom: "Sierre", fertilite: 92.2, agriculture: 84.6, examen: 3, education: 3, catholique: 99.46, mortalite: 16.3 },
+  { nom: "Sion", fertilite: 79.3, agriculture: 63.1, examen: 13, education: 13, catholique: 96.83, mortalite: 18.1 },
+  { nom: "Boudry", fertilite: 70.4, agriculture: 38.4, examen: 26, education: 12, catholique: 5.62, mortalite: 20.3 },
+  { nom: "La Chauxdfnd", fertilite: 65.7, agriculture: 7.7, examen: 29, education: 11, catholique: 13.79, mortalite: 20.5 },
+  { nom: "Le Locle", fertilite: 72.7, agriculture: 16.7, examen: 22, education: 13, catholique: 11.22, mortalite: 18.9 },
+  { nom: "Neuchatel", fertilite: 64.4, agriculture: 17.6, examen: 35, education: 32, catholique: 16.92, mortalite: 23 },
+  { nom: "Val de Ruz", fertilite: 77.6, agriculture: 37.6, examen: 15, education: 7, catholique: 4.97, mortalite: 20 },
+  { nom: "ValdeTravers", fertilite: 67.6, agriculture: 18.7, examen: 25, education: 7, catholique: 8.65, mortalite: 19.5 },
+  { nom: "V. De Geneve", fertilite: 35, agriculture: 1.2, examen: 37, education: 53, catholique: 42.34, mortalite: 18 },
+  { nom: "Rive Droite", fertilite: 44.7, agriculture: 46.6, examen: 16, education: 29, catholique: 50.43, mortalite: 18.2 },
+  { nom: "Rive Gauche", fertilite: 42.8, agriculture: 27.7, examen: 22, education: 29, catholique: 58.33, mortalite: 19.3 }
+];
+/* hist(swiss$Fertility) : bornes et effectifs, tels que R les choisit. */
+export const HIST = { bornes: [30, 40, 50, 60, 70, 80, 90, 100], effectifs: [1, 2, 5, 15, 14, 7, 3] };
+export const MOY_FERTILITE = 70.14255;
+export const COR_EDUCATION = -0.6638;
+export const LM_EDUCATION = { constante: 79.6101, pente: -0.8624 };
