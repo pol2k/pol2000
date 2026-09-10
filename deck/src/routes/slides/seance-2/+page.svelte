@@ -23,7 +23,9 @@
   import IA from '$lib/deck/visuels/IA.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import Logiciels from '$lib/deck/visuels/Logiciels.svelte';
-  import PourquoiR from '$lib/deck/visuels/PourquoiR.svelte';
+  import RaisonsR from '$lib/deck/visuels/RaisonsR.svelte';
+  import Ressources from '$lib/deck/visuels/Ressources.svelte';
+  import Organisations from '$lib/deck/visuels/Organisations.svelte';
   import Bureau from '$lib/deck/visuels/Bureau.svelte';
   import Dossier from '$lib/deck/visuels/Dossier.svelte';
   import AvantCoder from '$lib/deck/visuels/AvantCoder.svelte';
@@ -41,7 +43,7 @@
   import Empreinte from '$lib/deck/visuels/Empreinte.svelte';
   import Etudes from '$lib/deck/visuels/Etudes.svelte';
 
-  const TOTAL = 47;
+  const TOTAL = 50;
   const D = 'POL-2000 · séance 2 · jeu 10 sept';
 
   // ---- Les consoles. Sorties copiées de R 4.6.1, jamais tapées à la main. ----
@@ -182,29 +184,52 @@ lm(Fertility ~ Education, data = df)
 
     <!-- ================= 1 · POURQUOI R ================= -->
     <Slide fond="encre" bandeau="Pourquoi R" droite={D}>
-      <p class="surtitre e">La question de la semaine</p>
-      <h1 class="e">« Pourquoi pas Excel ? »</h1>
+      <h1 class="e une-ligne">« Pourquoi pas Excel ? »</h1>
       <hr class="filet" />
       <p class="lead e">Parce qu’un clic ne laisse pas de trace.</p>
+    </Slide>
+
+    <Slide bandeau="Pourquoi R" droite={D}>
+      <h2 class="e">Pourquoi R ?</h2>
+      <RaisonsR />
+    </Slide>
+
+    <Slide bandeau="Pourquoi R" droite={D}>
+      <h2 class="e">Vous pouvez même créer le vôtre</h2>
+      <div class="cran e">
+        <figure>
+          <img src="{base}/img/cran-ces.png" alt="La page du package ces sur le CRAN : Access to Canadian Election Study Data, version 1.1.0, auteur Laurence-Olivier M. Foisy." />
+        </figure>
+        <div class="cran-txt">
+          <p class="surtitre">cran.r-project.org/package=ces</p>
+          <p class="lead">Le package <code>ces</code> : les données de l’Étude électorale canadienne, de 1965 à 2025, en une ligne de R.</p>
+          <p class="lead">Écrit par votre prof. Publié sur le dépôt officiel. Vous l’utiliserez tout à l’heure.</p>
+          <Code src={'install.packages("ces")'} />
+        </div>
+      </div>
+    </Slide>
+
+    <Slide bandeau="Pourquoi R" droite={D}>
+      <h2 class="e">Ça s’apprend, et gratuitement</h2>
+      <Ressources />
+    </Slide>
+
+    <Slide fond="plein" bandeau="Pourquoi R" droite={D}>
+      <figure class="capture plein e">
+        <img src="{base}/img/ggplot-ces.png" alt="Graphique à barres : intention de vote selon l’âge à l’élection fédérale de 2025, cinq partis par groupe d’âge." />
+        <figcaption>Les plus beaux graphiques : ggplot2 · l’Étude électorale canadienne 2025 · vous en ferez un aujourd’hui</figcaption>
+      </figure>
+    </Slide>
+
+    <Slide bandeau="Pourquoi R" droite={D}>
+      <h2 class="e">Ils l’utilisent aussi</h2>
+      <Organisations />
     </Slide>
 
     <Slide bandeau="Pourquoi R" droite={D}>
       <h2 class="e">Les logiciels d’analyse</h2>
       <Logiciels />
     </Slide>
-
-    <Slide bandeau="Pourquoi R" droite={D}>
-      <h2 class="e">Quatre raisons</h2>
-      <PourquoiR />
-    </Slide>
-
-    <!-- ================= 2 · LE BUREAU ================= -->
-    <Slide fond="encre" bandeau="Le bureau" droite={D}>
-      <h1 class="e">Le bureau de travail</h1>
-      <hr class="filet" />
-      <p class="lead e">Deux logiciels, quatre zones, un dossier.</p>
-    </Slide>
-
     <Slide bandeau="Le bureau" droite={D}>
       <h2 class="e">R et Positron : rappel</h2>
       <Outils quoi="rvs" />
@@ -474,6 +499,20 @@ lm(Fertility ~ Education, data = df)
   .entete-ul .dept { font-size: 0.62em; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.45; font-weight: 600; }
   .entete-ul .session { margin-left: auto; font-size: 0.72em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dk-accent); font-weight: 600; }
   .pale { color: var(--dk-gris); }
+  /* Un titre qui doit tenir sur une ligne, guillemet fermant compris. */
+  .une-ligne { white-space: nowrap; font-size: 2.6em; }
+  /* Le package ces: capture du CRAN à gauche, le mot à droite. */
+  .cran { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.6em; align-items: center; }
+  .cran figure { margin: 0; }
+  .cran img { display: block; width: 100%; height: auto; border: 2px solid var(--dk-encre); }
+  .cran-txt { display: flex; flex-direction: column; gap: 0.7em; }
+  .cran-txt .lead { font-size: 1em; }
+  :global(.diapo-in:has(> .cran)) { max-width: 62em; }
+  .capture { margin: 0; }
+  .capture img { display: block; width: 100%; height: auto; border: 2px solid var(--dk-encre); }
+  .capture.plein { display: flex; flex-direction: column; height: 100%; }
+  .capture.plein img { flex: 1; min-height: 0; object-fit: contain; object-position: top; }
+  .capture.plein figcaption { font-size: 0.85em; color: var(--dk-encre); padding: 0.3em 0; }
 
   /* À main levée: quatre questions, très grandes. */
   .mains { list-style: none; padding: 0; margin: 0; counter-reset: m; display: flex; flex-direction: column; gap: 0.5em; }
