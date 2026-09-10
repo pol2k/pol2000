@@ -145,6 +145,22 @@ npm run exporter                              # → repo root: index.html, sylla
 - **Code on slides must be readable from the back of the room.** No
   `petit` variant on a teaching slide; if the code does not fit at normal
   size, split the slide (see séance 2, "Explorer" and "Regarder").
+- **`outils/verifier.sh seance-N [index[:steps] …]`** does the whole
+  check in one go: build, export, overflow check at both sizes, and
+  screenshots of the listed slides (0-based; `12:3` = after three arrow
+  presses) into `$CAPTURES`. Look at the PNGs before committing.
+- **Real R output only.** Console slides (`Console.svelte`, `lignes =
+  [{ in, out, note }]`) show text copied from an `Rscript` run at
+  `options(width = 100)`; figures read numbers from a generated module
+  in `deck/src/lib/data/` (`outils/ces_data.R`, `outils/swiss_data.R`).
+  Never type an output by hand.
+- **The Positron screenshot** (`static/img/positron-capture.png`) was
+  taken on this machine: a workspace with an `.Rprofile` that creates
+  the objects and draws the plot at startup, Positron launched with
+  `--disable-workspace-trust`, made fullscreen under sway (XWayland
+  window, so the criterion is `[class="Positron"]`, not `app_id`), then
+  `grim -g` on the window's rectangle. Redo it the same way if the
+  interface changes.
 - Known engine trap: `.qs-num li` is a two-column grid. Wrap each item's
   content in a single `<span>` or inline markup splits into extra cells.
 - To publish a new deck: add `deck: 'slides/seance-N/'` to the séance in

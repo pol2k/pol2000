@@ -21,7 +21,7 @@
 </script>
 
 <div class="visuel ia" bind:this={hote}>
-  <svg viewBox="0 0 1000 400" role="img" aria-label="Deux chemins partent de « IA »: vers un travail meilleur, ou vers une vie plus facile et un travail mou.">
+  <svg viewBox="0 0 1000 412" role="img" aria-label="Deux chemins partent de « IA »: vers un travail meilleur, ou vers une vie plus facile et un travail mou.">
     <defs><marker id="fia" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="pointe" /></marker></defs>
     <!-- point de départ -->
     <rect x="60" y="165" width="130" height="70" class="depart" />

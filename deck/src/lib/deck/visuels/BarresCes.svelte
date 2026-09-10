@@ -33,7 +33,7 @@
   const part = (b) => BARRES.find((r) => r.scolarite === groupes[b.g] && r.parti === partis[b.p]);
 </script>
 
-<div class="visuel barres" bind:this={hote}>
+<div class="visuel barres-ces" bind:this={hote}>
   <div class="codes">
     <pre class="code prep">d &lt;- df |&gt;
   filter(cps25_votechoice %in% 1:5,
@@ -85,8 +85,8 @@
 </div>
 
 <style>
-  .barres { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.4em; align-items: center; }
-  .codes { display: flex; flex-direction: column; gap: 0.6em; }
+  .barres-ces { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1.4em; align-items: center; }
+  .codes { min-width: 0; display: flex; flex-direction: column; gap: 0.6em; }
   .code { margin: 0; font-family: var(--dk-mono); font-size: 0.68em; line-height: 1.55; border: 3px solid var(--dk-encre); padding: 0.7em 0.9em; white-space: pre; overflow-x: auto; }
   .prep { border-color: var(--dk-gris-2); color: var(--dk-gris); }
   .l { color: var(--dk-gris-2); transition: color 0.3s; }
