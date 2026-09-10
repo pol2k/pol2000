@@ -26,7 +26,7 @@
   import RaisonsR from '$lib/deck/visuels/RaisonsR.svelte';
   import Ressources from '$lib/deck/visuels/Ressources.svelte';
   import Organisations from '$lib/deck/visuels/Organisations.svelte';
-  import Bureau from '$lib/deck/visuels/Bureau.svelte';
+  import Positron from '$lib/deck/visuels/Positron.svelte';
   import Dossier from '$lib/deck/visuels/Dossier.svelte';
   import AvantCoder from '$lib/deck/visuels/AvantCoder.svelte';
   import Anatomie from '$lib/deck/visuels/Anatomie.svelte';
@@ -235,9 +235,9 @@ lm(Fertility ~ Education, data = df)
       <RPositron />
     </Slide>
 
-    <Slide bandeau="Le bureau" droite={D}>
-      <h2 class="e">Les quatre zones de Positron</h2>
-      <Bureau />
+    <Slide fond="plein" bandeau="Le bureau" droite={D}>
+      <h2 class="e">Positron, zone par zone</h2>
+      <Positron />
     </Slide>
 
     <Slide bandeau="Le bureau" droite={D}>
