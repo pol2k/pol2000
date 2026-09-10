@@ -2,11 +2,11 @@
   /**
    * Un graphique ggplot2 qui se construit couche par couche, au clic, avec
    * les vraies parts de l'Étude électorale canadienne 2025
-   * (src/lib/data/ces2025.js, généré par outils/ces_data.R) : la part de
-   * chaque parti dans chaque groupe de scolarité. Quatre temps : les axes
+   * (src/lib/data/ces2025.js, généré par outils/ces_data.R) : la part de
+   * chaque parti dans chaque groupe de scolarité. Quatre temps : les axes
    * (aes), les barres (geom_col), les titres (labs), le thème
    * (theme_minimal, qui efface le fond gris de ggplot2). Le code qui grandit
-   * à gauche est exactement celui qu'on tape ; le tableau d se prépare avec
+   * à gauche est exactement celui qu'on tape ; le tableau d se prépare avec
    * les verbes de la diapo précédente.
    */
   import { brancherTemps } from '../temps.js';
@@ -23,7 +23,7 @@
   const partis = [...new Set(BARRES.map((b) => b.parti))];
   // Les couleurs officielles des partis, à la place de la palette de ggplot2.
   const couleurs = ['#d71920', '#1a4782', '#f37021', '#33b2cc', '#3d9b35'];
-  // Repères du dessin : part de 0 à 0,58 (ggplot2 gradue 0,0, 0,2, 0,4), trois groupes, légende à droite.
+  // Repères du dessin : part de 0 à 0,58 (ggplot2 gradue 0,0, 0,2, 0,4), trois groupes, légende à droite.
   const X0 = 80, X1 = 540, Y0 = 390, Y1 = 40, MAX = 0.58;
   const largeur = (X1 - X0) / groupes.length;
   const barre = (largeur * 0.9) / partis.length;

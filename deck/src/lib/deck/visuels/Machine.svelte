@@ -2,15 +2,15 @@
   /**
    * Une fonction, c'est une machine. Trois temps.
    *
-   *   0  La boîte noire : mean(). Quatre nombres entrent à gauche sur un
+   *   0  La boîte noire : mean(). Quatre nombres entrent à gauche sur un
    *      tapis, 29.5 sort à droite. On ne voit pas dedans, et c'est correct.
    *   1  Le rideau se lève et on voit les rouages, ce que mean fait
-   *      vraiment : additionner (sum), compter (length), diviser.
-   *   2  La vraie console : les deux chemins donnent 29.5.
+   *      vraiment : additionner (sum), compter (length), diviser.
+   *   2  La vraie console : les deux chemins donnent 29.5.
    *
    * Tout est en SVG et en images-clés CSS, sur un cycle de six secondes
-   * qui boucle : la salle peut regarder deux fois. Rien d'aléatoire, rien
-   * d'inventé : 118 ÷ 4 = 29.5 est ce que R répond.
+   * qui boucle : la salle peut regarder deux fois. Rien d'aléatoire, rien
+   * d'inventé : 118 ÷ 4 = 29.5 est ce que R répond.
    */
   import { brancherTemps } from '../temps.js';
   const AGES = [24, 30, 19, 45];
@@ -50,7 +50,7 @@
 
 <div class="visuel machine" bind:this={hote}>
   <svg viewBox="0 0 1000 340" class:ouverte={e >= 1} class:fermee={e === 0} aria-hidden="true">
-    <!-- Le tapis d'entrée : quatre jetons, un à la fois, vers la boîte. -->
+    <!-- Le tapis d'entrée : quatre jetons, un à la fois, vers la boîte. -->
     <text class="et" x="30" y="178">CE QU’ON DONNE</text>
     <line class="tapis" x1="30" y1="252" x2="318" y2="252" />
     {#each AGES as a, i}
@@ -63,7 +63,7 @@
     <g class="boite">
       <rect class="corps" x="320" y="62" width="360" height="264" />
 
-      <!-- Dedans : les rouages, visibles quand le rideau est levé. -->
+      <!-- Dedans : les rouages, visibles quand le rideau est levé. -->
       <g class="dedans">
         <polygon class="roue a" points={engrenage(352, 94, 20)} />
         <circle class="axe" cx="352" cy="94" r="5" />
@@ -94,7 +94,7 @@
         <text class="quotient" x="470" y="306">= 29.5</text>
       </g>
 
-      <!-- Le rideau : la face avant, qui s'enroule vers le haut au temps 1. -->
+      <!-- Le rideau : la face avant, qui s'enroule vers le haut au temps 1. -->
       <g class="rideau">
         <rect x="320" y="64" width="360" height="262" />
         <text class="nom" x="500" y="208">mean()</text>
@@ -104,7 +104,7 @@
       <rect class="rail" x="314" y="50" width="372" height="14" />
     </g>
 
-    <!-- La sortie : le résultat saute hors de la boîte. -->
+    <!-- La sortie : le résultat saute hors de la boîte. -->
     <text class="et" x="800" y="178">CE QUI SORT</text>
     <line class="tapis sortie" x1="682" y1="252" x2="790" y2="252" />
     <g class="resultat">
@@ -121,9 +121,7 @@
       </div>
     {/key}
     {#if e === 2}
-      <pre class="console">{#each LIGNES as l}<span class="in"><span class="prompt">&gt;</span> {l.in}</span>
-<span class="out">{l.out}</span>
-{/each}</pre>
+      <pre class="console">{#each LIGNES as l}<span class="in"><span class="prompt">&gt;</span> {l.in}</span><span class="out">{l.out}</span>{/each}</pre>
     {/if}
   </div>
 </div>
@@ -133,7 +131,7 @@
   svg { width: 86%; height: auto; display: block; overflow: visible; }
   text { font-family: var(--dk-mono); }
 
-  /* Dehors : encre et rouge sur papier. */
+  /* Dehors : encre et rouge sur papier. */
   .et { font-size: 15px; letter-spacing: 2.4px; font-weight: 600; fill: var(--dk-gris); }
   .tapis { stroke: var(--dk-encre); stroke-width: 3; stroke-dasharray: 14 10; animation: defiler 1.2s linear infinite; }
   .tapis.sortie { stroke: var(--dk-accent); }
@@ -141,7 +139,7 @@
   .jeton text { font-size: 24px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .jeton { animation: entrer 6s ease-in-out infinite both; animation-delay: var(--d); }
 
-  /* La boîte : encre, papier et or dedans. */
+  /* La boîte : encre, papier et or dedans. */
   .corps { fill: var(--dk-encre); }
   .rail { fill: var(--dk-encre); stroke: var(--dk-fond); stroke-width: 3; }
   .rideau rect { fill: var(--dk-encre); }
@@ -167,7 +165,7 @@
   .division { font-size: 26px; font-weight: 600; fill: var(--dk-fond); }
   .coche { fill: var(--dk-accent-clair); stroke: var(--dk-fond); stroke-width: 2.5; }
 
-  /* Les rouages ne tournent que boîte ouverte : chaque geste dans l'ordre. */
+  /* Les rouages ne tournent que boîte ouverte : chaque geste dans l'ordre. */
   .ouverte .somme { animation: apparaitre 6s linear infinite both; animation-delay: var(--d); }
   .ouverte .total { animation: sauter 6s linear infinite both; --t0: 56%; }
   .ouverte .coche { animation: cocher 6s linear infinite both; animation-delay: var(--d); }
@@ -176,14 +174,14 @@
   .ouverte .quotient { animation: sauter3 6s linear infinite both; }
   .total, .nombre, .quotient { transform-box: fill-box; transform-origin: center; }
 
-  /* Le résultat : dans les deux états, il saute à cinq secondes. */
+  /* Le résultat : dans les deux états, il saute à cinq secondes. */
   .resultat rect { fill: var(--dk-fond); stroke: var(--dk-accent); stroke-width: 4; }
   .resultat text { font-size: 36px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
   .resultat { transform-box: fill-box; transform-origin: center; animation: resultat 6s ease-out infinite both; }
 
   @keyframes defiler { to { stroke-dashoffset: -24; } }
   @keyframes tourner { to { transform: rotate(360deg); } }
-  /* Un jeton : apparaît, glisse jusqu'à la boîte, y entre. 0 à 2,4 s. */
+  /* Un jeton : apparaît, glisse jusqu'à la boîte, y entre. 0 à 2,4 s. */
   @keyframes entrer {
     0% { transform: translateX(0); opacity: 0; }
     4% { opacity: 1; }
@@ -191,7 +189,7 @@
     26% { transform: translateX(calc(var(--dx) + 46px)); opacity: 0; }
     100% { transform: translateX(calc(var(--dx) + 46px)); opacity: 0; }
   }
-  /* Boîte fermée : elle tremble pendant qu'elle travaille, 2,5 à 4,8 s. */
+  /* Boîte fermée : elle tremble pendant qu'elle travaille, 2,5 à 4,8 s. */
   @keyframes travailler {
     0%, 41% { transform: none; }
     43% { transform: translate(-3px, 1px); }
@@ -213,7 +211,7 @@
     42% { opacity: 1; } 50% { opacity: 0.2; } 58% { opacity: 1; } 66% { opacity: 0.2; } 74% { opacity: 1; }
     80%, 100% { opacity: 0; }
   }
-  /* Dedans : additionner à 2,5 s, total à 3,4 s, compter à 3,7 s, 4 à 4,3 s,
+  /* Dedans : additionner à 2,5 s, total à 3,4 s, compter à 3,7 s, 4 à 4,3 s,
      diviser à 4,5 s, quotient à 4,8 s. Le résultat sort à 5 s. */
   @keyframes apparaitre { 0%, 41% { opacity: 0; transform: translateY(6px); } 44%, 100% { opacity: 1; transform: none; } }
   @keyframes sauter { 0%, 56% { opacity: 0; transform: scale(0.6); } 59% { opacity: 1; transform: scale(1.12); } 62%, 100% { opacity: 1; transform: scale(1); } }
@@ -228,12 +226,13 @@
     .rideau { transition: none; }
   }
 
-  /* En bas : le mot à gauche, la vraie console à droite au dernier temps. */
+  /* En bas : le mot à gauche, la vraie console à droite au dernier temps. */
   .bas { width: 100%; display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.4em; align-items: start; min-height: 4.4em; }
   .legende { display: flex; flex-direction: column; gap: 0.3em; }
   .et-l { font-size: 0.62em; letter-spacing: 0.18em; font-weight: 600; color: var(--dk-accent); }
   .legende p { margin: 0; font-size: 1.05em; line-height: 1.4; animation: fondu 0.4s both; }
   .console { margin: 0; font-family: var(--dk-mono); font-size: 0.95em; line-height: 1.5; white-space: pre; background: var(--dk-fond-2); border: 2px solid var(--dk-encre); border-left-width: 0.34em; border-left-color: var(--dk-accent); padding: 0.5em 0.9em; animation: fondu 0.3s both; }
+  .in, .out { display: block; }
   .prompt { color: var(--dk-accent); font-weight: 600; }
   .out { color: var(--dk-gris); padding-left: 1.1em; }
   @keyframes fondu { from { opacity: 0; transform: translateY(0.3em); } to { opacity: 1; transform: none; } }

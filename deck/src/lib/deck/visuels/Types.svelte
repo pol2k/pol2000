@@ -1,10 +1,10 @@
 <script>
   /**
-   * Les quatre types de variables qu'on croisera cette session : un nombre,
+   * Les quatre types de variables qu'on croisera cette session : un nombre,
    * un texte, un vrai-ou-faux, et rien. Les classes affichées sont celles
-   * que R donne avec class(). NA est à part : il n'est pas un type, il est
-   * le trou dans n'importe lequel. Pas de paragraphe : la valeur, la classe,
-   * un mot ; le reste se dit.
+   * que R donne avec class(). NA est à part : il n'est pas un type, il est
+   * le trou dans n'importe lequel. Pas de paragraphe : la valeur, la classe,
+   * un mot ; le reste se dit.
    */
   const T = [
     { v: '25', c: 'numeric', q: 'un nombre' },

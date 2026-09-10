@@ -1,6 +1,6 @@
 <script>
   /**
-   * hist(df$cps25_age_in_years), tel que R le dessine : les bornes (de cinq
+   * hist(df$cps25_age_in_years), tel que R le dessine : les bornes (de cinq
    * ans en cinq ans) et les effectifs viennent de hist() lui-même
    * (src/lib/data/ces2025.js, généré par outils/ces_data.R). La moyenne est
    * posée dessus au second temps, pour lier le chiffre à la forme.
@@ -19,7 +19,7 @@
   const max = Math.max(...HIST_AGE.effectifs);
   const x = (v) => X0 + ((v - b0) / (b1 - b0)) * (X1 - X0);
   const y = (n) => Y0 - (n / max) * (Y0 - Y1);
-  // Dix-sept barres : on n'écrit l'effectif que sur celles qui ont la place.
+  // Dix-sept barres : on n'écrit l'effectif que sur celles qui ont la place.
   const moy = MOY_AGE.toLocaleString('fr-CA', { maximumFractionDigits: 1 });
   const graduations = [0, 500, 1000, 1500, 2000];
 </script>
@@ -43,7 +43,7 @@
     <text x={(X0 + X1) / 2} y="422" class="lab">df$cps25_age_in_years</text>
     <text transform="translate(22 {(Y0 + Y1) / 2}) rotate(-90)" class="lab">Frequency</text>
     <g class="moy" class:vu={e >= 1}>
-      <!-- L'étiquette vit au-dessus des barres : dix-sept effectifs occupent déjà le haut du dessin. -->
+      <!-- L'étiquette vit au-dessus des barres : dix-sept effectifs occupent déjà le haut du dessin. -->
       <line x1={x(MOY_AGE)} y1={Y0} x2={x(MOY_AGE)} y2={Y1 - 12} />
       <text x={x(MOY_AGE) + 10} y={Y1 - 16}>moyenne · {moy} ans</text>
     </g>

@@ -1,9 +1,9 @@
 <script>
   /**
    * Lire une erreur. Un message de R 4.6.1, copié tel quel, et en face le
-   * seul mot qui compte : on ne casse rien. Une erreur, c'est R qui dit
-   * qu'il n'a pas compris ; on la lit, on corrige la ligne, on relance.
-   * Pas de temps, pas de liste : une diapo qui se regarde.
+   * seul mot qui compte : on ne casse rien. Une erreur, c'est R qui dit
+   * qu'il n'a pas compris ; on la lit, on corrige la ligne, on relance.
+   * Pas de temps, pas de liste : une diapo qui se regarde.
    */
   import Picto from '../Picto.svelte';
 </script>
@@ -13,7 +13,7 @@
     <pre class="code"><i>1</i> library(dplyr)
 <i>2</i> df &lt;- swiss
 <i class="on">3</i> df |&gt; select(<span class="souligne">fertility</span>, Education)</pre>
-    <pre class="err">Error in select(df, fertility, Education) :
+    <pre class="err">Error in select(df, fertility, Education) :
   Can't select columns that don't exist.
 ✖ Column `fertility` doesn't exist.</pre>
     <div class="fix">
@@ -55,5 +55,5 @@
   .droite p { margin: 0; font-size: 1.1em; line-height: 1.4; color: var(--dk-gris); }
   .gestes { list-style: none; margin: 0.6em 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.45em; }
   .gestes li { display: flex; align-items: center; gap: 0.7em; font-size: 1.1em; font-weight: 600; }
-  .gestes li :global(.picto) { color: var(--dk-accent); flex: 0 0 auto; }
+  .gestes li :global(.picto) { color: var(--dk-accent); flex: 0 0 auto; }
 </style>

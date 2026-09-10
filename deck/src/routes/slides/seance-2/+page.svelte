@@ -40,17 +40,141 @@
   import Syntaxe from '$lib/deck/visuels/Syntaxe.svelte';
   import Erreurs from '$lib/deck/visuels/Erreurs.svelte';
   import Packages from '$lib/deck/visuels/Packages.svelte';
-  import Histo from '$lib/deck/visuels/Histo.svelte';
   import Pipe from '$lib/deck/visuels/Pipe.svelte';
-  import Nuage from '$lib/deck/visuels/Nuage.svelte';
   import Prompt from '$lib/deck/visuels/Prompt.svelte';
   import Tangible from '$lib/deck/visuels/Tangible.svelte';
   import DeuxChoses from '$lib/deck/visuels/DeuxChoses.svelte';
+  import HistoCes from '$lib/deck/visuels/HistoCes.svelte';
+  import BarresCes from '$lib/deck/visuels/BarresCes.svelte';
+  import Vecteur from '$lib/deck/visuels/Vecteur.svelte';
+  import Structures from '$lib/deck/visuels/Structures.svelte';
 
-  const TOTAL = 48;
+  const TOTAL = 52;
   const D = 'POL-2000 · séance 2 · jeu 10 sept';
 
-  // ---- Les consoles. Sorties copiées de R 4.6.1, jamais tapées à la main. ----
+  // ---- Imports à ajouter (Histo et Nuage ne servent plus dans ce bloc ; retirer
+  //      leurs imports si plus rien ne les utilise). ----
+
+  // ---- Le bloc « Un jeu de données » : l'Étude électorale canadienne 2025, par le
+  //      package ces. Sorties copiées de R 4.6.1 à options(width = 100), jamais tapées
+  //      à la main ; les figures lisent src/lib/data/ces2025.js (outils/ces_data.R). ----
+
+  // get_ces() télécharge 57,6 Mo depuis le Dataverse de Harvard ; les quatre lignes montrées sont extraites, mot pour mot, de son vrai message.
+  const d_charger = [
+    { in: 'library(ces)', out: '', note: 'Le package de tantôt. Installé une fois avec install.packages("ces"), chargé à chaque session avec library().' },
+    { in: 'library(dplyr)\nlibrary(haven)', out: '', note: 'dplyr manipule les tableaux ; haven lit les étiquettes des sondages (« 2 = Conservative Party »). Les deux viennent avec le tidyverse.' },
+    { in: 'df <- get_ces("2025")', out: 'trying URL \'https://dataverse.harvard.edu/api/access/datafile/13958997\'\ndownloaded 57.6 MB\nData loaded successfully: 20180 rows and 1440 columns\nCES 2025 (web) dataset ready for use', note: 'Une ligne, et tout le sondage arrive dans df. Il faut Internet et une trentaine de secondes. R en dit plus long ; voici l’essentiel, mot pour mot.' },
+    { in: 'saveRDS(df, "ces2025.rds")', out: '', note: 'Facultatif, mais malin : une copie sur votre disque. La prochaine fois, df <- readRDS("ces2025.rds") suffit, sans Internet.' }
+  ];
+
+  const d_explorer = [
+    { in: 'nrow(df)', out: '[1] 20180', note: 'Une ligne, une personne qui a répondu au sondage.' },
+    { in: 'ncol(df)', out: '[1] 1440', note: 'Une colonne, une question. Mille quatre cent quarante.' },
+    { in: 'names(df)[1:8]', out: '[1] "cps25_time"           "cps25_consent"        "cps25_citizenship"    "cps25_citizen_other" \n[5] "cps25_citizen_other2" "cps25_citizen_other3" "cps25_age_in_years"   "cps25_genderid"      ', note: 'Les huit premiers noms sur 1 440. cps25 : « campaign period survey », la vague pendant la campagne de 2025.' }
+  ];
+
+  const d_regarder = [
+    { in: 'df |> select(cps25_age_in_years, cps25_province, cps25_votechoice) |> head()', out: '# A tibble: 6 × 3\n  cps25_age_in_years cps25_province           cps25_votechoice         \n  <dbl+lbl>          <dbl+lbl>                <dbl+lbl>                \n1 69 [69. 69]         2 [2. British Columbia] 2 [2. Conservative Party]\n2 61 [61. 61]         1 [1. Alberta]          3 [3. NDP]               \n3 54 [54. 54]        11 [11. Quebec]          2 [2. Conservative Party]\n4 28 [28. 28]         9 [9. Ontario]          1 [1. Liberal Party]     \n5 63 [63. 63]         9 [9. Ontario]          1 [1. Liberal Party]     \n6 28 [28. 28]         2 [2. British Columbia] 2 [2. Conservative Party]', note: 'select() choisit trois colonnes sur 1 440, head() garde six lignes ; on y revient dans un instant. Une ligne, une personne. Une case : un code et, entre crochets, ce qu’il veut dire.' },
+    { in: 'View(df)', out: '', note: 'S’ouvre dans l’onglet Données de Positron. Le tableau entier, à faire défiler : 20 180 lignes, 1 440 colonnes.' }
+  ];
+
+  const d_variable = [
+    { in: 'length(df$cps25_age_in_years)', out: '[1] 20180', note: 'Le $ sort une colonne du tableau. Une colonne, c’est un vecteur : 20 180 âges. (Ne l’affichez pas tout seul : R les déverse tous.)' },
+    { in: 'mean(df$cps25_age_in_years)', out: '[1] 49.71511' },
+    { in: 'summary(df$cps25_age_in_years)', out: '   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \n  18.00   35.00   50.00   49.72   64.00   96.00 ', note: 'Six chiffres pour une variable. Jeudi prochain, on apprend à les lire.' }
+  ];
+
+  const d_codes = [
+    { in: 'table(df$cps25_votechoice)', out: '\n   1    2    3    4    5    6    7    8 \n6528 4644 1258 1011  317   82 1887  182 ', note: 'Pour qui comptez-vous voter ? Un effectif par code. Qui est le 2 ?' },
+    { in: 'levels(as_factor(df$cps25_votechoice))', out: '[1] "1. Liberal Party"                    "2. Conservative Party"              \n[3] "3. NDP"                              "4. Bloc Québécois"                  \n[5] "5. Green Party"                      "6. Another party (please specify)"  \n[7] "7. Don\'t know/ Prefer not to answer" "8. People\'s Party"                  ', note: 'as_factor(), de haven, lit l’étiquette collée à chaque code. 1 libéral, 2 conservateur, 3 NPD, 4 Bloc, 5 vert ; 6, 7 et 8 : autre, ne sait pas, PPC.' }
+  ];
+
+  const d_dplyr = [
+    { in: 'df |> select(cps25_age_in_years, cps25_province, cps25_votechoice) |> head(3)', out: '# A tibble: 3 × 3\n  cps25_age_in_years cps25_province           cps25_votechoice         \n  <dbl+lbl>          <dbl+lbl>                <dbl+lbl>                \n1 69 [69. 69]         2 [2. British Columbia] 2 [2. Conservative Party]\n2 61 [61. 61]         1 [1. Alberta]          3 [3. NDP]               \n3 54 [54. 54]        11 [11. Quebec]          2 [2. Conservative Party]', note: 'select() choisit des colonnes. Trois sur 1 440.' },
+    { in: 'df |> filter(cps25_province == 11) |> nrow()', out: '[1] 4906', note: 'filter() garde des lignes. Le code 11, c’est le Québec : 4 906 répondant.e.s sur 20 180.' }
+  ];
+
+  const d_enchainer = [
+    { in: 'df |>\n  filter(cps25_province == 11) |>\n  select(cps25_age_in_years, cps25_province, cps25_votechoice) |>\n  head(3)', out: '# A tibble: 3 × 3\n  cps25_age_in_years cps25_province  cps25_votechoice         \n  <dbl+lbl>          <dbl+lbl>       <dbl+lbl>                \n1 54 [54. 54]        11 [11. Quebec] 2 [2. Conservative Party]\n2 60 [60. 60]        11 [11. Quebec] 1 [1. Liberal Party]     \n3 46 [46. 46]        11 [11. Quebec] 2 [2. Conservative Party]', note: 'Trois verbes à la suite : le pipe passe le tableau de l’un au suivant. Une étape par ligne, ça se lit comme une recette.' }
+  ];
+
+  const d_groupe = [
+    { in: 'df |>\n  filter(cps25_votechoice %in% 1:5) |>\n  mutate(parti = as_factor(cps25_votechoice)) |>\n  group_by(parti) |>\n  summarise(age = mean(cps25_age_in_years), n = n())', out: '# A tibble: 5 × 3\n  parti                   age     n\n  <fct>                 <dbl> <int>\n1 1. Liberal Party       52.6  6528\n2 2. Conservative Party  49.7  4644\n3 3. NDP                 44.7  1258\n4 4. Bloc Québécois      52.9  1011\n5 5. Green Party         45.8   317', note: 'filter() garde les cinq grands partis ; mutate() crée une colonne ; group_by() sépare ; summarise() résume chaque groupe. Une question : l’âge moyen change-t-il d’un parti à l’autre ? Le NPD et les verts recrutent plus jeune.' }
+  ];
+
+  const d_lm = [
+    { in: 'd2 <- df |>\n  filter(cps25_votechoice %in% c(1:5, 8), cps25_income <= 8) |>\n  mutate(conservateur = cps25_votechoice == 2)', out: '', note: 'Un parti nommé, un revenu donné. conservateur vaut TRUE ou FALSE : R compte 1 ou 0.' },
+    { in: 'mean(d2$conservateur)', out: '[1] 0.3305243', note: 'La moyenne de vrais et de faux, c’est une proportion : 33 % comptent voter conservateur.' },
+    { in: 'lm(conservateur ~ cps25_income, data = d2)', out: 'Call:\nlm(formula = conservateur ~ cps25_income, data = d2)\n\nCoefficients:\n (Intercept)  cps25_income  \n     0.28364       0.01001  ', note: 'La droite de jeudi dernier, aux mêmes chiffres : une tranche de revenu de plus, un point de pourcentage de vote conservateur de plus. Séance 7.' }
+  ];
+
+
+  const script_ces = `# POL-2000 · séance 2 · Introduction à R et à Positron
+# À refaire chez vous, ligne par ligne, Ctrl + Entrée.
+
+# 1. Les boîtes à outils (installées une fois : install.packages(c("ces", "tidyverse")))
+library(ces)       # l'Étude électorale canadienne, de 1965 à 2025
+library(dplyr)     # manipuler des tableaux
+library(haven)     # lire les étiquettes des sondages
+library(ggplot2)   # dessiner
+
+# 2. L'Étude électorale canadienne 2025 : 20 180 personnes, 1 440 questions
+df <- get_ces("2025")          # Internet, une trentaine de secondes
+saveRDS(df, "ces2025.rds")     # la prochaine fois : df <- readRDS("ces2025.rds")
+nrow(df)
+ncol(df)
+names(df)[1:8]
+df |> select(cps25_age_in_years, cps25_province, cps25_votechoice) |> head()
+
+# 3. Une variable
+mean(df$cps25_age_in_years)
+summary(df$cps25_age_in_years)
+hist(df$cps25_age_in_years)
+table(df$cps25_votechoice)
+levels(as_factor(df$cps25_votechoice))
+
+# 4. Choisir des colonnes, garder des lignes, résumer par groupe
+df |> select(cps25_age_in_years, cps25_province, cps25_votechoice) |> head(3)
+df |> filter(cps25_province == 11) |> nrow()
+df |>
+  filter(cps25_votechoice %in% 1:5) |>
+  mutate(parti = as_factor(cps25_votechoice)) |>
+  group_by(parti) |>
+  summarise(age = mean(cps25_age_in_years), n = n())
+
+# 5. Un graphique, couche par couche
+d <- df |>
+  filter(cps25_votechoice %in% 1:5, cps25_education <= 11) |>
+  mutate(parti = as_factor(cps25_votechoice),
+         scolarite = cut(cps25_education, c(0, 5, 7, 11),
+                         labels = c("Secondaire ou moins", "Collégial", "Universitaire"))) |>
+  count(scolarite, parti) |>
+  group_by(scolarite) |>
+  mutate(part = n / sum(n))
+ggplot(d, aes(x = scolarite, y = part, fill = parti)) +
+  geom_col(position = "dodge") +
+  labs(x = "Scolarité", y = "Part des intentions de vote", fill = "Parti",
+       title = "Étude électorale canadienne 2025") +
+  theme_minimal()
+
+# 6. Une ligne, un résultat
+d2 <- df |>
+  filter(cps25_votechoice %in% c(1:5, 8), cps25_income <= 8) |>
+  mutate(conservateur = cps25_votechoice == 2)
+lm(conservateur ~ cps25_income, data = d2)
+
+# 7. À vous : remplacez cps25_income par cps25_education, partout. Que change-t-il ?`;
+  // Trop long pour une seule diapo à taille lisible : trois diapos, coupées
+  // avant « 3. Une variable » et avant « 5. Un graphique ».
+  const coupe_a = script_ces.indexOf('\n# 3. ');
+  const coupe_b = script_ces.indexOf('\n# 5. ');
+  const coupe_c = script_ces.indexOf('\n# 6. ');
+  const script_ces1 = script_ces.slice(0, coupe_a);
+  const script_ces2 = script_ces.slice(coupe_a + 1, coupe_b);
+  const script_ces3 = script_ces.slice(coupe_b + 1, coupe_c);
+  const script_ces4 = script_ces.slice(coupe_c + 1);
+
+  // ---- Les consoles du bloc « En direct ». Sorties copiées de R 4.6.1, jamais tapées à la main. ----
   const c_calc = [
     { in: '2 + 2', out: '[1] 4' },
     { in: '10 / 3', out: '[1] 3.333333' },
@@ -64,89 +188,7 @@
     { in: 'age', out: '[1] 25', note: 'Toujours 25. Calculer n’est pas ranger : sans flèche, rien ne change.' },
     { in: 'age <- age + 1\nage', out: '[1] 26' }
   ];
-  const c_vecteur = [
-    { in: 'ages <- c(24, 30, 19, 45)\nages', out: '[1] 24 30 19 45', note: 'c() pour « combiner ». Quatre nombres, un seul objet : un vecteur.' },
-    { in: 'mean(ages)', out: '[1] 29.5' },
-    { in: 'length(ages)', out: '[1] 4' },
-    { in: 'ages > 25', out: '[1] FALSE  TRUE FALSE  TRUE', note: 'Une question posée à chacun. Quatre réponses.' },
-    { in: 'sum(ages > 25)', out: '[1] 2', note: 'TRUE compte pour 1. Combien ont plus de 25 ans : deux.' }
-  ];
-  const c_na = [
-    { in: 'mean(c(24, NA, 30))', out: '[1] NA', note: 'Un seul manquant, et R refuse de répondre. Il a raison : il ne sait pas.' },
-    { in: 'mean(c(24, NA, 30), na.rm = TRUE)', out: '[1] 27', note: 'na.rm = TRUE : « ignore les manquants ». Vous le taperez des centaines de fois.' }
-  ];
-  const c_explorer = [
-    { in: 'df <- swiss', out: '', note: 'swiss est livré avec R. On le copie dans df, le nom qu’on donnera à tous nos tableaux.' },
-    { in: 'nrow(df)', out: '[1] 47' },
-    { in: 'ncol(df)', out: '[1] 6' },
-    { in: 'names(df)', out: '[1] "Fertility"        "Agriculture"      "Examination"      "Education"        "Catholic"        \n[6] "Infant.Mortality"' },
-    { in: 'head(df)', out: '             Fertility Agriculture Examination Education Catholic Infant.Mortality\nCourtelary        80.2        17.0          15        12     9.96             22.2\nDelemont          83.1        45.1           6         9    84.84             22.2\nFranches-Mnt      92.5        39.7           5         5    93.40             20.2\nMoutier           85.8        36.5          12         7    33.77             20.3\nNeuveville        76.9        43.5          17        15     5.16             20.6\nPorrentruy        76.1        35.3           9         7    90.57             26.6', note: 'Une ligne, une province. Une colonne, une variable. Les données bien rangées de jeudi dernier.' },
-    { in: 'View(df)', out: '', note: 'S’ouvre dans l’onglet Données de Positron. Le tableau entier, à faire défiler.' }
-  ];
-  const c_variable = [
-    { in: 'df$Fertility', out: ' [1] 80.2 83.1 92.5 85.8 76.9 76.1 83.8 92.4 82.4 82.9 87.1 64.1 66.9\n[14] 68.9 61.7 68.3 71.7 55.7 54.3 65.1 65.5 65.0 56.6 57.4 72.5 74.2\n[27] 72.0 60.5 58.3 65.4 75.5 69.3 77.3 70.5 79.4 65.0 92.2 79.3 70.4\n[40] 65.7 72.7 64.4 77.6 67.6 35.0 44.7 42.8', note: 'Le $ sort une colonne du tableau. Une colonne, c’est un vecteur : tout ce qu’on sait faire aux vecteurs marche.' },
-    { in: 'mean(df$Fertility)', out: '[1] 70.14255' },
-    { in: 'summary(df$Fertility)', out: '   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \n  35.00   64.70   70.40   70.14   78.45   92.50 ', note: 'Six chiffres pour une variable. Jeudi prochain, on apprend à les lire.' }
-  ];
-  const c_dplyr = [
-    { in: 'library(dplyr)', out: '', note: 'La boîte à outils pour manipuler des tableaux. Elle vient avec le tidyverse.' },
-    { in: 'df |> select(Fertility, Education) |> head(3)', out: '             Fertility Education\nCourtelary        80.2        12\nDelemont          83.1         9\nFranches-Mnt      92.5         5', note: 'select() choisit des colonnes.' },
-    { in: 'df |> filter(Education > 20)', out: '             Fertility Agriculture Examination Education Catholic Infant.Mortality\nLausanne          55.7        19.4          26        28    12.11             20.2\nNeuchatel         64.4        17.6          35        32    16.92             23.0\nV. De Geneve      35.0         1.2          37        53    42.34             18.0\nRive Droite       44.7        46.6          16        29    50.43             18.2\nRive Gauche       42.8        27.7          22        29    58.33             19.3', note: 'filter() garde des lignes. Cinq provinces sur 47 dépassent 20 % de scolarité. Les villes.' }
-  ];
-  const c_groupe = [
-    { in: 'df |>\n  mutate(catholique = Catholic > 50) |>\n  group_by(catholique) |>\n  summarise(fertilite = mean(Fertility), n = n())', out: '# A tibble: 2 × 3\n  catholique fertilite     n\n  <lgl>          <dbl> <int>\n1 FALSE           66.2    29\n2 TRUE            76.5    18', note: 'mutate() crée une colonne ; group_by() sépare ; summarise() résume chaque groupe. Trois verbes, une question : la fécondité diffère-t-elle selon la religion ?' }
-  ];
-  const c_lm = [
-    { in: 'cor(df$Education, df$Fertility)', out: '[1] -0.6637889', note: 'Une corrélation négative : plus de scolarité, moins de fécondité. Séance 3.' },
-    { in: 'lm(Fertility ~ Education, data = df)', out: '\nCall:\nlm(formula = Fertility ~ Education, data = df)\n\nCoefficients:\n(Intercept)    Education  \n    79.6101      -0.8624  ', note: 'La même ligne que jeudi dernier. Chaque point de scolarité en plus : 0,86 de fécondité en moins. Séance 7.' }
-  ];
 
-  const script = `# POL-2000 · séance 2 · Introduction à R et à Positron
-# À refaire chez vous, ligne par ligne, Ctrl + Entrée.
-
-# 1. Charger la boîte à outils (installée une fois : install.packages("tidyverse"))
-library(dplyr)
-library(ggplot2)
-
-# 2. Un jeu de données livré avec R : 47 provinces suisses, 1888
-df <- swiss
-nrow(df)
-names(df)
-head(df)
-
-# 3. Une variable
-mean(df$Fertility)
-summary(df$Fertility)
-hist(df$Fertility)
-
-# 4. Choisir des colonnes, garder des lignes, résumer par groupe
-df |> select(Fertility, Education) |> head()
-df |> filter(Education > 20)
-df |>
-  mutate(catholique = Catholic > 50) |>
-  group_by(catholique) |>
-  summarise(fertilite = mean(Fertility), n = n())
-
-# 5. Un graphique, couche par couche
-ggplot(df, aes(x = Education, y = Fertility)) +
-  geom_point() +
-  labs(x = "Scolarité au-delà du primaire (%)", y = "Indice de fécondité",
-       title = "47 provinces suisses, 1888") +
-  geom_smooth(method = "lm")
-
-# 6. Une ligne, un résultat
-lm(Fertility ~ Education, data = df)
-
-# 7. À vous : remplacez Education par Agriculture, partout. Que change-t-il ?`;
-  // Trop long pour une seule diapo à taille lisible: deux diapos, coupées
-  // entre l'exploration (1 à 3) et la manipulation (4 à 7).
-  const coupe = script.indexOf('\n# 4. ');
-  const script1 = script.slice(0, coupe);
-  const script2 = script.slice(coupe + 1);
-  // Même raison pour l'exploration du tableau: les compteurs d'un côté,
-  // le tableau lui-même de l'autre.
-  const c_explorer1 = c_explorer.slice(0, 4);
-  const c_regarder = c_explorer.slice(4);
 </script>
 
 <svelte:head>
@@ -265,13 +307,7 @@ lm(Fertility ~ Education, data = df)
     </Slide>
 
     <!-- ================= 3 · EN DIRECT, LA CONSOLE ================= -->
-    <Slide fond="encre" bandeau="En direct" droite={D}>
-      <h1 class="e">En direct</h1>
-      <hr class="filet" />
-      <p class="lead e">Tapez avec moi. Une ligne à la fois, dans la console.</p>
-      <p class="lead e">Une erreur ? C’est prévu. On la lit ensemble.</p>
-    </Slide>
-
+    <!-- ================= 3 · EN DIRECT, LA CONSOLE ================= -->
     <Slide bandeau="En direct · la console" droite={D}>
       <h2 class="e">Une calculatrice</h2>
       <Console lignes={c_calc} />
@@ -288,18 +324,18 @@ lm(Fertility ~ Education, data = df)
     </Slide>
 
     <Slide bandeau="En direct · les vecteurs" droite={D}>
-      <h2 class="e">Plusieurs valeurs, un objet</h2>
-      <Console lignes={c_vecteur} />
+      <h2 class="e">Plusieurs valeurs, un seul objet</h2>
+      <Vecteur />
     </Slide>
 
     <Slide bandeau="En direct · les vecteurs" droite={D}>
-      <h2 class="e">Quatre sortes de valeurs</h2>
+      <h2 class="e">Quatre types de variables</h2>
       <Types />
     </Slide>
 
-    <Slide bandeau="En direct · les vecteurs" droite={D}>
-      <h2 class="e">Le manquant</h2>
-      <Console lignes={c_na} />
+    <Slide bandeau="En direct · les données" droite={D}>
+      <h2 class="e">Structure des données : 1D vs 2D</h2>
+      <Structures />
     </Slide>
 
     <Slide bandeau="En direct · les fonctions" droite={D}>
@@ -308,7 +344,7 @@ lm(Fertility ~ Education, data = df)
     </Slide>
 
     <Slide bandeau="En direct · les erreurs" droite={D}>
-      <h2 class="e">Trois façons de se tromper</h2>
+      <h2 class="e">Les erreurs classiques</h2>
       <Syntaxe />
     </Slide>
 
@@ -317,55 +353,63 @@ lm(Fertility ~ Education, data = df)
       <Erreurs />
     </Slide>
 
-
-
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Les packages : la boîte à outils</h2>
       <Packages />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
-      <h2 class="e"><code>swiss</code> : 47 provinces, 1888</h2>
+      <h2 class="e">L’Étude électorale canadienne 2025</h2>
       <Deux ratio="1fr 1.6fr">
         <div class="chiffres">
-          <Grand valeur="47" legende="provinces francophones de Suisse" />
-          <Grand valeur="6" legende="variables, toutes des nombres" />
-          <p class="pale">Livré avec R, donc sur chaque ordinateur de la salle. Aucun fichier à télécharger aujourd’hui ; ça, c’est la séance 4.</p>
+          <Grand valeur="20 180" legende="personnes sondées pendant la campagne fédérale de 2025" />
+          <Grand valeur="1 440" legende="colonnes : une par question" />
+          <p class="pale">Le grand sondage universitaire de chaque élection fédérale depuis 1965. Une ligne par personne, un code par réponse. Il arrive dans R par le package <code>ces</code> ; rien à télécharger à la main.</p>
         </div>
         <dl class="vars e">
-          <dt>Fertility</dt><dd>indice de fécondité, standardisé</dd>
-          <dt>Agriculture</dt><dd>% d’hommes travaillant en agriculture</dd>
-          <dt>Examination</dt><dd>% de conscrits avec la meilleure note à l’examen de l’armée</dd>
-          <dt>Education</dt><dd>% de conscrits scolarisés au-delà du primaire</dd>
-          <dt>Catholic</dt><dd>% de catholiques</dd>
-          <dt>Infant.Mortality</dt><dd>% de bébés morts avant un an</dd>
+          <dt>cps25_votechoice</dt><dd>pour quel parti la personne compte voter (codes 1 à 8)</dd>
+          <dt>cps25_age_in_years</dt><dd>âge, en années</dd>
+          <dt>cps25_education</dt><dd>plus haut niveau de scolarité (codes 1 à 11)</dd>
+          <dt>cps25_province</dt><dd>province ou territoire (11 = Québec)</dd>
+          <dt>cps25_income</dt><dd>revenu du ménage, par tranche (codes 1 à 8)</dd>
+          <dt>cps25_genderid</dt><dd>identité de genre</dd>
         </dl>
       </Deux>
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
+      <h2 class="e">Charger</h2>
+      <Console lignes={d_charger} />
+    </Slide>
+
+    <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Explorer</h2>
-      <Console lignes={c_explorer1} />
+      <Console lignes={d_explorer} />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Regarder</h2>
-      <Console lignes={c_regarder} />
+      <Console lignes={d_regarder} />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Une variable</h2>
-      <Console lignes={c_variable} />
+      <Console lignes={d_variable} />
+    </Slide>
+
+    <Slide bandeau="Un jeu de données" droite={D}>
+      <h2 class="e">Des codes et leurs étiquettes</h2>
+      <Console lignes={d_codes} />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Sa forme</h2>
-      <Histo />
+      <HistoCes />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Choisir des colonnes, garder des lignes</h2>
-      <Console lignes={c_dplyr} />
+      <Console lignes={d_dplyr} />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
@@ -374,28 +418,43 @@ lm(Fertility ~ Education, data = df)
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
+      <h2 class="e">Enchaîner</h2>
+      <Console lignes={d_enchainer} />
+    </Slide>
+
+    <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Résumer par groupe</h2>
-      <Console lignes={c_groupe} />
+      <Console lignes={d_groupe} />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Un graphique, couche par couche</h2>
-      <Nuage />
+      <BarresCes />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Une ligne, un résultat</h2>
-      <Console lignes={c_lm} />
+      <Console lignes={d_lm} />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
-      <h2 class="e">Le script entier, 1 de 2</h2>
-      <Code src={script1} titre="seance2.R · à refaire chez vous, puis à modifier" />
+      <h2 class="e">Le script entier, 1 de 4</h2>
+      <Code src={script_ces1} titre="seance2.R · à refaire chez vous, puis à modifier" />
     </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
-      <h2 class="e">Le script entier, 2 de 2</h2>
-      <Code src={script2} titre="seance2.R · la suite" />
+      <h2 class="e">Le script entier, 2 de 4</h2>
+      <Code src={script_ces2} titre="seance2.R · la suite" />
+    </Slide>
+
+    <Slide bandeau="Un jeu de données" droite={D}>
+      <h2 class="e">Le script entier, 3 de 4</h2>
+      <Code src={script_ces3} titre="seance2.R · la fin" />
+    </Slide>
+
+    <Slide bandeau="Un jeu de données" droite={D}>
+      <h2 class="e">Le script entier, 4 de 4</h2>
+      <Code src={script_ces4} titre="seance2.R · la fin" />
     </Slide>
 
     <!-- ================= 5 · L'IA ================= -->
