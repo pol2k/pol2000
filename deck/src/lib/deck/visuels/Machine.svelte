@@ -131,7 +131,7 @@
   svg { width: 86%; height: auto; display: block; overflow: visible; }
   text { font-family: var(--dk-mono); }
 
-  /* Dehors : encre et rouge sur papier. */
+  /* Dehors : encre et rouge sur papier. */
   .et { font-size: 15px; letter-spacing: 2.4px; font-weight: 600; fill: var(--dk-gris); }
   .tapis { stroke: var(--dk-encre); stroke-width: 3; stroke-dasharray: 14 10; animation: defiler 1.2s linear infinite; }
   .tapis.sortie { stroke: var(--dk-accent); }
@@ -139,7 +139,7 @@
   .jeton text { font-size: 24px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .jeton { animation: entrer 6s ease-in-out infinite both; animation-delay: var(--d); }
 
-  /* La boîte : encre, papier et or dedans. */
+  /* La boîte : encre, papier et or dedans. */
   .corps { fill: var(--dk-encre); }
   .rail { fill: var(--dk-encre); stroke: var(--dk-fond); stroke-width: 3; }
   .rideau rect { fill: var(--dk-encre); }
@@ -165,7 +165,7 @@
   .division { font-size: 26px; font-weight: 600; fill: var(--dk-fond); }
   .coche { fill: var(--dk-accent-clair); stroke: var(--dk-fond); stroke-width: 2.5; }
 
-  /* Les rouages ne tournent que boîte ouverte : chaque geste dans l'ordre. */
+  /* Les rouages ne tournent que boîte ouverte : chaque geste dans l'ordre. */
   .ouverte .somme { animation: apparaitre 6s linear infinite both; animation-delay: var(--d); }
   .ouverte .total { animation: sauter 6s linear infinite both; --t0: 56%; }
   .ouverte .coche { animation: cocher 6s linear infinite both; animation-delay: var(--d); }
@@ -174,14 +174,14 @@
   .ouverte .quotient { animation: sauter3 6s linear infinite both; }
   .total, .nombre, .quotient { transform-box: fill-box; transform-origin: center; }
 
-  /* Le résultat : dans les deux états, il saute à cinq secondes. */
+  /* Le résultat : dans les deux états, il saute à cinq secondes. */
   .resultat rect { fill: var(--dk-fond); stroke: var(--dk-accent); stroke-width: 4; }
   .resultat text { font-size: 36px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
   .resultat { transform-box: fill-box; transform-origin: center; animation: resultat 6s ease-out infinite both; }
 
   @keyframes defiler { to { stroke-dashoffset: -24; } }
   @keyframes tourner { to { transform: rotate(360deg); } }
-  /* Un jeton : apparaît, glisse jusqu'à la boîte, y entre. 0 à 2,4 s. */
+  /* Un jeton : apparaît, glisse jusqu'à la boîte, y entre. 0 à 2,4 s. */
   @keyframes entrer {
     0% { transform: translateX(0); opacity: 0; }
     4% { opacity: 1; }
@@ -189,7 +189,7 @@
     26% { transform: translateX(calc(var(--dx) + 46px)); opacity: 0; }
     100% { transform: translateX(calc(var(--dx) + 46px)); opacity: 0; }
   }
-  /* Boîte fermée : elle tremble pendant qu'elle travaille, 2,5 à 4,8 s. */
+  /* Boîte fermée : elle tremble pendant qu'elle travaille, 2,5 à 4,8 s. */
   @keyframes travailler {
     0%, 41% { transform: none; }
     43% { transform: translate(-3px, 1px); }
@@ -211,7 +211,7 @@
     42% { opacity: 1; } 50% { opacity: 0.2; } 58% { opacity: 1; } 66% { opacity: 0.2; } 74% { opacity: 1; }
     80%, 100% { opacity: 0; }
   }
-  /* Dedans : additionner à 2,5 s, total à 3,4 s, compter à 3,7 s, 4 à 4,3 s,
+  /* Dedans : additionner à 2,5 s, total à 3,4 s, compter à 3,7 s, 4 à 4,3 s,
      diviser à 4,5 s, quotient à 4,8 s. Le résultat sort à 5 s. */
   @keyframes apparaitre { 0%, 41% { opacity: 0; transform: translateY(6px); } 44%, 100% { opacity: 1; transform: none; } }
   @keyframes sauter { 0%, 56% { opacity: 0; transform: scale(0.6); } 59% { opacity: 1; transform: scale(1.12); } 62%, 100% { opacity: 1; transform: scale(1); } }
@@ -226,7 +226,7 @@
     .rideau { transition: none; }
   }
 
-  /* En bas : le mot à gauche, la vraie console à droite au dernier temps. */
+  /* En bas : le mot à gauche, la vraie console à droite au dernier temps. */
   .bas { width: 100%; display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.4em; align-items: start; min-height: 4.4em; }
   .legende { display: flex; flex-direction: column; gap: 0.3em; }
   .et-l { font-size: 0.62em; letter-spacing: 0.18em; font-weight: 600; color: var(--dk-accent); }

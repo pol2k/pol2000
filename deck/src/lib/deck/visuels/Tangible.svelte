@@ -103,7 +103,7 @@
   .t { font-size: 0.74em; line-height: 1.3; color: var(--dk-gris); }
   .t strong { color: var(--dk-encre); }
   .s { font-size: 0.54em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dk-gris-2); white-space: nowrap; }
-  /* Les dégâts humains : présents dans la mise en page, invisibles avant le clic. */
+  /* Les dégâts humains : présents dans la mise en page, invisibles avant le clic. */
   .faits li.humain { animation: none; opacity: 0; transition: opacity 0.45s; }
   .faits li.humain.vu { opacity: 1; }
   .faits li.humain .v { color: var(--dk-encre); }

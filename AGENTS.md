@@ -149,6 +149,12 @@ npm run exporter                              # → repo root: index.html, sylla
   check in one go: build, export, overflow check at both sizes, and
   screenshots of the listed slides (0-based; `12:3` = after three arrow
   presses) into `$CAPTURES`. Look at the PNGs before committing.
+- **French spacing pass, with care.** The usual one-liner
+  (`perl -CSD -i -pe 's/ ([?!;:])/\x{202F}$1/g'`) must never run on
+  `<style>` or `<script>` blocks: it turned ` :global(...)` into a
+  selector with a no-break space, which Svelte compiles and which then
+  silently matches nothing. Apply it to markup and string literals only,
+  and put `:global` rules at column 0.
 - **Real R output only.** Console slides (`Console.svelte`, `lignes =
   [{ in, out, note }]`) show text copied from an `Rscript` run at
   `options(width = 100)`; figures read numbers from a generated module

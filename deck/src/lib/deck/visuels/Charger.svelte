@@ -9,7 +9,7 @@
   const F = [
     { ext: '.csv', quoi: 'Le tableau texte universel. Excel, Google Sheets et tous les sites de données l’exportent.', code: 'df <- read.csv("data/ces.csv")', pkg: 'livré avec R' },
     { ext: '.rds', quoi: 'Le format de R. Garde tout : les étiquettes, les types, les facteurs. Le package ces vous donne des .rds.', code: 'df <- readRDS("data/ces.rds")', pkg: 'livré avec R' },
-    { ext: '.sav', quoi: 'SPSS. La plupart des grandes enquêtes de sciences sociales sont livrées ainsi, étiquettes comprises.', code: 'df <- haven::read_sav("data/ces.sav")', pkg: 'install.packages("haven")' },
+    { ext: '.sav', quoi: 'SPSS. La plupart des grands sondages de sciences sociales sont livrés ainsi, étiquettes comprises.', code: 'df <- haven::read_sav("data/ces.sav")', pkg: 'install.packages("haven")' },
     { ext: '.xlsx', quoi: 'Excel. Une feuille à la fois ; dites laquelle avec sheet = si ce n’est pas la première.', code: 'df <- readxl::read_excel("data/ces.xlsx")', pkg: 'install.packages("readxl")' }
   ];
 </script>

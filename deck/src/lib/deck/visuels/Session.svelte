@@ -10,7 +10,8 @@
   import Glyphe from './Glyphe.svelte';
   // ici = numéro de la séance en cours. Au temps 0, la ligne s'arrête à
   // cette séance, une flèche « vous êtes ici » la désigne et sa fiche est
-  // affichée, au lieu de la vue d'ensemble de la séance 1.
+  // affichée, au lieu de la vue d’ensemble de la séance 1. La diapo ne se
+  // feuillette alors plus : les flèches rendent la main au deck.
   let { ici = 0 } = $props();
   const S = [
     { n: 1, d: 'jeudi 3 septembre', c: '3 sept', p: 1, t: 'Introduction et les éléments fondamentaux de la recherche', q: "Une question, les mots pour la poser, et ce qu'il faut installer." },
@@ -32,7 +33,7 @@
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
-    if (!hote) return;
+    if (!hote || ici > 0) return;
     e = 0;
     return brancherTemps(hote, { total: 14, lire: () => e, ecrire: (v) => (e = v) });
   });

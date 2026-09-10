@@ -3,7 +3,7 @@
    * La mentalité à adopter : on ne résout pas un problème d'un coup, on le
    * casse en morceaux et on les fait dans l'ordre. Quatre temps :
    *   0  la question, d'un bloc, trop grosse pour être codée ;
-   *   1  le bloc se fend en cinq briques, une tâche chacune ;
+   *   1  le bloc se fend en quatre briques, une tâche chacune ;
    *   2  chaque brique devient une ligne de R, les vraies lignes de la
    *      séance (Étude électorale canadienne 2025) ;
    *   3  les trois règles, en autocollants.
@@ -11,10 +11,9 @@
   import { brancherTemps } from '../temps.js';
   const BRIQUES = [
     { t: 'lire les données', code: 'df <- get_ces("2025")' },
-    { t: 'garder deux colonnes', code: 'df |> select(cps25_votechoice, cps25_income)' },
-    { t: 'compter les votes', code: 'table(df$cps25_votechoice)' },
-    { t: 'une moyenne par groupe', code: 'df |> group_by(vote) |> summarise(revenu = mean(revenu))' },
-    { t: 'dessiner', code: 'ggplot(df, aes(x = revenu, fill = vote)) + geom_bar()' }
+    { t: 'nettoyer les données', code: 'd2 <- df |>\n  filter(cps25_votechoice %in% c(1:5, 8), cps25_income <= 8) |>\n  mutate(conservateur = cps25_votechoice == 2)' },
+    { t: 'faire une régression', code: 'lm(conservateur ~ cps25_income, data = d2)' },
+    { t: 'faire un graphique', code: 'ggplot(d2, aes(x = cps25_income, y = conservateur)) + geom_smooth(method = "lm")' }
   ];
   const REGLES = [
     ['Un morceau à la fois', 'Si une étape vous semble grosse, c’est qu’elle se coupe encore en deux.'],
@@ -34,7 +33,7 @@
   {#if e === 0}
     <div class="bloc">
       <span class="q">Le revenu influence-t-il le vote ?</span>
-      <span class="s">Trop gros pour être tapé d’un coup. Personne ne sait coder ça.</span>
+      <span class="s">Personne ne code ça d’un coup.</span>
     </div>
   {:else}
     <div class="briques" class:code={e === 2}>
@@ -51,11 +50,11 @@
   {/if}
   <div class="bas">
     {#if e === 0}
-      <p class="mot">Comment mange-t-on un éléphant ? <strong>Une bouchée à la fois.</strong></p>
+      <p class="mot">Trop gros. <strong>Donc on coupe.</strong></p>
     {:else if e === 1}
-      <p class="mot">Cinq petites tâches. Chacune se dit en français, en cinq mots. <strong>Ça, ça se code.</strong></p>
+      <p class="mot">Quatre petites tâches. Chacune se dit en français, en trois mots. <strong>Ça, ça se code.</strong></p>
     {:else if e === 2}
-      <p class="mot">Chaque morceau tient en une ligne. Le code, ce n’est que ça : <strong>des petits morceaux, dans l’ordre.</strong></p>
+      <p class="mot">Chaque morceau tient en quelques lignes. Le code, ce n’est que ça : <strong>des petits morceaux, dans l’ordre.</strong></p>
     {:else}
       <div class="regles">
         {#each REGLES as [t, s], i}
@@ -77,16 +76,16 @@
   .s { font-size: 0.9em; color: var(--dk-gris-2); }
   @keyframes tremble { 0%, 100% { transform: none; } 25% { transform: translateX(-0.3em) rotate(-0.6deg); } 75% { transform: translateX(0.3em) rotate(0.6deg); } }
   /* Les briques. */
-  .briques { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.7em; }
+  .briques { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7em; }
   .briques.code { grid-template-columns: 1fr; gap: 0.45em; }
   .brique { border: 3px solid var(--dk-encre); background: var(--dk-accent); color: #fff; padding: 0.9em 0.8em; display: flex; flex-direction: column; align-items: center; gap: 0.4em; text-align: center; animation: eclate 0.55s cubic-bezier(0.2, 1.3, 0.4, 1) both; }
   .code .brique { flex-direction: row; text-align: left; background: var(--dk-fond); color: var(--dk-encre); padding: 0.5em 0.9em; gap: 0.9em; }
   .n { font-family: var(--dk-mono); font-size: 1.8em; font-weight: 600; line-height: 1; }
   .code .n { color: var(--dk-accent); font-size: 1.5em; width: 1.2em; }
-  .txt { display: flex; flex-direction: column; gap: 0.15em; }
+  .txt { display: flex; flex-direction: column; gap: 0.15em; min-width: 0; }
   .t { font-size: 0.95em; font-weight: 600; line-height: 1.2; }
   .code .t { font-size: 0.72em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dk-gris); font-weight: 600; }
-  .brique code { background: none; padding: 0; font-size: 0.95em; color: var(--dk-encre); }
+  .brique code { background: none; padding: 0; font-size: 0.95em; line-height: 1.4; color: var(--dk-encre); white-space: pre-wrap; overflow-wrap: anywhere; }
   @keyframes eclate { from { opacity: 0; transform: scale(0.4) rotate(-8deg); } to { opacity: 1; transform: none; } }
   /* Le mot du bas, et les règles. */
   .bas { min-height: 4em; display: flex; align-items: center; }

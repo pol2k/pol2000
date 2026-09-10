@@ -11,7 +11,7 @@
   <a class="tuile" href="https://www.datacamp.com" target="_blank" rel="noopener">
     <span class="logo"><img src="{base}/img/datacamp.png" alt="Datacamp" /></span>
     <strong>Datacamp</strong>
-    <span>Des exercices interactifs, un chapitre par séance. C’est dans le plan de cours.</span>
+    <span>Des exercices interactifs, à votre rythme.</span>
     <em>obligatoire · 10 % de la note</em>
   </a>
   <a class="tuile" href="https://swirlstats.com" target="_blank" rel="noopener">

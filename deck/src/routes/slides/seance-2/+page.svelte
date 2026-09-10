@@ -63,8 +63,8 @@
   const d_charger = [
     { in: 'library(ces)', out: '', note: 'Le package de tantôt. Installé une fois avec install.packages("ces"), chargé à chaque session avec library().' },
     { in: 'library(dplyr)\nlibrary(haven)', out: '', note: 'dplyr manipule les tableaux ; haven lit les étiquettes des sondages (« 2 = Conservative Party »). Les deux viennent avec le tidyverse.' },
-    { in: 'df <- get_ces("2025")', out: 'trying URL \'https://dataverse.harvard.edu/api/access/datafile/13958997\'\ndownloaded 57.6 MB\nData loaded successfully: 20180 rows and 1440 columns\nCES 2025 (web) dataset ready for use', note: 'Une ligne, et tout le sondage arrive dans df. Il faut Internet et une trentaine de secondes. R en dit plus long ; voici l’essentiel, mot pour mot.' },
-    { in: 'saveRDS(df, "ces2025.rds")', out: '', note: 'Facultatif, mais malin : une copie sur votre disque. La prochaine fois, df <- readRDS("ces2025.rds") suffit, sans Internet.' }
+    { in: 'df <- get_ces("2025")', out: 'trying URL \'https://dataverse.harvard.edu/api/access/datafile/13958997\'\ndownloaded 57.6 MB\nData loaded successfully: 20180 rows and 1440 columns\nCES 2025 (web) dataset ready for use', note: '' },
+    { in: 'saveRDS(df, "ces2025.rds")', out: '', note: '' }
   ];
 
   const d_explorer = [
@@ -81,7 +81,7 @@
   const d_variable = [
     { in: 'length(df$cps25_age_in_years)', out: '[1] 20180', note: 'Le $ sort une colonne du tableau. Une colonne, c’est un vecteur : 20 180 âges. (Ne l’affichez pas tout seul : R les déverse tous.)' },
     { in: 'mean(df$cps25_age_in_years)', out: '[1] 49.71511' },
-    { in: 'summary(df$cps25_age_in_years)', out: '   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \n  18.00   35.00   50.00   49.72   64.00   96.00 ', note: 'Six chiffres pour une variable. Jeudi prochain, on apprend à les lire.' }
+    { in: 'summary(df$cps25_age_in_years)', out: '   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \n  18.00   35.00   50.00   49.72   64.00   96.00 ', note: 'Six chiffres pour une variable.' }
   ];
 
   const d_codes = [
@@ -105,7 +105,7 @@
   const d_lm = [
     { in: 'd2 <- df |>\n  filter(cps25_votechoice %in% c(1:5, 8), cps25_income <= 8) |>\n  mutate(conservateur = cps25_votechoice == 2)', out: '', note: 'Un parti nommé, un revenu donné. conservateur vaut TRUE ou FALSE : R compte 1 ou 0.' },
     { in: 'mean(d2$conservateur)', out: '[1] 0.3305243', note: 'La moyenne de vrais et de faux, c’est une proportion : 33 % comptent voter conservateur.' },
-    { in: 'lm(conservateur ~ cps25_income, data = d2)', out: 'Call:\nlm(formula = conservateur ~ cps25_income, data = d2)\n\nCoefficients:\n (Intercept)  cps25_income  \n     0.28364       0.01001  ', note: 'La droite de jeudi dernier, aux mêmes chiffres : une tranche de revenu de plus, un point de pourcentage de vote conservateur de plus. Séance 7.' }
+    { in: 'lm(conservateur ~ cps25_income, data = d2)', out: 'Call:\nlm(formula = conservateur ~ cps25_income, data = d2)\n\nCoefficients:\n (Intercept)  cps25_income  \n     0.28364       0.01001  ', note: '' }
   ];
 
 
@@ -242,16 +242,14 @@ lm(conservateur ~ cps25_income, data = d2)
 
     <Slide bandeau="Pourquoi R" droite={D}>
       <h2 class="e">Vous pouvez même créer le vôtre</h2>
-      <div class="cran e">
-        <figure>
-          <img src="{base}/img/cran-ces.png" alt="La page du package ces sur le CRAN : Access to Canadian Election Study Data, version 1.1.0, auteur Laurence-Olivier M. Foisy." />
-        </figure>
-        <div class="cran-txt">
-          <p class="surtitre">cran.r-project.org/package=ces</p>
-          <p class="lead">Le package <code>ces</code> : les données de l’Étude électorale canadienne, de 1965 à 2025, en une ligne de R.</p>
-          <p class="lead">Écrit par votre prof. Publié sur le dépôt officiel. Vous l’utiliserez tout à l’heure.</p>
-          <Code src={'install.packages("ces")'} />
-        </div>
+      <figure class="cran e">
+        <img src="{base}/img/cran-ces-haut.png" alt="Le haut de la page du package ces sur le CRAN : Access to Canadian Election Study Data, version 1.1.0, auteur et mainteneur Laurence-Olivier M. Foisy." />
+      </figure>
+      <div class="cran-txt e">
+        <p class="surtitre">cran.r-project.org/package=ces</p>
+        <p class="lead">Le package <code>ces</code> : les données de l’Étude électorale canadienne, de 1965 à 2025, en une ligne de R.</p>
+        <p class="lead pale">Publié sur le dépôt officiel de R.</p>
+        <Code src={'install.packages("ces")'} />
       </div>
     </Slide>
 
@@ -263,7 +261,7 @@ lm(conservateur ~ cps25_income, data = d2)
     <Slide fond="plein" bandeau="Pourquoi R" droite={D}>
       <figure class="capture plein e">
         <img src="{base}/img/ggplot-ces.png" alt="Graphique à barres : intention de vote selon l’âge à l’élection fédérale de 2025, cinq partis par groupe d’âge." />
-        <figcaption>Les plus beaux graphiques : ggplot2 · l’Étude électorale canadienne 2025 · vous en ferez un aujourd’hui</figcaption>
+        <figcaption>Les plus beaux graphiques : ggplot2 · l’Étude électorale canadienne 2025</figcaption>
       </figure>
     </Slide>
 
@@ -462,7 +460,6 @@ lm(conservateur ~ cps25_income, data = d2)
     <Slide fond="encre" bandeau="L'assistant d'IA" droite={D}>
       <h1 class="e">Utiliser l’IA pour coder</h1>
       <hr class="filet" />
-      <p class="lead e">Un tuteur disponible à 2 h du matin. Qui se trompe avec assurance.</p>
     </Slide>
 
     <Slide bandeau="L'assistant d'IA" droite={D}>
@@ -535,13 +532,15 @@ lm(conservateur ~ cps25_income, data = d2)
   .pale { color: var(--dk-gris); }
   /* Un titre qui doit tenir sur une ligne, guillemet fermant compris. */
   .une-ligne { white-space: nowrap; font-size: 2.6em; }
-  /* Le package ces: capture du CRAN à gauche, le mot à droite. */
-  .cran { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.6em; align-items: center; }
-  .cran figure { margin: 0; }
-  .cran img { display: block; width: 100%; height: auto; border: 2px solid var(--dk-encre); }
-  .cran-txt { display: flex; flex-direction: column; gap: 0.7em; }
-  .cran-txt .lead { font-size: 1em; }
-  :global(.diapo-in:has(> .cran)) { max-width: 62em; }
+  /* Le package ces: le haut de la page du CRAN en pleine largeur, le mot dessous, une ligne chacun.
+     Les règles :global restent en colonne 0 : la passe d'espacement français remplace l'espace
+     devant « : » par U+202F, ce qui casse le sélecteur compilé. */
+:global(.diapo-in:has(> .cran)) { max-width: 64em; }
+  .cran { margin: 0; width: 100%; }
+  .cran img { display: block; width: 100%; height: auto; border: 3px solid var(--dk-accent); }
+  .cran-txt { display: flex; flex-direction: column; gap: 0.45em; margin-top: 1em; width: 100%; }
+  .cran-txt .lead { font-size: 0.9em; margin: 0; max-width: none; }
+  .cran-txt .surtitre { margin: 0; }
   .capture { margin: 0; }
   .capture img { display: block; width: 100%; height: auto; border: 2px solid var(--dk-encre); }
   .capture.plein { display: flex; flex-direction: column; height: 100%; }
@@ -561,7 +560,7 @@ lm(conservateur ~ cps25_income, data = d2)
   .vars dd { margin: 0; font-size: 0.85em; color: var(--dk-gris); }
 
   /* Trois choses: pleine largeur, comme un visuel. */
-  :global(.diapo-in:has(> .trois)) { max-width: 60em; }
+:global(.diapo-in:has(> .trois)) { max-width: 60em; }
   .trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em; }
   .trois > div { border: 2px solid var(--dk-encre); padding: 1.1em 1em 1em; display: flex; flex-direction: column; gap: 0.4em; }
   .trois > div:first-child { border: 3px solid var(--dk-accent); }

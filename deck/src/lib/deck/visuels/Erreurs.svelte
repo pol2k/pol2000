@@ -55,5 +55,5 @@
   .droite p { margin: 0; font-size: 1.1em; line-height: 1.4; color: var(--dk-gris); }
   .gestes { list-style: none; margin: 0.6em 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.45em; }
   .gestes li { display: flex; align-items: center; gap: 0.7em; font-size: 1.1em; font-weight: 600; }
-  .gestes li :global(.picto) { color: var(--dk-accent); flex: 0 0 auto; }
+  .gestes li :global(.picto) { color: var(--dk-accent); flex: 0 0 auto; }
 </style>

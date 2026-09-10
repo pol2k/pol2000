@@ -75,7 +75,7 @@
   .code { margin: 0; font-family: var(--dk-mono); font-size: 1.7em; font-weight: 500; white-space: pre; border: 3px solid var(--dk-encre); padding: 0.35em 0.7em; animation: fondu 0.3s both; }
   .code.com { color: var(--dk-gris); font-weight: 400; }
 
-  /* La scène : le nom à gauche, les cases, le résultat à droite. */
+  /* La scène : le nom à gauche, les cases, le résultat à droite. */
   .scene { display: flex; align-items: center; gap: 1em; padding: 0.6em 0 3em; min-height: 5.4em; }
   .nom { font-family: var(--dk-mono); font-size: 1.6em; font-weight: 600; color: var(--dk-accent); opacity: 0; transform: translateX(-0.5em); transition: opacity 0.5s, transform 0.5s; width: 3.2em; text-align: right; }
   .nom.vu { opacity: 1; transform: none; }
@@ -91,7 +91,7 @@
   .case.vrai { border-color: var(--dk-accent); color: var(--dk-accent); background: var(--dk-fond-2); }
   .case.faux .v, .case.faux .qui { opacity: 0.4; }
 
-  /* Sous chaque case : son numéro, puis la réponse de R. */
+  /* Sous chaque case : son numéro, puis la réponse de R. */
   .idx, .rep { position: absolute; left: 0; right: 0; text-align: center; font-family: var(--dk-mono); font-weight: 600; opacity: 0; transition: opacity 0.4s, color 0.3s; }
   .idx { top: calc(100% + 0.3em); font-size: 0.8em; color: var(--dk-gris-2); }
   .idx.vu { opacity: 1; }
@@ -105,7 +105,7 @@
   .fl { font-size: 2em; color: var(--dk-accent); }
   .val { font-family: var(--dk-mono); font-size: 2.4em; font-weight: 600; color: var(--dk-accent); border: 3px solid var(--dk-accent); padding: 0.1em 0.4em; line-height: 1.1; }
 
-  /* En bas : la vraie console à gauche, le mot à droite. */
+  /* En bas : la vraie console à gauche, le mot à droite. */
   .bas { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.4em; align-items: start; }
   .console { margin: 0; font-family: var(--dk-mono); font-size: 0.95em; line-height: 1.5; white-space: pre; background: var(--dk-fond-2); border: 2px solid var(--dk-encre); border-left-width: 0.34em; border-left-color: var(--dk-accent); padding: 0.55em 0.9em; min-height: 3.6em; animation: fondu 0.3s both; }
   .in, .out { display: block; }

@@ -79,7 +79,7 @@ ages &lt;- c(24, 30)</pre>
   .et { font-size: 0.6em; letter-spacing: 0.16em; font-weight: 600; color: var(--dk-gris); }
   .et.rouge { color: var(--dk-accent); }
 
-  /* Un vecteur : le nom, puis des cases collées bord à bord. */
+  /* Un vecteur : le nom, puis des cases collées bord à bord. */
   .vec { display: flex; align-items: center; gap: 0.7em; transition: opacity 0.4s; }
   .nom { font-family: var(--dk-mono); font-weight: 600; font-size: 1.15em; width: 3em; text-align: right; transition: color 0.3s; }
   .nom.rouge { color: var(--dk-accent); }
@@ -87,8 +87,8 @@ ages &lt;- c(24, 30)</pre>
   .cases span { font-family: var(--dk-mono); font-size: 1.15em; font-weight: 600; border: 3px solid var(--dk-encre); min-width: 4.4em; height: 2.3em; display: flex; align-items: center; justify-content: center; padding: 0 0.5em; margin-right: -3px; background: var(--dk-fond); transition: border-color 0.3s, color 0.3s; }
   .cases.rouge span { border-color: var(--dk-accent); color: var(--dk-accent); }
 
-  /* La grille : coin vide, en-têtes, numéros de ligne, cellules. */
-  /* Toutes les mesures ci-dessous sont en em du parent : les éléments
+  /* La grille : coin vide, en-têtes, numéros de ligne, cellules. */
+  /* Toutes les mesures ci-dessous sont en em du parent : les éléments
      positionnés gardent font-size 1em, la taille du texte va sur les cases.
      Le nom fait 3em × 1.15 = 3.45em, la grille 2.1 + 7.1 + 5 = 14.2em. */
   .zone { position: relative; display: flex; align-items: flex-start; gap: 0.7em; padding-bottom: 1.8em; }
@@ -99,7 +99,7 @@ ages &lt;- c(24, 30)</pre>
   .grille .tete { background: var(--dk-fond-2); }
   .grille .pale { opacity: 0.25; }
 
-  /* La colonne qui glisse hors de la grille : même largeur, mêmes hauteurs. */
+  /* La colonne qui glisse hors de la grille : même largeur, mêmes hauteurs. */
   /* Posée exactement sur la colonne « age » (3.45 + 0.7 + 2.1 + 7.1 = 13.35em,
      plus le filet gauche), elle glisse de 6.4em vers la droite. */
   .colonne { position: absolute; left: calc(13.35em + 3px); top: 0; width: 5em; display: grid; grid-auto-rows: 2.65em; font-family: var(--dk-mono); opacity: 0; pointer-events: none; transition: transform 0.7s ease, opacity 0.5s; }
@@ -107,7 +107,7 @@ ages &lt;- c(24, 30)</pre>
   .colonne .tete { background: var(--dk-fond-2); }
   .colonne.sortie { opacity: 1; transform: translateX(6.4em); }
   .colonne.tous span { background: var(--dk-fond-2); }
-  /* Le nom de ce qui sort, sous la colonne glissée ; la moyenne, à sa droite. */
+  /* Le nom de ce qui sort, sous la colonne glissée ; la moyenne, à sa droite. */
   .dollar { position: absolute; left: calc(19.75em + 3px); top: 8.3em; width: 5em; text-align: center; font-family: var(--dk-mono); font-weight: 600; color: var(--dk-accent); opacity: 0; transition: opacity 0.4s 0.4s; white-space: nowrap; }
   .dollar.vu { opacity: 1; }
   .moy { position: absolute; left: 22.05em; top: 2.8em; font-family: var(--dk-mono); font-weight: 600; font-size: 1.15em; color: var(--dk-accent); opacity: 0; transition: opacity 0.4s; white-space: nowrap; }
@@ -115,7 +115,7 @@ ages &lt;- c(24, 30)</pre>
 
   .code { margin: 0; font-family: var(--dk-mono); font-size: 0.85em; line-height: 1.5; white-space: pre; background: var(--dk-fond-2); border: 2px solid var(--dk-encre); border-left-width: 0.34em; padding: 0.4em 0.8em; }
 
-  /* En bas : la vraie console et le mot. */
+  /* En bas : la vraie console et le mot. */
   .bas { display: grid; grid-template-columns: 1fr 1.3fr; gap: 1.4em; align-items: start; }
   .console { margin: 0; font-family: var(--dk-mono); font-size: 0.9em; line-height: 1.5; white-space: pre; background: var(--dk-fond-2); border: 2px solid var(--dk-encre); border-left-width: 0.34em; border-left-color: var(--dk-accent); padding: 0.5em 0.9em; min-height: 3.4em; animation: fondu 0.3s both; }
   .in, .out { display: block; }
