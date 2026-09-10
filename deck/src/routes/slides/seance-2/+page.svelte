@@ -27,7 +27,9 @@
   import Ressources from '$lib/deck/visuels/Ressources.svelte';
   import Organisations from '$lib/deck/visuels/Organisations.svelte';
   import Positron from '$lib/deck/visuels/Positron.svelte';
-  import Dossier from '$lib/deck/visuels/Dossier.svelte';
+  import Arborescence from '$lib/deck/visuels/Arborescence.svelte';
+  import Chemins from '$lib/deck/visuels/Chemins.svelte';
+  import Charger from '$lib/deck/visuels/Charger.svelte';
   import AvantCoder from '$lib/deck/visuels/AvantCoder.svelte';
   import Anatomie from '$lib/deck/visuels/Anatomie.svelte';
   import Types from '$lib/deck/visuels/Types.svelte';
@@ -43,7 +45,7 @@
   import Empreinte from '$lib/deck/visuels/Empreinte.svelte';
   import Etudes from '$lib/deck/visuels/Etudes.svelte';
 
-  const TOTAL = 50;
+  const TOTAL = 52;
   const D = 'POL-2000 · séance 2 · jeu 10 sept';
 
   // ---- Les consoles. Sorties copiées de R 4.6.1, jamais tapées à la main. ----
@@ -175,22 +177,22 @@ lm(Fertility ~ Education, data = df)
     <Slide bandeau="Un tour de salle" droite={D}>
       <h2 class="e">À main levée</h2>
       <ol class="mains e">
-        <li><span>R et Positron sont installés ?</span></li>
-        <li><span>Vous avez ouvert Positron au moins une fois ?</span></li>
-        <li><span>Avez-vous accepté l’invitation à Slack ?</span></li>
-        <li><span>Avez-vous accepté l’invitation à Datacamp ?</span></li>
+        <li><span>R et Positron sont installés ?</span></li>
+        <li><span>Vous avez ouvert Positron au moins une fois ?</span></li>
+        <li><span>Avez-vous accepté l’invitation à Slack ?</span></li>
+        <li><span>Avez-vous accepté l’invitation à Datacamp ?</span></li>
       </ol>
     </Slide>
 
     <!-- ================= 1 · POURQUOI R ================= -->
     <Slide fond="encre" bandeau="Pourquoi R" droite={D}>
-      <h1 class="e une-ligne">« Pourquoi pas Excel ? »</h1>
+      <h1 class="e une-ligne">« Pourquoi pas Excel ? »</h1>
       <hr class="filet" />
       <p class="lead e">Parce qu’un clic ne laisse pas de trace.</p>
     </Slide>
 
     <Slide bandeau="Pourquoi R" droite={D}>
-      <h2 class="e">Pourquoi R ?</h2>
+      <h2 class="e">Pourquoi R ?</h2>
       <RaisonsR />
     </Slide>
 
@@ -198,11 +200,11 @@ lm(Fertility ~ Education, data = df)
       <h2 class="e">Vous pouvez même créer le vôtre</h2>
       <div class="cran e">
         <figure>
-          <img src="{base}/img/cran-ces.png" alt="La page du package ces sur le CRAN : Access to Canadian Election Study Data, version 1.1.0, auteur Laurence-Olivier M. Foisy." />
+          <img src="{base}/img/cran-ces.png" alt="La page du package ces sur le CRAN : Access to Canadian Election Study Data, version 1.1.0, auteur Laurence-Olivier M. Foisy." />
         </figure>
         <div class="cran-txt">
           <p class="surtitre">cran.r-project.org/package=ces</p>
-          <p class="lead">Le package <code>ces</code> : les données de l’Étude électorale canadienne, de 1965 à 2025, en une ligne de R.</p>
+          <p class="lead">Le package <code>ces</code> : les données de l’Étude électorale canadienne, de 1965 à 2025, en une ligne de R.</p>
           <p class="lead">Écrit par votre prof. Publié sur le dépôt officiel. Vous l’utiliserez tout à l’heure.</p>
           <Code src={'install.packages("ces")'} />
         </div>
@@ -216,8 +218,8 @@ lm(Fertility ~ Education, data = df)
 
     <Slide fond="plein" bandeau="Pourquoi R" droite={D}>
       <figure class="capture plein e">
-        <img src="{base}/img/ggplot-ces.png" alt="Graphique à barres : intention de vote selon l’âge à l’élection fédérale de 2025, cinq partis par groupe d’âge." />
-        <figcaption>Les plus beaux graphiques : ggplot2 · l’Étude électorale canadienne 2025 · vous en ferez un aujourd’hui</figcaption>
+        <img src="{base}/img/ggplot-ces.png" alt="Graphique à barres : intention de vote selon l’âge à l’élection fédérale de 2025, cinq partis par groupe d’âge." />
+        <figcaption>Les plus beaux graphiques : ggplot2 · l’Étude électorale canadienne 2025 · vous en ferez un aujourd’hui</figcaption>
       </figure>
     </Slide>
 
@@ -240,9 +242,19 @@ lm(Fertility ~ Education, data = df)
       <Positron />
     </Slide>
 
-    <Slide bandeau="Le bureau" droite={D}>
-      <h2 class="e">Le répertoire de travail</h2>
-      <Dossier />
+    <Slide bandeau="Avant de commencer" droite={D}>
+      <h2 class="e">Avant de commencer : l’arborescence des fichiers</h2>
+      <Arborescence />
+    </Slide>
+
+    <Slide bandeau="Avant de commencer" droite={D}>
+      <h2 class="e">Deux façons d’écrire un chemin</h2>
+      <Chemins />
+    </Slide>
+
+    <Slide bandeau="Avant de commencer" droite={D}>
+      <h2 class="e">Charger ses propres données</h2>
+      <Charger />
     </Slide>
 
     <Slide bandeau="Le bureau" droite={D}>
@@ -507,7 +519,7 @@ lm(Fertility ~ Education, data = df)
   .cran img { display: block; width: 100%; height: auto; border: 2px solid var(--dk-encre); }
   .cran-txt { display: flex; flex-direction: column; gap: 0.7em; }
   .cran-txt .lead { font-size: 1em; }
-  :global(.diapo-in:has(> .cran)) { max-width: 62em; }
+  :global(.diapo-in:has(> .cran)) { max-width: 62em; }
   .capture { margin: 0; }
   .capture img { display: block; width: 100%; height: auto; border: 2px solid var(--dk-encre); }
   .capture.plein { display: flex; flex-direction: column; height: 100%; }
