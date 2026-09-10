@@ -18,7 +18,7 @@
   import Deux from '$lib/deck/Deux.svelte';
   import Grand from '$lib/deck/Grand.svelte';
   import Code from '$lib/deck/Code.svelte';
-  import Outils from '$lib/deck/visuels/Outils.svelte';
+  import RPositron from '$lib/deck/visuels/RPositron.svelte';
   import Session from '$lib/deck/visuels/Session.svelte';
   import IA from '$lib/deck/visuels/IA.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
@@ -231,8 +231,8 @@ lm(Fertility ~ Education, data = df)
       <Logiciels />
     </Slide>
     <Slide bandeau="Le bureau" droite={D}>
-      <h2 class="e">R et Positron : rappel</h2>
-      <Outils quoi="rvs" />
+      <h2 class="e">Les deux outils du semestre</h2>
+      <RPositron />
     </Slide>
 
     <Slide bandeau="Le bureau" droite={D}>
