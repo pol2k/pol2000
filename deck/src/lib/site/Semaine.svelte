@@ -40,7 +40,7 @@
           {:else}
             <span class="bouton inactif">Diapositives · à venir</span>
           {/if}
-          {#if seance.n > 1}<span class="apporte">Apportez l'ordinateur.</span>{/if}
+          
         </div>
       </div>
     </div>
