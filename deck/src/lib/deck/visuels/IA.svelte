@@ -4,8 +4,13 @@
    * même point; l'un monte vers un travail net, l'autre descend vers un
    * travail mou — et la paresse se voit. Deux temps: les chemins, puis le
    * verdict.
+   *
+   * sousTitre : la règle écrite sous le schéma (« L'IA pour faire mieux,
+   * pas pour en faire moins. »). Vraie par défaut (séance 1) ; la séance 2
+   * la masque, le schéma seul suffit en rappel.
    */
   import { brancherTemps } from '../temps.js';
+  let { sousTitre = true } = $props();
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -40,10 +45,12 @@
       <text x="85" y="140" class="verdict mauvais" class:vu={e === 1}>la paresse aussi</text>
     </g>
   </svg>
-  <div class="regle" class:vu={e === 1}>
-    <strong>L'IA pour faire mieux, pas pour en faire moins.</strong>
-    <span>Un travail paresseux avec l'IA se repère en dix secondes. L'effort compte dans la note. Son absence aussi.</span>
-  </div>
+  {#if sousTitre}
+    <div class="regle" class:vu={e === 1}>
+      <strong>L'IA pour faire mieux, pas pour en faire moins.</strong>
+      <span>Un travail paresseux avec l'IA se repère en dix secondes. L'effort compte dans la note. Son absence aussi.</span>
+    </div>
+  {/if}
 </div>
 
 <style>

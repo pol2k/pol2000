@@ -30,7 +30,7 @@
   import Arborescence from '$lib/deck/visuels/Arborescence.svelte';
   import Chemins from '$lib/deck/visuels/Chemins.svelte';
   import Charger from '$lib/deck/visuels/Charger.svelte';
-  import AvantCoder from '$lib/deck/visuels/AvantCoder.svelte';
+  import Mentalite from '$lib/deck/visuels/Mentalite.svelte';
   import Anatomie from '$lib/deck/visuels/Anatomie.svelte';
   import Types from '$lib/deck/visuels/Types.svelte';
   import Machine from '$lib/deck/visuels/Machine.svelte';
@@ -45,7 +45,7 @@
   import Empreinte from '$lib/deck/visuels/Empreinte.svelte';
   import Etudes from '$lib/deck/visuels/Etudes.svelte';
 
-  const TOTAL = 52;
+  const TOTAL = 50;
   const D = 'POL-2000 · séance 2 · jeu 10 sept';
 
   // ---- Les consoles. Sorties copiées de R 4.6.1, jamais tapées à la main. ----
@@ -258,8 +258,8 @@ lm(Fertility ~ Education, data = df)
     </Slide>
 
     <Slide bandeau="Le bureau" droite={D}>
-      <h2 class="e">Avant d’écrire une ligne</h2>
-      <AvantCoder />
+      <h2 class="e">Avant de commencer : la mentalité à adopter</h2>
+      <Mentalite />
     </Slide>
 
     <!-- ================= 3 · EN DIRECT, LA CONSOLE ================= -->
@@ -315,19 +315,7 @@ lm(Fertility ~ Education, data = df)
       <Erreurs />
     </Slide>
 
-    <!-- ================= PAUSE ================= -->
-    <Slide fond="encre" bandeau="Pause" droite={D}>
-      <h1 class="e">Pause</h1>
-      <hr class="filet" />
-      <p class="lead e">Quinze minutes. Laissez Positron ouvert.</p>
-    </Slide>
 
-    <!-- ================= 4 · UN JEU DE DONNÉES ================= -->
-    <Slide fond="encre" bandeau="Un jeu de données" droite={D}>
-      <h1 class="e">Un jeu de données</h1>
-      <hr class="filet" />
-      <p class="lead e">Du tableau au graphique, en vingt lignes.</p>
-    </Slide>
 
     <Slide bandeau="Un jeu de données" droite={D}>
       <h2 class="e">Les packages : la boîte à outils</h2>
