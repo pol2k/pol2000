@@ -1,16 +1,16 @@
 <script>
   /**
-   * L'anatomie d'une ligne de R, en cinq temps : l'objet, la flèche, la
-   * fonction, l'argument, l'option. Une seule ligne, très grande, et une
+   * L'anatomie d'une ligne de R, en cinq temps : l'objet, l'assignation,
+   * la fonction, l'argument, l'option. Une seule ligne, très grande, et une
    * partie qui s'allume à la fois. C'est la ligne que la salle vient de
    * taper ; rien de nouveau, seulement des noms sur ce qu'elle a fait.
    */
   import { brancherTemps } from '../temps.js';
   const PARTIES = [
     ['LA LIGNE ENTIÈRE', 'Lue de droite à gauche : calcule ceci, range-le là.'],
-    ['L’OBJET', 'Un nom que vous choisissez. Minuscules, sans accent, sans espace. Il apparaît dans « Variables ».'],
-    ['LA FLÈCHE', 'Range le résultat dans l’objet. Tapez < puis - ; Positron peut l’écrire d’un raccourci.'],
-    ['LA FONCTION', 'Un verbe, suivi de parenthèses. Toujours les parenthèses, même vides.'],
+    ['L’OBJET', 'Un nom que vous choisissez. Préférablement en minuscules, sans espace, sans accent.'],
+    ['L’ASSIGNATION', 'Range le résultat dans l’objet. Tapez < puis -, sans espace entre les deux.'],
+    ['LA FONCTION', 'Une action que R sait faire, avec son nom suivi de parenthèses. mean, c’est « calcule la moyenne ». Toujours les parenthèses, même vides.'],
     ['L’ARGUMENT', 'Ce qu’on donne à la fonction. Ici, le vecteur des âges.'],
     ['L’OPTION', 'Un réglage, nommé. Ici : ignore les valeurs manquantes. Les arguments se séparent par des virgules.']
   ];

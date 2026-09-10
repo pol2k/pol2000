@@ -12,7 +12,12 @@
    */
   import { brancherTemps } from '../temps.js';
   import { surlignerR } from '../surligner.js';
+  import Copier from '../Copier.svelte';
   let { lignes = [], tout = false, legende = '', petit = false } = $props();
+
+  // Le bouton « copier » donne toutes les commandes de la console, révélées
+  // ou non : la salle les colle dans Positron et rejoue la diapo entière.
+  const commandes = $derived(lignes.map((l) => l.in).join('\n'));
 
   let e = $state(0);
   let hote = $state(null);
@@ -30,6 +35,7 @@
      sous les yeux; on montre seulement ce qui se tape et ce qui répond. -->
 <div class="visuel console" class:petit bind:this={hote}>
   <div class="corps">
+    <Copier texte={commandes} />
     {#each lignes as l, i}
       <div class="paire" class:vu={i < visibles}>
         <pre class="in"><span class="prompt">&gt;</span> {@html surlignerR(l.in)}</pre>
@@ -46,7 +52,10 @@
 
 <style>
   .console { display: flex; flex-direction: column; gap: 0.5em; }
-  .corps { background: var(--dk-fond-2); border: 2px solid var(--dk-encre); border-left-width: 0.34em; border-left-color: var(--dk-accent); padding: 0.7em 0.9em 0.75em; display: flex; flex-direction: column; gap: 0.3em; min-height: 6em; }
+  .corps { position: relative; background: var(--dk-fond-2); border: 2px solid var(--dk-encre); border-left-width: 0.34em; border-left-color: var(--dk-accent); padding: 0.7em 0.9em 0.75em; display: flex; flex-direction: column; gap: 0.3em; min-height: 6em; }
+  /* Le bouton « copier », posé comme dans un bloc de code (deck.css, .bloc-code .copier). */
+  .corps :global(.copier) { position: absolute; top: 0.5em; right: 0.5em; }
+  .corps:hover :global(.copier) { opacity: 1; }
   .paire { display: none; flex-direction: column; gap: 0.1em; animation: fondu 0.3s both; }
   .paire.vu { display: flex; }
   pre { margin: 0; font-family: var(--dk-mono); font-size: 1em; line-height: 1.5; white-space: pre; overflow-x: auto; }

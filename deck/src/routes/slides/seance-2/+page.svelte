@@ -8,9 +8,12 @@
    * salle tape sur son propre ordinateur ce que le projecteur montre.
    *
    * Rien n'est inventé pour une sortie de R. Chaque réponse affichée dans
-   * une Console vient d'un vrai R 4.6.1, avec le jeu `swiss` livré avec R
-   * (47 provinces suisses, 1888) ; les figures dessinent les vraies valeurs
-   * (src/lib/data/swiss.js, généré par outils/swiss_data.R).
+   * une Console vient d'un vrai R 4.6.1 sur l'Étude électorale canadienne
+   * 2025, chargée par le package ces ; les figures dessinent les vraies
+   * valeurs (src/lib/data/ces2025.js, généré par outils/ces_data.R).
+   *
+   * Remaniée le 10 septembre 2026 d'après les notes diapo par diapo de
+   * l'enseignant (épique beads pol-hqn).
    */
   import { base } from '$app/paths';
   import Deck from '$lib/deck/Deck.svelte';
@@ -41,11 +44,10 @@
   import Pipe from '$lib/deck/visuels/Pipe.svelte';
   import Nuage from '$lib/deck/visuels/Nuage.svelte';
   import Prompt from '$lib/deck/visuels/Prompt.svelte';
-  import Verifier from '$lib/deck/visuels/Verifier.svelte';
-  import Empreinte from '$lib/deck/visuels/Empreinte.svelte';
-  import Etudes from '$lib/deck/visuels/Etudes.svelte';
+  import Tangible from '$lib/deck/visuels/Tangible.svelte';
+  import DeuxChoses from '$lib/deck/visuels/DeuxChoses.svelte';
 
-  const TOTAL = 50;
+  const TOTAL = 48;
   const D = 'POL-2000 · séance 2 · jeu 10 sept';
 
   // ---- Les consoles. Sorties copiées de R 4.6.1, jamais tapées à la main. ----
@@ -397,34 +399,30 @@ lm(Fertility ~ Education, data = df)
     </Slide>
 
     <!-- ================= 5 · L'IA ================= -->
+    <!-- ================= 5 · L'IA ================= -->
     <Slide fond="encre" bandeau="L'assistant d'IA" droite={D}>
-      <h1 class="e">Un assistant d’IA pour apprendre R</h1>
+      <h1 class="e">Utiliser l’IA pour coder</h1>
       <hr class="filet" />
       <p class="lead e">Un tuteur disponible à 2 h du matin. Qui se trompe avec assurance.</p>
     </Slide>
 
     <Slide bandeau="L'assistant d'IA" droite={D}>
       <h2 class="e">Le contrat, rappel</h2>
-      <IA />
+      <IA sousTitre={false} />
     </Slide>
 
-    <!-- L'empreinte environnementale: position, chiffres, études. -->
+    <!-- Ce que ça coûte : la position de l'enseignant, puis les chiffres. -->
     <Slide fond="encre" bandeau="L'assistant d'IA" droite={D}>
       <p class="surtitre e">Ce que ça coûte</p>
-      <h1 class="e">Je suis partial.</h1>
+      <h1 class="e">Je suis biaisé.</h1>
       <hr class="filet" />
       <p class="lead e">Ma carrière repose sur l’IA. Je pense que vous devez l’apprendre pour vous placer dans un monde qui change vite.</p>
-      <p class="lead e">Mais elle a un prix, et ce ne sont pas ceux qui la vendent qui le paient. Voici ce que disent les études, pas moi.</p>
     </Slide>
 
-    <Slide bandeau="L'assistant d'IA · l'empreinte" droite={D}>
-      <h2 class="e">Six chiffres, trois sources</h2>
-      <Empreinte />
-    </Slide>
-
-    <Slide bandeau="L'assistant d'IA · l'empreinte" droite={D}>
-      <h2 class="e">Les sources, et ce qu’on a écarté</h2>
-      <Etudes />
+    <!-- Un clic : les deux dégâts humains apparaissent sous les six chiffres. -->
+    <Slide bandeau="L'assistant d'IA · ce que ça coûte" droite={D}>
+      <h2 class="e">L’IA est tangible</h2>
+      <Tangible />
     </Slide>
 
     <Slide bandeau="L'assistant d'IA" droite={D}>
@@ -432,11 +430,7 @@ lm(Fertility ~ Education, data = df)
       <Prompt />
     </Slide>
 
-    <Slide bandeau="L'assistant d'IA" droite={D}>
-      <h2 class="e">Vérifier</h2>
-      <Verifier />
-    </Slide>
-
+    <!-- ================= 6 · AVANT JEUDI PROCHAIN ================= -->
     <!-- ================= 6 · AVANT JEUDI PROCHAIN ================= -->
     <Slide fond="encre" bandeau="Avant jeudi prochain" droite={D}>
       <h1 class="e">Avant jeudi prochain</h1>
@@ -444,39 +438,20 @@ lm(Fertility ~ Education, data = df)
     </Slide>
 
     <Slide bandeau="Avant jeudi prochain" droite={D}>
-      <h2 class="e">Trois choses</h2>
-      <div class="trois e">
-        <div>
-          <strong>Refaire le script</strong>
-          <span>Seul.e, dans Positron, ligne par ligne. Puis remplacez Education par Agriculture. Ce qui casse vous apprend plus que ce qui marche.</span>
-          <em>une heure</em>
-        </div>
-        <div>
-          <strong>Datacamp</strong>
-          <span>Cours « Introduction to R », chapitre « Vectors ». Et « Intro to basics » si ce n’est pas déjà fait. Les mêmes objets, à votre rythme.</span>
-          <em>obligatoire · 10 % de la note</em>
-        </div>
-        <div>
-          <strong>Slack · #aide-metho</strong>
-          <span>Un blocage ? Le message d’erreur et le code, collés en entier. Avant jeudi, pas jeudi.</span>
-          <em>les auxiliaires répondent</em>
-        </div>
-      </div>
+      <h2 class="e">Deux choses</h2>
+      <DeuxChoses />
     </Slide>
 
     <Slide fond="encre" bandeau="Avant jeudi prochain" droite={D}>
       <h1 class="e">Jeudi prochain</h1>
       <hr class="filet" />
       <p class="lead e">Les statistiques descriptives et la visualisation des données.</p>
-      <p class="lead e">Décrire une variable, puis la dessiner. Avec ce que vous savez depuis aujourd’hui.</p>
     </Slide>
 
     <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
       <div class="titre merci">
         <h1 class="e">Merci.</h1>
         <hr class="filet" />
-        <p class="lead e">Des questions ? Maintenant, ou sur Slack.</p>
-        <p class="lead e"><code>pol2000.com</code></p>
       </div>
       <div class="entete-ul e">
         <img src="{base}/img/ulaval-logo.png" alt="Université Laval" />
