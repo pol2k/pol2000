@@ -8,6 +8,11 @@
    */
   import { brancherTemps } from '../temps.js';
   import Glyphe from './Glyphe.svelte';
+  // ici = numéro de la séance en cours. Au temps 0, la ligne s'arrête à
+  // cette séance, une flèche « vous êtes ici » la désigne et sa fiche est
+  // affichée, au lieu de la vue d’ensemble de la séance 1. La diapo ne se
+  // feuillette alors plus : les flèches rendent la main au deck.
+  let { ici = 0 } = $props();
   const S = [
     { n: 1, d: 'jeudi 3 septembre', c: '3 sept', p: 1, t: 'Introduction et les éléments fondamentaux de la recherche', q: "Une question, les mots pour la poser, et ce qu'il faut installer." },
     { n: 2, d: 'jeudi 10 septembre', c: '10 sept', p: 1, t: 'Introduction à R et à Positron', q: 'R à partir de zéro.', note: "Apportez l'ordinateur, installé." },
@@ -28,7 +33,7 @@
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
-    if (!hote) return;
+    if (!hote || ici > 0) return;
     e = 0;
     return brancherTemps(hote, { total: 14, lire: () => e, ecrire: (v) => (e = v) });
   });
@@ -37,21 +42,29 @@
   const slot = (i) => (i >= 8 ? i + 1 : i);                 // index de case, 0..14
   const x = (i) => X0 + (slot(i) / 14) * (X1 - X0);
   const xLecture = X0 + (8 / 14) * (X1 - X0);
-  const cur = $derived(e > 0 ? S[e - 1] : null);
+  // Le temps « affiché »: le clic, sinon la séance en cours si on l'a donnée.
+  const a = $derived(e > 0 ? e : ici);
+  const cur = $derived(a > 0 ? S[a - 1] : null);
 </script>
 
 <div class="visuel session" bind:this={hote}>
   <svg viewBox="0 0 {W} 168" class="ligne" role="img" aria-label="Ligne du temps des quatorze séances, de septembre à décembre.">
     <line x1={X0} y1="70" x2={X1} y2="70" class="rail" />
-    <rect x={X0} y="67" height="6" rx="3" width={e > 0 ? x(e - 1) - X0 : 0} class="progres" />
+    <rect x={X0} y="67" height="6" rx="3" width={a > 0 ? x(a - 1) - X0 : 0} class="progres" />
     <!-- semaine de lecture -->
     <g class="lecture" style="transform: translate({xLecture}px, 70px)">
       <rect x="-22" y="-12" width="44" height="24" />
       <text y="-24" class="lib">lecture</text>
     </g>
+    {#if ici > 0}
+      <g class="ici" style="transform: translate({x(ici - 1)}px, 0px)">
+        <text y="16" class="ici-t">vous êtes ici</text>
+        <path d="M 0 22 L 0 40 M -9 31 L 0 40 L 9 31" class="ici-f" />
+      </g>
+    {/if}
     {#each S as s, i}
-      {@const on = e === i + 1}
-      {@const fait = e > i + 1}
+      {@const on = a === i + 1}
+      {@const fait = a > i + 1}
       <g class="noeud p{s.p}" class:on class:fait style="transform: translate({x(i)}px, 70px)">
         <circle r={on ? 20 : 11} />
         <text y={on ? 7 : 5} class="n">{s.n}</text>
@@ -98,6 +111,9 @@
   .progres { fill: var(--dk-accent); transition: width 0.7s cubic-bezier(0.65, 0, 0.25, 1); }
   .lecture rect { fill: var(--dk-fond-2); stroke: var(--dk-filet); stroke-width: 2; }
   .lecture .lib { font-family: var(--dk-mono); font-size: 12px; letter-spacing: 0.12em; text-anchor: middle; fill: var(--dk-gris-2); }
+  .ici-t { font-family: var(--dk-mono); font-size: 15px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-anchor: middle; fill: var(--dk-accent); }
+  .ici-f { fill: none; stroke: var(--dk-accent); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; animation: saute 1.2s ease-in-out infinite; }
+  @keyframes saute { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
   .noeud circle { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 3; transition: r 0.4s, fill 0.4s, stroke 0.4s; }
   .noeud.p2 circle { stroke: var(--dk-gris); }
   .noeud.p3 circle { stroke: var(--dk-accent); }

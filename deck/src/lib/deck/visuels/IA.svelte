@@ -4,8 +4,13 @@
    * même point; l'un monte vers un travail net, l'autre descend vers un
    * travail mou — et la paresse se voit. Deux temps: les chemins, puis le
    * verdict.
+   *
+   * sousTitre : la règle écrite sous le schéma (« L'IA pour faire mieux,
+   * pas pour en faire moins. »). Vraie par défaut (séance 1) ; la séance 2
+   * la masque, le schéma seul suffit en rappel.
    */
   import { brancherTemps } from '../temps.js';
+  let { sousTitre = true } = $props();
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -16,7 +21,7 @@
 </script>
 
 <div class="visuel ia" bind:this={hote}>
-  <svg viewBox="0 0 1000 400" role="img" aria-label="Deux chemins partent de « IA »: vers un travail meilleur, ou vers une vie plus facile et un travail mou.">
+  <svg viewBox="0 0 1000 412" role="img" aria-label="Deux chemins partent de « IA »: vers un travail meilleur, ou vers une vie plus facile et un travail mou.">
     <defs><marker id="fia" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="pointe" /></marker></defs>
     <!-- point de départ -->
     <rect x="60" y="165" width="130" height="70" class="depart" />
@@ -40,10 +45,12 @@
       <text x="85" y="140" class="verdict mauvais" class:vu={e === 1}>la paresse aussi</text>
     </g>
   </svg>
-  <div class="regle" class:vu={e === 1}>
-    <strong>L'IA pour faire mieux, pas pour en faire moins.</strong>
-    <span>Un travail paresseux avec l'IA se repère en dix secondes. L'effort compte dans la note. Son absence aussi.</span>
-  </div>
+  {#if sousTitre}
+    <div class="regle" class:vu={e === 1}>
+      <strong>L'IA pour faire mieux, pas pour en faire moins.</strong>
+      <span>Un travail paresseux avec l'IA se repère en dix secondes. L'effort compte dans la note. Son absence aussi.</span>
+    </div>
+  {/if}
 </div>
 
 <style>
