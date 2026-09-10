@@ -19,6 +19,7 @@
   import Grand from '$lib/deck/Grand.svelte';
   import Code from '$lib/deck/Code.svelte';
   import Outils from '$lib/deck/visuels/Outils.svelte';
+  import Session from '$lib/deck/visuels/Session.svelte';
   import IA from '$lib/deck/visuels/IA.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import Logiciels from '$lib/deck/visuels/Logiciels.svelte';
@@ -40,13 +41,10 @@
   import Empreinte from '$lib/deck/visuels/Empreinte.svelte';
   import Etudes from '$lib/deck/visuels/Etudes.svelte';
 
-  const TOTAL = 48;
+  const TOTAL = 47;
   const D = 'POL-2000 · séance 2 · jeu 10 sept';
 
   // ---- Les consoles. Sorties copiées de R 4.6.1, jamais tapées à la main. ----
-  const c_test = [
-    { in: 'R.version.string', out: '[1] "R version 4.6.1 (2026-06-24)"', note: 'Le numéro peut différer. Une réponse suffit : R est là.' }
-  ];
   const c_calc = [
     { in: '2 + 2', out: '[1] 4' },
     { in: '10 / 3', out: '[1] 3.333333' },
@@ -168,33 +166,18 @@ lm(Fertility ~ Education, data = df)
       </div>
     </Slide>
 
+    <Slide bandeau="Où on en est" droite={D}>
+      <Session ici={2} />
+    </Slide>
+
     <Slide bandeau="Un tour de salle" droite={D}>
       <h2 class="e">À main levée</h2>
       <ol class="mains e">
-        <li><span>R et Positron sont installés ?</span></li>
-        <li><span>Vous avez ouvert Positron au moins une fois ?</span></li>
-        <li><span>Vous avez tapé quelque chose dedans ?</span></li>
-        <li><span>Vous êtes sur Slack ?</span></li>
+        <li><span>R et Positron sont installés ?</span></li>
+        <li><span>Vous avez ouvert Positron au moins une fois ?</span></li>
+        <li><span>Avez-vous accepté l’invitation à Slack ?</span></li>
+        <li><span>Avez-vous accepté l’invitation à Datacamp ?</span></li>
       </ol>
-    </Slide>
-
-    <Slide bandeau="Un tour de salle" droite={D}>
-      <h2 class="e">Le test</h2>
-      <p class="lead e">Ouvrez Positron. En bas, la console. Tapez ceci, puis Entrée.</p>
-      <Console lignes={c_test} tout />
-      <p class="lead e">Rien ne s’affiche, ou une erreur ? Levez la main <strong>maintenant</strong>. Les auxiliaires circulent.</p>
-    </Slide>
-
-    <Slide bandeau="Aujourd'hui" droite={D}>
-      <h2 class="e">Aujourd’hui</h2>
-      <ul class="horaire e">
-        <li><span class="h">15h30</span><span class="quoi">Pourquoi R, et le bureau de Positron</span></li>
-        <li><span class="h">16h00</span><span class="quoi">En direct : la console, les objets, les fonctions, les erreurs</span></li>
-        <li class="pause"><span class="h">16h55</span><span class="quoi">Pause</span></li>
-        <li><span class="h">17h10</span><span class="quoi">En direct : un jeu de données, du tableau au graphique</span></li>
-        <li><span class="h">17h45</span><span class="quoi">Un assistant d’IA pour apprendre R</span></li>
-        <li><span class="h">18h05</span><span class="quoi">Avant jeudi prochain</span></li>
-      </ul>
     </Slide>
 
     <!-- ================= 1 · POURQUOI R ================= -->
