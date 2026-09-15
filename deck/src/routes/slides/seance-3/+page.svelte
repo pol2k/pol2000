@@ -7,6 +7,11 @@
    * parlée au plus; le reste se dessine et bouge. Trois questions pour une
    * variable (la forme, le centre, la dispersion), puis la dessiner.
    *
+   * Ouverture : ce qu'est la science selon King, Keohane et Verba (1994,
+   * p. 7-9), dont le but est l'inférence; ce qu'est l'inférence et comment
+   * on la fait; décrire en est la première étape. Après chaque statistique,
+   * « Pis, ça sert à quoi ? » répond à la salle, qui n'a pas choisi ce cours.
+   *
    * Adapté du cours 3 d'Adrien Cloutier (hiver 2024) : le vecteur
    * c(2, 2, 2, 3, 106), les quartiles, l'écart type, la boîte à moustaches,
    * le tableau croisé du Titanic. La probabilité et la loi des grands
@@ -40,9 +45,19 @@
   import Titanic from '$lib/deck/visuels/Titanic.svelte';
   import AxeMenteur from '$lib/deck/visuels/AxeMenteur.svelte';
   import AvantS4 from '$lib/deck/visuels/AvantS4.svelte';
+  import Science from '$lib/deck/visuels/Science.svelte';
+  import Inference from '$lib/deck/visuels/Inference.svelte';
+  import DeuxInferences from '$lib/deck/visuels/DeuxInferences.svelte';
+  import Demarche from '$lib/deck/visuels/Demarche.svelte';
+  import PourquoiForme from '$lib/deck/visuels/PourquoiForme.svelte';
+  import PourquoiMode from '$lib/deck/visuels/PourquoiMode.svelte';
+  import PourquoiMoyenne from '$lib/deck/visuels/PourquoiMoyenne.svelte';
+  import PourquoiMediane from '$lib/deck/visuels/PourquoiMediane.svelte';
+  import PourquoiEcartType from '$lib/deck/visuels/PourquoiEcartType.svelte';
+  import PourquoiSondage from '$lib/deck/visuels/PourquoiSondage.svelte';
   import { CONSOLES } from '$lib/data/seance3.js';
 
-  const TOTAL = 35;
+  const TOTAL = 47;
   const D = 'POL-2000 · séance 3 · jeu 17 sept';
 
   const script = `# POL-2000 · séance 3 · Les statistiques descriptives et la visualisation
@@ -131,10 +146,44 @@ ggplot(d, aes(x = age, y = parti)) +
       </ol>
     </Slide>
 
+    <!-- ================= 0 · LA SCIENCE, L'INFÉRENCE ================= -->
+    <Slide fond="encre" bandeau="La science" droite={D}>
+      <p class="surtitre e">Avant les chiffres</p>
+      <h1 class="e">C’est quoi, la science ?</h1>
+      <hr class="filet" />
+      <p class="lead e">Pas le sarrau. La méthode.</p>
+    </Slide>
+
+    <Slide bandeau="La science" droite={D}>
+      <h2 class="e">Quatre traits de la recherche scientifique</h2>
+      <Science />
+    </Slide>
+
+    <Slide fond="encre" bandeau="L'inférence" droite={D}>
+      <h1 class="e">Le but : l’inférence</h1>
+      <hr class="filet" />
+      <p class="lead e">Aller au-delà de ce qu’on a observé.</p>
+    </Slide>
+
+    <Slide bandeau="L'inférence" droite={D}>
+      <h2 class="e">L’inférence</h2>
+      <Inference />
+    </Slide>
+
+    <Slide bandeau="L'inférence" droite={D}>
+      <h2 class="e">Deux inférences</h2>
+      <DeuxInferences />
+    </Slide>
+
+    <Slide bandeau="L'inférence" droite={D}>
+      <h2 class="e">Comment on fait ?</h2>
+      <Demarche />
+    </Slide>
+
     <Slide fond="encre" bandeau="Décrire" droite={D}>
       <h1 class="e">Décrire avant d’expliquer</h1>
       <hr class="filet" />
-      <p class="lead e">20 180 personnes. Une phrase.</p>
+      <p class="lead e">On ne généralise pas ce qu’on n’a pas décrit.</p>
     </Slide>
 
     <Slide bandeau="Décrire" droite={D}>
@@ -159,6 +208,10 @@ ggplot(d, aes(x = age, y = parti)) +
       <Formes />
     </Slide>
 
+    <Slide bandeau="La forme · pis ?" droite={D}>
+      <PourquoiForme />
+    </Slide>
+
     <!-- ================= 2 · LE CENTRE ================= -->
     <Slide fond="encre" bandeau="Le centre" droite={D}>
       <p class="surtitre e">2 de 3</p>
@@ -172,9 +225,21 @@ ggplot(d, aes(x = age, y = parti)) +
       <Bascule />
     </Slide>
 
+    <Slide bandeau="Le centre · pis ?" droite={D}>
+      <PourquoiMode />
+    </Slide>
+
+    <Slide bandeau="Le centre · pis ?" droite={D}>
+      <PourquoiMoyenne />
+    </Slide>
+
     <Slide bandeau="Le centre" droite={D}>
       <h2 class="e">Dans les vraies données</h2>
       <Menage />
+    </Slide>
+
+    <Slide bandeau="Le centre · pis ?" droite={D}>
+      <PourquoiMediane />
     </Slide>
 
     <Slide bandeau="Le centre" droite={D}>
@@ -203,6 +268,7 @@ ggplot(d, aes(x = age, y = parti)) +
     <Slide bandeau="La dispersion" droite={D}>
       <h2 class="e">Couper en quatre</h2>
       <Quartiles />
+      <p class="pis-l e"><b>Pis ?</b> « 78 %, c’est bon ? » Ça dépend où tombent les autres.</p>
     </Slide>
 
     <Slide bandeau="La dispersion" droite={D}>
@@ -210,9 +276,17 @@ ggplot(d, aes(x = age, y = parti)) +
       <EcartType />
     </Slide>
 
+    <Slide bandeau="La dispersion · pis ?" droite={D}>
+      <PourquoiEcartType />
+    </Slide>
+
     <Slide bandeau="La dispersion" droite={D}>
       <h2 class="e">68, 95, 99,7</h2>
       <Cloche />
+    </Slide>
+
+    <Slide bandeau="La dispersion · pis ?" droite={D}>
+      <PourquoiSondage />
     </Slide>
 
     <Slide bandeau="En direct · la dispersion" droite={D}>
@@ -257,6 +331,7 @@ ggplot(d, aes(x = age, y = parti)) +
     <Slide bandeau="Dessiner" droite={D}>
       <h2 class="e">Deux catégorielles : le tableau croisé</h2>
       <Titanic />
+      <p class="pis-l e"><b>Pis ?</b> Chaque sondage publié est un tableau croisé : le vote selon l’âge, la région, le genre.</p>
     </Slide>
 
     <Slide bandeau="Dessiner" droite={D}>
@@ -327,6 +402,10 @@ ggplot(d, aes(x = age, y = parti)) +
   .entete-ul .sep { width: 2px; align-self: stretch; background: var(--dk-encre); }
   .entete-ul .dept { font-size: 0.62em; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.45; font-weight: 600; }
   .entete-ul .session { margin-left: auto; font-size: 0.72em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dk-accent); font-weight: 600; }
+
+  /* « Pis ? » en une ligne, sous une figure : la réponse courte à « ça sert à quoi ». */
+  .pis-l { margin: 0; padding-left: 0.6em; border-left: 0.34em solid var(--dk-accent); font-size: 1em; line-height: 1.3; }
+  .pis-l b { color: var(--dk-accent); }
 
   /* À main levée : trois questions, très grandes. */
   .mains { list-style: none; padding: 0; margin: 0; counter-reset: m; display: flex; flex-direction: column; gap: 0.5em; }
