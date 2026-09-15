@@ -101,7 +101,7 @@ export const EQUIPE = [
 const DC = 'https://app.datacamp.com/learn/courses/';
 export const DEVOIRS = [
   { seance: 1, cours: 'Introduction to R', chapitre: 'Intro to basics', url: DC + 'free-introduction-to-r' },
-  { seance: 2, cours: 'Introduction to R', chapitre: 'Vectors', url: DC + 'free-introduction-to-r' },
+  { seance: 2, cours: 'Introduction to R', chapitre: 'Vectors · Factors · Data frames', url: DC + 'free-introduction-to-r' },
   { seance: 3, cours: 'Introduction to Statistics in R', chapitre: 'Summary Statistics', url: DC + 'introduction-to-statistics-in-r' },
   { seance: 4, cours: 'Intermediate R', chapitre: 'Conditionals and Control Flow', url: DC + 'intermediate-r' },
   { seance: 5, cours: 'Introduction to the Tidyverse', chapitre: 'Data Wrangling · Grouping and Summarizing', url: DC + 'introduction-to-the-tidyverse' },
