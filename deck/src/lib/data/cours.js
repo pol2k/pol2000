@@ -47,7 +47,7 @@ export const LIENS = {
 export const SEANCES = [
   { n: 1, court: 'Intro', date: '2026-09-03', partie: 1, titre: 'Introduction et les éléments fondamentaux de la recherche', resume: "Une question, les mots pour la poser, et ce qu'il faut installer.", deck: 'slides/seance-1/' },
   { n: 2, court: 'R et Positron', date: '2026-09-10', partie: 1, titre: 'Introduction à R et à Positron', resume: 'R à partir de zéro.', deck: 'slides/seance-2/' },
-  { n: 3, court: 'Décrire', date: '2026-09-17', partie: 1, titre: 'Les statistiques descriptives et la visualisation des données', resume: "Décrire une variable : la forme d'une distribution, son centre, sa dispersion. Et la dessiner.", deck: 'slides/seance-3/' },
+  { n: 3, court: 'Décrire', date: '2026-09-17', partie: 1, titre: 'Les statistiques descriptives et la visualisation des données', resume: "C'est quoi, la science ? Puis décrire une variable : sa forme, son centre, sa dispersion. Et la dessiner.", deck: 'slides/seance-3/' },
   { n: 4, court: 'Données', date: '2026-09-24', partie: 1, titre: 'Préparer ses données avec R', resume: 'Lire un codebook, recoder, gérer les valeurs manquantes.', note: "L'examen 1 ouvre aujourd'hui." },
   { n: 5, court: 'Inférence', date: '2026-10-01', partie: 1, titre: "L'inférence statistique", resume: 'Ce que je vois dans un échantillon, puis-je le dire de toute la population ?', note: 'Examen 1 à remettre dimanche 4 octobre.' },
   { n: 6, court: 'Rencontres', date: '2026-10-08', partie: 0, titre: 'Rencontres individuelles', resume: "Pas de cours de la semaine : on se voit, un.e à la fois, avec les auxiliaires et le tuteur, pour le travail de mi-session." },

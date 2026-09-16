@@ -43,6 +43,16 @@
   import Geoms from '$lib/deck/visuels/Geoms.svelte';
   import BoitesPartis from '$lib/deck/visuels/BoitesPartis.svelte';
   import Titanic from '$lib/deck/visuels/Titanic.svelte';
+  import Pourquoi from '$lib/deck/visuels/Pourquoi.svelte';
+  import Pearson from '$lib/deck/visuels/Pearson.svelte';
+  import Demarcation from '$lib/deck/visuels/Demarcation.svelte';
+  import Popper from '$lib/deck/visuels/Popper.svelte';
+  import PasSiSimple from '$lib/deck/visuels/PasSiSimple.svelte';
+  import Lakatos from '$lib/deck/visuels/Lakatos.svelte';
+  import NaturelSocial from '$lib/deck/visuels/NaturelSocial.svelte';
+  import RIScience from '$lib/deck/visuels/RIScience.svelte';
+  import Mearsheimer from '$lib/deck/visuels/Mearsheimer.svelte';
+  import Demontrer from '$lib/deck/visuels/Demontrer.svelte';
   import AxeMenteur from '$lib/deck/visuels/AxeMenteur.svelte';
   import AvantS4 from '$lib/deck/visuels/AvantS4.svelte';
   import Science from '$lib/deck/visuels/Science.svelte';
@@ -57,7 +67,7 @@
   import PourquoiSondage from '$lib/deck/visuels/PourquoiSondage.svelte';
   import { CONSOLES } from '$lib/data/seance3.js';
 
-  const TOTAL = 47;
+  const TOTAL = 57;
   const D = 'POL-2000 · séance 3 · jeu 17 sept';
 
   const script = `# POL-2000 · séance 3 · Les statistiques descriptives et la visualisation
@@ -155,8 +165,58 @@ ggplot(d, aes(x = age, y = parti)) +
     </Slide>
 
     <Slide bandeau="La science" droite={D}>
+      <h2 class="e">Pourquoi se donner tout ce mal ?</h2>
+      <Pourquoi />
+    </Slide>
+
+    <Slide bandeau="La science" droite={D}>
       <h2 class="e">Quatre traits de la recherche scientifique</h2>
       <Science />
+    </Slide>
+
+    <Slide bandeau="La science" droite={D}>
+      <h2 class="e">La méthode, pas le sujet</h2>
+      <Pearson />
+    </Slide>
+
+    <Slide bandeau="La démarcation" droite={D}>
+      <h2 class="e">Quatre filtres pour une hypothèse</h2>
+      <Demarcation />
+    </Slide>
+
+    <Slide bandeau="La démarcation" droite={D}>
+      <h2 class="e">Une bonne théorie interdit</h2>
+      <Popper />
+    </Slide>
+
+    <Slide bandeau="Le débat" droite={D}>
+      <h2 class="e">Sauf que ce n’est pas si simple</h2>
+      <PasSiSimple />
+    </Slide>
+
+    <Slide bandeau="Le débat" droite={D}>
+      <h2 class="e">Progressive, ou dégénérative ?</h2>
+      <Lakatos />
+    </Slide>
+
+    <Slide bandeau="Nature et société" droite={D}>
+      <h2 class="e">Le quark et l’électeur</h2>
+      <NaturelSocial />
+    </Slide>
+
+    <Slide bandeau="Les RI" droite={D}>
+      <h2 class="e">Les RI, est-ce une science ?</h2>
+      <RIScience />
+    </Slide>
+
+    <Slide bandeau="Les RI" droite={D}>
+      <h2 class="e">Une prévision de 1990</h2>
+      <Mearsheimer />
+    </Slide>
+
+    <Slide bandeau="Démontrer" droite={D}>
+      <h2 class="e">Ce qu’on peut démontrer</h2>
+      <Demontrer />
     </Slide>
 
     <Slide fond="encre" bandeau="L'inférence" droite={D}>

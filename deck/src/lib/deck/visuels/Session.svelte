@@ -16,7 +16,7 @@
   const S = [
     { n: 1, d: 'jeudi 3 septembre', c: '3 sept', p: 1, t: 'Introduction et les éléments fondamentaux de la recherche', q: "Une question, les mots pour la poser, et ce qu'il faut installer." },
     { n: 2, d: 'jeudi 10 septembre', c: '10 sept', p: 1, t: 'Introduction à R et à Positron', q: 'R à partir de zéro.', note: "Apportez l'ordinateur, installé." },
-    { n: 3, d: 'jeudi 17 septembre', c: '17 sept', p: 1, t: 'Les statistiques descriptives et la visualisation des données', q: "Décrire une variable : la forme d'une distribution, son centre, sa dispersion. Et la dessiner." },
+    { n: 3, d: 'jeudi 17 septembre', c: '17 sept', p: 1, t: 'Les statistiques descriptives et la visualisation des données', q: "C'est quoi, la science ? Puis décrire une variable : sa forme, son centre, sa dispersion. Et la dessiner." },
     { n: 4, d: 'jeudi 24 septembre', c: '24 sept', p: 1, t: 'Préparer ses données avec R', q: 'Lire un codebook, recoder, gérer les valeurs manquantes.', note: "L'examen 1 ouvre aujourd'hui." },
     { n: 5, d: 'jeudi 1er octobre', c: '1 oct', p: 1, t: "L'inférence statistique", q: 'Ce que je vois dans un échantillon, puis-je le dire de toute la population ?', note: 'Examen 1 à remettre dimanche 4 octobre.' },
     { n: 6, d: 'jeudi 8 octobre', c: '8 oct', p: 0, t: 'Rencontres individuelles', q: 'Pas de cours magistral : on se voit, un.e à la fois, avec les auxiliaires et le tuteur.' },

@@ -9,8 +9,12 @@
    *   0  Les carrés apparaissent rangée par rangée; le brouillard dérive.
    *   1  Une flèche rouge saute de gauche à droite; un peu de lumière rouge
    *      se répand dans le brouillard.
-   *   2  La définition de King, Keohane et Verba (1994, p. 46), dans la
-   *      traduction des diapositives d'Adrien Cloutier (hiver 2024).
+   *   2  La définition de King, Keohane et Verba (1994, p. 46). La page est
+   *      attestée, et la proposition citée l'est aussi; la formule
+   *      d'ouverture (« Inference is the process of... ») n'a pas pu être
+   *      retrouvée dans le texte, alors elle reste hors des guillemets.
+   *      Traduction libre, d'après les diapositives d'Adrien Cloutier
+   *      (hiver 2024).
    *
    * Pas de nuage de population avec son échantillon : la séance 1 l'a
    * déjà dessiné. Ici, on oppose le connu et l'inconnu.
@@ -62,8 +66,8 @@
     {/if}
   </svg>
   <blockquote class="citation-i" class:vu={e >= 2}>
-    <p>« Le processus d’utilisation des faits que nous connaissons pour en apprendre sur les faits que nous ne connaissons pas. »</p>
-    <cite>King, Keohane et Verba (1994, p. 46)</cite>
+    <p>L’inférence, c’est «&#8239;utiliser les faits que nous connaissons pour en apprendre sur les faits que nous ne connaissons pas&#8239;».</p>
+    <cite>King, Keohane et Verba (1994, p. 46) · traduction libre</cite>
   </blockquote>
 </div>
 
