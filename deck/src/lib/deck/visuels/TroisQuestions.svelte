@@ -9,6 +9,9 @@
    *      trouve son équilibre sur le pivot.
    *   2  La dispersion : une flèche double qui s'étire et se contracte,
    *      les points s'écartent avec elle.
+   *   3  Le pourquoi. Les trois panneaux sont allumés ensemble, aucun
+   *      n'est « actif » : chacun gagne une ligne rouge qui dit à quoi il
+   *      sert, et une ligne de clôture les enchaîne sous les trois.
    */
   import { brancherTemps } from '../temps.js';
   let e = $state(0);
@@ -16,7 +19,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
 
   // Panneau 1 : des hauteurs schématiques, une cloche vague.
@@ -60,6 +63,7 @@
     </svg>
     <h3>La forme</h3>
     <p>À quoi ça ressemble&#8239;?</p>
+    <p class="pourquoi" class:vu={e >= 3} style="--pd: 0ms">{#if e >= 3}elle décide quel résumé est honnête{/if}</p>
   </div>
 
   <div class="panneau" class:on={e >= 1} class:actif={e === 1}>
@@ -75,6 +79,7 @@
     </svg>
     <h3>Le centre</h3>
     <p>Où est le milieu&#8239;?</p>
+    <p class="pourquoi" class:vu={e >= 3} style="--pd: 150ms">{#if e >= 3}un seul chiffre pour répondre{/if}</p>
   </div>
 
   <div class="panneau" class:on={e >= 2} class:actif={e === 2}>
@@ -90,7 +95,10 @@
     </svg>
     <h3>La dispersion</h3>
     <p>Ça s’étale comment&#8239;?</p>
+    <p class="pourquoi" class:vu={e >= 3} style="--pd: 300ms">{#if e >= 3}elle dit si ce chiffre est fiable{/if}</p>
   </div>
+
+  <p class="cloture" class:vu={e >= 3}>{#if e >= 3}La forme choisit le résumé. Le centre le donne. <span class="cle">La dispersion dit à quel point on peut s’y fier.</span>{/if}</p>
 </div>
 
 <style>
@@ -102,6 +110,15 @@
   h3 { margin: 0.4em 0 0; font-size: 1.35em; font-weight: 600; }
   .panneau.actif h3 { color: var(--dk-accent); }
   p { margin: 0; font-size: 0.9em; color: var(--dk-gris); }
+
+  /* Le pourquoi : une ligne par panneau, plus une ligne de clôture qui les
+     enchaîne. Leur place est réservée dès le temps 0 (min-height), sinon les
+     panneaux sautent en hauteur quand les lignes arrivent. */
+  .pourquoi { margin: 0.2em 0 0; font-size: 0.8em; line-height: 1.25; min-height: 1.3em; color: var(--dk-accent); }
+  .pourquoi.vu { animation: surgit 0.45s ease-out both; animation-delay: var(--pd); }
+  .cloture { grid-column: 1 / -1; margin: 0; font-size: 0.85em; line-height: 1.3; min-height: 1.35em; color: var(--dk-encre); }
+  .cloture.vu { animation: surgit 0.5s ease-out 0.5s both; }
+  .cle { color: var(--dk-accent); font-weight: 600; }
 
   .axe { stroke: var(--dk-encre); stroke-width: 3; }
   .trait { fill: none; stroke: var(--dk-encre); stroke-width: 5; stroke-linecap: square; stroke-linejoin: miter; }
@@ -141,10 +158,14 @@
   @keyframes tete-g { from { transform: translateX(39px); } to { transform: translateX(-33px); } }
   @keyframes tete-d { from { transform: translateX(-39px); } to { transform: translateX(33px); } }
   @keyframes etale { from { transform: translateX(calc(var(--k) * -0.6px)); } to { transform: translateX(calc(var(--k) * 0.35px)); } }
+  @keyframes surgit { from { opacity: 0; transform: translateY(0.4em); } to { opacity: 1; transform: none; } }
 
   @media (prefers-reduced-motion: reduce) {
     .on .barre, .on .bloc, .on .fleau, .on .tige, .on .tete.g, .on .tete.d, .on .pt { animation: none; }
     .on .contour { animation: none; stroke-dashoffset: 0; }
     .panneau { transition: none; }
+    /* Pas d'opacity: 0 sur la base de ces deux règles : sans animation, elles
+       doivent rester lisibles. */
+    .pourquoi.vu, .cloture.vu { animation: none; }
   }
 </style>

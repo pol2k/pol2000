@@ -2,26 +2,27 @@
   /**
    * « On me dit que les RI, ce n'est pas une vraie science. Je réponds quoi ? »
    * La réponse n'est pas une consolation : la dispute a déjà lieu, à
-   * l'intérieur du champ, dans sa revue phare, entre ses plus grands noms,
-   * et elle se mène avec l'outil qu'on vient d'apprendre. Quatre temps.
+   * l'intérieur du champ, entre ses plus grands noms, et elle se mène avec
+   * l'outil qu'on vient d'apprendre (Lakatos). Quatre temps.
    *
    *   0  L'accusation, en gris, hors champ : « Les RI, ce n'est pas
    *      vraiment une science. » Dessous, « on l'entend souvent ».
-   *   1  Le forum. Le sommaire d'un numéro : American Political Science
-   *      Review, vol. 91, no 4, décembre 1997, et quatre entrées qui
-   *      arrivent l'une après l'autre (Vasquez p. 899-912, Waltz
-   *      p. 913-917, Walt p. 931-935, et trois autres réponses).
-   *      L'accusation rapetisse : elle est déjà dans la salle.
-   *   2  Ce que chacun dit, en trois cartes. Vasquez applique le critère;
-   *      Waltz rejette le test; Walt rejette l'étalon. Le sommaire se
-   *      replie sur son bandeau pour leur laisser la place. Les citations
-   *      françaises sont des traductions libres; les deux citations
-   *      anglaises sont données dans l'original, donc sans mention.
+   *   1  La salle. Une pièce encadrée, LES RELATIONS INTERNATIONALES, et
+   *      dedans trois personnes qui s'engueulent déjà, chacune avec sa
+   *      bulle. Les queues de bulles penchent vers les voisins : c'est une
+   *      dispute, pas une liste. L'accusation rapetisse, elle est dépassée.
+   *      L'ordre est celui de l'escalade : Vasquez applique le critère,
+   *      Waltz rejette le test, Walt rejette l'étalon.
+   *   2  La référence, petite, sous la salle : c'est la revue phare du
+   *      champ, pas une chicane de corridor.
    *   3  La réponse à donner : personne ne tranche de l'extérieur, et
-   *      King, Keohane et Verba (1994, p. 9) en rouge.
+   *      King, Keohane et Verba (1994, p. 9) en rouge. Les trois reculent
+   *      (bulles repliées, silhouettes atténuées) mais restent visibles :
+   *      on parle d'eux pendant ce temps-là.
    *
-   * Le titre de Vasquez est rendu ici par une description de son argument,
-   * en italique : ce n'est pas son titre original, donc pas de guillemets.
+   * Les citations françaises sont des traductions libres et le disent; les
+   * deux citations anglaises sont données dans l'original, donc sans
+   * mention. Rien n'est tiré au hasard : coordonnées fixes.
    */
   import { brancherTemps } from '../temps.js';
 
@@ -33,105 +34,104 @@
     return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  // Espace fine insécable, pour les chaînes de caractères.
+  // Espace fine insécable (U+202F), pour les chaînes de caractères.
   const N = ' ';
 
-  const ENTREES = [
-    { qui: 'John Vasquez', quoi: 'Le paradigme réaliste est dégénératif', pp: 'p. 899-912' },
-    { qui: 'Kenneth Waltz', quoi: 'Evaluating Theories', pp: 'p. 913-917' },
-    { qui: 'Stephen Walt', quoi: 'The Progressive Power of Realism', pp: 'p. 931-935' }
+  // La queue de bulle penche vers un voisin : deux tracés fixes, un par
+  // sens. Le fond recouvre le filet du bas, le trait n'en montre que les
+  // deux arêtes utiles.
+  const QUEUE = {
+    d: { fond: 'M 2 0 L 30 0 L 42 28 Z', trait: 'M 2 0 L 42 28 L 30 0' },
+    g: { fond: 'M 14 0 L 42 0 L 2 28 Z', trait: 'M 42 0 L 2 28 L 14 0' }
+  };
+
+  const GENS = [
+    {
+      qui: 'John Vasquez',
+      dit: `«${N}le programme réaliste dégénère${N}: il ne dit jamais ce qui, s’il était réfuté, ferait abandonner le paradigme${N}»`,
+      tl: true,
+      tag: 'applique le critère de Lakatos',
+      vers: 'd'
+    },
+    {
+      qui: 'Kenneth Waltz',
+      dit: `«${N}Explanation, not prediction, is the ultimate criterion of good theory.${N}»`,
+      tl: false,
+      tag: 'rejette le test lui-même',
+      vers: 'g'
+    },
+    {
+      qui: 'Stephen Walt',
+      dit: `«${N}the Lakatosian model has been largely rejected by contemporary historians and philosophers of science${N}»`,
+      tl: false,
+      tag: 'rejette l’étalon',
+      vers: 'g'
+    }
   ];
 </script>
 
 <div class="visuel ri-sci" bind:this={hote}>
-  {#if e < 2}
-    <!-- L'accusation, hors champ. -->
+  <div class="ri-scene">
+    <!-- L'accusation, hors champ. Elle ne disparaît jamais : c'est à elle
+         qu'on répond. Elle rapetisse pour de bon (font-size), donc elle
+         rend aussi sa place en largeur. -->
     <div class="ri-charge" class:ri-mini={e >= 1}>
       <div class="ri-bulle">
         <p class="ri-dit-on">«{N}Les RI, ce n’est pas vraiment une science.{N}»</p>
-        <!-- La queue de la bulle : un fond qui recouvre le filet du bas,
-             puis les deux seules arêtes qui doivent se voir. -->
-        <svg class="ri-queue" viewBox="0 0 40 30" aria-hidden="true">
-          <path d="M 4 0 L 36 0 L 2 28 Z" class="ri-q-fond" />
-          <path d="M 4 0 L 2 28 L 36 0" class="ri-q-trait" />
+        <svg class="ri-queue" viewBox="0 0 44 30" aria-hidden="true">
+          <path d={QUEUE.g.fond} class="ri-q-fond" />
+          <path d={QUEUE.g.trait} class="ri-q-trait" />
         </svg>
       </div>
       <span class="ri-souvent">on l’entend souvent</span>
     </div>
-  {/if}
 
-  {#if e >= 1}
-    <!-- Le forum : un numéro de revue, et son sommaire. -->
-    <div class="ri-revue">
-      <div class="ri-tete">
-        <span class="ri-titre">American Political Science Review</span>
-        <span class="ri-numero">vol. 91, no 4, décembre 1997</span>
-      </div>
+    {#if e >= 1}
+      <!-- La salle : la dispute est déjà à l'intérieur. -->
+      <div class="ri-salle" class:ri-recule={e >= 3}>
+        <span class="ri-salle-nom">Les relations internationales</span>
 
-      {#if e === 1}
-        <ul class="ri-sommaire">
-          {#each ENTREES as en, k}
-            <li style="--k: {k}">
-              <span class="ri-qui">{en.qui}</span>
-              <span class="ri-quoi"><i>{en.quoi}</i></span>
-              <span class="ri-pp">{en.pp}</span>
-            </li>
+        <div class="ri-gens">
+          {#each GENS as g, k (g.qui)}
+            <article class="ri-perso" style="--k: {k}">
+              {#if e < 3}
+                <div class="ri-bulle-p">
+                  <p class="ri-dit">{g.dit}</p>
+                  {#if g.tl}<p class="ri-tl">(traduction libre)</p>{/if}
+                  <svg class="ri-queue-p" viewBox="0 0 44 30" aria-hidden="true">
+                    <path d={QUEUE[g.vers].fond} class="ri-q-fond" />
+                    <path d={QUEUE[g.vers].trait} class="ri-q-trait ri-q-encre" />
+                  </svg>
+                </div>
+              {/if}
+
+              <div class="ri-pied">
+                <svg class="ri-silhouette" viewBox="0 0 34 40" aria-hidden="true">
+                  <circle cx="17" cy="10" r="8" />
+                  <path d="M 4 40 L 4 32 L 11 26 L 23 26 L 30 32 L 30 40" />
+                </svg>
+                <span class="ri-nom">{g.qui}</span>
+                <span class="ri-tag">{g.tag}</span>
+              </div>
+            </article>
           {/each}
-          <li class="ri-reste" style="--k: 3"><span>et trois autres réponses</span></li>
-        </ul>
-      {/if}
-    </div>
-  {/if}
+        </div>
+      </div>
+    {/if}
+  </div>
 
-  {#if e === 2}
-    <!-- Ce que chacun dit. -->
-    <div class="ri-cartes">
-      <article class="ri-carte" style="--k: 0">
-        <svg class="ri-glyphe" viewBox="0 0 140 56" role="img" aria-label="Une règle posée sur un paradigme, et une flèche qui applique le critère.">
-          <path d="M 70 2 L 70 14" class="ri-tr" />
-          <path d="M 63 8 L 70 16 L 77 8" class="ri-tr ri-rg" />
-          <rect x="12" y="22" width="116" height="20" class="ri-tr" />
-          <path d="M 34 22 L 34 32 M 56 22 L 56 32 M 78 22 L 78 32 M 100 22 L 100 32" class="ri-tr ri-fin" />
-        </svg>
-        <span class="ri-nom">Vasquez</span>
-        <span class="ri-tag">applique le critère</span>
-        <p class="ri-txt">«{N}une réticence à préciser ce qui, s’il était réfuté, ferait rejeter le paradigme{N}»</p>
-        <p class="ri-txt">«{N}l’adoption continuelle de propositions auxiliaires pour expliquer les ratés{N}»</p>
-        <!-- La mention porte sur les deux citations ci-dessus, pas sur le
-             résumé qui suit. -->
-        <p class="ri-tl">(traduction libre)</p>
-        <p class="ri-gloss">le programme réaliste dégénère</p>
-      </article>
-
-      <article class="ri-carte" style="--k: 1">
-        <svg class="ri-glyphe" viewBox="0 0 140 56" role="img" aria-label="Un test coché, barré de rouge.">
-          <rect x="52" y="8" width="36" height="36" class="ri-tr" />
-          <path d="M 60 26 L 68 36 L 82 16" class="ri-tr" />
-          <path d="M 18 8 L 122 48 M 122 8 L 18 48" class="ri-tr ri-rg" />
-        </svg>
-        <span class="ri-nom">Waltz</span>
-        <span class="ri-tag">en réponse</span>
-        <p class="ri-txt">«{N}Explanation, not prediction, is the ultimate criterion of good theory.{N}»</p>
-        <p class="ri-gloss">il rejette le test lui-même</p>
-      </article>
-
-      <article class="ri-carte" style="--k: 2">
-        <svg class="ri-glyphe" viewBox="0 0 140 56" role="img" aria-label="Une règle graduée, barrée de rouge.">
-          <rect x="12" y="18" width="116" height="20" class="ri-tr" />
-          <path d="M 34 18 L 34 28 M 56 18 L 56 28 M 78 18 L 78 28 M 100 18 L 100 28" class="ri-tr ri-fin" />
-          <path d="M 18 8 L 122 48 M 122 8 L 18 48" class="ri-tr ri-rg" />
-        </svg>
-        <span class="ri-nom">Walt</span>
-        <span class="ri-tag">en réponse</span>
-        <p class="ri-txt">«{N}the Lakatosian model has been largely rejected by contemporary historians and philosophers of science{N}»</p>
-        <p class="ri-gloss">il rejette l’étalon</p>
-      </article>
-    </div>
+  {#if e >= 2}
+    <!-- La référence arrive après coup, et petite : elle prouve la scène,
+         elle n'est pas la scène. -->
+    <p class="ri-cred">
+      <span class="ri-revue"><i>American Political Science Review</i>, vol. 91, no 4, décembre 1997</span>
+      <span class="ri-voix">Ce n’est pas une chicane de corridor. C’est la revue phare du champ.</span>
+    </p>
   {/if}
 
   {#if e >= 3}
-    <div class="ri-fin">
-      <p class="ri-encre">La question se débat à l’intérieur du champ, dans sa revue phare, entre ses plus grands noms. Personne ne tranche de l’extérieur.</p>
+    <div class="ri-reponse">
+      <p class="ri-encre">La question se débat à l’intérieur du champ, entre ses plus grands noms. Personne ne tranche de l’extérieur.</p>
       <p class="ri-rouge">«{N}Le plus grand gain des règles de l’inférence survient précisément quand les données sont rares, les instruments imparfaits, les mesures incertaines.{N}»</p>
       <p class="ri-src">King, Keohane et Verba (1994), <i>Designing Social Inquiry</i>, p. 9 (traduction libre)</p>
       <p class="ri-rouge ri-clou">Ce n’est pas malgré la difficulté. C’est à cause d’elle.</p>
@@ -140,63 +140,75 @@
 </div>
 
 <style>
-  .ri-sci { display: flex; flex-direction: column; gap: 0.9em; }
+  .ri-sci { display: flex; flex-direction: column; gap: 0.7em; }
+  .ri-scene { display: flex; align-items: flex-end; gap: 1.1em; }
 
-  /* L'accusation. */
-  /* Pas de transform dans l'animation d'arrivée : elle écraserait le
-     rapetissement de .ri-mini, qui est une transition. */
-  .ri-charge { display: flex; flex-direction: column; gap: 0.5em; align-items: flex-start; transition: opacity 0.4s, transform 0.5s cubic-bezier(0.34, 1.5, 0.64, 1); transform-origin: 0 0; animation: ri-fondu 0.5s ease-out both; }
-  .ri-charge.ri-mini { opacity: 0.42; transform: scale(0.72); }
-  .ri-bulle { position: relative; border: 3px solid var(--dk-gris-2); padding: 0.6em 1em 0.7em; background: var(--dk-fond-2); }
-  .ri-dit-on { margin: 0; font-size: 1.15em; font-weight: 600; color: var(--dk-gris); }
-  .ri-queue { position: absolute; left: 2.2em; bottom: -27px; width: 40px; height: 30px; max-height: 44vh; display: block; overflow: visible; }
+  /* ——— L'accusation, hors champ ——— */
+  /* Elle rapetisse par la taille de police, pas par un transform : tout ce
+     qu'elle contient est dimensionné en em, donc le bloc rend aussi sa
+     largeur à la salle, et aucune animation d'arrivée n'entre en conflit
+     avec le rapetissement. */
+  .ri-charge { flex: 0 0 auto; max-width: 15em; display: flex; flex-direction: column; gap: 0.5em; align-items: flex-start; transition: opacity 0.45s, font-size 0.5s; animation: ri-fondu 0.5s ease-out both; }
+  .ri-charge.ri-mini { font-size: 0.58em; opacity: 0.55; }
+  .ri-bulle { position: relative; border: 3px solid var(--dk-gris-2); padding: 0.6em 0.9em 0.7em; background: var(--dk-fond-2); }
+  .ri-dit-on { margin: 0; font-size: 1.1em; font-weight: 600; line-height: 1.3; color: var(--dk-gris); }
+  .ri-queue { position: absolute; left: 1.6em; bottom: calc(3px - 1.45em); width: 2.1em; height: 1.45em; max-height: 44vh; display: block; overflow: visible; }
   .ri-q-fond { fill: var(--dk-fond-2); stroke: none; }
-  .ri-q-trait { fill: none; stroke: var(--dk-gris-2); stroke-width: 3; stroke-linejoin: miter; }
-  .ri-souvent { margin-left: 3.4em; font-size: 0.66em; letter-spacing: 0.08em; color: var(--dk-gris-2); }
+  .ri-q-trait { fill: none; stroke: var(--dk-gris-2); stroke-width: 3; stroke-linejoin: miter; vector-effect: non-scaling-stroke; }
+  .ri-q-encre { stroke: var(--dk-encre); }
+  /* La queue descend de 1.6em à 3.7em : la mention passe après, sinon le
+     tracé lui mange sa première lettre. */
+  .ri-souvent { margin-left: 4.3em; font-size: 0.66em; letter-spacing: 0.08em; color: var(--dk-gris-2); }
 
-  /* Le forum. */
-  .ri-revue { border: 3px solid var(--dk-encre); padding: 0.7em 1em 0.8em; animation: ri-entre 0.5s ease-out both; }
-  .ri-tete { display: flex; flex-direction: column; gap: 0.15em; padding-bottom: 0.4em; border-bottom: 3px solid var(--dk-encre); }
-  .ri-titre { font-size: 1.15em; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
-  .ri-numero { font-size: 0.68em; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dk-accent); font-weight: 600; }
-  .ri-sommaire { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-  .ri-sommaire li { display: grid; grid-template-columns: 11em 1fr auto; gap: 0.8em; align-items: baseline; padding: 0.35em 0; border-bottom: 2px solid var(--dk-filet); animation: ri-monte 0.45s ease-out both; animation-delay: calc(var(--k) * 180ms + 150ms); }
-  .ri-qui { font-size: 0.82em; font-weight: 600; }
-  .ri-quoi { font-size: 0.78em; color: var(--dk-gris); }
-  .ri-quoi i { font-style: italic; }
-  .ri-pp { font-size: 0.7em; color: var(--dk-gris-2); }
-  .ri-reste { display: block; border-bottom: none; }
-  .ri-reste span { font-size: 0.72em; color: var(--dk-gris-2); }
+  /* ——— La salle ——— */
+  /* L'étiquette coupe le filet du haut : une pièce, pas un en-tête de revue. */
+  .ri-salle { position: relative; flex: 1 1 auto; min-width: 0; border: 3px solid var(--dk-encre); padding: 1.1em 1em 0.9em; transition: padding 0.45s; animation: ri-entre 0.5s ease-out both; }
+  .ri-salle.ri-recule { padding: 1em 1em 0.7em; }
+  .ri-salle-nom { position: absolute; top: -0.66em; left: 1.1em; padding: 0 0.5em; background: var(--dk-fond); font-size: 0.6em; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dk-gris); }
 
-  /* Les trois positions. */
-  .ri-cartes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1em; }
-  .ri-carte { display: flex; flex-direction: column; gap: 0.3em; padding: 0.7em 0.8em 0.9em; border: 3px solid var(--dk-encre); animation: ri-monte 0.5s cubic-bezier(0.34, 1.5, 0.64, 1) both; animation-delay: calc(var(--k) * 160ms); }
-  .ri-glyphe { width: 100%; max-height: 44vh; display: block; overflow: visible; }
-  .ri-tr { fill: none; stroke: var(--dk-encre); stroke-width: 4; stroke-linejoin: miter; stroke-dasharray: 1; stroke-dashoffset: 1; animation: ri-trace 0.6s ease-out both; animation-delay: calc(var(--k) * 160ms + 250ms); }
-  .ri-tr.ri-fin { stroke-width: 2.5; }
-  .ri-tr.ri-rg { stroke: var(--dk-accent); stroke-width: 5; animation-delay: calc(var(--k) * 160ms + 550ms); }
-  .ri-nom { font-size: 1.15em; font-weight: 600; line-height: 1; }
-  .ri-tag { align-self: flex-start; font-size: 0.6em; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dk-accent); border: 2px solid var(--dk-accent); padding: 0.15em 0.5em; }
-  .ri-txt { margin: 0.15em 0 0; font-size: 0.72em; line-height: 1.35; color: var(--dk-encre); }
-  .ri-gloss { margin: auto 0 0; padding-top: 0.4em; font-size: 0.72em; line-height: 1.3; font-weight: 600; color: var(--dk-accent); }
-  .ri-tl { margin: 0.1em 0 0; font-size: 0.56em; letter-spacing: 0.04em; color: var(--dk-gris-2); }
+  .ri-gens { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9em; }
+  /* Les bulles n'ont pas la même hauteur : on les pose toutes sur le même
+     fond de colonne, juste au-dessus des personnes. */
+  .ri-perso { display: flex; flex-direction: column; justify-content: flex-end; gap: 0.9em; height: 100%; animation: ri-monte 0.5s cubic-bezier(0.34, 1.5, 0.64, 1) both; animation-delay: calc(var(--k) * 180ms + 120ms); }
 
-  /* La réponse à donner. */
-  .ri-fin { display: flex; flex-direction: column; gap: 0.35em; border-left: 6px solid var(--dk-accent); padding: 0.3em 0 0.3em 0.9em; }
-  .ri-encre { margin: 0; font-size: 1em; line-height: 1.35; font-weight: 600; color: var(--dk-encre); animation: ri-monte 0.45s cubic-bezier(0.34, 1.55, 0.64, 1) both; }
-  .ri-rouge { margin: 0; font-size: 1em; line-height: 1.35; font-weight: 600; color: var(--dk-accent); animation: ri-monte 0.45s cubic-bezier(0.34, 1.55, 0.64, 1) 0.25s both; }
-  .ri-src { margin: 0; font-size: 0.58em; line-height: 1.3; letter-spacing: 0.03em; color: var(--dk-gris); animation: ri-monte 0.4s ease-out 0.45s both; }
+  .ri-bulle-p { position: relative; border: 3px solid var(--dk-encre); background: var(--dk-fond-2); padding: 0.5em 0.65em 0.55em; }
+  .ri-dit { margin: 0; font-size: 0.72em; line-height: 1.4; color: var(--dk-encre); }
+  .ri-tl { margin: 0.3em 0 0; font-size: 0.55em; letter-spacing: 0.04em; color: var(--dk-gris-2); }
+  /* La queue s'ancre du côté de la personne qui parle et penche vers les
+     autres. Le sens est dans le tracé, pas dans le style: Vasquez penche
+     vers la droite, les deux qui lui répondent penchent vers la gauche. */
+  .ri-queue-p { position: absolute; left: 1.4em; bottom: calc(3px - 1.25em); width: 1.8em; height: 1.25em; max-height: 44vh; display: block; overflow: visible; }
+
+  .ri-pied { display: flex; flex-direction: column; align-items: flex-start; gap: 0.25em; }
+  .ri-silhouette { width: auto; height: 2em; max-height: 44vh; display: block; overflow: visible; fill: none; stroke: var(--dk-encre); stroke-width: 3; stroke-linejoin: miter; transition: height 0.45s, opacity 0.45s; }
+  .ri-nom { font-size: 0.92em; font-weight: 600; line-height: 1.15; transition: opacity 0.45s; }
+  .ri-tag { font-size: 0.58em; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.25; color: var(--dk-accent); border-top: 2px solid var(--dk-accent); padding-top: 0.25em; transition: opacity 0.45s; }
+  /* Au dernier temps, les trois reculent sans s'effacer : on les nomme à
+     voix haute pendant que la réponse est à l'écran. */
+  .ri-recule .ri-silhouette { height: 1.5em; opacity: 0.5; }
+  .ri-recule .ri-nom { opacity: 0.8; }
+  .ri-recule .ri-tag { opacity: 0.72; }
+
+  /* ——— La référence, petite ——— */
+  .ri-cred { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.15em 0.9em; border-left: 3px solid var(--dk-filet); padding-left: 0.7em; animation: ri-fondu 0.45s ease-out both; }
+  .ri-revue { font-size: 0.6em; letter-spacing: 0.04em; color: var(--dk-gris); }
+  .ri-revue i { font-style: italic; }
+  .ri-voix { font-size: 0.7em; line-height: 1.3; color: var(--dk-gris); }
+
+  /* ——— La réponse à donner ——— */
+  .ri-reponse { display: flex; flex-direction: column; gap: 0.3em; border-left: 6px solid var(--dk-accent); padding: 0.25em 0 0.25em 0.9em; }
+  .ri-encre { margin: 0; font-size: 0.95em; line-height: 1.35; font-weight: 600; color: var(--dk-encre); animation: ri-monte 0.45s cubic-bezier(0.34, 1.55, 0.64, 1) both; }
+  .ri-rouge { margin: 0; font-size: 0.95em; line-height: 1.35; font-weight: 600; color: var(--dk-accent); animation: ri-monte 0.45s cubic-bezier(0.34, 1.55, 0.64, 1) 0.25s both; }
+  .ri-src { margin: 0; font-size: 0.56em; line-height: 1.3; letter-spacing: 0.03em; color: var(--dk-gris); animation: ri-monte 0.4s ease-out 0.45s both; }
   .ri-src i { font-style: italic; }
-  .ri-clou { font-size: 1.15em; animation-delay: 0.65s; }
+  .ri-clou { font-size: 1.05em; animation-delay: 0.65s; }
 
   @keyframes ri-fondu { from { opacity: 0; } to { opacity: 1; } }
   @keyframes ri-entre { from { opacity: 0; transform: translateX(-1em); } to { opacity: 1; transform: none; } }
   @keyframes ri-monte { from { opacity: 0; transform: translateY(0.6em); } to { opacity: 1; transform: none; } }
-  @keyframes ri-trace { to { stroke-dashoffset: 0; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .ri-charge, .ri-revue, .ri-sommaire li, .ri-carte, .ri-encre, .ri-rouge, .ri-src { animation: none; }
-    .ri-tr { animation: none; stroke-dashoffset: 0; }
-    .ri-charge { transition: none; }
+    .ri-charge, .ri-salle, .ri-perso, .ri-cred, .ri-encre, .ri-rouge, .ri-src { animation: none; }
+    .ri-charge, .ri-salle, .ri-silhouette, .ri-nom, .ri-tag { transition: none; }
   }
 </style>

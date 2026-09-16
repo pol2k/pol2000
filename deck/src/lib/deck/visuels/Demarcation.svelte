@@ -7,10 +7,12 @@
    *   0  Le couloir, les quatre portes encore pâles, la boîte « testable »
    *      au bout. Rien n’est nommé.
    *   1  Porte 1, PLAUSIBLE.
-   *   2  Porte 2, VÉRIFIABLE. Une petite carte « le sexe des anges » arrive
-   *      de la gauche, passe la porte 1, rebondit sur la porte 2 et tombe.
-   *      Elle n’est pas fausse : elle est invérifiable, et c’est ça qui la
-   *      disqualifie.
+   *   2  Porte 2, VÉRIFIABLE. Une petite carte « Tout arrive pour une
+   *      raison. » arrive de la gauche, passe la porte 1, rebondit sur la
+   *      porte 2 et tombe. Elle n’est pas fausse : elle est invérifiable,
+   *      et c’est ça qui la disqualifie. Aucune observation ne pourrait la
+   *      contredire, ce qui prépare la diapositive suivante : Popper et
+   *      les théories compatibles avec tout.
    *   3  Porte 3, PRÉCISE.
    *   4  Porte 4, GÉNÉRALE. Une seconde carte, « Plus on est âgé, plus on
    *      vote. », traverse les quatre portes et se range dans la boîte
@@ -37,7 +39,7 @@
 
   const REGLES = [
     { nom: 'PLAUSIBLE', gloss: cite('elle doit avoir un rapport étroit avec le phénomène observé qu’elle prétend expliquer') },
-    { nom: 'VÉRIFIABLE', gloss: cite('Il ne sert à rien de poser une hypothèse sur le sexe des anges puisque nous ne pourrons jamais vérifier une telle hypothèse.') },
+    { nom: 'VÉRIFIABLE', gloss: cite('Il ne sert à rien de poser une hypothèse […] puisque nous ne pourrons jamais vérifier une telle hypothèse.') },
     { nom: 'PRÉCISE', gloss: cite('sa formulation doit éviter toute ambiguïté') },
     { nom: 'GÉNÉRALE', gloss: cite('son pouvoir d’explication va au-delà du cas particulier') }
   ];
@@ -53,7 +55,7 @@
     class="dm-svg"
     viewBox="0 0 1000 300"
     role="img"
-    aria-label="Un couloir de quatre portes en enfilade, nommées plausible, vérifiable, précise et générale, puis une boîte marquée testable. Une carte portant l’exemple du sexe des anges franchit la première porte, rebondit sur la porte vérifiable et tombe. Une seconde carte, plus on est âgé plus on vote, traverse les quatre portes et se range dans la boîte."
+    aria-label="Un couloir de quatre portes en enfilade, nommées plausible, vérifiable, précise et générale, puis une boîte marquée testable. Une carte portant l’énoncé tout arrive pour une raison franchit la première porte, rebondit sur la porte vérifiable et tombe. Une seconde carte, plus on est âgé plus on vote, traverse les quatre portes et se range dans la boîte."
   >
     <!-- Le couloir. -->
     <line x1="20" y1={LANE} x2="690" y2={LANE} class="dm-couloir" />
@@ -77,9 +79,10 @@
 
     <!-- Temps 2 : la carte invérifiable rebondit sur la porte 2 et tombe. -->
     {#if e >= 2}
-      <g class="dm-jeton dm-anges">
-        <rect x="-82" y="-18" width="164" height="36" class="dm-carte" />
-        <text x="0" y="6" class="dm-carte-t">le sexe des anges</text>
+      <g class="dm-jeton dm-inverif">
+        <rect x="-74" y="-25" width="148" height="50" class="dm-carte" />
+        <text x="0" y="-4" class="dm-carte-t">Tout arrive</text>
+        <text x="0" y="14" class="dm-carte-t">pour une raison.</text>
       </g>
       <!-- Les étincelles passent APRÈS la carte : en SVG, l’ordre du document
            est l’ordre de peinture, et la carte est opaque. -->
@@ -139,9 +142,9 @@
   .dm-carte-t-ok { font-weight: 600; fill: var(--dk-accent); }
 
   /* La carte invérifiable : elle passe la porte 1, cogne la porte 2, retombe. */
-  .dm-anges { animation: dm-rebond 1.7s both; }
-  .dm-anges .dm-carte { animation: dm-grise 0.6s ease-out 1.25s both; }
-  .dm-anges .dm-carte-t { animation: dm-grise-t 0.6s ease-out 1.25s both; }
+  .dm-inverif { animation: dm-rebond 1.7s both; }
+  .dm-inverif .dm-carte { animation: dm-grise 0.6s ease-out 1.25s both; }
+  .dm-inverif .dm-carte-t { animation: dm-grise-t 0.6s ease-out 1.25s both; }
 
   .dm-choc path { fill: none; stroke: var(--dk-accent); stroke-width: 5; stroke-linecap: round; opacity: 0; animation: dm-etincelle 0.5s ease-out 0.62s both; }
 
@@ -169,10 +172,10 @@
 
   @keyframes dm-rebond {
     0% { transform: translate(-120px, 150px) rotate(0deg); }
-    40% { transform: translate(248px, 150px) rotate(0deg); animation-timing-function: cubic-bezier(0.4, 0, 0.5, 1); }
-    52% { transform: translate(214px, 152px) rotate(-5deg); }
-    70% { transform: translate(150px, 168px) rotate(-9deg); animation-timing-function: cubic-bezier(0.5, 0, 0.6, 1); }
-    100% { transform: translate(112px, 236px) rotate(-13deg); }
+    40% { transform: translate(256px, 150px) rotate(0deg); animation-timing-function: cubic-bezier(0.4, 0, 0.5, 1); }
+    52% { transform: translate(222px, 152px) rotate(-5deg); }
+    70% { transform: translate(158px, 168px) rotate(-9deg); animation-timing-function: cubic-bezier(0.5, 0, 0.6, 1); }
+    100% { transform: translate(108px, 228px) rotate(-13deg); }
   }
   @keyframes dm-grise { from { stroke: var(--dk-encre); } to { stroke: var(--dk-gris-2); } }
   @keyframes dm-grise-t { from { fill: var(--dk-encre); } to { fill: var(--dk-gris-2); } }
@@ -188,12 +191,12 @@
     .dm-porte.dm-valide .dm-montant,
     .dm-porte-t, .dm-porte-n,
     .dm-regle.dm-ici, .dm-regle-t, .dm-regle-g,
-    .dm-anges .dm-carte, .dm-anges .dm-carte-t { animation: none; }
+    .dm-inverif .dm-carte, .dm-inverif .dm-carte-t { animation: none; }
     .dm-but, .dm-but-t, .dm-montant, .dm-regle, .dm-regle-n { transition: none; }
     .dm-choc path { animation: none; opacity: 1; }
-    .dm-anges { animation: none; transform: translate(112px, 236px) rotate(-13deg); }
-    .dm-anges .dm-carte { stroke: var(--dk-gris-2); }
-    .dm-anges .dm-carte-t { fill: var(--dk-gris-2); }
+    .dm-inverif { animation: none; transform: translate(108px, 228px) rotate(-13deg); }
+    .dm-inverif .dm-carte { stroke: var(--dk-gris-2); }
+    .dm-inverif .dm-carte-t { fill: var(--dk-gris-2); }
     .dm-bonne { animation: none; transform: translate(840px, 150px); }
   }
 </style>

@@ -4,18 +4,19 @@
    * raison : pour s'empêcher de croire ce qu'on a envie de croire.
    * Trois temps.
    *
-   *   0  L'épisode Millikan, en schéma. Robert Millikan a mesuré la charge
-   *      de l'électron et a obtenu une valeur légèrement fausse. Les
-   *      mesures publiées ensuite ne sautent pas à la vraie valeur : elles
-   *      s'en approchent lentement, parce que celui qui trouvait loin de
-   *      Millikan supposait s'être trompé et cherchait son erreur, tandis
-   *      que celui qui trouvait proche publiait sans rien vérifier.
+   *   0  Le biais de confirmation, en schéma. On part d'une croyance —
+   *      « les jeunes ne votent pas » — et d'un champ de vingt-quatre cas.
+   *      À l'arrivée, seuls les huit cas qui confirment la croyance sont
+   *      encrés, chacun marqué d'un « +1 » pendant qu'un compteur grimpe;
+   *      les seize autres sont tracés si pâles qu'ils passent pour absents.
+   *      Puis, sans clic, ils remontent à l'encre pleine : ce qui était là
+   *      aussi, et qu'on n'avait pas compté.
    *   1  On nomme la chose : ce n'est pas de la malhonnêteté, c'est humain.
    *   2  La phrase de Feynman, qui est le point de la diapositive, puis la
    *      ligne rouge : la méthode nous protège de nous-mêmes.
    *
-   * Aucune donnée réelle : les douze positions sont fixes et servent
-   * seulement à montrer la dérive. La scène est légendée « schéma ».
+   * Aucune donnée réelle : les vingt-quatre jetons sont des positions fixes
+   * et ne disent rien du vote des jeunes. La scène est légendée « schéma ».
    * La citation vient de Richard Feynman, « Cargo Cult Science »,
    * Engineering and Science, vol. 37, no 7, juin 1974 (traduction libre).
    */
@@ -29,27 +30,33 @@
     return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  // Géométrie (viewBox 1000 × 350).
-  const VRAIE = 100, SOL = 300, GAUCHE = 90;
+  // Géométrie (viewBox 1000 × 350). Deux rangées de douze, bien plus larges
+  // que hautes : la diapositive n'a pas un pixel de hauteur à donner.
+  const COLONNES = 12;
+  const X0 = 104, DX = 72;
+  const RANGS = [82, 178];
 
-  // Les mesures publiées, l'une après l'autre. La première est celle de
-  // Millikan, nettement sous la vraie valeur; les suivantes remontent vers
-  // elle sans jamais l'atteindre. Positions fixes, aucune donnée réelle.
-  const MESURES = [
-    { x: 150, y: 252 },
-    { x: 218, y: 246 },
-    { x: 286, y: 234 },
-    { x: 354, y: 238 },
-    { x: 422, y: 220 },
-    { x: 490, y: 208 },
-    { x: 558, y: 198 },
-    { x: 626, y: 182 },
-    { x: 694, y: 168 },
-    { x: 762, y: 150 },
-    { x: 830, y: 134 },
-    { x: 898, y: 120 }
-  ];
-  const TRACE = MESURES.map((m, i) => `${i ? 'L' : 'M'} ${m.x} ${m.y}`).join(' ');
+  // Les cas qui confirment la croyance. Choix fixe, réparti sur les deux
+  // rangées; huit sur vingt-quatre, donc nettement minoritaires.
+  const CONFIRME = new Set([0, 3, 4, 9, 12, 17, 18, 22]);
+
+  const GENS = [];
+  let rang = 0;
+  for (let i = 0; i < COLONNES * RANGS.length; i++) {
+    const vu = CONFIRME.has(i);
+    GENS.push({
+      x: X0 + (i % COLONNES) * DX,
+      y: RANGS[Math.floor(i / COLONNES)],
+      vu,
+      // j : rang d'apparition parmi les cas remarqués (−1 pour les autres).
+      j: vu ? rang++ : -1
+    });
+  }
+  const REMARQUES = GENS.filter((g) => g.vu);
+  const NB_VUS = REMARQUES.length;
+  const NB_TOTAL = GENS.length;
+  // Les valeurs successives du compteur : 1, 2, … 8.
+  const COMPTE = Array.from({ length: NB_VUS }, (_, k) => k + 1);
 </script>
 
 <div class="visuel pq-fig" bind:this={hote}>
@@ -57,28 +64,43 @@
     <svg
       viewBox="0 0 1000 350"
       role="img"
-      aria-label="Schéma : la charge de l’électron, mesure après mesure. La première mesure, celle de Millikan, est nettement sous la vraie valeur. Les mesures publiées ensuite ne se répartissent pas autour de la vraie valeur : elles s’en approchent lentement, parce qu’on ne cherche son erreur que lorsque le résultat surprend."
+      aria-label="Schéma&#8239;: vingt-quatre cas, et la croyance «&#8239;les jeunes ne votent pas&#8239;». D’abord, seuls les huit cas qui donnent raison à la croyance sont tracés à l’encre, chacun marqué d’un plus un pendant qu’un compteur grimpe jusqu’à huit&#8239;; les seize autres sont presque de la couleur du papier. Puis les vingt-quatre cas apparaissent à l’encre pleine&#8239;: ce qui était là aussi, et que le compte de huit avait laissé de côté."
     >
-      <!-- Les deux axes : le temps en bas, la valeur mesurée à gauche. -->
-      <line x1={GAUCHE} y1="64" x2={GAUCHE} y2={SOL} class="pq-axe" />
-      <line x1={GAUCHE} y1={SOL} x2="960" y2={SOL} class="pq-axe" />
-      <text x="40" y="192" class="pq-axe-t" transform="rotate(-90 40 192)">la charge de l’électron</text>
-      <text x="520" y="330" class="pq-axe-t">mesures publiées, les unes après les autres</text>
+      <!-- La croyance de départ, celle qu'on va « vérifier ». -->
+      <text x="500" y="32" class="pq-croyance">«&#8239;Les jeunes ne votent pas.&#8239;»</text>
 
-      <!-- La vraie valeur, qu'on ne connaît qu'après coup. -->
-      <line x1={GAUCHE} y1={VRAIE} x2="960" y2={VRAIE} class="pq-vraie" />
-      <text x="960" y="86" class="pq-vraie-t">la vraie valeur</text>
-
-      <!-- La dérive, tracée sous les points. -->
-      <path d={TRACE} pathLength="1" class="pq-derive" />
-
-      {#each MESURES as m, i}
-        <circle cx={m.x} cy={m.y} r={i === 0 ? 12 : 10} class="pq-pt" class:pq-mil={i === 0} style="--k: {i}" />
+      <!-- Le champ : vingt-quatre cas, tous là depuis le début. -->
+      {#each GENS as g}
+        <g class="pq-jeton" class:pq-net={g.vu} class:pq-flou={!g.vu} style="--j: {g.j}">
+          <circle cx={g.x} cy={g.y + 9} r="9" />
+          <line x1={g.x} y1={g.y + 19} x2={g.x} y2={g.y + 40} />
+          <line x1={g.x - 13} y1={g.y + 28} x2={g.x + 13} y2={g.y + 28} />
+          <line x1={g.x} y1={g.y + 40} x2={g.x - 10} y2={g.y + 56} />
+          <line x1={g.x} y1={g.y + 40} x2={g.x + 10} y2={g.y + 56} />
+        </g>
       {/each}
-      <text x="172" y="284" class="pq-mil-t">la première mesure de Millikan</text>
 
-      <!-- Le motif, nommé une fois les points posés. -->
-      <text x="500" y="44" class="pq-motif">on cherche l’erreur seulement quand le résultat nous surprend</text>
+      <!-- Un « +1 » rouge sur chaque cas qu'on remarque, et sur eux seuls. -->
+      {#each REMARQUES as g}
+        <text x={g.x} y={g.y - 8} class="pq-plus" style="--j: {g.j}">+1</text>
+      {/each}
+
+      <line x1="90" y1="258" x2="910" y2="258" class="pq-regle" />
+
+      <!-- Le compteur : un chiffre par temps, le dernier reste. -->
+      {#each COMPTE as v, k}
+        <text x="90" y="302" class="pq-n" class:pq-n-fin={k === NB_VUS - 1} style="--j: {k}">{v}</text>
+      {/each}
+      <text x="150" y="302" class="pq-etiq pq-etiq-a">ce qu’on remarque</text>
+
+      <!-- Ce qui était là aussi, révélé sans clic, une fois le compte fait. -->
+      <g class="pq-rev">
+        <text x="470" y="302" class="pq-gros">{NB_TOTAL}</text>
+        <text x="546" y="302" class="pq-etiq">ce qui était là aussi</text>
+      </g>
+
+      <!-- Le motif, nommé une fois la scène retournée. -->
+      <text x="500" y="334" class="pq-motif">On ne compte que les cas qui nous donnent raison.</text>
     </svg>
     <p class="pq-legende">schéma</p>
   </div>
@@ -107,46 +129,56 @@
   .pq-scene.pq-recule svg { max-height: 34vh; }
   text { font-family: var(--dk-mono); }
 
-  .pq-axe { stroke: var(--dk-encre); stroke-width: 3; }
-  .pq-axe-t { font-size: 16px; text-anchor: middle; fill: var(--dk-gris); }
+  .pq-croyance { font-size: 24px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
 
-  .pq-vraie { stroke: var(--dk-encre); stroke-width: 3; stroke-dasharray: 10 8; }
-  .pq-vraie-t { font-size: 17px; font-weight: 600; text-anchor: end; fill: var(--dk-encre); }
+  /* Le trait seul : la couleur est posée par .pq-net ou .pq-flou, et rien
+     dans le groupe ne redéclare stroke, sinon l'encrage ne descendrait pas
+     jusqu'aux membres. */
+  .pq-jeton { fill: none; stroke-width: 3; }
+  .pq-net {
+    stroke: var(--dk-encre);
+    animation: pq-pose 0.4s ease-out both;
+    animation-delay: calc(var(--j) * 160ms + 250ms);
+  }
+  /* Presque la couleur du papier : ils sont là, on ne les voit pas. */
+  .pq-flou { stroke: var(--dk-filet); animation: pq-encrer 0.9s ease-out 2.3s forwards; }
 
-  .pq-derive {
-    fill: none;
-    stroke: var(--dk-gris-2);
-    stroke-width: 3;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: pq-trace 1.6s ease-out 0.5s both;
-  }
-
-  .pq-pt {
-    fill: var(--dk-encre);
-    stroke: var(--dk-fond);
-    stroke-width: 2.5;
-    animation: pq-tombe 0.5s cubic-bezier(0.34, 1.5, 0.64, 1) both;
-    animation-delay: calc(var(--k) * 110ms + 200ms);
-  }
-  .pq-pt.pq-mil { fill: var(--dk-accent); stroke-width: 3; }
-  /* Halo couleur papier : l'axe passe derrière les étiquettes, pas au travers. */
-  .pq-mil-t {
-    font-size: 15px;
-    font-weight: 600;
-    fill: var(--dk-accent);
-    paint-order: stroke;
-    stroke: var(--dk-fond);
-    stroke-width: 7px;
-    stroke-linejoin: round;
-    animation: pq-monte 0.5s ease-out 0.7s both;
-  }
-  .pq-motif {
+  .pq-plus {
     font-size: 18px;
+    font-weight: 700;
+    text-anchor: middle;
+    fill: var(--dk-accent);
+    animation: pq-monte 0.35s ease-out both;
+    animation-delay: calc(var(--j) * 160ms + 320ms);
+  }
+
+  .pq-regle { stroke: var(--dk-filet); stroke-width: 2; }
+
+  /* Un chiffre à la fois : chaque texte n'est visible que pendant sa fenêtre
+     de 160 ms, exactement le pas du compteur. Pas de fill-mode ici — avec
+     « backwards » les huit chiffres seraient empilés dès l'arrivée. */
+  .pq-n {
+    font-size: 44px;
+    font-weight: 700;
+    fill: var(--dk-accent);
+    opacity: 0;
+    animation: pq-cpt 160ms linear calc(var(--j) * 160ms + 300ms);
+  }
+  .pq-n-fin { animation-fill-mode: forwards; }
+
+  .pq-gros { font-size: 44px; font-weight: 700; fill: var(--dk-encre); }
+  .pq-etiq { font-size: 18px; fill: var(--dk-gris); }
+  .pq-etiq-a { opacity: 0; animation: pq-monte 0.4s ease-out 0.25s forwards; }
+
+  .pq-rev { opacity: 0; animation: pq-monte 0.5s ease-out 2.6s forwards; }
+
+  .pq-motif {
+    font-size: 22px;
     font-weight: 600;
     text-anchor: middle;
     fill: var(--dk-accent);
-    animation: pq-monte 0.6s ease-out 1.9s both;
+    opacity: 0;
+    animation: pq-monte 0.5s ease-out 3.1s forwards;
   }
 
   .pq-legende { margin: 0; font-size: 0.6em; letter-spacing: 0.06em; color: var(--dk-gris-2); }
@@ -201,13 +233,17 @@
   }
   .pq-bloc.pq-vu .pq-chute { opacity: 1; }
 
-  @keyframes pq-trace { to { stroke-dashoffset: 0; } }
-  @keyframes pq-tombe { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: none; } }
+  @keyframes pq-pose { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+  @keyframes pq-encrer { to { stroke: var(--dk-encre); } }
+  @keyframes pq-cpt { from, to { opacity: 1; } }
   @keyframes pq-monte { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .pq-pt, .pq-mil-t, .pq-motif { animation: none; }
-    .pq-derive { animation: none; stroke-dashoffset: 0; }
+    .pq-net, .pq-plus, .pq-etiq-a, .pq-rev, .pq-motif, .pq-flou, .pq-n { animation: none; }
+    .pq-net, .pq-plus, .pq-etiq-a, .pq-rev, .pq-motif { opacity: 1; }
+    .pq-flou { stroke: var(--dk-encre); }
+    .pq-n { opacity: 0; }
+    .pq-n-fin { opacity: 1; }
     svg, .pq-scene, .pq-humain, .pq-bloc, .pq-cit, .pq-chute { transition: none; }
   }
 </style>
