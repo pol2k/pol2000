@@ -14,6 +14,11 @@
    *   4  Un jeton 106 arrive de la droite ; l'échelle passe à 0-110, la planche
    *      bascule, le pivot court jusqu'à 23. La médiane ne bouge pas.
    *
+   * À droite, chaque mesure porte sa définition en une ligne, qui apparaît
+   * avec sa valeur : le mode (la valeur la plus fréquente), la médiane (la
+   * valeur du milieu, une fois rangées), la moyenne (la somme divisée par le
+   * nombre : le point d'équilibre).
+   *
    * Les valeurs sont celles que R donne : mean(c(2, 2, 2, 3)) = 2.25,
    * median() = 2 ; mean(c(2, 2, 2, 3, 106)) = 23, median() = 2.
    */
@@ -123,6 +128,7 @@
     <div class="ligne" class:vu={e >= 1}>
       <span class="et">MODE</span>
       {#if e >= 1}<span class="val">2</span>{/if}
+      <span class="def">la valeur la plus fréquente</span>
     </div>
     <div class="ligne" class:vu={e >= 2}>
       <span class="et">MÉDIANE</span>
@@ -131,6 +137,7 @@
           <span class="val" class:flash={e >= 4}>2</span>
         {/key}
       {/if}
+      <span class="def">la valeur du milieu, une fois rangées</span>
     </div>
     <div class="ligne" class:vu={e >= 3}>
       <span class="et">MOYENNE</span>
@@ -139,6 +146,7 @@
           <span class="val" class:rouge={e >= 4}>{fmt(moyenne)}</span>
         {/key}
       {/if}
+      <span class="def">la somme divisée par le nombre&#8239;: le point d’équilibre</span>
     </div>
   </div>
 
@@ -146,7 +154,7 @@
 </div>
 
 <style>
-  .bascule { display: grid; grid-template-columns: 1fr 11em; gap: 0.4em 1.6em; align-items: center; }
+  .bascule { display: grid; grid-template-columns: 1fr 13.5em; gap: 0.4em 1.6em; align-items: center; }
   .scene { display: flex; flex-direction: column; gap: 0.3em; min-width: 0; }
   .chip { margin: 0; align-self: flex-start; font-family: var(--dk-mono); font-size: 0.9em; border: 3px solid var(--dk-encre); padding: 0.3em 0.8em; }
   .chip .neuf { color: var(--dk-accent); font-weight: 600; }
@@ -205,13 +213,18 @@
   .milieu { fill: none; stroke: var(--dk-accent); stroke-width: 4; stroke-dasharray: 520; stroke-dashoffset: 520; animation: trace 0.6s ease-out 1.3s forwards; }
   @keyframes trace { to { stroke-dashoffset: 0; } }
 
-  .lecture { display: flex; flex-direction: column; gap: 0.9em; }
-  .ligne { display: flex; flex-direction: column; border-top: 3px solid var(--dk-filet); padding-top: 0.3em; min-height: 3.6em; transition: border-color 0.3s; }
+  .lecture { display: flex; flex-direction: column; gap: 0.7em; }
+  .ligne { display: flex; flex-direction: column; border-top: 3px solid var(--dk-filet); padding-top: 0.3em; min-height: 5.3em; transition: border-color 0.3s; }
   .ligne.vu { border-top-color: var(--dk-encre); }
   .et { font-size: 0.66em; letter-spacing: 0.16em; font-weight: 600; color: var(--dk-gris); }
   .ligne.vu .et { color: var(--dk-encre); }
   .val { font-size: 2.4em; line-height: 1; font-weight: 600; color: var(--dk-encre); display: inline-block; animation: popc 0.5s cubic-bezier(0.34, 1.8, 0.64, 1) both; font-variant-numeric: tabular-nums; }
   .val.rouge { color: var(--dk-accent); }
+  /* La définition, en une ligne ou deux, sous le nombre. Elle suit la ligne : pâle
+     tant que la mesure n'est pas révélée. La valeur étant montée par {#if}, on pousse
+     la définition vers le bas pour qu'elle garde sa place avant et après. */
+  .def { margin-top: auto; font-size: 0.7em; line-height: 1.3; color: var(--dk-gris); opacity: 0; transition: opacity 0.4s 0.3s; }
+  .ligne.vu .def { opacity: 1; }
   .val.flash { animation: flash 0.5s ease-in-out 1.9s 3 both; }
   @keyframes popc { from { transform: scale(0.3); opacity: 0; } to { transform: none; opacity: 1; } }
   @keyframes pop { from { transform: scale(0.3); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -224,6 +237,6 @@
     .planche.osc3, .planche.osc4, .chute, .vol, .jeton.mode rect, .val, .val.flash, .p-val { animation: none; }
     .raye, .milieu { animation: none; stroke-dashoffset: 0; }
     .jeton, .jeton.loin, .tick, .pivot, .pivot.vite { transition: none; }
-    .leg { transition: none; }
+    .leg, .def { transition: none; }
   }
 </style>

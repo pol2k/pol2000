@@ -9,10 +9,16 @@
    *      « personne ici ? »
    *   2  La tranche 0 à 10 s'allume (36 %), les tranches autour de la
    *      moyenne s'encadrent (11 %) ; la réponse arrive : le problème.
-   *   3  La sortie : les deux camps s'allument ensemble, chacun avec sa part
-   *      (10 ou moins, 81 ou plus) ; la moyenne et son bonhomme grisent, le
-   *      cadre du milieu s'efface, la médiane se pose discrètement sous
-   *      l'axe. La réponse devient « on décrit les deux camps ».
+   *   3  La médiane entre en scène : un trait plein à 33, la moyenne et son
+   *      bonhomme grisent, le cadre du milieu s'efface. Pourquoi elle vaut
+   *      mieux : elle dit une chose vraie sur des personnes. Par définition,
+   *      la moitié des répondant.e.s lui donnent 33 ou moins ; 40, la
+   *      moyenne, n'est qu'un point d'équilibre où presque personne ne se
+   *      trouve.
+   *   4  La sortie, meilleure encore pour une distribution à deux bosses :
+   *      les deux camps s'allument ensemble, chacun avec sa part (10 ou
+   *      moins, 81 ou plus). On ne survend pas la médiane : pour une forme
+   *      en U, décrire les camps bat les deux résumés.
    *
    * Les tranches viennent de hist(breaks = seq(0, 100, 10)) : [0, 10],
    * (10, 20], ..., (90, 100]. « 10 ou moins » est donc la première tranche,
@@ -31,7 +37,7 @@
     if (!hote) return;
     e = 0;
     return brancherTemps(hote, {
-      total: 3,
+      total: 4,
       lire: () => e,
       ecrire: (v) => untrack(() => { if (v === 0) tour += 1; e = v; })
     });
@@ -50,11 +56,13 @@
   const CHAUD = [8, 9];
   const haut = pct(CHAUD.reduce((s, i) => s + P.effectifs[i], 0));
   const hautChaud = Math.min(...CHAUD.map((i) => y(P.effectifs[i])));
-  const camp = (i) => i === 0 || (e >= 3 && CHAUD.includes(i));
+  const camp = (i) => i === 0 || (e >= 4 && CHAUD.includes(i));
   const reponse = $derived(
-    e >= 3
-      ? `Alors on décrit les deux camps : ${bas} % très froids, ${haut} % très chauds.`
-      : 'La moyenne d’une opinion divisée ne décrit presque personne.'
+    e >= 4
+      ? `Mieux encore, on décrit les deux camps : ${bas} % très froids, ${haut} % très chauds.`
+      : e === 3
+        ? `La médiane dit une chose vraie : la moitié lui donne ${P.mediane} ou moins.`
+        : 'La moyenne d’une opinion divisée ne décrit presque personne.'
   );
   const moy = Math.round(P.moyenne);
   const hautMilieu = Math.min(y(P.effectifs[3]), y(P.effectifs[4]));
@@ -101,9 +109,23 @@
         </g>
       </g>
 
+      <!-- Temps 3 : la médiane, un trait plein, et ce qu'elle dit de vrai.
+           Dessinée AVANT les étiquettes des faits : en SVG l'ordre du document est
+           l'ordre de peinture, et le trait doit passer derrière « 36 % : 10 ou moins ». -->
+      <g class="mediane-f" class:vu={e >= 3}>
+        <line x1={x(P.mediane)} y1={Y0} x2={x(P.mediane)} y2={Y1 - 16} class="med-l" />
+        <text x={x(P.mediane) - 10} y={Y1 - 20} class="med-t">médiane · {P.mediane}</text>
+        <path d="M {X0} {Y0 + 40} L {X0} {Y0 + 46} L {x(P.mediane)} {Y0 + 46} L {x(P.mediane)} {Y0 + 40}" class="med-acc" />
+        <text x={(X0 + x(P.mediane)) / 2} y={Y0 + 66} class="med-moitie">la moitié des gens</text>
+      </g>
+
       <!-- Temps 2 : les deux faits qui comptent. -->
       <g class="fait" class:vu={e >= 2}>
-        <text x={x(10) + 10} y={y(P.effectifs[0]) + 40} class="fait-t">{bas} %&#8239;: 10 ou moins</text>
+        <!-- Sur deux lignes : l'étiquette s'arrête avant le trait de la médiane (33). -->
+        <text x={x(10) + 10} y={y(P.effectifs[0]) + 34} class="fait-t">
+          <tspan x={x(10) + 10} class="fait-g">{bas}&#8239;%</tspan>
+          <tspan x={x(10) + 10} dy="28">10 ou moins</tspan>
+        </text>
       </g>
       <g class="fait" class:vu={e === 2} style="transition-delay: {e === 2 ? 0.25 : 0}s">
         <rect x={x(30) + 2} y={hautMilieu - 8} width={x(50) - x(30) - 4} height={Y0 - hautMilieu + 8} class="cadre-f" />
@@ -111,13 +133,9 @@
         <text x={x(40)} y={Y0 + 66} class="fait-t c">{milieu} % entre 31 et 50</text>
       </g>
 
-      <!-- Temps 3 : la sortie. L'autre camp, et la médiane, discrète, sous l'axe. -->
-      <g class="fait" class:vu={e >= 3}>
+      <!-- Temps 4 : la sortie. L'autre camp. -->
+      <g class="fait" class:vu={e >= 4}>
         <text x={X1} y={hautChaud - 16} class="fait-t d">{haut} %&#8239;: 81 ou plus</text>
-      </g>
-      <g class="fait" class:vu={e >= 3} style="transition-delay: {e >= 3 ? 0.25 : 0}s">
-        <path d="M {x(P.mediane)} {Y0 + 12} l -9 16 l 18 0 z" class="med-m" />
-        <text x={x(P.mediane)} y={Y0 + 66} class="med-t">médiane · {P.mediane}</text>
       </g>
     </svg>
   {/snippet}
@@ -149,16 +167,22 @@
 
   .fait { opacity: 0; transform: translateY(10px); transition: opacity 0.4s, transform 0.5s cubic-bezier(0.34, 1.6, 0.64, 1); }
   .fait.vu { opacity: 1; transform: none; }
-  .fait-t { font-size: 22px; font-weight: 600; fill: var(--dk-accent); }
+  /* Halo couleur papier : le trait de la médiane passe derrière l'étiquette, pas au travers. */
+  .fait-t { font-size: 22px; font-weight: 600; fill: var(--dk-accent); paint-order: stroke; stroke: var(--dk-fond); stroke-width: 7px; stroke-linejoin: round; }
+  .fait-g { font-size: 30px; }
   .fait-t.c { text-anchor: middle; }
   .fait-t.d { text-anchor: end; }
-  .med-m { fill: var(--dk-encre); }
-  .med-t { font-size: 22px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
+  .mediane-f { opacity: 0; transition: opacity 0.4s; }
+  .mediane-f.vu { opacity: 1; }
+  .med-l { stroke: var(--dk-encre); stroke-width: 5; }
+  .med-t { font-size: 22px; font-weight: 600; text-anchor: end; fill: var(--dk-encre); paint-order: stroke; stroke: var(--dk-fond); stroke-width: 6px; }
+  .med-acc { fill: none; stroke: var(--dk-encre); stroke-width: 3; }
+  .med-moitie { font-size: 20px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .cadre-f { fill: none; stroke: var(--dk-accent); stroke-width: 4; }
   .acc-f { fill: none; stroke: var(--dk-accent); stroke-width: 3; }
 
   @media (prefers-reduced-motion: reduce) {
     .barre-f { animation: none; }
-    .moyenne-f, .moy-l, .moy-t, .bonhomme, .fait { transition: none; }
+    .moyenne-f, .moy-l, .moy-t, .bonhomme, .fait, .mediane-f { transition: none; }
   }
 </style>

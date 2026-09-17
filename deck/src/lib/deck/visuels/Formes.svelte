@@ -8,18 +8,41 @@
    *   2  Intérêt pour la politique : « Étirée vers la gauche ».
    *   3  Pierre Poilievre, thermomètre : « En U ».
    *   4  Personnes dans le ménage : « Étirée vers la droite ».
+   *   5  Dans les quatre panneaux à la fois, deux traits verticaux : la
+   *      moyenne (encre) et la médiane (rouge, tiretée), chacune avec sa
+   *      valeur. Symétrique : elles se confondent. Étirée ou en U : elles
+   *      s'écartent. Pour le ménage, la moyenne sort du graphique : une
+   *      flèche pointe vers la droite.
    *
-   * Les formes révélées restent ; la dernière porte le cadre rouge.
+   * Les formes révélées restent ; la dernière porte le cadre rouge, sauf au
+   * temps 5, où aucun panneau n'est mis en avant.
+   *
+   * Moyennes et médianes viennent de FORMES, sauf pour le ménage : on lit
+   * celles de la sortie summary() que la diapositive « Dans les vraies
+   * données » affiche (CONSOLES.menage), pour que le deck ne montre jamais
+   * deux moyennes différentes pour la même variable.
    */
   import { brancherTemps } from '../temps.js';
-  import { FORMES } from '$lib/data/seance3.js';
+  import { FORMES, CONSOLES } from '$lib/data/seance3.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 4, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 5, lire: () => e, ecrire: (v) => (e = v) });
   });
+
+  // summary() : Min. 1st Qu. Median Mean 3rd Qu. Max. ; on lit la ligne des
+  // valeurs par position (la médiane est la 3e, la moyenne la 4e).
+  function resumeMenage() {
+    const lignes = CONSOLES.menage[0].out.trim().split('\n');
+    const v = lignes[lignes.length - 1].trim().split(/\s+/).map(Number);
+    if (v.length !== 6 || v.some(Number.isNaN)) throw new Error('Formes : sortie summary() du ménage illisible.');
+    return { mediane: v[2], moyenne: v[3] };
+  }
+  const MENAGE = resumeMenage();
+  const FINE = ' ';
+  const fr = (n, dec) => n.toLocaleString('fr-CA', { minimumFractionDigits: dec, maximumFractionDigits: dec }).replace(/\s/g, FINE);
 
   const W = 460, X0 = 22, X1 = 438, Y0 = 176, Y1 = 12;
   const PANNEAUX = [
@@ -55,7 +78,25 @@
       ? [0, 5, 10].map((j) => ({ x: X0 + j * pas, t: String(F.valeurs[j]) }))
       : F.valeurs.map((v, i) => ({ x: X0 + (i + 0.5) * pas, t: String(v) }));
     const pts = [[X0, Y0], ...barres.map((b) => [b.cx, b.y]), [X1, Y0]];
-    return { ...p, barres, etiquettes, contour: lisse(pts) };
+
+    // Où tombe une valeur sur l'axe. Le thermomètre est en tranches de 0 à
+    // 100 ; les trois autres ont une barre par valeur entière, centrée.
+    const xDe = p.cle === 'poilievre'
+      ? (v) => X0 + (v / 100) * (X1 - X0)
+      : (v) => X0 + (v - F.valeurs[0] + 0.5) * pas;
+    const moy = p.cle === 'menage' ? MENAGE.moyenne : F.moyenne;
+    const med = p.cle === 'menage' ? MENAGE.mediane : F.mediane;
+    const horsChamp = xDe(moy) > X1;
+    const reperes = {
+      xMoy: horsChamp ? null : xDe(moy),
+      xMed: xDe(med),
+      tMoy: `moy. ${fr(moy, moy >= 1000 ? 0 : 1)}`,
+      tMed: `méd. ${fr(med, 0)}`,
+      // L'étiquette de la plus petite des deux va à gauche de son trait, l'autre à droite.
+      moyAGauche: moy <= med,
+      horsChamp
+    };
+    return { ...p, barres, etiquettes, contour: lisse(pts), reperes };
   });
 </script>
 
@@ -76,11 +117,32 @@
             <text x={t.x} y={Y0 + 22} class="tick">{t.t}</text>
           {/each}
           <path d={f.contour} pathLength="1" class="contour" class:vu={e >= i + 1} />
+
+          <!-- Temps 5 : où tombent la moyenne et la médiane. -->
+          {#if e >= 5}
+            {@const r = f.reperes}
+            <g class="reperes" style="--d: {i * 120}ms">
+              <line x1={r.xMed} y1={Y1 - 4} x2={r.xMed} y2={Y0} class="rep-med" />
+              {#if r.horsChamp}
+                <!-- La moyenne est hors du graphique : une flèche vers la droite. -->
+                <path d="M {X1 - 70} 20 H {X1 + 2} M {X1 - 12} 10 L {X1 + 4} 20 L {X1 - 12} 30" class="rep-fleche" />
+                <text x={X1 - 78} y="26" class="rep-t rep-moy fin">{r.tMoy}</text>
+                <text x={r.xMed + 7} y="48" class="rep-t rep-medt">{r.tMed}</text>
+              {:else}
+                <line x1={r.xMoy} y1={Y1 - 4} x2={r.xMoy} y2={Y0} class="rep-moyl" />
+                <text x={r.xMoy + (r.moyAGauche ? -20 : 12)} y="26" class="rep-t rep-moy" class:fin={r.moyAGauche}>{r.tMoy}</text>
+                <text x={r.xMed + (r.moyAGauche ? 7 : -7)} y="48" class="rep-t rep-medt" class:fin={!r.moyAGauche}>{r.tMed}</text>
+              {/if}
+            </g>
+          {/if}
         </svg>
       </div>
     {/each}
   </div>
-  <p class="source">Étude électorale canadienne 2025</p>
+  <div class="pied">
+    <p class="lecon" class:vue={e >= 5}>Symétrique&#8239;: elles se confondent. Étirée ou en U&#8239;: elles s’écartent.</p>
+    <p class="source">Étude électorale canadienne 2025</p>
+  </div>
 </div>
 
 <style>
@@ -101,8 +163,26 @@
   .tick { font-size: 15px; text-anchor: middle; fill: var(--dk-gris); }
   .contour { fill: none; stroke: var(--dk-accent); stroke-width: 5; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
   .contour.vu { animation: trace 1.1s ease-in-out forwards; }
-  .source { margin: 0; font-size: 0.56em; letter-spacing: 0.06em; color: var(--dk-gris); }
+  .source { margin: 0; font-size: 0.56em; letter-spacing: 0.06em; color: var(--dk-gris); white-space: nowrap; }
 
+  /* Le pied : la leçon à gauche, la source à droite, sur une seule ligne,
+     pour que le temps 5 n'ajoute aucune hauteur à la diapositive. */
+  .pied { display: flex; justify-content: space-between; align-items: baseline; gap: 1.5em; }
+  .lecon { margin: 0; font-size: 0.82em; font-weight: 600; color: var(--dk-accent); opacity: 0; transition: opacity 0.4s 0.5s; }
+  .lecon.vue { opacity: 1; }
+
+  /* Temps 5 : la moyenne en encre, la médiane en rouge tireté. */
+  .reperes { animation: fondu 0.4s ease-out both; animation-delay: var(--d); }
+  .rep-moyl { stroke: var(--dk-encre); stroke-width: 4; }
+  .rep-med { stroke: var(--dk-accent); stroke-width: 4; stroke-dasharray: 9 6; }
+  .rep-fleche { fill: none; stroke: var(--dk-encre); stroke-width: 4; stroke-linejoin: miter; }
+  /* Halo couleur papier : les étiquettes passent devant les barres et la silhouette. */
+  .rep-t { font-size: 17px; font-weight: 600; paint-order: stroke; stroke: var(--dk-fond); stroke-width: 6px; stroke-linejoin: round; }
+  .rep-t.fin { text-anchor: end; }
+  .rep-moy { fill: var(--dk-encre); }
+  .rep-medt { fill: var(--dk-accent); }
+
+  @keyframes fondu { from { opacity: 0; } to { opacity: 1; } }
   @keyframes monte { from { transform: scaleY(0); } to { transform: scaleY(1); } }
   @keyframes trace { to { stroke-dashoffset: 0; } }
   @keyframes pop { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
@@ -111,5 +191,7 @@
     .barre { animation: none; transition: none; }
     .contour.vu { animation: none; stroke-dashoffset: 0; }
     .forme.vue { animation: none; opacity: 1; }
+    .reperes { animation: none; }
+    .lecon { transition: none; }
   }
 </style>

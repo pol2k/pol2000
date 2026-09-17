@@ -57,6 +57,7 @@
   import AxeMenteur from '$lib/deck/visuels/AxeMenteur.svelte';
   import AvantS4 from '$lib/deck/visuels/AvantS4.svelte';
   import Science from '$lib/deck/visuels/Science.svelte';
+  import KKV from '$lib/deck/visuels/KKV.svelte';
   import Inference from '$lib/deck/visuels/Inference.svelte';
   import DeuxInferences from '$lib/deck/visuels/DeuxInferences.svelte';
   import Gabarit from '$lib/deck/visuels/Gabarit.svelte';
@@ -66,7 +67,7 @@
   import PourquoiEcartType from '$lib/deck/visuels/PourquoiEcartType.svelte';
   import { CONSOLES } from '$lib/data/seance3.js';
 
-  const TOTAL = 58;
+  const TOTAL = 59;
   const D = 'POL-2000 · séance 3 · jeu 17 sept';
 
   // Retour sur les chemins : trois consoles, toutes tirées de la même session
@@ -223,6 +224,11 @@ ggplot(d, aes(x = groupe_age, fill = parti)) +
     <Slide bandeau="La science" droite={D}>
       <h2 class="e">Pourquoi se donner tout ce mal ?</h2>
       <Pourquoi />
+    </Slide>
+
+    <Slide bandeau="La science" droite={D}>
+      <h2 class="e">Un livre, trois auteurs</h2>
+      <KKV />
     </Slide>
 
     <Slide bandeau="La science" droite={D}>
@@ -405,7 +411,7 @@ ggplot(d, aes(x = groupe_age, fill = parti)) +
     </Slide>
 
     <Slide bandeau="Dessiner" droite={D}>
-      <h2 class="e">Le vote, selon le groupe d’âge</h2>
+      <h2 class="e">Le vote selon l’âge : une table, quatre graphiques</h2>
       <BarresDodge />
     </Slide>
 

@@ -1,12 +1,13 @@
 <script>
   /**
-   * Le gabarit d’un article scientifique : un seul document, huit sections,
-   * toujours dans le même ordre. Ce qu’on apprend aujourd’hui, décrire une
-   * variable, se fait dans une section précise : « Données et méthodes ».
+   * Le gabarit d’un article scientifique : un seul document, neuf sections,
+   * toujours dans le même ordre. « Données » et « Méthodes » sont deux
+   * cases distinctes. Ce qu’on apprend aujourd’hui, décrire une variable,
+   * se fait dans une section précise : « Données ».
    *
-   *   0  La page et ses huit sections numérotées, de haut en bas.
-   *   1  La section 5, « Données et méthodes », passe au rouge, les sept
-   *      autres s’effacent. « Vous êtes ici. »
+   *   0  La page et ses neuf sections numérotées, de haut en bas.
+   *   1  La section 5, « Données », passe au rouge, les huit autres
+   *      s’effacent. « Vous êtes ici. »
    *   2  La section 5 s’ouvre : un panneau se déplie à droite, avec trois
    *      pictogrammes (la forme, le centre, la dispersion) et la phrase de
    *      clôture en rouge.
@@ -23,13 +24,14 @@
     'Question de recherche',
     'Revue de littérature',
     'Hypothèses',
-    'Données et méthodes',
+    'Données',
+    'Méthodes',
     'Résultats',
     'Discussion',
     'Conclusion'
   ];
-  const ICI = 4; // rang de « Données et méthodes »
-  const Y0 = 30, PAS = 51, H = 43;
+  const ICI = 4; // rang de « Données »
+  const Y0 = 30, PAS = 45, H = 38;
   const Y_ICI = Y0 + ICI * PAS;
   const MI = Y_ICI + H / 2;
 
@@ -62,7 +64,7 @@
     class:gb-joue={joue}
     viewBox="0 0 1000 484"
     role="img"
-    aria-label="Une page d’article scientifique découpée en huit sections numérotées, de haut en bas&#8239;: introduction, question de recherche, revue de littérature, hypothèses, données et méthodes, résultats, discussion, conclusion. La section 5, données et méthodes, est en rouge&#8239;: vous êtes ici. Elle s’ouvre sur trois pictogrammes&#8239;: la forme, le centre, la dispersion."
+    aria-label="Une page d’article scientifique découpée en neuf sections numérotées, de haut en bas&#8239;: introduction, question de recherche, revue de littérature, hypothèses, données, méthodes, résultats, discussion, conclusion. La section 5, données, est en rouge&#8239;: vous êtes ici. Elle s’ouvre sur trois pictogrammes&#8239;: la forme, le centre, la dispersion."
   >
     <!-- ——— La page : un seul document ——— -->
     <path d="M 20 8 H 394 L 410 24 V 446 H 20 Z" class="gb-page" />
@@ -74,15 +76,15 @@
         <g class="gb-pose" style="--k: {i}">
           <rect x="34" y={y} width="358" height={H} class="gb-case" />
           <line x1="78" y1={y} x2="78" y2={y + H} class="gb-sep" />
-          <text x="56" y={y + 30} class="gb-num">{i + 1}</text>
-          <text x="92" y={y + 30} class="gb-nom">{nom}</text>
+          <text x="56" y={y + 27} class="gb-num">{i + 1}</text>
+          <text x="92" y={y + 27} class="gb-nom">{nom}</text>
         </g>
       </g>
     {/each}
 
     <text x="20" y="474" class="gb-legende">le gabarit d’un article scientifique</text>
 
-    <!-- ——— La section 5 s’ouvre ——— -->
+    <!-- ——— La section 5, « Données », s’ouvre ——— -->
     {#if e >= 2}
       <path d="M 392 {Y_ICI} L 470 30 M 392 {Y_ICI + H} L 470 340" pathLength="1" class="gb-zoom" />
       <g class="gb-panneau">
@@ -151,7 +153,7 @@
   .gb-page { fill: var(--dk-fond-2); stroke: var(--dk-encre); stroke-width: 4; stroke-linejoin: miter; }
   .gb-pli { fill: none; stroke: var(--dk-encre); stroke-width: 4; }
 
-  /* Les huit sections. L’effacement vit sur le groupe extérieur, l’arrivée
+  /* Les neuf sections. L’effacement vit sur le groupe extérieur, l’arrivée
      sur le groupe intérieur : l’un ne bloque pas l’autre. */
   .gb-rang { opacity: 1; transition: opacity 0.4s; }
   .gb-rang.gb-loin { opacity: 0.3; }
@@ -171,7 +173,7 @@
   .gb-fleche { animation: gb-pousse 1.2s ease-in-out 0.6s infinite; }
   .gb-fleche-t { fill: none; stroke: var(--dk-accent); stroke-width: 5; stroke-linejoin: miter; }
   .gb-ici-g { transition: transform 0.5s cubic-bezier(0.45, 0, 0.3, 1); }
-  .gb-ici-g.gb-monte { transform: translate(-66px, -190px); }
+  .gb-ici-g.gb-monte { transform: translate(-66px, -163.5px); }
   .gb-ici-t { font-size: 26px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; fill: var(--dk-accent); }
 
   /* Le panneau qui se déplie. */
