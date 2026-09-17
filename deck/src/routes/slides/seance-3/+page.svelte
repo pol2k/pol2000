@@ -411,7 +411,7 @@ ggplot(d, aes(x = groupe_age, fill = parti)) +
     </Slide>
 
     <Slide bandeau="Dessiner" droite={D}>
-      <h2 class="e">Le vote selon l’âge : une table, quatre graphiques</h2>
+      <h2 class="e">Le vote selon l’âge : une table, sept graphiques</h2>
       <BarresDodge />
     </Slide>
 
