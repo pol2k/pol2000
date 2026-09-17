@@ -6,19 +6,26 @@
    * dossier. Dans les trois cas, on écrit un chemin entre guillemets.
    *
    *   0  La scène au repos : le dossier pol2000 à gauche, avec data/ (qui
-   *      contient ces2025.csv) et resultats/ (vide), le bloc R à droite.
-   *   1  LIRE : la flèche va de ces2025.csv vers R, une copie de la feuille
+   *      contient data.csv) et resultats/ (vide), à droite le vrai logo de
+   *      R dans son cadre.
+   *   1  LIRE : la flèche va de data.csv vers R, une copie de la feuille
    *      glisse dans R.
    *   2  ÉCRIRE : la flèche repart de R vers resultats/, une nouvelle
-   *      feuille, ces_propre.csv, arrive dans le dossier jusque-là vide.
+   *      feuille, data_propre.csv, arrive dans le dossier jusque-là vide.
    *   3  EXPORTER : même flèche, et une image, age.png, arrive à côté.
    *      Puis la phrase de clôture.
    *
-   * Les trois commandes et les deux noms de fichiers viennent de la vraie
+   * Les trois commandes et les trois noms de fichiers viennent de la vraie
    * session R (seance3_chemins.js) : rien n’est retapé ici. Le mini
    * histogramme du glyphe est un pictogramme, pas une donnée. Tracés fixes,
    * aucun hasard.
+   *
+   * R est le logo officiel (static/img/Rlogo.png, 724 × 561, proportions
+   * gardées), posé dans un cadre carré : les flèches horizontales partent
+   * du bord droit du cadre et y arrivent, ce que l’ovale du logo seul ne
+   * permettrait pas proprement.
    */
+  import { base } from '$app/paths';
   import { brancherTemps } from '../temps.js';
   import { CHEMINS } from '$lib/data/seance3_chemins.js';
 
@@ -53,7 +60,7 @@
     class="tg-scene"
     viewBox="0 0 1000 375"
     role="img"
-    aria-label="À gauche, le dossier pol2000 avec deux sous-dossiers&#8239;: data, qui contient le fichier ces2025.csv, et resultats, vide au départ. À droite, un grand carré rouge marqué R. Une flèche va d’abord du fichier vers R (lire), puis de R vers le dossier resultats, où apparaissent un nouveau fichier csv (écrire) puis une image (exporter)."
+    aria-label="À gauche, le dossier pol2000 avec deux sous-dossiers&#8239;: data, qui contient le fichier data.csv, et resultats, vide au départ. À droite, le logo de R dans un cadre carré. Une flèche va d’abord du fichier vers R (lire), puis de R vers le dossier resultats, où apparaissent un nouveau fichier csv (écrire) puis une image (exporter)."
   >
     {#snippet feuille()}
       <path d="M -28 -35 H 12 L 28 -19 V 35 H -28 Z" class="tg-papier" />
@@ -94,8 +101,8 @@
     </g>
 
     <!-- ——— R, l’atelier ——— -->
-    <rect x="770" y="95" width="220" height="220" class="tg-r" />
-    <text x="880" y="252" class="tg-r-t">R</text>
+    <rect x="772" y="97" width="216" height="216" class="tg-r" />
+    <image href="{base}/img/Rlogo.png" x="786" y="132.2" width="188" height="145.7" />
 
     <!-- ——— La flèche : seul son sens change ——— -->
     {#if e === 1}
@@ -162,8 +169,7 @@
   .tg-vide-t { font-size: 22px; text-anchor: middle; fill: var(--dk-gris-2); }
 
   /* R. */
-  .tg-r { fill: var(--dk-accent); }
-  .tg-r-t { font-size: 150px; font-weight: 700; text-anchor: middle; fill: var(--dk-fond); }
+  .tg-r { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 4; }
 
   /* La flèche se trace, puis la pointe se pose. */
   .tg-trait { stroke: var(--dk-accent); stroke-width: 5; stroke-dasharray: 1; stroke-dashoffset: 0; animation: tg-trace 0.5s ease-out both; }

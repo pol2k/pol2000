@@ -1,7 +1,8 @@
 <script>
   /**
-   * L'écart type, comme une distance typique à la moyenne. Aucune formule :
-   * on montre des distances, on les range, on en retient une longueur.
+   * L'écart type (standard deviation, sd() dans R), comme une distance
+   * typique à la moyenne. Aucune formule : on montre des distances, on les
+   * range, on en retient une longueur, puis on dit la recette en mots.
    *
    * En haut, un schéma : dix valeurs fictives dont la moyenne vaut 50.
    *   0  Les dix points et la moyenne, en rouge.
@@ -9,8 +10,12 @@
    *   2  Les flèches se détachent et s'alignent à gauche, triées, comme des
    *      barres ; un repère rouge se pose à leur longueur typique (celle que
    *      sd() de R donnerait pour ces dix valeurs).
+   *   3  Ni la distance moyenne, ni la distance médiane : un second repère,
+   *      à l'encre, marque la distance moyenne ; les deux nombres côte à
+   *      côte, la recette en mots, et un seul point (le plus loin) mis au
+   *      carré. Tout est calculé à partir des dix valeurs.
    * En bas, la vraie variable :
-   *   3  L'âge de l'Étude électorale canadienne 2025 : une bande d'un écart
+   *   4  L'âge de l'Étude électorale canadienne 2025 : une bande d'un écart
    *      type de chaque côté de la moyenne s'ouvre depuis le centre
    *      (src/lib/data/seance3.js).
    */
@@ -21,7 +26,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 4, lire: () => e, ecrire: (v) => (e = v) });
   });
 
   const VALEURS = [22, 34, 40, 45, 48, 52, 55, 60, 66, 78];
@@ -39,6 +44,12 @@
   const ordre = VALEURS.map((v, i) => i).sort((a, b) => Math.abs(VALEURS[a] - MOY) - Math.abs(VALEURS[b] - MOY));
   const rang = VALEURS.map((_, i) => ordre.indexOf(i));
   const XMARQUE = ORIGINE + ET * K;
+  // La distance moyenne, pour la comparer à l'écart type : ce n'est pas le même nombre.
+  const DMOY = VALEURS.reduce((s, v) => s + Math.abs(v - MOY), 0) / N;
+  const XDMOY = ORIGINE + DMOY * K;
+  // Le point le plus loin de la moyenne (la dernière flèche de la pile) sert d'exemple.
+  const IEX = ordre[N - 1];
+  const DEX = Math.abs(VALEURS[IEX] - MOY);
   const XLONG = ORIGINE + Math.max(...VALEURS.map((v) => Math.abs(v - MOY))) * K;
 
   // La vraie variable : l'âge, de 15 à 100 ans.
@@ -50,6 +61,8 @@
 <div class="visuel ecart-type" bind:this={hote}>
   <svg viewBox="0 0 1000 500" role="img" aria-label="Dix valeurs fictives autour d'une moyenne de 50 : des flèches mesurent la distance de chacune à la moyenne, puis se rangent ; l'écart type est leur longueur typique. En bas, l'âge de l'Étude électorale canadienne 2025 : moyenne de 49,7 ans, écart type de 17,5 ans.">
     <text x="920" y="26" class="note">schéma</text>
+    <text x="80" y="20" class="angl">en anglais&#8239;: standard deviation</text>
+    <text x="80" y="43" class="angl">dans R&#8239;: <tspan class="angl-c">sd()</tspan></text>
 
     <!-- Le schéma : axe, moyenne, points. -->
     <line x1={x(0)} y1="160" x2={x(100)} y2="160" class="axe" />
@@ -69,7 +82,7 @@
     {#each VALEURS as v, i}
       {@const L = Math.abs(v - MOY) * K}
       {@const sens = v < MOY ? -1 : 1}
-      <g class="fleche" class:vu={e >= 1} class:rangee={e >= 2}
+      <g class="fleche" class:vu={e >= 1} class:exemple={e >= 3 && i === IEX}
          style="transform: {e >= 2 ? `translate(${ORIGINE}px, ${PILE + rang[i] * 9}px) scale(1, 1)` : `translate(${x(MOY)}px, ${rangee(i)}px) scale(${sens}, 1)`}; transition-delay: {e >= 2 ? rang[i] * 60 : 0}ms">
         <path d="M 0 0 H {L}" pathLength="1" class="trait" style="transition-delay: {e === 1 ? i * 70 : 0}ms" />
         <path d="M {L - 7} -5 L {L} 0 L {L - 7} 5" class="pointe" style="transition-delay: {e === 1 ? i * 70 + 350 : 0}ms" />
@@ -81,12 +94,25 @@
       <g class="marque" style="transform: translateX({e >= 2 ? XMARQUE - ORIGINE : 0}px)">
         <line x1={ORIGINE} y1={PILE - 14} x2={ORIGINE} y2={PILE + N * 9 + 6} />
       </g>
-      <line x1={XMARQUE} y1={PILE + 45} x2={XLONG + 24} y2={PILE + 45} class="lien" />
-      <text x={XLONG + 34} y={PILE + 51} class="et-t">écart type : la distance typique à la moyenne</text>
+      <g class="typique" class:vu={e === 2}>
+        <line x1={XMARQUE} y1={PILE + 45} x2={XLONG + 24} y2={PILE + 45} class="lien" />
+        <text x={XLONG + 34} y={PILE + 52} class="et-t">écart type&#8239;: la distance typique à la moyenne</text>
+      </g>
+    </g>
+
+    <!-- Le calcul : ni la distance moyenne, ni la médiane. -->
+    <g class="calcul" class:vu={e >= 3}>
+      <line x1={XDMOY} y1={PILE - 14} x2={XDMOY} y2={PILE + N * 9 + 6} class="dmoy" />
+      <text x="350" y={PILE + 10} class="nb nb-d">distance moyenne&#8239;: {f1(DMOY)}</text>
+      <text x="690" y={PILE + 10} class="nb nb-e">écart type&#8239;: {f1(ET)}</text>
+      <text x="350" y={PILE + 38} class="recette">on met chaque distance au carré, on fait la moyenne,</text>
+      <text x="350" y={PILE + 61} class="recette">on prend la racine · <tspan class="glose">les grands écarts comptent plus</tspan></text>
+      <text x={XLONG + 12} y={PILE + 87} class="ex">{VALEURS[IEX]}&#8239;: distance {DEX}, au carré {DEX ** 2}</text>
+      <text x="1000" y={PILE + 87} class="nmoins">R divise par n − 1, ici {N - 1}</text>
     </g>
 
     <!-- La vraie variable : l'âge. -->
-    <g class="reel" class:vu={e >= 3}>
+    <g class="reel" class:vu={e >= 4}>
       <text x="80" y="356" class="titre-r">Âge · Étude électorale canadienne 2025</text>
       <g style="transform: translateX({X(AGE.moyenne)}px)">
         <rect x={-DEMI} y="405" width={DEMI * 2} height="40" class="bande" />
@@ -107,11 +133,11 @@
   .ecart-type { display: flex; justify-content: center; }
   svg { width: 100%; height: auto; max-height: 62vh; display: block; overflow: visible; }
   text { font-family: var(--dk-mono); }
-  .note { font-size: 14px; text-anchor: end; fill: var(--dk-gris-2); letter-spacing: 0.06em; }
+  .note { font-size: 18px; text-anchor: end; fill: var(--dk-gris-2); letter-spacing: 0.06em; }
   .axe { stroke: var(--dk-encre); stroke-width: 2.5; }
-  .tick { font-size: 15px; text-anchor: middle; fill: var(--dk-gris); }
+  .tick { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
   .moy { stroke: var(--dk-accent); stroke-width: 4; stroke-dasharray: 10 7; }
-  .moy-t { font-size: 17px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
+  .moy-t { font-size: 20px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
 
   .pt { fill: var(--dk-encre); stroke: var(--dk-fond); stroke-width: 2.5; transform-box: fill-box; transform-origin: center; animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; animation-delay: var(--d); }
   @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
@@ -130,20 +156,35 @@
   .zero { stroke: var(--dk-encre); stroke-width: 2.5; }
   .marque { transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s; }
   .marque line { stroke: var(--dk-accent); stroke-width: 5; }
-  .lien { stroke: var(--dk-accent); stroke-width: 2; stroke-dasharray: 5 5; opacity: 0; transition: opacity 0.3s 1.6s; }
-  .et-t { font-size: 17px; font-weight: 600; fill: var(--dk-accent); opacity: 0; transition: opacity 0.4s 1.6s; }
-  .pile.vu .lien, .pile.vu .et-t { opacity: 1; }
+  .lien { stroke: var(--dk-accent); stroke-width: 3; stroke-dasharray: 5 5; }
+  .et-t { font-size: 20px; font-weight: 600; fill: var(--dk-accent); }
+  .typique { opacity: 0; transition: opacity 0.2s; }
+  .typique.vu { opacity: 1; transition: opacity 0.4s 1.6s; }
+
+  .angl { font-size: 18px; fill: var(--dk-gris); letter-spacing: 0.02em; }
+  .angl-c { font-weight: 600; fill: var(--dk-encre); }
+  .fleche.exemple .trait, .fleche.exemple .pointe { stroke: var(--dk-accent); }
+  .calcul { opacity: 0; transition: opacity 0.4s; }
+  .calcul.vu { opacity: 1; }
+  .dmoy { stroke: var(--dk-encre); stroke-width: 5; }
+  .nb { font-size: 22px; font-weight: 600; }
+  .nb-d { fill: var(--dk-encre); }
+  .nb-e { fill: var(--dk-accent); }
+  .recette { font-size: 18px; fill: var(--dk-encre); }
+  .glose { font-weight: 600; fill: var(--dk-accent); }
+  .ex { font-size: 18px; font-weight: 600; fill: var(--dk-accent); }
+  .nmoins { font-size: 18px; text-anchor: end; fill: var(--dk-gris); }
 
   .reel { opacity: 0; transition: opacity 0.3s; }
   .reel.vu { opacity: 1; }
-  .titre-r { font-size: 16px; font-weight: 600; letter-spacing: 0.04em; fill: var(--dk-encre); }
+  .titre-r { font-size: 20px; font-weight: 600; letter-spacing: 0.04em; fill: var(--dk-encre); }
   .bande { fill: var(--dk-accent); fill-opacity: 0.25; stroke: var(--dk-accent); stroke-width: 2.5; transform-box: fill-box; transform-origin: center; transform: scaleX(0); transition: transform 0.9s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s; }
   .reel.vu .bande { transform: scaleX(1); }
-  .pm { font-size: 18px; font-weight: 600; fill: var(--dk-accent); opacity: 0; transition: opacity 0.4s 0.9s; }
+  .pm { font-size: 20px; font-weight: 600; fill: var(--dk-accent); opacity: 0; transition: opacity 0.4s 0.9s; }
   .reel.vu .pm { opacity: 1; }
 
   @media (prefers-reduced-motion: reduce) {
     .pt { animation: none; }
-    .fleche, .fleche .trait, .marque, .bande, .chute, .lien, .et-t, .pm { transition: none; }
+    .fleche, .fleche .trait, .fleche .pointe, .marque, .bande, .chute, .typique, .typique.vu, .calcul, .pm { transition: none; }
   }
 </style>

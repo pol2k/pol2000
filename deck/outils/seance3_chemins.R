@@ -3,15 +3,18 @@
 # « C'est quoi, un chemin ? ». Rien n'est tapé à la main.
 #
 # Le script bâtit un bac à sable qui a exactement la forme du dossier montré à
-# la séance 2 (Users/camille/Documents/pol2000, avec data/, R/ et resultats/),
+# la séance 2 (Users/ral/Documents/pol2000, avec data/, R/ et resultats/),
 # y dépose un vrai extrait de l'Étude électorale canadienne 2025, puis lance
 # une VRAIE session R interactive dans ce dossier et en découpe la
 # transcription. Le message d'erreur est donc celui que R affiche dans la
 # console, sans les lignes « Calls: » et « Execution halted » propres à Rscript.
 #
 # Seule transformation : le préfixe du dossier temporaire est retiré des
-# chemins affichés, pour que getwd() montre /Users/camille/... et non
-# /tmp/RtmpXXXX/Users/camille/... Tout le reste est la sortie brute.
+# chemins affichés, pour que getwd() montre /Users/ral/... et non
+# /tmp/RtmpXXXX/Users/ral/... Tout le reste est la sortie brute.
+#
+# HOME pointe vers le Users/ral du bac à sable, pour que « ~ » s'y résolve :
+# read.csv("~/Downloads/data.csv") lit donc bien la copie du bac à sable.
 #
 # Usage :
 #   CES2025_RDS=/chemin/vers/ces2025.rds Rscript outils/seance3_chemins.R
@@ -25,9 +28,12 @@ ces <- readRDS(rds)
 
 # --- Le bac à sable -------------------------------------------------------
 racine <- normalizePath(tempfile("bac"), mustWork = FALSE)
-projet <- file.path(racine, "Users", "camille", "Documents", "pol2000")
+maison <- file.path(racine, "Users", "ral")
+projet <- file.path(maison, "Documents", "pol2000")
 for (d in c("data", "R", "resultats")) dir.create(file.path(projet, d), recursive = TRUE)
+dir.create(file.path(maison, "Downloads"), recursive = TRUE)
 racine <- normalizePath(racine)
+maison <- normalizePath(maison)
 projet <- normalizePath(projet)
 
 # Un extrait réel : l'âge et l'intérêt pour la politique, noms courts.
@@ -35,7 +41,9 @@ extrait <- data.frame(
   age = as.numeric(ces$cps25_age_in_years),
   interet = as.numeric(ces$cps25_interest_gen_1)
 )
-write.csv(extrait, file.path(projet, "data", "ces2025.csv"), row.names = FALSE)
+write.csv(extrait, file.path(projet, "data", "data.csv"), row.names = FALSE)
+# La même chose, restée dans les téléchargements : le cas que tout le monde vit.
+write.csv(extrait, file.path(maison, "Downloads", "data.csv"), row.names = FALSE)
 file.create(file.path(projet, "data", "codebook.pdf"))
 file.create(file.path(projet, "R", "seance3.R"))
 file.create(file.path(projet, "plan-de-cours.pdf"))
@@ -48,12 +56,17 @@ GROUPES <- list(
     'list.files("data")'
   ),
   charger = c(
-    'df <- read.csv("data/ces2025.csv")',
+    'df <- read.csv("data/data.csv")',
     'head(df, 3)'
   ),
+  ailleurs = c(
+    'file.exists("~/Downloads/data.csv")',
+    'df <- read.csv("~/Downloads/data.csv")',
+    'nrow(df)'
+  ),
   sauver = c(
-    'write.csv(df, "resultats/ces_propre.csv", row.names = FALSE)',
-    'saveRDS(df, "data/ces2025.rds")',
+    'write.csv(df, "resultats/data_propre.csv", row.names = FALSE)',
+    'saveRDS(df, "data/data.rds")',
     'list.files("resultats")'
   ),
   graphique = c(
@@ -63,9 +76,9 @@ GROUPES <- list(
     'list.files("resultats")'
   ),
   erreur = c(
-    'df <- read.csv("ces2025.csv")',
-    'file.exists("ces2025.csv")',
-    'file.exists("data/ces2025.csv")'
+    'df <- read.csv("data.csv")',
+    'file.exists("data.csv")',
+    'file.exists("data/data.csv")'
   )
 )
 commandes <- unlist(GROUPES, use.names = FALSE)
@@ -81,7 +94,10 @@ vieux <- setwd(projet)
 transcription <- system2(
   file.path(R.home("bin"), "R"),
   c("--interactive", "--no-save", "--no-restore", "--quiet"),
-  stdin = session, stdout = TRUE, stderr = TRUE
+  stdin = session, stdout = TRUE, stderr = TRUE,
+  # HOME : pour « ~ ». R_LIBS : ggplot2 vit dans la bibliothèque de l'usager
+  # réel, que le faux HOME ferait perdre de vue.
+  env = c(paste0("HOME=", maison), paste0("R_LIBS=", paste(.libPaths(), collapse = ":")))
 )
 setwd(vieux)
 
@@ -131,7 +147,7 @@ apres <- list(
   data = sort(list.files(file.path(projet, "data"))),
   resultats = sort(list.files(file.path(projet, "resultats")))
 )
-stopifnot("age.png" %in% apres$resultats, "ces_propre.csv" %in% apres$resultats, "ces2025.rds" %in% apres$data)
+stopifnot("age.png" %in% apres$resultats, "data_propre.csv" %in% apres$resultats, "data.rds" %in% apres$data)
 
 res <- list(
   r = R.version.string,
@@ -145,7 +161,7 @@ cible <- file.path("src", "lib", "data", "seance3_chemins.js")
 writeLines(c(
   "// GÉNÉRÉ par outils/seance3_chemins.R : ne pas modifier à la main.",
   "// Transcription d'une vraie session R interactive, lancée dans un bac à",
-  "// sable de la forme Users/camille/Documents/pol2000. Seul le préfixe du",
+  "// sable de la forme Users/ral/Documents/pol2000. Seul le préfixe du",
   "// dossier temporaire est retiré des chemins affichés.",
   paste0("export const CHEMINS = ", toJSON(res, auto_unbox = TRUE, pretty = TRUE), ";")
 ), cible)

@@ -6,18 +6,23 @@
    * vérifie; ils s’allument un à un, comme une liste que l’on coche.
    *
    *   0  Trois cadres pâles en tirets, numérotés 1, 2, 3. Rien d’autre.
-   *   1  « R n’est pas au bon endroit » : le jeton R tombe dans
-   *      Téléchargements, sa place reste vide dans pol2000. getwd()
-   *   2  « Le fichier est ailleurs » : la feuille ces2025.csv est dans
-   *      Téléchargements, pol2000/data est vide. list.files("data")
-   *   3  « Le nom n’est pas le bon » : ces2025.csv tapé, ces2025.xlsx dans
-   *      le dossier, l’extension en rouge. file.exists("data/ces2025.csv")
+   *   1  « R n’est pas au bon endroit » : le logo de R tombe dans
+   *      Downloads, sa place reste vide dans pol2000. getwd()
+   *   2  « Le fichier est ailleurs » : la feuille data.csv est dans
+   *      Downloads, pol2000/data est vide. list.files("data")
+   *   3  « Le nom n’est pas le bon » : data.csv tapé, data.xlsx dans
+   *      le dossier, l’extension en rouge. file.exists("data/data.csv")
    *      Puis la phrase de clôture, en rouge, sous les trois panneaux.
    *
    * Le contraste retenu est l’extension et non la majuscule : sous Windows
-   * et macOS, « CES2025.csv » s’ouvre quand même, l’exemple serait faux sur
+   * et macOS, « DATA.csv » s’ouvre quand même, l’exemple serait faux sur
    * la plupart des portables de la salle. Tracés fixes, aucun hasard.
+   *
+   * R est le logo officiel (static/img/Rlogo.png, 724 × 561, proportions
+   * gardées). Les soulignés du panneau 3 sont posés à la largeur d’un
+   * caractère (13,2 unités à 22 px) : « data. » fait 5 caractères.
    */
+  import { base } from '$app/paths';
   import { brancherTemps } from '../temps.js';
 
   let e = $state(0);
@@ -39,17 +44,16 @@
           class="pd-scene"
           viewBox="0 0 300 165"
           role="img"
-          aria-label="Deux dossiers côte à côte. Le jeton R, un carré rouge, se trouve dans le dossier Téléchargements&#8239;; dans le dossier pol2000, sa place est vide, marquée en tirets rouges."
+          aria-label="Deux dossiers côte à côte. Le logo de R se trouve dans le dossier Downloads&#8239;; dans le dossier pol2000, sa place est vide, marquée en tirets rouges."
         >
           <path d="M 4 28 L 4 16 L 56 16 L 66 28 L 144 28 L 144 132 L 4 132 Z" class="pd-dossier" />
-          <text x="74" y="154" class="pd-nom">Téléchargements</text>
+          <text x="74" y="154" class="pd-nom">Downloads</text>
           <path d="M 156 28 L 156 16 L 208 16 L 218 28 L 296 28 L 296 132 L 156 132 Z" class="pd-dossier" />
           <text x="226" y="154" class="pd-nom pd-fort">pol2000</text>
 
-          <rect x="204" y="58" width="44" height="44" class="pd-fantome" />
+          <rect x="196" y="56" width="60" height="48" class="pd-fantome" />
           <g class="pd-tombe">
-            <rect x="52" y="58" width="44" height="44" class="pd-jeton" />
-            <text x="74" y="91" class="pd-jeton-t">R</text>
+            <image href="{base}/img/Rlogo.png" x="46" y="58.3" width="56" height="43.4" />
           </g>
         </svg>
         <p class="pd-titre">R n’est pas au bon endroit</p>
@@ -66,10 +70,10 @@
           class="pd-scene"
           viewBox="0 0 300 165"
           role="img"
-          aria-label="Deux dossiers côte à côte. La feuille ces2025.csv se trouve dans le dossier Téléchargements&#8239;; le dossier pol2000/data est vide, la place de la feuille y est marquée en tirets rouges."
+          aria-label="Deux dossiers côte à côte. La feuille data.csv se trouve dans le dossier Downloads&#8239;; le dossier pol2000/data est vide, la place de la feuille y est marquée en tirets rouges."
         >
           <path d="M 4 28 L 4 16 L 56 16 L 66 28 L 144 28 L 144 132 L 4 132 Z" class="pd-dossier" />
-          <text x="74" y="154" class="pd-nom">Téléchargements</text>
+          <text x="74" y="154" class="pd-nom">Downloads</text>
           <path d="M 156 28 L 156 16 L 208 16 L 218 28 L 296 28 L 296 132 L 156 132 Z" class="pd-dossier" />
           <text x="226" y="154" class="pd-nom pd-fort">pol2000/data</text>
 
@@ -78,7 +82,7 @@
             <path d="M 57 40 L 81 40 L 91 50 L 91 84 L 57 84 Z" class="pd-feuille" />
             <path d="M 81 40 L 81 50 L 91 50" class="pd-pli" />
             <path d="M 63 60 L 85 60 M 63 68 L 85 68 M 63 76 L 79 76" class="pd-lignes" />
-            <text x="74" y="112" class="pd-nom pd-fort">ces2025.csv</text>
+            <text x="74" y="112" class="pd-nom pd-fort">data.csv</text>
           </g>
         </svg>
         <p class="pd-titre">Le fichier est ailleurs</p>
@@ -95,22 +99,22 @@
           class="pd-scene"
           viewBox="0 0 300 165"
           role="img"
-          aria-label="Deux noms de fichier presque identiques, l’un au-dessus de l’autre. Tapé dans R&#8239;: ces2025.csv. Dans le dossier&#8239;: ces2025.xlsx. Seule l’extension diffère, elle est en rouge."
+          aria-label="Deux noms de fichier presque identiques, l’un au-dessus de l’autre. Tapé dans R&#8239;: data.csv. Dans le dossier&#8239;: data.xlsx. Seule l’extension diffère, elle est en rouge."
         >
           <text x="16" y="18" class="pd-leg">tapé dans R</text>
           <rect x="16" y="28" width="268" height="40" class="pd-case" />
-          <text x="32" y="55" class="pd-fichier" textLength="145.2" lengthAdjust="spacing">ces2025.<tspan class="pd-diff">csv</tspan></text>
-          <rect x="137.6" y="60" width="39.6" height="3" class="pd-trait" />
+          <text x="32" y="55" class="pd-fichier" textLength="105.6" lengthAdjust="spacing">data.<tspan class="pd-diff">csv</tspan></text>
+          <rect x="98" y="60" width="39.6" height="3" class="pd-trait" />
 
           <text x="284" y="97" class="pd-pasegal">≠</text>
 
           <text x="16" y="98" class="pd-leg">dans le dossier</text>
           <rect x="16" y="108" width="268" height="40" class="pd-case" />
-          <text x="32" y="135" class="pd-fichier" textLength="158.4" lengthAdjust="spacing">ces2025.<tspan class="pd-diff">xlsx</tspan></text>
-          <rect x="137.6" y="140" width="52.8" height="3" class="pd-trait" />
+          <text x="32" y="135" class="pd-fichier" textLength="118.8" lengthAdjust="spacing">data.<tspan class="pd-diff">xlsx</tspan></text>
+          <rect x="98" y="140" width="52.8" height="3" class="pd-trait" />
         </svg>
         <p class="pd-titre">Le nom n’est pas le bon</p>
-        <code class="pd-cmd">file.exists("data/ces2025.csv")</code>
+        <code class="pd-cmd">file.exists("data/data.csv")</code>
         <p class="pd-glose">une lettre, une majuscule, l’extension</p>
       </div>
     </section>
@@ -171,9 +175,6 @@
 
   .pd-fantome { fill: none; stroke: var(--dk-accent); stroke-width: 2.5; stroke-dasharray: 5 4; }
   .pd-allume .pd-fantome { animation: pd-clignote 1.6s ease-in-out 0.7s 1 both; }
-
-  .pd-jeton { fill: var(--dk-accent); }
-  .pd-jeton-t { font-size: 30px; font-weight: 700; text-anchor: middle; fill: var(--dk-fond); }
 
   .pd-feuille { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 2.5; stroke-linejoin: miter; }
   .pd-pli { fill: none; stroke: var(--dk-encre); stroke-width: 2.5; }

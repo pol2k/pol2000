@@ -11,14 +11,16 @@
    *   1  On nomme. À gauche, deux étiquettes tombent : « comète de Halley »
    *      sur la comète, « quark » sur la particule. Rien ne bouge : la
    *      comète continue exactement le même tour. Deux citations, en
-   *      traduction libre : Merton (1948, p. 194) sur l'orbite de Halley,
-   *      Hacking (1999, p. 105) sur le quark qu'on appelle un quark.
+   *      anglais, dans le texte original : Merton (1948, p. 194) sur
+   *      l'orbite de Halley, Hacking (1999, p. 105) sur le quark qu'on
+   *      appelle un quark.
    *   2  La boucle. À droite, l'étiquette « électeur indécis » tombe sur la
    *      personne, une flèche revient de l'étiquette vers elle, et la
    *      personne se déplace le long de l'échelle : l'effet de boucle.
-   *      Citation de Hacking (1999, p. 32), traduction libre.
+   *      Citation de Hacking (1999, p. 32), en anglais, texte original.
    *   3  Le verdict, qui n'est pas défaitiste : même logique, conditions
-   *      plus dures, et King, Keohane et Verba (1994, p. 9-10) en rouge.
+   *      plus dures, et King, Keohane et Verba (1994, p. 9-10) en rouge,
+   *      en anglais, texte original.
    *      Les colonnes reculent pour lui laisser la place.
    *
    * Tout est schématique : aucune donnée, aucune position tirée au hasard.
@@ -33,8 +35,6 @@
     return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  // Espace fine insécable, pour les chaînes de caractères.
-  const N = ' ';
   // Les graduations de la petite échelle sur laquelle la personne se tient.
   const CRANS = [100, 185, 270, 355, 440];
 </script>
@@ -76,10 +76,10 @@
 
       {#if e >= 1 && e < 3}
         <div class="ns-bloc">
-          <p class="ns-cite">«{N}Les prédictions du retour de la comète de Halley n’influencent pas son orbite.{N}»</p>
-          <p class="ns-src">Robert Merton, «{N}The Self-Fulfilling Prophecy{N}», <i>The Antioch Review</i>, vol. 8, no 2, 1948, p. 194 (traduction libre)</p>
-          <p class="ns-cite ns-pince">«{N}appeler un quark un quark ne fait aucune différence pour le quark{N}»</p>
-          <p class="ns-src">Ian Hacking, <i>The Social Construction of What?</i>, Harvard University Press, 1999, p. 105 (traduction libre)</p>
+          <p class="ns-cite" lang="en">“Predictions of the return of Halley’s comet do not influence its orbit.”</p>
+          <p class="ns-src">Robert Merton, “The Self-Fulfilling Prophecy”, <i>The Antioch Review</i>, vol. 8, no 2, 1948, p. 194</p>
+          <p class="ns-cite ns-pince" lang="en">“calling a quark a quark makes no difference to the quark”</p>
+          <p class="ns-src">Ian Hacking, <i>The Social Construction of What?</i>, Harvard University Press, 1999, p. 105</p>
         </div>
       {/if}
     </section>
@@ -122,8 +122,8 @@
 
       {#if e >= 2 && e < 3}
         <div class="ns-bloc">
-          <p class="ns-cite">«{N}Les catégories des sciences sociales sont interactives. Celles des sciences de la nature ne le sont pas.{N}»</p>
-          <p class="ns-src">Ian Hacking, <i>The Social Construction of What?</i>, Harvard University Press, 1999, p. 32 (traduction libre)</p>
+          <p class="ns-cite" lang="en">“The classifications of the social sciences are interactive. The classifications and concepts of the natural sciences are not.”</p>
+          <p class="ns-src">Ian Hacking, <i>The Social Construction of What?</i>, Harvard University Press, 1999, p. 32</p>
         </div>
       {/if}
     </section>
@@ -132,8 +132,8 @@
   {#if e >= 3}
     <div class="ns-verdict">
       <p class="ns-dur">Même logique. Conditions plus dures.</p>
-      <p class="ns-clou">«{N}La complexité rend nos inférences moins certaines{N}; elle ne les rend pas moins scientifiques.{N}»</p>
-      <p class="ns-src">King, Keohane et Verba (1994), <i>Designing Social Inquiry</i>, p. 9-10 (traduction libre)</p>
+      <p class="ns-clou" lang="en">“Complexity is likely to make our inferences less certain but should not make them any less scientific.”</p>
+      <p class="ns-src">King, Keohane and Verba (1994), <i>Designing Social Inquiry</i>, p. 9-10</p>
     </div>
   {/if}
 </div>

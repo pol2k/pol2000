@@ -1,6 +1,6 @@
 <script>
   /**
-   * « Pis, ça sert à quoi ? » La coquille commune des diapositives qui
+   * « Ça sert à quoi ? » La coquille commune des diapositives qui
    * répondent, statistique par statistique, à la personne qui suit ce cours
    * parce qu'il est obligatoire. Toujours la même mise en scène, pour que la
    * salle la reconnaisse au premier coup d'œil : la bulle de la question, le
@@ -17,7 +17,7 @@
 
 <div class="visuel pis">
   <div class="tete">
-    <p class="bulle">Pis, ça sert à quoi&#8239;?</p>
+    <p class="bulle">Ça sert à quoi&#8239;?</p>
     <span class="stat">{stat}</span>
   </div>
   <div class="scene">{@render children()}</div>

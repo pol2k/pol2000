@@ -2,13 +2,15 @@
   /**
    * Une bonne théorie interdit des choses. Plus elle en interdit, plus elle
    * risque, plus elle vaut. Deux prédictions posées sur le même axe : le
-   * nombre de sièges qu’un parti obtient. Quatre temps.
+   * nombre de sièges qu’un parti obtient à l’Assemblée nationale du Québec
+   * (125 sièges, source : assnat.qc.ca). Quatre temps.
    *
    *   0  Les deux prédictions, en toutes lettres, sans dessin. B arrive
    *      après A et sonne, à la première écoute, comme la plus fine des
    *      deux : c’est le piège que la suite fait sauter.
-   *   1  L’axe de A : une bande rouge étroite (30 à 35), tout le reste
-   *      hachuré. Elle exclut 73 résultats sur 79.
+   *   1  L’axe de A : une bande rouge étroite (60 à 70), tout le reste
+   *      hachuré. Elle exclut 115 résultats sur 126. Un repère discret
+   *      marque le seuil de la majorité (63), qui tombe dans la bande.
    *   2  Le même axe pour B, gris plat d’un bout à l’autre : tout lui va.
    *      Elle n’exclut rien, donc elle ne risque rien.
    *   3  Le verdict, la citation de Popper, puis le rappel : la classe a
@@ -22,9 +24,9 @@
    * Exemple inventé pour le cours : aucun parti réel, aucune donnée. La
    * prédiction porte sur un résultat à venir, pas sur une mesure.
    *
-   * Citation : Karl Popper, Conjectures et réfutations (1963), chapitre 1,
-   * dans la traduction française publiée. On cite le chapitre seulement,
-   * pas de page. Schéma : coordonnées fixes, aucun tirage au sort.
+   * Citation : Karl Popper, Conjectures and Refutations (1963), chapitre 1,
+   * dans l’anglais d’origine. On cite le chapitre seulement, jamais de
+   * page. Schéma : coordonnées fixes, aucun tirage au sort.
    */
   import { brancherTemps } from '../temps.js';
 
@@ -36,16 +38,22 @@
     return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  // L’axe : 0 à 78 sièges, donc 79 résultats possibles. La bande permise
-  // par la prédiction A en couvre 6 (de 30 à 35), et en exclut 73.
-  const SIEGES = 78;
+  // L’axe : 0 à 125 sièges (Assemblée nationale du Québec), donc 126
+  // résultats possibles. La bande permise par la prédiction A en couvre 11
+  // (de 60 à 70). Tout le reste est calculé à partir de SIEGES.
+  const SIEGES = 125;
   const X0 = 74, X1 = 972;
   const YB = 40, HB = 42; // la barre des résultats
   const x = (v) => X0 + (v / SIEGES) * (X1 - X0);
-  const TICKS = [0, 20, 40, 60, 78];
-  const BAS = 30, HAUT = 35;
+  const TICKS = [0, 25, 50, 75, 100, SIEGES];
+  const BAS = 60, HAUT = 70;
+  const POSSIBLES = SIEGES + 1;
+  const PERMIS = HAUT - BAS + 1;
+  const EXCLUS = POSSIBLES - PERMIS;
+  // Le seuil de la majorité : un repère discret sous l’axe.
+  const MAJ = Math.floor(SIEGES / 2) + 1;
   // Les trois répétitions du mot « compatible » sur la barre de B.
-  const REPETES = [13, 39, 65];
+  const REPETES = [SIEGES / 6, SIEGES / 2, (5 * SIEGES) / 6];
 </script>
 
 <div class="visuel pp-fig" class:pp-serre={e >= 3} bind:this={hote}>
@@ -54,7 +62,7 @@
   <div class="pp-cartes">
     <div class="pp-carte pp-carte-a">
       <span class="pp-quoi">pr&#233;diction A</span>
-      <p class="pp-dit">&#171;&#8239;Ce parti obtiendra entre 30 et 35 si&#232;ges.&#8239;&#187;</p>
+      <p class="pp-dit">&#171;&#8239;Ce parti obtiendra entre {BAS} et {HAUT} si&#232;ges.&#8239;&#187;</p>
     </div>
     <div class="pp-carte pp-carte-b">
       <span class="pp-quoi">pr&#233;diction B</span>
@@ -72,7 +80,7 @@
         class="pp-axe"
         viewBox="0 0 1000 116"
         role="img"
-        aria-label="Un axe des si&#232;ges obtenus, gradu&#233; de 0 &#224; 78. Une bande rouge &#233;troite couvre les r&#233;sultats de 30 &#224; 35&#8239;; tout le reste de l&#8217;axe, de 0 &#224; 30 et de 35 &#224; 78, est hachur&#233; en gris et marqu&#233; exclu."
+        aria-label="Un axe des si&#232;ges &#224; l&#8217;Assembl&#233;e nationale, gradu&#233; de 0 &#224; {SIEGES}. Une bande rouge &#233;troite couvre les r&#233;sultats de {BAS} &#224; {HAUT}&#8239;; tout le reste de l&#8217;axe, de 0 &#224; {BAS} et de {HAUT} &#224; {SIEGES}, est hachur&#233; en gris et marqu&#233; exclu. Un rep&#232;re marque la majorit&#233;, &#224; {MAJ} si&#232;ges."
       >
         <defs>
           <pattern id="pp-hachure" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -81,10 +89,10 @@
         </defs>
 
         <text x={X0} y="20" class="pp-qui pp-qui-a">pr&#233;diction A</text>
-        <text x={X1} y="20" class="pp-unite">si&#232;ges obtenus</text>
-        <!-- Pas de mot « compatible » ici : la bande ne fait que six sièges sur
-             soixante-dix-neuf, le mot y est plus large qu'elle et retombait sur
-             les bornes 30 et 35. La bande rouge et ses deux bornes suffisent. -->
+        <text x={X1} y="20" class="pp-unite">si&#232;ges &#224; l&#8217;Assembl&#233;e nationale</text>
+        <!-- Pas de mot « compatible » ici : la bande est trop étroite, le mot y
+             est plus large qu'elle et retombait sur ses bornes. La bande rouge
+             et ses deux bornes suffisent. -->
 
         <!-- Ce que la prédiction exclut : hachuré, gris, sans rouge. -->
         <g class="pp-exclus">
@@ -94,21 +102,23 @@
           <text x={(x(HAUT) + X1) / 2} y={YB + HB / 2 + 6} class="pp-exclu">exclu</text>
         </g>
 
-        <!-- Ce qu’elle s’autorise : six résultats sur soixante-dix-neuf. -->
+        <!-- Ce qu’elle s’autorise : onze résultats sur cent vingt-six. -->
         <rect x={x(BAS)} y={YB} width={x(HAUT) - x(BAS)} height={HB} class="pp-bande" />
         <line x1={x(BAS)} y1={YB - 8} x2={x(BAS)} y2={YB} class="pp-amorce" />
         <line x1={x(HAUT)} y1={YB - 8} x2={x(HAUT)} y2={YB} class="pp-amorce" />
-        <text x={x(BAS) - 7} y={YB - 12} class="pp-borne pp-borne-g">30</text>
-        <text x={x(HAUT) + 7} y={YB - 12} class="pp-borne pp-borne-d">35</text>
+        <text x={x(BAS) - 7} y={YB - 12} class="pp-borne pp-borne-g">{BAS}</text>
+        <text x={x(HAUT) + 7} y={YB - 12} class="pp-borne pp-borne-d">{HAUT}</text>
 
         {#each TICKS as t}
           <line x1={x(t)} y1={YB + HB} x2={x(t)} y2={YB + HB + 9} class="pp-tick" />
           <text x={x(t)} y={YB + HB + 30} class="pp-tick-t">{t}</text>
         {/each}
+        <line x1={x(MAJ)} y1={YB + HB} x2={x(MAJ)} y2={YB + HB + 9} class="pp-maj" />
+        <text x={x(MAJ)} y={YB + HB + 30} class="pp-maj-t">majorit&#233;</text>
       </svg>
 
       <p class="pp-bilan">
-        <span class="pp-compte">elle exclut <strong>73</strong> r&#233;sultats sur 79</span>
+        <span class="pp-compte">elle exclut <strong>{EXCLUS}</strong> r&#233;sultats sur {POSSIBLES}</span>
         <span class="pp-note">Presque n&#8217;importe quel r&#233;sultat la tuerait.</span>
       </p>
     </div>
@@ -120,10 +130,10 @@
         class="pp-axe"
         viewBox="0 0 1000 116"
         role="img"
-        aria-label="Le m&#234;me axe des si&#232;ges obtenus, de 0 &#224; 78, recouvert d&#8217;un bout &#224; l&#8217;autre par une bande grise uniforme qui porte le mot compatible r&#233;p&#233;t&#233; sur toute sa longueur. Aucune portion n&#8217;est hachur&#233;e."
+        aria-label="Le m&#234;me axe des si&#232;ges &#224; l&#8217;Assembl&#233;e nationale, de 0 &#224; {SIEGES}, recouvert d&#8217;un bout &#224; l&#8217;autre par une bande grise uniforme qui porte le mot compatible r&#233;p&#233;t&#233; sur toute sa longueur. Aucune portion n&#8217;est hachur&#233;e."
       >
         <text x={X0} y="20" class="pp-qui pp-qui-b">pr&#233;diction B</text>
-        <text x={X1} y="20" class="pp-unite">si&#232;ges obtenus</text>
+        <text x={X1} y="20" class="pp-unite">si&#232;ges &#224; l&#8217;Assembl&#233;e nationale</text>
 
         <rect x={X0} y={YB} width={X1 - X0} height={HB} class="pp-plein" />
         {#each REPETES as v}
@@ -134,10 +144,12 @@
           <line x1={x(t)} y1={YB + HB} x2={x(t)} y2={YB + HB + 9} class="pp-tick" />
           <text x={x(t)} y={YB + HB + 30} class="pp-tick-t">{t}</text>
         {/each}
+        <line x1={x(MAJ)} y1={YB + HB} x2={x(MAJ)} y2={YB + HB + 9} class="pp-maj" />
+        <text x={x(MAJ)} y={YB + HB + 30} class="pp-maj-t">majorit&#233;</text>
       </svg>
 
       <p class="pp-bilan">
-        <span class="pp-compte pp-compte-b">elle exclut <strong>0</strong> r&#233;sultat sur 79</span>
+        <span class="pp-compte pp-compte-b">elle exclut <strong>0</strong> r&#233;sultat sur {POSSIBLES}</span>
         <span class="pp-note pp-note-b">Quel que soit le r&#233;sultat, elle aura eu raison.</span>
       </p>
     </div>
@@ -145,9 +157,9 @@
 
   {#if e >= 3}
     <p class="pp-verdict">Seule la premi&#232;re vous apprend quelque chose&#8239;: c&#8217;est la seule qui pouvait &#233;chouer.</p>
-    <blockquote class="pp-cit">
-      <p>&#171;&#8239;Une th&#233;orie qui n&#8217;est r&#233;futable par aucun &#233;v&#233;nement qui se puisse concevoir est d&#233;pourvue de caract&#232;re scientifique. Pour les th&#233;ories, l&#8217;irr&#233;futabilit&#233; n&#8217;est pas (comme on l&#8217;imagine souvent) vertu mais d&#233;faut.&#8239;&#187;</p>
-      <span class="pp-src">Karl Popper, Conjectures et r&#233;futations (1963), chapitre 1</span>
+    <blockquote class="pp-cit" lang="en">
+      <p>&#8220;A theory which is not refutable by any conceivable event is non-scientific. Irrefutability is not a virtue of a theory (as people often think) but a vice.&#8221;</p>
+      <span class="pp-src">Karl Popper, Conjectures and Refutations (1963), chapter 1</span>
     </blockquote>
     <p class="pp-rappel">Vous faites d&#233;j&#224; &#231;a&#8239;: on ne prouve jamais H&#8321;, on demande aux donn&#233;es de rejeter H&#8320;.</p>
   {/if}
@@ -177,32 +189,35 @@
   .pp-axe { width: 100%; max-height: 15vh; display: block; overflow: visible; }
   .pp-serre .pp-axe { max-height: 12vh; }
 
-  .pp-qui { font-size: 17px; font-weight: 600; letter-spacing: 0.12em; text-anchor: start; }
+  .pp-qui { font-size: 20px; font-weight: 600; letter-spacing: 0.12em; text-anchor: start; }
   .pp-qui-a { fill: var(--dk-accent); }
   .pp-qui-b { fill: var(--dk-gris-2); }
-  .pp-unite { font-size: 15px; letter-spacing: 0.1em; text-anchor: end; fill: var(--dk-gris); }
+  .pp-unite { font-size: 18px; letter-spacing: 0.03em; text-anchor: end; fill: var(--dk-gris); }
 
   /* Ce que A exclut : hachures grises, discrètes, jamais rouges. Le rouge
      dit « elle a tendu le cou », pas « elle est cassée ». */
   .pp-hach { stroke: var(--dk-gris-2); stroke-width: 2; }
   .pp-hachure { fill: url(#pp-hachure); stroke: var(--dk-gris-2); stroke-width: 2; }
   .pp-exclus { animation: pp-parait 0.45s ease-out 0.4s both; }
-  .pp-exclu { font-size: 17px; font-weight: 600; letter-spacing: 0.22em; text-anchor: middle; fill: var(--dk-gris); paint-order: stroke; stroke: var(--dk-fond); stroke-width: 6; }
+  .pp-exclu { font-size: 19px; font-weight: 600; letter-spacing: 0.22em; text-anchor: middle; fill: var(--dk-gris); paint-order: stroke; stroke: var(--dk-fond); stroke-width: 6; }
 
   /* Ce que A s’autorise : plein, net, rouge. */
   .pp-bande { fill: var(--dk-accent); animation: pp-ouvre 0.5s cubic-bezier(0.34, 1.5, 0.64, 1) both; transform-box: fill-box; transform-origin: 50% 50%; }
   .pp-amorce { stroke: var(--dk-accent); stroke-width: 3; }
-  .pp-borne { font-size: 18px; font-weight: 600; fill: var(--dk-accent); }
+  .pp-borne { font-size: 21px; font-weight: 600; fill: var(--dk-accent); }
   .pp-borne-g { text-anchor: end; }
   .pp-borne-d { text-anchor: start; }
 
   /* B : un aplat gris, uniforme, sans texture et sans accent. Rien à voir,
      rien d’exclu, rien en jeu. */
   .pp-plein { fill: var(--dk-gris-2); animation: pp-etale 0.6s cubic-bezier(0.5, 0, 0.3, 1) both; transform-box: fill-box; transform-origin: 0% 50%; }
-  .pp-plein-t { font-size: 16px; font-weight: 600; letter-spacing: 0.16em; text-anchor: middle; fill: var(--dk-fond); }
+  .pp-plein-t { font-size: 18px; font-weight: 600; letter-spacing: 0.16em; text-anchor: middle; fill: var(--dk-fond); }
 
   .pp-tick { stroke: var(--dk-filet); stroke-width: 3; }
-  .pp-tick-t { font-size: 16px; text-anchor: middle; fill: var(--dk-gris); }
+  .pp-tick-t { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
+  /* Le seuil de la majorité : même graduation, à l'encre, avec son mot. */
+  .pp-maj { stroke: var(--dk-encre); stroke-width: 3; }
+  .pp-maj-t { font-size: 18px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
 
   .pp-bilan { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2em 1.1em; margin: 0; }
   .pp-compte { font-size: 0.82em; font-weight: 600; color: var(--dk-accent); }

@@ -9,7 +9,8 @@
    *   1  La démonstration : à côté, un petit tableau de nombres avec ses
    *      en-têtes, et sous lui la méthode, écrite. Petit, plat, vérifiable.
    *      La bulle se dégonfle et grisonne. La phrase de King, Keohane et
-   *      Verba (1994), Designing Social Inquiry, traduction libre.
+   *      Verba (1994), Designing Social Inquiry, en anglais, dans le texte
+   *      original (le tiret long est le leur).
    *   2  Le passage de relais vers la suite du cours : décrire une variable.
    *
    * Aucune donnée : le tableau est un schéma, dit tel, et ses en-têtes comme
@@ -109,8 +110,8 @@
   </svg>
 
   <blockquote class="dt-cit" class:dt-vu={e >= 1}>
-    «&#8239;Personne ne se soucie de ce que nous pensons&#8239;; la communauté savante ne se soucie que de ce que nous pouvons démontrer.&#8239;»
-    <span class="dt-src">King, Keohane et Verba (1994), <i>Designing Social Inquiry</i> (traduction libre)</span>
+    <span lang="en">“no one cares what we think—the scholarly community only cares what we can demonstrate.”</span>
+    <span class="dt-src">King, Keohane and Verba (1994), <i>Designing Social Inquiry</i></span>
   </blockquote>
 
   <div class="dt-relais" class:dt-vu={e >= 2}>

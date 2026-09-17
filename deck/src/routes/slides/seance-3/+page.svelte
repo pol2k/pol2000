@@ -37,44 +37,35 @@
   import Etalement from '$lib/deck/visuels/Etalement.svelte';
   import Quartiles from '$lib/deck/visuels/Quartiles.svelte';
   import EcartType from '$lib/deck/visuels/EcartType.svelte';
-  import Cloche from '$lib/deck/visuels/Cloche.svelte';
   import Anscombe from '$lib/deck/visuels/Anscombe.svelte';
   import QuelGraphique from '$lib/deck/visuels/QuelGraphique.svelte';
   import Geoms from '$lib/deck/visuels/Geoms.svelte';
-  import BoitesPartis from '$lib/deck/visuels/BoitesPartis.svelte';
-  import Titanic from '$lib/deck/visuels/Titanic.svelte';
+  import BarresDodge from '$lib/deck/visuels/BarresDodge.svelte';
   import CheminIpad from '$lib/deck/visuels/CheminIpad.svelte';
   import CheminBoites from '$lib/deck/visuels/CheminBoites.svelte';
   import OuEstR from '$lib/deck/visuels/OuEstR.svelte';
   import TroisGestes from '$lib/deck/visuels/TroisGestes.svelte';
   import Perdu from '$lib/deck/visuels/Perdu.svelte';
   import { CHEMINS } from '$lib/data/seance3_chemins.js';
-  import Paires from '$lib/deck/visuels/Paires.svelte';
   import Pourquoi from '$lib/deck/visuels/Pourquoi.svelte';
   import Pearson from '$lib/deck/visuels/Pearson.svelte';
   import Demarcation from '$lib/deck/visuels/Demarcation.svelte';
   import Popper from '$lib/deck/visuels/Popper.svelte';
-  import PasSiSimple from '$lib/deck/visuels/PasSiSimple.svelte';
-  import Lakatos from '$lib/deck/visuels/Lakatos.svelte';
   import NaturelSocial from '$lib/deck/visuels/NaturelSocial.svelte';
-  import RIScience from '$lib/deck/visuels/RIScience.svelte';
-  import Mearsheimer from '$lib/deck/visuels/Mearsheimer.svelte';
   import Demontrer from '$lib/deck/visuels/Demontrer.svelte';
   import AxeMenteur from '$lib/deck/visuels/AxeMenteur.svelte';
   import AvantS4 from '$lib/deck/visuels/AvantS4.svelte';
   import Science from '$lib/deck/visuels/Science.svelte';
   import Inference from '$lib/deck/visuels/Inference.svelte';
   import DeuxInferences from '$lib/deck/visuels/DeuxInferences.svelte';
-  import Demarche from '$lib/deck/visuels/Demarche.svelte';
+  import Gabarit from '$lib/deck/visuels/Gabarit.svelte';
   import PourquoiForme from '$lib/deck/visuels/PourquoiForme.svelte';
   import PourquoiMode from '$lib/deck/visuels/PourquoiMode.svelte';
-  import PourquoiMoyenne from '$lib/deck/visuels/PourquoiMoyenne.svelte';
   import PourquoiMediane from '$lib/deck/visuels/PourquoiMediane.svelte';
   import PourquoiEcartType from '$lib/deck/visuels/PourquoiEcartType.svelte';
-  import PourquoiSondage from '$lib/deck/visuels/PourquoiSondage.svelte';
   import { CONSOLES } from '$lib/data/seance3.js';
 
-  const TOTAL = 67;
+  const TOTAL = 57;
   const D = 'POL-2000 · séance 3 · jeu 17 sept';
 
   // Retour sur les chemins : trois consoles, toutes tirées de la même session
@@ -118,13 +109,15 @@ ggplot(df, aes(x = cps25_age_in_years)) +
 ggplot(df, aes(x = cps25_age_in_years)) +
   geom_density()
 
-# 5. L'âge, parti par parti
+# 5. Le vote, selon le groupe d'âge
 d <- df |>
   filter(cps25_votechoice %in% 1:5) |>
   mutate(parti = as_factor(cps25_votechoice),
-         age = as.numeric(cps25_age_in_years))
-ggplot(d, aes(x = age, y = parti)) +
-  geom_boxplot()
+         age = as.numeric(cps25_age_in_years),
+         groupe_age = cut(age, breaks = c(18, 35, 55, Inf), right = FALSE,
+                          labels = c("18-34", "35-54", "55 et plus")))
+ggplot(d, aes(x = groupe_age, fill = parti)) +
+  geom_bar(position = "dodge")
 
 # 6. À vous : refaites 1, 3 et 4 avec cps25_interest_gen_1. Regardez le minimum.`;
   // Trop long pour une diapo à taille lisible : coupé avant « 2. » et avant « 4. ».
@@ -165,18 +158,19 @@ ggplot(d, aes(x = age, y = parti)) +
     <Slide bandeau="Un tour de salle" droite={D}>
       <h2 class="e">À main levée</h2>
       <ol class="mains e">
-        <li><span>Le script de la séance 2, refait chez vous ?</span></li>
-        <li><span>Le chapitre Datacamp, terminé ?</span></li>
-        <li><span>Positron est ouvert, là, maintenant ?</span></li>
+        <li><span>Quelqu’un pourrait m’expliquer c’est quoi un chemin d’accès ?</span></li>
+        <li><span>Avez-vous fait des Datacamps ?</span></li>
+        <li><span>Êtes-vous sur Slack ?</span></li>
+        <li><span>Avez-vous installé R et Positron ?</span></li>
       </ol>
     </Slide>
 
     <!-- ================= RETOUR · LE CHEMIN ================= -->
     <Slide fond="encre" bandeau="Retour" droite={D}>
       <p class="surtitre e">Retour sur jeudi dernier</p>
-      <h1 class="e">C’est quoi, un chemin ?</h1>
+      <h1 class="e">C’est quoi un chemin d’accès ?</h1>
       <hr class="filet" />
-      <p class="lead e">L’adresse d’un fichier. Rien de plus.</p>
+      <p class="lead e">L’adresse d’un fichier</p>
     </Slide>
 
     <Slide bandeau="Retour · le chemin" droite={D}>
@@ -221,10 +215,8 @@ ggplot(d, aes(x = age, y = parti)) +
 
     <!-- ================= 0 · LA SCIENCE, L'INFÉRENCE ================= -->
     <Slide fond="encre" bandeau="La science" droite={D}>
-      <p class="surtitre e">Avant les chiffres</p>
       <h1 class="e">C’est quoi, la science ?</h1>
       <hr class="filet" />
-      <p class="lead e">Pas le sarrau. La méthode.</p>
     </Slide>
 
     <Slide bandeau="La science" droite={D}>
@@ -252,29 +244,9 @@ ggplot(d, aes(x = age, y = parti)) +
       <Popper />
     </Slide>
 
-    <Slide bandeau="Le débat" droite={D}>
-      <h2 class="e">Sauf que ce n’est pas si simple</h2>
-      <PasSiSimple />
-    </Slide>
-
-    <Slide bandeau="Le débat" droite={D}>
-      <h2 class="e">Progressive, ou dégénérative ?</h2>
-      <Lakatos />
-    </Slide>
-
     <Slide bandeau="Nature et société" droite={D}>
       <h2 class="e">Le quark et l’électeur</h2>
       <NaturelSocial />
-    </Slide>
-
-    <Slide bandeau="Les RI" droite={D}>
-      <h2 class="e">Les RI, est-ce une science ?</h2>
-      <RIScience />
-    </Slide>
-
-    <Slide bandeau="Les RI" droite={D}>
-      <h2 class="e">Une prévision qu’on n’a jamais pu tester</h2>
-      <Mearsheimer />
     </Slide>
 
     <Slide bandeau="Démontrer" droite={D}>
@@ -299,14 +271,13 @@ ggplot(d, aes(x = age, y = parti)) +
     </Slide>
 
     <Slide bandeau="L'inférence" droite={D}>
-      <h2 class="e">Comment on fait ?</h2>
-      <Demarche />
+      <h2 class="e">Le plan d’un article scientifique</h2>
+      <Gabarit />
     </Slide>
 
     <Slide fond="encre" bandeau="Décrire" droite={D}>
       <h1 class="e">Décrire avant d’expliquer</h1>
       <hr class="filet" />
-      <p class="lead e">On ne généralise pas ce qu’on n’a pas décrit.</p>
     </Slide>
 
     <Slide bandeau="Décrire" droite={D}>
@@ -331,7 +302,7 @@ ggplot(d, aes(x = age, y = parti)) +
       <Formes />
     </Slide>
 
-    <Slide bandeau="La forme · pis ?" droite={D}>
+    <Slide bandeau="La forme · ça sert à quoi ?" droite={D}>
       <PourquoiForme />
     </Slide>
 
@@ -348,12 +319,8 @@ ggplot(d, aes(x = age, y = parti)) +
       <Bascule />
     </Slide>
 
-    <Slide bandeau="Le centre · pis ?" droite={D}>
+    <Slide bandeau="Le centre · ça sert à quoi ?" droite={D}>
       <PourquoiMode />
-    </Slide>
-
-    <Slide bandeau="Le centre · pis ?" droite={D}>
-      <PourquoiMoyenne />
     </Slide>
 
     <Slide bandeau="Le centre" droite={D}>
@@ -361,7 +328,7 @@ ggplot(d, aes(x = age, y = parti)) +
       <Menage />
     </Slide>
 
-    <Slide bandeau="Le centre · pis ?" droite={D}>
+    <Slide bandeau="Le centre · ça sert à quoi ?" droite={D}>
       <PourquoiMediane />
     </Slide>
 
@@ -391,38 +358,18 @@ ggplot(d, aes(x = age, y = parti)) +
     <Slide bandeau="La dispersion" droite={D}>
       <h2 class="e">Couper en quatre</h2>
       <Quartiles />
-      <p class="pis-l e"><b>Pis ?</b> « 78 %, c’est bon ? » Ça dépend où tombent les autres.</p>
     </Slide>
 
     <Slide bandeau="La dispersion" droite={D}>
-      <h2 class="e">L’écart type</h2>
+      <h2 class="e">L’écart type (standard deviation)</h2>
       <EcartType />
     </Slide>
 
-    <Slide bandeau="La dispersion · pis ?" droite={D}>
+    <Slide bandeau="La dispersion · ça sert à quoi ?" droite={D}>
       <PourquoiEcartType />
     </Slide>
 
-    <Slide bandeau="La dispersion" droite={D}>
-      <h2 class="e">68, 95, 99,7</h2>
-      <Cloche />
-    </Slide>
-
-    <Slide bandeau="La dispersion · pis ?" droite={D}>
-      <PourquoiSondage />
-    </Slide>
-
-    <Slide bandeau="En direct · la dispersion" droite={D}>
-      <h2 class="e">La dispersion, dans R</h2>
-      <Console lignes={CONSOLES.dispersion} />
-    </Slide>
-
     <!-- ================= PAUSE ================= -->
-    <Slide bandeau="La dispersion" droite={D}>
-      <h2 class="e">Ça va par paires</h2>
-      <Paires />
-    </Slide>
-
     <Slide fond="encre" bandeau="Pause" droite={D}>
       <h1 class="e">Pause</h1>
       <hr class="filet" />
@@ -452,14 +399,8 @@ ggplot(d, aes(x = age, y = parti)) +
     </Slide>
 
     <Slide bandeau="Dessiner" droite={D}>
-      <h2 class="e">L’âge, parti par parti</h2>
-      <BoitesPartis />
-    </Slide>
-
-    <Slide bandeau="Dessiner" droite={D}>
-      <h2 class="e">Deux catégorielles : le tableau croisé</h2>
-      <Titanic />
-      <p class="pis-l e"><b>Pis ?</b> Chaque sondage publié est un tableau croisé : le vote selon l’âge, la région, le genre.</p>
+      <h2 class="e">Le vote, selon le groupe d’âge</h2>
+      <BarresDodge />
     </Slide>
 
     <Slide bandeau="Dessiner" droite={D}>
@@ -531,9 +472,6 @@ ggplot(d, aes(x = age, y = parti)) +
   .entete-ul .dept { font-size: 0.62em; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.45; font-weight: 600; }
   .entete-ul .session { margin-left: auto; font-size: 0.72em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dk-accent); font-weight: 600; }
 
-  /* « Pis ? » en une ligne, sous une figure : la réponse courte à « ça sert à quoi ». */
-  .pis-l { margin: 0; padding-left: 0.6em; border-left: 0.34em solid var(--dk-accent); font-size: 1em; line-height: 1.3; }
-  .pis-l b { color: var(--dk-accent); }
 
   /* À main levée : trois questions, très grandes. */
   .mains { list-style: none; padding: 0; margin: 0; counter-reset: m; display: flex; flex-direction: column; gap: 0.5em; }

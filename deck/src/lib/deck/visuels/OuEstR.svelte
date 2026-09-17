@@ -1,145 +1,192 @@
 <script>
   /**
-   * Où est R ? Un plan de l’ordinateur, dessiné comme des pièces. R est un
-   * jeton rouge, toujours debout dans UNE pièce. Un chemin relatif comme
-   * "data/ces2025.csv" est un itinéraire qui part de la pièce où R se
-   * trouve : mêmes indications, mauvais point de départ, on n’arrive nulle
-   * part. C’est la seule idée de la diapositive.
+   * Où est R ? Un plan de l’ordinateur, dessiné comme des pièces. R (le vrai
+   * logo) reste debout dans UNE pièce, pol2000, et n’en bouge jamais. C’est
+   * le FICHIER qui peut être ailleurs. Un chemin relatif est un itinéraire
+   * qui part de la pièce où R se trouve ; « ~ » part du dossier personnel.
    *
-   *   0  Le plan (Documents > pol2000 > data, R, resultats ; ailleurs,
-   *      Téléchargements) et le jeton R dans pol2000. La vraie console :
-   *      getwd() et sa sortie. « R est ici ».
-   *   1  L’itinéraire "data/ces2025.csv" : un tracé rouge part du jeton,
-   *      passe la porte de data, atteint le fichier. Coche.
-   *   2  Le jeton saute dans Téléchargements. Le même itinéraire repart :
-   *      il cherche une porte data, il n’y en a pas. Croix. La sortie de
-   *      getwd() est retirée, elle ne serait plus vraie.
-   *   3  Le jeton revient, l’itinéraire réussit de nouveau, et la règle
-   *      s’écrit en rouge.
+   *   0  Le plan : ~ contient Documents > pol2000 > data, R, resultats et, à
+   *      part, Downloads. R est dans pol2000. La vraie console : getwd().
+   *   1  Le fichier est dans data. La commande relative, un tracé rouge part
+   *      de R, passe la porte de data, atteint le fichier. Coche.
+   *   2  Le fichier est plutôt dans Downloads, data est vide. Même commande,
+   *      même tracé : il ne trouve rien. Croix.
+   *   3  Sortie A : donner l’adresse complète. Le tracé part de ~, descend
+   *      dans Downloads, atteint le fichier. Coche.
+   *   4  Sortie B (le mieux) : la feuille glisse de Downloads vers data, la
+   *      première commande fonctionne de nouveau. Coche. La règle en rouge.
    *
-   * Toutes les chaînes R viennent de seance3_chemins.js (vraie session R).
-   * Coordonnées fixes, aucun hasard.
+   * getwd() reste affiché du début à la fin : R ne bouge pas, la sortie est
+   * toujours vraie. Toutes les chaînes R viennent de seance3_chemins.js
+   * (vraie session R). Coordonnées fixes, aucun hasard.
    */
+  import { base } from '$app/paths';
   import { brancherTemps } from '../temps.js';
   import { CHEMINS } from '$lib/data/seance3_chemins.js';
 
   const appel = CHEMINS.consoles.ou[0];
-  const chemin = CHEMINS.consoles.charger[0].in.match(/"[^"]+"/)[0];
-  const fichier = CHEMINS.apres.data[0];
+  const charger = CHEMINS.consoles.charger[0].in;
+  const ailleurs = CHEMINS.consoles.ailleurs[1].in;
+  /* "data/data.csv" → data.csv : le nom vient de la commande elle-même. */
+  const fichier = charger.match(/"([^"]+)"/)[1].split('/').pop();
 
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 4, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  let reussi = $derived(e === 1 || e === 3);
-  let rate = $derived(e === 2);
-  /* Au temps 3, le tracé attend que le jeton soit rentré. */
-  let delai = $derived(e === 3 ? '0.9s' : '0s');
+  /* Le fichier est-il dans Downloads ? (temps 2 et 3) */
+  let loin = $derived(e === 2 || e === 3);
+  /* Le tracé R → data est joué aux temps 1, 2 et 4. */
+  let versData = $derived(e === 1 || e === 2 || e === 4);
+  let reussi = $derived(e === 1 || e === 3 || e === 4);
+  /* Au temps 4, le tracé attend que la feuille soit rangée. */
+  let delai = $derived(e === 4 ? '0.9s' : '0s');
 </script>
 
 <div class="visuel or-fig" bind:this={hote}>
   <svg
     class="or-plan"
-    viewBox="0 0 1200 470"
+    viewBox="0 0 1200 526"
     role="img"
     style:--or-d={delai}
-    aria-label="Un plan schématique de l’ordinateur, dessiné comme des pièces&#8239;: la pièce Documents contient la pièce pol2000, qui contient trois pièces, data, R et resultats&#8239;; dans data, une feuille, le fichier ces2025.csv. À part, une autre pièce&#8239;: Téléchargements. Un jeton carré rouge marqué R se tient dans pol2000. Un tracé rouge en pointillés part du jeton, entre dans data et atteint le fichier. Quand le jeton est dans Téléchargements, le même tracé ne trouve aucune porte data et finit sur une croix."
+    aria-label="Un plan schématique de l’ordinateur, dessiné comme des pièces. La grande pièce, le tilde, est le dossier personnel. Elle contient Documents, qui contient pol2000, qui contient trois pièces&#8239;: data, R et resultats. À part, dans le dossier personnel, une autre pièce&#8239;: Downloads. Le logo de R se tient dans pol2000 et n’en bouge pas. Quand le fichier data.csv est dans data, un tracé rouge en pointillés part de R, entre dans data et atteint le fichier. Quand le fichier est dans Downloads, le même tracé ne trouve rien dans data et finit sur une croix. Deux sorties&#8239;: A, un tracé part du dossier personnel, descend dans Downloads et atteint le fichier&#8239;; B, le fichier est déplacé de Downloads vers data et le premier tracé réussit de nouveau."
   >
-    <defs>
-      <mask id="or-masque-ok" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="470">
-        <path d="M 176 215 L 540 215 L 540 160 L 634 160" pathLength="1" class="or-trace" class:or-va={reussi} />
-      </mask>
-      <mask id="or-masque-non" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="470">
-        <path d="M 968 178 L 1076 178" pathLength="1" class="or-trace or-court" class:or-va={rate} />
-      </mask>
-    </defs>
-
     <!-- ——— Les pièces ——— -->
-    <rect x="10" y="10" width="810" height="450" class="or-mur or-dehors" />
-    <text x="30" y="46" class="or-nom or-pale">Documents</text>
+    <rect x="10" y="10" width="1180" height="506" class="or-mur or-dehors" />
+    <text x="30" y="48" class="or-nom or-pale"><tspan class="or-tilde">~</tspan>&#8239;: votre dossier personnel</text>
 
-    <rect x="40" y="64" width="750" height="376" class="or-mur or-projet" />
-    <text x="60" y="102" class="or-nom or-fort">pol2000</text>
+    <rect x="40" y="66" width="750" height="434" class="or-mur or-dehors" />
+    <text x="60" y="102" class="or-nom or-pale">Documents</text>
 
-    <rect x="430" y="84" width="340" height="160" class="or-mur" />
-    <text x="450" y="122" class="or-nom">data</text>
-    <line x1="430" y1="197" x2="430" y2="233" class="or-porte" />
+    <rect x="70" y="118" width="690" height="366" class="or-mur or-projet" />
+    <text x="90" y="156" class="or-nom or-fort">pol2000</text>
 
-    <rect x="430" y="264" width="160" height="74" class="or-mur" />
-    <text x="510" y="310" class="or-nom or-centre">R</text>
-    <line x1="450" y1="264" x2="486" y2="264" class="or-porte" />
+    <rect x="410" y="136" width="330" height="166" class="or-mur" />
+    <text x="430" y="172" class="or-nom">data</text>
+    <line x1="410" y1="222" x2="410" y2="258" class="or-porte" />
 
-    <rect x="610" y="264" width="160" height="74" class="or-mur" />
-    <text x="690" y="310" class="or-nom or-centre or-serre">resultats</text>
-    <line x1="630" y1="264" x2="666" y2="264" class="or-porte" />
+    <rect x="410" y="318" width="140" height="68" class="or-mur" />
+    <text x="480" y="362" class="or-nom or-centre">R</text>
+    <line x1="430" y1="318" x2="466" y2="318" class="or-porte" />
 
-    <rect x="850" y="10" width="340" height="250" class="or-mur" />
-    <text x="870" y="46" class="or-nom">Téléchargements</text>
+    <rect x="570" y="318" width="170" height="68" class="or-mur" />
+    <text x="655" y="362" class="or-nom or-centre or-serre">resultats</text>
+    <line x1="590" y1="318" x2="626" y2="318" class="or-porte" />
 
-    <!-- Le fichier, une feuille à coin plié. -->
-    <g class="or-feuille" class:or-trouve={reussi}>
-      <path d="M 640 112 L 684 112 L 700 128 L 700 190 L 640 190 Z" class="or-papier" />
-      <path d="M 684 112 L 684 128 L 700 128" class="or-pli" />
-      <path d="M 652 146 L 688 146 M 652 160 L 688 160 M 652 174 L 688 174" class="or-rang" />
-    </g>
-    <text x="670" y="226" class="or-petit or-centre">{fichier}</text>
+    <rect x="850" y="66" width="320" height="250" class="or-mur" />
+    <text x="1150" y="102" class="or-nom or-fin">Downloads</text>
+    <line x1="912" y1="66" x2="948" y2="66" class="or-porte or-porte-f" />
 
-    <!-- ——— La console : où suis-je ? (fausse au temps 2, donc retirée) ——— -->
-    <g class="or-console" class:or-vu={e !== 2}>
-      <line x1="138" y1="253" x2="138" y2="356" class="or-lien" />
-      <rect x="60" y="356" width="610" height="76" class="or-ecran" />
-      <text x="78" y="387" class="or-petit or-fort">&gt; {appel.in}</text>
-      <text x="78" y="419" class="or-petit">{appel.out}</text>
-    </g>
+    <!-- ——— La console : où suis-je ? Vraie du début à la fin. ——— -->
+    <line x1="150" y1="278" x2="150" y2="400" class="or-lien" />
+    <rect x="90" y="400" width="600" height="70" class="or-ecran" />
+    <text x="108" y="429" class="or-petit or-fort">&gt; {appel.in}</text>
+    <text x="108" y="459" class="or-petit">{appel.out}</text>
 
-    <!-- ——— Les indications ——— -->
-    <g class="or-indic" class:or-vu={e >= 1}>
-      <rect x="850" y="300" width="340" height="72" class="or-puce" />
-      <text x="1020" y="346" class="or-code">{chemin}</text>
-    </g>
+    <!-- ——— R, qui ne bouge pas ——— -->
+    <text x="100" y="188" class="or-ici">R est ici</text>
+    <image href="{base}/img/Rlogo.png" x="100" y="200" width="100" height="77.5" />
 
-    <!-- Depuis pol2000 : on arrive. -->
-    <path d="M 176 215 L 540 215 L 540 160 L 634 160" class="or-route" mask="url(#or-masque-ok)" />
-    <path d="M 714 152 L 727 167 L 752 134" class="or-coche" class:or-vu={reussi} />
-
-    <!-- Depuis Téléchargements : pas de porte data. -->
-    <g class="or-fantome" class:or-vu={rate}>
-      <rect x="1040" y="100" width="135" height="120" class="or-vide" />
-      <text x="1107" y="134" class="or-petit or-centre or-pale">data&#8239;?</text>
-    </g>
-    <path d="M 968 178 L 1076 178" class="or-route" mask="url(#or-masque-non)" />
-    <path d="M 1085 156 L 1129 200 M 1129 156 L 1085 200" class="or-croix" class:or-vu={rate} />
-
-    <!-- ——— Le jeton R : X et Y animés à part, pour un vrai saut ——— -->
-    <g class="or-jx" class:or-loin={e === 2} class:or-retour={e === 3}>
-      <g class="or-jy" class:or-loin={e === 2} class:or-retour={e === 3}>
-        <text x="100" y="163" class="or-ici">R est ici</text>
-        <rect x="100" y="177" width="76" height="76" class="or-jeton" />
-        <text x="138" y="233" class="or-jeton-t">R</text>
+    <!-- ——— Les places vides ——— -->
+    {#if loin}
+      <path d="M 520 205 L 564 205 L 580 221 L 580 275 L 520 275 Z" class="or-vide or-parait" />
+    {/if}
+    {#if e === 4}
+      <path d="M 900 205 L 944 205 L 960 221 L 960 275 L 900 275 Z" class="or-vide or-parait" />
+      <!-- Sortie B : le déménagement. -->
+      <g class="or-parait">
+        <path d="M 892 264 L 662 264 M 678 254 L 662 264 L 678 274" class="or-demenage" />
+        <rect x="803" y="247" width="34" height="34" class="or-pastille" />
+        <text x="820" y="273" class="or-pastille-t">B</text>
       </g>
+    {/if}
+
+    <!-- ——— Le fichier, une feuille à coin plié. Il est dans data, ou dans
+         Downloads (fondu), ou il y revient en glissant (temps 4). ——— -->
+    <g class="or-feuille" class:or-loin={loin} class:or-range={e === 4}>
+      <path d="M 520 205 L 564 205 L 580 221 L 580 275 L 520 275 Z" class="or-papier" />
+      <path d="M 564 205 L 564 221 L 580 221" class="or-pli" />
+      <path d="M 532 236 L 568 236 M 532 249 L 568 249 M 532 262 L 568 262" class="or-rang" />
+      <text x="594" y="236" class="or-petit">{fichier}</text>
+      {#key e}
+        {#if reussi}
+          <g class="or-gagne">
+            <path d="M 520 205 L 564 205 L 580 221 L 580 275 L 520 275 Z M 564 205 L 564 221 L 580 221" class="or-rouge" />
+            <path d="M 600 264 L 613 279 L 638 248" class="or-coche" />
+          </g>
+        {/if}
+      {/key}
     </g>
+
+    <!-- ——— Les tracés : rejoués à chaque temps ——— -->
+    {#key e}
+      <!-- Le chemin relatif : de R vers data. -->
+      {#if versData}
+        <mask id="or-masque-data" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="526">
+          <path d="M 208 240 L 514 240.5" pathLength="1" class="or-trace" />
+        </mask>
+        <path d="M 208 240 L 514 240.5" class="or-route" mask="url(#or-masque-data)" />
+      {/if}
+      {#if e === 2}
+        <path d="M 528 218 L 572 262 M 572 218 L 528 262" class="or-croix" />
+      {/if}
+      <!-- Sortie A : de ~ vers Downloads. -->
+      {#if e === 3}
+        <mask id="or-masque-tilde" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="526">
+          <path d="M 557 36 L 930 36 L 930 199" pathLength="1" class="or-trace" />
+        </mask>
+        <path d="M 557 36 L 930 36 L 930 199" class="or-route" mask="url(#or-masque-tilde)" />
+        <g class="or-parait">
+          <rect x="523" y="19" width="34" height="34" class="or-pastille" />
+          <text x="540" y="45" class="or-pastille-t">A</text>
+        </g>
+      {/if}
+    {/key}
   </svg>
 
+  <!-- Sous le plan : la place est réservée, le plan ne bouge pas. -->
   <div class="or-bas">
-    {#if e === 1}
-      <p class="or-ligne">depuis ici&#8239;: on entre dans <b>data</b>, on prend le fichier</p>
-    {:else if e === 2}
-      <p class="or-ligne">mêmes indications, mauvais point de départ</p>
-    {:else if e >= 3}
-      <p class="or-regle">Un chemin relatif part toujours de l’endroit où R se trouve.</p>
-      <p class="or-note">Dans ce cours&#8239;: le dossier ouvert dans Positron.</p>
-    {/if}
+    <div class="or-haut">
+      {#if e === 1 || e === 2}
+        <p class="or-cmd or-monte">&gt; {charger}</p>
+      {:else if e >= 3}
+        <div class="or-choix">
+          <div class="or-opt or-monte" class:or-passe={e === 4}>
+            <p class="or-opt-t"><span class="or-lettre">A</span> donner l’adresse complète</p>
+            <p class="or-cmd">&gt; {ailleurs}</p>
+          </div>
+          {#if e === 4}
+            <div class="or-opt or-monte">
+              <p class="or-opt-t"><span class="or-lettre">B</span> ranger le fichier dans le projet <span class="or-tag">le mieux</span></p>
+              <p class="or-cmd">&gt; {charger}</p>
+            </div>
+          {/if}
+        </div>
+      {/if}
+    </div>
+    <div class="or-dit">
+      {#if e === 1}
+        <p class="or-ligne or-monte">depuis ici&#8239;: on entre dans <b>data</b>, on prend le fichier</p>
+      {:else if e === 2}
+        <p class="or-ligne or-monte">le fichier n’est pas là</p>
+      {:else if e === 3}
+        <p class="or-ligne or-monte">depuis <b>~</b>&#8239;: on entre dans <b>Downloads</b>, on prend le fichier</p>
+      {:else if e === 4}
+        <p class="or-regle or-monte">Un chemin relatif part de l’endroit où R se trouve.</p>
+        <p class="or-regle or-monte"><b>~</b> part de votre dossier personnel.</p>
+      {/if}
+    </div>
   </div>
 </div>
 
 <style>
-  .or-fig { display: flex; flex-direction: column; gap: 0.6em; }
+  .or-fig { display: flex; flex-direction: column; gap: 0.5em; }
 
-  .or-plan { width: 100%; max-height: 43vh; display: block; overflow: visible; }
+  .or-plan { width: 100%; max-height: 48vh; display: block; overflow: visible; }
   .or-plan text { font-family: var(--dk-mono); }
 
   /* Les pièces */
@@ -147,85 +194,78 @@
   .or-mur.or-dehors { fill: none; stroke: var(--dk-gris-2); }
   .or-mur.or-projet { fill: var(--dk-fond-2); stroke-width: 5; }
   .or-porte { stroke: var(--dk-fond-2); stroke-width: 8; }
+  .or-porte.or-porte-f { stroke: var(--dk-fond); }
 
-  .or-nom { font-size: 28px; fill: var(--dk-encre); }
-  .or-nom.or-serre { font-size: 26px; }
+  .or-nom { font-size: 29px; fill: var(--dk-encre); }
+  .or-nom.or-serre { font-size: 27px; }
   .or-nom.or-pale { fill: var(--dk-gris); }
+  .or-nom.or-fin { text-anchor: end; }
+  .or-tilde { font-weight: 700; fill: var(--dk-encre); }
   .or-fort { font-weight: 600; }
   .or-centre { text-anchor: middle; }
-  .or-petit { font-size: 25px; fill: var(--dk-encre); }
-  .or-petit.or-pale { fill: var(--dk-gris); }
-
-  /* Le fichier */
-  .or-papier { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 4; stroke-linejoin: miter; transition: stroke 0.3s; }
-  .or-pli { fill: none; stroke: var(--dk-encre); stroke-width: 4; transition: stroke 0.3s; }
-  .or-rang { fill: none; stroke: var(--dk-gris-2); stroke-width: 4; }
-  .or-feuille.or-trouve .or-papier,
-  .or-feuille.or-trouve .or-pli { stroke: var(--dk-accent); transition-delay: calc(var(--or-d) + 1.1s); }
+  .or-petit { font-size: 26px; fill: var(--dk-encre); }
 
   /* La console */
-  .or-console { opacity: 0; transition: opacity 0.3s; }
-  .or-console.or-vu { opacity: 1; transition-delay: var(--or-d); }
   .or-lien { stroke: var(--dk-encre); stroke-width: 4; }
   .or-ecran { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 4; }
 
-  /* Les indications */
-  .or-indic { opacity: 0; transition: opacity 0.35s; }
-  .or-indic.or-vu { opacity: 1; }
-  .or-puce { fill: var(--dk-fond); stroke: var(--dk-accent); stroke-width: 5; }
-  .or-code { font-size: 28px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
+  /* R */
+  .or-ici { font-size: 29px; font-weight: 600; fill: var(--dk-accent); }
+
+  /* Le fichier : fondu quand il change de pièce « par hypothèse » (temps 2),
+     glissement quand on le déplace pour vrai (temps 4). */
+  .or-papier { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 4; stroke-linejoin: miter; }
+  .or-pli { fill: none; stroke: var(--dk-encre); stroke-width: 4; }
+  .or-rang { fill: none; stroke: var(--dk-gris-2); stroke-width: 4; }
+  .or-feuille { animation: or-fondu-a 0.4s ease-out both; }
+  .or-feuille.or-loin { transform: translateX(380px); animation-name: or-fondu-b; }
+  .or-feuille.or-range { animation: none; transition: transform 0.9s ease-in-out; }
+
+  .or-rouge { fill: none; stroke: var(--dk-accent); stroke-width: 5; stroke-linejoin: miter; }
+  .or-coche { fill: none; stroke: var(--dk-accent); stroke-width: 8; }
+  .or-gagne { animation: or-parait 0.25s ease-out calc(var(--or-d) + 1.05s) both; }
+
+  .or-vide { fill: none; stroke: var(--dk-gris-2); stroke-width: 4; stroke-dasharray: 12 9; }
+  .or-parait { animation: or-parait 0.3s ease-out both; }
+  .or-croix { fill: none; stroke: var(--dk-accent); stroke-width: 9; animation: or-parait 0.25s ease-out 1.05s both; }
 
   /* Le tracé : pointillés rouges, dévoilés par un masque qui se dessine. */
   .or-route { fill: none; stroke: var(--dk-accent); stroke-width: 6; stroke-dasharray: 16 10; stroke-linejoin: miter; }
-  .or-trace { fill: none; stroke: #fff; stroke-width: 16; stroke-dasharray: 1; stroke-dashoffset: 1; }
-  .or-trace.or-va { stroke-dashoffset: 0; animation: or-dessine 1.1s ease-in-out var(--or-d) both; }
-  .or-trace.or-court.or-va { animation-duration: 0.5s; animation-delay: 0.95s; }
+  .or-trace { fill: none; stroke: #fff; stroke-width: 16; stroke-dasharray: 1; stroke-dashoffset: 0; animation: or-dessine 1s ease-in-out var(--or-d) both; }
 
-  .or-coche { fill: none; stroke: var(--dk-accent); stroke-width: 8; opacity: 0; transition: opacity 0.25s; }
-  .or-coche.or-vu { opacity: 1; transition-delay: calc(var(--or-d) + 1.1s); }
+  /* Les sorties A et B */
+  .or-pastille { fill: var(--dk-accent); }
+  .or-pastille-t { font-size: 26px; font-weight: 700; text-anchor: middle; fill: var(--dk-fond); }
+  .or-demenage { fill: none; stroke: var(--dk-encre); stroke-width: 5; stroke-linejoin: miter; }
 
-  .or-fantome { opacity: 0; transition: opacity 0.3s; }
-  .or-fantome.or-vu { opacity: 1; transition-delay: 0.8s; }
-  .or-vide { fill: none; stroke: var(--dk-gris-2); stroke-width: 4; stroke-dasharray: 12 9; }
-  .or-croix { fill: none; stroke: var(--dk-accent); stroke-width: 9; opacity: 0; transition: opacity 0.25s; }
-  .or-croix.or-vu { opacity: 1; transition-delay: 1.5s; }
+  /* Sous le plan */
+  .or-bas { display: flex; flex-direction: column; gap: 0.45em; }
+  .or-haut { min-height: 3.7em; }
+  .or-dit { min-height: 3.1em; display: flex; flex-direction: column; }
 
-  /* Le jeton */
-  .or-jeton { fill: var(--dk-accent); }
-  .or-jeton-t { font-size: 52px; font-weight: 700; text-anchor: middle; fill: var(--dk-fond); }
-  .or-ici { font-size: 28px; font-weight: 600; fill: var(--dk-accent); }
+  .or-cmd { margin: 0; display: inline-block; font-size: 0.9em; font-weight: 600; line-height: 1.3; padding: 0.3em 0.7em; border: 2px solid var(--dk-accent); background: var(--dk-fond); color: var(--dk-encre); white-space: nowrap; }
 
-  .or-jx.or-loin { transform: translateX(792px); animation: or-va-x 0.8s ease-in-out both; }
-  .or-jy.or-loin { transform: translateY(-37px); animation: or-va-y 0.8s both; }
-  .or-jx.or-retour { animation: or-rev-x 0.8s ease-in-out both; }
-  .or-jy.or-retour { animation: or-rev-y 0.8s both; }
+  .or-choix { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; }
+  .or-opt { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em; transition: opacity 0.3s; }
+  .or-opt.or-passe { opacity: 0.45; }
+  .or-opt-t { margin: 0; font-size: 0.8em; line-height: 1.4; color: var(--dk-encre); }
+  .or-lettre { display: inline-block; width: 1.5em; text-align: center; font-weight: 700; background: var(--dk-accent); color: var(--dk-fond); margin-right: 0.3em; }
+  .or-tag { display: inline-block; margin-left: 0.4em; padding: 0 0.5em; font-weight: 600; border: 2px solid var(--dk-accent); color: var(--dk-accent); }
 
-  /* Sous le plan : la place est réservée, le plan ne bouge pas. */
-  .or-bas { min-height: 3.3em; display: flex; flex-direction: column; gap: 0.35em; }
-  .or-ligne { margin: 0; font-size: 1.05em; line-height: 1.4; animation: or-monte 0.4s ease-out both; }
+  .or-ligne { margin: 0; font-size: 1.05em; line-height: 1.4; }
   .or-ligne b { font-weight: 600; }
-  .or-regle { margin: 0; font-size: 1.3em; font-weight: 600; line-height: 1.3; color: var(--dk-accent); animation: or-monte 0.45s ease-out both; }
-  .or-note { margin: 0; font-size: 0.75em; line-height: 1.4; color: var(--dk-encre); animation: or-monte 0.45s ease-out 0.2s both; }
+  .or-regle { margin: 0; font-size: 1.15em; font-weight: 600; line-height: 1.3; color: var(--dk-accent); }
+  .or-regle b { font-weight: 700; }
+  .or-monte { animation: or-monte 0.4s ease-out both; }
 
   @keyframes or-dessine { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-  @keyframes or-va-x { from { transform: translateX(0); } to { transform: translateX(792px); } }
-  @keyframes or-rev-x { from { transform: translateX(792px); } to { transform: translateX(0); } }
-  @keyframes or-va-y {
-    0% { transform: translateY(0); animation-timing-function: ease-out; }
-    50% { transform: translateY(-150px); animation-timing-function: ease-in; }
-    100% { transform: translateY(-37px); }
-  }
-  @keyframes or-rev-y {
-    0% { transform: translateY(-37px); animation-timing-function: ease-out; }
-    50% { transform: translateY(-150px); animation-timing-function: ease-in; }
-    100% { transform: translateY(0); }
-  }
+  @keyframes or-parait { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes or-fondu-a { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes or-fondu-b { from { opacity: 0; } to { opacity: 1; } }
   @keyframes or-monte { from { opacity: 0; transform: translateY(0.4em); } to { opacity: 1; transform: none; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .or-trace.or-va, .or-trace.or-court.or-va { animation: none; }
-    .or-jx.or-loin, .or-jy.or-loin, .or-jx.or-retour, .or-jy.or-retour { animation: none; }
-    .or-ligne, .or-regle, .or-note { animation: none; }
-    .or-papier, .or-pli, .or-console, .or-indic, .or-coche, .or-fantome, .or-croix { transition: none; }
+    .or-feuille, .or-feuille.or-loin, .or-gagne, .or-parait, .or-croix, .or-trace, .or-monte { animation: none; }
+    .or-feuille.or-range, .or-opt { transition: none; }
   }
 </style>

@@ -7,17 +7,25 @@
    *
    *   0  Une grande boîte : Documents. Chemin : Documents
    *   1  Dedans s’ouvre pol2000. Chemin : Documents/pol2000, la nouvelle
-   *      barre oblique clignote en rouge.
-   *   2  Dedans, data (et, très pâles, ses voisines R et resultats).
-   *   3  Dedans, un fichier, dessiné comme une feuille : ces2025.csv.
-   *   4  Toutes les barres obliques passent au rouge ensemble, et une seule
+   *      barre oblique est rouge et le reste tant qu’on est à ce temps.
+   *   2  Dedans, data (et, très pâles, ses voisines R et resultats). La
+   *      barre précédente redevient encre, la nouvelle est rouge.
+   *   3  Dedans, un fichier, dessiné comme une feuille : data.csv.
+   *   4  Toutes les barres obliques sont rouges ensemble, et une seule
    *      phrase apparaît.
+   *
+   * L’état de repos de chaque temps ne dépend que de `e` : la couleur des
+   * barres est une classe, pas une animation minutée. Un clic rapide, un
+   * retour en arrière ou un aller-retour vers la diapo voisine tombent donc
+   * toujours sur la bonne image. Les entrées sont brèves et ne remplissent
+   * que vers l’arrière (`backwards`) : interrompues ou non, elles finissent
+   * sur la valeur de repos.
    *
    * Coordonnées fixes, aucun hasard.
    */
   import { brancherTemps } from '../temps.js';
 
-  const SEGMENTS = ['Documents', 'pol2000', 'data', 'ces2025.csv'];
+  const SEGMENTS = ['Documents', 'pol2000', 'data', 'data.csv'];
 
   let e = $state(0);
   let hote = $state(null);
@@ -34,7 +42,7 @@
     class="cb-scene"
     viewBox="0 0 1200 424"
     role="img"
-    aria-label="Des boîtes emboîtées, de la plus grande à la plus petite&#8239;: la boîte Documents contient la boîte pol2000, qui contient la boîte data, à côté de deux boîtes pâles, R et resultats. Dans la boîte data, une feuille de papier&#8239;: le fichier ces2025.csv."
+    aria-label="Des boîtes emboîtées, de la plus grande à la plus petite&#8239;: la boîte Documents contient la boîte pol2000, qui contient la boîte data, à côté de deux boîtes pâles, R et resultats. Dans la boîte data, une feuille de papier&#8239;: le fichier data.csv."
   >
     <rect x="40" y="16" width="1120" height="392" class="cb-boite" />
     <text x="66" y="58" class="cb-nom">Documents</text>
@@ -48,7 +56,7 @@
       <rect x="730" y="144" width="160" height="216" class="cb-voisine" />
       <text x="750" y="182" class="cb-nom-pale">R</text>
       <rect x="920" y="144" width="160" height="216" class="cb-voisine" />
-      <text x="936" y="182" class="cb-nom-pale">resultats</text>
+      <text x="1000" y="182" text-anchor="middle" class="cb-nom-pale">resultats</text>
       <rect x="140" y="144" width="560" height="216" class="cb-boite" />
       <text x="166" y="186" class="cb-nom">data</text>
     </g>
@@ -56,12 +64,14 @@
     <g class="cb-niveau" class:cb-vu={e >= 3}>
       <path d="M 190 208 H 256 L 280 232 V 340 H 190 Z M 256 208 V 232 H 280" class="cb-feuille" />
       <path d="M 206 262 H 264 M 206 286 H 264 M 206 310 H 244" class="cb-lignes" />
-      <text x="306" y="290" class="cb-nom cb-fichier">ces2025.csv</text>
+      <text x="306" y="290" class="cb-nom cb-fichier">data.csv</text>
     </g>
   </svg>
 
-  <p class="cb-chemin" class:cb-rouge={e >= 4}>
-    {#each visibles as s, i (s)}{#if i > 0}<span class="cb-barre">/</span>{/if}<span class="cb-seg">{s}</span>{/each}
+  <!-- La barre n° i arrive au temps i : elle est rouge tant que ce temps est
+       le temps courant, et toutes le sont au dernier temps. -->
+  <p class="cb-chemin">
+    {#each visibles as s, i (s)}{#if i > 0}<span class="cb-barre" class:cb-rouge={e >= 4 || i === e}>/</span>{/if}<span class="cb-seg">{s}</span>{/each}
   </p>
 
   <div class="cb-bas">
@@ -90,15 +100,16 @@
   .cb-feuille { fill: var(--dk-fond-2); stroke: var(--dk-encre); stroke-width: 4; stroke-linejoin: miter; }
   .cb-lignes { fill: none; stroke: var(--dk-gris-2); stroke-width: 4; }
 
-  /* Chaque boîte s’ouvre dans la précédente. */
+  /* Chaque boîte s’ouvre dans la précédente : simple bascule de classe, la
+     transition se retourne proprement si l’on clique pendant qu’elle joue. */
   .cb-niveau {
     opacity: 0;
     transform-box: fill-box;
     transform-origin: center;
-    transform: scale(0.82);
-    transition: opacity 0.25s, transform 0.25s;
+    transform: scale(0.9);
+    transition: opacity 0.2s, transform 0.2s;
   }
-  .cb-niveau.cb-vu { opacity: 1; transform: none; transition: opacity 0.4s, transform 0.5s ease-out; }
+  .cb-niveau.cb-vu { opacity: 1; transform: none; transition: opacity 0.3s, transform 0.3s ease-out; }
 
   /* Le chemin : il est toujours là, il ne fait que s’allonger. */
   .cb-chemin {
@@ -113,27 +124,25 @@
     line-height: 1.3;
     white-space: nowrap;
   }
-  .cb-seg { display: inline-block; animation: cb-arrive 0.4s ease-out 0.25s both; }
+  /* Entrées brèves, sans délai (la puce ne reste jamais vide), et sans
+     remplissage vers l’avant : l’état final est celui des règles ci-dessous. */
+  .cb-seg { display: inline-block; animation: cb-arrive 0.3s ease-out backwards; }
   .cb-barre {
     display: inline-block;
-    margin: 0 0.12em;
+    margin: 0 0.2em;
     color: var(--dk-encre);
-    transition: color 0.4s, transform 0.4s;
-    animation: cb-eclair 2.4s ease-out both;
+    transition: color 0.3s, transform 0.3s;
+    animation: cb-pose 0.3s ease-out backwards;
   }
-  .cb-chemin.cb-rouge .cb-barre { color: var(--dk-accent); transform: scale(1.45); animation: none; }
+  .cb-barre.cb-rouge { color: var(--dk-accent); transform: scale(1.4); }
 
   /* La place de la phrase finale est réservée : rien ne saute au clic. */
   .cb-bas { font-size: 1.25em; line-height: 1.35; min-height: 1.35em; }
-  .cb-ligne { margin: 0; font-weight: 600; color: var(--dk-accent); animation: cb-arrive 0.4s ease-out 0.3s both; }
+  .cb-ligne { margin: 0; font-weight: 600; color: var(--dk-accent); animation: cb-arrive 0.3s ease-out backwards; }
 
-  @keyframes cb-arrive { from { opacity: 0; transform: translateY(0.3em); } to { opacity: 1; transform: none; } }
-  @keyframes cb-eclair {
-    0% { opacity: 0; color: var(--dk-accent); transform: scale(2.2); }
-    15% { opacity: 1; color: var(--dk-accent); transform: scale(1.6); }
-    70% { color: var(--dk-accent); transform: scale(1.6); }
-    100% { color: var(--dk-encre); transform: none; }
-  }
+  /* Pas de `to` : l’animation rejoint la valeur de repos, quelle qu’elle soit. */
+  @keyframes cb-arrive { from { opacity: 0; transform: translateY(0.3em); } }
+  @keyframes cb-pose { from { opacity: 0; transform: scale(2); } }
 
   @media (prefers-reduced-motion: reduce) {
     .cb-niveau, .cb-niveau.cb-vu { transition: none; }

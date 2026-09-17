@@ -2,6 +2,9 @@
   /**
    * La feuille de route de la séance : trois questions pour décrire une
    * variable. Trois panneaux, un dessin schématique chacun, aucun chiffre.
+   * La hiérarchie : la forme EST toute l'histoire ; le centre et la
+   * dispersion sont les deux résumés auxquels on se rabat, parce que
+   * personne ne retient une forme entière.
    *
    *   0  La forme : un petit histogramme dont la silhouette se trace.
    *      Les deux autres panneaux attendent, pâles.
@@ -9,9 +12,10 @@
    *      trouve son équilibre sur le pivot.
    *   2  La dispersion : une flèche double qui s'étire et se contracte,
    *      les points s'écartent avec elle.
-   *   3  Le pourquoi. Les trois panneaux sont allumés ensemble, aucun
-   *      n'est « actif » : chacun gagne une ligne rouge qui dit à quoi il
-   *      sert, et une ligne de clôture les enchaîne sous les trois.
+   *   3  La hiérarchie. La forme s'encadre de rouge : c'est le tout. Un
+   *      connecteur « résumée par » en part et descend sur le centre et
+   *      sur la dispersion. Chaque panneau gagne sa ligne rouge, et la
+   *      clôture dit pourquoi on résume.
    */
   import { brancherTemps } from '../temps.js';
   let e = $state(0);
@@ -53,7 +57,14 @@
 </script>
 
 <div class="visuel trois-q" bind:this={hote}>
-  <div class="panneau" class:on={e >= 0} class:actif={e === 0}>
+  <div class="lien" class:vu={e >= 3} aria-hidden="true">
+    <i class="dep"></i>
+    <i class="desc mil"></i>
+    <i class="desc fin"></i>
+    <span class="lien-t">résumée par</span>
+  </div>
+
+  <div class="panneau" class:on={e >= 0} class:actif={e === 0 || e >= 3}>
     <svg viewBox="0 0 300 200" role="img" aria-label="Schéma : un histogramme et sa silhouette.">
       <line x1="16" y1={Y0} x2="284" y2={Y0} class="axe" />
       {#each barres as b, i}
@@ -63,7 +74,7 @@
     </svg>
     <h3>La forme</h3>
     <p>À quoi ça ressemble&#8239;?</p>
-    <p class="pourquoi" class:vu={e >= 3} style="--pd: 0ms">{#if e >= 3}elle décide quel résumé est honnête{/if}</p>
+    <p class="pourquoi" class:vu={e >= 3} style="--pd: 0ms">{#if e >= 3}tout y est, mais c’est trop pour une seule tête{/if}</p>
   </div>
 
   <div class="panneau" class:on={e >= 1} class:actif={e === 1}>
@@ -79,7 +90,7 @@
     </svg>
     <h3>Le centre</h3>
     <p>Où est le milieu&#8239;?</p>
-    <p class="pourquoi" class:vu={e >= 3} style="--pd: 150ms">{#if e >= 3}un seul chiffre pour répondre{/if}</p>
+    <p class="pourquoi" class:vu={e >= 3} style="--pd: 150ms">{#if e >= 3}le résumé en un chiffre{/if}</p>
   </div>
 
   <div class="panneau" class:on={e >= 2} class:actif={e === 2}>
@@ -95,28 +106,45 @@
     </svg>
     <h3>La dispersion</h3>
     <p>Ça s’étale comment&#8239;?</p>
-    <p class="pourquoi" class:vu={e >= 3} style="--pd: 300ms">{#if e >= 3}elle dit si ce chiffre est fiable{/if}</p>
+    <p class="pourquoi" class:vu={e >= 3} style="--pd: 300ms">{#if e >= 3}à quel point ce chiffre résume bien{/if}</p>
   </div>
 
-  <p class="cloture" class:vu={e >= 3}>{#if e >= 3}La forme choisit le résumé. Le centre le donne. <span class="cle">La dispersion dit à quel point on peut s’y fier.</span>{/if}</p>
+  <p class="cloture" class:vu={e >= 3}>{#if e >= 3}<span class="ph">Si on pouvait retenir la forme, on n’aurait besoin de rien d’autre.</span> <span class="ph cle">On la résume&#8239;: un centre, une dispersion.</span>{/if}</p>
 </div>
 
 <style>
-  .trois-q { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2em; }
+  .trois-q { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5em 1.2em; }
+
+  /* Le connecteur « résumée par » : il sort du haut de la forme, file vers
+     la droite et retombe en flèche sur le centre et sur la dispersion. Même
+     grille que les panneaux, pour tomber pile au milieu de chacun. Sa place
+     est réservée dès le temps 0. */
+  .lien { grid-column: 1 / -1; position: relative; display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 1.2em; height: 1.3em; margin-top: 0.55em; opacity: 0; transition: opacity 0.5s; }
+  .lien.vu { opacity: 1; }
+  .dep, .desc { display: block; position: relative; box-sizing: border-box; height: 100%; border: 0 solid var(--dk-accent); border-top-width: 3px; }
+  .dep { margin-left: 50%; width: calc(50% + 1.2em); height: calc(100% + 0.5em); border-left-width: 3px; }
+  .mil { width: calc(100% + 1.2em); }
+  .fin { width: 50%; border-right-width: 3px; }
+  .mil::after { content: ''; position: absolute; top: 0; bottom: 0; left: calc((100% - 1.2em) / 2); border-left: 3px solid var(--dk-accent); }
+  .desc::before { content: ''; position: absolute; bottom: -0.35em; width: 0; height: 0; border-left: 0.4em solid transparent; border-right: 0.4em solid transparent; border-top: 0.55em solid var(--dk-accent); }
+  .mil::before { left: calc((100% - 1.2em) / 2 + 1.5px - 0.4em); }
+  .fin::before { right: calc(-0.4em - 1.5px); }
+  .lien-t { position: absolute; top: 0; left: calc((100% - 3em) / 3 + 0.75em); transform: translate(-50%, -55%); padding: 0 0.5em; background: var(--dk-fond); color: var(--dk-accent); font-size: 0.8em; font-weight: 600; line-height: 1.2; white-space: nowrap; }
   .panneau { display: flex; flex-direction: column; gap: 0.25em; border: 2px solid var(--dk-filet); padding: 0.9em 1em 1em; opacity: 0.28; transition: opacity 0.5s, border-color 0.4s; }
   .panneau.on { opacity: 1; border-color: var(--dk-encre); }
   .panneau.actif { border: 3px solid var(--dk-accent); padding: calc(0.9em - 1px) calc(1em - 1px) calc(1em - 1px); }
-  svg { width: 100%; height: auto; max-height: 38vh; display: block; overflow: visible; }
+  svg { width: 100%; height: auto; max-height: 30vh; display: block; overflow: visible; }
   h3 { margin: 0.4em 0 0; font-size: 1.35em; font-weight: 600; }
   .panneau.actif h3 { color: var(--dk-accent); }
   p { margin: 0; font-size: 0.9em; color: var(--dk-gris); }
 
-  /* Le pourquoi : une ligne par panneau, plus une ligne de clôture qui les
-     enchaîne. Leur place est réservée dès le temps 0 (min-height), sinon les
-     panneaux sautent en hauteur quand les lignes arrivent. */
-  .pourquoi { margin: 0.2em 0 0; font-size: 0.8em; line-height: 1.25; min-height: 1.3em; color: var(--dk-accent); }
+  /* Le pourquoi : deux lignes au plus par panneau, puis deux phrases de
+     clôture, une par ligne. Leur place est réservée dès le temps 0
+     (min-height), sinon les panneaux sautent quand les lignes arrivent. */
+  .pourquoi { margin: 0.2em 0 0; font-size: 0.8em; line-height: 1.25; min-height: 2.5em; color: var(--dk-accent); }
   .pourquoi.vu { animation: surgit 0.45s ease-out both; animation-delay: var(--pd); }
-  .cloture { grid-column: 1 / -1; margin: 0; font-size: 0.85em; line-height: 1.3; min-height: 1.35em; color: var(--dk-encre); }
+  .cloture { grid-column: 1 / -1; margin: 0; font-size: 0.85em; line-height: 1.3; min-height: 2.6em; color: var(--dk-encre); }
+  .ph { display: block; }
   .cloture.vu { animation: surgit 0.5s ease-out 0.5s both; }
   .cle { color: var(--dk-accent); font-weight: 600; }
 
@@ -163,7 +191,7 @@
   @media (prefers-reduced-motion: reduce) {
     .on .barre, .on .bloc, .on .fleau, .on .tige, .on .tete.g, .on .tete.d, .on .pt { animation: none; }
     .on .contour { animation: none; stroke-dashoffset: 0; }
-    .panneau { transition: none; }
+    .panneau, .lien { transition: none; }
     /* Pas d'opacity: 0 sur la base de ces deux règles : sans animation, elles
        doivent rester lisibles. */
     .pourquoi.vu, .cloture.vu { animation: none; }

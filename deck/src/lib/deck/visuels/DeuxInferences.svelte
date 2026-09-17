@@ -42,7 +42,6 @@
         <span class="ex">Quelle part compte voter conservateur{N}?</span>
         <div class="piste-i" style="--p: {(part * 100).toFixed(1)}%"><div class="rempli-i"></div><span class="val-i">{pct}{N}%</span></div>
         <span class="mini-i">Étude électorale canadienne 2025, sans les «&#8239;ne sait pas&#8239;»</span>
-        <span class="tag-i">partie 1 · dès aujourd’hui</span>
       {/if}
     </div>
     <div class="col-i" class:plein={e >= 2} class:ici={e === 2}>
@@ -57,7 +56,6 @@
           <rect x="284" y="12" width="130" height="46" class="boite-i rouge" />
           <text x="349" y="42" class="mot-i rouge">vote</text>
         </svg>
-        <span class="tag-i">partie 3 · novembre</span>
       {/if}
     </div>
   </div>
@@ -69,7 +67,7 @@
   .racine { font-family: var(--dk-mono); font-size: 28px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); animation: pop 0.5s cubic-bezier(0.34, 1.7, 0.64, 1) both; transform-box: fill-box; transform-origin: center; }
   .branche { fill: none; stroke: var(--dk-encre); stroke-width: 4; stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace 0.7s ease-out 0.25s forwards; }
   .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6em; }
-  .col-i { display: flex; flex-direction: column; gap: 0.4em; min-height: 15em; padding: 0.9em 1em 1em; border: 3px dashed var(--dk-filet); transition: border-color 0.3s; }
+  .col-i { display: flex; flex-direction: column; gap: 0.4em; min-height: 13em; padding: 0.9em 1em 1em; border: 3px dashed var(--dk-filet); transition: border-color 0.3s; }
   .col-i.plein { border-style: solid; border-color: var(--dk-encre); }
   .col-i.ici { border-color: var(--dk-accent); animation: rebond 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
   .gros { font-size: 1.9em; font-weight: 600; line-height: 1; letter-spacing: -0.03em; animation: monte 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
@@ -86,14 +84,13 @@
   .mot-i { font-family: var(--dk-mono); font-size: 22px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .mot-i.rouge { fill: var(--dk-accent); }
   .fleche-i { fill: none; stroke: var(--dk-accent); stroke-width: 5; stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace 0.6s ease-out 0.7s forwards; }
-  .tag-i { margin-top: auto; align-self: flex-start; font-size: 0.66em; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dk-accent); border: 2px solid var(--dk-accent); padding: 0.2em 0.55em; animation: monte 0.4s ease-out 0.6s both; }
   @keyframes pop { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: none; } }
   @keyframes trace { to { stroke-dashoffset: 0; } }
   @keyframes monte { from { opacity: 0; transform: translateY(0.5em); } to { opacity: 1; transform: none; } }
   @keyframes rebond { from { transform: scale(0.95); } to { transform: scale(1); } }
   @keyframes remplir { to { width: var(--p); } }
   @media (prefers-reduced-motion: reduce) {
-    .racine, .col-i, .gros, .quest, .ex, .piste-i, .val-i, .mini-i, .glyphe-i, .tag-i { animation: none; }
+    .racine, .col-i, .gros, .quest, .ex, .piste-i, .val-i, .mini-i, .glyphe-i { animation: none; }
     .branche, .fleche-i { animation: none; stroke-dashoffset: 0; }
     .rempli-i { animation: none; width: var(--p); }
   }

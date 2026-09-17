@@ -12,9 +12,10 @@
    *   2  La définition de King, Keohane et Verba (1994, p. 46). La page est
    *      attestée, et la proposition citée l'est aussi; la formule
    *      d'ouverture (« Inference is the process of... ») n'a pas pu être
-   *      retrouvée dans le texte, alors elle reste hors des guillemets.
-   *      Traduction libre, d'après les diapositives d'Adrien Cloutier
-   *      (hiver 2024).
+   *      retrouvée dans le texte, alors elle reste hors des guillemets :
+   *      le cadre (« L'inférence, c'est ») est le nôtre, en français, et
+   *      seule la proposition vérifiée est citée, en anglais, dans le
+   *      texte original.
    *
    * Pas de nuage de population avec son échantillon : la séance 1 l'a
    * déjà dessiné. Ici, on oppose le connu et l'inconnu.
@@ -66,8 +67,8 @@
     {/if}
   </svg>
   <blockquote class="citation-i" class:vu={e >= 2}>
-    <p>L’inférence, c’est «&#8239;utiliser les faits que nous connaissons pour en apprendre sur les faits que nous ne connaissons pas&#8239;».</p>
-    <cite>King, Keohane et Verba (1994, p. 46) · traduction libre</cite>
+    <p>L’inférence, c’est <span lang="en">“using the facts we know to learn about facts we do not know”</span>.</p>
+    <cite>King, Keohane and Verba (1994, p. 46)</cite>
   </blockquote>
 </div>
 
