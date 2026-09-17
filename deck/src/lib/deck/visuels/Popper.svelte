@@ -3,14 +3,17 @@
    * Une bonne théorie interdit des choses. Plus elle en interdit, plus elle
    * risque, plus elle vaut. Deux prédictions posées sur le même axe : le
    * nombre de sièges qu’un parti obtient à l’Assemblée nationale du Québec
-   * (125 sièges, source : assnat.qc.ca). Quatre temps.
+   * (127 sièges : la carte électorale de 2026, source : Élections Québec,
+   * « Le Québec est divisé en 127 circonscriptions ». L’Assemblée qui
+   * siège aujourd’hui en compte 125, mais une prédiction porte sur
+   * l’élection à venir). Quatre temps.
    *
    *   0  Les deux prédictions, en toutes lettres, sans dessin. B arrive
    *      après A et sonne, à la première écoute, comme la plus fine des
    *      deux : c’est le piège que la suite fait sauter.
    *   1  L’axe de A : une bande rouge étroite (60 à 70), tout le reste
-   *      hachuré. Elle exclut 115 résultats sur 126. Un repère discret
-   *      marque le seuil de la majorité (63), qui tombe dans la bande.
+   *      hachuré. Elle exclut 117 résultats sur 128. Un repère discret
+   *      marque le seuil de la majorité (64), qui tombe dans la bande.
    *   2  Le même axe pour B, gris plat d’un bout à l’autre : tout lui va.
    *      Elle n’exclut rien, donc elle ne risque rien.
    *   3  Le verdict, la citation de Popper, puis le rappel : la classe a
@@ -38,10 +41,10 @@
     return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  // L’axe : 0 à 125 sièges (Assemblée nationale du Québec), donc 126
+  // L’axe : 0 à 127 sièges (Assemblée nationale du Québec, carte de 2026), donc 128
   // résultats possibles. La bande permise par la prédiction A en couvre 11
   // (de 60 à 70). Tout le reste est calculé à partir de SIEGES.
-  const SIEGES = 125;
+  const SIEGES = 127;
   const X0 = 74, X1 = 972;
   const YB = 40, HB = 42; // la barre des résultats
   const x = (v) => X0 + (v / SIEGES) * (X1 - X0);
@@ -102,7 +105,7 @@
           <text x={(x(HAUT) + X1) / 2} y={YB + HB / 2 + 6} class="pp-exclu">exclu</text>
         </g>
 
-        <!-- Ce qu’elle s’autorise : onze résultats sur cent vingt-six. -->
+        <!-- Ce qu’elle s’autorise : onze résultats sur cent vingt-huit. -->
         <rect x={x(BAS)} y={YB} width={x(HAUT) - x(BAS)} height={HB} class="pp-bande" />
         <line x1={x(BAS)} y1={YB - 8} x2={x(BAS)} y2={YB} class="pp-amorce" />
         <line x1={x(HAUT)} y1={YB - 8} x2={x(HAUT)} y2={YB} class="pp-amorce" />
