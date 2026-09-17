@@ -43,6 +43,12 @@
   import Geoms from '$lib/deck/visuels/Geoms.svelte';
   import BoitesPartis from '$lib/deck/visuels/BoitesPartis.svelte';
   import Titanic from '$lib/deck/visuels/Titanic.svelte';
+  import CheminIpad from '$lib/deck/visuels/CheminIpad.svelte';
+  import CheminBoites from '$lib/deck/visuels/CheminBoites.svelte';
+  import OuEstR from '$lib/deck/visuels/OuEstR.svelte';
+  import TroisGestes from '$lib/deck/visuels/TroisGestes.svelte';
+  import Perdu from '$lib/deck/visuels/Perdu.svelte';
+  import { CHEMINS } from '$lib/data/seance3_chemins.js';
   import Paires from '$lib/deck/visuels/Paires.svelte';
   import Pourquoi from '$lib/deck/visuels/Pourquoi.svelte';
   import Pearson from '$lib/deck/visuels/Pearson.svelte';
@@ -68,8 +74,16 @@
   import PourquoiSondage from '$lib/deck/visuels/PourquoiSondage.svelte';
   import { CONSOLES } from '$lib/data/seance3.js';
 
-  const TOTAL = 58;
+  const TOTAL = 67;
   const D = 'POL-2000 · séance 3 · jeu 17 sept';
+
+  // Retour sur les chemins : trois consoles, toutes tirées de la même session
+  // R réelle (outils/seance3_chemins.R). Celle des trois gestes ne garde que
+  // l'essentiel : lire, écrire deux fois, dessiner, exporter, vérifier.
+  const CH = CHEMINS.consoles;
+  const c_ou = CH.ou;
+  const c_gestes = [CH.charger[0], CH.sauver[0], CH.sauver[1], CH.graphique[1], CH.graphique[2], CH.graphique[3]];
+  const c_erreur = CH.erreur;
 
   const script = `# POL-2000 · séance 3 · Les statistiques descriptives et la visualisation
 # À refaire chez vous, ligne par ligne, Ctrl + Entrée.
@@ -368,6 +382,54 @@ ggplot(d, aes(x = age, y = parti)) +
     </Slide>
 
     <!-- ================= 4 · DESSINER ================= -->
+    <!-- ================= RETOUR · LE CHEMIN ================= -->
+    <Slide fond="encre" bandeau="Retour" droite={D}>
+      <p class="surtitre e">Retour sur jeudi dernier</p>
+      <h1 class="e">C’est quoi, un chemin ?</h1>
+      <hr class="filet" />
+      <p class="lead e">L’adresse d’un fichier. Rien de plus.</p>
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">Sur un iPad, vous ne rangez rien</h2>
+      <CheminIpad />
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">Des boîtes dans des boîtes</h2>
+      <CheminBoites />
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">R est toujours quelque part</h2>
+      <OuEstR />
+    </Slide>
+
+    <Slide bandeau="En direct · le chemin" droite={D}>
+      <h2 class="e">Où suis-je ? Qu’est-ce que je vois ?</h2>
+      <Console lignes={c_ou} />
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">Lire, écrire, exporter</h2>
+      <TroisGestes />
+    </Slide>
+
+    <Slide bandeau="En direct · le chemin" droite={D}>
+      <h2 class="e">Les trois gestes, dans R</h2>
+      <Console lignes={c_gestes} />
+    </Slide>
+
+    <Slide bandeau="En direct · le chemin" droite={D}>
+      <h2 class="e">Quand R ne trouve pas</h2>
+      <Console lignes={c_erreur} />
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">Trois vérifications</h2>
+      <Perdu />
+    </Slide>
+
     <Slide fond="encre" bandeau="Dessiner" droite={D}>
       <h1 class="e">Dessiner</h1>
       <hr class="filet" />
