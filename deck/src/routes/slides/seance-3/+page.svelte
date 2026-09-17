@@ -171,6 +171,54 @@ ggplot(d, aes(x = age, y = parti)) +
       </ol>
     </Slide>
 
+    <!-- ================= RETOUR · LE CHEMIN ================= -->
+    <Slide fond="encre" bandeau="Retour" droite={D}>
+      <p class="surtitre e">Retour sur jeudi dernier</p>
+      <h1 class="e">C’est quoi, un chemin ?</h1>
+      <hr class="filet" />
+      <p class="lead e">L’adresse d’un fichier. Rien de plus.</p>
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">Sur un iPad, vous ne rangez rien</h2>
+      <CheminIpad />
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">Des boîtes dans des boîtes</h2>
+      <CheminBoites />
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">R est toujours quelque part</h2>
+      <OuEstR />
+    </Slide>
+
+    <Slide bandeau="En direct · le chemin" droite={D}>
+      <h2 class="e">Où suis-je ? Qu’est-ce que je vois ?</h2>
+      <Console lignes={c_ou} />
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">Lire, écrire, exporter</h2>
+      <TroisGestes />
+    </Slide>
+
+    <Slide bandeau="En direct · le chemin" droite={D}>
+      <h2 class="e">Les trois gestes, dans R</h2>
+      <Console lignes={c_gestes} />
+    </Slide>
+
+    <Slide bandeau="En direct · le chemin" droite={D}>
+      <h2 class="e">Quand R ne trouve pas</h2>
+      <Console lignes={c_erreur} />
+    </Slide>
+
+    <Slide bandeau="Retour · le chemin" droite={D}>
+      <h2 class="e">Trois vérifications</h2>
+      <Perdu />
+    </Slide>
+
     <!-- ================= 0 · LA SCIENCE, L'INFÉRENCE ================= -->
     <Slide fond="encre" bandeau="La science" droite={D}>
       <p class="surtitre e">Avant les chiffres</p>
@@ -382,54 +430,6 @@ ggplot(d, aes(x = age, y = parti)) +
     </Slide>
 
     <!-- ================= 4 · DESSINER ================= -->
-    <!-- ================= RETOUR · LE CHEMIN ================= -->
-    <Slide fond="encre" bandeau="Retour" droite={D}>
-      <p class="surtitre e">Retour sur jeudi dernier</p>
-      <h1 class="e">C’est quoi, un chemin ?</h1>
-      <hr class="filet" />
-      <p class="lead e">L’adresse d’un fichier. Rien de plus.</p>
-    </Slide>
-
-    <Slide bandeau="Retour · le chemin" droite={D}>
-      <h2 class="e">Sur un iPad, vous ne rangez rien</h2>
-      <CheminIpad />
-    </Slide>
-
-    <Slide bandeau="Retour · le chemin" droite={D}>
-      <h2 class="e">Des boîtes dans des boîtes</h2>
-      <CheminBoites />
-    </Slide>
-
-    <Slide bandeau="Retour · le chemin" droite={D}>
-      <h2 class="e">R est toujours quelque part</h2>
-      <OuEstR />
-    </Slide>
-
-    <Slide bandeau="En direct · le chemin" droite={D}>
-      <h2 class="e">Où suis-je ? Qu’est-ce que je vois ?</h2>
-      <Console lignes={c_ou} />
-    </Slide>
-
-    <Slide bandeau="Retour · le chemin" droite={D}>
-      <h2 class="e">Lire, écrire, exporter</h2>
-      <TroisGestes />
-    </Slide>
-
-    <Slide bandeau="En direct · le chemin" droite={D}>
-      <h2 class="e">Les trois gestes, dans R</h2>
-      <Console lignes={c_gestes} />
-    </Slide>
-
-    <Slide bandeau="En direct · le chemin" droite={D}>
-      <h2 class="e">Quand R ne trouve pas</h2>
-      <Console lignes={c_erreur} />
-    </Slide>
-
-    <Slide bandeau="Retour · le chemin" droite={D}>
-      <h2 class="e">Trois vérifications</h2>
-      <Perdu />
-    </Slide>
-
     <Slide fond="encre" bandeau="Dessiner" droite={D}>
       <h1 class="e">Dessiner</h1>
       <hr class="filet" />
