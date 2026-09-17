@@ -43,6 +43,7 @@
   import Geoms from '$lib/deck/visuels/Geoms.svelte';
   import BoitesPartis from '$lib/deck/visuels/BoitesPartis.svelte';
   import Titanic from '$lib/deck/visuels/Titanic.svelte';
+  import Paires from '$lib/deck/visuels/Paires.svelte';
   import Pourquoi from '$lib/deck/visuels/Pourquoi.svelte';
   import Pearson from '$lib/deck/visuels/Pearson.svelte';
   import Demarcation from '$lib/deck/visuels/Demarcation.svelte';
@@ -67,7 +68,7 @@
   import PourquoiSondage from '$lib/deck/visuels/PourquoiSondage.svelte';
   import { CONSOLES } from '$lib/data/seance3.js';
 
-  const TOTAL = 57;
+  const TOTAL = 58;
   const D = 'POL-2000 · séance 3 · jeu 17 sept';
 
   const script = `# POL-2000 · séance 3 · Les statistiques descriptives et la visualisation
@@ -185,7 +186,7 @@ ggplot(d, aes(x = age, y = parti)) +
     </Slide>
 
     <Slide bandeau="La démarcation" droite={D}>
-      <h2 class="e">Une bonne théorie interdit</h2>
+      <h2 class="e">Deux prédictions</h2>
       <Popper />
     </Slide>
 
@@ -210,7 +211,7 @@ ggplot(d, aes(x = age, y = parti)) +
     </Slide>
 
     <Slide bandeau="Les RI" droite={D}>
-      <h2 class="e">Une prévision de 1990</h2>
+      <h2 class="e">Une prévision qu’on n’a jamais pu tester</h2>
       <Mearsheimer />
     </Slide>
 
@@ -355,6 +356,11 @@ ggplot(d, aes(x = age, y = parti)) +
     </Slide>
 
     <!-- ================= PAUSE ================= -->
+    <Slide bandeau="La dispersion" droite={D}>
+      <h2 class="e">Ça va par paires</h2>
+      <Paires />
+    </Slide>
+
     <Slide fond="encre" bandeau="Pause" droite={D}>
       <h1 class="e">Pause</h1>
       <hr class="filet" />
