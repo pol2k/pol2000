@@ -34,6 +34,7 @@
   import Bascule from '$lib/deck/visuels/Bascule.svelte';
   import Menage from '$lib/deck/visuels/Menage.svelte';
   import QuelCentre from '$lib/deck/visuels/QuelCentre.svelte';
+  import Pouce from '$lib/deck/visuels/Pouce.svelte';
   import Etalement from '$lib/deck/visuels/Etalement.svelte';
   import Quartiles from '$lib/deck/visuels/Quartiles.svelte';
   import EcartType from '$lib/deck/visuels/EcartType.svelte';
@@ -65,7 +66,7 @@
   import PourquoiEcartType from '$lib/deck/visuels/PourquoiEcartType.svelte';
   import { CONSOLES } from '$lib/data/seance3.js';
 
-  const TOTAL = 57;
+  const TOTAL = 58;
   const D = 'POL-2000 · séance 3 · jeu 17 sept';
 
   // Retour sur les chemins : trois consoles, toutes tirées de la même session
@@ -335,6 +336,11 @@ ggplot(d, aes(x = groupe_age, fill = parti)) +
     <Slide bandeau="Le centre" droite={D}>
       <h2 class="e">Quel centre, pour quelle variable ?</h2>
       <QuelCentre />
+    </Slide>
+
+    <Slide bandeau="Le centre" droite={D}>
+      <h2 class="e">Moyenne ou médiane ? La règle du pouce</h2>
+      <Pouce />
     </Slide>
 
     <Slide bandeau="En direct · le centre" droite={D}>
