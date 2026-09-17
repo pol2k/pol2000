@@ -17,7 +17,8 @@ for (let i = 0; i < Number(k); i++) {
   await p.keyboard.press('ArrowRight');
   await p.waitForTimeout(250);
 }
-await p.waitForTimeout(1300);
+// ATTENTE (ms) : laisser finir une animation longue avant la photo.
+await p.waitForTimeout(Number(process.env.ATTENTE ?? 1300));
 await p.screenshot({ path: `${out}/t${w}x${h}-${idx}-k${k}.png` });
 await b.close();
 console.log(`capturé ${idx} au temps ${k}`);
