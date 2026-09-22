@@ -13,8 +13,8 @@
 #
 # Deux exceptions, faute de jeu de données dans un package : la station
 # MX17004 (février 2010, tmax et tmin des jours 1 à 4) est recopiée du
-# tableau 11 de Wickham (2014, « Tidy Data », Journal of Statistical
-# Software 59(10)), et les sièges sont les résultats officiels d'Élections
+# fichier weather.csv de la vignette « Tidy data » de tidyr (Global
+# Historical Climatology Network ; vérifié le 22 septembre 2026), et les sièges sont les résultats officiels d'Élections
 # Canada (2021 : 160, 119, 32, 25, 2 ; 2025 : 169, 144, 22, 7, 1).
 suppressPackageStartupMessages({ library(ces); library(dplyr); library(tidyr); library(haven) })
 options(width = 100, pillar.advice = FALSE)
@@ -143,7 +143,7 @@ J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA
 out <- c(
   "/* Généré par outils/seance4_data.R. Sources : ces::get_ces(\"2025\"), l'Étude électorale",
   "   canadienne 2025 ; tidyr::relig_income, tidyr::who2, tidyr::billboard ; la station MX17004",
-  "   de Wickham (2014, tableau 11) ; les sièges d'Élections Canada, 2021 et 2025.",
+  "   de weather.csv (vignette « Tidy data » de tidyr) ; les sièges d'Élections Canada, 2021 et 2025.",
   sprintf("   %s. Aucune valeur ici n'est écrite à la main. */", R.version.string),
   "",
   "/* Les dimensions de la base brute et de la base propre. */",

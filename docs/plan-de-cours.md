@@ -90,9 +90,11 @@ student-facing text (Brio, plan de cours, slides).
 Decided 22 Sept 2026 (séance 4 deck): the « banque de données fournie » for
 the travail de mi-session and the travail final is the **Canadian Election
 Study 2025** (`ces::get_ces("2025")`), the same data the decks use from
-séance 2 on. R is taught with **tidyverse syntax only** (`mutate()`,
-`case_when()`, `na_if()`, `pivot_longer()`), not the base-R bracket recodes
-of H24 (`df$x[df$y == 1] <- 0`): one idiom, continuous with séances 2 and 3.
+séance 2 on. The séance 4 deck teaches **tidyverse syntax only**
+(`mutate()`, `case_when()`, `na_if()`, `pivot_longer()`), not the base-R
+bracket recodes of H24 (`df$x[df$y == 1] <- 0`): one idiom, continuous with
+séances 2 and 3. This was the agent's recommendation; the instructor asked
+for it but has not yet confirmed it.
 
 Lecture-only constraint: ~100 students in a lecture hall. No lab halves. R is
 taught through live projector demos students follow on their own laptops, plus

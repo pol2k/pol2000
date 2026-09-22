@@ -31,6 +31,7 @@
   import Session from '$lib/deck/visuels/Session.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import Tidy from '$lib/deck/visuels/Tidy.svelte';
+  import TroisRegles from '$lib/deck/visuels/TroisRegles.svelte';
   import QuatreVingts from '$lib/deck/visuels/QuatreVingts.svelte';
   import Nettoyage from '$lib/deck/visuels/Nettoyage.svelte';
   import CinqProblemes from '$lib/deck/visuels/CinqProblemes.svelte';
@@ -49,7 +50,7 @@
   import AvantS5 from '$lib/deck/visuels/AvantS5.svelte';
   import { CONSOLES, TIDY } from '$lib/data/seance4.js';
 
-  const TOTAL = 48;
+  const TOTAL = 49;
   const D = 'POL-2000 · séance 4 · jeu 24 sept';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -200,8 +201,13 @@ relig_income |>
     </Slide>
 
     <Slide bandeau="Des données tidy" droite={D}>
-      <h2 class="e">Trois règles, déjà vues</h2>
+      <h2 class="e">Un tableau, vu de près</h2>
       <Tidy />
+    </Slide>
+
+    <Slide bandeau="Des données tidy" droite={D}>
+      <h2 class="e">Trois règles</h2>
+      <TroisRegles />
     </Slide>
 
     <Slide bandeau="Des données tidy" droite={D}>
@@ -239,7 +245,7 @@ relig_income |>
         code={code('meteo', 1)}
         apres={[T.meteo.apres]}
         explication="Les jours sont en colonnes, les deux températures en lignes."
-        source="Station météo MX17004, février 2010 · Wickham (2014), tableau 11" />
+        source="Station météo MX17004, Mexique, février 2010 · Global Historical Climatology Network, vignette « Tidy data » de tidyr" />
     </Slide>
 
     <Slide bandeau="Des données tidy · 4 de 5" droite={D}>

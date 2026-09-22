@@ -3,7 +3,7 @@
    * Trois sortes de vide dans l'Étude électorale canadienne 2025. Une carte
    * par clic, un grand nombre, une ligne chacune.
    *
-   *   1  -99 : le « ne sait pas » des curseurs de 0 à 10. R le prend pour
+   *   1  -99 : le code de non-réponse des curseurs de 0 à 10. R le prend pour
    *      un nombre (GAUCHE_DROITE.n99).
    *   2  « Ne sait pas » : une vraie réponse, code 7 de l'intention de vote
    *      (VOTE_VIDE.nsp). À vous de choisir : catégorie ou NA.
@@ -23,7 +23,7 @@
 
   const milliers = (n) => n.toLocaleString('fr-CA').replace(/\s/g, ' ');
   const CARTES = [
-    { code: '-99', n: GAUCHE_DROITE.n99, quoi: 'sur l’échelle gauche-droite', ligne: 'Un code pour « ne sait pas ». R le compte comme un nombre.', danger: true },
+    { code: '-99', n: GAUCHE_DROITE.n99, quoi: 'sur l’échelle gauche-droite', ligne: 'Un code de non-réponse. R le compte comme un nombre.', danger: true },
     { code: 'Ne sait pas', n: VOTE_VIDE.nsp, quoi: 'intention de vote, code 7', ligne: 'Une vraie réponse. Catégorie ou NA : à vous de choisir.' },
     { code: 'NA', n: VOTE_VIDE.na, quoi: 'sans intention de vote', ligne: `Question jamais posée : ${milliers(VOTE_VIDE.raisons['6'])} avaient déjà voté.` }
   ];

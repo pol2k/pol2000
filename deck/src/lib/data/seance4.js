@@ -1,6 +1,6 @@
 /* Généré par outils/seance4_data.R. Sources : ces::get_ces("2025"), l'Étude électorale
    canadienne 2025 ; tidyr::relig_income, tidyr::who2, tidyr::billboard ; la station MX17004
-   de Wickham (2014, tableau 11) ; les sièges d'Élections Canada, 2021 et 2025.
+   de weather.csv (vignette « Tidy data » de tidyr) ; les sièges d'Élections Canada, 2021 et 2025.
    R version 4.6.1 (2026-06-24). Aucune valeur ici n'est écrite à la main. */
 
 /* Les dimensions de la base brute et de la base propre. */
