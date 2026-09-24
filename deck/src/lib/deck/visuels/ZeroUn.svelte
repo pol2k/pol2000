@@ -5,21 +5,22 @@
    * Trois règles posées sur une même droite de nombres bruts, puis étirées
    * jusqu'à couvrir la même largeur. Cinq temps :
    *
-   *   0  trois variables, trois étendues : 1 à 5, 0 à 10, oui ou non;
+   *   0  trois variables, trois étendues : 1 à 5, 0 à 10, oui ou non,
+   *      avec les mots des réponses (pas du tout … très; gauche, droite);
    *   1  les étiquettes d'origine s'effacent, les règles s'étirent sur la
    *      même largeur (on ne dit pas encore quel bout est lequel : c'est
    *      la diapo suivante, le sens de l'échelle);
    *   2  l'axe commun : 0 = le minimum, 1 = le maximum;
-   *   3  ce que vaut chaque cran : l'ancienne valeur revient en gris
-   *      au-dessus, la nouvelle s'écrit en rouge dessous (0 · 0,25 · … · 1,
-   *      0 · 0,1 · … · 1, et 0 · 1 pour le oui ou non);
+   *   3  ce que vaut chaque cran : seule la nouvelle valeur s'écrit, en
+   *      rouge (0 · 0,25 · … · 1, 0 · 0,1 · … · 1, et 0 · 1 pour le oui
+   *      ou non);
    *   4  le milieu : 3 sur l'échelle de 1 à 5 et 5 sur celle de 0 à 10
    *      tombent tous les deux à 0,5.
    *
    * Aucune donnée : des échelles schématiques. La satisfaction de 1 à 5
    * n'est pas cps25_demsat (4 crans, voir SensEchelle.svelte) : c'est une
-   * Likert générique, sans nom aux bouts, pour ne pas devancer le sens de
-   * l'échelle. Pas d'effectifs.
+   * Likert générique, de « pas du tout » (1) à « très » satisfait.e (5).
+   * Pas d'effectifs.
    */
   import { brancherTemps } from '../temps.js';
 
@@ -28,8 +29,13 @@
   const brut = (v) => X0 + v * U;
 
   const REGLES = [
-    { nom: 'satisfaction', sous: 'Likert, 1 à 5', y: 70, valeurs: [1, 2, 3, 4, 5], etiq: null, milieu: 3 },
-    { nom: 'gauche-droite', sous: '0 à 10', y: 180, valeurs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], etiq: null, milieu: 5 },
+    // Au temps 0 seulement : ce que disent les réponses. Cinq mots ne tiennent
+    // pas sous des crans si serrés : une ligne de légende pour la Likert, un mot
+    // à chaque bout pour la gauche-droite.
+    { nom: 'satisfaction', sous: 'Likert, 1 à 5', y: 70, valeurs: [1, 2, 3, 4, 5], etiq: null, milieu: 3,
+      legende: '1 pas du tout · 2 peu · 3 moyennement · 4 assez · 5 très' },
+    { nom: 'gauche-droite', sous: '0 à 10', y: 180, valeurs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], etiq: null, milieu: 5,
+      mots: ['gauche', '', '', '', '', '', '', '', '', '', 'droite'] },
     // Le oui ou non ne rappelle pas ses étiquettes au temps 3 : lequel vaut 1,
     // c'est la diapo suivante.
     { nom: 'né.e au Canada', sous: 'oui ou non', y: 290, valeurs: [1, 2], etiq: ['oui', 'non'], cache: true }
@@ -54,7 +60,7 @@
 </script>
 
 <div class="visuel zero-un" bind:this={hote}>
-  <svg viewBox="0 0 1000 440" role="img" aria-label="Trois variables aux échelles différentes : une satisfaction de 1 à 5 (échelle de Likert), une échelle gauche-droite de 0 à 10 et un oui ou non. Elles sont toutes étirées sur la même règle, de 0 à 1 : 0 est le minimum, 1 le maximum. La satisfaction devient 0, 0,25, 0,5, 0,75 et 1; la gauche-droite 0, 0,1, 0,2 et ainsi de suite jusqu'à 1; le oui ou non 0 et 1. Le milieu, 3 sur 5 ou 5 sur 10, vaut 0,5.">
+  <svg viewBox="0 0 1000 440" role="img" aria-label="Trois variables aux échelles différentes : une satisfaction de 1 à 5 (échelle de Likert, de pas du tout à très satisfait.e), une échelle gauche-droite de 0 à 10 et un oui ou non. Elles sont toutes étirées sur la même règle, de 0 à 1 : 0 est le minimum, 1 le maximum. La satisfaction devient 0, 0,25, 0,5, 0,75 et 1; la gauche-droite 0, 0,1, 0,2 et ainsi de suite jusqu'à 1; le oui ou non 0 et 1. Le milieu, 3 sur 5 ou 5 sur 10, vaut 0,5.">
     <!-- Les repères communs, au dernier temps. -->
     <g class="commun" class:vu={e >= 2}>
       <line x1={X0} y1="30" x2={X0} y2={YAXE} class="guide" />
@@ -76,12 +82,18 @@
       <g transform="translate(0 {r.y})">
         <text x="290" y="0" class="nom">{r.nom}</text>
         <text x="290" y="26" class="sous">{r.sous}</text>
+        {#if r.legende}
+          <text x={brut(r.min) - 12} y="46" class="mot legende" class:efface={e >= 1}>{r.legende}</text>
+        {/if}
         <!-- La règle : un rectangle d'une unité, déplacé puis étiré. -->
         <rect x="0" y="-2" width="1" height="4" class="regle" style="transform: translateX({pos(r, r.min, e >= 1)}px) scaleX({pos(r, r.max, e >= 1) - pos(r, r.min, e >= 1)}); transition-delay: {e >= 1 ? 250 + i * 120 : 0}ms" />
         {#each r.valeurs as v, k}
           <g class="cran" style="transform: translateX({pos(r, v, e >= 1)}px); transition-delay: {e >= 1 ? 250 + i * 120 : 0}ms">
             <line x1="0" y1="-12" x2="0" y2="12" />
-            <text x="0" y="-22" class="cr" class:efface={e >= 1 && (e < 3 || r.cache)} class:avant={e >= 3} class:terne={e >= 4 && v !== r.milieu && !r.cache} class:fort={e >= 4 && v === r.milieu}>{r.etiq[k]}</text>
+            <text x="0" y="-22" class="cr" class:efface={e >= 1}>{r.etiq[k]}</text>
+            {#if r.mots?.[k]}
+              <text x="0" y="42" class="mot" class:efface={e >= 1}>{r.mots[k]}</text>
+            {/if}
             <text x="0" y="44" class="apres" class:vu={e >= 3} class:terne={e >= 4 && v !== r.milieu} class:fort={e >= 4 && v === r.milieu}>{zu(r, v)}</text>
           </g>
         {/each}
@@ -113,13 +125,14 @@
   /* Un halo couleur papier : les pointillés passent sous les chiffres. */
   .cr, .apres, .borne { paint-order: stroke; stroke: var(--dk-fond); stroke-width: 8px; stroke-linejoin: round; }
   .cr.efface { opacity: 0; }
-  .cr.avant { fill: var(--dk-gris); font-weight: 500; }
+  .mot { font-size: 17px; text-anchor: middle; fill: var(--dk-gris); transition: opacity 0.25s; }
+  .mot.efface { opacity: 0; }
+  .legende { text-anchor: start; }
   .apres { font-size: 23px; font-weight: 700; text-anchor: middle; fill: var(--dk-accent); opacity: 0; transition: opacity 0.4s, fill-opacity 0.4s, font-size 0.3s; }
   .apres.vu { opacity: 1; }
   /* On pâlit le chiffre, pas son halo : les pointillés restent cachés. */
-  .cr.terne, .apres.terne { fill-opacity: 0.3; }
+  .apres.terne { fill-opacity: 0.3; }
   .apres.fort { font-size: 30px; }
-  .cr.fort { fill: var(--dk-encre); font-weight: 700; }
   .milieu { opacity: 0; transition: opacity 0.5s; }
   .milieu.vu { opacity: 1; }
   .commun { opacity: 0; transition: opacity 0.5s; }
