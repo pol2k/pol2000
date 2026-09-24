@@ -1,23 +1,27 @@
 <script>
   /**
    * Du brut au propre, une colonne à la fois. Un petit tableau de quatre
-   * vraies personnes de l'Étude électorale canadienne 2025 se transforme sur
-   * place : on lit la colonne dans le codebook, on la renomme, on traduit ses
-   * codes, puis le -99 devient NA. Même idée que le schéma « cleaning » du
-   * cours 4 de FAS1001, mais animé.
+   * vraies personnes de l'Étude électorale canadienne 2025 : on lit la colonne
+   * dans le codebook, on la renomme, on traduit ses codes, puis le -99
+   * devient NA. Même idée que le schéma « cleaning » du cours 4 de FAS1001,
+   * mais animé. La règle du cours : df_raw ne change jamais; chaque colonne
+   * propre est écrite dans df_clean (qui compte aussi la colonne id). Au
+   * dernier temps, les deux objets sont côte à côte : df_raw inchangé,
+   * df_clean nouveau.
    *
    *   0  Les données brutes : des noms cryptiques et des codes.
    *   1  cps25_education : la fiche du codebook s'ouvre (ce que veut dire chaque code).
-   *   2  Le nom devient scolarite.
+   *   2  Le nom devient ses_education.
    *   3  Les codes deviennent des catégories.
    *   4  cps25_lr_scale_bef_1 : la fiche change (0 = gauche, 10 = droite, -99 = non-réponse).
    *   5  Le nom devient gauche_droite.
    *   6  Les -99 deviennent NA.
-   *   7  cps25_age_in_years devient age : les données propres.
+   *   7  cps25_age_in_years devient age : df_clean est prêt, df_raw n'a pas bougé.
    *
    * Valeurs avant/après : BRUT et PROPRE de seance4.js (outils/seance4_data.R),
    * mêmes personnes sur les mêmes lignes. Les noms français des codes de
-   * scolarité sont ceux de Recodage.svelte (ils abrègent le codebook).
+   * scolarité abrègent le codebook; les catégories (secondaire_ou_moins,
+   * collegial, universitaire) viennent de PROPRE.
    */
   import { brancherTemps } from '../temps.js';
   import { BRUT, PROPRE, DIMENSIONS, SCOLARITE } from '$lib/data/seance4.js';
@@ -36,7 +40,7 @@
   // Chaque colonne : son nom brut, son nom propre, et le temps où chaque chose arrive.
   const COLONNES = [
     { brut: 'cps25_age_in_years', propre: 'age', lire: null, nom: 7, val: null },
-    { brut: 'cps25_education', propre: 'scolarite', lire: 1, nom: 2, val: 3 },
+    { brut: 'cps25_education', propre: 'ses_education', lire: 1, nom: 2, val: 3 },
     { brut: 'cps25_lr_scale_bef_1', propre: 'gauche_droite', lire: 4, nom: 5, val: 6 }
   ].map((c) => {
     const ib = BRUT.cols.indexOf(c.brut);
@@ -81,10 +85,8 @@
   <div class="scene">
     <section class="bloc">
       <div class="objet">
-        <span class="pile">
-          <span class="av" class:parti={e >= 7}><code>df</code> <span class="dim">{NLIG} lignes × {NCOL_BRUT} colonnes</span></span>
-          <span class="ap" class:vu={e >= 7}><code>df_propre</code> <span class="dim">{NLIG} lignes × {NCOL_PROPRE} colonnes</span></span>
-        </span>
+        <span class="brut"><code>df_raw</code><span class="dim">{NLIG} lignes × {NCOL_BRUT} colonnes</span><span class="etat" class:vu={e >= 7}>inchangé</span></span>
+        <span class="ap" class:vu={e >= 7}><code>df_clean</code><span class="dim">{NLIG} lignes × {NCOL_PROPRE} colonnes</span><span class="etat">nouveau</span></span>
       </div>
 
       <div class="table">
@@ -161,10 +163,18 @@
   .ap { opacity: 0; transform: translateY(0.45em); transition: opacity 0.35s, transform 0.35s; }
   .ap.vu { opacity: 1; transform: none; }
 
-  .objet { font-size: 0.8em; }
+  /* Les deux objets : df_raw reste, df_clean arrive dessous (place réservée). */
+  .objet { font-size: 0.8em; display: grid; grid-template-columns: auto auto auto; justify-content: start; gap: 0.15em 0; align-items: baseline; }
+  .objet > span { display: contents; }
   .objet code { font-family: var(--dk-mono); font-weight: 600; font-size: 1.15em; }
+  .objet .ap > * { opacity: 0; transition: opacity 0.35s; }
+  .objet .ap.vu > * { opacity: 1; }
   .objet .ap code { color: var(--dk-accent); }
-  .dim { color: var(--dk-gris); font-size: 0.85em; margin-left: 0.4em; }
+  .dim { color: var(--dk-gris); font-size: 0.85em; margin-left: 0.6em; }
+  .etat { font-size: 0.85em; font-weight: 600; margin-left: 1em; }
+  .brut .etat { opacity: 0; transition: opacity 0.35s; }
+  .brut .etat.vu { opacity: 1; }
+  .ap .etat { color: var(--dk-accent); }
 
   /* Le tableau, colonne par colonne : une colonne active se cerne de rouge. */
   .table { display: grid; grid-template-columns: repeat(3, auto); border: 3px solid var(--dk-encre); transition: border-color 0.4s; }
@@ -202,7 +212,7 @@
   .source { margin: 0; font-size: 0.6em; letter-spacing: 0.06em; color: var(--dk-gris); text-align: right; }
 
   @media (prefers-reduced-motion: reduce) {
-    .av, .ap, .col, .th, .fiche, .ctn, .cat, .rail li, .table { transition: none; }
+    .av, .ap, .col, .th, .fiche, .ctn, .cat, .rail li, .table, .objet .ap > *, .brut .etat { transition: none; }
     .td .flash { animation: none; }
   }
 </style>

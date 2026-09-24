@@ -30,7 +30,7 @@
 </script>
 
 <div class="visuel brut-propre" bind:this={hote}>
-  <code class="nom">df</code>
+  <code class="nom">df_raw</code>
   <table>
     <thead><tr>{#each BRUT.cols as c}<th>{#each morceaux(c) as m, k}{#if k}<wbr />{/if}{m}{/each}</th>{/each}</tr></thead>
     <tbody>
@@ -40,7 +40,7 @@
     </tbody>
   </table>
 
-  <code class="nom rouge" class:cache={e < 1}>df_propre</code>
+  <code class="nom rouge" class:cache={e < 1}>df_clean</code>
   <table class:cache={e < 1}>
     <thead><tr>{#each PROPRE.cols as c}<th>{#each morceaux(c) as m, k}{#if k}<wbr />{/if}{m}{/each}</th>{/each}</tr></thead>
     <tbody>

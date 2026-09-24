@@ -2,62 +2,76 @@
   /**
    * Le vrai codebook de l'Étude électorale canadienne de 1993 (153 pages,
    * téléchargé par ces::download_pdf_codebook("1993") depuis
-   * borealisdata.ca), ouvert à la page 37 : l'entrée cpsg1, la TPS.
+   * borealisdata.ca), feuilleté comme dans un lecteur PDF.
    *
    * Pas d'iframe : certains navigateurs téléchargent le PDF dès que le deck
    * s'ouvre au lieu de l'afficher. On montre donc de vraies pages du PDF,
-   * rendues en images par Ghostscript (gs -sDEVICE=pnggray -r110) : la
-   * couverture, puis les pages 36 à 38. Le cadre défile à la molette et
-   * s'ouvre à la page 37. Le PDF complet n'est qu'au bout d'un lien.
+   * rendues en images par Ghostscript (pas pdftoppm, qui écrase la police
+   * non incorporée) :
+   *   gs -q -dNOPAUSE -dBATCH -sDEVICE=pnggray -r130 -dTextAlphaBits=4
+   *      -dGraphicsAlphaBits=4 -dFirstPage=1 -dLastPage=40
+   *      -sOutputFile=codebook-1993-p%02d.png ces1993-codebook.pdf
+   * puis optipng -o2 (40 pages, moins de 1 Mo au total).
+   *
+   * Le cadre s'ouvre à la page 1 et défile en continu à la molette jusqu'à
+   * la page 40 (cpsg1, la TPS, est à la page 37). Les flèches du clavier
+   * restent au deck : c'est Deck.svelte qui les capte sur window.
+   * Le PDF complet n'est qu'au bout d'un lien.
    */
   import { base } from '$app/paths';
 
   const PDF = `${base}/img/ces1993-codebook.pdf`;
-  const PAGES = [1, 36, 37, 38];
-  const CIBLE = 37;
+  const TOTAL_PDF = 153;
+  const PAGES = Array.from({ length: 40 }, (_, i) => i + 1);
+  const deux = (n) => String(n).padStart(2, '0');
 
   let ecran = $state(null);
-  let cible = $state(null);
+  let courante = $state(1);
 
-  // Ouvrir à la page 37 : on place le haut de la page en haut du cadre.
-  function placer() {
-    if (!ecran || !cible) return;
-    const dy = cible.getBoundingClientRect().top - ecran.getBoundingClientRect().top;
-    ecran.scrollTop += dy - 12;
+  // Page courante : la dernière dont le haut a passé le premier tiers du cadre.
+  function suivre() {
+    if (!ecran) return;
+    const seuil = ecran.scrollTop + ecran.clientHeight / 3;
+    let n = 1;
+    for (const img of ecran.querySelectorAll('img')) {
+      if (img.offsetTop <= seuil) n = Number(img.dataset.page);
+      else break;
+    }
+    courante = n;
   }
-  // Si l'image est déjà en cache, onload peut partir avant le montage.
-  $effect(() => { if (cible?.complete) placer(); });
 </script>
 
 <div class="visuel pdf93">
   <div class="barre">
     <span class="fichier">ces1993-codebook.pdf</span>
-    <span class="nb">p. {CIBLE} / 153</span>
+    <span class="nb">p. {courante} / {TOTAL_PDF}</span>
   </div>
-  <div class="ecran" bind:this={ecran}>
-    {#each PAGES as p, i}
-      {#if i > 0 && p - PAGES[i - 1] > 1}
-        <p class="saut">pages {PAGES[i - 1] + 1} à {p - 1}</p>
-      {/if}
-      {#if p === CIBLE}
-        <img bind:this={cible} src="{base}/img/codebook-1993-p{p}.png" alt="Codebook 1993, page {p} : l'entrée cpsg1 sur la TPS" onload={placer} />
-      {:else}
-        <img src="{base}/img/codebook-1993-p{p}.png" alt="Codebook 1993, page {p}" />
-      {/if}
+  <div class="ecran" bind:this={ecran} onscroll={suivre}>
+    {#each PAGES as p}
+      <img
+        data-page={p}
+        src="{base}/img/codebook-1993-p{deux(p)}.png"
+        width="1105"
+        height="1430"
+        loading={p <= 2 ? 'eager' : 'lazy'}
+        alt={p === 37 ? "Codebook 1993, page 37 : l'entrée cpsg1 sur la TPS" : `Codebook 1993, page ${p}`}
+      />
     {/each}
+    <p class="suite">pages 41 à {TOTAL_PDF}&#8239;: <a href={PDF} target="_blank" rel="noopener">le PDF complet</a></p>
   </div>
   <p class="source">
-    Étude électorale canadienne 1993 · questionnaire de la campagne, p. 37 ·
+    Étude électorale canadienne 1993 · cpsg1 (la TPS)&#8239;: p. 37 ·
     <a href={PDF} target="_blank" rel="noopener">le PDF complet</a>
   </p>
 </div>
 
 <style>
-  .pdf93 { display: flex; flex-direction: column; }
-  .barre { display: flex; justify-content: space-between; background: var(--dk-encre); color: var(--dk-papier, #f4f4f0); padding: 0.35em 0.8em; font-size: 0.62em; letter-spacing: 0.08em; }
-  .ecran { border: 3px solid var(--dk-encre); border-top: 0; background: #d9d9d4; height: 58vh; overflow-y: auto; padding: 0.8em 0; display: flex; flex-direction: column; align-items: center; gap: 0.8em; }
-  .ecran img { display: block; width: 72%; height: auto; background: #fff; border: 2px solid var(--dk-encre); }
-  .saut { margin: 0; font-size: 0.6em; letter-spacing: 0.08em; color: var(--dk-gris); }
-  .source { align-self: flex-end; margin: 0.4em 0 0; font-size: 0.6em; letter-spacing: 0.06em; color: var(--dk-gris); }
-  .source a { color: inherit; text-decoration: none; border-bottom: 2px solid var(--dk-filet); }
+  .pdf93 { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+  .barre { display: flex; justify-content: space-between; background: var(--dk-encre); color: var(--dk-fond); padding: 0.35em 0.8em; font-size: 0.62em; letter-spacing: 0.08em; flex: 0 0 auto; }
+  .nb { font-variant-numeric: tabular-nums; }
+  .ecran { position: relative; flex: 1 1 auto; min-height: 0; border: 3px solid var(--dk-encre); border-top: 0; background: #d9d9d4; overflow-y: auto; overscroll-behavior: contain; padding: 0.8em 0; display: flex; flex-direction: column; align-items: center; gap: 0.8em; }
+  .ecran img { display: block; flex: 0 0 auto; width: min(94%, 40em); height: auto; background: #fff; border: 2px solid var(--dk-encre); }
+  .suite { margin: 0.2em 0 0.4em; font-size: 0.62em; letter-spacing: 0.06em; color: var(--dk-gris); }
+  .source { align-self: flex-end; margin: 0.4em 0 0; font-size: 0.6em; letter-spacing: 0.06em; color: var(--dk-gris); flex: 0 0 auto; }
+  a { color: inherit; text-decoration: none; border-bottom: 2px solid var(--dk-filet); }
 </style>

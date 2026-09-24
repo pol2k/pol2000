@@ -41,7 +41,7 @@
 
   // Le bout de code qui fait le travail, souligné. On coupe la chaîne de R
   // sur des frontières de jetons, pour que la coloration reste juste.
-  const CLES = [null, 'na_if(cps25_lr_scale_bef_1, -99)', null, 'na.rm = TRUE'];
+  const CLES = [null, 'na_if(df_raw$cps25_lr_scale_bef_1, -99)', null, 'na.rm = TRUE'];
   const html = L.map((l, i) => {
     const cle = CLES[i];
     const k = cle ? l.in.indexOf(cle) : -1;

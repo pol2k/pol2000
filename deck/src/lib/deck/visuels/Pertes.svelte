@@ -2,11 +2,12 @@
   /**
    * Chaque variable coûte des lignes. PERTES (outils/seance4_data.R) : le
    * nombre de personnes qui ont une réponse à toutes les colonnes de
-   * df_propre, ajoutées une à une. Une barre par clic; puis ce que garde
+   * df_clean, ajoutées une à une. Une barre par clic; puis ce que garde
    * drop_na() et ce qu'il retire; puis les deux leçons :
    *   1. retirer les NA seulement sur les variables de l'analyse
-   *      (restants[2] = drop_na() sur age, scolarite, gauche_droite, par
-   *      construction dans seance4_data.R);
+   *      (restants[2] = drop_na() sur age, ses_education, gauche_droite, par
+   *      construction dans seance4_data.R; la colonne id de df_clean n'a
+   *      aucun NA, le compte est donc le même);
    *   2. les personnes retirées peuvent être différentes de celles qui restent.
    * Tous les nombres viennent de PERTES; aucun n'est tapé ici.
    */
@@ -57,7 +58,7 @@
   <ol class="lecons">
     <li class:vu={e >= N + 1}>
       <span>Retirer les NA seulement sur les variables de votre analyse<br />
-        <code>drop_na({cols})</code> garde <strong class="encre">{milliers(P.restants[K])}</strong></span>
+        <code>drop_na(df_clean, {cols})</code> garde <strong class="encre">{milliers(P.restants[K])}</strong></span>
     </li>
     <li class:vu={e >= N + 2}>
       <span>Les personnes retirées ne sont pas tirées au hasard : elles peuvent être différentes de celles qui restent</span>

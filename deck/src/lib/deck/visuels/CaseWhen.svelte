@@ -4,12 +4,14 @@
    * français, et enfin les trois règles lues de haut en bas (inspiré de
    * « Anatomie d'une ligne de code » et « En langage naturel » du cours 4 de
    * FAS1001). Le code est celui que R a exécuté sur l'Étude électorale
-   * canadienne de 1993 (CONSOLES_PLUS.casewhen93[1]); les codes 1 à 11 de
+   * canadienne de 1993 (CONSOLES_PLUS.casewhen93[2]) : df_raw n'est jamais
+   * modifié, la nouvelle colonne va dans df_clean. Les codes 1 à 11 de
    * cpso3 viennent de EDUC93. Les groupes de la bande sont calculés à partir
    * des seuils lus dans le code : rien n'est tapé à la main. Sept temps :
    *
    *   1  la condition        2  le ~ : « alors »
-   *   3  la nouvelle valeur  4  la phrase en français
+   *   3  la nouvelle valeur, et où elle va (df_clean$ses_education)
+   *   4  la phrase en français
    *   5  règle 1 : codes 1 à 5
    *   6  règle 2 : codes 6 et 7 (1 à 5 sont déjà pris)
    *   7  règle 3 : codes 8 à 11; NA ne passe aucune règle
@@ -19,8 +21,13 @@
   import { CONSOLES_PLUS, EDUC93 } from '$lib/data/seance4_plus.js';
 
   // Découpe du code : chaque ligne qui contient ~ est une règle.
-  const LIGNES = CONSOLES_PLUS.casewhen93[1].in.split('\n').map((l) => {
-    if (!l.includes('~')) return { regle: false, html: surlignerR(l) };
+  const LIGNES = CONSOLES_PLUS.casewhen93[2].in.split('\n').map((l) => {
+    if (!l.includes('~')) {
+      // La première ligne : « df_clean$ses_education <- case_when( ».
+      // La destination est séparée pour être allumée au temps 3.
+      const [dest, reste] = l.includes(' <- ') ? l.split(' <- ') : ['', l];
+      return { regle: false, dest, html: surlignerR(dest ? ' <- ' + reste : reste) };
+    }
     const [gauche, droite] = l.split('~');
     const m = gauche.match(/^(\s*)(.*?)(\s*)$/);
     const seuil = Number(gauche.match(/<=\s*(\d+)/)[1]);
@@ -28,6 +35,7 @@
     return {
       regle: true,
       retrait: m[1],
+      brut: m[2],
       condition: surlignerR(m[2]),
       espace: m[3],
       valeur: surlignerR(valeur),
@@ -37,6 +45,9 @@
     };
   });
   const REGLES = LIGNES.filter((l) => l.regle);
+  const DEST = LIGNES.find((l) => l.dest)?.dest ?? '';
+  // « df_raw$cpso3 <= 5 » → la variable lue et le seuil de la première règle.
+  const SOURCE = REGLES[0].brut.split('<=')[0].trim();
 
   // Chaque code va à la première règle dont la condition est TRUE.
   const CODES = EDUC93.codes.map((c) => ({ c, r: REGLES.findIndex((r) => c <= r.seuil) }));
@@ -51,7 +62,7 @@
     ['UNE RÈGLE PAR LIGNE', 'Trois catégories, trois règles.'],
     ['LA CONDITION', 'Une question à R : TRUE ou FALSE.'],
     ['ALORS', 'Le ~ se lit « alors ».'],
-    ['LA NOUVELLE VALEUR', 'Ce qu’on écrit dans ses_education.'],
+    ['LA NOUVELLE VALEUR', `Écrite dans ${DEST}.`],
     ['EN FRANÇAIS', ''],
     ['RÈGLE 1', `Les codes ${plage(0)}.`],
     ['RÈGLE 2', `Les codes ${plage(1)}. Les codes ${plage(0)} sont déjà pris.`],
@@ -71,7 +82,7 @@
 </script>
 
 <div class="visuel casewhen" bind:this={hote}>
-  <pre class="code">{#each LIGNES as l, i}{#if l.regle}{@const k = REGLES.indexOf(l)}<span class="regle" class:vue={k === active} class:passe={e >= 5 && k > active}>{l.retrait}<span class="p" class:on={(e === 1 && k === 0) || (e >= 5 && k === active)}>{@html l.condition}</span>{l.espace}<span class="p tilde" class:on={e === 2 && k === 0}>~</span> <span class="p" class:on={e === 3 && k === 0}>{@html l.valeur}</span>{l.virgule}</span>{:else}<span class="autour">{@html l.html}</span>{/if}{#if i < LIGNES.length - 1}{'\n'}{/if}{/each}</pre>
+  <pre class="code">{#each LIGNES as l, i}{#if l.regle}{@const k = REGLES.indexOf(l)}<span class="regle" class:vue={k === active} class:passe={e >= 5 && k > active}>{l.retrait}<span class="p" class:on={(e === 1 && k === 0) || (e >= 5 && k === active)}>{@html l.condition}</span>{l.espace}<span class="p tilde" class:on={e === 2 && k === 0}>~</span> <span class="p" class:on={e === 3 && k === 0}>{@html l.valeur}</span>{l.virgule}</span>{:else}<span class="autour" class:clair={e === 3 && l.dest}>{#if l.dest}<span class="p" class:on={e === 3}>{@html surlignerR(l.dest)}</span>{/if}{@html l.html}</span>{/if}{#if i < LIGNES.length - 1}{'\n'}{/if}{/each}</pre>
 
   {#key e}
     <div class="legende">
@@ -79,7 +90,7 @@
       {#if e !== 4}
         <p>{LEG[e][1]}</p>
       {:else}
-        <p class="phrase">Si cpso3 vaut 5 ou moins, <b>alors</b> écrire "secondaire_ou_moins".</p>
+        <p class="phrase">Si {SOURCE} vaut {REGLES[0].seuil} ou moins, <b>alors</b> écrire "{REGLES[0].nom}" dans {DEST}.</p>
         <p class="suite">Sinon, essayer la règle suivante. Aucune règle ne marche ? <b>NA</b>.</p>
       {/if}
     </div>
@@ -104,7 +115,8 @@
 <style>
   .casewhen { display: flex; flex-direction: column; gap: 0.7em; }
   .code { margin: 0; font-family: var(--dk-mono); font-size: 1.45em; line-height: 1.45; white-space: pre; background: var(--dk-fond-2); border: 3px solid var(--dk-encre); border-left: 0.3em solid var(--dk-accent); padding: 0.45em 0.8em; overflow-x: auto; }
-  .autour { opacity: 0.5; }
+  .autour { opacity: 0.5; transition: opacity 0.3s; }
+  .autour.clair { opacity: 1; }
   .regle { display: inline-block; transition: background 0.3s, opacity 0.3s; }
   .regle.vue { background: #fff; outline: 2px solid var(--dk-encre); outline-offset: 0.08em; }
   .regle.passe { opacity: 0.35; }

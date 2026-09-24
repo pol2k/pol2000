@@ -35,74 +35,78 @@ sortie <- function(code, env) {
 }
 # Chaque bloc s'exécute à la suite du précédent, dans son propre environnement.
 executer <- function(codes, env) lapply(codes, function(code) list(`in` = code, out = sortie(code, env)))
-nouvel <- function() { e <- new.env(parent = globalenv()); assign("df", df, e); assign("ces93", ces93, e); assign("ces93_brut", ces93_brut, e); e }
+# Deux mondes séparés, comme en classe : df_raw (1993 ou 2025) ne change
+# jamais; df_clean part vide, une ligne par répondant.e.
+nouvel <- function(annee = 1993) {
+  e <- new.env(parent = globalenv())
+  assign("df_raw", if (annee == 1993) ces93 else df, e)
+  assign("ces93_brut", ces93_brut, e)
+  eval(quote(df_clean <- data.frame(id = 1:nrow(df_raw))), e)
+  e
+}
 
 # ---- Le codebook de 1993, dans les données brutes : les 8 et les 9 y sont.
 cb <- executer(c("table(ces93_brut$cpsg1)"), nouvel())
 
 # ---- Poser une question à R : les onze codes de scolarité.
 op <- executer(c("educ <- 1:11", "educ >= 9", "educ == 7", "educ %in% c(6, 7)", "educ <= 5",
-                 "sum(ces93$cpso3 >= 9, na.rm = TRUE)"), nouvel())
+                 "sum(df_raw$cpso3 >= 9, na.rm = TRUE)"), nouvel())
 
 # ---- case_when() en trois catégories, noms en snake_case.
-cw_code <- 'ces93 <- ces93 |>
-  mutate(ses_education = case_when(
-    cpso3 <= 5  ~ "secondaire_ou_moins",
-    cpso3 <= 7  ~ "collegial",
-    cpso3 <= 11 ~ "universitaire"
-  ))'
-cw <- executer(c("count(ces93, cpso3)", cw_code, "count(ces93, ses_education)"), nouvel())
+cw_code <- 'df_clean$ses_education <- case_when(
+  df_raw$cpso3 <= 5  ~ "secondaire_ou_moins",
+  df_raw$cpso3 <= 7  ~ "collegial",
+  df_raw$cpso3 <= 11 ~ "universitaire"
+)'
+cw <- executer(c("table(df_raw$cpso3)", "df_clean <- data.frame(id = 1:nrow(df_raw))", cw_code,
+                 'table(df_clean$ses_education, useNA = "ifany")'), nouvel())
 
 # ---- Quatre façons d'écrire la même variable : a fréquenté l'université (1) ou non (0).
 STYLES <- list(
-  base = 'ces93$universitaire <- NA
-ces93$universitaire[ces93$cpso3 >= 8] <- 1
-ces93$universitaire[ces93$cpso3 < 8] <- 0',
-  ifelse = "ces93$universitaire <- ifelse(ces93$cpso3 >= 8, 1, 0)",
-  if_else = "ces93 <- ces93 |>
-  mutate(universitaire = if_else(cpso3 >= 8, 1, 0))",
-  case_when = "ces93 <- ces93 |>
-  mutate(universitaire = case_when(
-    cpso3 >= 8 ~ 1,
-    cpso3 < 8  ~ 0
-  ))"
+  base = 'df_clean$universitaire <- NA
+df_clean$universitaire[df_raw$cpso3 >= 8] <- 1
+df_clean$universitaire[df_raw$cpso3 < 8] <- 0',
+  ifelse = "df_clean$universitaire <- ifelse(df_raw$cpso3 >= 8, 1, 0)",
+  if_else = "df_clean$universitaire <- if_else(df_raw$cpso3 >= 8, 1, 0)",
+  case_when = "df_clean$universitaire <- case_when(
+  df_raw$cpso3 >= 8 ~ 1,
+  df_raw$cpso3 < 8  ~ 0
+)"
 )
-verif <- 'table(ces93$universitaire, useNA = "ifany")'
+verif <- 'table(df_clean$universitaire, useNA = "ifany")'
 styles <- list(); resultats <- list()
 for (k in names(STYLES)) {
   e <- nouvel()
   styles[[k]] <- executer(c(STYLES[[k]], verif), e)
-  resultats[[k]] <- as.numeric(get("ces93", e)$universitaire)
+  resultats[[k]] <- as.numeric(get("df_clean", e)$universitaire)
 }
 identiques <- all(vapply(resultats, identical, logical(1), resultats[[1]]))
 stopifnot(identiques)
 
 # ---- Opérationnaliser : la même question, trois variables.
-opz_code <- 'ces93 <- ces93 |>
-  mutate(
-    ses_universitaire = case_when(cpso3 >= 8 ~ 1, cpso3 < 8 ~ 0),
-    ses_education = case_when(
-      cpso3 <= 5  ~ "secondaire_ou_moins",
-      cpso3 <= 7  ~ "collegial",
-      cpso3 <= 11 ~ "universitaire"
-    ),
-    ses_education_detail = as_factor(cpso3)
-  )'
+opz_code <- c('df_clean$ses_universitaire <- case_when(
+  df_raw$cpso3 >= 8 ~ 1,
+  df_raw$cpso3 < 8  ~ 0
+)', 'df_clean$ses_education <- case_when(
+  df_raw$cpso3 <= 5  ~ "secondaire_ou_moins",
+  df_raw$cpso3 <= 7  ~ "collegial",
+  df_raw$cpso3 <= 11 ~ "universitaire"
+)', "df_clean$ses_education_detail <- as_factor(df_raw$cpso3)")
 e_opz <- nouvel()
-opz <- executer(c(opz_code, "count(ces93, ses_universitaire)", "count(ces93, ses_education)",
-                  "count(ces93, ses_education_detail)"), e_opz)
-o93 <- get("ces93", e_opz)
+opz <- executer(c(opz_code[1], 'table(df_clean$ses_universitaire, useNA = "ifany")',
+                  opz_code[2], 'table(df_clean$ses_education, useNA = "ifany")',
+                  opz_code[3], 'table(df_clean$ses_education_detail, useNA = "ifany")'), e_opz)
+o93 <- get("df_clean", e_opz)
 
 # ---- La moyenne, pas à pas; puis NaN.
-e_moy <- nouvel()
-moy <- executer(c("mean(df$cps25_lr_scale_bef_1)",
-                  "d <- df |> mutate(gauche_droite = na_if(cps25_lr_scale_bef_1, -99))",
-                  "mean(d$gauche_droite)",
-                  "mean(d$gauche_droite, na.rm = TRUE)"), e_moy)
+e_moy <- nouvel(2025)
+moy <- executer(c("mean(df_raw$cps25_lr_scale_bef_1)",
+                  "df_clean$gauche_droite <- na_if(df_raw$cps25_lr_scale_bef_1, -99)",
+                  "mean(df_clean$gauche_droite)",
+                  "mean(df_clean$gauche_droite, na.rm = TRUE)"), e_moy)
 nan <- executer(c("0 / 0",
-                  "d |>
-  filter(is.na(gauche_droite)) |>
-  summarise(moyenne = mean(gauche_droite, na.rm = TRUE))",
+                  "vides <- df_clean$gauche_droite[is.na(df_clean$gauche_droite)]",
+                  "mean(vides, na.rm = TRUE)",
                   "is.na(NaN)"), e_moy)
 
 # ---- Billboard : un seul tableau, une ligne par chanson et par semaine.
@@ -122,6 +126,8 @@ lab <- lab[lab %in% 1:11]
 compte <- function(x, niveaux) as.integer(table(factor(as.numeric(x), levels = niveaux)))
 brut_g1 <- as.numeric(ces93_brut$cpsg1)
 
+tab <- function(x) { t <- table(x, useNA = "ifany"); as.list(setNames(as.integer(t), ifelse(is.na(names(t)), "NA", names(t)))) }
+RAW93 <- dim(ces93)
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
 out <- c(
   "/* Généré par outils/seance4_plus.R. Sources : ces::get_ces(\"1993\") et le fichier SPSS de",
@@ -139,9 +145,11 @@ out <- c(
     sansCampagne = sum(is.na(ces93_brut$cpspanel)),
     nspRefus = sum(as.numeric(ces93_brut$cpso3) %in% c(98, 99)),
     groupes = list(
-      universitaire = as.list(setNames(count(o93, ses_universitaire)$n, ifelse(is.na(count(o93, ses_universitaire)$ses_universitaire), "NA", count(o93, ses_universitaire)$ses_universitaire))),
-      education = as.list(setNames(count(o93, ses_education)$n, ifelse(is.na(count(o93, ses_education)$ses_education), "NA", count(o93, ses_education)$ses_education)))
+      universitaire = tab(o93$ses_universitaire),
+      education = tab(o93$ses_education)
     )))),
+  "/* Les dimensions de df_raw en 1993 (lignes, colonnes). */",
+  sprintf("export const RAW93 = %s;", J(RAW93)),
   "/* La TPS en 1993 (cpsg1), codes bruts : 1, 3, 5, 7, puis 8 (ne sait pas) et 9 (refus). */",
   sprintf("export const TPS93 = %s;", J(list(codes = c(1, 3, 5, 7, 8, 9), effectifs = compte(brut_g1, c(1, 3, 5, 7, 8, 9)),
     etiquettes = unname(names(attr(ces93_brut$cpsg1, "labels"))[match(c(1, 3, 5, 7, 8, 9), attr(ces93_brut$cpsg1, "labels"))]),

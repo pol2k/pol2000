@@ -1,7 +1,7 @@
 <script>
   /**
-   * Toujours vérifier, en 1993 : les onze codes de scolarité (cpso3) et les
-   * NA, reliés aux trois catégories de ses_education plus NA. Les totaux des
+   * Toujours vérifier, en 1993 : les onze codes de scolarité (df_raw$cpso3)
+   * et les NA, reliés aux trois catégories de df_clean$ses_education plus NA. Les totaux des
    * groupes doivent retomber sur toutes les personnes de l'enquête.
    * Recodage.svelte fait la même chose pour 2025; il reste tel quel.
    * Quatre temps :
@@ -40,7 +40,8 @@
   ];
   const sommeNA = POURQUOI.reduce((s, p) => s + p.n, 0);
 
-  const H = 34, Y0 = 22;
+  // Y0 laisse la place aux deux en-têtes : df_raw à gauche, df_clean à droite.
+  const H = 34, Y0 = 58;
   // Un peu d'air entre le code 11 et la ligne des NA.
   const yCode = (k) => Y0 + k * H + (k === 11 ? 14 : 0);
   const MAXN = Math.max(...EDUC93.effectifs);
@@ -61,7 +62,10 @@
 </script>
 
 <div class="visuel recodage93" bind:this={hote}>
-  <svg viewBox="0 0 1060 {HAUT}" role="img" aria-label="Les onze codes de scolarité de l'Étude électorale canadienne 1993 et les 2 537 NA, reliés à ses_education : secondaire_ou_moins (codes 1 à 5), collegial (6 et 7), universitaire (8 à 11), et NA.">
+  <svg viewBox="0 0 1060 {HAUT}" role="img" aria-label="Les onze codes de scolarité de l'Étude électorale canadienne 1993 (df_raw$cpso3) et les 2 537 NA, reliés à df_clean$ses_education : secondaire_ou_moins (codes 1 à 5), collegial (6 et 7), universitaire (8 à 11), et NA.">
+    <text x={XC} y="24" class="tete">df_raw$cpso3</text>
+    <text x={XG} y="24" class="tete var" class:vu={e >= 1}>df_clean$ses_education</text>
+
     {#each LIGNES as l, k}
       {@const y = yCode(k)}
       {@const g = groupeDe(k)}
@@ -116,6 +120,9 @@
   .recodage93 { display: flex; flex-direction: column; gap: 0.5em; }
   svg { width: 100%; height: auto; max-height: 52vh; display: block; }
   text { font-family: var(--dk-mono); }
+  .tete { font-size: 22px; font-weight: 600; fill: var(--dk-encre); text-anchor: end; }
+  .tete.var { text-anchor: start; fill: var(--dk-accent); opacity: 0; transition: opacity 0.4s; }
+  .tete.var.vu { opacity: 1; }
   .nom { font-size: 18px; text-anchor: end; fill: var(--dk-gris); }
   .nom.na { fill: var(--dk-accent); font-weight: 600; font-size: 20px; }
   .code { font-size: 20px; font-weight: 600; text-anchor: end; fill: var(--dk-encre); }
@@ -166,5 +173,5 @@
   .pourquoi li b { display: inline-block; min-width: 3.4em; text-align: right; margin-right: 0.4em; font-variant-numeric: tabular-nums; }
   @keyframes pousse { from { transform: scaleX(0); } to { transform: scaleX(1); } }
   @keyframes fondu { from { opacity: 0; transform: translateY(0.2em); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .barre, .verif, .pourquoi, .gn { animation: none; } .lien, .groupe { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .barre, .verif, .pourquoi, .gn { animation: none; } .lien, .groupe, .tete.var { transition: none; } }
 </style>

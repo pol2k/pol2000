@@ -40,6 +40,7 @@
   import Codebook1993 from '$lib/deck/visuels/Codebook1993.svelte';
   import FicheCodebook1993 from '$lib/deck/visuels/FicheCodebook1993.svelte';
   import CodebookPdf1993 from '$lib/deck/visuels/CodebookPdf1993.svelte';
+  import DeuxTableaux from '$lib/deck/visuels/DeuxTableaux.svelte';
   import Operateurs93 from '$lib/deck/visuels/Operateurs93.svelte';
   import CaseWhen from '$lib/deck/visuels/CaseWhen.svelte';
   import QuatreFacons from '$lib/deck/visuels/QuatreFacons.svelte';
@@ -56,14 +57,14 @@
   import { CONSOLES, TIDY } from '$lib/data/seance4.js';
   import { BILLBOARD, CONSOLES_PLUS } from '$lib/data/seance4_plus.js';
 
-  const TOTAL = 56;
+  const TOTAL = 57;
   const D = 'POL-2000 · séance 4 · jeu 24 sept';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
   const avec = (cle, notes = []) => CONSOLES[cle].map((l, i) => ({ ...l, note: notes[i] || '' }));
-  const c_mystere = avec('mystere', ['Une échelle de 0 à 10. Une moyenne de -11,44 ?']);
   const c_codebook = avec('codebook');
-  const c_educ93 = CONSOLES_PLUS.casewhen93.slice(1).map((l) => ({ ...l, note: '' }));
+  // table() avant, la règle, table() après : la création de df_clean est sur sa propre diapo.
+  const c_educ93 = [0, 2, 3].map((i) => ({ ...CONSOLES_PLUS.casewhen93[i], note: '' }));
   const c_satisfaction = avec('satisfaction');
   const c_propre = avec('propre');
 
@@ -73,78 +74,82 @@
 
   const script = `# POL-2000 · séance 4 · Préparer ses données avec R
 # À refaire chez vous, ligne par ligne, Ctrl + Entrée.
+# La règle : df_raw ne change jamais. On remplit df_clean, une colonne à la fois.
 
 library(ces)
 library(dplyr)
 library(tidyr)
 library(haven)
 
-df <- readRDS("ces2025.rds")   # sauvegardé à la séance 2 ; sinon : df <- get_ces("2025")
-ces93 <- get_ces("1993")       # l'Étude électorale de 1993
+# 1. L'Étude électorale de 1993
+df_raw <- get_ces("1993")
+df_clean <- data.frame(id = 1:nrow(df_raw))
 
-# 1. Le codebook, dans R
-attr(df$cps25_demsat, "label")
-count(df, cps25_demsat)
+# 2. Opérationnaliser la scolarité : trois choix
+table(df_raw$cpso3)
+df_clean$ses_universitaire <- case_when(
+  df_raw$cpso3 >= 8 ~ 1,
+  df_raw$cpso3 < 8  ~ 0
+)
+df_clean$ses_education <- case_when(
+  df_raw$cpso3 <= 5  ~ "secondaire_ou_moins",
+  df_raw$cpso3 <= 7  ~ "collegial",
+  df_raw$cpso3 <= 11 ~ "universitaire"
+)
+df_clean$ses_education_detail <- as_factor(df_raw$cpso3)
+table(df_clean$ses_education, useNA = "ifany")   # toujours vérifier
 
-# 2. Opérationnaliser la scolarité de 1993 : trois choix
-ces93 <- ces93 |>
-  mutate(
-    ses_universitaire = case_when(cpso3 >= 8 ~ 1, cpso3 < 8 ~ 0),
-    ses_education = case_when(
-      cpso3 <= 5  ~ "secondaire_ou_moins",
-      cpso3 <= 7  ~ "collegial",
-      cpso3 <= 11 ~ "universitaire"
-    ),
-    ses_education_detail = as_factor(cpso3)
-  )
-count(ces93, cpso3, ses_education)   # toujours vérifier
+# 3. Votre travail : l'Étude électorale de 2025
+df_raw <- readRDS("ces2025.rds")   # sauvegardé à la séance 2 ; sinon : get_ces("2025")
+df_clean <- data.frame(id = 1:nrow(df_raw))
 
-# 3. La même chose pour votre travail, en 2025
-d <- df |>
-  mutate(scolarite = case_when(
-    cps25_education <= 5  ~ "Secondaire ou moins",
-    cps25_education <= 7  ~ "Collégial",
-    cps25_education <= 11 ~ "Universitaire"
-  ))
-count(d, cps25_education, scolarite)
+attr(df_raw$cps25_demsat, "label")
+table(df_raw$cps25_demsat)
 
 # 4. De 0 à 1, dans le sens du nom
-d <- d |>
-  mutate(satisfaction = case_when(
-    cps25_demsat == 1 ~ 1,
-    cps25_demsat == 2 ~ 0.67,
-    cps25_demsat == 3 ~ 0.33,
-    cps25_demsat == 4 ~ 0
-  ))
-count(d, satisfaction)
+df_clean$satisfaction <- case_when(
+  df_raw$cps25_demsat == 1 ~ 1,
+  df_raw$cps25_demsat == 2 ~ 0.67,
+  df_raw$cps25_demsat == 3 ~ 0.33,
+  df_raw$cps25_demsat == 4 ~ 0
+)
+table(df_clean$satisfaction, useNA = "ifany")
 
-d <- d |>
-  mutate(ne_canada = case_when(
-    cps25_bornin_canada == 1 ~ 1,
-    cps25_bornin_canada == 2 ~ 0
-  ))
-count(d, ne_canada)
+# 5. La scolarité et le lieu de naissance
+table(df_raw$cps25_education)
+df_clean$ses_education <- case_when(
+  df_raw$cps25_education <= 5  ~ "secondaire_ou_moins",
+  df_raw$cps25_education <= 7  ~ "collegial",
+  df_raw$cps25_education <= 11 ~ "universitaire"
+)
+table(df_clean$ses_education, useNA = "ifany")
 
-# 5. Les valeurs manquantes
-mean(df$cps25_lr_scale_bef_1)
-d <- d |> mutate(gauche_droite = na_if(cps25_lr_scale_bef_1, -99))
-mean(d$gauche_droite)
-mean(d$gauche_droite, na.rm = TRUE)
+table(df_raw$cps25_bornin_canada)
+df_clean$ne_canada <- case_when(
+  df_raw$cps25_bornin_canada == 1 ~ 1,
+  df_raw$cps25_bornin_canada == 2 ~ 0
+)
+table(df_clean$ne_canada, useNA = "ifany")
 
-# 6. Une base propre, sauvegardée
-df_propre <- d |>
-  mutate(age = as.numeric(cps25_age_in_years),
-         vote = as_factor(cps25_votechoice)) |>
-  select(age, scolarite, gauche_droite, satisfaction, ne_canada, vote)
-saveRDS(df_propre, "ces2025_propre.rds")
+# 6. Les valeurs manquantes
+mean(df_raw$cps25_lr_scale_bef_1)
+df_clean$gauche_droite <- na_if(df_raw$cps25_lr_scale_bef_1, -99)
+mean(df_clean$gauche_droite)
+mean(df_clean$gauche_droite, na.rm = TRUE)
 
-# 7. Des données tidy
+# 7. Compléter et sauvegarder df_clean
+df_clean$age <- as.numeric(df_raw$cps25_age_in_years)
+df_clean$vote <- as_factor(df_raw$cps25_votechoice)
+head(df_clean)
+saveRDS(df_clean, "ces2025_clean.rds")
+
+# 8. Des données tidy
 relig_income |>
   pivot_longer(!religion, names_to = "revenu", values_to = "n")
 
-# 8. À vous : cps25_interest_gen_1 a aussi des -99. Recodez-les, puis sa moyenne.`;
-  // Trop long pour une diapo à taille lisible : coupé avant « 2. », « 3. », « 4. », « 5. » et « 7. ».
-  const coupes = ['\n# 2. ', '\n# 3. ', '\n# 4. ', '\n# 5. ', '\n# 7. '].map((c) => script.indexOf(c));
+# 9. À vous : cps25_interest_gen_1 a aussi des -99. Mettez-la dans df_clean, puis sa moyenne.`;
+  // Trop long pour une diapo à taille lisible : coupé avant « 2. », « 3. », « 4. », « 5. », « 6. » et « 8. ».
+  const coupes = ['\n# 2. ', '\n# 3. ', '\n# 4. ', '\n# 5. ', '\n# 6. ', '\n# 8. '].map((c) => script.indexOf(c));
   const scripts = [0, ...coupes].map((d, i, t) => script.slice(i ? d + 1 : 0, t[i + 1]));
 </script>
 
@@ -182,11 +187,6 @@ relig_income |>
     <Slide bandeau="Préparer" droite={D}>
       <h2 class="e">Notre objectif</h2>
       <Objectif />
-    </Slide>
-
-    <Slide bandeau="Un mystère" droite={D}>
-      <h2 class="e">Gauche ou droite, de 0 à 10</h2>
-      <Console lignes={c_mystere} />
     </Slide>
 
     <!-- ================= 1 · DES DONNÉES TIDY ================= -->
@@ -347,6 +347,11 @@ relig_income |>
       <h1 class="e">Recoder</h1>
       <hr class="filet" />
       <p class="lead e">Des codes du sondage aux catégories de votre question.</p>
+    </Slide>
+
+    <Slide bandeau="Recoder" droite={D}>
+      <h2 class="e">df_raw et df_clean</h2>
+      <DeuxTableaux />
     </Slide>
 
     <Slide bandeau="Recoder" droite={D}>

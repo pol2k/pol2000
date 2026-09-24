@@ -10,7 +10,7 @@
    *   2  educ == 7                égal à (deux =, pas un)
    *   3  educ %in% c(6, 7)        fait partie de
    *   4  educ <= 5                plus petit ou égal à
-   *   5  sum(ces93$cpso3 >= 9, na.rm = TRUE)   TRUE compte pour 1 : 428
+   *   5  sum(df_raw$cpso3 >= 9, na.rm = TRUE)   TRUE compte pour 1 : 428
    *
    * Les TRUE/FALSE sont lus dans la sortie de R (CONSOLES_PLUS.operateurs93),
    * pas recalculés ici : la figure ne peut pas diverger de la console. Les
@@ -101,7 +101,7 @@
     {#key e}
       {#if e === 0}
         <pre class="expr">{C[0].in}</pre>
-        <p class="source">cpso3 · Étude électorale canadienne 1993</p>
+        <p class="source">df_raw$cpso3 · Étude électorale canadienne 1993</p>
         <div class="legende">
           <span class="pastille v">TRUE</span><span>oui</span>
           <span class="pastille f">FALSE</span><span>non</span>

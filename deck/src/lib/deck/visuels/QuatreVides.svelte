@@ -1,24 +1,24 @@
 <script>
   /**
-   * Quatre sortes de vide. Remplace TroisVides : même idée, plus NaN.
-   * Chaque sorte est une case de tableau qui se comporte à sa façon, avec
-   * ce que R en fait. Au temps 0, quatre cases vides; un clic en remplit une.
+   * Quatre sortes de vide. Quatre cartes, une par clic, comme l'ancienne
+   * TroisVides : une grande valeur, un dessin, un grand nombre, une ligne.
+   * Le dessin porte l'idée; le texte reste minimal.
    *
-   *   1  -99 : code de non-réponse des curseurs de 0 à 10
-   *      (GAUCHE_DROITE.n99). La case clignote en rouge : R le prend pour un
-   *      nombre, et mean() rend -11.43717 (CONSOLES_PLUS.moyenne[0]).
-   *   2  « Ne sait pas » : une vraie réponse, code 7 de l'intention de vote
-   *      (VOTE_VIDE.nsp). À vous de trancher : catégorie ou NA.
-   *   3  NA : la question n'a jamais été posée (VOTE_VIDE.na), surtout parce
-   *      que la personne avait déjà voté (raisons["6"]). R le sait : is.na()
-   *      les compte (CONSOLES.nonpose[0]).
-   *   4  NaN : un calcul sans réponse. 0 / 0, ou la moyenne d'un groupe où
-   *      personne n'a répondu. is.na(NaN) vaut TRUE (CONSOLES_PLUS.nan).
+   *   1  -99 : l'histogramme réel de l'échelle gauche-droite
+   *      (GAUCHE_DROITE.effectifs). La barre de -99 (n99) a l'air d'une
+   *      réponse, puis glisse loin à gauche de la règle 0-10 et entraîne la
+   *      moyenne de moyennePropre à moyenneBrute.
+   *   2  « Ne sait pas » : une case cochée parmi les choix de réponse
+   *      (VOTE_VIDE.nsp), puis la fourche : catégorie ou NA.
+   *   3  NA : trois questions, celle du vote est sautée (VOTE_VIDE.na). Pas
+   *      d'étiquette « déjà voté » : ce n'est qu'une des raisons.
+   *   4  NaN : la même règle 0-10, vide; la moyenne ne trouve pas où se
+   *      poser. Dans R : 0 / 0 (CONSOLES_PLUS.nan[0]).
    *
-   * Aucune sortie n'est tapée à la main : on retire seulement le « [1] ».
+   * Aucun nombre n'est tapé à la main.
    */
   import { brancherTemps } from '../temps.js';
-  import { GAUCHE_DROITE, VOTE_VIDE, CONSOLES } from '$lib/data/seance4.js';
+  import { GAUCHE_DROITE, VOTE_VIDE } from '$lib/data/seance4.js';
   import { CONSOLES_PLUS } from '$lib/data/seance4_plus.js';
 
   let e = $state(0);
@@ -30,134 +30,219 @@
   });
 
   const milliers = (n) => n.toLocaleString('fr-CA').replace(/\s/g, ' ');
+  const virgule = (x) => x.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('-', '−');
   const sortie = (l) => l.out.replace(/^\[1\]\s*/, '');
-  const M = CONSOLES_PLUS.moyenne;
-  const N = CONSOLES_PLUS.nan;
 
-  const LIGNES = [
-    {
-      cle: 'n99', case: '−99', n: milliers(GAUCHE_DROITE.n99),
-      ligne: 'Un code de non-réponse',
-      quoi: 'échelle gauche-droite, de 0 à 10',
-      r: [{ in: 'mean(…)', out: sortie(M[0]) }]
-    },
-    {
-      cle: 'nsp', case: 'Ne sait pas', n: milliers(VOTE_VIDE.nsp),
-      ligne: 'Une vraie réponse',
-      quoi: 'intention de vote, code 7',
-      choix: ['catégorie', 'NA']
-    },
-    {
-      cle: 'na', case: 'NA', n: milliers(VOTE_VIDE.na),
-      ligne: 'Une question jamais posée',
-      quoi: `intention de vote · ${milliers(VOTE_VIDE.raisons['6'])} avaient déjà voté`,
-      r: [{ in: CONSOLES.nonpose[0].in, out: sortie(CONSOLES.nonpose[0]), long: true }]
-    },
-    {
-      cle: 'nan', case: 'NaN', avant: N[0].in, n: '',
-      ligne: 'Un calcul sans réponse',
-      quoi: 'la moyenne d’un groupe où personne n’a répondu',
-      r: [
-        { in: N[0].in, out: sortie(N[0]) },
-        { in: N[2].in, out: sortie(N[2]) }
-      ]
-    }
-  ];
+  // -99 : règle à l'échelle, de -12,2 à 10, avec une coupure pour loger -99.
+  const G = GAUCHE_DROITE;
+  const AXE = 80;
+  const HMAX = 62;
+  const xg = (v) => 140 + v * 9;
+  const max = Math.max(...G.effectifs);
+  const BARRES = G.valeurs
+    .map((v, i) => ({ v, h: (G.effectifs[i] / max) * HMAX }))
+    .filter((b) => b.v >= 0);
+  const H99 = (G.n99 / max) * HMAX;
+  const X99 = 12;
+  const DEPART99 = xg(-1.5) - X99; // d'où part la barre : juste à côté du 0
+  const XM = xg(G.moyenneBrute);
+  const DEPARTM = xg(G.moyennePropre) - XM;
+
+  // NaN : la même règle, sans personne dessus.
+  const xn = (v) => 30 + v * 18;
+
+  const NAN = CONSOLES_PLUS.nan[0];
 </script>
 
 <div class="visuel quatre-vides" bind:this={hote}>
-  <div class="tete">
-    <span>valeur</span><span class="d">personnes</span><span></span><span>dans R</span>
+  <!-- 1. -99 -->
+  <div class="carte n99" class:vu={e > 0}>
+    <span class="glyphe">−99</span>
+    <svg class="dessin" viewBox="0 0 240 128" aria-hidden="true">
+      {#each BARRES as b}
+        <rect x={xg(b.v) - 3.5} y={AXE - b.h} width="7" height={b.h} class="barre" />
+      {/each}
+      <line x1="30" y1={AXE} x2="236" y2={AXE} class="prolonge" />
+      <line x1={xg(0) - 5} y1={AXE} x2={xg(10) + 5} y2={AXE} class="regle" />
+      {#each [0, 5, 10] as t}
+        <text x={xg(t)} y={AXE + 17} class="graduation">{t}</text>
+      {/each}
+      <line x1="2" y1={AXE} x2="20" y2={AXE} class="prolonge" />
+      <path d="M 21 {AXE + 6} l 5 -12 M 26 {AXE + 6} l 5 -12" class="coupure" />
+      <g class="glisse" style="--de: {DEPART99}px">
+        <rect x={X99 - 4.5} y={AXE - H99} width="9" height={H99} class="b99" />
+      </g>
+      <text x={X99} y={AXE + 17} class="graduation rouge">−99</text>
+      <g class="glisse moy" style="--de: {DEPARTM}px">
+        <path d="M {XM} {AXE + 24} l -6 10 h 12 z" class="triangle" />
+      </g>
+      <text x={xg(G.moyennePropre)} y={AXE + 47} class="etiq avant">moyenne {virgule(G.moyennePropre)}</text>
+      <text x={XM - 8} y={AXE + 47} class="etiq apres">moyenne {virgule(G.moyenneBrute)}</text>
+    </svg>
+    <span class="n">{milliers(G.n99)}</span>
+    <span class="unite">personnes</span>
+    <p>R le lit comme un nombre</p>
   </div>
-  {#each LIGNES as l, i}
-    <div class="rang {l.cle}" class:vu={e > i}>
-      <div class="case">
-        {#if l.avant}
-          <span class="glyphe calc">{l.avant}</span>
-          <span class="glyphe res">{l.case}</span>
-        {:else}
-          <span class="glyphe">{l.case}</span>
-        {/if}
+
+  <!-- 2. Ne sait pas -->
+  <div class="carte nsp" class:vu={e > 1}>
+    <span class="glyphe">Ne sait pas</span>
+    <div class="dessin choix">
+      <div class="partis">
+        <span class="option"><i></i>PLC</span>
+        <span class="option"><i></i>PCC</span>
+        <span class="option"><i></i>NPD</span>
       </div>
-      <span class="n">{l.n}</span>
-      <div class="texte">
-        <span class="ligne">{l.ligne}</span>
-        <span class="quoi">{l.quoi}</span>
-      </div>
-      <div class="r">
-        {#if l.choix}
-          <span class="option p1">{l.choix[0]}</span><span class="ou">ou</span><span class="option p2">{l.choix[1]}</span>
-        {:else}
-          {#each l.r as c}
-            <code class:long={c.long}><span class="in">{c.in}</span><span class="out">{c.out}</span></code>
-          {/each}
-        {/if}
+      <span class="option coche"><i></i>Ne sait pas</span>
+      <div class="fourche">
+        <svg viewBox="0 0 200 26" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 100 0 V 8 M 100 8 L 45 24 M 100 8 L 155 24" />
+        </svg>
+        <span class="branche">catégorie</span><span class="branche">NA</span>
       </div>
     </div>
-  {/each}
-  <p class="source">Étude électorale canadienne 2025 · {milliers(GAUCHE_DROITE.n)} personnes</p>
+    <span class="n">{milliers(VOTE_VIDE.nsp)}</span>
+    <span class="unite">personnes</span>
+    <p>Une vraie réponse</p>
+  </div>
+
+  <!-- 3. NA -->
+  <div class="carte na" class:vu={e > 2}>
+    <span class="glyphe">NA</span>
+    <svg class="dessin" viewBox="0 0 240 128" aria-hidden="true">
+      {#each [['âge', 4], ['scolarité', 94]] as [q, y]}
+        <rect x="6" {y} width="150" height="30" class="question" />
+        <text x="18" y={y + 20} class="libelle">{q}</text>
+        <rect x="136" y={y + 10} width="10" height="10" class="repondu" />
+      {/each}
+      <rect x="6" y="49" width="150" height="30" class="question pleine" />
+      <rect x="6" y="49" width="150" height="30" class="question trou" />
+      <text x="18" y="69" class="libelle vote">vote</text>
+      <text x="146" y="69" class="libelle vote na-mot">NA</text>
+      <path d="M 162 19 C 236 19, 236 109, 162 109" class="saut" pathLength="1" />
+      <path d="M 170 103 L 161 109 L 170 115" class="pointe" />
+    </svg>
+    <span class="n">{milliers(VOTE_VIDE.na)}</span>
+    <span class="unite">personnes</span>
+    <p>Question jamais posée</p>
+  </div>
+
+  <!-- 4. NaN -->
+  <div class="carte nan" class:vu={e > 3}>
+    <span class="glyphe">NaN</span>
+    <svg class="dessin" viewBox="0 0 240 128" aria-hidden="true">
+      <rect x="18" y="18" width="204" height="58" class="groupe" />
+      <text x="120" y="53" class="vide-mot">aucune réponse</text>
+      <line x1={xn(0) - 5} y1={AXE} x2={xn(10) + 5} y2={AXE} class="regle" />
+      {#each [0, 5, 10] as t}
+        <text x={xn(t)} y={AXE + 17} class="graduation">{t}</text>
+      {/each}
+      <g class="cherche">
+        <path d="M {xn(5)} {AXE + 24} l -6 10 h 12 z" class="triangle" />
+        <text x={xn(5)} y={AXE + 47} class="etiq point">?</text>
+      </g>
+    </svg>
+    <code class="calcul"><span class="in">{NAN.in}</span><span class="fleche">→</span><span class="out">{sortie(NAN)}</span></code>
+    <span class="unite">dans R</span>
+    <p>Un calcul sans réponse</p>
+  </div>
+
+  <p class="source">Étude électorale canadienne 2025 · {milliers(G.n)} personnes</p>
 </div>
 
 <style>
-  .quatre-vides { display: grid; grid-template-columns: 7.6em 5.4em minmax(0, 1fr) 17em; column-gap: 1.1em; row-gap: 0.55em; align-items: center; }
-  .tete, .rang { display: contents; }
-  .tete span { font-size: 0.6em; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dk-gris); font-weight: 600; }
-  .tete .d { text-align: right; }
+  .quatre-vides { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1em; align-items: stretch; }
 
-  /* Avant le clic : la case est vide, le reste de la rangée est caché. */
-  .rang:not(.vu) .glyphe, .rang:not(.vu) .n, .rang:not(.vu) .texte, .rang:not(.vu) .r { visibility: hidden; }
+  /* Une carte par clic, comme l'ancienne version. */
+  .carte { display: flex; flex-direction: column; border: 3px solid var(--dk-encre); padding: 0.8em 0.9em 0.8em; visibility: hidden; opacity: 0; }
+  .carte.vu { visibility: visible; animation: fondu 0.4s both; }
+  .glyphe { font-size: 1.7em; font-weight: 600; line-height: 1.2; letter-spacing: -0.02em; white-space: nowrap; }
+  .dessin { display: block; width: 100%; height: 7.6em; margin: 0.5em 0 0.4em; overflow: visible; }
+  .n { font-size: 2.3em; font-weight: 600; line-height: 1; letter-spacing: -0.03em; margin-top: auto; }
+  .unite { font-size: 0.6em; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dk-gris); font-weight: 600; margin-top: 0.3em; }
+  .carte p { margin: 0.6em 0 0; padding-top: 0.5em; border-top: 2px solid var(--dk-filet); font-size: 0.82em; line-height: 1.35; font-weight: 600; }
 
-  /* La case : une cellule de tableau. */
-  .case { height: 2.5em; border: 2px dashed var(--dk-filet); display: grid; place-items: center; }
-  .vu .case { border: 3px solid var(--dk-encre); }
-  .glyphe { grid-area: 1 / 1; font-size: 1.45em; font-weight: 600; letter-spacing: -0.02em; }
-  .vu .glyphe { animation: entre 0.35s both; }
+  /* Éléments de dessin communs. */
+  .regle { stroke: var(--dk-encre); stroke-width: 3; }
+  .prolonge { stroke: var(--dk-filet); stroke-width: 2; }
+  .graduation { font-family: var(--dk-mono); font-size: 13px; text-transform: none; letter-spacing: 0; font-weight: 600; fill: var(--dk-gris); text-anchor: middle; }
+  .triangle { fill: var(--dk-encre); }
+  .etiq { font-family: var(--dk-mono); font-size: 13px; text-transform: none; letter-spacing: 0; font-weight: 600; fill: var(--dk-encre); }
 
-  .n { font-size: 1.7em; font-weight: 600; text-align: right; white-space: nowrap; letter-spacing: -0.03em; }
-  .vu .n { animation: entre 0.4s 0.15s both; }
-  .texte { display: flex; flex-direction: column; gap: 0.15em; }
-  .vu .texte { animation: entre 0.4s 0.25s both; }
-  .ligne { font-size: 1.05em; font-weight: 600; }
-  .quoi { font-size: 0.62em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dk-gris); font-weight: 600; }
-
-  .r { display: flex; flex-direction: column; gap: 0.3em; }
-  .vu .r { animation: entre 0.4s 0.5s both; }
-  code { display: flex; justify-content: space-between; gap: 0.8em; font-family: var(--dk-mono); font-size: 0.85em; background: var(--dk-fond-2); padding: 0.3em 0.6em; }
-  code.long { flex-direction: column; gap: 0.1em; }
-  code.long .out { align-self: flex-end; }
-  .out { font-weight: 600; }
-
-  /* -99 : l'air d'un nombre, puis il clignote en rouge. */
-  .n99.vu .case { border-color: var(--dk-accent); animation: alerte 0.5s 0.6s 3 both; }
-  .n99.vu .glyphe { animation: entre 0.35s both, vire 1.5s 0.6s both; }
+  /* 1. -99 : un nombre d'apparence légitime, loin de la règle. */
+  .n99 { border-color: var(--dk-accent); }
   .n99 .glyphe { color: var(--dk-accent); }
-  .n99 .out { color: var(--dk-accent); }
-  @keyframes alerte { 0%, 100% { background: transparent; } 50% { background: var(--dk-accent); } }
-  @keyframes vire { from { color: var(--dk-encre); } 30%, 70% { color: var(--dk-fond); } to { color: var(--dk-accent); } }
+  .barre { fill: var(--dk-encre); }
+  .b99 { fill: var(--dk-accent); }
+  .coupure { stroke: var(--dk-gris); stroke-width: 2; fill: none; }
+  .rouge { fill: var(--dk-accent); }
+  .n99 .moy .triangle { fill: var(--dk-accent); }
+  .n99 .etiq.avant { text-anchor: middle; opacity: 0; }
+  .n99 .etiq.apres { text-anchor: start; fill: var(--dk-accent); }
+  .n99.vu .glisse { animation: glisse 1.1s 0.6s both cubic-bezier(0.55, 0, 0.3, 1); }
+  .n99.vu .b99 { animation: vire 1.1s 0.6s both; }
+  .n99.vu .moy .triangle { animation: vire 1.1s 0.6s both; }
+  .n99.vu .etiq.avant { animation: montre-cache 1.7s both; }
+  .n99.vu .etiq.apres, .n99.vu .rouge { animation: apparait 0.4s 1.5s both; }
+  @keyframes glisse { from { transform: translateX(var(--de)); } to { transform: none; } }
+  @keyframes vire { from { fill: var(--dk-encre); } to { fill: var(--dk-accent); } }
+  @keyframes montre-cache { 0%, 45% { opacity: 1; } 70%, 100% { opacity: 0; } }
 
-  /* Ne sait pas : une vraie réponse; le choix de l'analyste bascule. */
-  .nsp .glyphe { font-size: 0.95em; letter-spacing: 0; }
-  .nsp .r { flex-direction: row; align-items: center; gap: 0.5em; }
-  .option { font-size: 0.85em; font-weight: 600; border: 2px solid var(--dk-encre); padding: 0.25em 0.6em; }
-  .ou { font-size: 0.75em; color: var(--dk-gris); }
-  .vu .p1 { animation: choix 2.4s 0.9s 2 both; }
-  .vu .p2 { animation: choix 2.4s 2.1s 2 both; }
-  @keyframes choix { 0%, 50%, 100% { background: transparent; color: var(--dk-encre); } 10%, 40% { background: var(--dk-encre); color: var(--dk-fond); } }
+  /* 2. Ne sait pas : une case cochée parmi les autres, puis la fourche. */
+  .choix { display: flex; flex-direction: column; gap: 0.45em; font-size: 0.82em; height: 9.3em; }
+  .partis { display: flex; gap: 0.9em; }
+  .option { display: flex; align-items: center; gap: 0.45em; font-weight: 600; color: var(--dk-gris); white-space: nowrap; }
+  .option i { width: 0.9em; height: 0.9em; border: 2px solid var(--dk-gris); flex: none; }
+  .option.coche { color: var(--dk-encre); }
+  .option.coche i { border: 3px solid var(--dk-encre); }
+  .nsp.vu .coche i { animation: coche 0.3s 0.6s both; }
+  @keyframes coche { from { background: transparent; } to { background: var(--dk-encre); } }
+  .fourche { display: grid; grid-template-columns: 1fr 1fr; justify-items: center; row-gap: 0.15em; }
+  .fourche svg { grid-column: 1 / -1; width: 100%; height: 1.2em; }
+  .fourche path { stroke: var(--dk-encre); stroke-width: 2; fill: none; vector-effect: non-scaling-stroke; }
+  .branche { font-weight: 600; border: 2px solid var(--dk-encre); padding: 0.15em 0.55em; }
+  .nsp.vu .fourche { animation: apparait 0.4s 1s both; }
 
-  /* NA : un trou franc, que R reconnaît. */
-  .na.vu .case { border-style: dashed; border-color: var(--dk-gris); }
-  .na .glyphe { color: var(--dk-gris); }
+  /* 3. NA : la question du vote est sautée. */
+  .question { fill: none; stroke: var(--dk-encre); stroke-width: 2; }
+  .question.trou { stroke: var(--dk-gris-2); stroke-dasharray: 6 5; fill: var(--dk-fond-2); opacity: 0; }
+  .libelle { font-family: var(--dk-mono); font-size: 15px; font-weight: 600; fill: var(--dk-encre); }
+  .libelle.vote { transition: fill 0.4s; }
+  .na-mot { text-anchor: end; fill: var(--dk-gris); opacity: 0; }
+  .repondu { fill: var(--dk-encre); }
+  .saut { fill: none; stroke: var(--dk-accent); stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .pointe { fill: none; stroke: var(--dk-accent); stroke-width: 3; opacity: 0; }
+  .na.vu .saut { animation: trace 0.8s 0.5s both; }
+  .na.vu .pointe { animation: apparait 0.2s 1.2s both; }
+  .na.vu .pleine { animation: montre-cache 2.4s both; }
+  .na.vu .trou, .na.vu .na-mot { animation: apparait 0.5s 1.3s both; }
+  .na.vu .vote:not(.na-mot) { animation: grisee 0.5s 1.3s both; }
+  @keyframes trace { to { stroke-dashoffset: 0; } }
+  @keyframes grisee { to { fill: var(--dk-gris-2); } }
 
-  /* NaN : 0 / 0 s'efface et laisse NaN. */
-  .nan .calc { font-size: 1.1em; opacity: 0; }
-  .nan.vu .calc { animation: sort 1.4s both; }
-  .nan.vu .res { animation: entre 0.4s 1.1s both; }
-  @keyframes sort { 0%, 60% { opacity: 1; } 100% { opacity: 0; } }
+  /* 4. NaN : une règle sans personne; la moyenne ne sait pas où se poser. */
+  .groupe { fill: none; stroke: var(--dk-gris-2); stroke-width: 2; stroke-dasharray: 6 5; }
+  .vide-mot { font-family: var(--dk-mono); font-size: 15px; font-weight: 600; fill: var(--dk-gris-2); text-anchor: middle; }
+  .point { text-anchor: middle; font-size: 17px; fill: var(--dk-accent); }
+  .nan.vu .cherche { animation: cherche 1.6s 0.4s both ease-in-out; }
+  .nan.vu .point { animation: apparait 0.3s 2s both; }
+  @keyframes cherche { 0% { transform: none; } 25% { transform: translateX(-80px); } 60% { transform: translateX(80px); } 100% { transform: none; } }
+  .calcul { display: flex; align-items: baseline; gap: 0.45em; margin-top: auto; font-family: var(--dk-mono); font-size: 1.55em; font-weight: 600; line-height: 1; white-space: nowrap; }
+  .calcul .fleche { color: var(--dk-gris); font-weight: 400; }
+  .calcul .out { color: var(--dk-accent); }
 
-  .source { grid-column: 1 / -1; margin: 0.3em 0 0; font-size: 0.6em; letter-spacing: 0.06em; color: var(--dk-gris); text-align: right; }
-  @keyframes entre { from { opacity: 0; transform: translateY(0.3em); } to { opacity: 1; transform: none; } }
+  .source { grid-column: 1 / -1; margin: 0; font-size: 0.6em; letter-spacing: 0.06em; color: var(--dk-gris); text-align: right; }
+  @keyframes fondu { from { opacity: 0; transform: translateY(0.4em); } to { opacity: 1; transform: none; } }
+  @keyframes apparait { from { opacity: 0; } to { opacity: 1; } }
+
   @media (prefers-reduced-motion: reduce) {
-    .vu .glyphe, .vu .n, .vu .texte, .vu .r, .vu .case, .vu .option, .vu .res { animation: none !important; }
-    .nan.vu .calc { animation: none !important; opacity: 0; }
+    .carte.vu { animation: none; opacity: 1; }
+    .n99.vu .glisse, .n99.vu .b99, .n99.vu .moy .triangle, .nan.vu .cherche { animation: none !important; }
+    .n99.vu .etiq.avant { animation: none !important; opacity: 0; }
+    .n99.vu .etiq.apres, .n99.vu .rouge, .nsp.vu .fourche, .na.vu .pointe, .na.vu .trou, .na.vu .na-mot, .nan.vu .point { animation: none !important; opacity: 1; }
+    .nsp.vu .coche i { animation: none !important; background: var(--dk-encre); }
+    .na.vu .saut { animation: none !important; stroke-dashoffset: 0; }
+    .na.vu .pleine { animation: none !important; opacity: 0; }
+    .na.vu .vote:not(.na-mot) { animation: none !important; fill: var(--dk-gris-2); }
   }
 </style>

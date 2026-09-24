@@ -1,12 +1,12 @@
 <script>
   /**
-   * Quatre façons, un résultat : la même variable (universitaire = 1 si
-   * cpso3 >= 8, sinon 0, Étude électorale 1993) recodée dans quatre styles
+   * Quatre façons, un résultat : la même variable (df_clean$universitaire
+   * = 1 si df_raw$cpso3 >= 8, sinon 0, Étude électorale 1993) recodée dans quatre styles
    * qu'on croise dans le code des autres. Le cours enseigne le tidyverse et
    * case_when(); les trois autres, il faut savoir les lire. Six temps :
    *
    *   1  R de base (crochets)     2  ifelse()
-   *   3  if_else() (tidyverse)    4  case_when() (tidyverse)
+   *   3  if_else() (dplyr)        4  case_when() (dplyr)
    *   5  le tableau, une seule fois : les quatre donnent le même
    *   6  case_when() est celle du cours
    *
@@ -20,12 +20,24 @@
   import Copier from '../Copier.svelte';
   import { CONSOLES_PLUS, STYLES_IDENTIQUES } from '$lib/data/seance4_plus.js';
 
+  // Affichage seulement : une ligne trop longue pour une demi-largeur est
+  // coupée après « <- », avec un retrait de deux espaces. Le code reste du R
+  // valide; le bouton Copier copie le code exécuté, tel quel.
+  const couper = (code) =>
+    code
+      .split('\n')
+      .map((l) => (l.length > 50 && l.includes(' <- ') ? l.replace(' <- ', ' <-\n  ') : l))
+      .join('\n');
+
   const STYLES = [
     { cle: 'style_base', nom: 'R de base (crochets)' },
     { cle: 'style_ifelse', nom: 'ifelse()' },
-    { cle: 'style_if_else', nom: 'if_else() (tidyverse)' },
-    { cle: 'style_case_when', nom: 'case_when() (tidyverse)', cours: true }
-  ].map((s) => ({ ...s, code: CONSOLES_PLUS[s.cle][0].in, tableau: CONSOLES_PLUS[s.cle][1] }));
+    { cle: 'style_if_else', nom: 'if_else() (dplyr)' },
+    { cle: 'style_case_when', nom: 'case_when() (dplyr)', cours: true }
+  ].map((s) => {
+    const code = CONSOLES_PLUS[s.cle][0].in;
+    return { ...s, code, affiche: couper(code), tableau: CONSOLES_PLUS[s.cle][1] };
+  });
 
   // Le tableau n'est montré qu'une fois : il doit être le même pour les quatre.
   const verif = STYLES[0].tableau;
@@ -49,7 +61,7 @@
           {#if memes}<span class="coche" class:vue={e >= 5}>✓</span>{/if}
         </figcaption>
         <div class="enveloppe">
-          <pre><code>{@html surlignerR(s.code)}</code></pre>
+          <pre><code>{@html surlignerR(s.affiche)}</code></pre>
           <Copier texte={s.code} />
         </div>
       </figure>
@@ -67,7 +79,7 @@
 
 <style>
   .quatre { display: flex; flex-direction: column; gap: 0.8em; }
-  .grille { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7em 1em; align-items: stretch; }
+  .grille { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.7em 1em; align-items: stretch; }
 
   .carte-f { margin: 0; display: flex; flex-direction: column; gap: 0.3em; opacity: 0; transform: translateY(0.3em); transition: opacity 0.35s, transform 0.35s; }
   .carte-f.vue { opacity: 1; transform: none; }

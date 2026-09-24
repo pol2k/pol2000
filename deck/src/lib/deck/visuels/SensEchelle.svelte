@@ -1,9 +1,9 @@
 <script>
   /**
    * 1 = ce que dit le nom : le sens d'une échelle de 0 à 1. La satisfaction
-   * envers la démocratie (cps25_demsat) est codée 1 = très satisfait …
+   * envers la démocratie (df_raw$cps25_demsat) est codée 1 = très satisfait …
    * 4 = pas du tout, 5 = ne sait pas. La nouvelle variable s'appelle
-   * satisfaction : 1 doit donc vouloir dire satisfait.e. Deux axes qui
+   * df_clean$satisfaction : 1 doit donc vouloir dire satisfait.e. Deux axes qui
    * montent tous deux; les liens se croisent en X, et ce X, c'est
    * l'inversion. Reprend l'idée d'Inverser.svelte, en plus grand. Cinq
    * temps :
@@ -21,6 +21,8 @@
   import { SATISFACTION } from '$lib/data/seance4.js';
 
   let { nom = 'satisfaction_democratie' } = $props();
+  // La nouvelle variable vit dans df_clean; le sondage reste dans df_raw.
+  const cible = $derived(nom.startsWith('df_clean$') ? nom : `df_clean$${nom}`);
 
   const NOMS = ['Très satisfait', 'Plutôt satisfait', 'Peu satisfait', 'Pas du tout satisfait', 'Ne sait pas'];
   const CIBLE = [1, 0.67, 0.33, 0, null];
@@ -42,9 +44,9 @@
 </script>
 
 <div class="visuel sens-echelle" bind:this={hote}>
-  <svg viewBox="0 0 1000 490" role="img" aria-label="À gauche, les codes 1 à 4 de la satisfaction envers la démocratie dans le sondage, 1 = très satisfait en bas, 4 = pas du tout satisfait en haut. À droite, la nouvelle variable {nom}, de 0 à 1, où 1 = satisfait.e. Les liens se croisent : le code 1 devient 1, le code 4 devient 0. Le code 5, ne sait pas, devient NA.">
+  <svg viewBox="0 0 1000 490" role="img" aria-label="À gauche, les codes 1 à 4 de la satisfaction envers la démocratie dans le sondage, 1 = très satisfait en bas, 4 = pas du tout satisfait en haut. À droite, la nouvelle variable {cible}, de 0 à 1, où 1 = satisfait.e. Les liens se croisent : le code 1 devient 1, le code 4 devient 0. Le code 5, ne sait pas, devient NA.">
     <!-- L'axe de gauche : le code du sondage. -->
-    <text x={XG} y="112" class="tete">cps25_demsat</text>
+    <text x={XG + 12} y="112" class="tete">df_raw$cps25_demsat</text>
     <line x1={XG} y1={YBAS + 14} x2={XG} y2={YHAUT - 22} class="axe" />
     <path d="M {XG - 9} {YHAUT - 12} L {XG} {YHAUT - 28} L {XG + 9} {YHAUT - 12}" class="pointe" />
     {#each [0, 1, 2, 3] as k}
@@ -57,7 +59,7 @@
 
     <!-- L'axe de droite : la nouvelle variable, de 0 à 1. -->
     <g class="droite" class:vu={e >= 1}>
-      <text x={XD} y="76" class="var">{nom}</text>
+      <text x={XD} y="76" class="var">{cible}</text>
       <line x1={XD} y1={YBAS + 14} x2={XD} y2={YHAUT - 22} class="axe g" />
       <path d="M {XD - 9} {YHAUT - 12} L {XD} {YHAUT - 28} L {XD + 9} {YHAUT - 12}" class="pointe g" />
       {#each CIBLE.slice(0, 4) as v}
@@ -80,7 +82,7 @@
       {:else if e === 1}Le nom parle de satisfaction&#8239;: <b>1</b> doit vouloir dire satisfait.e.
       {:else if e === 2}Le code 1 devient 1, le code 4 devient 0&#8239;: on <b>inverse</b> l’échelle.
       {:else if e === 3}« Ne sait pas » n’est pas un degré de satisfaction&#8239;: <b>NA</b>.
-      {:else}Même règle partout&#8239;: <code>appui_avortement</code>, <b>1</b> = appuie, <b>0</b> = n’appuie pas.{/if}
+      {:else}Même règle partout&#8239;: <code>df_clean$appui_avortement</code>, <b>1</b> = appuie, <b>0</b> = n’appuie pas.{/if}
     </p>
   {/key}
 </div>
@@ -89,7 +91,7 @@
   .sens-echelle { display: flex; flex-direction: column; gap: 0.5em; }
   svg { width: 100%; height: auto; max-height: 58vh; display: block; }
   text { font-family: var(--dk-mono); }
-  .tete { font-size: 22px; font-weight: 600; fill: var(--dk-gris); text-anchor: middle; }
+  .tete { font-size: 22px; font-weight: 600; fill: var(--dk-gris); text-anchor: end; }
   .var { font-size: 34px; font-weight: 700; fill: var(--dk-accent); text-anchor: middle; }
   .axe { stroke: var(--dk-encre); stroke-width: 3; }
   .axe.g { stroke: var(--dk-accent); }

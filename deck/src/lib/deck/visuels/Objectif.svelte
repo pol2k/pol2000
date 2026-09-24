@@ -9,7 +9,10 @@
    *   0  La flèche et le premier niveau : non structurées.
    *   1  Semi-structurées.
    *   2  Structurées, le tableau.
-   *   3  Les deux premiers niveaux s'effacent; le tableau passe au rouge.
+   *   3  À droite, une grande flèche rouge descend du haut jusqu'au tableau
+ *      (« structurer ») : peu importe la source, notre travail est de la
+ *      ramener à un tableau en deux dimensions, lignes × colonnes. Les deux
+ *      premiers niveaux pâlissent; le tableau passe au rouge.
    *
    * Tout est dessiné à la main, sans image : rien de mesuré n'est suggéré.
    */
@@ -37,12 +40,12 @@
 </script>
 
 <div class="visuel objectif" bind:this={hote}>
-  <svg viewBox="-10 0 1000 470" role="img" aria-label="Échelle d'abstraction des données. En haut, les données non structurées : images et sons. Au milieu, les données semi-structurées : textes, journaux, débats. En bas, les données structurées, en tableau : sondages et données économiques. Ce cours travaille avec des données structurées.">
+  <svg viewBox="-10 0 1000 505" role="img" aria-label="Échelle d'abstraction des données. En haut, les données non structurées : images et sons. Au milieu, les données semi-structurées : textes, journaux, débats. En bas, les données structurées, en tableau : sondages et données économiques. Une flèche descend de chaque niveau vers le tableau : notre travail est de structurer les données en un tableau en deux dimensions, lignes et colonnes.">
     <!-- la flèche : de plus en plus abstrait vers le haut -->
     <g class="fleche">
-      <line x1="30" y1="455" x2="30" y2="22" />
+      <line x1="30" y1="490" x2="30" y2="22" />
       <polyline points="16,40 30,18 44,40" />
-      <text x="0" y="0" transform="translate(12 240) rotate(-90)" class="axe">abstraction</text>
+      <text x="0" y="0" transform="translate(12 255) rotate(-90)" class="axe">abstraction</text>
     </g>
 
     <!-- 1 · non structurées : une image et une onde sonore -->
@@ -78,7 +81,7 @@
 
     <!-- 3 · structurées : un tableau, une ligne par répondant -->
     <g class="rangee structure" class:vu={e >= 2} class:cible={e >= 3}>
-      <rect x="70" y="325" width="830" height="140" class="cadre" />
+      <rect x="70" y="325" width="890" height="175" class="cadre" />
       <g class="glyphe">
         <rect x={TX} y={TY} width={TW} height={TH / NL} class="entete" />
         <rect x={TX} y={TY} width={TW} height={TH} />
@@ -91,7 +94,15 @@
       </g>
       <text x="310" y={RANGEES[2].y - 4} class="nom">{RANGEES[2].nom}</text>
       <text x="310" y={RANGEES[2].y + 34} class="ex">{RANGEES[2].ex}</text>
-      <text x="880" y="352" class="etiquette">POL-2000</text>
+      <text x="310" y={RANGEES[2].y + 76} class="dim">lignes × colonnes</text>
+      <text x="945" y="484" class="etiquette">POL-2000</text>
+    </g>
+
+    <!-- 4 · notre travail : tout descend vers le tableau -->
+    <g class="descente" class:vu={e >= 3}>
+      <line x1="890" y1="30" x2="890" y2="318" />
+      <polyline points="870,294 890,322 910,294" />
+      <text x="0" y="0" transform="translate(922 175) rotate(90)" class="verbe">structurer</text>
     </g>
   </svg>
 </div>
@@ -102,11 +113,11 @@
   text { font-family: var(--dk-mono); }
 
   .fleche line, .fleche polyline { fill: none; stroke: var(--dk-encre); stroke-width: 4; stroke-linejoin: miter; }
-  .fleche line { stroke-dasharray: 440; stroke-dashoffset: 440; animation: trace 0.9s 0.1s ease-out forwards; }
+  .fleche line { stroke-dasharray: 470; stroke-dashoffset: 470; animation: trace 0.9s 0.1s ease-out forwards; }
 
   .rangee { opacity: 0; transform: translateY(14px); transition: opacity 0.5s, transform 0.5s cubic-bezier(0.34, 1.3, 0.64, 1); }
   .rangee.vu { opacity: 1; transform: none; }
-  .rangee.vu.efface { opacity: 0.22; }
+  .rangee.vu.efface { opacity: 0.35; }
 
   .glyphe rect, .glyphe line, .glyphe polyline, .glyphe circle { fill: none; stroke: var(--dk-encre); stroke-width: 3; }
   .glyphe .plein { fill: var(--dk-gris-2); stroke: none; }
@@ -121,7 +132,17 @@
   .cadre { fill: none; stroke: var(--dk-accent); stroke-width: 3; opacity: 0; transition: opacity 0.5s; }
   .etiquette { font-size: 24px; font-weight: 600; letter-spacing: 0.06em; text-anchor: end; fill: var(--dk-accent); opacity: 0; transition: opacity 0.5s 0.2s; }
 
-  .cible .cadre, .cible .etiquette { opacity: 1; }
+  .dim { font-size: 27px; font-weight: 600; fill: var(--dk-accent); opacity: 0; transition: opacity 0.5s 0.6s; }
+
+  /* la flèche de droite : se trace vers le bas, en rouge */
+  .descente line, .descente polyline { fill: none; stroke: var(--dk-accent); stroke-width: 8; stroke-linejoin: miter; }
+  .descente line { stroke-dasharray: 290; stroke-dashoffset: 290; transition: stroke-dashoffset 0.7s ease-out; }
+  .descente polyline, .descente .verbe { opacity: 0; transition: opacity 0.3s 0.6s; }
+  .descente.vu line { stroke-dashoffset: 0; }
+  .descente.vu polyline, .descente.vu .verbe { opacity: 1; }
+  .verbe { font-size: 34px; font-weight: 600; letter-spacing: 0.04em; text-anchor: middle; fill: var(--dk-accent); }
+
+  .cible .cadre, .cible .etiquette, .cible .dim { opacity: 1; }
   .cible .glyphe rect, .cible .glyphe line { stroke: var(--dk-accent); }
   .cible .glyphe .entete { fill: var(--dk-accent); }
   .cible .nom { fill: var(--dk-accent); }
@@ -129,6 +150,6 @@
   @keyframes trace { to { stroke-dashoffset: 0; } }
   @media (prefers-reduced-motion: reduce) {
     .fleche line { animation: none; stroke-dashoffset: 0; }
-    .rangee, .cadre, .etiquette, .nom, .glyphe .entete { transition: none; }
+    .rangee, .cadre, .etiquette, .nom, .dim, .glyphe .entete, .descente line, .descente polyline, .descente .verbe { transition: none; }
   }
 </style>

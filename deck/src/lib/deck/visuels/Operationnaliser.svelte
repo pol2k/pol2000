@@ -1,14 +1,14 @@
 <script>
   /**
-   * Opérationnaliser : les mêmes onze codes de scolarité (cpso3, Étude
-   * électorale canadienne 1993) deviennent trois variables possibles, une
-   * par clic. Les codes ne bougent pas; seuls les liens et les groupes
+   * Opérationnaliser : les mêmes onze codes de scolarité (df_raw$cpso3,
+   * Étude électorale canadienne 1993) deviennent trois variables possibles
+   * dans df_clean, une par clic. Les codes ne bougent pas; seuls les liens et les groupes
    * changent. Quatre temps :
    *
    *   0  les onze codes et leurs effectifs;
-   *   1  ses_universitaire : deux valeurs, 0 et 1 (codes 8 à 11 → 1);
-   *   2  ses_education : trois valeurs (1–5, 6–7, 8–11);
-   *   3  ses_education_detail : onze valeurs, chaque réponse gardée;
+   *   1  df_clean$ses_universitaire : deux valeurs, 0 et 1 (codes 8 à 11 → 1);
+   *   2  df_clean$ses_education : trois valeurs (1–5, 6–7, 8–11);
+   *   3  df_clean$ses_education_detail : onze valeurs, chaque réponse gardée;
    *   4  le mot : opérationnalisation.
    *
    * Effectifs et totaux : EDUC93 dans seance4_plus.js (outils/seance4_plus.R).
@@ -28,14 +28,14 @@
   const E = EDUC93.groupes.education;
   const FACONS = [
     {
-      nom: 'ses_universitaire',
+      nom: 'df_clean$ses_universitaire',
       groupes: [
         { val: '0', de: 1, a: 7, n: U['0'], teinte: 'encre' },
         { val: '1', de: 8, a: 11, n: U['1'], teinte: 'rouge' }
       ]
     },
     {
-      nom: 'ses_education',
+      nom: 'df_clean$ses_education',
       groupes: [
         { val: 'secondaire_ou_moins', de: 1, a: 5, n: E.secondaire_ou_moins, teinte: 'encre' },
         { val: 'collegial', de: 6, a: 7, n: E.collegial, teinte: 'gris' },
@@ -43,12 +43,13 @@
       ]
     },
     {
-      nom: 'ses_education_detail',
+      nom: 'df_clean$ses_education_detail',
       groupes: EDUC93.codes.map((c, k) => ({ val: EDUC93.etiquettes[k], de: c, a: c, n: EDUC93.effectifs[k], teinte: 'encre' }))
     }
   ];
 
-  const H = 38, Y0 = 72;
+  // Y0 laisse deux lignes d'en-tête : le nom de la variable, puis le nombre de valeurs.
+  const H = 38, Y0 = 98;
   const yCode = (k) => Y0 + k * H;
   const MAXN = Math.max(...EDUC93.effectifs);
   const XC = 330, XB = 344, LB = 150;
@@ -72,12 +73,13 @@
 </script>
 
 <div class="visuel operationnaliser" bind:this={hote}>
-  <svg viewBox="0 0 1060 {HAUT}" role="img" aria-label="Les onze codes de scolarité de l'Étude électorale canadienne 1993 (cpso3) codés de trois façons : ses_universitaire en deux valeurs (0 pour les codes 1 à 7, 1 pour les codes 8 à 11), ses_education en trois valeurs (secondaire_ou_moins, collegial, universitaire), ses_education_detail en onze valeurs, une par réponse.">
-    <text x={XC} y="30" class="tete">cpso3 <tspan class="nb">· 11 codes</tspan></text>
+  <svg viewBox="0 0 1060 {HAUT}" role="img" aria-label="Les onze codes de scolarité de l'Étude électorale canadienne 1993 (df_raw$cpso3) codés de trois façons dans df_clean : ses_universitaire en deux valeurs (0 pour les codes 1 à 7, 1 pour les codes 8 à 11), ses_education en trois valeurs (secondaire_ou_moins, collegial, universitaire), ses_education_detail en onze valeurs, une par réponse.">
+    <text x={XC} y="30" class="tete">df_raw$cpso3</text>
+    <text x={XC} y="56" class="nb">{EDUC93.codes.length} codes</text>
     {#if f >= 0}
       {#key f}
         <text x={XG} y="30" class="tete var">{FACONS[f].nom}</text>
-        <text x={XG + WG} y="30" class="nb fin">{FACONS[f].groupes.length} valeurs</text>
+        <text x={XG} y="56" class="nb deb">{FACONS[f].groupes.length} valeurs</text>
       {/key}
     {/if}
 
@@ -122,7 +124,8 @@
   .tete { font-size: 22px; font-weight: 600; fill: var(--dk-encre); text-anchor: end; }
   .tete.var { text-anchor: start; fill: var(--dk-accent); animation: fondu 0.35s both; }
   .nb { font-size: 17px; font-weight: 400; fill: var(--dk-gris); }
-  .nb.fin { text-anchor: end; animation: fondu 0.35s both; }
+  .nb { text-anchor: end; }
+  .nb.deb { text-anchor: start; animation: fondu 0.35s both; }
   .nom { font-size: 18px; text-anchor: end; fill: var(--dk-gris); }
   .code { font-size: 20px; font-weight: 600; text-anchor: end; fill: var(--dk-encre); }
   .n { font-size: 17px; fill: var(--dk-gris); }
@@ -157,5 +160,5 @@
   .mot span { font-size: 0.9em; line-height: 1.4; }
   @keyframes pousse { from { transform: scaleX(0); } to { transform: scaleX(1); } }
   @keyframes fondu { from { opacity: 0; } to { opacity: 1; } }
-  @media (prefers-reduced-motion: reduce) { .barre, .mot, .tete.var, .nb.fin { animation: none; } .lien, .groupe { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .barre, .mot, .tete.var, .nb.deb { animation: none; } .lien, .groupe { transition: none; } }
 </style>
