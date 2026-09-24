@@ -3,20 +3,12 @@
    * « 80 % du temps d'analyse passe à préparer les données. » Un adage, pas
    * une mesure : Wickham (2014) le rapporte d'après Dasu et Johnson (2003).
    * La barre est donc schématique, bornée par des guillemets et étiquetée
-   * « ce qu'on dit souvent »; aucun axe, aucune graduation. Un temps : la
-   * part « préparer » se remplit, puis la phrase qui la ramène à sa place.
+   * « ce qu'on dit souvent »; aucun axe, aucune graduation. Aucun temps :
+   * la part « préparer » se remplit à l'arrivée.
    */
-  import { brancherTemps } from '../temps.js';
-  let e = $state(0);
-  let hote = $state(null);
-  $effect(() => {
-    if (!hote) return;
-    e = 0;
-    return brancherTemps(hote, { total: 1, lire: () => e, ecrire: (v) => (e = v) });
-  });
 </script>
 
-<div class="visuel quatre-vingts" bind:this={hote}>
+<div class="visuel quatre-vingts">
   <span class="et">CE QU’ON DIT SOUVENT</span>
   <div class="barre" aria-label="Schéma : environ 80 % du temps à préparer les données, 20 % à les analyser. Un adage, pas une mesure.">
     <span class="guil">«</span>
@@ -30,7 +22,6 @@
     </div>
     <span class="guil">»</span>
   </div>
-  <p class="chute" class:vu={e >= 1}>Un ordre de grandeur, pas une mesure. Mais tout le monde le vit.</p>
   <p class="source">Wickham (2014), d’après Dasu et Johnson (2003)</p>
 </div>
 
@@ -45,8 +36,6 @@
   .part strong { font-size: 2.4em; line-height: 1; letter-spacing: -0.02em; }
   .part span { font-size: 0.95em; font-weight: 600; }
   .ana strong { font-size: 1.6em; }
-  .chute { margin: 0.3em 0 0; font-size: 1.25em; line-height: 1.35; opacity: 0; transition: opacity 0.4s; }
-  .chute.vu { opacity: 1; }
   .source { margin: 0; font-size: 0.6em; letter-spacing: 0.06em; color: var(--dk-gris); text-align: right; }
   @keyframes remplit { from { transform: scaleX(0); } to { transform: scaleX(1); } }
   @keyframes fondu { from { opacity: 0; } to { opacity: 1; } }

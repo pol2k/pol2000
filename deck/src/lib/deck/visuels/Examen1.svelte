@@ -1,8 +1,8 @@
 <script>
   /**
    * L'examen 1 ouvre aujourd'hui. Tout vient de EVALUATIONS dans cours.js,
-   * comme sur le site : le poids, l'ouverture, la remise. Ce qu'il évalue
-   * reprend le plan de cours mot pour mot. Aucun contenu d'examen ici.
+   * comme sur le site : le poids, l'ouverture, la remise. Aucun contenu
+   * d'examen ici.
    */
   import { EVALUATIONS } from '$lib/data/cours.js';
   const ex = EVALUATIONS.find((v) => v.id === 'examen1');
@@ -30,7 +30,6 @@
     <strong>{quantieme(ex.date)}</strong>
     <span class="h">{ex.heure}</span>
   </div>
-  <p class="evalue">Importer, manipuler et décrire des données avec R et Positron.</p>
 </div>
 
 <style>
@@ -44,7 +43,6 @@
   .date strong { font-size: 1.25em; line-height: 1.2; white-space: nowrap; }
   .h { font-size: 0.9em; font-weight: 600; color: var(--dk-accent); }
   .fl { align-self: center; font-size: 1.8em; font-weight: 600; color: var(--dk-accent); }
-  .evalue { grid-column: 1 / -1; margin: 0; font-size: 1.1em; line-height: 1.4; border-left: 0.34em solid var(--dk-accent); padding-left: 0.8em; }
   @keyframes fondu { from { opacity: 0; transform: translateY(0.4em); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .examen1 { animation: none; } }
 </style>

@@ -27,43 +27,45 @@
   import Deck from '$lib/deck/Deck.svelte';
   import Slide from '$lib/deck/Slide.svelte';
   import Code from '$lib/deck/Code.svelte';
-  import Citation from '$lib/deck/Citation.svelte';
   import Session from '$lib/deck/visuels/Session.svelte';
+  import Objectif from '$lib/deck/visuels/Objectif.svelte';
+  import TidyIntro from '$lib/deck/visuels/TidyIntro.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
-  import Tidy from '$lib/deck/visuels/Tidy.svelte';
+  import TidyVu from '$lib/deck/visuels/TidyVu.svelte';
   import TroisRegles from '$lib/deck/visuels/TroisRegles.svelte';
   import QuatreVingts from '$lib/deck/visuels/QuatreVingts.svelte';
-  import Nettoyage from '$lib/deck/visuels/Nettoyage.svelte';
+  import Nettoyage2 from '$lib/deck/visuels/Nettoyage2.svelte';
   import CinqProblemes from '$lib/deck/visuels/CinqProblemes.svelte';
   import Probleme from '$lib/deck/visuels/Probleme.svelte';
   import Codebook1993 from '$lib/deck/visuels/Codebook1993.svelte';
-  import FicheCodebook from '$lib/deck/visuels/FicheCodebook.svelte';
-  import Operateurs from '$lib/deck/visuels/Operateurs.svelte';
+  import FicheCodebook1993 from '$lib/deck/visuels/FicheCodebook1993.svelte';
+  import CodebookPdf1993 from '$lib/deck/visuels/CodebookPdf1993.svelte';
+  import Operateurs93 from '$lib/deck/visuels/Operateurs93.svelte';
   import CaseWhen from '$lib/deck/visuels/CaseWhen.svelte';
-  import Recodage from '$lib/deck/visuels/Recodage.svelte';
-  import Inverser from '$lib/deck/visuels/Inverser.svelte';
-  import TroisVides from '$lib/deck/visuels/TroisVides.svelte';
-  import Mystere from '$lib/deck/visuels/Mystere.svelte';
+  import QuatreFacons from '$lib/deck/visuels/QuatreFacons.svelte';
+  import Operationnaliser from '$lib/deck/visuels/Operationnaliser.svelte';
+  import Recodage93 from '$lib/deck/visuels/Recodage93.svelte';
+  import ZeroUn from '$lib/deck/visuels/ZeroUn.svelte';
+  import SensEchelle from '$lib/deck/visuels/SensEchelle.svelte';
+  import QuatreVides from '$lib/deck/visuels/QuatreVides.svelte';
+  import Moyenne from '$lib/deck/visuels/Moyenne.svelte';
   import Pertes from '$lib/deck/visuels/Pertes.svelte';
   import BrutPropre from '$lib/deck/visuels/BrutPropre.svelte';
   import Examen1 from '$lib/deck/visuels/Examen1.svelte';
   import AvantS5 from '$lib/deck/visuels/AvantS5.svelte';
   import { CONSOLES, TIDY } from '$lib/data/seance4.js';
+  import { BILLBOARD, CONSOLES_PLUS } from '$lib/data/seance4_plus.js';
 
-  const TOTAL = 49;
+  const TOTAL = 57;
   const D = 'POL-2000 · séance 4 · jeu 24 sept';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
   const avec = (cle, notes = []) => CONSOLES[cle].map((l, i) => ({ ...l, note: notes[i] || '' }));
   const c_mystere = avec('mystere', ['Une échelle de 0 à 10. Une moyenne de -11,44 ?']);
   const c_codebook = avec('codebook');
-  const c_scolarite = avec('scolarite');
+  const c_educ93 = CONSOLES_PLUS.casewhen93.slice(1).map((l) => ({ ...l, note: '' }));
   const c_satisfaction = avec('satisfaction');
-  const c_piege = avec('piege', ['', '', 'Les 132 « ne sait pas » sont devenus des 0.']);
-  const c_corrige = avec('corrige', ['', 'Sans règle, case_when() laisse NA.']);
-  const c_na = avec('na', ['', 'Un seul NA, et la moyenne devient NA.', '', '']);
   const c_propre = avec('propre');
-  const c_pertes = avec('pertes');
 
   // Les cinq problèmes : le code affiché est celui que R a exécuté.
   const code = (cle, ...i) => i.map((k) => CONSOLES[cle][k].in).join('\n');
@@ -78,21 +80,35 @@ library(tidyr)
 library(haven)
 
 df <- readRDS("ces2025.rds")   # sauvegardé à la séance 2 ; sinon : df <- get_ces("2025")
+ces93 <- get_ces("1993")       # l'Étude électorale de 1993
 
 # 1. Le codebook, dans R
 attr(df$cps25_demsat, "label")
 count(df, cps25_demsat)
 
-# 2. Recoder en trois catégories
+# 2. Opérationnaliser la scolarité de 1993 : trois choix
+ces93 <- ces93 |>
+  mutate(
+    ses_universitaire = case_when(cpso3 >= 8 ~ 1, cpso3 < 8 ~ 0),
+    ses_education = case_when(
+      cpso3 <= 5  ~ "secondaire_ou_moins",
+      cpso3 <= 7  ~ "collegial",
+      cpso3 <= 11 ~ "universitaire"
+    ),
+    ses_education_detail = as_factor(cpso3)
+  )
+count(ces93, cpso3, ses_education)   # toujours vérifier
+
+# 3. La même chose pour votre travail, en 2025
 d <- df |>
   mutate(scolarite = case_when(
     cps25_education <= 5  ~ "Secondaire ou moins",
     cps25_education <= 7  ~ "Collégial",
     cps25_education <= 11 ~ "Universitaire"
   ))
-count(d, cps25_education, scolarite)   # toujours vérifier
+count(d, cps25_education, scolarite)
 
-# 3. Inverser une échelle, de 0 à 1
+# 4. De 0 à 1, dans le sens du nom
 d <- d |>
   mutate(satisfaction = case_when(
     cps25_demsat == 1 ~ 1,
@@ -102,7 +118,6 @@ d <- d |>
   ))
 count(d, satisfaction)
 
-# 4. Oui, non, et « ne sait pas »
 d <- d |>
   mutate(ne_canada = case_when(
     cps25_bornin_canada == 1 ~ 1,
@@ -111,9 +126,10 @@ d <- d |>
 count(d, ne_canada)
 
 # 5. Les valeurs manquantes
+mean(df$cps25_lr_scale_bef_1)
 d <- d |> mutate(gauche_droite = na_if(cps25_lr_scale_bef_1, -99))
+mean(d$gauche_droite)
 mean(d$gauche_droite, na.rm = TRUE)
-sum(is.na(d$gauche_droite))
 
 # 6. Une base propre, sauvegardée
 df_propre <- d |>
@@ -127,9 +143,9 @@ relig_income |>
   pivot_longer(!religion, names_to = "revenu", values_to = "n")
 
 # 8. À vous : cps25_interest_gen_1 a aussi des -99. Recodez-les, puis sa moyenne.`;
-  // Trop long pour une diapo à taille lisible : coupé avant « 2. », « 4. » et « 6. ».
-  const coupes = ['\n# 2. ', '\n# 4. ', '\n# 6. '].map((c) => script.indexOf(c));
-  const [script1, script2, script3, script4] = [0, ...coupes].map((d, i, t) => script.slice(i ? d + 1 : 0, t[i + 1]));
+  // Trop long pour une diapo à taille lisible : coupé avant « 2. », « 3. », « 4. », « 5. » et « 7. ».
+  const coupes = ['\n# 2. ', '\n# 3. ', '\n# 4. ', '\n# 5. ', '\n# 7. '].map((c) => script.indexOf(c));
+  const scripts = [0, ...coupes].map((d, i, t) => script.slice(i ? d + 1 : 0, t[i + 1]));
 </script>
 
 <svelte:head>
@@ -159,13 +175,13 @@ relig_income |>
       <Session ici={4} />
     </Slide>
 
-    <Slide bandeau="Un tour de salle" droite={D}>
-      <h2 class="e">À main levée</h2>
-      <ol class="mains e">
-        <li><span>Avez-vous refait le script de la séance 3 ?</span></li>
-        <li><span>Avez-vous fait le Datacamp de la semaine ?</span></li>
-        <li><span>Avez-vous déjà ouvert un codebook ?</span></li>
-      </ol>
+    <Slide bandeau="Retour" droite={D}>
+      <h2 class="e grande-q">Des questions sur la semaine dernière ?</h2>
+    </Slide>
+
+    <Slide bandeau="Préparer" droite={D}>
+      <h2 class="e">Notre objectif</h2>
+      <Objectif />
     </Slide>
 
     <Slide bandeau="Un mystère" droite={D}>
@@ -173,36 +189,31 @@ relig_income |>
       <Console lignes={c_mystere} />
     </Slide>
 
-    <Slide fond="encre" bandeau="Votre travail" droite={D}>
-      <p class="surtitre e">Les données de votre travail</p>
-      <h1 class="e">L’Étude électorale canadienne 2025</h1>
-      <hr class="filet" />
-      <p class="lead e">Aujourd’hui, on la prépare.</p>
-    </Slide>
-
-    <Slide bandeau="Préparer" droite={D}>
-      <h2 class="e">Le vrai travail</h2>
-      <QuatreVingts />
-    </Slide>
-
-    <Slide bandeau="Préparer" droite={D}>
-      <h2 class="e">Du brut au propre</h2>
-      <Nettoyage />
-    </Slide>
-
     <!-- ================= 1 · DES DONNÉES TIDY ================= -->
     <Slide fond="encre" bandeau="Des données tidy" droite={D}>
       <p class="surtitre e">1 de 3</p>
       <h1 class="e">Des données tidy</h1>
       <hr class="filet" />
-      <div class="e">
-        <Citation source="Hadley Wickham, « Tidy Data », 2014">« Les jeux de données bien rangés se ressemblent tous ; chaque jeu de données désordonné l’est à sa façon. »</Citation>
-      </div>
+    </Slide>
+
+    <Slide bandeau="Des données tidy" droite={D}>
+      <h2 class="e">Des données tidy</h2>
+      <TidyIntro />
+    </Slide>
+
+    <Slide bandeau="Des données tidy" droite={D}>
+      <h2 class="e">Le vrai travail</h2>
+      <QuatreVingts />
+    </Slide>
+
+    <Slide bandeau="Des données tidy" droite={D}>
+      <h2 class="e">Du brut au propre</h2>
+      <Nettoyage2 />
     </Slide>
 
     <Slide bandeau="Des données tidy" droite={D}>
       <h2 class="e">Un tableau, vu de près</h2>
-      <Tidy />
+      <TidyVu />
     </Slide>
 
     <Slide bandeau="Des données tidy" droite={D}>
@@ -210,64 +221,97 @@ relig_income |>
       <TroisRegles />
     </Slide>
 
-    <Slide bandeau="Des données tidy" droite={D}>
-      <h2 class="e">Cinq problèmes communs</h2>
-      <CinqProblemes />
-    </Slide>
-
     <Slide bandeau="Des données tidy · 1 de 5" droite={D}>
       <h2 class="e">Des valeurs dans les en-têtes</h2>
-      <Probleme
+      <Probleme partie="probleme"
         avant={[{ ...T.relig.avant, suite: `… ${T.relig.nAvant[1]} colonnes` }]}
         marque={['<$10k', '$10-20k', '$20-30k']}
-        code={code('relig', 1)}
-        apres={[{ ...T.relig.apres, suite: `… ${T.relig.nApres[0]} lignes` }]}
         explication="Les tranches de revenu sont des valeurs, pas des variables."
         source="Revenu et religion aux États-Unis, Pew Research Center · tidyr::relig_income" />
     </Slide>
 
+    <Slide bandeau="Des données tidy · 1 de 5" droite={D}>
+      <h2 class="e">Les tranches de revenu en une colonne</h2>
+      <Probleme partie="solution"
+        avant={[{ ...T.relig.avant, suite: `… ${T.relig.nAvant[1]} colonnes` }]}
+        marque={['<$10k', '$10-20k', '$20-30k']}
+        code={code('relig', 1)}
+        apres={[{ ...T.relig.apres, suite: `… ${T.relig.nApres[0]} lignes` }]} />
+    </Slide>
+
     <Slide bandeau="Des données tidy · 2 de 5" droite={D}>
       <h2 class="e">Plusieurs variables dans une colonne</h2>
-      <Probleme
+      <Probleme partie="probleme"
         avant={[{ ...T.who.avant, suite: `… ${T.who.nAvant[1]} colonnes` }]}
         marque={['sp_m_014', 'sp_m_1524', 'sp_f_014', 'sp_f_1524']}
-        code={code('who', 0)}
-        apres={[{ ...T.who.apres, suite: `… ${T.who.nApres[0].toLocaleString('fr-CA')} lignes` }]}
         explication="sp_m_014 cache trois variables : le diagnostic, le sexe, l’âge."
         source="Cas de tuberculose, Canada 2010, Organisation mondiale de la santé · tidyr::who2" />
     </Slide>
 
+    <Slide bandeau="Des données tidy · 2 de 5" droite={D}>
+      <h2 class="e">Trois variables, trois colonnes</h2>
+      <Probleme partie="solution"
+        avant={[{ ...T.who.avant, suite: `… ${T.who.nAvant[1]} colonnes` }]}
+        marque={['sp_m_014', 'sp_m_1524', 'sp_f_014', 'sp_f_1524']}
+        code={code('who', 0)}
+        apres={[{ ...T.who.apres, suite: `… ${T.who.nApres[0].toLocaleString('fr-CA')} lignes` }]} />
+    </Slide>
+
     <Slide bandeau="Des données tidy · 3 de 5" droite={D}>
       <h2 class="e">Des variables dans les lignes et les colonnes</h2>
-      <Probleme
+      <Probleme partie="probleme"
         avant={[T.meteo.avant]}
         marque={['mesure', 'd1', 'd2', 'd3', 'd4']}
-        code={code('meteo', 1)}
-        apres={[T.meteo.apres]}
         explication="Les jours sont en colonnes, les deux températures en lignes."
         source="Station météo MX17004, Mexique, février 2010 · Global Historical Climatology Network, vignette « Tidy data » de tidyr" />
     </Slide>
 
+    <Slide bandeau="Des données tidy · 3 de 5" droite={D}>
+      <h2 class="e">Les jours en lignes, les températures en colonnes</h2>
+      <Probleme partie="solution"
+        avant={[T.meteo.avant]}
+        marque={['mesure', 'd1', 'd2', 'd3', 'd4']}
+        code={code('meteo', 1)}
+        apres={[T.meteo.apres]} />
+    </Slide>
+
     <Slide bandeau="Des données tidy · 4 de 5" droite={D}>
-      <h2 class="e">Deux types d’observations dans un tableau</h2>
-      <Probleme
-        avant={[{ ...T.billboard.avant, suite: `… ${T.billboard.nAvant[1]} colonnes` }]}
+      <h2 class="e">Plusieurs observations dans une ligne</h2>
+      <Probleme partie="probleme"
+        avant={[{ ...BILLBOARD.avant, suite: `… ${BILLBOARD.nAvant[1]} colonnes` }]}
         marque={['wk1', 'wk2', 'wk3']}
-        code={code('billboard', 0, 1)}
-        apres={[{ titre: 'chansons', ...T.billboard.chansons }, { titre: 'classement', ...T.billboard.classement }]}
-        explication="Une chanson, et chacune de ses semaines au palmarès : deux choses, deux tableaux."
+        explication="Une observation : une chanson, une semaine."
         source="Palmarès Billboard, 2000 · tidyr::billboard" />
+    </Slide>
+
+    <Slide bandeau="Des données tidy · 4 de 5" droite={D}>
+      <h2 class="e">Une ligne par chanson et par semaine</h2>
+      <Probleme partie="solution"
+        avant={[{ ...BILLBOARD.avant, suite: `… ${BILLBOARD.nAvant[1]} colonnes` }]}
+        marque={['wk1', 'wk2', 'wk3']}
+        code={CONSOLES_PLUS.billboard[0].in}
+        apres={[{ ...BILLBOARD.apres, suite: `… ${BILLBOARD.nApres[0].toLocaleString('fr-CA')} lignes` }]} />
     </Slide>
 
     <Slide bandeau="Des données tidy · 5 de 5" droite={D}>
       <h2 class="e">Une observation dans plusieurs tableaux</h2>
-      <Probleme
+      <Probleme partie="probleme" marqueTitres
         avant={[{ titre: 'sieges_2021', ...T.sieges.a2021 }, { titre: 'sieges_2025', ...T.sieges.a2025 }]}
-        marque={[]}
-        code={code('sieges', 1)}
-        apres={[T.sieges.apres]}
         explication="Mêmes partis, mêmes colonnes, un fichier par élection."
         source="Sièges à la Chambre des communes, élections de 2021 et 2025 · Élections Canada" />
+    </Slide>
+
+    <Slide bandeau="Des données tidy · 5 de 5" droite={D}>
+      <h2 class="e">Un seul tableau, avec l’année</h2>
+      <Probleme partie="solution" marqueTitres
+        avant={[{ titre: 'sieges_2021', ...T.sieges.a2021 }, { titre: 'sieges_2025', ...T.sieges.a2025 }]}
+        code={code('sieges', 1)}
+        apres={[T.sieges.apres]} />
+    </Slide>
+
+    <Slide bandeau="Des données tidy" droite={D}>
+      <h2 class="e">Les cinq problèmes</h2>
+      <CinqProblemes tout />
     </Slide>
 
     <!-- ================= 2 · LE CODEBOOK ================= -->
@@ -279,13 +323,18 @@ relig_income |>
     </Slide>
 
     <Slide bandeau="Le codebook" droite={D}>
+      <h2 class="e">Le codebook de 1993</h2>
+      <CodebookPdf1993 />
+    </Slide>
+
+    <Slide bandeau="Le codebook" droite={D}>
       <h2 class="e">Des codes illisibles</h2>
       <Codebook1993 />
     </Slide>
 
     <Slide bandeau="Le codebook" droite={D}>
       <h2 class="e">Lire une entrée</h2>
-      <FicheCodebook />
+      <FicheCodebook1993 />
     </Slide>
 
     <Slide bandeau="En direct · le codebook" droite={D}>
@@ -310,7 +359,7 @@ relig_income |>
 
     <Slide bandeau="Recoder" droite={D}>
       <h2 class="e">Poser une question à R</h2>
-      <Operateurs />
+      <Operateurs93 />
     </Slide>
 
     <Slide bandeau="Recoder" droite={D}>
@@ -318,19 +367,34 @@ relig_income |>
       <CaseWhen />
     </Slide>
 
+    <Slide bandeau="Recoder" droite={D}>
+      <h2 class="e">Quatre façons, un résultat</h2>
+      <QuatreFacons />
+    </Slide>
+
+    <Slide bandeau="Recoder" droite={D}>
+      <h2 class="e">Opérationnaliser</h2>
+      <Operationnaliser />
+    </Slide>
+
     <Slide bandeau="En direct · recoder" droite={D}>
-      <h2 class="e">Trois catégories</h2>
-      <Console lignes={c_scolarite} />
+      <h2 class="e">Trois catégories, dans R</h2>
+      <Console lignes={c_educ93} />
     </Slide>
 
     <Slide bandeau="Recoder" droite={D}>
       <h2 class="e">Toujours vérifier</h2>
-      <Recodage />
+      <Recodage93 />
     </Slide>
 
     <Slide bandeau="Recoder" droite={D}>
-      <h2 class="e">Inverser une échelle</h2>
-      <Inverser />
+      <h2 class="e">Toutes les variables de 0 à 1</h2>
+      <ZeroUn />
+    </Slide>
+
+    <Slide bandeau="Recoder" droite={D}>
+      <h2 class="e">1 = ce que dit le nom</h2>
+      <SensEchelle nom="satisfaction" />
     </Slide>
 
     <Slide bandeau="En direct · recoder" droite={D}>
@@ -338,36 +402,23 @@ relig_income |>
       <Console lignes={c_satisfaction} />
     </Slide>
 
-    <Slide bandeau="En direct · recoder" droite={D}>
-      <h2 class="e">Le piège de if_else()</h2>
-      <Console lignes={c_piege} />
-    </Slide>
 
-    <Slide bandeau="En direct · recoder" droite={D}>
-      <h2 class="e">case_when(), encore</h2>
-      <Console lignes={c_corrige} />
-    </Slide>
 
     <!-- ================= LES VALEURS MANQUANTES ================= -->
     <Slide fond="encre" bandeau="Les valeurs manquantes" droite={D}>
       <h1 class="e">Les valeurs manquantes</h1>
       <hr class="filet" />
-      <p class="lead e">Un trou n’est pas un zéro.</p>
+      <p class="lead e">-99, « ne sait pas », NA et NaN.</p>
     </Slide>
 
     <Slide bandeau="Les valeurs manquantes" droite={D}>
-      <h2 class="e">Trois sortes de vide</h2>
-      <TroisVides />
+      <h2 class="e">Quatre sortes de vide</h2>
+      <QuatreVides />
     </Slide>
 
     <Slide bandeau="Les valeurs manquantes" droite={D}>
-      <h2 class="e">Le mystère du -99</h2>
-      <Mystere />
-    </Slide>
-
-    <Slide bandeau="En direct · les valeurs manquantes" droite={D}>
-      <h2 class="e">na_if(), puis na.rm</h2>
-      <Console lignes={c_na} />
+      <h2 class="e">La moyenne, pas à pas</h2>
+      <Moyenne />
     </Slide>
 
     <Slide bandeau="Les valeurs manquantes" droite={D}>
@@ -391,30 +442,13 @@ relig_income |>
       <Console lignes={c_propre} />
     </Slide>
 
-    <Slide bandeau="En direct · une base propre" droite={D}>
-      <h2 class="e">Combien de lignes complètes ?</h2>
-      <Console lignes={c_pertes} />
-    </Slide>
 
-    <Slide bandeau="En direct · le script" droite={D}>
-      <h2 class="e">Le script entier, 1 de 4</h2>
-      <Code src={script1} titre="seance4.R · à refaire chez vous" />
-    </Slide>
-
-    <Slide bandeau="En direct · le script" droite={D}>
-      <h2 class="e">Le script entier, 2 de 4</h2>
-      <Code src={script2} titre="seance4.R · la suite" />
-    </Slide>
-
-    <Slide bandeau="En direct · le script" droite={D}>
-      <h2 class="e">Le script entier, 3 de 4</h2>
-      <Code src={script3} titre="seance4.R · la suite" />
-    </Slide>
-
-    <Slide bandeau="En direct · le script" droite={D}>
-      <h2 class="e">Le script entier, 4 de 4</h2>
-      <Code src={script4} titre="seance4.R · la fin" />
-    </Slide>
+    {#each scripts as bout, i}
+      <Slide bandeau="En direct · le script" droite={D}>
+        <h2 class="e">Le script entier, {i + 1} de {scripts.length}</h2>
+        <Code src={bout} titre={i === 0 ? 'seance4.R · à refaire chez vous' : i === scripts.length - 1 ? 'seance4.R · la fin' : 'seance4.R · la suite'} />
+      </Slide>
+    {/each}
 
     <!-- ================= L'EXAMEN 1 ================= -->
     <Slide fond="encre" bandeau="Examen 1" droite={D}>
@@ -470,8 +504,6 @@ relig_income |>
   .entete-ul .dept { font-size: 0.62em; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.45; font-weight: 600; }
   .entete-ul .session { margin-left: auto; font-size: 0.72em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dk-accent); font-weight: 600; }
 
-  /* À main levée : trois questions, très grandes. */
-  .mains { list-style: none; padding: 0; margin: 0; counter-reset: m; display: flex; flex-direction: column; gap: 0.5em; }
-  .mains li { counter-increment: m; display: grid; grid-template-columns: 1.4em 1fr; gap: 0.6em; align-items: baseline; font-size: 1.7em; line-height: 1.25; }
-  .mains li::before { content: counter(m); color: var(--dk-accent); font-weight: 600; }
+  /* Le retour sur la semaine : une seule question, très grande. */
+  .grande-q { font-size: 2.6em; line-height: 1.2; max-width: 16em; margin-top: 1.4em; }
 </style>

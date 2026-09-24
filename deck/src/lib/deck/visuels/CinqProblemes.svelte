@@ -3,15 +3,22 @@
    * Les cinq problèmes communs des données désordonnées (Wickham 2014), tels
    * que le cours 4 de FAS1001 les présentait. Chacun a son petit glyphe (une
    * grille schématique où le défaut est en rouge) et le verbe qui le règle.
-   * Un problème par clic; le premier est là d'emblée.
+   * Un problème par clic; le premier est là d'emblée. Avec `tout`, les cinq
+   * sont là d'emblée, sans clic : c'est le récapitulatif qui suit les cinq
+   * diapos problème / solution.
+   *
+   * Le quatrième (le palmarès Billboard) se règle en un seul tableau : une
+   * ligne par chanson et par semaine. Son défaut est dans la ligne (plusieurs
+   * observations), là où celui du premier est dans les en-têtes.
    */
   import { brancherTemps } from '../temps.js';
+  let { tout = false } = $props();
 
   const P = [
     { t: 'Des valeurs dans les en-têtes', v: 'pivot_longer()' },
     { t: 'Plusieurs variables dans une colonne', v: 'pivot_longer(names_sep = )' },
     { t: 'Des variables dans les lignes et les colonnes', v: 'pivot_longer() + pivot_wider()' },
-    { t: 'Deux types d’observations dans un tableau', v: 'deux tableaux' },
+    { t: 'Plusieurs observations dans une ligne', v: 'pivot_longer()' },
     { t: 'Une observation dans plusieurs tableaux', v: 'bind_rows()' }
   ];
 
@@ -19,6 +26,7 @@
   let hote = $state(null);
   $effect(() => {
     if (!hote) return;
+    if (tout) { e = P.length - 1; return; }
     e = 0;
     return brancherTemps(hote, { total: P.length - 1, lire: () => e, ecrire: (v) => (e = v) });
   });
@@ -40,7 +48,7 @@
               (i === 0 && r === 0 && c > 0) ||
               (i === 1 && r === 0 && c > 1) ||
               (i === 2 && ((r === 0 && c > 1) || (r > 0 && c === 1))) ||
-              (i === 3 && c > 1)}
+              (i === 3 && r === 1 && c > 1)}
             <rect x={X0 + c * (W + 2)} y={Y0 + r * (H + 1)} width={W} height={H}
               class:tete={r === 0} class:rouge />
             {#if i === 1 && r === 0 && c > 1}
