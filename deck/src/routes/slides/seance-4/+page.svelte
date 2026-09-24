@@ -56,7 +56,7 @@
   import { CONSOLES, TIDY } from '$lib/data/seance4.js';
   import { BILLBOARD, CONSOLES_PLUS } from '$lib/data/seance4_plus.js';
 
-  const TOTAL = 57;
+  const TOTAL = 56;
   const D = 'POL-2000 · séance 4 · jeu 24 sept';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -190,12 +190,6 @@ relig_income |>
     </Slide>
 
     <!-- ================= 1 · DES DONNÉES TIDY ================= -->
-    <Slide fond="encre" bandeau="Des données tidy" droite={D}>
-      <p class="surtitre e">1 de 3</p>
-      <h1 class="e">Des données tidy</h1>
-      <hr class="filet" />
-    </Slide>
-
     <Slide bandeau="Des données tidy" droite={D}>
       <h2 class="e">Des données tidy</h2>
       <TidyIntro />
@@ -316,7 +310,6 @@ relig_income |>
 
     <!-- ================= 2 · LE CODEBOOK ================= -->
     <Slide fond="encre" bandeau="Le codebook" droite={D}>
-      <p class="surtitre e">2 de 3</p>
       <h1 class="e">Le codebook</h1>
       <hr class="filet" />
       <p class="lead e">Le dictionnaire des données.</p>
@@ -351,7 +344,6 @@ relig_income |>
 
     <!-- ================= 3 · RECODER ================= -->
     <Slide fond="encre" bandeau="Recoder" droite={D}>
-      <p class="surtitre e">3 de 3</p>
       <h1 class="e">Recoder</h1>
       <hr class="filet" />
       <p class="lead e">Des codes du sondage aux catégories de votre question.</p>
