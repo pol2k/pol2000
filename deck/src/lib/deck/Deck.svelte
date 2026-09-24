@@ -70,7 +70,8 @@
       }
       return;
     }
-    if (e.key === 'p' || e.key === 'P') {
+    // Un « p » seul ouvre la pause; Ctrl+P (ou Cmd+P) reste l'impression.
+    if ((e.key === 'p' || e.key === 'P') && !e.ctrlKey && !e.metaKey && !e.altKey) {
       e.preventDefault();
       pause = true;
       reste = 0;
