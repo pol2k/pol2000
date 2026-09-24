@@ -43,6 +43,7 @@
   import DeuxTableaux from '$lib/deck/visuels/DeuxTableaux.svelte';
   import Operateurs93 from '$lib/deck/visuels/Operateurs93.svelte';
   import CaseWhen from '$lib/deck/visuels/CaseWhen.svelte';
+  import CommentCaseWhen from '$lib/deck/visuels/CommentCaseWhen.svelte';
   import QuatreFacons from '$lib/deck/visuels/QuatreFacons.svelte';
   import Operationnaliser from '$lib/deck/visuels/Operationnaliser.svelte';
   import Recodage93 from '$lib/deck/visuels/Recodage93.svelte';
@@ -57,7 +58,7 @@
   import { CONSOLES, TIDY } from '$lib/data/seance4.js';
   import { BILLBOARD, CONSOLES_PLUS } from '$lib/data/seance4_plus.js';
 
-  const TOTAL = 57;
+  const TOTAL = 58;
   const D = 'POL-2000 · séance 4 · jeu 24 sept';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -392,6 +393,11 @@ relig_income |>
     <Slide bandeau="Recoder" droite={D}>
       <h2 class="e">1 = ce que dit le nom</h2>
       <SensEchelle nom="satisfaction" />
+    </Slide>
+
+    <Slide bandeau="Recoder" droite={D}>
+      <h2 class="e">Comment case_when() lit vos données</h2>
+      <CommentCaseWhen />
     </Slide>
 
     <Slide bandeau="En direct · recoder" droite={D}>
