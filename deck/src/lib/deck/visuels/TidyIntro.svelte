@@ -30,7 +30,7 @@
 
   <div class="droite">
     <blockquote class="cit">
-      « Les jeux de données bien rangés se ressemblent tous ; chaque jeu de données désordonné l’est à sa façon. »
+      « Les jeux de données bien rangés se ressemblent tous. Chaque jeu de données désordonné l’est à sa façon. »
       <cite>Hadley Wickham, « Tidy Data », 2014</cite>
     </blockquote>
 

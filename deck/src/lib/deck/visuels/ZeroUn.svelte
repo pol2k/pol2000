@@ -60,7 +60,7 @@
 </script>
 
 <div class="visuel zero-un" bind:this={hote}>
-  <svg viewBox="0 0 1000 440" role="img" aria-label="Trois variables aux échelles différentes : une satisfaction de 1 à 5 (échelle de Likert, de pas du tout à très satisfait.e), une échelle gauche-droite de 0 à 10 et un oui ou non. Elles sont toutes étirées sur la même règle, de 0 à 1 : 0 est le minimum, 1 le maximum. La satisfaction devient 0, 0,25, 0,5, 0,75 et 1; la gauche-droite 0, 0,1, 0,2 et ainsi de suite jusqu'à 1; le oui ou non 0 et 1. Le milieu, 3 sur 5 ou 5 sur 10, vaut 0,5.">
+  <svg viewBox="0 0 1000 440" role="img" aria-label="Trois variables aux échelles différentes : une satisfaction de 1 à 5 (échelle de Likert, de pas du tout à très satisfait.e), une échelle gauche-droite de 0 à 10 et un oui ou non. Elles sont toutes étirées sur la même règle, de 0 à 1 : 0 est le minimum, 1 le maximum. La satisfaction devient 0, 0,25, 0,5, 0,75 et 1, la gauche-droite 0, 0,1, 0,2 et ainsi de suite jusqu'à 1, le oui ou non 0 et 1. Le milieu, 3 sur 5 ou 5 sur 10, vaut 0,5.">
     <!-- Les repères communs, au dernier temps. -->
     <g class="commun" class:vu={e >= 2}>
       <line x1={X0} y1="30" x2={X0} y2={YAXE} class="guide" />

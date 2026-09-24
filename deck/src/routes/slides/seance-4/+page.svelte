@@ -101,7 +101,7 @@ df_clean$ses_education_detail <- as_factor(df_raw$cpso3)
 table(df_clean$ses_education, useNA = "ifany")   # toujours vérifier
 
 # 3. Votre travail : l'Étude électorale de 2025
-df_raw <- readRDS("ces2025.rds")   # sauvegardé à la séance 2 ; sinon : get_ces("2025")
+df_raw <- readRDS("ces2025.rds")   # sauvegardé à la séance 2, sinon get_ces("2025")
 df_clean <- data.frame(id = 1:nrow(df_raw))
 
 attr(df_raw$cps25_demsat, "label")
@@ -155,7 +155,7 @@ relig_income |>
 </script>
 
 <svelte:head>
-  <title>POL-2000 · Séance 4 — Préparer ses données avec R</title>
+  <title>POL-2000 · Séance 4 · Préparer ses données avec R</title>
 </svelte:head>
 
 <Deck total={TOTAL} logo="{base}/img/ulaval-logo.png">
