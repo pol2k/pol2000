@@ -4,70 +4,60 @@
    * téléchargé par ces::download_pdf_codebook("1993") depuis
    * borealisdata.ca), ouvert à la page 37 : l'entrée cpsg1, la TPS.
    *
-   * Piège du clavier : une iframe qui a le focus garde les flèches pour
-   * elle, et le deck (qui écoute sur window) ne les reçoit plus; la
-   * télécommande tombe à plat. Donc :
-   *   - au repos, l'iframe ne capte ni la souris ni le Tab (pointer-events:
-   *     none, tabindex -1) : impossible de lui donner le focus par erreur;
-   *   - un clic sur la page l'active (on peut alors défiler dans le PDF);
-   *   - dès que la souris sort du cadre, qu'on clique ailleurs ou qu'on
-   *     quitte la diapo, elle se désactive et le focus revient au deck.
+   * Pas d'iframe : certains navigateurs téléchargent le PDF dès que le deck
+   * s'ouvre au lieu de l'afficher. On montre donc de vraies pages du PDF,
+   * rendues en images par Ghostscript (gs -sDEVICE=pnggray -r110) : la
+   * couverture, puis les pages 36 à 38. Le cadre défile à la molette et
+   * s'ouvre à la page 37. Le PDF complet n'est qu'au bout d'un lien.
    */
   import { base } from '$app/paths';
 
   const PDF = `${base}/img/ces1993-codebook.pdf`;
+  const PAGES = [1, 36, 37, 38];
+  const CIBLE = 37;
 
-  let actif = $state(false);
-  let hote = $state(null);
-  let cadre = $state(null);
+  let ecran = $state(null);
+  let cible = $state(null);
 
-  function activer(ev) {
-    ev.stopPropagation();
-    actif = true;
+  // Ouvrir à la page 37 : on place le haut de la page en haut du cadre.
+  function placer() {
+    if (!ecran || !cible) return;
+    const dy = cible.getBoundingClientRect().top - ecran.getBoundingClientRect().top;
+    ecran.scrollTop += dy - 12;
   }
-
-  function desactiver() {
-    if (!actif) return;
-    actif = false;
-    // Rendre le clavier au deck : on retire le focus de l'iframe.
-    const deck = hote?.closest('.deck');
-    if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
-    window.focus();
-    deck?.focus({ preventScroll: true });
-  }
-
-  $effect(() => {
-    if (!hote) return;
-    const deck = hote.closest('.deck');
-    const diapo = hote.closest('.diapo');
-    if (!deck || !diapo) return;
-    // Un clic ailleurs sur la diapo désactive aussi.
-    const ailleurs = (ev) => { if (!cadre?.contains(ev.target)) desactiver(); };
-    diapo.addEventListener('click', ailleurs);
-    deck.addEventListener('scroll', desactiver, { passive: true });
-    return () => {
-      diapo.removeEventListener('click', ailleurs);
-      deck.removeEventListener('scroll', desactiver);
-    };
-  });
+  // Si l'image est déjà en cache, onload peut partir avant le montage.
+  $effect(() => { if (cible?.complete) placer(); });
 </script>
 
-<div class="visuel pdf93" bind:this={hote}>
-  <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-  <div class="ecran" role="presentation" class:actif bind:this={cadre} onclick={activer} onmouseleave={desactiver}>
-    <iframe src="{PDF}#page=37&view=FitH&navpanes=0" title="Codebook de l'Étude électorale canadienne 1993, page 37 : l'entrée cpsg1 sur la TPS" tabindex="-1"></iframe>
+<div class="visuel pdf93">
+  <div class="barre">
+    <span class="fichier">ces1993-codebook.pdf</span>
+    <span class="nb">p. {CIBLE} / 153</span>
+  </div>
+  <div class="ecran" bind:this={ecran}>
+    {#each PAGES as p, i}
+      {#if i > 0 && p - PAGES[i - 1] > 1}
+        <p class="saut">pages {PAGES[i - 1] + 1} à {p - 1}</p>
+      {/if}
+      {#if p === CIBLE}
+        <img bind:this={cible} src="{base}/img/codebook-1993-p{p}.png" alt="Codebook 1993, page {p} : l'entrée cpsg1 sur la TPS" onload={placer} />
+      {:else}
+        <img src="{base}/img/codebook-1993-p{p}.png" alt="Codebook 1993, page {p}" />
+      {/if}
+    {/each}
   </div>
   <p class="source">
-    <a href="{PDF}#page=37" target="_blank" rel="noopener">Étude électorale canadienne 1993 · questionnaire de la campagne, p. 37</a>
+    Étude électorale canadienne 1993 · questionnaire de la campagne, p. 37 ·
+    <a href={PDF} target="_blank" rel="noopener">le PDF complet</a>
   </p>
 </div>
 
 <style>
   .pdf93 { display: flex; flex-direction: column; gap: 0.4em; }
-  .ecran { border: 3px solid var(--dk-encre); background: #fff; height: 62vh; cursor: pointer; transition: border-color 0.2s; }
-  .ecran.actif { border-color: var(--dk-accent); cursor: auto; }
-  iframe { display: block; width: 100%; height: 100%; border: 0; pointer-events: none; }
-  .ecran.actif iframe { pointer-events: auto; }
+  .barre { margin-bottom: -0.4em; display: flex; justify-content: space-between; background: var(--dk-encre); color: var(--dk-papier, #f4f4f0); padding: 0.35em 0.8em; font-size: 0.62em; letter-spacing: 0.08em; }
+  .ecran { border: 3px solid var(--dk-encre); border-top: 0; background: #d9d9d4; height: 58vh; overflow-y: auto; padding: 0.8em 0; display: flex; flex-direction: column; align-items: center; gap: 0.8em; }
+  .ecran img { display: block; width: 72%; height: auto; background: #fff; border: 2px solid var(--dk-encre); }
+  .saut { margin: 0; font-size: 0.6em; letter-spacing: 0.08em; color: var(--dk-gris); }
   .source { align-self: flex-end; margin: 0; font-size: 0.6em; letter-spacing: 0.06em; color: var(--dk-gris); }
   .source a { color: inherit; text-decoration: none; border-bottom: 2px solid var(--dk-filet); }
 </style>
