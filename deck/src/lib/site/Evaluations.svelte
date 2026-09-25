@@ -36,6 +36,12 @@
         <div class="corps">
           <h3>{e.nom}</h3>
           <p class="mode">{e.mode}{#if e.ouvre}{' · ouvre le '}{moyenne(e.ouvre)}{/if}</p>
+          {#if e.fichier}
+            <div class="fichier">
+              <a class="bouton rouge" href={e.fichier} download>Télécharger l'examen (.zip) <span class="fl">↓</span></a>
+              <span class="note">Décompressez le fichier avant de l'ouvrir. Sur Windows : clic droit, puis « Extraire tout ».</span>
+            </div>
+          {/if}
         </div>
         <div class="droite">
           <span class="poids">{e.poids} %</span>
@@ -72,6 +78,8 @@
   h3 { font-size: 1rem; line-height: 1.25; font-weight: 600; }
   li.passe h3 { color: var(--gris); }
   .mode { font-size: 0.78rem; color: var(--gris); margin-top: 0.15rem; }
+  .fichier { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.9rem; margin-top: 0.6rem; }
+  .fichier .note { font-size: 0.72rem; color: var(--gris); }
   .droite { display: flex; align-items: center; gap: 1.2rem; }
   .poids { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.03em; min-width: 3.2rem; text-align: right; }
   li.ex .poids { color: var(--encre); } li.tr .poids { color: var(--accent); } li.dc .poids { color: var(--gris); }

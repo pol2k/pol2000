@@ -72,9 +72,11 @@ export const PARTIES = [
  * groupe: ex examens (45 %) · tr travaux (45 %) · dc Datacamp (10 %).
  * `ouvre` marks the first day an evaluation is available (examen 1 only);
  * between `ouvre` and `date` its status is « en cours ».
+ * `fichier` (optional): download link for the evaluation's files.
  */
 export const EVALUATIONS = [
-  { id: 'examen1', nom: 'Examen 1 · Analyser des données avec R', court: 'Examen 1', groupe: 'ex', poids: 15, ouvre: '2026-09-24', date: '2026-10-04', heure: '23h59', mode: 'À distance, sur ordinateur · boîte de dépôt' },
+  { id: 'examen1', nom: 'Examen 1 · Analyser des données avec R', court: 'Examen 1', groupe: 'ex', poids: 15, ouvre: '2026-09-24', date: '2026-10-04', heure: '23h59', mode: 'À distance, sur ordinateur · boîte de dépôt',
+    fichier: 'https://github.com/pol2k/pol2000/releases/download/examen-1-a26/examen_1.zip' },
   { id: 'misession', nom: 'Travail de mi-session', court: 'Mi-session', groupe: 'tr', poids: 20, date: '2026-10-25', heure: '23h59', mode: 'Individuel · PDF, boîte de dépôt' },
   { id: 'datacamp1', nom: 'Datacamp · 1re partie', court: 'DC 1', groupe: 'dc', poids: 5, date: '2026-10-25', heure: '23h59', mode: 'Tous les devoirs de la première moitié' },
   { id: 'examen2', nom: 'Examen 2 · Les statistiques descriptives', court: 'Examen 2', groupe: 'ex', poids: 15, date: '2026-11-12', heure: '17h20 à 18h20', mode: 'En classe, après le cours · sur papier, à livre ouvert · aucun appareil' },
