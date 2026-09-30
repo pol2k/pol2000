@@ -61,6 +61,7 @@
   import MargeErreur from '$lib/deck/visuels/MargeErreur.svelte';
   import TheoremeCentral from '$lib/deck/visuels/TheoremeCentral.svelte';
   import EecCanada from '$lib/deck/visuels/EecCanada.svelte';
+  import Ponderation from '$lib/deck/visuels/Ponderation.svelte';
   import PaniersH0 from '$lib/deck/visuels/PaniersH0.svelte';
   import Grammaire from '$lib/deck/visuels/Grammaire.svelte';
   import GabaritGg from '$lib/deck/visuels/GabaritGg.svelte';
@@ -78,7 +79,7 @@
   import { CONSOLES } from '$lib/data/seance5.js';
   import { GGPLOT_NORMALE } from '$lib/data/seance5_normale.js';
 
-  const TOTAL = 71;
+  const TOTAL = 72;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -249,6 +250,11 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     <Slide bandeau="L’échantillon" droite={D}>
       <h2 class="e">La CES ressemble-t-elle au Canada ?</h2>
       <EecCanada />
+    </Slide>
+
+    <Slide bandeau="L’échantillon" droite={D}>
+      <h2 class="e">Pondérer, puis ratisser</h2>
+      <Ponderation />
     </Slide>
 
     <!-- ================= LA COURBE NORMALE ================= -->
