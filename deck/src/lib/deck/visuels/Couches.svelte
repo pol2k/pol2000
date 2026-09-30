@@ -29,22 +29,23 @@
   import { surlignerR } from '../surligner.js';
   import { GGPLOT } from '$lib/data/seance5.js';
 
-  let { etapes = [], messages = true, depart = '' } = $props();
+  // source : un autre objet de la même forme que GGPLOT (le quiz de la séance 5).
+  let { etapes = [], messages = true, depart = '', source = GGPLOT } = $props();
 
-  const lignesDe = (k) => GGPLOT[k].code.split('\n');
+  const lignesDe = (k) => source[k].code.split('\n');
   // Une ligne « déjà vue » : même texte, au « + » final et aux espaces près.
   const norme = (l) => l.trim().replace(/\s*\+$/, '');
 
   const ETAPES = $derived(
     etapes.map((k, i) => {
       const avant = i > 0 ? etapes[i - 1] : depart;
-      const vues = new Set(avant && GGPLOT[avant] ? lignesDe(avant).map(norme) : []);
+      const vues = new Set(avant && source[avant] ? lignesDe(avant).map(norme) : []);
       return {
         cle: k,
-        image: GGPLOT[k].image,
+        image: source[k].image,
         lignes: lignesDe(k).map((l) => ({ html: surlignerR(l) || '&nbsp;', neuve: !vues.has(norme(l)) })),
         // Un seul message arrive comme une chaîne, plusieurs comme un tableau.
-        messages: [].concat(GGPLOT[k].messages ?? [])
+        messages: [].concat(source[k].messages ?? [])
       };
     })
   );

@@ -6,13 +6,14 @@
    * Doctrine : moins de texte, plus de figure. Une idée par diapo, une phrase
    * parlée au plus; le reste se dessine et bouge.
    *
-   * Le fil. Avant la pause, l'inférence : ce qu'un échantillon dit d'une
-   * population (le hasard, la loi des grands nombres, la distribution
-   * d'échantillonnage, l'erreur type, le biais), puis le test d'hypothèse
-   * nulle sur l'exemple de la pomicultrice du livre (t, p, intervalle de
-   * confiance, les deux erreurs, ce que p ne dit pas). Après la pause,
-   * ggplot2 couche par couche, puis l'inférence en direct dans R, dessinée
-   * avec ggplot2.
+   * Le fil (remanié le 30 septembre 2026, pol-3ti) : R fait les calculs, la
+   * diapo montre l'idée. Pas de test t ici, il vient avec la régression.
+   * Avant la pause : l'échantillon et la population, la courbe normale et
+   * le quiz « Normale ou pas ? » sur de vraies données, les moyennes
+   * d'échantillons qui forment une cloche même quand les données n'en font
+   * pas une, le biais, la marge d'erreur (« 19 fois sur 20 »), puis « Est-ce
+   * le hasard ? » (H0, la pomicultrice, la valeur p en mots). Après la
+   * pause, ggplot2 couche par couche, puis tout ça en direct dans R.
    *
    * Le dispositif : les 20 180 répondant.e.s de l'Étude électorale
    * canadienne 2025 servent de population d'exercice. On connaît donc la
@@ -48,22 +49,12 @@
   import TroisTirages from '$lib/deck/visuels/TroisTirages.svelte';
   import MilleEchantillons from '$lib/deck/visuels/MilleEchantillons.svelte';
   import QuatreTailles from '$lib/deck/visuels/QuatreTailles.svelte';
-  import ErreurType from '$lib/deck/visuels/ErreurType.svelte';
-  import DansEntre from '$lib/deck/visuels/DansEntre.svelte';
   import Cible from '$lib/deck/visuels/Cible.svelte';
   import BiaisEchantillon from '$lib/deck/visuels/BiaisEchantillon.svelte';
   import Pomicultrice from '$lib/deck/visuels/Pomicultrice.svelte';
   import DeuxHypotheses from '$lib/deck/visuels/DeuxHypotheses.svelte';
   import Proces from '$lib/deck/visuels/Proces.svelte';
   import MondeH0 from '$lib/deck/visuels/MondeH0.svelte';
-  import StatT from '$lib/deck/visuels/StatT.svelte';
-  import ValeurP from '$lib/deck/visuels/ValeurP.svelte';
-  import Seuil from '$lib/deck/visuels/Seuil.svelte';
-  import IntervalleConfiance from '$lib/deck/visuels/IntervalleConfiance.svelte';
-  import Anneaux from '$lib/deck/visuels/Anneaux.svelte';
-  import TroisMesures from '$lib/deck/visuels/TroisMesures.svelte';
-  import HuitEtapes from '$lib/deck/visuels/HuitEtapes.svelte';
-  import DeuxErreurs from '$lib/deck/visuels/DeuxErreurs.svelte';
   import CeQuePNestPas from '$lib/deck/visuels/CeQuePNestPas.svelte';
   import Importance from '$lib/deck/visuels/Importance.svelte';
   import Grammaire from '$lib/deck/visuels/Grammaire.svelte';
@@ -71,25 +62,26 @@
   import Couches from '$lib/deck/visuels/Couches.svelte';
   import DansHorsAes from '$lib/deck/visuels/DansHorsAes.svelte';
   import ErreursGg from '$lib/deck/visuels/ErreursGg.svelte';
-  import LireTTest from '$lib/deck/visuels/LireTTest.svelte';
   import DeuxIC from '$lib/deck/visuels/DeuxIC.svelte';
   import MiSession from '$lib/deck/visuels/MiSession.svelte';
   import AvantS7 from '$lib/deck/visuels/AvantS7.svelte';
-  import { CONSOLES, TESTS } from '$lib/data/seance5.js';
+  import Cloche from '$lib/deck/visuels/Cloche.svelte';
+  import NormaleOuPas from '$lib/deck/visuels/NormaleOuPas.svelte';
+  import NycMoyennes from '$lib/deck/visuels/NycMoyennes.svelte';
+  import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
+  import { CONSOLES } from '$lib/data/seance5.js';
+  import { GGPLOT_NORMALE } from '$lib/data/seance5_normale.js';
 
-  const TOTAL = 68;
+  const TOTAL = 65;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
   const avec = (cle, notes = [], garder = null) =>
     CONSOLES[cle].map((l, i) => ({ ...l, note: notes[i] || '' })).filter((_, i) => !garder || garder.includes(i));
-  const pct = (x) => Math.round(x * 100);
   const c_echantillon = avec('echantillon', ['', 'Le vôtre sera différent.']);
-  const c_mille = avec('mille');
-  const c_naissance = avec('naissance', ['0 = né.e ailleurs, 1 = né.e au Canada']);
-  const c_petit = avec('petit', ['', `Sur 1 000 échantillons de 100, ${pct(TESTS.puissance100)}\u202F% trouvent la différence.`]);
+  const c_mille = avec('mille', [], [0, 1]);
   const c_partis_def = avec('partis', ['Les codes 1 à 5\u202F: les cinq grands partis.'], [0]);
-  const c_partis = avec('partis', [], [1, 2]);
+  const c_partis = avec('partis', ['et\u202F: R calcule de combien chaque moyenne peut bouger.'], [1, 2]);
   const c_sauver = avec('sauver');
 
   const script = `# POL-2000 · séance 5 · L'inférence statistique, et ggplot2
@@ -132,25 +124,24 @@ ggplot(partis, aes(x = age, y = gauche_droite, colour = vote)) +
   labs(x = "Âge", y = "Gauche (0) à droite (10)", colour = NULL) +
   theme_minimal()
 
-# 3. Un échantillon de 50 (le vôtre sera différent)
+# 3. Normale ou pas ?
+ggplot(faithful, aes(x = waiting)) +
+  geom_histogram(binwidth = 4)
+ggplot(morley, aes(x = Speed + 299000)) +
+  geom_histogram(binwidth = 40)
+
+# 4. Un échantillon de 50 (le vôtre sera différent)
 echantillon <- slice_sample(df_clean, n = 50)
 mean(echantillon$age)
 mean(df_clean$age)
 
-# 4. Mille échantillons
+# 5. Mille échantillons
 moyennes <- replicate(1000, mean(slice_sample(df_clean, n = 50)$age))
-sd(moyennes)
-sd(df_clean$age) / sqrt(50)
+mean(moyennes)
 ggplot(data.frame(moyennes), aes(x = moyennes)) +
   geom_histogram(binwidth = 0.5)
 
-# 5. Le test t
-t.test(df_clean$gauche_droite, mu = 5)
-t.test(gauche_droite ~ ne_canada, data = df_clean)
-petit <- slice_sample(df_clean, n = 100)
-t.test(gauche_droite ~ ne_canada, data = petit)
-
-# 6. Une moyenne par parti, avec son intervalle
+# 6. Une moyenne par parti, avec sa marge d'erreur
 moyennes_partis <- partis |>
   group_by(vote) |>
   summarise(moyenne = mean(gauche_droite),
@@ -165,8 +156,9 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
 
 # 7. À vous : la même chose, avec l'âge au lieu de la position gauche-droite.`;
   // Trop long pour une diapo à taille lisible : coupé avant le secours et
-  // avant « 1. », « 2. », « 3. », « 5. » et « 6. ».
-  const coupes = ['\n# Pas de fichier', '\n# 1. ', '\n# 2. ', '\n# 3. ', '\n# 5. ', '\n# 6. '].map((c) => script.indexOf(c));
+  // avant « 1. », « 2. », « 3. », « 4. » et « 6. ».
+  const coupes = ['\n# Pas de fichier', '\n# 1. ', '\n# 2. ', '\n# 3. ', '\n# 4. ', '\n# 6. '].map((c) => script.indexOf(c));
+  if (coupes.includes(-1)) throw new Error('seance-5 : une coupe du script est introuvable');
   const scripts = [0, ...coupes].map((d, i, t) => script.slice(i ? d + 1 : 0, t[i + 1]));
 </script>
 
@@ -238,6 +230,42 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <Leger2025 />
     </Slide>
 
+    <!-- ================= LA COURBE NORMALE ================= -->
+    <Slide bandeau="La courbe normale" droite={D}>
+      <h2 class="e">D’où vient la cloche</h2>
+      <Cloche />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Normale ou pas ?</h2>
+      <NormaleOuPas cle="michelson" />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Normale ou pas ?</h2>
+      <NormaleOuPas cle="nyc" />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Normale ou pas ?</h2>
+      <NormaleOuPas cle="bebes" />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Normale ou pas ?</h2>
+      <NormaleOuPas cle="rivieres" />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Normale ou pas ?</h2>
+      <NormaleOuPas cle="geyser" />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Normale ou pas ?</h2>
+      <NormaleOuPas cle="age" />
+    </Slide>
+
     <Slide bandeau="Le hasard" droite={D}>
       <h2 class="e">La loi des grands nombres</h2>
       <PileFace />
@@ -258,14 +286,9 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <QuatreTailles />
     </Slide>
 
-    <Slide bandeau="L’erreur type" droite={D}>
-      <h2 class="e">L’erreur type</h2>
-      <ErreurType />
-    </Slide>
-
-    <Slide bandeau="L’erreur type" droite={D}>
-      <h2 class="e">Dans l’échantillon, entre les échantillons</h2>
-      <DansEntre />
+    <Slide bandeau="Le hasard" droite={D}>
+      <h2 class="e">Même les bâtiments de New York</h2>
+      <NycMoyennes />
     </Slide>
 
     <Slide bandeau="Le biais" droite={D}>
@@ -278,71 +301,36 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <BiaisEchantillon />
     </Slide>
 
+    <Slide bandeau="La marge d’erreur" droite={D}>
+      <h2 class="e">19 fois sur 20</h2>
+      <DixNeufSurVingt />
+    </Slide>
+
     <!-- ================= 2 · LE TEST D'HYPOTHÈSE NULLE ================= -->
-    <Slide fond="encre" bandeau="Le test d’hypothèse" droite={D}>
+    <Slide fond="encre" bandeau="Est-ce le hasard ?" droite={D}>
       <h1 class="e">Le test d’hypothèse nulle</h1>
       <hr class="filet" />
       <p class="lead e">Mon résultat, est-ce le hasard ?</p>
     </Slide>
 
-    <Slide bandeau="Le test d’hypothèse" droite={D}>
+    <Slide bandeau="Est-ce le hasard ?" droite={D}>
       <h2 class="e">La pomicultrice</h2>
       <Pomicultrice />
     </Slide>
 
-    <Slide bandeau="Le test d’hypothèse" droite={D}>
+    <Slide bandeau="Est-ce le hasard ?" droite={D}>
       <h2 class="e">Deux hypothèses</h2>
       <DeuxHypotheses />
     </Slide>
 
-    <Slide bandeau="Le test d’hypothèse" droite={D}>
+    <Slide bandeau="Est-ce le hasard ?" droite={D}>
       <h2 class="e">Présumée vraie</h2>
       <Proces />
     </Slide>
 
-    <Slide bandeau="La statistique t" droite={D}>
+    <Slide bandeau="La valeur p" droite={D}>
       <h2 class="e">Si H0 était vraie…</h2>
       <MondeH0 />
-    </Slide>
-
-    <Slide bandeau="La statistique t" droite={D}>
-      <h2 class="e">La statistique t</h2>
-      <StatT />
-    </Slide>
-
-    <Slide bandeau="La valeur p" droite={D}>
-      <h2 class="e">La valeur p</h2>
-      <ValeurP />
-    </Slide>
-
-    <Slide bandeau="La valeur p" droite={D}>
-      <h2 class="e">Le seuil de 0,05</h2>
-      <Seuil />
-    </Slide>
-
-    <Slide bandeau="L’intervalle de confiance" droite={D}>
-      <h2 class="e">L’intervalle de confiance</h2>
-      <IntervalleConfiance />
-    </Slide>
-
-    <Slide bandeau="L’intervalle de confiance" droite={D}>
-      <h2 class="e">Le lancer d’anneaux</h2>
-      <Anneaux />
-    </Slide>
-
-    <Slide bandeau="Le test d’hypothèse" droite={D}>
-      <h2 class="e">Trois façons de dire la même chose</h2>
-      <TroisMesures />
-    </Slide>
-
-    <Slide bandeau="Le test d’hypothèse" droite={D}>
-      <h2 class="e">Le test, en huit étapes</h2>
-      <HuitEtapes />
-    </Slide>
-
-    <Slide bandeau="Les limites" droite={D}>
-      <h2 class="e">Deux façons de se tromper</h2>
-      <DeuxErreurs />
     </Slide>
 
     <Slide bandeau="Les limites" droite={D}>
@@ -426,6 +414,11 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <p class="lead e">Ordinateurs ouverts.</p>
     </Slide>
 
+    <Slide bandeau="En direct · normale ou pas" droite={D}>
+      <h2 class="e">Normale ou pas, dans R</h2>
+      <Couches etapes={['geyser', 'michelson']} source={GGPLOT_NORMALE} />
+    </Slide>
+
     <Slide bandeau="En direct · échantillonner" droite={D}>
       <h2 class="e">Votre échantillon de 50</h2>
       <Console lignes={c_echantillon} />
@@ -441,32 +434,17 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <Couches etapes={['histo']} />
     </Slide>
 
-    <Slide bandeau="En direct · t.test()" droite={D}>
-      <h2 class="e">Lire la sortie de t.test()</h2>
-      <LireTTest />
-    </Slide>
-
-    <Slide bandeau="En direct · t.test()" droite={D}>
-      <h2 class="e">Né.e.s ici, né.e.s ailleurs</h2>
-      <Console lignes={c_naissance} />
-    </Slide>
-
-    <Slide bandeau="En direct · t.test()" droite={D}>
-      <h2 class="e">Le même test, sur 100 personnes</h2>
-      <Console lignes={c_petit} />
-    </Slide>
-
-    <Slide bandeau="En direct · intervalles" droite={D}>
+    <Slide bandeau="En direct · marge d’erreur" droite={D}>
       <h2 class="e">Une moyenne par parti</h2>
       <Console lignes={c_partis} />
     </Slide>
 
-    <Slide bandeau="En direct · intervalles" droite={D}>
+    <Slide bandeau="En direct · marge d’erreur" droite={D}>
       <h2 class="e">Même code, deux tailles d’échantillon</h2>
       <DeuxIC />
     </Slide>
 
-    <Slide bandeau="En direct · intervalles" droite={D}>
+    <Slide bandeau="En direct · marge d’erreur" droite={D}>
       <h2 class="e">Sauvegarder le graphique</h2>
       <Console lignes={c_sauver} />
     </Slide>

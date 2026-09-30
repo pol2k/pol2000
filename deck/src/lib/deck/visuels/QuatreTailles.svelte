@@ -15,8 +15,9 @@
    *   0  n = 10.
    *   1  + n = 50.
    *   2  + n = 200.
-   *   3  + n = 1 000, et la règle, lue sur le passage de 50 à 200 :
-   *      4 fois plus de monde, environ 2 fois moins d'écart (2,55 → 1,19).
+   *   3  + n = 1 000, et la règle, en mots : plus de monde, des moyennes
+   *      plus serrées. Aucun chiffre d'écart à l'écran (séance 5 remaniée :
+   *      R fait les calculs, la diapo montre la forme).
    */
   import { brancherTemps } from '../temps.js';
   import { POP, BORNES, DISTRIBUTIONS } from '$lib/data/seance5.js';
@@ -32,7 +33,7 @@
 
   // L'axe commun : toutes les tranches de BORNES (30 à 70 ans).
   const AMIN = BORNES[0], AMAX = BORNES[BORNES.length - 1];
-  const X0 = 170, X1 = 790;
+  const X0 = 170, X1 = 940;
   const x = (v) => X0 + ((v - AMIN) / (AMAX - AMIN)) * (X1 - X0);
   const LARGE = x(AMIN + 1) - x(AMIN);
 
@@ -43,7 +44,6 @@
     const base = Y0 + HAUT + i * PAS;
     return {
       n: d.n,
-      ecart: d.ecartTypeDesMoyennes,
       base,
       batons: d.effectifs.map((c, j) => ({ a: BORNES[j], h: (c / max) * HAUT })).filter((b) => b.h > 0)
     };
@@ -51,13 +51,10 @@
   const AXE = RANGEES[RANGEES.length - 1].base;
   const XP = x(POP.moyenne);
 
-  // La règle, vérifiée sur les données : de 50 à 200, n est multiplié par 4.
-  const [, R50, R200] = RANGEES;
-  const RAPPORT = R50.ecart / R200.ecart;
 </script>
 
 <div class="visuel quatre-tailles" bind:this={hote}>
-  <svg viewBox="0 0 1000 470" role="img" aria-label="Les moyennes d’âge de mille échantillons, pour quatre tailles d’échantillon. Avec {DISTRIBUTIONS.map((d) => `${f(d.n)} personnes, l’écart entre les moyennes est de ${f(d.ecartTypeDesMoyennes, 2)} ans`).join(', avec ')}. Quatre fois plus de monde, environ deux fois moins d’écart.">
+  <svg viewBox="0 0 1000 470" role="img" aria-label="Les moyennes d’âge de mille échantillons, pour quatre tailles d’échantillon. Avec 10, 50, 200 puis 1 000 personnes, les moyennes se resserrent autour de la vraie moyenne.">
     <!-- La vraie moyenne, à travers les quatre rangées. -->
     <line x1={XP} y1={Y0 - 6} x2={XP} y2={AXE} class="qt-pop" />
 
@@ -68,7 +65,6 @@
           <rect x={x(b.a) + 1} y={r.base - b.h} width={LARGE - 2} height={b.h} class="qt-baton" />
         {/each}
         <line x1={X0} y1={r.base} x2={X1} y2={r.base} class="qt-sol" />
-        <text x={X1 + 24} y={r.base - HAUT / 2 + 9} class="qt-ecart">écart&#8239;: <tspan class="qt-chiffre" class:qt-rouge={i === 1 || i === 2}>{f(r.ecart, 2)}</tspan> ans</text>
       </g>
     {/each}
 
@@ -81,7 +77,7 @@
 
     <!-- Temps 3 : la règle. -->
     <g class="qt-regle" class:qt-vu={e >= 3}>
-      <text x="500" y="460" class="qt-regle-t">4 fois plus de monde, environ {f(RAPPORT, 0)} fois moins d’écart</text>
+      <text x="500" y="460" class="qt-regle-t">plus de monde, des moyennes plus serrées autour de la vérité</text>
     </g>
   </svg>
 </div>
@@ -95,9 +91,6 @@
   .qt-n { font-size: 24px; font-weight: 600; text-anchor: end; fill: var(--dk-encre); }
   .qt-baton { fill: var(--dk-encre); }
   .qt-sol { stroke: var(--dk-encre); stroke-width: 2.5; }
-  .qt-ecart { font-size: 21px; fill: var(--dk-gris); }
-  .qt-chiffre { font-weight: 600; fill: var(--dk-encre); }
-  .qt-rouge { fill: var(--dk-accent); }
   .qt-tick-l { stroke: var(--dk-encre); stroke-width: 2.5; }
   .qt-tick { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
   .qt-regle-t { font-size: 26px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }

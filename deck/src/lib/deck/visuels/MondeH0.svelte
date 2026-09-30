@@ -11,6 +11,10 @@
    *   0  La courbe et ce qu'elle représente.
    *   1  Un repère rouge à notre échantillon, POMMES.moyenne.
    *   2  Une question : serait-ce surprenant ?
+   *   3  Les deux queues au moins aussi loin de H0 que notre panier passent
+   *      au rouge : la valeur p, dite en mots (« moins de 5 fois sur 100 »,
+   *      arrondi vers le haut à partir de POMMES.p). Pas de t à l'écran : R
+   *      fait le calcul, la diapo montre l'idée.
    *
    * L'axe va de 90 à 110 g : la courbe, de h0 - 4 erreurs types à
    * h0 + 4 erreurs types, y tient entièrement.
@@ -22,7 +26,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
 
   const G0 = 90, G1 = 110, X0 = 60, X1 = 940;
@@ -38,6 +42,16 @@
   const TICKS = [90, 95, 100, 105, 110];
   const MINEURS = Array.from({ length: G1 - G0 + 1 }, (_, i) => G0 + i);
   const XE = x(POMMES.moyenne);
+  // Temps 3 : les deux queues au moins aussi loin de H0 que notre panier,
+  // découpées dans la même courbe. « Moins de k fois sur 100 » vient de POMMES.p.
+  const queue = (garder) => {
+    const q = PTS.filter(([px]) => garder(px));
+    if (!q.length) return '';
+    return 'M ' + q[0][0].toFixed(1) + ' ' + BASE + ' ' + q.map(([a, b]) => `L ${a.toFixed(1)} ${b.toFixed(1)}`).join(' ') + ' L ' + q[q.length - 1][0].toFixed(1) + ' ' + BASE + ' Z';
+  };
+  const XM = x(2 * POMMES.h0 - POMMES.moyenne);
+  const QUEUES = [queue((px) => px >= XE), queue((px) => px <= XM)];
+  const SUR100 = Math.ceil(POMMES.p * 100);
 </script>
 
 <div class="visuel monde-h0" bind:this={hote}>
@@ -65,7 +79,15 @@
     </g>
 
     <!-- Temps 2 : la question. -->
-    <text x="500" y="432" class="mh0-question mh0-etape" class:mh0-vu={e >= 2}>Serait-ce surprenant&#8239;?</text>
+    <text x="500" y="432" class="mh0-question mh0-etape" class:mh0-vu={e === 2}>Serait-ce surprenant&#8239;?</text>
+
+    <!-- Temps 3 : les queues, et la réponse en mots. -->
+    <g class="mh0-etape" class:mh0-vu={e >= 3}>
+      {#each QUEUES as d}<path {d} class="mh0-queue" />{/each}
+      <line x1={XM} y1={BASE} x2={XM} y2="300" class="mh0-miroir" />
+      <text x={XE + 14} y="290" class="mh0-p">la valeur p</text>
+      <text x="500" y="432" class="mh0-reponse">Si H0 était vraie&#8239;: moins de {SUR100} fois sur 100.</text>
+    </g>
   </svg>
 </div>
 
@@ -87,6 +109,10 @@
   .mh0-lab { font-size: 21px; fill: var(--dk-encre); }
   .mh0-val { font-size: 34px; font-weight: 600; fill: var(--dk-accent); }
   .mh0-question { font-size: 30px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
+  .mh0-queue { fill: var(--dk-accent); opacity: 0.85; }
+  .mh0-miroir { stroke: var(--dk-accent); stroke-width: 2; stroke-dasharray: 6 5; }
+  .mh0-p { font-size: 21px; font-weight: 600; fill: var(--dk-accent); }
+  .mh0-reponse { font-size: 28px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
   .mh0-etape { opacity: 0; transition: opacity 0.3s; }
   .mh0-etape.mh0-vu { opacity: 1; transition: opacity 0.5s; }
 

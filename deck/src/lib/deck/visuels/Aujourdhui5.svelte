@@ -28,7 +28,7 @@
 
   const STATIONS = [
     { x: 110, lignes: ['L’inférence'], picto: 'inf' },
-    { x: 320, lignes: ['Le test', 'd’hypothèse'], picto: 'test' },
+    { x: 320, lignes: ['Est-ce', 'le hasard ?'], picto: 'test' },
     { x: 680, lignes: ['ggplot2'], picto: 'gg' },
     { x: 890, lignes: ['En direct', 'dans R'], picto: 'r' }
   ];
@@ -37,7 +37,7 @@
 </script>
 
 <div class="visuel aujourdhui5">
-  <svg viewBox="0 0 1000 300" role="img" aria-label="La séance en cinq temps, de gauche à droite : l’inférence, le test d’hypothèse, la pause, ggplot2, puis en direct dans R.">
+  <svg viewBox="0 0 1000 300" role="img" aria-label="La séance en cinq temps, de gauche à droite : l’inférence, est-ce le hasard, la pause, ggplot2, puis en direct dans R.">
     <!-- La ligne, coupée par la pause. -->
     <path d="M 40 {YR} H 458" pathLength="1" class="aj-rail" />
     <path d="M 542 {YR} H 958" pathLength="1" class="aj-rail aj-rail-2" />

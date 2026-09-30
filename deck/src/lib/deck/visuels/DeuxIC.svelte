@@ -69,7 +69,7 @@
       </figure>
     {/each}
   </div>
-  <div class="di-fin" class:di-vu={e >= 2}>Moins de monde, des intervalles plus larges.</div>
+  <div class="di-fin" class:di-vu={e >= 2}>Moins de monde, des fourchettes plus larges : plus dur de dire que ce n’est pas le hasard.</div>
 </div>
 
 <style>
