@@ -210,21 +210,6 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <p class="lead e">Dire quelque chose du grand à partir du petit.</p>
     </Slide>
 
-    <Slide bandeau="L’inférence · rappel" droite={D}>
-      <h2 class="e">Le but : l’inférence</h2>
-      <Inference />
-    </Slide>
-
-    <Slide bandeau="L’inférence" droite={D}>
-      <h2 class="e">Quatre mots</h2>
-      <Vocabulaire />
-    </Slide>
-
-    <Slide bandeau="L’échantillon" droite={D}>
-      <h2 class="e">Au hasard</h2>
-      <Aleatoire />
-    </Slide>
-
     <Slide bandeau="L’échantillon · 1936" droite={D}>
       <h2 class="e">1936 : le plus gros sondage de son temps</h2>
       <DigestHistoire />
@@ -238,6 +223,21 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     <Slide bandeau="L’échantillon · 1936" droite={D}>
       <h2 class="e">Qu’est-ce qui a mal tourné ?</h2>
       <DigestFiltres />
+    </Slide>
+
+    <Slide bandeau="L’inférence · rappel" droite={D}>
+      <h2 class="e">Le but : l’inférence</h2>
+      <Inference />
+    </Slide>
+
+    <Slide bandeau="L’inférence" droite={D}>
+      <h2 class="e">Quatre mots</h2>
+      <Vocabulaire />
+    </Slide>
+
+    <Slide bandeau="L’échantillon" droite={D}>
+      <h2 class="e">Au hasard</h2>
+      <Aleatoire />
     </Slide>
 
     <Slide bandeau="L’échantillon" droite={D}>
