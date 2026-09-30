@@ -55,7 +55,8 @@
   import Pomicultrice from '$lib/deck/visuels/Pomicultrice.svelte';
   import DeuxHypotheses from '$lib/deck/visuels/DeuxHypotheses.svelte';
   import Proces from '$lib/deck/visuels/Proces.svelte';
-  import MondeH0 from '$lib/deck/visuels/MondeH0.svelte';
+  import PourquoiH0 from '$lib/deck/visuels/PourquoiH0.svelte';
+  import PaniersH0 from '$lib/deck/visuels/PaniersH0.svelte';
   import Grammaire from '$lib/deck/visuels/Grammaire.svelte';
   import GabaritGg from '$lib/deck/visuels/GabaritGg.svelte';
   import Couches from '$lib/deck/visuels/Couches.svelte';
@@ -71,7 +72,7 @@
   import { CONSOLES } from '$lib/data/seance5.js';
   import { GGPLOT_NORMALE } from '$lib/data/seance5_normale.js';
 
-  const TOTAL = 63;
+  const TOTAL = 65;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -323,13 +324,23 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ?" droite={D}>
+      <h2 class="e">Pourquoi passer par H0 ?</h2>
+      <PourquoiH0 />
+    </Slide>
+
+    <Slide bandeau="Est-ce le hasard ?" droite={D}>
       <h2 class="e">Présumée vraie</h2>
       <Proces />
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ?" droite={D}>
       <h2 class="e">Si H0 était vraie…</h2>
-      <MondeH0 />
+      <PaniersH0 panier={105} />
+    </Slide>
+
+    <Slide bandeau="Est-ce le hasard ?" droite={D}>
+      <h2 class="e">Et si son panier avait pesé 102 g ?</h2>
+      <PaniersH0 panier={102} />
     </Slide>
 
 

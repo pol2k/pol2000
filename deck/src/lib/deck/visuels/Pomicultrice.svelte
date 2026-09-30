@@ -10,8 +10,8 @@
    *      par un petit générateur congruentiel à graine fixe, pas Math.random),
    *      rougissent et vont dans le panier. Leur place dans le verger reste
    *      vide.
-   *   2  Les deux nombres de l'échantillon : POMMES.moyenne et
-   *      POMMES.ecartType (la racine de la variance, 300, du livre).
+   *   2  Le poids moyen du panier : POMMES.moyenne. (L'écart type n'est plus
+   *      à l'écran depuis le 30 septembre 2026 : la simulation le porte.)
    *   3  La question : ces grammes de plus suffisent-ils pour conclure ?
    *
    * Tous les nombres viennent de POMMES (src/lib/data/seance5.js).
@@ -87,7 +87,6 @@
     <!-- Temps 2 : les deux nombres. -->
     <g class="pom-etape" class:pom-vu={e >= 2}>
       <text x="622" y="384" class="pom-nombre">moyenne&#8239;: {POMMES.moyenne} g</text>
-      <text x="622" y="422" class="pom-nombre">écart type&#8239;: {fr(POMMES.ecartType, 1)} g</text>
     </g>
 
     <!-- Temps 3 : la question. -->

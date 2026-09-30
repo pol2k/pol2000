@@ -4,7 +4,8 @@
 # tapé à la main : tous les nombres viennent des données ci-dessous. Depuis
 # deck/ :
 #
-#   CES2025_RDS=/tmp/ces2025.rds NYC_CSV=/tmp/nyc_hauteurs.csv Rscript outils/seance5_normale.R
+#   CES2025_RDS=/tmp/ces2025.rds NYC_CSV=/tmp/nyc_hauteurs.csv \
+#   STATCAN_CSV=/tmp/17100005.csv Rscript outils/seance5_normale.R
 #
 # Sans NYC_CSV, les hauteurs sont téléchargées de NYC Open Data (environ
 # 1,1 million de lignes). Sans CES2025_RDS, ces::get_ces("2025").
@@ -125,12 +126,59 @@ for (i in seq_along(sondages)) sondages[[i]]$couvre <- !rate(sondages[[i]])
 SONDAGE <- list(population = length(liberal), vrai = round(vrai, 4), n = 1000, graine = graine,
                 sondages = sondages, couvrent = sum(sapply(sondages, `[[`, "couvre")))
 
-# ---- 4 bis. La pomicultrice, unilatérale : elle veut prouver que ses
-#      pommes pèsent PLUS de 100 g. Mêmes nombres que seance5_data.R (n = 50,
-#      moyenne 105 g, variance 300, Arel-Bundock 2021, p. 62-63); ici, la
-#      valeur p d'un seul côté.
-t_pom <- (105 - 100) / (sqrt(300) / sqrt(50))
-POMME_UNI <- list(t = t_pom, p = pt(t_pom, df = 49, lower.tail = FALSE))
+# ---- 4 bis. Le monde de H0, pour la pomicultrice (exemple fictif
+#      d'Arel-Bundock 2021, p. 62-63 : paniers de 50 pommes, variance 300).
+#      Si H0 était vraie, ses pommes seraient ordinaires : 100 g en moyenne.
+#      On simule 1 000 paniers de 50 pommes fictives dans ce monde-là, et on
+#      compte ceux qui pèsent autant que son panier (105 g), puis 102 g.
+#      Poids des pommes : loi normale de moyenne 100 g et d'écart type
+#      racine(300) g, comme dans le livre. Le compte est celui que la graine
+#      donne, sans retouche.
+set.seed(54)
+paniers <- replicate(1000, mean(rnorm(50, mean = 100, sd = sqrt(300))))
+PANIERS <- c(list(moyennes = round(paniers, 2),
+                  auMoins105 = sum(paniers >= 105), auMoins102 = sum(paniers >= 102)),
+             compter(paniers, 90, 110, 0.5))
+
+# ---- 4 ter. Le théorème central limite, sur trois formes : les moyennes de
+#      1 000 échantillons de 50 pétales d'iris (sans remise, parmi les 150).
+set.seed(56)
+m_iris <- replicate(1000, mean(sample(iris$Petal.Length, 50)))
+b_iris <- seq(min(m_iris), max(m_iris), length.out = 31)
+IRIS_MOYENNES <- list(n = 50, bornes = round(b_iris, 3),
+                      effectifs = as.integer(table(cut(m_iris, b_iris, include.lowest = TRUE))))
+
+# ---- 4 quater. L'EEC ressemble-t-elle au Canada ? L'âge des répondant.e.s
+#      (brut, puis pondéré par cps25_weight_general_all, 61 poids manquants
+#      retirés) contre Statistique Canada, tableau 17-10-0005-01, estimations
+#      au 1er juillet 2025, 18 ans et plus, téléchargé le 30 septembre 2026.
+#      Le fichier (39 Mo) reste dans /tmp : seuls les pourcentages sont
+#      exportés.
+statcan_csv <- Sys.getenv("STATCAN_CSV")
+if (!nzchar(statcan_csv) || !file.exists(statcan_csv)) {
+  zip <- file.path(tempdir(), "17100005-eng.zip")
+  download.file("https://www150.statcan.gc.ca/n1/tbl/csv/17100005-eng.zip", zip, quiet = TRUE)
+  statcan_csv <- unzip(zip, "17100005.csv", exdir = tempdir())
+}
+sc <- read.csv(statcan_csv, check.names = FALSE)
+names(sc)[1] <- "REF_DATE"
+sc <- sc[sc$REF_DATE == 2025 & sc$GEO == "Canada" & sc$Gender == "Total - gender" &
+         grepl("^[0-9]+ years?$|^100 years and older$", sc$`Age group`), ]
+sc$age <- as.numeric(sub(" .*", "", sc$`Age group`))
+sc <- sc[sc$age >= 18, ]
+br <- c(seq(18, 88, 5), 200)
+parts <- function(v, poids) {
+  ok <- !is.na(v) & !is.na(poids)
+  t <- tapply(poids[ok], cut(v[ok], br, right = FALSE), sum)
+  round(100 * as.numeric(t) / sum(t), 1)
+}
+poids_eec <- as.numeric(df_raw$cps25_weight_general_all)
+RECENSEMENT <- list(
+  groupes = c(paste0(head(br, -2), " à ", head(br, -2) + 4), paste0(br[length(br) - 1], " et +")),
+  statcan = parts(sc$age, sc$VALUE),
+  eecBrut = parts(age, rep(1, length(age))),
+  eecPondere = parts(age, poids_eec)
+)
 
 # ---- 5. Le quiz dans R, en direct : deux histogrammes que la salle refait.
 rendre <- function(nom, code, largeur = 6.4, hauteur = 4) {
@@ -165,8 +213,12 @@ out <- c(
   paste0("export const NYC_MOYENNES = ", J(NYC_MOYENNES), ";"),
   "/* Vingt sondages de 1 000 parmi les répondant.e.s qui déclarent un parti : la part libérale et sa marge. */",
   paste0("export const SONDAGE = ", J(SONDAGE), ";"),
-  "/* La pomicultrice, d'un seul côté (plus lourdes que 100 g) : t et p calculés par R. */",
-  paste0("export const POMME_UNI = ", J(POMME_UNI), ";"),
+  "/* Le monde de H0 : 1 000 paniers de 50 pommes fictives de 100 g en moyenne. */",
+  paste0("export const PANIERS = ", J(PANIERS), ";"),
+  "/* Les moyennes de 1 000 échantillons de 50 pétales d'iris. */",
+  paste0("export const IRIS_MOYENNES = ", J(IRIS_MOYENNES), ";"),
+  "/* L'âge : Statistique Canada (1er juillet 2025) contre l'EEC brute et pondérée, en %. */",
+  paste0("export const RECENSEMENT = ", J(RECENSEMENT), ";"),
   "/* Les pétales d'iris, refaits dans R : le code, l'image, les messages de R. */",
   paste0("export const GGPLOT_NORMALE = ", J(GGPLOT_NORMALE), ";")
 )

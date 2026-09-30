@@ -9,8 +9,8 @@
    *      pommes ordinaires, POMMES.h0 grammes, le reste est du hasard.
    *   1  Un exemple politique, dans le même sens : H1, un lien; H0, pas de
    *      lien. Les deux exemples restent visibles, côte à côte.
-   *   2  Une ligne sous les cartes : c'est à nous de prouver H1, alors on
-   *      présume H0 et on cherche à la rejeter.
+   *   (La stratégie, « on présume H0 et on cherche à la rejeter », a sa propre
+   *   diapo depuis le 30 septembre 2026 : PourquoiH0.svelte.)
    *
    * Remanié le 30 septembre 2026 : l'ancienne H1 (« n'est pas de 100 g »)
    * se lisait à l'envers de l'exemple politique.
@@ -25,7 +25,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 1, lire: () => e, ecrire: (v) => (e = v) });
   });
 </script>
 
@@ -42,7 +42,6 @@
       <p class="dhy-ex dhy-pol" class:dhy-vu={e >= 1}>L’âge et l’intérêt pour la politique ne sont pas liés.</p>
     </div>
   </div>
-  <p class="dhy-ligne" class:dhy-vu={e >= 2}>C’est à nous de prouver H1. Alors on présume H0, et on cherche à la <span class="dhy-rouge">rejeter</span>.</p>
   <span class="dhy-src">Arel-Bundock (2021, p. 67)</span>
 </div>
 
