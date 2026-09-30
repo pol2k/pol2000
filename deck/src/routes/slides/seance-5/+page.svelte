@@ -56,6 +56,9 @@
   import DeuxHypotheses from '$lib/deck/visuels/DeuxHypotheses.svelte';
   import Proces from '$lib/deck/visuels/Proces.svelte';
   import PourquoiH0 from '$lib/deck/visuels/PourquoiH0.svelte';
+  import MargeErreur from '$lib/deck/visuels/MargeErreur.svelte';
+  import TheoremeCentral from '$lib/deck/visuels/TheoremeCentral.svelte';
+  import EecCanada from '$lib/deck/visuels/EecCanada.svelte';
   import PaniersH0 from '$lib/deck/visuels/PaniersH0.svelte';
   import Grammaire from '$lib/deck/visuels/Grammaire.svelte';
   import GabaritGg from '$lib/deck/visuels/GabaritGg.svelte';
@@ -72,7 +75,7 @@
   import { CONSOLES } from '$lib/data/seance5.js';
   import { GGPLOT_NORMALE } from '$lib/data/seance5_normale.js';
 
-  const TOTAL = 65;
+  const TOTAL = 68;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -230,6 +233,11 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <Leger2025 />
     </Slide>
 
+    <Slide bandeau="L’échantillon" droite={D}>
+      <h2 class="e">L’EEC ressemble-t-elle au Canada ?</h2>
+      <EecCanada />
+    </Slide>
+
     <!-- ================= LA COURBE NORMALE ================= -->
     <Slide bandeau="La courbe normale" droite={D}>
       <h2 class="e">La planche de Galton</h2>
@@ -291,6 +299,11 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <NycMoyennes />
     </Slide>
 
+    <Slide bandeau="Le hasard" droite={D}>
+      <h2 class="e">Le théorème central limite</h2>
+      <TheoremeCentral />
+    </Slide>
+
     <Slide bandeau="Le biais" droite={D}>
       <h2 class="e">Le biais et la variance</h2>
       <Cible />
@@ -299,6 +312,11 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     <Slide bandeau="Le biais" droite={D}>
       <h2 class="e">Ne sonder que les passionné.e.s</h2>
       <BiaisEchantillon />
+    </Slide>
+
+    <Slide bandeau="La marge d’erreur" droite={D}>
+      <h2 class="e">La marge d’erreur</h2>
+      <MargeErreur />
     </Slide>
 
     <Slide bandeau="La marge d’erreur" droite={D}>
