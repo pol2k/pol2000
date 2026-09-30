@@ -81,7 +81,7 @@
   const c_echantillon = avec('echantillon', ['', 'Le vôtre sera différent.']);
   const c_mille = avec('mille', [], [0, 1]);
   const c_partis_def = avec('partis', ['Les codes 1 à 5\u202F: les cinq grands partis.'], [0]);
-  const c_partis = avec('partis', ['et\u202F: R calcule de combien chaque moyenne peut bouger.'], [1, 2]);
+  const c_partis = avec('partis', ['', 'et\u202F: R calcule de combien chaque moyenne peut bouger.'], [1, 2]);
   const c_sauver = avec('sauver');
 
   const script = `# POL-2000 · séance 5 · L'inférence statistique, et ggplot2
