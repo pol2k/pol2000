@@ -6,9 +6,13 @@
    *
    *   0  L'accusée est présumée innocente | H0 est présumée vraie.
    *   1  Les preuves | les données.
-   *   2  Coupable hors de tout doute raisonnable | on rejette H0.
-   *   3  Pas assez de preuves : acquittée, pas « innocente » | on ne rejette
-   *      pas H0, on ne l'accepte jamais (Arel-Bundock 2021, p. 75).
+   *   2  Premier verdict possible. Soit assez de preuves : coupable | soit
+   *      des données très surprenantes : on rejette H0.
+   *   3  Second verdict possible. Soit pas assez de preuves : acquittée, mais
+   *      pas déclarée « innocente » | on ne rejette pas H0, on ne dit jamais
+   *      « H0 est vraie » (Arel-Bundock 2021, p. 75). Les « soit » disent
+   *      que ce sont deux issues, pas une suite (remanié le 30 septembre
+   *      2026 : la dernière ligne se lisait comme la conclusion).
    *
    * Les lignes à venir gardent leur place (opacité, visibilité) : la grille
    * ne bouge pas. Le filet rouge marque la ligne qu'on vient d'ajouter.
@@ -26,8 +30,8 @@
   const LIGNES = [
     { g: 'l’accusée est présumée innocente', d: 'H0 est présumée vraie' },
     { g: 'les preuves', d: 'les données' },
-    { g: 'coupable hors de tout doute raisonnable', d: 'on rejette H0' },
-    { g: `pas assez de preuves${N}: acquittée, pas «${N}innocente${N}»`, d: 'on ne rejette pas H0, on ne l’accepte jamais', src: 'Arel-Bundock (2021, p. 75)' }
+    { g: `soit assez de preuves${N}: coupable`, d: `soit des données très surprenantes${N}: on rejette H0` },
+    { g: `soit pas assez de preuves${N}: acquittée, mais pas déclarée «${N}innocente${N}»`, d: `soit pas assez surprenantes${N}: on ne rejette pas H0. On ne dit jamais «${N}H0 est vraie${N}».`, src: 'Arel-Bundock (2021, p. 75)' }
   ];
 </script>
 

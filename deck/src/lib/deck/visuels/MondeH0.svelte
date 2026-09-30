@@ -11,16 +11,18 @@
    *   0  La courbe et ce qu'elle représente.
    *   1  Un repère rouge à notre échantillon, POMMES.moyenne.
    *   2  Une question : serait-ce surprenant ?
-   *   3  Les deux queues au moins aussi loin de H0 que notre panier passent
-   *      au rouge : la valeur p, dite en mots (« moins de 5 fois sur 100 »,
-   *      arrondi vers le haut à partir de POMMES.p). Pas de t à l'écran : R
-   *      fait le calcul, la diapo montre l'idée.
+   *   3  La queue au moins aussi lourde que notre panier passe au rouge :
+   *      « environ k fois sur 100 », d'un seul côté parce que la pomicultrice
+   *      veut prouver « plus lourdes » (POMME_UNI, calculée par R, arrondie à
+   *      l'unité), puis le verdict au seuil de 5 sur 100. Ni t ni le mot
+   *      « valeur p » à l'écran : ils viennent avec la régression (séance 7).
    *
    * L'axe va de 90 à 110 g : la courbe, de h0 - 4 erreurs types à
    * h0 + 4 erreurs types, y tient entièrement.
    */
   import { brancherTemps } from '../temps.js';
   import { POMMES, STUDENT } from '$lib/data/seance5.js';
+  import { POMME_UNI } from '$lib/data/seance5_normale.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -49,13 +51,13 @@
     if (!q.length) return '';
     return 'M ' + q[0][0].toFixed(1) + ' ' + BASE + ' ' + q.map(([a, b]) => `L ${a.toFixed(1)} ${b.toFixed(1)}`).join(' ') + ' L ' + q[q.length - 1][0].toFixed(1) + ' ' + BASE + ' Z';
   };
-  const XM = x(2 * POMMES.h0 - POMMES.moyenne);
-  const QUEUES = [queue((px) => px >= XE), queue((px) => px <= XM)];
-  const SUR100 = Math.ceil(POMMES.p * 100);
+  // Une seule queue : la pomicultrice veut prouver « plus lourdes ».
+  const QUEUE = queue((px) => px >= XE);
+  const SUR100 = Math.round(POMME_UNI.p * 100);
 </script>
 
 <div class="visuel monde-h0" bind:this={hote}>
-  <svg viewBox="0 0 1000 445" role="img" aria-label="Une courbe en cloche centrée sur {POMMES.h0} g&#8239;: les moyennes de {POMMES.n} pommes, si le vrai poids moyen était de {POMMES.h0} g. Notre échantillon, {POMMES.moyenne} g, tombe loin dans la queue droite. Serait-ce surprenant&#8239;?">
+  <svg viewBox="0 0 1000 452" role="img" aria-label="Une courbe en cloche centrée sur {POMMES.h0} g&#8239;: les moyennes de {POMMES.n} pommes, si le vrai poids moyen était de {POMMES.h0} g. Notre échantillon, {POMMES.moyenne} g, tombe loin dans la queue droite. Serait-ce surprenant&#8239;?">
     <text x="500" y="38" class="mh0-titre">les moyennes de {POMMES.n} pommes, si le vrai poids moyen était de {POMMES.h0} g</text>
 
     <path d={AIRE} class="mh0-aire" />
@@ -83,10 +85,9 @@
 
     <!-- Temps 3 : les queues, et la réponse en mots. -->
     <g class="mh0-etape" class:mh0-vu={e >= 3}>
-      {#each QUEUES as d}<path {d} class="mh0-queue" />{/each}
-      <line x1={XM} y1={BASE} x2={XM} y2="300" class="mh0-miroir" />
-      <text x={XE + 14} y="290" class="mh0-p">la valeur p</text>
-      <text x="500" y="432" class="mh0-reponse">Si H0 était vraie&#8239;: moins de {SUR100} fois sur 100.</text>
+      <path d={QUEUE} class="mh0-queue" />
+      <text x="500" y="412" class="mh0-reponse">Si H0 était vraie, un panier aussi lourd&#8239;: environ {SUR100} fois sur 100.</text>
+      <text x="500" y="442" class="mh0-verdict">C’est moins de 5 fois sur 100&#8239;: on rejette H0.</text>
     </g>
   </svg>
 </div>
@@ -110,9 +111,8 @@
   .mh0-val { font-size: 34px; font-weight: 600; fill: var(--dk-accent); }
   .mh0-question { font-size: 30px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .mh0-queue { fill: var(--dk-accent); opacity: 0.85; }
-  .mh0-miroir { stroke: var(--dk-accent); stroke-width: 2; stroke-dasharray: 6 5; }
-  .mh0-p { font-size: 21px; font-weight: 600; fill: var(--dk-accent); }
-  .mh0-reponse { font-size: 28px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
+  .mh0-reponse { font-size: 24px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
+  .mh0-verdict { font-size: 24px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .mh0-etape { opacity: 0; transition: opacity 0.3s; }
   .mh0-etape.mh0-vu { opacity: 1; transition: opacity 0.5s; }
 

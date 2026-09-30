@@ -12,7 +12,8 @@
    * le quiz « Normale ou pas ? » sur de vraies données, les moyennes
    * d'échantillons qui forment une cloche même quand les données n'en font
    * pas une, le biais, la marge d'erreur (« 19 fois sur 20 »), puis « Est-ce
-   * le hasard ? » (H0, la pomicultrice, la valeur p en mots). Après la
+   * le hasard ? » (H0 et H1, le procès, le monde où H0 est vraie). Ni test t
+   * ni le mot « valeur p » : ils viennent avec la régression. Après la
    * pause, ggplot2 couche par couche, puis tout ça en direct dans R.
    *
    * Le dispositif : les 20 180 répondant.e.s de l'Étude électorale
@@ -55,8 +56,6 @@
   import DeuxHypotheses from '$lib/deck/visuels/DeuxHypotheses.svelte';
   import Proces from '$lib/deck/visuels/Proces.svelte';
   import MondeH0 from '$lib/deck/visuels/MondeH0.svelte';
-  import CeQuePNestPas from '$lib/deck/visuels/CeQuePNestPas.svelte';
-  import Importance from '$lib/deck/visuels/Importance.svelte';
   import Grammaire from '$lib/deck/visuels/Grammaire.svelte';
   import GabaritGg from '$lib/deck/visuels/GabaritGg.svelte';
   import Couches from '$lib/deck/visuels/Couches.svelte';
@@ -65,14 +64,14 @@
   import DeuxIC from '$lib/deck/visuels/DeuxIC.svelte';
   import MiSession from '$lib/deck/visuels/MiSession.svelte';
   import AvantS7 from '$lib/deck/visuels/AvantS7.svelte';
-  import Cloche from '$lib/deck/visuels/Cloche.svelte';
+  import Galton from '$lib/deck/visuels/Galton.svelte';
   import NormaleOuPas from '$lib/deck/visuels/NormaleOuPas.svelte';
   import NycMoyennes from '$lib/deck/visuels/NycMoyennes.svelte';
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { CONSOLES } from '$lib/data/seance5.js';
   import { GGPLOT_NORMALE } from '$lib/data/seance5_normale.js';
 
-  const TOTAL = 65;
+  const TOTAL = 63;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -124,11 +123,11 @@ ggplot(partis, aes(x = age, y = gauche_droite, colour = vote)) +
   labs(x = "Âge", y = "Gauche (0) à droite (10)", colour = NULL) +
   theme_minimal()
 
-# 3. Normale ou pas ?
-ggplot(faithful, aes(x = waiting)) +
-  geom_histogram(binwidth = 4)
-ggplot(morley, aes(x = Speed + 299000)) +
-  geom_histogram(binwidth = 40)
+# 3. Normale ou pas ? Les pétales d'iris, puis une couleur par espèce
+ggplot(iris, aes(x = Petal.Length)) +
+  geom_histogram(binwidth = 0.25)
+ggplot(iris, aes(x = Petal.Length, fill = Species)) +
+  geom_histogram(binwidth = 0.25)
 
 # 4. Un échantillon de 50 (le vôtre sera différent)
 echantillon <- slice_sample(df_clean, n = 50)
@@ -232,18 +231,23 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
 
     <!-- ================= LA COURBE NORMALE ================= -->
     <Slide bandeau="La courbe normale" droite={D}>
-      <h2 class="e">D’où vient la cloche</h2>
-      <Cloche />
+      <h2 class="e">La planche de Galton</h2>
+      <Galton />
     </Slide>
 
     <Slide bandeau="La courbe normale · quiz" droite={D}>
       <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="michelson" />
+      <NormaleOuPas cle="hommes" />
     </Slide>
 
     <Slide bandeau="La courbe normale · quiz" droite={D}>
       <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="nyc" />
+      <NormaleOuPas cle="adultes" />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Normale ou pas ?</h2>
+      <NormaleOuPas cle="iris" />
     </Slide>
 
     <Slide bandeau="La courbe normale · quiz" droite={D}>
@@ -253,12 +257,7 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
 
     <Slide bandeau="La courbe normale · quiz" droite={D}>
       <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="rivieres" />
-    </Slide>
-
-    <Slide bandeau="La courbe normale · quiz" droite={D}>
-      <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="geyser" />
+      <NormaleOuPas cle="nyc" />
     </Slide>
 
     <Slide bandeau="La courbe normale · quiz" droite={D}>
@@ -328,20 +327,12 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <Proces />
     </Slide>
 
-    <Slide bandeau="La valeur p" droite={D}>
+    <Slide bandeau="Est-ce le hasard ?" droite={D}>
       <h2 class="e">Si H0 était vraie…</h2>
       <MondeH0 />
     </Slide>
 
-    <Slide bandeau="Les limites" droite={D}>
-      <h2 class="e">Ce que p ne dit pas</h2>
-      <CeQuePNestPas />
-    </Slide>
 
-    <Slide bandeau="Les limites" droite={D}>
-      <h2 class="e">Significatif n’est pas important</h2>
-      <Importance />
-    </Slide>
 
     <!-- ================= PAUSE ================= -->
     <Slide fond="encre" bandeau="Pause" droite={D}>
@@ -416,7 +407,7 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
 
     <Slide bandeau="En direct · normale ou pas" droite={D}>
       <h2 class="e">Normale ou pas, dans R</h2>
-      <Couches etapes={['geyser', 'michelson']} source={GGPLOT_NORMALE} />
+      <Couches etapes={['iris', 'irisEspeces']} source={GGPLOT_NORMALE} />
     </Slide>
 
     <Slide bandeau="En direct · échantillonner" droite={D}>

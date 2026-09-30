@@ -4,11 +4,16 @@
    * (Arel-Bundock 2021, p. 67). Deux cartes côte à côte; celle de H0 porte
    * le filet rouge, c'est elle qu'on teste. Trois temps.
    *
-   *   0  L'exemple de la pomicultrice : le poids moyen est, ou n'est pas,
-   *      de POMMES.h0 grammes (src/lib/data/seance5.js).
-   *   1  Une seconde ligne apparaît dans chaque carte, un exemple politique :
-   *      l'âge et l'intérêt pour la politique. L'exemple des pommes pâlit.
-   *   2  Une ligne sous les cartes : on teste H0, on cherche à la rejeter.
+   *   0  L'exemple de la pomicultrice. H1, ce qu'elle veut prouver : ses
+   *      pommes pèsent plus de POMMES.h0 grammes. H0, le sceptique : des
+   *      pommes ordinaires, POMMES.h0 grammes, le reste est du hasard.
+   *   1  Un exemple politique, dans le même sens : H1, un lien; H0, pas de
+   *      lien. Les deux exemples restent visibles, côte à côte.
+   *   2  Une ligne sous les cartes : c'est à nous de prouver H1, alors on
+   *      présume H0 et on cherche à la rejeter.
+   *
+   * Remanié le 30 septembre 2026 : l'ancienne H1 (« n'est pas de 100 g »)
+   * se lisait à l'envers de l'exemple politique.
    *
    * Les lignes cachées gardent leur place (opacité, visibilité) : rien ne
    * saute d'un temps à l'autre.
@@ -27,17 +32,17 @@
 <div class="visuel deux-hyp" bind:this={hote}>
   <div class="dhy-cartes">
     <div class="dhy-carte">
-      <div class="dhy-tete"><span class="dhy-h">H1</span><span class="dhy-nom">· l’hypothèse</span></div>
-      <p class="dhy-ex" class:dhy-passe={e >= 1}>Le poids moyen des pommes n’est pas de {POMMES.h0}&#8239;g.</p>
+      <div class="dhy-tete"><span class="dhy-h">H1</span><span class="dhy-nom">· ce qu’on veut prouver</span></div>
+      <p class="dhy-ex">Mes pommes pèsent plus de {POMMES.h0}&#8239;g.</p>
       <p class="dhy-ex dhy-pol" class:dhy-vu={e >= 1}>L’intérêt pour la politique augmente avec l’âge.</p>
     </div>
     <div class="dhy-carte dhy-nulle">
-      <div class="dhy-tete"><span class="dhy-h">H0</span><span class="dhy-nom">· l’hypothèse nulle</span></div>
-      <p class="dhy-ex" class:dhy-passe={e >= 1}>Le poids moyen des pommes est de {POMMES.h0}&#8239;g.</p>
+      <div class="dhy-tete"><span class="dhy-h">H0</span><span class="dhy-nom">· rien de spécial, c’est le hasard</span></div>
+      <p class="dhy-ex">Mes pommes pèsent {POMMES.h0}&#8239;g, comme n’importe quelles pommes.</p>
       <p class="dhy-ex dhy-pol" class:dhy-vu={e >= 1}>L’âge et l’intérêt pour la politique ne sont pas liés.</p>
     </div>
   </div>
-  <p class="dhy-ligne" class:dhy-vu={e >= 2}>On teste H0. On cherche à la <span class="dhy-rouge">rejeter</span>.</p>
+  <p class="dhy-ligne" class:dhy-vu={e >= 2}>C’est à nous de prouver H1. Alors on présume H0, et on cherche à la <span class="dhy-rouge">rejeter</span>.</p>
   <span class="dhy-src">Arel-Bundock (2021, p. 67)</span>
 </div>
 
@@ -52,7 +57,6 @@
   .dhy-nom { font-size: 0.9em; font-weight: 600; color: var(--dk-gris); }
   .dhy-nulle .dhy-nom { color: var(--dk-encre); }
   .dhy-ex { margin: 0; font-size: 1em; line-height: 1.4; color: var(--dk-encre); transition: color 0.4s; }
-  .dhy-ex.dhy-passe { color: var(--dk-gris-2); }
   .dhy-pol { padding-top: 0.6em; border-top: 2px solid var(--dk-filet); opacity: 0; visibility: hidden; transform: translateY(0.4em); transition: opacity 0.4s, transform 0.4s, visibility 0s 0.4s; }
   .dhy-pol.dhy-vu { opacity: 1; visibility: visible; transform: none; transition: opacity 0.5s 0.2s, transform 0.5s 0.2s, visibility 0s; }
   .dhy-ligne { margin: 0.2em 0 0; font-size: 1.25em; font-weight: 600; opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0s 0.4s; }

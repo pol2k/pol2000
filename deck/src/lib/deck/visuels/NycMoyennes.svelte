@@ -1,7 +1,7 @@
 <script>
   /**
-   * Même les bâtiments de New York. En haut, la hauteur des bâtiments : une
-   * longue queue, pas une cloche (QUIZ, clé nyc). Dessous, trois rangées :
+   * Même les bâtiments de New York. En haut, la hauteur des bâtiments, de 0 à
+   * 40 m : une longue queue, pas une cloche (NYC_POP). Dessous, trois rangées :
    * les moyennes de 1 000 échantillons de 10, de 100 puis de 2 000 bâtiments
    * (NYC_MOYENNES). Chaque rangée a son propre axe, un zoom sur ses moyennes :
    * c'est la forme qu'on regarde, pas la largeur. Un pointillé marque la
@@ -15,7 +15,7 @@
    * Tout vient de src/lib/data/seance5_normale.js (outils/seance5_normale.R).
    */
   import { brancherTemps } from '../temps.js';
-  import { QUIZ, NYC_POP, NYC_MOYENNES } from '$lib/data/seance5_normale.js';
+  import { NYC_POP, NYC_MOYENNES } from '$lib/data/seance5_normale.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -35,9 +35,8 @@
       batons: effectifs.map((c, j) => ({ x: x(bornes[j]), w: x(bornes[j + 1]) - x(bornes[j]), h: (c / max) * HAUT }))
     };
   };
-  const NYC = QUIZ.find((q) => q.cle === 'nyc');
   const RANGEES = [
-    rangee(NYC.bornes, NYC.effectifs, 0, 'les bâtiments'),
+    rangee(NYC_POP.bornes, NYC_POP.effectifs, 0, 'les bâtiments'),
     ...NYC_MOYENNES.map((m, i) => rangee(m.bornes, m.effectifs, i + 1, `moyennes de ${f(m.n)}`))
   ];
 </script>
@@ -54,7 +53,7 @@
         <line x1={r.xp} y1={r.base - HAUT - 6} x2={r.xp} y2={r.base} class="nm-pop" class:nm-pop-r={i < 3} />
       </g>
     {/each}
-    <text x={X1} y={Y0 + 3 * PAS + 26} class="nm-zoom nm-rangee" class:nm-vu={e >= 1}>chaque rangée a son propre zoom · pointillé&#8239;: la vraie moyenne des bâtiments</text>
+    <text x={X1} y={Y0 + 3 * PAS + 26} class="nm-zoom nm-rangee" class:nm-vu={e >= 1}>chaque rangée a son propre zoom (en haut, de 0 à 40 m) · pointillé&#8239;: la vraie moyenne des bâtiments</text>
     <text x="500" y="458" class="nm-phrase nm-rangee" class:nm-vu={e >= 3}>Même quand les données ne font pas une cloche, les moyennes, elles, en font une.</text>
   </svg>
 </div>
