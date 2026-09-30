@@ -71,13 +71,14 @@
   import MiSession from '$lib/deck/visuels/MiSession.svelte';
   import AvantS7 from '$lib/deck/visuels/AvantS7.svelte';
   import Galton from '$lib/deck/visuels/Galton.svelte';
+  import CourbeNormale from '$lib/deck/visuels/CourbeNormale.svelte';
   import NormaleOuPas from '$lib/deck/visuels/NormaleOuPas.svelte';
   import NycMoyennes from '$lib/deck/visuels/NycMoyennes.svelte';
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { CONSOLES } from '$lib/data/seance5.js';
   import { GGPLOT_NORMALE } from '$lib/data/seance5_normale.js';
 
-  const TOTAL = 70;
+  const TOTAL = 71;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -254,6 +255,11 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     <Slide bandeau="La courbe normale" droite={D}>
       <h2 class="e">La planche de Galton</h2>
       <Galton />
+    </Slide>
+
+    <Slide bandeau="La courbe normale" droite={D}>
+      <h2 class="e">La courbe normale</h2>
+      <CourbeNormale />
     </Slide>
 
     <Slide bandeau="La courbe normale · quiz" droite={D}>

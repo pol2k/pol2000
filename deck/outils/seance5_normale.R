@@ -126,6 +126,10 @@ for (i in seq_along(sondages)) sondages[[i]]$couvre <- !rate(sondages[[i]])
 SONDAGE <- list(population = length(liberal), vrai = round(vrai, 4), n = 1000, graine = graine,
                 sondages = sondages, couvrent = sum(sapply(sondages, `[[`, "couvre")))
 
+# ---- 4 zéro. La courbe normale elle-même : la part des valeurs à moins
+#      d'un, puis de deux écarts types du centre (pnorm).
+NORMALE <- list(un = pnorm(1) - pnorm(-1), deux = pnorm(2) - pnorm(-2))
+
 # ---- 4 bis. Le monde de H0, pour la pomicultrice (exemple fictif
 #      d'Arel-Bundock 2021, p. 62-63 : paniers de 50 pommes, variance 300).
 #      Si H0 était vraie, ses pommes seraient ordinaires : 100 g en moyenne.
@@ -213,6 +217,8 @@ out <- c(
   paste0("export const NYC_MOYENNES = ", J(NYC_MOYENNES), ";"),
   "/* Vingt sondages de 1 000 parmi les répondant.e.s qui déclarent un parti : la part libérale et sa marge. */",
   paste0("export const SONDAGE = ", J(SONDAGE), ";"),
+  "/* La courbe normale : part des valeurs à moins d'un et de deux écarts types du centre. */",
+  paste0("export const NORMALE = ", J(NORMALE), ";"),
   "/* Le monde de H0 : 1 000 paniers de 50 pommes fictives de 100 g en moyenne. */",
   paste0("export const PANIERS = ", J(PANIERS), ";"),
   "/* Les moyennes de 1 000 échantillons de 50 pétales d'iris. */",
