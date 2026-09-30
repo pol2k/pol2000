@@ -234,7 +234,7 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     </Slide>
 
     <Slide bandeau="L’échantillon" droite={D}>
-      <h2 class="e">L’EEC ressemble-t-elle au Canada ?</h2>
+      <h2 class="e">La CES ressemble-t-elle au Canada ?</h2>
       <EecCanada />
     </Slide>
 

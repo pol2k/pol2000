@@ -18,7 +18,7 @@
    *
    * L'âge, vérifié le 30 septembre 2026 contre Statistique Canada (tableau
    * 17-10-0005-01, 1er juillet 2025, 18 ans et plus) : de 7 à 9 % par
-   * tranche de cinq ans jusque vers 70 ans, puis ça descend. L'EEC, bâtie
+   * tranche de cinq ans jusque vers 70 ans, puis ça descend. La CES, bâtie
    * avec des quotas d'âge, reproduit ce plateau. Elle surreprésente
    * toutefois les 53 à 72 ans (9,4 % des 58-62 ans contre 7,7 %) : la
    * petite bosse vers 60 ans vient du panel, pas de la population. Rien

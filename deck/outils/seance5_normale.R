@@ -97,7 +97,7 @@ NYC_MOYENNES <- lapply(c(10, 100, 2000), function(n) {
 NYC_POP <- c(list(plusDe40 = sum(nyc >= 40), brut = NYC_BRUT), compter(nyc, 0, 40, 2))
 
 # ---- 4. « 19 fois sur 20 » : 20 sondages de 1 000 personnes, tirés parmi les
-#         répondant.e.s de l'EEC 2025 qui déclarent un parti (sans « ne sait
+#         répondant.e.s de la CES 2025 qui déclarent un parti (sans « ne sait
 #         pas » ni réponse manquante). La marge d'erreur est celle que les
 #         maisons de sondage publient : 1,96 × racine(p(1 − p) / n).
 vote <- as_factor(df_raw$cps25_votechoice)
@@ -148,7 +148,7 @@ b_iris <- seq(min(m_iris), max(m_iris), length.out = 31)
 IRIS_MOYENNES <- list(n = 50, bornes = round(b_iris, 3),
                       effectifs = as.integer(table(cut(m_iris, b_iris, include.lowest = TRUE))))
 
-# ---- 4 quater. L'EEC ressemble-t-elle au Canada ? L'âge des répondant.e.s
+# ---- 4 quater. La CES ressemble-t-elle au Canada ? L'âge des répondant.e.s
 #      (brut, puis pondéré par cps25_weight_general_all, 61 poids manquants
 #      retirés) contre Statistique Canada, tableau 17-10-0005-01, estimations
 #      au 1er juillet 2025, 18 ans et plus, téléchargé le 30 septembre 2026.
@@ -217,7 +217,7 @@ out <- c(
   paste0("export const PANIERS = ", J(PANIERS), ";"),
   "/* Les moyennes de 1 000 échantillons de 50 pétales d'iris. */",
   paste0("export const IRIS_MOYENNES = ", J(IRIS_MOYENNES), ";"),
-  "/* L'âge : Statistique Canada (1er juillet 2025) contre l'EEC brute et pondérée, en %. */",
+  "/* L'âge : Statistique Canada (1er juillet 2025) contre la CES brute et pondérée, en %. */",
   paste0("export const RECENSEMENT = ", J(RECENSEMENT), ";"),
   "/* Les pétales d'iris, refaits dans R : le code, l'image, les messages de R. */",
   paste0("export const GGPLOT_NORMALE = ", J(GGPLOT_NORMALE), ";")

@@ -1,15 +1,15 @@
 <script>
   /**
-   * L'EEC ressemble-t-elle au Canada ? L'âge des répondant.e.s de l'Étude
+   * La CES ressemble-t-elle au Canada ? L'âge des répondant.e.s de l'Étude
    * électorale canadienne 2025 contre les estimations de Statistique Canada
    * (tableau 17-10-0005-01, 1er juillet 2025, 18 ans et plus), en % par
    * tranche de cinq ans. Tout vient de RECENSEMENT
    * (src/lib/data/seance5_normale.js, outils/seance5_normale.R). Trois temps.
    *
    *   0  Statistique Canada : des bâtons gris. Un plateau jusque vers 70 ans.
-   *   1  L'EEC brute : un trait rouge par tranche. Grâce aux quotas, proche.
+   *   1  La CES brute : un trait rouge par tranche. Grâce aux quotas, proche.
    *      Mais trop de 53 à 72 ans, pas assez de 18 à 27 ans ni de 83 ans et +.
-   *   2  L'EEC pondérée : un trait noir par tranche, qui se rapproche des
+   *   2  La CES pondérée : un trait noir par tranche, qui se rapproche des
    *      bâtons. La phrase : des quotas pour ressembler, des poids pour
    *      corriger le reste.
    */
@@ -31,17 +31,17 @@
 </script>
 
 <div class="visuel eec-canada" bind:this={hote}>
-  <svg viewBox="0 0 1000 490" role="img" aria-label="L’âge des adultes au Canada selon Statistique Canada, et dans l’Étude électorale canadienne, brute puis pondérée. Les deux dessinent un plateau jusque vers 70 ans. L’EEC brute a trop de 53 à 72 ans et pas assez de jeunes et de très âgés. Les poids corrigent la plus grande partie de l’écart.">
+  <svg viewBox="0 0 1000 490" role="img" aria-label="L’âge des adultes au Canada selon Statistique Canada, et dans l’Étude électorale canadienne, brute puis pondérée. Les deux dessinent un plateau jusque vers 70 ans. La CES brute a trop de 53 à 72 ans et pas assez de jeunes et de très âgés. Les poids corrigent la plus grande partie de l’écart.">
     <!-- La légende. -->
     <rect x={X0} y="14" width="22" height="16" class="ec-bat" />
     <text x={X0 + 32} y="29" class="ec-leg">Statistique Canada, 2025</text>
     <g class="ec-etape" class:ec-vu={e >= 1}>
       <line x1={X0 + 330} y1="22" x2={X0 + 356} y2="22" class="ec-brut" />
-      <text x={X0 + 366} y="29" class="ec-leg">EEC brute</text>
+      <text x={X0 + 366} y="29" class="ec-leg">CES brute</text>
     </g>
     <g class="ec-etape" class:ec-vu={e >= 2}>
       <line x1={X0 + 510} y1="22" x2={X0 + 536} y2="22" class="ec-pond" />
-      <text x={X0 + 546} y="29" class="ec-leg">EEC pondérée</text>
+      <text x={X0 + 546} y="29" class="ec-leg">CES pondérée</text>
     </g>
 
     {#each [0, 2, 4, 6, 8, 10] as p}
