@@ -44,7 +44,7 @@
   import Aujourdhui5 from '$lib/deck/visuels/Aujourdhui5.svelte';
   import Vocabulaire from '$lib/deck/visuels/Vocabulaire.svelte';
   import Aleatoire from '$lib/deck/visuels/Aleatoire.svelte';
-  import Digest1936 from '$lib/deck/visuels/Digest1936.svelte';
+  import DigestVerdict from '$lib/deck/visuels/DigestVerdict.svelte';
   import DigestHistoire from '$lib/deck/visuels/DigestHistoire.svelte';
   import DigestFiltres from '$lib/deck/visuels/DigestFiltres.svelte';
   import Leger2025 from '$lib/deck/visuels/Leger2025.svelte';
@@ -217,12 +217,12 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     </Slide>
 
     <Slide bandeau="L’échantillon · 1936" droite={D}>
-      <h2 class="e">Le résultat</h2>
-      <Digest1936 />
+      <h2 class="e">La prévision, puis la réalité</h2>
+      <DigestVerdict />
     </Slide>
 
     <Slide bandeau="L’échantillon · 1936" droite={D}>
-      <h2 class="e">Qu’est-ce qui a mal tourné ?</h2>
+      <h2 class="e">Qui le Digest a-t-il vraiment sondé ?</h2>
       <DigestFiltres />
     </Slide>
 
