@@ -15,6 +15,14 @@
    * (src/lib/data/seance5_normale.js, produit par outils/seance5_normale.R).
    * Le verdict est lu à l'œil, comme en classe (aucun test de normalité) :
    * il est écrit dans ce fichier, avec sa raison.
+   *
+   * L'âge, vérifié le 30 septembre 2026 contre Statistique Canada (tableau
+   * 17-10-0005-01, 1er juillet 2025, 18 ans et plus) : de 7 à 9 % par
+   * tranche de cinq ans jusque vers 70 ans, puis ça descend. L'EEC, bâtie
+   * avec des quotas d'âge, reproduit ce plateau. Elle surreprésente
+   * toutefois les 53 à 72 ans (9,4 % des 58-62 ans contre 7,7 %) : la
+   * petite bosse vers 60 ans vient du panel, pas de la population. Rien
+   * sur les baby-boomers, donc.
    */
   import { brancherTemps } from '../temps.js';
   import { QUIZ, TAILLES } from '$lib/data/seance5_normale.js';
@@ -71,7 +79,7 @@
       source: () => 'Étude électorale canadienne 2025',
       axe: 'âge (ans)', ticks: [20, 40, 60, 80, 100],
       verdict: `piège${N}: un plateau`,
-      pourquoi: () => [`Pas d’enfants${N}: on sonde les 18 ans et plus. Puis à peu près autant de monde`, `à chaque âge jusque vers 80 ans. La bosse vers 60 ans${N}: les baby-boomers.`]
+      pourquoi: () => [`Pas d’enfants${N}: on sonde les 18 ans et plus. Puis, comme au Canada,`, 'à peu près autant de monde à chaque âge jusque vers 70 ans. Ensuite, ça descend.']
     }
   };
   const T = $derived(TEXTE[cle]);
