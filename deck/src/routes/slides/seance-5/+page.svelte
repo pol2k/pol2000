@@ -45,6 +45,8 @@
   import Vocabulaire from '$lib/deck/visuels/Vocabulaire.svelte';
   import Aleatoire from '$lib/deck/visuels/Aleatoire.svelte';
   import Digest1936 from '$lib/deck/visuels/Digest1936.svelte';
+  import DigestHistoire from '$lib/deck/visuels/DigestHistoire.svelte';
+  import DigestFiltres from '$lib/deck/visuels/DigestFiltres.svelte';
   import Leger2025 from '$lib/deck/visuels/Leger2025.svelte';
   import PileFace from '$lib/deck/visuels/PileFace.svelte';
   import TroisTirages from '$lib/deck/visuels/TroisTirages.svelte';
@@ -75,7 +77,7 @@
   import { CONSOLES } from '$lib/data/seance5.js';
   import { GGPLOT_NORMALE } from '$lib/data/seance5_normale.js';
 
-  const TOTAL = 68;
+  const TOTAL = 70;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -223,9 +225,19 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
       <Aleatoire />
     </Slide>
 
-    <Slide bandeau="L’échantillon" droite={D}>
-      <h2 class="e">1936 : 2,3 millions de réponses</h2>
+    <Slide bandeau="L’échantillon · 1936" droite={D}>
+      <h2 class="e">1936 : le plus gros sondage de son temps</h2>
+      <DigestHistoire />
+    </Slide>
+
+    <Slide bandeau="L’échantillon · 1936" droite={D}>
+      <h2 class="e">Le résultat</h2>
       <Digest1936 />
+    </Slide>
+
+    <Slide bandeau="L’échantillon · 1936" droite={D}>
+      <h2 class="e">Qu’est-ce qui a mal tourné ?</h2>
+      <DigestFiltres />
     </Slide>
 
     <Slide bandeau="L’échantillon" droite={D}>
