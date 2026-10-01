@@ -51,6 +51,7 @@
   import Proces from '$lib/deck/visuels/Proces.svelte';
   import PourquoiH0 from '$lib/deck/visuels/PourquoiH0.svelte';
   import MargeErreur from '$lib/deck/visuels/MargeErreur.svelte';
+  import CalculMarge from '$lib/deck/visuels/CalculMarge.svelte';
   import EcartTypeCes from '$lib/deck/visuels/EcartTypeCes.svelte';
   import TroisIngredients from '$lib/deck/visuels/TroisIngredients.svelte';
   import TheoremeCentral from '$lib/deck/visuels/TheoremeCentral.svelte';
@@ -77,7 +78,7 @@
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { GG, GG_CONSOLE } from '$lib/data/seance5_ggplot.js';
 
-  const TOTAL = 57;
+  const TOTAL = 58;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // La console vient de R telle quelle (outils/seance5_ggplot.R); seules les notes sont d'ici.
@@ -254,6 +255,11 @@
     <Slide bandeau="La marge d’erreur" droite={D}>
       <h2 class="e">La marge d’erreur</h2>
       <MargeErreur />
+    </Slide>
+
+    <Slide bandeau="La marge d’erreur" droite={D}>
+      <h2 class="e">Le calcul, pas à pas</h2>
+      <CalculMarge />
     </Slide>
 
     <Slide bandeau="La marge d’erreur" droite={D}>
