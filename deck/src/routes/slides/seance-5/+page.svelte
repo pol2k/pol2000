@@ -62,6 +62,7 @@
   import TheoremeCentral from '$lib/deck/visuels/TheoremeCentral.svelte';
   import EecCanada from '$lib/deck/visuels/EecCanada.svelte';
   import Ponderation from '$lib/deck/visuels/Ponderation.svelte';
+  import PoidsColonne from '$lib/deck/visuels/PoidsColonne.svelte';
   import PaniersH0 from '$lib/deck/visuels/PaniersH0.svelte';
   import Grammaire from '$lib/deck/visuels/Grammaire.svelte';
   import GabaritGg from '$lib/deck/visuels/GabaritGg.svelte';
@@ -75,7 +76,7 @@
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { CONSOLES } from '$lib/data/seance5.js';
 
-  const TOTAL = 54;
+  const TOTAL = 55;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -169,8 +170,13 @@
     </Slide>
 
     <Slide bandeau="L’échantillon" droite={D}>
-      <h2 class="e">Pondérer, puis ratisser</h2>
+      <h2 class="e">Pondérer</h2>
       <Ponderation />
+    </Slide>
+
+    <Slide bandeau="L’échantillon" droite={D}>
+      <h2 class="e">Le poids, dans nos données</h2>
+      <PoidsColonne />
     </Slide>
 
     <!-- ================= LA COURBE NORMALE ================= -->

@@ -220,6 +220,29 @@ rendre <- function(nom, code, largeur = 6.4, hauteur = 4) {
     message = function(m) { messages <<- c(messages, trimws(conditionMessage(m))); invokeRestart("muffleMessage") })
   list(code = code, image = paste0("s5-n-", nom, ".png"), messages = unique(messages))
 }
+# ---- 4 quinquies. Le poids, une colonne de df_clean. Les six premières
+#      lignes, puis la moyenne d'âge brute et pondérée, telles que R les
+#      imprime (options(width = 100)). 61 répondant.e.s n'ont pas de poids :
+#      weighted.mean() rendrait NA, d'où le filter().
+df_p <- data.frame(id = 1:nrow(df_raw))
+df_p$age <- as.numeric(df_raw$cps25_age_in_years)
+df_p$gauche_droite <- na_if(as.numeric(df_raw$cps25_lr_scale_bef_1), -99)
+df_p$poids <- as.numeric(df_raw$cps25_weight_general_all)
+POIDS_LIGNES <- lapply(1:6, function(i) list(id = df_p$id[i], age = df_p$age[i],
+  gauche_droite = if (is.na(df_p$gauche_droite[i])) "NA" else as.character(df_p$gauche_droite[i]),
+  poids = sprintf("%.2f", df_p$poids[i])))
+sortie <- function(code) {
+  out <- capture.output(eval(parse(text = code), envir = list2env(list(df_clean = df_p), parent = globalenv())))
+  paste(out, collapse = "\n")
+}
+old_w <- options(width = 100)
+code_moy <- "df_clean |>\n  filter(!is.na(poids)) |>\n  summarise(brute = mean(age),\n            ponderee = weighted.mean(age, poids))"
+CONSOLE_POIDS <- list(
+  list(`in` = "df_clean$poids <- df_raw$cps25_weight_general_all", out = ""),
+  list(`in` = code_moy, out = sortie(code_moy))
+)
+options(old_w)
+
 # ---- Export.
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
 out <- c(
@@ -249,6 +272,9 @@ out <- c(
   paste0("export const IRIS_MOYENNES = ", J(IRIS_MOYENNES), ";"),
   "/* L'âge : Statistique Canada (1er juillet 2025) contre la CES brute et pondérée, en %. */",
   paste0("export const RECENSEMENT = ", J(RECENSEMENT), ";"),
+  "/* Le poids dans df_clean : six lignes, et la console de la moyenne brute et pondérée. */",
+  paste0("export const POIDS_LIGNES = ", J(POIDS_LIGNES), ";"),
+  paste0("export const CONSOLE_POIDS = ", J(CONSOLE_POIDS), ";"),
   "/* (Les histogrammes refaits en direct dans R ont été retirés le 1er octobre 2026.) */"
 )
 writeLines(out, file.path(ici, "..", "src", "lib", "data", "seance5_normale.js"))
