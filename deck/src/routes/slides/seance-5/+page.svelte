@@ -51,7 +51,6 @@
   import Proces from '$lib/deck/visuels/Proces.svelte';
   import PourquoiH0 from '$lib/deck/visuels/PourquoiH0.svelte';
   import MargeErreur from '$lib/deck/visuels/MargeErreur.svelte';
-  import EcartTypeNormale from '$lib/deck/visuels/EcartTypeNormale.svelte';
   import EcartTypeCes from '$lib/deck/visuels/EcartTypeCes.svelte';
   import TroisIngredients from '$lib/deck/visuels/TroisIngredients.svelte';
   import TheoremeCentral from '$lib/deck/visuels/TheoremeCentral.svelte';
@@ -68,7 +67,6 @@
   import AvantS7 from '$lib/deck/visuels/AvantS7.svelte';
   import Galton from '$lib/deck/visuels/Galton.svelte';
   import ClasseTaille from '$lib/deck/visuels/ClasseTaille.svelte';
-  import DeuxEcarts from '$lib/deck/visuels/DeuxEcarts.svelte';
   import DefiInference from '$lib/deck/visuels/DefiInference.svelte';
   import BudgetIntro from '$lib/deck/visuels/BudgetIntro.svelte';
   import EchantillonsFaciles from '$lib/deck/visuels/EchantillonsFaciles.svelte';
@@ -79,7 +77,7 @@
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { GG, GG_CONSOLE } from '$lib/data/seance5_ggplot.js';
 
-  const TOTAL = 59;
+  const TOTAL = 57;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // La console vient de R telle quelle (outils/seance5_ggplot.R); seules les notes sont d'ici.
@@ -251,16 +249,6 @@
     <Slide bandeau="L’écart type" droite={D}>
       <h2 class="e">L’écart type</h2>
       <EcartTypeCes />
-    </Slide>
-
-    <Slide bandeau="La marge d’erreur" droite={D}>
-      <h2 class="e">L’écart type et la cloche</h2>
-      <EcartTypeNormale />
-    </Slide>
-
-    <Slide bandeau="La marge d’erreur" droite={D}>
-      <h2 class="e">Deux écarts types</h2>
-      <DeuxEcarts />
     </Slide>
 
     <Slide bandeau="La marge d’erreur" droite={D}>

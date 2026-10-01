@@ -1,5 +1,8 @@
 <script>
   /**
+   * Version simplifiée (1er octobre 2026, à la demande de l'enseignant) :
+   * trois clics, sans écart type ni racine carrée à l'écran. Le dernier
+   * clic (la chaîne 46 → ÷ √682 → 1,8) n'est plus atteint.
    * La marge d'erreur, d'où elle vient. Fil rouge : « Notre budget : 1 000
    * personnes ». Les 20 180 répondant.e.s de l'Étude électorale canadienne
    * 2025 (BUDGET.population) servent de population d'exercice, on y connaît
@@ -58,7 +61,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 4, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
   const f = (v, d = 0) => v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, '\u202F');
   // Tout en points de pourcentage : 0,331 devient 33,1.
@@ -121,7 +124,7 @@
 </script>
 
 <div class="visuel marge-erreur" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Notre sondage au hasard, {f(BUDGET.n)} personnes, le même qu’à «&#8239;Facile, ou au hasard&#8239;?&#8239;», donne {f(UN, 1)}&#8239;% aux conservateurs. Est-ce la vraie réponse&#8239;? Probablement pas exactement. Les résultats de {f(N_ECH)} sondages de {f(BUDGET.n)} forment une cloche autour de la vraie réponse, {f(VRAI, 1)}&#8239;%. Les sondages varient typiquement de {f(ET, 1)} {points(ET)}. {f(DEDANS)} sur {f(N_ECH)}, à peu près 19 sur 20, tombent à moins de {f(MARGE, 1)} points de la vraie réponse, environ deux écarts types des sondages. On pose la même règle autour de notre sondage&#8239;: de {f(UN - MARGE, 1)} à {f(UN + MARGE, 1)}&#8239;%. La vraie réponse est {UN_ATTRAPE ? 'dedans' : 'dehors'}. 19 fois sur 20, ça marche&#8239;: c’est la marge d’erreur. Un seul sondage suffit pour la trouver&#8239;: {f(UN, 1)}&#8239;% parmi {f(N_DECL)} qui déclarent un vote. {SUR10} sur 10 votent conservateur&#8239;: les gens sont très partagés. L’écart type des gens est de {f(ET_GENS)}, sur une échelle qui va de 0, tout le monde pareil, à 50, moitié-moitié. Divisé par la racine de {f(N_DECL)}, environ {f(RACINE)}, car les hasards s’annulent en partie&#8239;: {f(ET_CALC, 1)} {points(ET_CALC)}, l’écart type des sondages. Fois environ 2&#8239;: ±&#8239;{f(MARGE, 1)} points, la marge d’erreur. {MEME ? 'Le même' : 'Presque le même'} {f(ET_CALC, 1)} que nos {f(N_ECH)} sondages simulés ({f(ET, 1)}).">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="Notre sondage au hasard, {f(BUDGET.n)} personnes, donne {f(UN, 1)}&#8239;% aux conservateurs. Est-ce la vraie réponse&#8239;? Probablement pas exactement. Les résultats de {f(N_ECH)} sondages de {f(BUDGET.n)} forment une cloche autour de la vraie réponse, {f(VRAI, 1)}&#8239;%. {f(DEDANS)} sur {f(N_ECH)}, à peu près 19 sur 20, tombent à moins de {f(MARGE, 1)} points de la vraie réponse. On pose la même règle autour de notre sondage&#8239;: de {f(UN - MARGE, 1)} à {f(UN + MARGE, 1)}&#8239;%. La vraie réponse est {UN_ATTRAPE ? 'dedans' : 'dehors'}. 19 fois sur 20, ça marche&#8239;: c’est la marge d’erreur.">
 
     <!-- 0 : la question, dans l'espace que la cloche occupera. -->
     <g class="me-etape" class:me-vu={e === 0}>
@@ -164,11 +167,7 @@
 
     <!-- 2 : ce que la règle mesure sur la cloche. -->
     <g class="me-etape" class:me-vu={e === 2}>
-      <text x={X0} y="150" class="me-et">les sondages varient</text>
-      <text x={X0} y="174" class="me-et">typiquement de {f(ET, 1)} {points(ET)}</text>
       <text x={XV + W2 + 18} y={RY + 8} class="me-pm">±&#8239;{f(MARGE, 1)} points</text>
-      <text x={XV + W2 + 18} y={RY + 32} class="me-pm-s">environ 2 écarts types</text>
-      <text x={XV + W2 + 18} y={RY + 54} class="me-pm-s">des sondages</text>
       <text x={XV + W2 + 18} y="92" class="me-compte">{f(DEDANS)} sur {f(N_ECH)}</text>
       <text x={XV + W2 + 18} y="120" class="me-lab">à moins de {f(MARGE, 1)} points</text>
       <text x={XV + W2 + 18} y="146" class="me-lab">de la vraie réponse</text>
