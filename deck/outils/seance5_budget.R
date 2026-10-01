@@ -72,8 +72,10 @@ set.seed(64); mille_q <- replicate(1000, part_cons(tirer(qc)))
 # notre sondage, arrondie comme à l'écran) de la vraie réponse.
 MILLE <- list(bornes = bornes,
               hasard = list(effectifs = compte(mille_h), moyenne = mean(mille_h), ecartType = sd(mille_h),
-                            dedans35 = sum(abs(mille_h - VRAI) <= HASARD$marge)),
-              quebec = list(effectifs = compte(mille_q), moyenne = mean(mille_q), ecartType = sd(mille_q)))
+                            dedans35 = sum(abs(mille_h - VRAI) <= HASARD$marge),
+                            parts = mille_h),
+              quebec = list(effectifs = compte(mille_q), moyenne = mean(mille_q), ecartType = sd(mille_q),
+                            parts = mille_q))
 
 # Et si le budget changeait : 1 000 sondages de 100, de 1 000 et de 4 000
 # personnes. Axe large, de 0 à 70 %, par demi-point : avec 100 personnes, les

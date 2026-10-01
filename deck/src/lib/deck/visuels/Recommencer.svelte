@@ -12,7 +12,10 @@
    * BUDGET.vrai (la ligne pointillée), BUDGET.n (la taille de chaque
    * sondage), MILLE.bornes (tranches d'un demi-point, [a, a + 0,005)),
    * MILLE.hasard.effectifs et MILLE.quebec.effectifs (1 000 sondages
-   * chacun), MILLE.quebec.moyenne (l'étiquette de la cloche rouge).
+   * chacun), MILLE.quebec.moyenne (l'étiquette de la cloche rouge), et
+   * MILLE.*.parts : les 1 000 résultats dans l'ordre des tirages, pour la
+   * moyenne des sondages déjà faits (en haut à droite, et un triangle sous
+   * l'axe), qui rejoint la vraie réponse au hasard, et reste loin au Québec.
    *
    * Le module ne donne que les effectifs, pas l'ordre des tirages. Pour
    * l'animation, les sondages arrivent dans un ordre fixe : la liste des
@@ -68,16 +71,15 @@
   const XV = x(BUDGET.vrai);
   const XQ = x(MILLE.quebec.moyenne);
 
-  // L'ordre d'arrivée : la liste des tranches, parcourue par pas fixe.
-  const pgcd = (a, b) => (b ? pgcd(b, a % b) : a);
-  const ordre = (eff) => {
-    const liste = eff.flatMap((c, j) => Array(c).fill(j));
-    const n = liste.length;
-    let pas = Math.round(n * 0.618);
-    while (pgcd(pas, n) !== 1) pas++;
-    return liste.map((_, i) => liste[(i * pas) % n]);
-  };
-  const ORDRE_H = ordre(H), ORDRE_Q = ordre(Q);
+  // L'ordre d'arrivée : celui des tirages de R (MILLE.*.parts), sondage par
+  // sondage. Chaque part tombe dans sa tranche [a, a + 0,5 point) (même
+  // epsilon que le script R : les comptes finaux égalent les effectifs).
+  const tranche = (p) => Math.floor((p + 1e-9 - B[0]) / (B[1] - B[0]) + 1e-9);
+  const PARTS_H = MILLE.hasard.parts, PARTS_Q = MILLE.quebec.parts;
+  const ORDRE_H = PARTS_H.map(tranche), ORDRE_Q = PARTS_Q.map(tranche);
+  // La moyenne des k premiers sondages, qui s'approche (ou pas) de la vraie réponse.
+  const cumul = (P) => P.reduce((acc, v, i) => (acc.push((i ? acc[i - 1] * i : 0) / (i + 1) + v / (i + 1)), acc), []);
+  const MOY_H = cumul(PARTS_H), MOY_Q = cumul(PARTS_Q);
   const compter = (o, k) => {
     const c = new Array(B.length - 1).fill(0);
     for (let i = 0; i < k; i++) c[o[i]]++;
@@ -117,6 +119,8 @@
   const kQ = $derived(e < 2 ? 0 : e > 2 ? NBQ : arrives(tQ, NBQ));
   const effH = $derived(compter(ORDRE_H, kH));
   const effQ = $derived(compter(ORDRE_Q, kQ));
+  const mH = $derived(kH ? MOY_H[kH - 1] : BUDGET.vrai);
+  const mQ = $derived(kQ ? MOY_Q[kQ - 1] : MILLE.quebec.moyenne);
 
   const BATONS = B.slice(0, -1).map((a, j) => ({ a, j })).filter((b) => b.a >= AMIN && b.a < AMAX);
   const h = (c) => (c / YMAX) * HMAX;
@@ -126,8 +130,10 @@
 <div class="visuel recommencer" bind:this={hote}>
   <svg viewBox="0 0 1000 524" role="img" aria-label="On refait le même sondage de {TAILLE} personnes {f(NB)} fois. Au hasard, les résultats s’empilent en cloche autour de la vraie réponse, {pc(BUDGET.vrai)}. Au Québec seulement, ils s’empilent aussi en cloche, mais autour de {pc(MILLE.quebec.moyenne)}, loin de la vraie réponse. Plus de sondages ne corrigent pas une mauvaise méthode.">
     <!-- Les compteurs. -->
-    <text x={X0} y="40" class="re-compte re-etape" class:re-vu={e >= 1}>{sondages(Math.max(kH, 1))}, au hasard</text>
-    <text x={X0} y="76" class="re-compte re-quebec re-etape" class:re-vu={e >= 2}>{sondages(Math.max(kQ, 1))}, au Québec seulement</text>
+    <text x={X0} y="40" class="re-compte re-etape" class:re-vu={e >= 1}>{f(Math.max(kH, 1))} sondages au hasard</text>
+    <text x={X1} y="40" class="re-moy re-etape" class:re-vu={e >= 1}>moyenne{N}: {pc(mH)}</text>
+    <text x={X0} y="76" class="re-compte re-quebec re-etape" class:re-vu={e >= 2}>{f(Math.max(kQ, 1))} sondages au Québec</text>
+    <text x={X1} y="76" class="re-moy re-quebec re-etape" class:re-vu={e >= 2}>moyenne{N}: {pc(mQ)}</text>
 
     <!-- 1 : au hasard. -->
     {#each BATONS as b}
@@ -146,6 +152,9 @@
 
     <!-- L'axe. -->
     <line x1={X0} y1={AXE} x2={X1} y2={AXE} class="re-axe" />
+    <!-- La moyenne des sondages déjà faits : un triangle sous l'axe. -->
+    <path d="M {x(mH)} {AXE + 4} l -9 14 h 18 z" class="re-tri re-etape" class:re-vu={e >= 1} />
+    <path d="M {x(mQ)} {AXE + 4} l -9 14 h 18 z" class="re-tri re-tri-q re-etape" class:re-vu={e >= 2} />
     {#each TICKS as t}
       <line x1={x(t / 100)} y1={AXE} x2={x(t / 100)} y2={AXE + 8} class="re-axe" />
       <text x={x(t / 100)} y={AXE + 32} class="re-tick">{t}</text>
@@ -175,6 +184,10 @@
   .re-axe { stroke: var(--dk-encre); stroke-width: 2; }
   .re-tick { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
   .re-fin { text-anchor: end; }
+  .re-moy { font-size: 24px; font-weight: 700; text-anchor: end; fill: var(--dk-encre); }
+  .re-moy.re-quebec { fill: var(--dk-accent); }
+  .re-tri { fill: var(--dk-encre); }
+  .re-tri-q { fill: var(--dk-accent); }
 
   .re-lecon { font-size: 24px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
 

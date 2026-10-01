@@ -86,8 +86,8 @@
       quoi: `la moyenne de ${f(AGE_50.n)} répondant.e.s`
     },
     {
-      nom: 'sondage',
-      source: 'CES 2025',
+      nom: 'vote',
+      source: 'conservateur, CES 2025',
       ind: `${f(UN_VOTE)} ${point(UN_VOTE)}`,
       qui: `un.e répondant.e${N}: 0 ou 100`,
       moy: `${f(POINTS, 1)} ${point(POINTS)}`,
