@@ -1,22 +1,23 @@
 <script>
   /**
-   * La moyenne de plusieurs dés. Trois panneaux côte à côte : 10 000 lancers
-   * d'un dé, de deux dés, puis de dix dés. Chaque barre compte combien de
-   * lancers donnent cette moyenne. Un dé seul : plat, chaque face a la même
-   * chance. Deux dés : un triangle, parce que 3,5 s'obtient de six façons et
-   * 1 ou 6 d'une seule. Dix dés : une cloche, parce qu'une moyenne de 1
-   * demande que les dix dés montrent 1. Chaque panneau est mis à l'échelle de
-   * sa plus haute barre : c'est la forme qu'on regarde.
+   * Un dé, lancé encore et encore : ce qu'est une barre d'histogramme. À
+   * gauche, le dé et le compteur de lancers. À droite, un axe de 1 à 6 :
+   * chaque lancer y dépose un carré au-dessus de sa face. Les carrés
+   * s'empilent, et une pile, c'est une barre.
    *
-   * Au-dessus de chaque panneau, les faces du premier lancer de la série.
+   *   0  Je lance un dé : un lancer, un carré.
+   *   1  Je recommence : neuf autres lancers tombent un à un (environ 2 s).
+   *      Après 10 lancers, les piles sont inégales.
+   *   2  1 000 fois : l'avance rapide (environ 2 s). Les piles montent, les
+   *      carrés rapetissent pour tenir dans le cadre et deviennent des
+   *      barres. Chaque face sort à peu près aussi souvent : c'est plat.
    *
-   *   0  Un dé : plat.
-   *   1  + deux dés : un triangle.
-   *   2  + dix dés : une cloche, en rouge.
-   *   3  + la phrase : les hauts et les bas s'annulent.
-   *   4  + le lien : un échantillon de 50 personnes, c'est 50 dés.
+   * Chaque animation a une fin fixe : au temps suivant, ou une fois la durée
+   * écoulée, l'image est toujours la même (les 10 premiers lancers, puis les
+   * effectifs de R). Avec « réduire les animations », on saute à la fin.
    *
-   * Tout vient de src/lib/data/seance5_des.js (outils/seance5_des.R).
+   * Tout vient de src/lib/data/seance5_des.js (outils/seance5_des.R) : les
+   * faces de chaque lancer, dans l'ordre, et les effectifs des 1 000.
    */
   import { brancherTemps } from '../temps.js';
   import { DES } from '$lib/data/seance5_des.js';
@@ -25,13 +26,19 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 4, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  // Géométrie : trois panneaux de 280 de large, axe de 0,5 à 6,5.
-  const LARGEUR = 280, GAUCHES = [30, 360, 690];
-  const BASE = 330, HAUT = 170;
-  const Y_TITRE = 34, Y_DES = 52, H_DES = 74;
+  const SERIE = DES.find((d) => d.des === 1);
+  const N = SERIE.n;
+  const FACES = [...SERIE.faces].map(Number);
+  const DEBUT = 10; // les lancers rejoués un à un avant l'avance rapide
+
+  // Géométrie : le dé à gauche, l'axe des faces à droite.
+  const X0 = 360, CASE = 103, COTE = 60, PAS_MAX = 64;
+  const BASE = 410, HAUT = 300, Y_CHUTE = 36;
+  const xFace = (f) => X0 + (f - 0.5) * CASE;
+  const DE = { x: 100, y: 140, c: 130 };
 
   // Les points d'une face : positions en tiers de la face (−1, 0, 1).
   const POINTS = {
@@ -43,70 +50,129 @@
     6: [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [1, 1]]
   };
 
-  // Les dés du premier lancer : une rangée pour 1 ou 2 dés, deux rangées de 5 pour 10.
-  const placerDes = (faces, cx) => {
-    const parRangee = faces.length > 5 ? 5 : faces.length;
-    const c = faces.length > 5 ? 32 : 56;
-    const ecart = faces.length > 5 ? 10 : 16;
-    const rangees = Math.ceil(faces.length / parRangee);
-    const larg = parRangee * c + (parRangee - 1) * ecart;
-    const haut = rangees * c + (rangees - 1) * ecart;
-    const x0 = cx - larg / 2, y0 = Y_DES + (H_DES - haut) / 2;
-    return faces.map((f, i) => {
-      const x = x0 + (i % parRangee) * (c + ecart);
-      const y = y0 + Math.floor(i / parRangee) * (c + ecart);
-      return {
-        x, y, c,
-        points: POINTS[f].map(([dx, dy]) => ({ cx: x + c / 2 + dx * c * 0.27, cy: y + c / 2 + dy * c * 0.27 })),
-        r: c * 0.09
-      };
-    });
-  };
-
-  const PANNEAUX = DES.map((d, i) => {
-    const g = GAUCHES[i];
-    const x = (v) => g + ((v - 0.5) / 6) * LARGEUR;
-    const pas = d.valeurs.length > 1 ? d.valeurs[1] - d.valeurs[0] : 1;
-    const w = pas * (LARGEUR / 6) * 0.8;
-    const max = Math.max(...d.effectifs);
-    return {
-      titre: d.des === 1 ? '1 dé' : `${d.des} dés`,
-      centre: g + LARGEUR / 2,
-      gauche: g,
-      batons: d.valeurs.map((v, j) => ({ x: x(v) - w / 2, w, h: (d.effectifs[j] / max) * HAUT })),
-      graduations: [1, 2, 3, 4, 5, 6].map((v) => ({ v, x: x(v) })),
-      des: placerDes(d.premier, g + LARGEUR / 2)
+  // Le temps : 1 = les lancers 2 à 10 tombent un à un, 2 = l'avance rapide.
+  const INTERVALLE = 250, CHUTE = 250;
+  const DUREE = { 1: (DEBUT - 2) * INTERVALLE + CHUTE, 2: 2000 };
+  let t = $state(0);
+  let tPour = $state(-1); // le temps à qui appartient t (évite un éclair de l'image finale)
+  $effect(() => {
+    if (!DUREE[e]) return;
+    const fin = DUREE[e];
+    tPour = e;
+    t = 0;
+    if (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      t = fin;
+      return;
+    }
+    const debut = performance.now();
+    let id;
+    const tic = (now) => {
+      t = Math.min(fin, now - debut);
+      if (t < fin) id = requestAnimationFrame(tic);
     };
+    id = requestAnimationFrame(tic);
+    return () => cancelAnimationFrame(id);
   });
+  const tt = $derived(tPour === e ? t : 0);
+  const fini = $derived(e === 0 || (DUREE[e] && tt >= DUREE[e]));
+
+  // Combien de lancers sont partis, combien sont posés, et celui qui tombe.
+  const etat = $derived.by(() => {
+    if (e === 0) return { partis: 1, poses: 1, chute: null };
+    if (e === 1) {
+      if (fini) return { partis: DEBUT, poses: DEBUT, chute: null };
+      let partis = 1, poses = 1, chute = null;
+      for (let i = 1; i < DEBUT; i++) {
+        const depart = (i - 1) * INTERVALLE;
+        if (tt >= depart) partis = i + 1;
+        if (tt >= depart + CHUTE) poses = i + 1;
+        else if (tt >= depart) chute = { i, u: (tt - depart) / CHUTE };
+      }
+      return { partis, poses, chute };
+    }
+    // L'avance rapide : de 10 à 1 000 lancers, de plus en plus vite.
+    const n = fini ? N : Math.min(N, Math.max(DEBUT, Math.round(DEBUT * (N / DEBUT) ** (tt / DUREE[2]))));
+    return { partis: n, poses: n, chute: null };
+  });
+
+  // Les piles : combien de carrés au-dessus de chaque face (les effectifs de R à la fin).
+  const piles = $derived.by(() => {
+    if (e === 2 && fini) return SERIE.effectifs;
+    const c = [0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < etat.partis; i++) c[FACES[i] - 1]++;
+    if (etat.chute) c[FACES[etat.chute.i] - 1]--;
+    return c;
+  });
+  // La hauteur d'un carré : 64 tant que tout tient, puis de moins en moins.
+  const pas = $derived(Math.min(PAS_MAX, HAUT / Math.max(1, ...piles, etat.chute ? piles[FACES[etat.chute.i] - 1] + 1 : 0)));
+  const jeu = $derived(pas >= 20 ? 4 : pas >= 8 ? 2 : 0);
+
+  // Le carré qui tombe : du haut du cadre jusqu'au sommet de sa pile.
+  const chute = $derived.by(() => {
+    if (!etat.chute) return null;
+    const f = FACES[etat.chute.i];
+    const yFin = BASE - (piles[f - 1] + 1) * pas;
+    const u = etat.chute.u;
+    return { x: xFace(f) - COTE / 2, y: Y_CHUTE + (yFin - Y_CHUTE) * u * u, h: pas - jeu };
+  });
+  // Le dernier carré posé est en rouge, tant qu'on compte un à un.
+  const dernier = $derived(e < 2 && !etat.chute ? FACES[etat.poses - 1] : 0);
+
+  const face = $derived(FACES[etat.partis - 1]);
+  const points = $derived(POINTS[face].map(([dx, dy]) => ({ cx: DE.x + DE.c / 2 + dx * DE.c * 0.27, cy: DE.y + DE.c / 2 + dy * DE.c * 0.27 })));
+
+  const milliers = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  const compteur = $derived(`${milliers(etat.partis)} ${etat.partis > 1 ? 'lancers' : 'lancer'}`);
+  const LEGENDES = ['Je lance un dé.', 'Je recommence.', '1 000 fois.'];
+
+  // Après 10 lancers : les faces qui ne sont pas encore sorties.
+  const ABSENTES = [1, 2, 3, 4, 5, 6].filter((f) => !FACES.slice(0, DEBUT).includes(f));
+  const APRES_DIX = ABSENTES.length
+    ? `Après ${DEBUT} lancers, pas encore un seul ${ABSENTES.join(' ni un seul ')}.`
+    : `Après ${DEBUT} lancers, des piles inégales.`;
+  const phrase = $derived(
+    e === 1 && fini ? APRES_DIX : e === 2 && fini ? 'Chaque face sort à peu près aussi souvent : c’est plat.' : ''
+  );
 </script>
 
 <div class="visuel des" bind:this={hote}>
-  <svg viewBox="0 0 1000 516" role="img" aria-label="10 000 lancers d’un dé, de deux dés et de dix dés. Un dé seul donne un histogramme plat. La moyenne de deux dés fait un triangle, avec 3,5 au sommet. La moyenne de dix dés fait une cloche. Chaque dé est plat, leur moyenne fait une cloche, parce que les hauts et les bas s’annulent. Un échantillon de 50 personnes, c’est comme 50 dés.">
-    {#each PANNEAUX as p, i}
-      <g class="de-temps" class:de-vu={e >= i}>
-        <text x={p.centre} y={Y_TITRE} class="de-titre" class:de-rouge={i === 2}>{p.titre}</text>
-        {#each p.des as d}
-          <rect x={d.x} y={d.y} width={d.c} height={d.c} class="de-face" />
-          {#each d.points as pt}
-            <circle cx={pt.cx} cy={pt.cy} r={d.r} class="de-point" />
-          {/each}
-        {/each}
-        {#each p.batons as b}
-          <rect x={b.x} y={BASE - b.h} width={b.w} height={b.h} class="de-baton" class:de-rouge={i === 2} />
-        {/each}
-        <line x1={p.gauche} y1={BASE} x2={p.gauche + LARGEUR} y2={BASE} class="de-sol" />
-        {#each p.graduations as t}
-          <line x1={t.x} y1={BASE} x2={t.x} y2={BASE + 7} class="de-sol" />
-          <text x={t.x} y={BASE + 28} class="de-grad">{t.v}</text>
-        {/each}
-        <text x={p.centre} y={BASE + 56} class="de-axe">la moyenne des dés</text>
-      </g>
+  <svg viewBox="0 0 1000 530" role="img" aria-label="Je lance un dé et je pose un carré au-dessus de la face obtenue. Je recommence : les carrés s’empilent, une pile par face. Après 1 000 lancers, les six piles ont à peu près la même hauteur : un dé seul donne un histogramme plat.">
+    <text x="980" y="22" class="de-note">simulation</text>
+    <!-- Le dé, la légende du temps et le compteur. -->
+    <text x="40" y="80" class="de-legende">{LEGENDES[e]}</text>
+    <rect x={DE.x} y={DE.y} width={DE.c} height={DE.c} class="de-face" />
+    {#each points as pt}
+      <circle cx={pt.cx} cy={pt.cy} r={DE.c * 0.085} class="de-point" />
     {/each}
-    <g class="de-temps" class:de-vu={e >= 3}>
-      <text x="500" y="430" class="de-phrase">Chaque dé est plat.</text>
-      <text x="500" y="460" class="de-phrase">Leur moyenne fait une cloche&#8239;: les hauts et les bas s’annulent.</text>
-    </g>
-    <text x="500" y="502" class="de-lien de-temps" class:de-vu={e >= 4}>Un échantillon de 50 personnes, c’est comme 50 dés.</text>
+    <text x={DE.x + DE.c / 2} y="330" class="de-compteur">{compteur}</text>
+
+    <!-- Les piles. -->
+    {#each piles as c, k}
+      {#if jeu > 0}
+        {#each { length: c } as _, j}
+          <rect x={xFace(k + 1) - COTE / 2} y={BASE - (j + 1) * pas} width={COTE} height={pas - jeu} class="de-carre" class:de-rouge={dernier === k + 1 && j === c - 1} />
+        {/each}
+      {:else}
+        <rect x={xFace(k + 1) - COTE / 2} y={BASE - c * pas} width={COTE} height={c * pas} class="de-carre" />
+      {/if}
+      {#if e === 2 && fini}
+        <text x={xFace(k + 1)} y={BASE - c * pas - 12} class="de-effectif">{c}</text>
+      {/if}
+    {/each}
+    {#if chute}
+      <rect x={chute.x} y={chute.y} width={COTE} height={chute.h} class="de-carre de-rouge" />
+    {/if}
+
+    <!-- L'axe des faces. -->
+    <line x1={X0} y1={BASE} x2={X0 + 6 * CASE} y2={BASE} class="de-sol" />
+    {#each [1, 2, 3, 4, 5, 6] as f}
+      <text x={xFace(f)} y={BASE + 32} class="de-grad">{f}</text>
+    {/each}
+    <text x={X0 + 3 * CASE} y={BASE + 62} class="de-axe">la face du dé</text>
+
+    {#key phrase}
+      <text x="500" y="516" class="de-phrase">{phrase}</text>
+    {/key}
   </svg>
 </div>
 
@@ -114,20 +180,20 @@
   .des { display: flex; justify-content: center; }
   svg { width: 100%; height: auto; max-height: 60vh; display: block; }
   text { font-family: var(--dk-mono); }
-  .de-titre { font-size: 26px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
-  .de-titre.de-rouge { fill: var(--dk-accent); }
-  .de-face { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 2; }
+  .de-note { font-size: 18px; text-anchor: end; fill: var(--dk-gris); }
+  .de-legende { font-size: 28px; font-weight: 600; fill: var(--dk-encre); }
+  .de-face { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 3; }
   .de-point { fill: var(--dk-encre); }
-  .de-baton { fill: var(--dk-encre); }
-  .de-baton.de-rouge { fill: var(--dk-accent); }
+  .de-compteur { font-size: 26px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
+  .de-carre { fill: var(--dk-encre); }
+  .de-carre.de-rouge { fill: var(--dk-accent); }
+  .de-effectif { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
   .de-sol { stroke: var(--dk-encre); stroke-width: 2; }
-  .de-grad { font-size: 18px; text-anchor: middle; fill: var(--dk-encre); }
+  .de-grad { font-size: 22px; text-anchor: middle; fill: var(--dk-encre); }
   .de-axe { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
-  .de-phrase { font-size: 22px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
-  .de-lien { font-size: 22px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
-  .de-temps { opacity: 0; transition: opacity 0.3s; }
-  .de-temps.de-vu { opacity: 1; transition: opacity 0.6s; }
+  .de-phrase { font-size: 22px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); animation: de-entree 0.5s; }
+  @keyframes de-entree { from { opacity: 0; } to { opacity: 1; } }
   @media (prefers-reduced-motion: reduce) {
-    .de-temps, .de-temps.de-vu { transition: none; }
+    .de-phrase { animation: none; }
   }
 </style>

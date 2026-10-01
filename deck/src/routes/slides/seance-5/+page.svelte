@@ -53,7 +53,7 @@
   import PourquoiH0 from '$lib/deck/visuels/PourquoiH0.svelte';
   import MargeErreur from '$lib/deck/visuels/MargeErreur.svelte';
   import EcartTypeNormale from '$lib/deck/visuels/EcartTypeNormale.svelte';
-  import EcartType from '$lib/deck/visuels/EcartType.svelte';
+  import EcartTypeCes from '$lib/deck/visuels/EcartTypeCes.svelte';
   import TroisIngredients from '$lib/deck/visuels/TroisIngredients.svelte';
   import TheoremeCentral from '$lib/deck/visuels/TheoremeCentral.svelte';
   import EecCanada from '$lib/deck/visuels/EecCanada.svelte';
@@ -68,6 +68,7 @@
   import AvantS7 from '$lib/deck/visuels/AvantS7.svelte';
   import Galton from '$lib/deck/visuels/Galton.svelte';
   import Des from '$lib/deck/visuels/Des.svelte';
+  import DesMoyenne from '$lib/deck/visuels/DesMoyenne.svelte';
   import DefiInference from '$lib/deck/visuels/DefiInference.svelte';
   import BudgetIntro from '$lib/deck/visuels/BudgetIntro.svelte';
   import EchantillonsFaciles from '$lib/deck/visuels/EchantillonsFaciles.svelte';
@@ -78,7 +79,7 @@
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { GG, GG_CONSOLE } from '$lib/data/seance5_ggplot.js';
 
-  const TOTAL = 55;
+  const TOTAL = 56;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // La console vient de R telle quelle (outils/seance5_ggplot.R); seules les notes sont d'ici.
@@ -215,8 +216,13 @@
     </Slide>
 
     <Slide bandeau="La courbe normale" droite={D}>
-      <h2 class="e">La moyenne de plusieurs dés</h2>
+      <h2 class="e">Un dé, encore et encore</h2>
       <Des />
+    </Slide>
+
+    <Slide bandeau="La courbe normale" droite={D}>
+      <h2 class="e">La moyenne de plusieurs dés</h2>
+      <DesMoyenne />
     </Slide>
 
     <Slide bandeau="La courbe normale" droite={D}>
@@ -251,7 +257,7 @@
 
     <Slide bandeau="L’écart type" droite={D}>
       <h2 class="e">L’écart type</h2>
-      <EcartType />
+      <EcartTypeCes />
     </Slide>
 
     <Slide bandeau="La marge d’erreur" droite={D}>
