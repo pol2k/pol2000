@@ -17,7 +17,13 @@
    *      soit 100 ou 0 sur une échelle de 0 à 100. L'écart type de ce vote
    *      0 ou 1, en points, est racine(vrai × (1 − vrai)) × 100, avec
    *      vrai = BUDGET.vrai (la part conservatrice de la CES 2025) : environ
-   *      47 points. Un sondage de 1 000 varie de 1,8 point (plus que
+   *      47 points. Pour une variable oui ou non, cet écart type mesure à
+   *      quel point les gens sont partagés : 0 si tout le monde répond
+   *      pareil, 50 au maximum, quand c'est moitié-moitié. D'où la légende
+   *      « très partagés (max. 50) » sous le 47 (l'ancienne légende
+   *      « un.e répondant.e : 0 ou 100 » restait incomprise). La flèche
+   *      « ÷ √682 ≈ 26 » et la cellule des moyennes ne changent pas.
+   *      Un sondage de 1 000 varie de 1,8 point (plus que
    *      47 / racine(1 000), parce que seul.e.s celles et ceux qui déclarent
    *      un vote comptent : HASARD.declares, 682 sur 1 000 dans notre sondage).
    *   3  Le lien entre les deux colonnes : une flèche par rangée, de l'écart
@@ -103,7 +109,7 @@
       nom: 'vote',
       source: 'conservateur, CES 2025',
       ind: `${f(UN_VOTE)} ${point(UN_VOTE)}`,
-      qui: `un.e répondant.e${N}: 0 ou 100`,
+      qui: 'très partagés (max. 50)',
       moy: `${f(POINTS, 1)} ${point(POINTS)}`,
       quoi: `un sondage de ${f(BUDGET.n)}`,
       groupe: HASARD.declares,
@@ -125,7 +131,7 @@
     `Deux écarts types. La taille${N}: une personne, écart type de ${RANGEES[0].ind}. ` +
     `La moyenne d’une classe de ${f(CLASSES.n)}${N}: ${RANGEES[0].moy}. ` +
     `L’âge dans l’Étude électorale canadienne 2025${N}: un.e répondant.e, ${RANGEES[1].ind}, la moyenne de ${f(AGE_50.n)} répondant.e.s, ${RANGEES[1].moy}. ` +
-    `Un sondage${N}: un.e répondant.e vote conservateur ou non, 0 ou 100, écart type de ${RANGEES[2].ind}. ` +
+    `Un sondage${N}: chaque répondant.e vote conservateur (100) ou non (0). L’écart type des individus, ${RANGEES[2].ind}, dit à quel point les gens sont partagés, de 0 si tout le monde répond pareil à 50 quand c’est moitié-moitié${N}: ils sont très partagés. ` +
     `Un sondage de ${f(BUDGET.n)} varie de ${RANGEES[2].moy}. ` +
     `De la première colonne à la seconde, on divise par la racine du nombre${N}: ` +
     `${RANGEES[0].diviser} pour la taille et l’âge, ${RANGEES[2].diviser} pour les ${f(HASARD.declares)} votes déclarés. ` +
