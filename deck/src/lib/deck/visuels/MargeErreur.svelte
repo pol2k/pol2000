@@ -34,11 +34,16 @@
    *      ni les 1 000 sondages. La cloche, l'axe, la vraie réponse et le
    *      crochet s'effacent, notre sondage et sa règle restent. Une chaîne,
    *      calculée ici depuis HASARD : 30,5 % (HASARD.part, parmi les
-   *      HASARD.declares = 682 qui déclarent un vote) → les gens valent 0 ou
-   *      100, leur écart type est racine(p(1 − p)) × 100 ≈ 46 points → divisé
-   *      par la racine de 682 (≈ 26), les hasards s'annulent en partie →
-   *      1,8 point, l'écart type des sondages → fois environ 2 (1,96 dans R)
-   *      → ± 3,5 points (HASARD.marge), la marge d'erreur. Les lignes
+   *      HASARD.declares = 682 qui déclarent un vote) → « 3 sur 10 votent
+   *      conservateur » (arrondi de HASARD.part × 10) : les gens sont très
+   *      partagés → 46, l'écart type des gens. Le vote vaut 100
+   *      (conservateur) ou 0 (autre), donc cet écart type mesure à quel
+   *      point le groupe est divisé : 0 si tout le monde répond pareil, 50
+   *      (le maximum) à moitié-moitié. Une jauge schématique de 0 à 50 le
+   *      montre, remplie jusqu'à racine(p(1 − p)) × 100 → divisé par la
+   *      racine de 682 (≈ 26), les hasards s'annulent en partie → 1,8 point,
+   *      l'écart type des sondages → fois environ 2 (1,96 dans R) → ± 3,5
+   *      points (HASARD.marge), la marge d'erreur. Les lignes
    *      arrivent l'une après l'autre. En bas, la comparaison avec l'écart
    *      type mesuré sur les 1 000 sondages simulés (MILLE.hasard.ecartType),
    *      les deux arrondis au dixième (« presque » s'ils diffèrent).
@@ -99,18 +104,24 @@
 
   // Temps 4 : la chaîne d'un seul sondage, calculée depuis HASARD.
   const N_DECL = HASARD.declares; // 682 qui déclarent un vote
-  const ET_GENS = Math.sqrt(HASARD.part * (1 - HASARD.part)) * 100; // ≈ 46 points, chacun.e vaut 0 ou 100
+  const SUR10 = Math.round(HASARD.part * 10); // 3 sur 10 votent conservateur
+  // L'écart type des gens : le vote vaut 100 (conservateur) ou 0 (autre). Il dit à quel
+  // point le groupe est divisé : 0 si tout le monde répond pareil, 50 à moitié-moitié.
+  const ET_GENS = Math.sqrt(HASARD.part * (1 - HASARD.part)) * 100; // ≈ 46
   const RACINE = Math.sqrt(N_DECL); // ≈ 26
   const ET_CALC = ET_GENS / RACINE; // ≈ 1,8 point
   const MEME = f(ET_CALC, 1) === f(ET, 1);
   // Colonnes : opération (alignée à droite), flèche et valeur (centrées), sens (à gauche).
   const CO = 398, CV = 420, CS = 545;
-  const RANGS = [52, 130, 208, 286];
+  const RANGS = [50, 130, 228, 296];
   const FLECHES = [0, 1, 2].map((i) => ({ y1: RANGS[i] + 14, y2: RANGS[i + 1] - 28, ym: (RANGS[i] + RANGS[i + 1]) / 2 - 1 }));
+  // La jauge schématique de l'écart type des gens : de 0 (tout le monde pareil) à 50 (moitié-moitié).
+  const GX0 = 565, GX1 = 935, GY = RANGS[1] + 14;
+  const GM = GX0 + (ET_GENS / 50) * (GX1 - GX0);
 </script>
 
 <div class="visuel marge-erreur" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Notre sondage au hasard, {f(BUDGET.n)} personnes, le même qu’à «&#8239;Facile, ou au hasard&#8239;?&#8239;», donne {f(UN, 1)}&#8239;% aux conservateurs. Est-ce la vraie réponse&#8239;? Probablement pas exactement. Les résultats de {f(N_ECH)} sondages de {f(BUDGET.n)} forment une cloche autour de la vraie réponse, {f(VRAI, 1)}&#8239;%. Les sondages varient typiquement de {f(ET, 1)} {points(ET)}. {f(DEDANS)} sur {f(N_ECH)}, à peu près 19 sur 20, tombent à moins de {f(MARGE, 1)} points de la vraie réponse, environ deux écarts types des sondages. On pose la même règle autour de notre sondage&#8239;: de {f(UN - MARGE, 1)} à {f(UN + MARGE, 1)}&#8239;%. La vraie réponse est {UN_ATTRAPE ? 'dedans' : 'dehors'}. 19 fois sur 20, ça marche&#8239;: c’est la marge d’erreur. Un seul sondage suffit pour la trouver&#8239;: {f(UN, 1)}&#8239;% parmi {f(N_DECL)} qui déclarent un vote, chacun.e vaut 0 ou 100, les gens varient de {f(ET_GENS)} points. Divisé par la racine de {f(N_DECL)}, environ {f(RACINE)}, car les hasards s’annulent en partie&#8239;: {f(ET_CALC, 1)} {points(ET_CALC)}, l’écart type des sondages. Fois environ 2&#8239;: ±&#8239;{f(MARGE, 1)} points, la marge d’erreur. {MEME ? 'Le même' : 'Presque le même'} {f(ET_CALC, 1)} que nos {f(N_ECH)} sondages simulés ({f(ET, 1)}).">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="Notre sondage au hasard, {f(BUDGET.n)} personnes, le même qu’à «&#8239;Facile, ou au hasard&#8239;?&#8239;», donne {f(UN, 1)}&#8239;% aux conservateurs. Est-ce la vraie réponse&#8239;? Probablement pas exactement. Les résultats de {f(N_ECH)} sondages de {f(BUDGET.n)} forment une cloche autour de la vraie réponse, {f(VRAI, 1)}&#8239;%. Les sondages varient typiquement de {f(ET, 1)} {points(ET)}. {f(DEDANS)} sur {f(N_ECH)}, à peu près 19 sur 20, tombent à moins de {f(MARGE, 1)} points de la vraie réponse, environ deux écarts types des sondages. On pose la même règle autour de notre sondage&#8239;: de {f(UN - MARGE, 1)} à {f(UN + MARGE, 1)}&#8239;%. La vraie réponse est {UN_ATTRAPE ? 'dedans' : 'dehors'}. 19 fois sur 20, ça marche&#8239;: c’est la marge d’erreur. Un seul sondage suffit pour la trouver&#8239;: {f(UN, 1)}&#8239;% parmi {f(N_DECL)} qui déclarent un vote. {SUR10} sur 10 votent conservateur&#8239;: les gens sont très partagés. L’écart type des gens est de {f(ET_GENS)}, sur une échelle qui va de 0, tout le monde pareil, à 50, moitié-moitié. Divisé par la racine de {f(N_DECL)}, environ {f(RACINE)}, car les hasards s’annulent en partie&#8239;: {f(ET_CALC, 1)} {points(ET_CALC)}, l’écart type des sondages. Fois environ 2&#8239;: ±&#8239;{f(MARGE, 1)} points, la marge d’erreur. {MEME ? 'Le même' : 'Presque le même'} {f(ET_CALC, 1)} que nos {f(N_ECH)} sondages simulés ({f(ET, 1)}).">
 
     <!-- 0 : la question, dans l'espace que la cloche occupera. -->
     <g class="me-etape" class:me-vu={e === 0}>
@@ -205,15 +216,24 @@
     <g class="me-etape me-chaine" class:me-vu={e >= 4} style="--d: 0.45s">
       <line x1={CV} y1={FLECHES[0].y1} x2={CV} y2={FLECHES[0].y2} class="me-fleche" />
       <path d="M {CV - 6} {FLECHES[0].y2 - 8} L {CV} {FLECHES[0].y2} L {CV + 6} {FLECHES[0].y2 - 8}" class="me-fleche" />
-      <text x={CO} y={FLECHES[0].ym + 7} class="me-op">chacun.e&#8239;: 0 ou 100</text>
-      <text x={CV} y={RANGS[1]} class="me-val">{f(ET_GENS)} points</text>
-      <text x={CS} y={RANGS[1]} class="me-sens me-encre">les gens varient</text>
+      <text x={CO} y={FLECHES[0].ym - 5} class="me-op">{SUR10} sur 10 votent conservateur&#8239;:</text>
+      <text x={CO} y={FLECHES[0].ym + 19} class="me-sens me-droite">les gens sont très partagés</text>
+      <text x={CV} y={RANGS[1]} class="me-val">{f(ET_GENS)}</text>
+      <text x={CS} y={RANGS[1] - 6} class="me-sens me-encre">l’écart type des gens</text>
+      <!-- La jauge : 0 si tout le monde répond pareil, 50 (le maximum) à moitié-moitié. -->
+      <rect x={GX0} y={GY - 5} width={GM - GX0} height="10" class="me-jauge-plein" />
+      <rect x={GX0} y={GY - 5} width={GX1 - GX0} height="10" class="me-jauge" />
+      <line x1={GM} y1={GY - 11} x2={GM} y2={GY + 11} class="me-jauge-repere" />
+      <text x={GX0 - 8} y={GY + 6} class="me-jauge-n me-droite">0</text>
+      <text x={GX1 + 8} y={GY + 6} class="me-jauge-n">50</text>
+      <text x={GX0} y={GY + 28} class="me-jauge-t">tout le monde pareil</text>
+      <text x={GX1} y={GY + 28} class="me-jauge-t me-droite">moitié-moitié</text>
     </g>
     <g class="me-etape me-chaine" class:me-vu={e >= 4} style="--d: 0.9s">
       <line x1={CV} y1={FLECHES[1].y1} x2={CV} y2={FLECHES[1].y2} class="me-fleche" />
       <path d="M {CV - 6} {FLECHES[1].y2 - 8} L {CV} {FLECHES[1].y2} L {CV + 6} {FLECHES[1].y2 - 8}" class="me-fleche" />
-      <text x={CO} y={FLECHES[1].ym + 7} class="me-op">÷ √{f(N_DECL)} ≈ {f(RACINE)}</text>
-      <text x={CV + 24} y={FLECHES[1].ym + 7} class="me-sens">les hasards s’annulent en partie</text>
+      <text x={CO} y={FLECHES[1].ym - 5} class="me-op">÷ √{f(N_DECL)} ≈ {f(RACINE)}</text>
+      <text x={CO} y={FLECHES[1].ym + 19} class="me-sens me-droite">les hasards s’annulent en partie</text>
       <text x={CV} y={RANGS[2]} class="me-val">{f(ET_CALC, 1)} {points(ET_CALC)}</text>
       <text x={CS} y={RANGS[2]} class="me-sens me-encre">l’écart type des sondages</text>
     </g>
@@ -279,6 +299,13 @@
   .me-sens.me-rouge-t { fill: var(--dk-accent); font-size: 19px; }
   .me-val.me-rouge-t { fill: var(--dk-accent); }
   .me-fleche { stroke: var(--dk-accent); stroke-width: 2.5; fill: none; }
+  .me-droite { text-anchor: end; }
+  .me-jauge { fill: none; stroke: var(--dk-encre); stroke-width: 2; }
+  .me-jauge-plein { fill: var(--dk-accent); }
+  .me-jauge-repere { stroke: var(--dk-accent); stroke-width: 3; }
+  .me-jauge-n { font-size: 18px; fill: var(--dk-encre); }
+  .me-jauge-t { font-size: 17px; fill: var(--dk-gris); }
+  .me-jauge-t.me-droite { text-anchor: end; }
   @media (prefers-reduced-motion: reduce) {
     .me-etape, .me-etape.me-vu, .me-etape.me-apres.me-vu, .me-etape.me-chaine.me-vu, .me-baton, .me-regle, .me-regle.me-vu { transition: none; }
   }
