@@ -5,9 +5,9 @@
    * glissent l'une sur l'autre pour former un seul graphique.
    *
    *   0  Les données : un tableau, avec les noms de colonnes
-   *      note_parti | note_poilievre | vote (l'Étude électorale canadienne
+   *      note_carney | note_poilievre | vote (l'Étude électorale canadienne
    *      2025, l'exemple de la suite) et des lignes vides.
-   *   1  Les esthétiques, aes() : deux axes, x = note_parti et
+   *   1  Les esthétiques, aes() : deux axes, x = note_carney et
    *      y = note_poilievre.
    *   2  Les géométries, geom_...() : quelques points.
    *   3  Les trois feuilles glissent au centre et s'empilent : le tableau
@@ -50,7 +50,7 @@
   // Le tableau : trois colonnes, un en-tête, des lignes vides. La colonne du
   // milieu est la plus large : note_poilievre a 14 caractères.
   const COLS = [
-    { nom: 'note_parti', x: 51 },
+    { nom: 'note_carney', x: 51 },
     { nom: 'note_poilievre', x: 167 },
     { nom: 'vote', x: 262 }
   ];
@@ -79,7 +79,7 @@
 </script>
 
 <div class="visuel grammaire" bind:this={hote}>
-  <svg viewBox="0 0 1000 460" role="img" aria-label="Schéma de la grammaire des graphiques. Trois couches&#8239;: les données, un tableau aux colonnes note_parti, note_poilievre et vote. Les esthétiques, aes(), qui placent l’opinion du Parti conservateur en x et celle de Pierre Poilievre en y. Les géométries, geom_...(), des points. Les trois couches s’empilent en un seul graphique&#8239;: les données plus les esthétiques plus les géométries.">
+  <svg viewBox="0 0 1000 460" role="img" aria-label="Schéma de la grammaire des graphiques. Trois couches&#8239;: les données, un tableau aux colonnes note_carney, note_poilievre et vote. Les esthétiques, aes(), qui placent l’opinion de Mark Carney en x et celle de Pierre Poilievre en y. Les géométries, geom_...(), des points. Les trois couches s’empilent en un seul graphique&#8239;: les données plus les esthétiques plus les géométries.">
     <text x="980" y="24" class="gr-note">schéma</text>
 
     <!-- Couche 1 : les données. Dessinée en premier, elle passe derrière. -->
@@ -110,7 +110,7 @@
       {#each TY as y}
         <line x1={X0 - 7} y1={y} x2={X0} y2={y} class="gr-trait" />
       {/each}
-      <text x={(X0 + X1) / 2} y="214" class="gr-axe"><tspan class="gr-xy">x =</tspan> note_parti</text>
+      <text x={(X0 + X1) / 2} y="214" class="gr-axe"><tspan class="gr-xy">x =</tspan> note_carney</text>
       <text transform="translate(30 {(Y0 + Y1) / 2}) rotate(-90)" class="gr-axe"><tspan class="gr-xy">y =</tspan> note_poilievre</text>
     </g>
 

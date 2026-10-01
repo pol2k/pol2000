@@ -14,7 +14,7 @@
    * pas une, le biais, la marge d'erreur (« 19 fois sur 20 »), puis « Est-ce
    * le hasard ? » (H0 et H1, le procès, le monde où H0 est vraie). Ni test t
    * ni le mot « valeur p » : ils viennent avec la régression. Après la
-   * pause, ggplot2 couche par couche, puis tout ça en direct dans R.
+   * pause, ggplot2 couche par couche, puis on change de géométrie.
    *
    * Le dispositif : les 20 180 répondant.e.s de l'Étude électorale
    * canadienne 2025 servent de population d'exercice. On connaît donc la
@@ -64,6 +64,7 @@
   import Couches from '$lib/deck/visuels/Couches.svelte';
   import DansHorsAes from '$lib/deck/visuels/DansHorsAes.svelte';
   import ErreursGg from '$lib/deck/visuels/ErreursGg.svelte';
+  import ChangerGeom from '$lib/deck/visuels/ChangerGeom.svelte';
   import AvantS7 from '$lib/deck/visuels/AvantS7.svelte';
   import Galton from '$lib/deck/visuels/Galton.svelte';
   import ClasseTaille from '$lib/deck/visuels/ClasseTaille.svelte';
@@ -78,18 +79,18 @@
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { GG, GG_CONSOLE } from '$lib/data/seance5_ggplot.js';
 
-  const TOTAL = 57;
+  const TOTAL = 59;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // La console vient de R telle quelle (outils/seance5_ggplot.R); seules les notes sont d'ici.
   const NOTES_GAP = [
-    '-99 veut dire « pas de réponse » : on l’écarte. as.numeric() retire la question anglaise collée à la colonne.',
+    '-99 veut dire « pas de réponse » : on l’écarte, comme les personnes sans vote déclaré. as.numeric() retire la question anglaise collée à la colonne.',
     'Notre budget : 1 000 répondant.e.s, tiré.e.s au hasard.',
     'Deux notes de 0 à 100, et le vote.'
   ];
-  const c_gapminder = GG_CONSOLE.map((l, i) => ({ ...l, note: NOTES_GAP[i] || '' }));
-  const c_donnees = c_gapminder.slice(0, 1);
-  const c_mille = c_gapminder.slice(1);
+  const c_ces = GG_CONSOLE.map((l, i) => ({ ...l, note: NOTES_GAP[i] || '' }));
+  const c_donnees = c_ces.slice(0, 1);
+  const c_mille = c_ces.slice(1);
 
 </script>
 
@@ -388,6 +389,25 @@
     <Slide bandeau="ggplot2 · rappel" droite={D}>
       <h2 class="e">Quel graphique ?</h2>
       <QuelGraphique />
+    </Slide>
+
+    <Slide bandeau="ggplot2 · changer de géométrie" droite={D}>
+      <h2 class="e">Changer de géométrie</h2>
+      <ChangerGeom etapes={[
+        { cle: 'point', cibles: ['geom_point()'] },
+        { cle: 'count', cibles: ['geom_count()'] },
+        { cle: 'bin', cibles: ['geom_bin_2d()'] },
+        { cle: 'densite', cibles: ['geom_density_2d_filled()'] }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="ggplot2 · changer de géométrie" droite={D}>
+      <h2 class="e">Une autre question, un autre graphique</h2>
+      <ChangerGeom etapes={[
+        { cle: 'histo', cibles: ['aes(x = note_carney)', 'geom_histogram()'] },
+        { cle: 'boite', cibles: ['aes(x = vote, y = note_carney)', 'geom_boxplot()'] },
+        { cle: 'barres', cibles: ['aes(x = vote)', 'geom_bar()'] }
+      ]} />
     </Slide>
 
     <Slide bandeau="Avant le 15 octobre" droite={D}>

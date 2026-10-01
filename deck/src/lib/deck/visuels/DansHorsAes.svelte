@@ -1,8 +1,8 @@
 <script>
   /**
    * Dans aes(), ou hors de aes() ? Le même nuage de points (1 000
-   * répondant.e.s de l'Étude électorale canadienne 2025 : l'opinion du Parti
-   * conservateur et celle de Pierre Poilievre),
+   * répondant.e.s de l'Étude électorale canadienne 2025 : l'opinion de Mark
+   * Carney et celle de Pierre Poilievre),
    * deux fois, avec colour = "blue" à deux endroits. Code et images réels :
    * GG.bleuAes et GG.bleu (src/lib/data/seance5_ggplot.js,
    * static/img/s5-g-bleu-aes.png et s5-g-bleu.png, rendus par
@@ -42,7 +42,7 @@
       ...GG.bleuAes,
       ou: 'dans aes()',
       dit: 'R y voit une variable',
-      alt: 'Nuage de points de l’opinion de Pierre Poilievre selon celle du Parti conservateur, aux points saumon, avec une légende colour qui affiche blue.'
+      alt: 'Nuage de points de l’opinion de Pierre Poilievre selon celle de Mark Carney, aux points saumon, avec une légende colour qui affiche blue.'
     },
     {
       ...GG.bleu,

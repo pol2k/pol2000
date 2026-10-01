@@ -38,7 +38,7 @@
     ['ggplot(', 0],
     ['ces1000', 1],
     [', ', 0],
-    ['aes(x = note_parti, y = note_poilievre)', 2],
+    ['aes(x = note_carney, y = note_poilievre)', 2],
     [') +\n  ', 0],
     ['geom_point()', 3]
   ].map(([t, k]) => ({ html: surlignerR(t), k }));
