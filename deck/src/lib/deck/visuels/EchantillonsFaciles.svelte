@@ -21,7 +21,6 @@
    *      pointillée. C'est ce même sondage qui revient à « La marge
    *      d'erreur » (MargeErreur) et dans le journal de « 19 fois sur 20 »
    *      (DixNeufSurVingt, SONDAGES.sondages[0]).
-   *   6  La phrase : « Facile, mais faux. Au hasard : juste à côté. »
    *
    * Les écarts sont calculés sur les valeurs déjà arrondies à une décimale :
    * l'arithmétique affichée tombe toujours juste. Aucun nombre tapé à la main.
@@ -33,7 +32,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 6, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 5, lire: () => e, ecrire: (v) => (e = v) });
   });
 
   const f = (v, d = 0) =>
@@ -83,7 +82,7 @@
     `La vraie réponse : ${pc(BUDGET.vrai)} %. Un budget de ${N} personnes. ` +
     ROWS.map((r) => `${r.quoi ? r.quoi + ', ' : ''}${r.qui} : ${r.val}, ${r.gap}.`).join(' ') +
     ` ${N} au hasard, parmi tout le monde : ${pc(HASARD.part)} %, à ${ecart(HASARD.part)} près. ` +
-    `Facile, mais faux. Au hasard : juste à côté.`;
+    '';
   // Espace fine insécable devant : et %, comme dans le texte visible.
   const ARIA = aria.replace(/ ([:%?!])/g, '\u202f$1');
 </script>
@@ -134,7 +133,6 @@
     <text x="20" y={AXE + 30} class="ef-tick ef-tick-t">vote conservateur</text>
 
     <!-- 6 : la phrase, sous la règle. -->
-    <text x="500" y="606" class="ef-phrase ef-etape" class:ef-vu={e >= 6}><tspan class="ef-rouge">Facile, mais faux.</tspan> Au hasard&#8239;: juste à côté.</text>
   </svg>
 </div>
 
