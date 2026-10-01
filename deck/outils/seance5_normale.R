@@ -65,6 +65,10 @@ compter <- function(x, de, a, largeur) {
 age <- as.numeric(df_raw$cps25_age_in_years)
 nh <- NHANES::NHANES
 nh <- nh[nh$Age >= 20 & !is.na(nh$Height) & !duplicated(nh$ID), ]
+# Au Québec, une taille se dit en pieds et pouces : NHANES mesure en cm, on
+# passe en pouces (÷ 2,54) avant tout tirage. sample() ne dépend que de la
+# longueur du vecteur : les mêmes hommes sont tirés qu'en cm.
+nh$Height <- nh$Height / 2.54
 hommes <- nh$Height[nh$Gender == "male"]
 femmes <- nh$Height[nh$Gender == "female"]
 TAILLES <- list(ecart = mean(hommes) - mean(femmes),
@@ -81,8 +85,8 @@ nyc_q$plus40 <- sum(nyc >= 40); nyc_q$plus100 <- sum(nyc >= 100); nyc_q$plus200 
 poilievre <- as.numeric(df_raw$cps25_lead_rating_24)
 poilievre <- poilievre[!is.na(poilievre) & poilievre >= 0]
 QUIZ <- list(
-  c(list(cle = "hommes", forme = "cloche"), compter(hommes, 150, 206, 2)),
-  c(list(cle = "adultes", forme = "cloche"), compter(nh$Height, 134, 206, 2)),
+  c(list(cle = "hommes", forme = "cloche"), compter(hommes, 58, 80, 1)),
+  c(list(cle = "adultes", forme = "cloche"), compter(nh$Height, 52, 80, 1)),
   c(list(cle = "iris", forme = "bosses"), compter(iris$Petal.Length, 1, 7.25, 0.25)),
   c(list(cle = "poilievre", forme = "bosses"), compter(poilievre, 0, 105, 5)),
   c(list(cle = "bebes", forme = "cloche"), compter(MASS::birthwt$bwt, 400, 5200, 400)),
@@ -272,7 +276,7 @@ out <- c(
   "",
   "/* Le quiz : effectifs par tranche [a, a + largeur), n, ce qui déborde à droite. */",
   paste0("export const QUIZ = ", J(QUIZ), ";"),
-  "/* La taille des adultes (NHANES) : l'écart hommes-femmes et l'étendue de 95 % des hommes, en cm. */",
+  "/* La taille des adultes (NHANES) : l'écart hommes-femmes et l'étendue de 95 % des hommes, en pouces. */",
   paste0("export const TAILLES = ", J(TAILLES), ";"),
   "/* Les bâtiments de New York (en mètres), et 1 000 moyennes d'échantillons de 10, 100 et 2 000. */",
   paste0("export const NYC_POP = ", J(NYC_POP), ";"),
@@ -287,7 +291,7 @@ out <- c(
   paste0("export const MONDES = ", J(MONDES), ";"),
   "/* Les moyennes de 1 000 échantillons de 50 notes de Pierre Poilievre. */",
   paste0("export const POILIEVRE_MOYENNES = ", J(POILIEVRE_MOYENNES), ";"),
-  "/* Les moyennes de 1 000 échantillons de 50 hommes (taille en cm, NHANES). */",
+  "/* Les moyennes de 1 000 échantillons de 50 hommes (taille en pouces, NHANES). */",
   paste0("export const HOMMES_MOYENNES = ", J(HOMMES_MOYENNES), ";"),
   "/* Les moyennes de 1 000 échantillons de 50 pétales d'iris. */",
   paste0("export const IRIS_MOYENNES = ", J(IRIS_MOYENNES), ";"),

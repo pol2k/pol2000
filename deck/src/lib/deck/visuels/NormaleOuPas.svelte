@@ -37,6 +37,11 @@
    * aucune moyenne. Les formes sont lues à l'œil, comme en classe (aucun
    * test de normalité) : elles sont écrites dans ce fichier.
    *
+   * Les hommes : au Québec, une taille se dit en pieds et pouces. Les
+   * données arrivent en pouces (R a divisé les cm de NHANES par 2,54). Les
+   * graduations s'écrivent comme dans ClasseTaille.svelte : aux 4 pouces,
+   * « 5 pi », « 5 pi 4 », « 5 pi 8 »; celles des moyennes, au pouce.
+   *
    * L'âge, vérifié le 30 septembre 2026 contre Statistique Canada (tableau
    * 17-10-0005-01, 1er juillet 2025, 18 ans et plus) : de 7 à 9 % par
    * tranche de cinq ans jusque vers 70 ans, puis ça descend. La CES, bâtie
@@ -57,6 +62,9 @@
   const N = ' ';
   const f = (v, d = 0) => v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, N);
 
+  // Une graduation en pieds et pouces : 64 po donne « 5 pi 4 », 60 po donne « 5 pi ».
+  const grad = (po) => (po % 12 ? `${Math.floor(po / 12)}${N}pi ${po % 12}` : `${po / 12}${N}pi`);
+
   const AGE_50 = DISTRIBUTIONS.find((d) => d.n === 50);
   const MOYENNES = {
     hommes: HOMMES_MOYENNES,
@@ -70,10 +78,11 @@
     hommes: {
       titre: (q) => `La taille de ${f(q.n)} hommes adultes`,
       source: () => 'États-Unis, enquête NHANES, 2009 à 2012',
-      axe: 'taille (cm)', ticks: [150, 160, 170, 180, 190, 200],
+      axe: 'taille (pieds et pouces)', ticks: [60, 64, 68, 72, 76, 80], etiquette: grad,
+      rpas: 1,
       forme: 'une cloche',
       qui: 'hommes tirés au hasard',
-      unite: ' (cm)',
+      unite: ', pieds et pouces',
       fin: [`Les données${N}: déjà une cloche,`, ' et leurs moyennes aussi.']
     },
     poilievre: {
@@ -135,8 +144,9 @@
   const RMAX = $derived(Math.max(...M.effectifs));
   const RBATONS = $derived(M.effectifs.map((c, j) => ({ a: M.bornes[j], b: M.bornes[j + 1], h: (c / RMAX) * RHAUT })));
   // Graduations des moyennes : le plus fin des pas qui en donne au plus cinq.
+  // Les hommes : au pouce (T.rpas), écrites en pieds et pouces.
   const RTICKS = $derived.by(() => {
-    for (const pas of [0.1, 0.2, 0.5, 1, 2, 5, 10, 20]) {
+    for (const pas of T.rpas ? [T.rpas] : [0.1, 0.2, 0.5, 1, 2, 5, 10, 20]) {
       const k0 = Math.ceil(M0 / pas - 1e-9), k1 = Math.floor(M1 / pas + 1e-9);
       if (k1 - k0 + 1 <= 5) {
         return Array.from({ length: k1 - k0 + 1 }, (_, i) => ({ v: Math.round((k0 + i) * pas * 1000) / 1000, d: pas < 1 ? 1 : 0 }));
@@ -184,7 +194,7 @@
     <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="nop-axe" />
     {#each T.ticks as t}
       <line x1={x(t)} y1={BASE} x2={x(t)} y2={BASE + 8} class="nop-axe" />
-      <text x={x(t)} y={BASE + (TRAITS.length ? 44 : 30)} class="nop-tick">{f(t)}</text>
+      <text x={x(t)} y={BASE + (TRAITS.length ? 44 : 30)} class="nop-tick">{T.etiquette ? T.etiquette(t) : f(t)}</text>
     {/each}
     <text x={X1} y={BASE + (TRAITS.length ? 72 : 58)} class="nop-tick nop-fin">{T.axe}</text>
 
@@ -196,7 +206,7 @@
       <line x1={RX0} y1={BASE} x2={RX1} y2={BASE} class="nop-axe" />
       {#each RTICKS as t}
         <line x1={xr(t.v)} y1={BASE} x2={xr(t.v)} y2={BASE + 8} class="nop-axe" />
-        <text x={xr(t.v)} y={BASE + 30} class="nop-tick">{f(t.v, t.d)}</text>
+        <text x={xr(t.v)} y={BASE + 30} class="nop-tick">{T.etiquette ? T.etiquette(t.v) : f(t.v, t.d)}</text>
       {/each}
       <text x={RX1} y={BASE + 58} class="nop-tick nop-fin">{RAXE}</text>
     </g>
