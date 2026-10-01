@@ -1,20 +1,24 @@
 <script>
   /**
-   * Le monde à 100 g, construit panier par panier, pour une seule question :
-   * si ses pommes étaient ordinaires, un panier comme le sien serait-il rare ?
+   * Le lot juste à 100 g, construit panier par panier, pour une seule
+   * question : si l'acheteur avait raison, un panier comme le sien serait-il
+   * rare ? 100 g n'est pas le poids « normal » des pommes : c'est l'exigence
+   * de l'acheteur, la limite. On imagine un lot pile à cette limite.
    * Une idée par temps, une phrase en haut (qui change à chaque temps), le
-   * dessin au milieu, le verdict en bas. Tout vient de PANIERS
-   * (src/lib/data/seance5_normale.js, simulation d'outils/seance5_normale.R,
-   * pommes fictives, dit à l'écran) et de POMMES (src/lib/data/seance5.js :
-   * 50 pommes par panier, 100 g, 105 g).
+   * dessin au milieu, puis la conversation reprend en bulles : la
+   * pomicultrice (à gauche) et l'acheteur (à droite), comme dans les diapos
+   * d'avant. Tout vient de PANIERS (src/lib/data/seance5_normale.js,
+   * simulation d'outils/seance5_normale.R, pommes fictives, dit à l'écran)
+   * et de POMMES (src/lib/data/seance5.js : 50 pommes par panier, 100 g,
+   * 105 g).
    *
-   * C'est le monde à 100 g, pas « le monde de H0 » : depuis le 1er octobre
-   * 2026, H0 dit « 100 g ou moins », et la diapo d'avant (PourquoiH0)
-   * explique pourquoi on ne construit que celui-là.
+   * C'est le lot à 100 g, pas « le monde de H0 » : H0 dit « 100 g ou
+   * moins », et la diapo PourquoiH0 explique pourquoi on ne construit que
+   * celui-là.
    *
-   * Avec panier = 105 (la diapo principale), cinq temps :
-   *   0  « Imaginons des pommes ordinaires » : l'axe des poids et la ligne
-   *      pointillée de 100 g, vides.
+   * Avec panier = 105 (la diapo principale), six temps :
+   *   0  « Imaginons que l'acheteur a raison : un lot juste à 100 g » :
+   *      l'axe des poids et la ligne pointillée de 100 g, vides.
    *   1  Un panier de 50 pommes tombe sur l'axe, à son poids moyen :
    *      PANIERS.moyennes[0] (100,7 g).
    *   2  Un autre panier, un autre poids : PANIERS.moyennes[1] (97,3 g). Le
@@ -25,23 +29,33 @@
    *      1 000 paniers sont tous là, toujours les mêmes.
    *   4  Son panier, 105 g, en rouge; les bâtons de 105 g ou plus passent au
    *      rouge; le compte, PANIERS.auMoins105 (27) sur 1 000.
-   *   5  Le verdict : « Si ses pommes étaient ordinaires, un panier comme le
-   *      sien arriverait environ 3 fois sur 100. C'est rare : on rejette
-   *      H0. » La phrase du haut tire la leçon de la diapo PourquoiH0.
+   *   5  La phrase du haut s'efface; la pomicultrice : « Si tu avais raison,
+   *      un panier comme le mien arriverait environ 3 fois sur 100. »
+   *   6  L'acheteur : « C'est rare. D'accord, je te crois. » Et, en bas à
+   *      gauche, la phrase du cours : « On rejette H0. »
    * Avec panier = 102 (la diapo « et si »), le monde est déjà construit,
-   * trois temps (ramenés à 3, 4 et 5 ci-dessus) :
+   * trois temps (ramenés à 3, 4 et 6 ci-dessus; la bulle de la
+   * pomicultrice est sautée) :
    *   0  Les 1 000 paniers, la cloche.
    *   1  Un panier de 102 g, et le compte, PANIERS.auMoins102 (217) sur 1 000.
-   *   2  « … environ 22 fois sur 100. Ce n'est pas rare : on ne rejette pas
-   *      H0. » En haut : on ne peut pas conclure, et ça ne prouve pas que ses
-   *      pommes sont ordinaires (Arel-Bundock 2021, p. 75).
+   *   2  L'acheteur : « 22 fois sur 100 ? Ça peut être la chance. Pas
+   *      convaincu. » En bas : « On ne rejette pas H0 : on ne peut pas
+   *      conclure. » (Ça ne prouve pas que le lot pèse 100 g ou moins,
+   *      Arel-Bundock 2021, p. 75.)
    *
    * « Environ k fois sur 100 » est le compte sur 1 000 divisé par 10 et
    * arrondi : un seul chiffre à l'écran, celui de la simulation. Le seuil
    * de « rare » (moins de 50 sur 1 000) reste dans le code, pas à l'écran.
    *
+   * Les bulles : carrées, filet de 2, une petite pointe qui descend vers le
+   * nom de qui parle. Leur largeur se calcule sur la plus longue ligne
+   * (Plex Mono : 0,6 em par caractère).
+   *
    * Remanié le 1er octobre 2026 : le professeur ne comprenait pas l'ancienne
    * version (dix paniers d'un coup, un titre long, un verdict technique).
+   * Le même jour, plus rien ne laisse croire que 100 g est le poids moyen
+   * connu des pommes : c'est l'exigence de l'acheteur. Les conclusions
+   * passent en bulles.
    */
   import { brancherTemps } from '../temps.js';
   import { PANIERS } from '$lib/data/seance5_normale.js';
@@ -50,7 +64,7 @@
   const rapide = panier !== POMMES.moyenne;
   let e = $state(0);
   let hote = $state(null);
-  const TOTAL = rapide ? 2 : 5;
+  const TOTAL = rapide ? 2 : 6;
   $effect(() => {
     if (!hote) return;
     e = 0;
@@ -58,8 +72,8 @@
   });
   const f = (v, d = 0) => v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, ' ');
   const N = '\u202f';
-  // Les temps, ramenés à ceux de la diapo principale.
-  const T = $derived(rapide ? e + 3 : e);
+  // Les temps, ramenés à ceux de la diapo principale (102 g : 3, 4, puis 6).
+  const T = $derived(rapide ? [3, 4, 6][e] : e);
 
   const G0 = 90, G1 = 110, X0 = 70, X1 = 930, BASE = 350, HAUT = 200;
   const x = (g) => X0 + ((g - G0) / (G1 - G0)) * (X1 - X0);
@@ -101,37 +115,73 @@
   const sur100 = Math.round(nb / 10);
   const rare = nb < 50;
 
-  // La phrase du haut, une par temps : [principale, secondaire].
+  // La phrase du haut, une par temps : [principale, secondaire]. Plus de
+  // phrase à partir du temps 5 : les bulles prennent le relais.
   const PHRASES = rapide
     ? {
-        3: [`Le même monde${N}: des pommes ordinaires.`, `${TOUS} paniers, une cloche autour de ${H0} g`],
-        4: [`Un panier de ${panier} g.`, `Combien de paniers ordinaires pèsent autant${N}?`],
-        5: ['On ne peut pas conclure.', 'Ça ne prouve pas que ses pommes sont ordinaires.']
+        3: [`Le même lot, juste à ${H0} g.`, `${TOUS} paniers, une cloche autour de ${H0} g`],
+        4: [`Un panier de ${panier} g.`, `Combien de ces paniers pèsent autant${N}?`]
       }
     : {
-        0: ['Imaginons des pommes ordinaires.', `${H0} g en moyenne${N}: le monde à ${H0} g`],
-        1: [`On remplit un panier de ${NB_POMMES} pommes.`, `Il pèse ${f(M[0], 1)} g en moyenne.`],
+        0: ['Imaginons que l’acheteur a raison.', `Un lot juste à ${H0} g.`],
+        1: [`On y prend un panier de ${NB_POMMES} pommes.`, `Il pèse ${f(M[0], 1)} g en moyenne.`],
         2: [`Un autre panier${N}: un autre poids.`, `Celui-ci pèse ${f(M[1], 1)} g.`],
         3: [`On remplit ${TOUS} paniers.`, `Ils s’empilent en cloche autour de ${H0} g.`],
-        4: [`Son panier pèse ${panier} g.`, `Combien de paniers ordinaires pèsent autant${N}?`],
-        5: ['H0 explique très mal son panier.', 'Ça donne du poids à H1.']
+        4: [`Son panier pèse ${panier} g.`, `Combien de ces paniers pèsent autant${N}?`]
       };
   const phrase = $derived(PHRASES[T]);
-  const VERDICT = rare
-    ? [`Si ses pommes étaient ordinaires, un panier comme le sien`, `arriverait environ ${sur100} fois sur 100.`, `C’est rare${N}: on rejette H0.`]
-    : [`Si ses pommes étaient ordinaires, un panier de ${panier} g ou plus`, `arriverait environ ${sur100} fois sur 100.`, `Ce n’est pas rare${N}: on ne rejette pas H0.`];
+
+  // Les bulles. Plex Mono : 0,6 em par caractère, 21 unités, marges de 18.
+  const FS = 21, LH = 28, MX = 18;
+  const largeur = (lignes) => Math.ceil(Math.max(...lignes.map((l) => l.length)) * 0.6 * FS) + 2 * MX;
+  const hauteur = (lignes) => lignes.length * LH + 20;
+  const bulle = (qui, cote, lignes, xy) => {
+    const w = largeur(lignes);
+    return { qui, cote, lignes, w, h: hauteur(lignes), x: cote === 'g' ? xy[0] : xy[0] - w, y: xy[1] };
+  };
+  // 5 : la pomicultrice, en haut à gauche (la phrase du haut s'est effacée).
+  const ELLE = bulle('la pomicultrice', 'g', ['Si tu avais raison, un panier comme le mien', `arriverait environ ${sur100} fois sur 100.`], [40, 30]);
+  // 6 : l'acheteur, en bas à droite, sous le titre de l'axe.
+  const LUI = rare
+    ? bulle('l’acheteur', 'd', [`C’est rare. D’accord, je te crois.`], [980, 418])
+    : bulle('l’acheteur', 'd', [`${sur100} fois sur 100${N}? Ça peut être la chance.`, 'Pas convaincu.'], [980, 418]);
+  // 6 : la phrase du cours, en bas à gauche.
+  const COURS = rare ? ['On rejette H0.'] : [`On ne rejette pas H0${N}:`, 'on ne peut pas conclure.'];
+
+  const ARIA = [
+    'Simulation, pommes fictives.',
+    `Imaginons que l’acheteur a raison${N}: un lot juste à ${H0} g.`,
+    `On remplit ${TOUS} paniers de ${NB_POMMES} pommes. Ils forment une cloche autour de ${H0} g.`,
+    `${f(nb)} paniers sur ${TOUS} pèsent ${panier} g ou plus.`,
+    rapide ? '' : `La pomicultrice${N}: ${ELLE.lignes.join(' ')}`,
+    `L’acheteur${N}: ${LUI.lignes.join(' ')}`,
+    COURS.join(' ')
+  ].filter(Boolean).join(' ');
 </script>
 
 <div class="visuel paniers-h0" bind:this={hote}>
-  <svg viewBox="0 0 1000 510" role="img" aria-label="Simulation, pommes fictives. Des pommes ordinaires, {H0} g en moyenne. On remplit {TOUS} paniers de {NB_POMMES} pommes. Ils forment une cloche autour de {H0} g. {f(nb)} paniers sur {TOUS} pèsent {panier} g ou plus. {VERDICT.join(' ')}">
+  <svg viewBox="0 0 1000 540" role="img" aria-label={ARIA}>
+    {#snippet dire(b)}
+      {@const bx = b.cote === 'g' ? b.x + 22 : b.x + b.w - 22}
+      {@const s = b.cote === 'g' ? 1 : -1}
+      <rect x={b.x} y={b.y} width={b.w} height={b.h} class="bu-cadre" />
+      <path d="M {bx} {b.y + b.h - 1.5} L {bx} {b.y + b.h + 16} L {bx + s * 20} {b.y + b.h - 1.5}" class="bu-pointe" />
+      {#each b.lignes as l, i}
+        <text x={b.x + MX} y={b.y + 30 + i * LH} class="bu-t">{l}</text>
+      {/each}
+      <text x={bx} y={b.y + b.h + 35} class="bu-qui" class:bu-droite={b.cote === 'd'}>{b.qui}</text>
+    {/snippet}
+
     <text x="990" y="22" class="ph-note">simulation · pommes fictives</text>
 
-    <!-- La phrase du temps. -->
+    <!-- La phrase du temps (jusqu'au temps 4). -->
     {#key T}
-      <g class="ph-phrase">
-        <text x="40" y="54" class="ph-titre">{phrase[0]}</text>
-        <text x="40" y="86" class="ph-sous" class:ph-rouge-t={T === 5 && rare}>{phrase[1]}</text>
-      </g>
+      {#if phrase}
+        <g class="ph-phrase">
+          <text x="40" y="54" class="ph-titre">{phrase[0]}</text>
+          <text x="40" y="86" class="ph-sous">{phrase[1]}</text>
+        </g>
+      {/if}
     {/key}
 
     <!-- 3 : mille paniers. -->
@@ -169,11 +219,17 @@
       <text x={XP + 14} y="206" class="ph-lab-s">pèsent {panier} g ou plus</text>
     </g>
 
-    <!-- 5 : le verdict. -->
-    <g class="ph-etape" class:ph-vu={T >= 5}>
-      <text x="500" y="440" class="ph-verdict">{VERDICT[0]}</text>
-      <text x="500" y="470" class="ph-verdict">{VERDICT[1]}</text>
-      <text x="500" y="502" class="ph-verdict ph-fort" class:ph-rouge-t={rare}>{VERDICT[2]}</text>
+    <!-- 5 : la pomicultrice répond (diapo principale seulement). -->
+    {#if !rapide}
+      <g class="ph-etape" class:ph-vu={T >= 5}>{@render dire(ELLE)}</g>
+    {/if}
+
+    <!-- 6 : l'acheteur, puis la phrase du cours. -->
+    <g class="ph-etape" class:ph-vu={T >= 6}>{@render dire(LUI)}</g>
+    <g class="ph-etape ph-apres" class:ph-vu={T >= 6}>
+      {#each COURS as c, i}
+        <text x="40" y={LUI.y + 30 + i * LH} class="ph-cours">{c}</text>
+      {/each}
     </g>
   </svg>
 </div>
@@ -204,13 +260,17 @@
   .ph-lab { font-size: 21px; font-weight: 600; fill: var(--dk-accent); }
   .ph-compte { font-size: 30px; font-weight: 600; fill: var(--dk-accent); }
   .ph-lab-s { font-size: 19px; fill: var(--dk-encre); }
-  .ph-verdict { font-size: 23px; text-anchor: middle; fill: var(--dk-encre); }
-  .ph-fort { font-weight: 600; }
-  .ph-rouge-t { fill: var(--dk-accent); }
+  .ph-cours { font-size: 24px; font-weight: 600; fill: var(--dk-accent); }
+  .bu-cadre { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 2; }
+  .bu-pointe { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 2; stroke-linejoin: miter; }
+  .bu-t { font-size: 21px; fill: var(--dk-encre); }
+  .bu-qui { font-size: 17px; font-weight: 600; fill: var(--dk-gris); }
+  .bu-qui.bu-droite { text-anchor: end; }
   .ph-etape { opacity: 0; transition: opacity 0.2s; }
   .ph-etape.ph-vu { opacity: 1; transition: opacity 0.5s; }
+  .ph-etape.ph-apres.ph-vu { transition: opacity 0.5s 0.7s; }
   @media (prefers-reduced-motion: reduce) {
     .ph-phrase { animation: none; }
-    .ph-etape, .ph-etape.ph-vu, .ph-panier, .ph-baton { transition: none; }
+    .ph-etape, .ph-etape.ph-vu, .ph-etape.ph-apres.ph-vu, .ph-panier, .ph-baton { transition: none; }
   }
 </style>

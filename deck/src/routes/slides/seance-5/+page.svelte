@@ -59,6 +59,8 @@
   import PourquoiH0 from '$lib/deck/visuels/PourquoiH0.svelte';
   import MargeErreur from '$lib/deck/visuels/MargeErreur.svelte';
   import EcartTypeNormale from '$lib/deck/visuels/EcartTypeNormale.svelte';
+  import EcartType from '$lib/deck/visuels/EcartType.svelte';
+  import TroisIngredients from '$lib/deck/visuels/TroisIngredients.svelte';
   import TheoremeCentral from '$lib/deck/visuels/TheoremeCentral.svelte';
   import EecCanada from '$lib/deck/visuels/EecCanada.svelte';
   import Ponderation from '$lib/deck/visuels/Ponderation.svelte';
@@ -76,7 +78,7 @@
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { CONSOLES } from '$lib/data/seance5.js';
 
-  const TOTAL = 55;
+  const TOTAL = 57;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -255,8 +257,13 @@
       <BiaisEchantillon />
     </Slide>
 
-    <Slide bandeau="La marge d’erreur" droite={D}>
+    <Slide bandeau="L’écart type" droite={D}>
       <h2 class="e">L’écart type</h2>
+      <EcartType />
+    </Slide>
+
+    <Slide bandeau="La marge d’erreur" droite={D}>
+      <h2 class="e">L’écart type et la cloche</h2>
       <EcartTypeNormale />
     </Slide>
 
@@ -283,13 +290,8 @@
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ?" droite={D}>
-      <h2 class="e">Deux hypothèses</h2>
+      <h2 class="e">La conversation</h2>
       <DeuxHypotheses />
-    </Slide>
-
-    <Slide bandeau="Est-ce le hasard ?" droite={D}>
-      <h2 class="e">Pourquoi le monde à 100 g ?</h2>
-      <PourquoiH0 />
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ?" droite={D}>
@@ -298,8 +300,18 @@
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ?" droite={D}>
-      <h2 class="e">Si ses pommes étaient ordinaires…</h2>
+      <h2 class="e">Le monde de l’acheteur</h2>
+      <TroisIngredients />
+    </Slide>
+
+    <Slide bandeau="Est-ce le hasard ?" droite={D}>
+      <h2 class="e">Compter les paniers</h2>
       <PaniersH0 panier={105} />
+    </Slide>
+
+    <Slide bandeau="Est-ce le hasard ?" droite={D}>
+      <h2 class="e">Pourquoi le monde à 100 g ?</h2>
+      <PourquoiH0 />
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ?" droite={D}>
