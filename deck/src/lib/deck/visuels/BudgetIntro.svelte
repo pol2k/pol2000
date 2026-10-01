@@ -10,12 +10,18 @@
    *
    *   0  La population d'exercice, une grande foule de points (un point
    *      pour 20 répondant.e.s) : vote conservateur en rouge, autre vote en
-   *      gris, pas de vote déclaré en contour pâle. À droite, la vraie
-   *      valeur en grand, « parmi les votes déclarés », et « ici, on
-   *      connaît la réponse ».
-   *   1  Un porte-monnaie : « budget : 1 000 personnes », et une petite
-   *      boîte de 1 000, à la même échelle que la foule (50 points vides :
-   *      on ne sait pas encore qui).
+   *      gris, pas de vote déclaré en contour pâle. Au-dessus, sur toute la
+   *      largeur : « Faisons comme si les 20 180 répondant.e.s de la CES
+   *      étaient tout le Canada. » (trop longue pour le panneau de droite,
+   *      d'où sa place en haut). À droite, « la vraie réponse » en grand
+   *      (vote conservateur, parmi les votes déclarés), puis, en petit,
+   *      « c'est le paramètre. Chaque sondage en donne un estimé. » (les
+   *      mots de la diapo « Quatre mots »), et « ici, on connaît la
+   *      réponse ». « La vraie réponse » est le nom de ce 33,1 % dans
+   *      toute l'histoire du budget.
+   *   1  Une petite boîte de 1 000, à la même échelle que la foule
+   *      (50 points vides : on ne sait pas encore qui), et dessous un
+   *      porte-monnaie : « budget : 1 000 personnes ».
    *   2  Une flèche pointillée de la foule vers la boîte, et la question en
    *      grand : « Comment choisir les 1 000 ? »
    *
@@ -92,28 +98,32 @@
     return item;
   });
 
-  // La colonne de droite : la vraie valeur en haut, le budget en dessous.
+  // La colonne de droite : la vraie réponse en haut, le budget en dessous.
   const CX = 775;
-  // La boîte du budget : même pas, même rayon que la foule.
+  const PH = 230; // hauteur du panneau de la vraie réponse
+  // La boîte du budget : même pas, même rayon que la foule. Le
+  // porte-monnaie et « budget : 1 000 personnes » passent sous la boîte,
+  // pour que la flèche du temps 2 passe au-dessus d'eux.
   const BCOLS = 10;
   const BR = Math.ceil(NBUD / BCOLS);
   const BW = BCOLS * PAS + 16, BH = BR * PAS + 14;
-  const BX = CX - BW / 2, BY = 334;
+  const BX = CX - BW / 2, BY = FY + PH + 16;
+  const YB = BY + BH + 17; // haut du porte-monnaie
   const boite = Array.from({ length: NBUD }, (_, i) => ({
     x: BX + 13 + (i % BCOLS) * PAS,
     y: BY + 12 + Math.floor(i / BCOLS) * PAS
   }));
 
   // La flèche pointillée, de la foule vers la boîte.
-  const AX1 = FX + FW + 10, AY1 = FY + FH - 30;
+  const AX1 = FX + FW + 10, AY1 = FY + FH - 20;
   const AX2 = BX - 12, AY2 = BY + BH / 2;
 </script>
 
 <div class="visuel budget-intro" bind:this={hote}>
-  <svg viewBox="0 0 1000 540" role="img" aria-label="Notre population d’exercice : {nPop} répondant.e.s de l’Étude électorale canadienne 2025, dont certain.e.s ne déclarent pas de vote. Vrai vote conservateur, parmi les votes déclarés : {vrai} %. Ici, on connaît la réponse. Notre budget : {nBudget} personnes. Comment choisir les {nBudget} ?">
+  <svg viewBox="0 0 1000 540" role="img" aria-label="Notre population d’exercice. Faisons comme si les {nPop} répondant.e.s de l’Étude électorale canadienne 2025 étaient tout le Canada. Certain.e.s ne déclarent pas de vote. La vraie réponse, le vote conservateur parmi les votes déclarés&#8239;: {vrai}&#8239;%. C’est le paramètre. Chaque sondage en donne un estimé. Ici, on connaît la réponse. Notre budget&#8239;: {nBudget} personnes. Comment choisir les {nBudget}&#8239;?">
     <!-- 0 : la population d'exercice, une foule de points. -->
     <text x={FX} y="34" class="bi-titre">notre population d’exercice</text>
-    <text x={FX} y="64" class="bi-t"><tspan class="bi-fort">{nPop}</tspan> répondant.e.s de la CES</text>
+    <text x={FX} y="64" class="bi-t">Faisons comme si les <tspan class="bi-fort">{nPop}</tspan> répondant.e.s de la CES étaient tout le Canada.</text>
     <rect x={FX} y={FY} width={FW} height={FH} class="bi-cadre" />
     {#each foule as p}
       <circle cx={p.x} cy={p.y} r={R} class={p.classe} />
@@ -124,32 +134,35 @@
       <text x={l.tx} y={LY} class="bi-leg">{l.mot}</text>
     {/each}
 
-    <!-- 0 : la vraie valeur, connue, parmi les votes déclarés. -->
-    <rect x="575" y={FY} width="400" height="178" class="bi-panneau" />
-    <text x={CX} y={FY + 34} class="bi-t bi-fort bi-m">vrai vote conservateur</text>
-    <text x={CX} y={FY + 60} class="bi-leg bi-m">parmi les votes déclarés</text>
-    <text x={CX} y={FY + 130} class="bi-vrai">{vrai}&#8239;%</text>
-    <text x={CX} y={FY + 162} class="bi-t bi-m bi-accent">ici, on connaît la réponse</text>
+    <!-- 0 : la vraie réponse, connue, parmi les votes déclarés. -->
+    <rect x="575" y={FY} width="400" height={PH} class="bi-panneau" />
+    <text x={CX} y={FY + 28} class="bi-t bi-fort bi-m">la vraie réponse</text>
+    <text x={CX} y={FY + 52} class="bi-leg bi-m">vote conservateur</text>
+    <text x={CX} y={FY + 73} class="bi-leg bi-m">parmi les votes déclarés</text>
+    <text x={CX} y={FY + 140} class="bi-vrai">{vrai}&#8239;%</text>
+    <text x={CX} y={FY + 168} class="bi-p bi-m">c’est le <tspan class="bi-fort">paramètre</tspan>.</text>
+    <text x={CX} y={FY + 188} class="bi-p bi-m">Chaque sondage en donne un <tspan class="bi-fort">estimé</tspan>.</text>
+    <text x={CX} y={FY + 216} class="bi-t bi-m bi-accent">ici, on connaît la réponse</text>
 
-    <!-- 1 : le budget, et une petite boîte de 1 000, à la même échelle. -->
+    <!-- 1 : une petite boîte de 1 000, à la même échelle, et le budget. -->
     <g class="bi-budget" class:bi-vu={e >= 1}>
-      <g transform="translate(582 278)">
-        <rect x="0" y="6" width="58" height="38" class="bi-bourse" />
-        <path d="M 0 6 L 10 -6 H 48 L 58 6" class="bi-bourse" />
-        <rect x="40" y="18" width="18" height="14" class="bi-fermoir" />
-      </g>
-      <text x="656" y="308" class="bi-t bi-fort">budget&#8239;: {nBudget} personnes</text>
       <rect x={BX} y={BY} width={BW} height={BH} class="bi-cadre" />
       {#each boite as p}
         <circle cx={p.x} cy={p.y} r={R} class="bi-vide" />
       {/each}
+      <g transform="translate(582 {YB})">
+        <rect x="0" y="6" width="58" height="38" class="bi-bourse" />
+        <path d="M 0 6 L 10 -6 H 48 L 58 6" class="bi-bourse" />
+        <rect x="40" y="18" width="18" height="14" class="bi-fermoir" />
+      </g>
+      <text x="656" y={YB + 30} class="bi-t bi-fort">budget&#8239;: {nBudget} personnes</text>
     </g>
 
     <!-- 2 : la question. -->
     <g class="bi-question" class:bi-vu={e >= 2}>
       <path d="M {AX1} {AY1} C {AX1 + 70} {AY1}, {AX2 - 70} {AY2}, {AX2} {AY2}" class="bi-fleche" />
       <path d="M {AX2 - 12} {AY2 - 8} L {AX2} {AY2} L {AX2 - 12} {AY2 + 8}" class="bi-pointe" />
-      <text x="500" y="482" class="bi-grande">Comment choisir les {nBudget}&#8239;?</text>
+      <text x="500" y="499" class="bi-grande">Comment choisir les {nBudget}&#8239;?</text>
     </g>
 
     <text x={FX} y="530" class="bi-source">CES 2025, les {nPop} répondant.e.s, sans pondération</text>
@@ -173,8 +186,9 @@
   .bi-fort { font-weight: 600; }
   .bi-m { text-anchor: middle; }
   .bi-accent { fill: var(--dk-accent); font-weight: 600; }
-  .bi-vrai { font-size: 84px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); letter-spacing: -0.02em; }
+  .bi-vrai { font-size: 76px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); letter-spacing: -0.02em; }
   .bi-leg { font-size: 18px; fill: var(--dk-gris); }
+  .bi-p { font-size: 17px; fill: var(--dk-gris); }
   .bi-grande { font-size: 36px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .bi-source { font-size: 18px; fill: var(--dk-gris-2); letter-spacing: 0.02em; }
 

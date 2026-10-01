@@ -7,9 +7,10 @@
    *   1  La forme : une cloche (le théorème central limite). Une cloche pâle,
    *      pas encore à sa place.
    *   2  Le centre : la cloche glisse sur 100 g, ce que dit l'acheteur (H0).
-   *   3  La largeur : elle dépend de combien les pommes varient d'une à
-   *      l'autre dans son panier (leur écart type, POMMES.ecartType) et de la
-   *      taille du panier (POMMES.n). En pointillé gris, à titre de schéma, la
+   *   3  La largeur : combien les paniers varient d'un panier à l'autre
+   *      (POMMES.erreurType, environ 2,5 g), beaucoup moins que les pommes
+   *      (POMMES.ecartType, environ 17 g), parce que dans un panier de 50 les
+   *      grosses et les petites s'annulent (comme la taille d'une classe). En pointillé gris, à titre de schéma, la
    *      cloche qu'on aurait si les pommes variaient beaucoup plus.
    *   4  Son panier, 105 g : dans la cloche large, rien d'étonnant. Dans la
    *      vraie, au bout de la queue. On peut maintenant compter.
@@ -49,12 +50,12 @@
   const ETAPES = [
     { n: '1', mot: 'la forme', quoi: 'une cloche', pourquoi: 'le théorème central limite' },
     { n: '2', mot: 'le centre', quoi: `${POMMES.h0} g`, pourquoi: 'ce que dit l’acheteur' },
-    { n: '3', mot: 'la largeur', quoi: `ses pommes varient d’environ ${f(POMMES.ecartType)} g`, pourquoi: `et le panier en a ${POMMES.n}` }
+    { n: '3', mot: 'la largeur', quoi: `les paniers varient de ${f(POMMES.erreurType, 1)}\u202fg`, pourquoi: `pas ${f(POMMES.ecartType)}\u202fg comme une pomme` }
   ];
 </script>
 
 <div class="visuel trois-ingredients" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="À quoi ressemblent les paniers d’un lot à {POMMES.h0} g ? Trois ingrédients. La forme : une cloche, grâce au théorème central limite. Le centre : {POMMES.h0} g, ce que dit l’acheteur. La largeur : combien ses pommes varient, environ {f(POMMES.ecartType)} g, et la taille du panier, {POMMES.n} pommes. Son panier de {POMMES.moyenne} g tombe au bout de la cloche.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="À quoi ressemblent les paniers d’un lot à {POMMES.h0} g ? Trois ingrédients. La forme : une cloche, grâce au théorème central limite. Le centre : {POMMES.h0} g, ce que dit l’acheteur. La largeur : les paniers de {POMMES.n} pommes varient d’environ {f(POMMES.erreurType, 1)} g, pas {f(POMMES.ecartType)} g comme une pomme, parce que les grosses et les petites s’annulent. Son panier de {POMMES.moyenne} g tombe au bout de la cloche.">
     <text x={X0} y="34" class="ti-question">À quoi ressemblent les paniers d’un lot à {POMMES.h0}&#8239;g&#8239;?</text>
 
     <!-- Les trois ingrédients, en colonne à gauche. -->

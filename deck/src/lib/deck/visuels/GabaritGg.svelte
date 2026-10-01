@@ -8,8 +8,9 @@
    *   1  <DONNÉES> : quel tableau.
    *   2  aes(<CORRESPONDANCES>) : quelle variable va où.
    *   3  <GEOM>() : quelle forme ; et le + qui ajoute une couche.
-   *   4  Le gabarit rempli, dessous, avec Gapminder 2007 (gap07) :
-   *      les trois parties remplies sont soulignées en rouge.
+   *   4  Le gabarit rempli, dessous, avec les 1 000 répondant.e.s de
+   *      l'Étude électorale canadienne 2025 (ces1000) : les trois parties
+   *      remplies sont soulignées en rouge.
    *
    * Aucun nombre. Le gabarit suit Wickham, Çetinkaya-Rundel et Grolemund
    * (2023), R for Data Science, 2e éd., chap. 1.
@@ -35,9 +36,9 @@
   // Le gabarit rempli, en morceaux : 1, 2, 3 sont les blancs remplis.
   const REMPLI = [
     ['ggplot(', 0],
-    ['gap07', 1],
+    ['ces1000', 1],
     [', ', 0],
-    ['aes(x = gdpPercap, y = lifeExp)', 2],
+    ['aes(x = note_parti, y = note_poilievre)', 2],
     [') +\n  ', 0],
     ['geom_point()', 3]
   ].map(([t, k]) => ({ html: surlignerR(t), k }));

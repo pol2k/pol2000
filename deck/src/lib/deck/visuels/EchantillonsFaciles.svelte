@@ -1,23 +1,26 @@
 <script>
   /**
-   * L'échantillon facile, puis l'échantillon au hasard, sur de vraies données.
-   * On fait comme si les 20 180 répondant.e.s de l'Étude électorale
+   * Les sondages faciles, puis notre sondage au hasard, sur de vraies
+   * données. On fait comme si les 20 180 répondant.e.s de l'Étude électorale
    * canadienne 2025 étaient toute la population (BUDGET.population) : on
-   * connaît donc la vraie part conservatrice (BUDGET.vrai, parmi celles et
-   * ceux qui déclarent un vote). Le budget :
-   * BUDGET.n personnes. Chaque rangée est un échantillon de cette taille.
+   * connaît donc la vraie réponse (BUDGET.vrai, 33,1 %, la part conservatrice
+   * parmi celles et ceux qui déclarent un vote). Le budget : BUDGET.n
+   * personnes. Chaque rangée est un sondage de cette taille.
    * Source : src/lib/data/seance5_budget.js, généré par outils/seance5_budget.R
    * (FACILES, HASARD, graines documentées dans le script).
    *
    *   0  La règle de la part conservatrice (10 à 60 %) et la vraie réponse,
    *      une ligne pointillée.
    *   1  Le Québec : un point rouge, et une accolade rouge mince jusqu'à la
-   *      vraie réponse, avec l'écart (« 13,8 points de trop peu »).
+   *      vraie réponse, avec l'écart (« 12,6 points de trop peu »).
    *   2  L'Alberta, trop haut.
    *   3  Le campus : les diplômé.e.s universitaires.
    *   4  Les 65 ans et plus.
-   *   5  Le même budget au hasard, parmi tout le monde, en encre : le point
-   *      tombe sur la ligne pointillée.
+   *   5  Notre sondage au hasard (HASARD, 30,5 %) : le même budget, parmi
+   *      tout le monde, en encre. Le point tombe juste à côté de la ligne
+   *      pointillée. C'est ce même sondage qui revient à « La marge
+   *      d'erreur » (MargeErreur) et dans le journal de « 19 fois sur 20 »
+   *      (DixNeufSurVingt, SONDAGES.sondages[0]).
    *   6  La phrase : « Facile, mais faux. Au hasard : juste à côté. »
    *
    * Les écarts sont calculés sur les valeurs déjà arrondies à une décimale :
@@ -77,7 +80,7 @@
   const N = f(BUDGET.n);
   const aria =
     `On fait comme si ${f(BUDGET.population)} répondant.e.s étaient toute la population. ` +
-    `La vraie part conservatrice : ${pc(BUDGET.vrai)} %. Un budget de ${N} personnes. ` +
+    `La vraie réponse : ${pc(BUDGET.vrai)} %. Un budget de ${N} personnes. ` +
     ROWS.map((r) => `${r.quoi ? r.quoi + ', ' : ''}${r.qui} : ${r.val}, ${r.gap}.`).join(' ') +
     ` ${N} au hasard, parmi tout le monde : ${pc(HASARD.part)} %, à ${ecart(HASARD.part)} près. ` +
     `Facile, mais faux. Au hasard : juste à côté.`;
@@ -96,7 +99,7 @@
     <text x={XV} y={Y_VRAI} class="ef-vrai-t">la vraie réponse&#8239;: {pc(BUDGET.vrai)}&#8239;%</text>
     <line x1={XV} y1={Y_VRAI + 14} x2={XV} y2={AXE} class="ef-vrai" />
 
-    <!-- 1 à 4 : les échantillons faciles. Accolade, puis point, puis texte. -->
+    <!-- 1 à 4 : les sondages faciles. Accolade, puis point, puis texte. -->
     {#each ROWS as r, i}
       <g class="ef-etape" class:ef-vu={e >= i + 1}>
         <line x1={r.xp} y1={r.y} x2={XV} y2={r.y} pathLength="1" class="ef-accolade" class:ef-trace={e >= i + 1} />

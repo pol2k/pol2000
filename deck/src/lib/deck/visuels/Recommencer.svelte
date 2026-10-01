@@ -1,9 +1,10 @@
 <script>
   /**
    * « Et si on recommençait ? » Le même sondage de 1 000 personnes, refait
-   * mille fois. Au hasard, les résultats s'empilent en cloche autour du vrai
-   * vote conservateur. Au Québec seulement, ils s'empilent aussi en cloche,
-   * mais loin de la vérité : répéter une mauvaise méthode ne la corrige pas.
+   * mille fois. Au hasard, les résultats s'empilent en cloche autour de la
+   * vraie réponse (33,1 %). Au Québec seulement, ils s'empilent aussi en
+   * cloche, mais loin de la vraie réponse : répéter une mauvaise méthode ne
+   * la corrige pas.
    *
    * Tout vient de src/lib/data/seance5_budget.js (outils/seance5_budget.R,
    * Étude électorale canadienne 2025, toute l'enquête comme population;
@@ -21,10 +22,11 @@
    * L'échelle verticale est commune aux deux cloches (le plus haut bâton
    * des deux) et fixée dès le départ : les bâtons grandissent.
    *
-   *   0  L'axe (part du vote conservateur, %) et la ligne pointillée du
-   *      vrai vote, BUDGET.vrai.
+   *   0  L'axe (part du vote conservateur, %) et la ligne pointillée de la
+   *      vraie réponse, BUDGET.vrai.
    *   1  1 000 sondages de 1 000, au hasard : les bâtons montent en trois
-   *      secondes (requestAnimationFrame), une cloche autour de la vérité.
+   *      secondes (requestAnimationFrame), une cloche autour de la vraie
+   *      réponse.
    *      L'état final est fixé : dès le temps 2, ou après trois secondes,
    *      les 1 000 sondages sont tous là.
    *   2  1 000 sondages de 1 000, au Québec seulement : une cloche rouge
@@ -122,7 +124,7 @@
 </script>
 
 <div class="visuel recommencer" bind:this={hote}>
-  <svg viewBox="0 0 1000 524" role="img" aria-label="On refait le même sondage de {TAILLE} personnes {f(NB)} fois. Au hasard, les résultats s’empilent en cloche autour du vrai vote conservateur, {pc(BUDGET.vrai)}. Au Québec seulement, ils s’empilent aussi en cloche, mais autour de {pc(MILLE.quebec.moyenne)}, loin de la vérité. Plus de sondages ne corrigent pas une mauvaise méthode.">
+  <svg viewBox="0 0 1000 524" role="img" aria-label="On refait le même sondage de {TAILLE} personnes {f(NB)} fois. Au hasard, les résultats s’empilent en cloche autour de la vraie réponse, {pc(BUDGET.vrai)}. Au Québec seulement, ils s’empilent aussi en cloche, mais autour de {pc(MILLE.quebec.moyenne)}, loin de la vraie réponse. Plus de sondages ne corrigent pas une mauvaise méthode.">
     <!-- Les compteurs. -->
     <text x={X0} y="40" class="re-compte re-etape" class:re-vu={e >= 1}>{sondages(Math.max(kH, 1))}, au hasard</text>
     <text x={X0} y="76" class="re-compte re-quebec re-etape" class:re-vu={e >= 2}>{sondages(Math.max(kQ, 1))}, au Québec seulement</text>
@@ -138,9 +140,9 @@
     {/each}
     <text x={XQ} y={AXE - HMAX - 14} class="re-qc-t re-etape re-apres" class:re-vu={e >= 2}>autour de {pc(MILLE.quebec.moyenne)}</text>
 
-    <!-- Le vrai vote. -->
+    <!-- La vraie réponse. -->
     <line x1={XV} y1="130" x2={XV} y2={AXE} class="re-vrai" />
-    <text x={XV} y="118" class="re-vrai-t">le vrai vote{N}: {pc(BUDGET.vrai)}</text>
+    <text x={XV} y="118" class="re-vrai-t">la vraie réponse{N}: {pc(BUDGET.vrai)}</text>
 
     <!-- L'axe. -->
     <line x1={X0} y1={AXE} x2={X1} y2={AXE} class="re-axe" />

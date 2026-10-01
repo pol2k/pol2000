@@ -9,7 +9,9 @@
    *   1  POMMES.n pommes, choisies au hasard (un mélange de Fisher-Yates mené
    *      par un petit générateur congruentiel à graine fixe, pas Math.random),
    *      rougissent et vont dans le panier. Leur place dans le verger reste
-   *      vide.
+   *      vide. Au-dessus du panier, le lien avec le vocabulaire : « Le panier,
+   *      c'est l'échantillon. Le lot, c'est la population. » (le lot : tout
+   *      le verger, le mot des diapos suivantes).
    *   2  Le poids moyen du panier : POMMES.moyenne. (L'écart type n'est plus
    *      à l'écran depuis le 30 septembre 2026 : la simulation le porte.)
    *   3  La question : ces grammes de plus suffisent-ils pour conclure ?
@@ -57,7 +59,7 @@
 </script>
 
 <div class="visuel pomicultrice" bind:this={hote}>
-  <svg viewBox="0 0 1000 465" role="img" aria-label="Exemple fictif. Un verger de centaines de milliers de pommes. L’acheteur exige un poids moyen de plus de {POMMES.h0} g. La pomicultrice tire au hasard {POMMES.n} pommes. Leur moyenne est de {POMMES.moyenne} g, leur écart type de {fr(POMMES.ecartType, 1)} g. Est-ce assez pour conclure que la vraie moyenne dépasse {POMMES.h0} g&#8239;?">
+  <svg viewBox="0 0 1000 465" role="img" aria-label="Exemple fictif. Un verger de centaines de milliers de pommes. Le lot, c’est la population. L’acheteur exige un poids moyen de plus de {POMMES.h0} g. La pomicultrice tire au hasard {POMMES.n} pommes. Le panier, c’est l’échantillon. Leur moyenne est de {POMMES.moyenne} g, leur écart type de {fr(POMMES.ecartType, 1)} g. Est-ce assez pour conclure que la vraie moyenne dépasse {POMMES.h0} g&#8239;?">
     <text x={OX} y="40" class="pom-verger-t">des centaines de milliers de pommes</text>
     <text x="990" y="22" class="pom-src">Exemple fictif · Arel-Bundock (2021, p. 62)</text>
 
@@ -76,6 +78,8 @@
         style="transform: translate({e >= 1 ? q.bx : q.ox}px, {e >= 1 ? q.by : q.oy}px); transition-delay: {e >= 1 ? `0s, ${300 + q.k * 8}ms` : '0s, 0s'}" />
     {/each}
     <g class="pom-etape" class:pom-vu={e >= 1}>
+      <text x="779" y="74" class="pom-lab">Le panier, c’est <tspan class="pom-gras">l’échantillon</tspan>.</text>
+      <text x="779" y="104" class="pom-lab">Le lot, c’est <tspan class="pom-gras">la population</tspan>.</text>
       <text x="779" y="306" class="pom-lab">un échantillon aléatoire</text>
       <text x="779" y="334" class="pom-lab">de {POMMES.n} pommes</text>
     </g>

@@ -38,7 +38,6 @@
   import Slide from '$lib/deck/Slide.svelte';
   import Session from '$lib/deck/visuels/Session.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
-  import Inference from '$lib/deck/visuels/Inference.svelte';
   import QuelGraphique from '$lib/deck/visuels/QuelGraphique.svelte';
   import Aujourdhui5 from '$lib/deck/visuels/Aujourdhui5.svelte';
   import Vocabulaire from '$lib/deck/visuels/Vocabulaire.svelte';
@@ -67,8 +66,8 @@
   import ErreursGg from '$lib/deck/visuels/ErreursGg.svelte';
   import AvantS7 from '$lib/deck/visuels/AvantS7.svelte';
   import Galton from '$lib/deck/visuels/Galton.svelte';
-  import Des from '$lib/deck/visuels/Des.svelte';
-  import DesMoyenne from '$lib/deck/visuels/DesMoyenne.svelte';
+  import ClasseTaille from '$lib/deck/visuels/ClasseTaille.svelte';
+  import DeuxEcarts from '$lib/deck/visuels/DeuxEcarts.svelte';
   import DefiInference from '$lib/deck/visuels/DefiInference.svelte';
   import BudgetIntro from '$lib/deck/visuels/BudgetIntro.svelte';
   import EchantillonsFaciles from '$lib/deck/visuels/EchantillonsFaciles.svelte';
@@ -79,15 +78,18 @@
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { GG, GG_CONSOLE } from '$lib/data/seance5_ggplot.js';
 
-  const TOTAL = 56;
+  const TOTAL = 57;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // La console vient de R telle quelle (outils/seance5_ggplot.R); seules les notes sont d'ici.
   const NOTES_GAP = [
-    'Pas dans le tidyverse. À installer une seule fois avec install.packages("gapminder").',
-    'Une ligne par pays, en 2007. La population, en millions.'
+    '-99 veut dire « pas de réponse » : on l’écarte. as.numeric() retire la question anglaise collée à la colonne.',
+    'Notre budget : 1 000 répondant.e.s, tiré.e.s au hasard.',
+    'Deux notes de 0 à 100, et le vote.'
   ];
   const c_gapminder = GG_CONSOLE.map((l, i) => ({ ...l, note: NOTES_GAP[i] || '' }));
+  const c_donnees = c_gapminder.slice(0, 1);
+  const c_mille = c_gapminder.slice(1);
 
 </script>
 
@@ -154,11 +156,6 @@
       <DigestFiltres />
     </Slide>
 
-    <Slide bandeau="L’inférence · rappel" droite={D}>
-      <h2 class="e">Le but : l’inférence</h2>
-      <Inference />
-    </Slide>
-
     <Slide bandeau="L’inférence" droite={D}>
       <h2 class="e">Quatre mots</h2>
       <Vocabulaire />
@@ -216,23 +213,13 @@
     </Slide>
 
     <Slide bandeau="La courbe normale" droite={D}>
-      <h2 class="e">Un dé, encore et encore</h2>
-      <Des />
-    </Slide>
-
-    <Slide bandeau="La courbe normale" droite={D}>
-      <h2 class="e">La moyenne de plusieurs dés</h2>
-      <DesMoyenne />
+      <h2 class="e">Une personne, une classe</h2>
+      <ClasseTaille />
     </Slide>
 
     <Slide bandeau="La courbe normale" droite={D}>
       <h2 class="e">La courbe normale</h2>
       <CourbeNormale />
-    </Slide>
-
-    <Slide bandeau="Le hasard" droite={D}>
-      <h2 class="e">Le théorème central limite</h2>
-      <TheoremeCentral />
     </Slide>
 
     <Slide bandeau="La courbe normale · quiz" droite={D}>
@@ -255,6 +242,11 @@
       <NormaleOuPas cle="age" />
     </Slide>
 
+    <Slide bandeau="Le hasard" droite={D}>
+      <h2 class="e">Le théorème central limite</h2>
+      <TheoremeCentral />
+    </Slide>
+
     <Slide bandeau="L’écart type" droite={D}>
       <h2 class="e">L’écart type</h2>
       <EcartTypeCes />
@@ -263,6 +255,11 @@
     <Slide bandeau="La marge d’erreur" droite={D}>
       <h2 class="e">L’écart type et la cloche</h2>
       <EcartTypeNormale />
+    </Slide>
+
+    <Slide bandeau="La marge d’erreur" droite={D}>
+      <h2 class="e">Deux écarts types</h2>
+      <DeuxEcarts />
     </Slide>
 
     <Slide bandeau="La marge d’erreur" droite={D}>
@@ -344,8 +341,13 @@
     </Slide>
 
     <Slide bandeau="En direct · ggplot2" droite={D}>
-      <h2 class="e">Les données : Gapminder 2007</h2>
-      <Console lignes={c_gapminder} />
+      <h2 class="e">Les données : la CES 2025</h2>
+      <Console lignes={c_donnees} />
+    </Slide>
+
+    <Slide bandeau="En direct · ggplot2" droite={D}>
+      <h2 class="e">1 000 répondant.e.s, au hasard</h2>
+      <Console lignes={c_mille} />
     </Slide>
 
     <Slide bandeau="ggplot2 · couche par couche" droite={D}>
@@ -354,18 +356,23 @@
     </Slide>
 
     <Slide bandeau="ggplot2 · couche par couche" droite={D}>
-      <h2 class="e">Les points, puis l’échelle</h2>
-      <Couches source={GG} etapes={['points', 'log']} depart="axes" />
+      <h2 class="e">Les points, puis la transparence</h2>
+      <Couches source={GG} etapes={['points', 'alpha']} depart="axes" />
     </Slide>
 
     <Slide bandeau="ggplot2 · couche par couche" droite={D}>
-      <h2 class="e">Une troisième et une quatrième variable</h2>
-      <Couches source={GG} etapes={['couleur', 'taille']} depart="log" />
+      <h2 class="e">Une tendance</h2>
+      <Couches source={GG} etapes={['tendance']} depart="alpha" />
+    </Slide>
+
+    <Slide bandeau="ggplot2 · couche par couche" droite={D}>
+      <h2 class="e">Une troisième variable, puis nos couleurs</h2>
+      <Couches source={GG} etapes={['couleur', 'partis']} depart="tendance" />
     </Slide>
 
     <Slide bandeau="ggplot2 · couche par couche" droite={D}>
       <h2 class="e">L’habillage</h2>
-      <Couches source={GG} etapes={['bulles', 'labs', 'theme']} depart="taille" />
+      <Couches source={GG} etapes={['labs', 'theme']} depart="partis" />
     </Slide>
 
     <Slide bandeau="ggplot2" droite={D}>

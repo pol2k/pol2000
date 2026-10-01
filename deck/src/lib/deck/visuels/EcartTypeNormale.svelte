@@ -11,23 +11,20 @@
    *      aire, donc la serrée est plus haute.
    *   1  La largeur, c'est l'écart type : une règle sous l'axe, du centre à un
    *      écart type, pour chacune (petit à droite, grand à gauche). La
-   *      distance typique au centre. Un repère concret : l'âge des 20 180
-   *      répondant.e.s de l'ÉÉC 2025, écart type de 17,5 ans (POP.ecartType).
-   *      L'âge n'est pas normal (presque plat de 25 à 70 ans) : il sert
-   *      seulement à donner une unité à l'écart type, aucune part n'y est
-   *      appliquée.
+   *      distance typique au centre. Pas d'exemple chiffré ici : l'âge
+   *      n'est pas une cloche (la diapo d'avant y trouve 6 sur 10, pas
+   *      2 sur 3), et la diapo suivante, « Deux écarts types », porte les
+   *      exemples.
    *   2  On garde la cloche étalée. À moins d'un écart type du centre :
    *      environ 2 sur 3 (aire grisée, accolade sous l'axe).
    *   3  À moins de deux écarts types : environ 19 sur 20. « Retenez ce 19
    *      sur 20 » : il revient avec la marge d'erreur.
    *
    * Les deux parts viennent de NORMALE (pnorm dans outils/seance5_normale.R),
-   * arrondies ici. L'écart type et l'effectif de l'âge viennent de POP
-   * (outils/seance5_data.R).
+   * arrondies ici.
    */
   import { brancherTemps } from '../temps.js';
   import { NORMALE } from '$lib/data/seance5_normale.js';
-  import { POP } from '$lib/data/seance5.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -36,7 +33,6 @@
     return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
   const pc = (p) => Math.round(p * 100);
-  const f = (v, d = 0) => v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, ' ');
 
   const CX = 500, BASE = 330;
   // Deux cloches de même aire : la hauteur est inversement proportionnelle
@@ -61,7 +57,7 @@
 </script>
 
 <div class="visuel ecart-type-normale" bind:this={hote}>
-  <svg viewBox="0 0 1000 490" role="img" aria-label="Deux cloches de même centre, l’une serrée, l’autre étalée : même centre, largeur différente. Cette largeur, c’est l’écart type, la distance typique au centre. Par exemple, l’âge des {f(POP.n)} répondant.e.s a un écart type de {f(POP.ecartType, 1)} ans. Sur une courbe normale, environ 2 valeurs sur 3 ({pc(NORMALE.un)} %) sont à moins d’un écart type du centre, et environ 19 sur 20 ({pc(NORMALE.deux)} %) à moins de deux écarts types. Retenez ce 19 sur 20 : il revient avec la marge d’erreur.">
+  <svg viewBox="0 0 1000 490" role="img" aria-label="Deux cloches de même centre, l’une serrée, l’autre étalée&#8239;: même centre, largeur différente. Cette largeur, c’est l’écart type, la distance typique au centre. Sur une courbe normale, environ 2 valeurs sur 3 ({pc(NORMALE.un)}&#8239;%) sont à moins d’un écart type du centre, et environ 19 sur 20 ({pc(NORMALE.deux)}&#8239;%) à moins de deux écarts types. Retenez ce 19 sur 20&#8239;: il revient avec la marge d’erreur.">
     <text x="980" y="22" class="et-note">schéma</text>
 
     <!-- 3 puis 2 : les aires sous la cloche étalée, la plus large d'abord. -->
@@ -86,7 +82,6 @@
       <text x={CX + SDN + 12} y={R + 6} class="et-regle-t">petit écart type</text>
       <text x={xL(-1) - 12} y={R + 6} class="et-regle-t et-fin">grand écart type</text>
       <text x={CX} y="414" class="et-phrase">L’écart type&#8239;: la distance typique au centre.</text>
-      <text x={CX} y="448" class="et-exemple">Exemple&#8239;: l’âge des {f(POP.n)} répondant.e.s, écart type de {f(POP.ecartType, 1)} ans.</text>
     </g>
 
     <!-- 2 : à moins d'un écart type. -->
@@ -120,7 +115,6 @@
   .et-regle-t { font-size: 18px; font-weight: 600; fill: var(--dk-accent); }
   .et-fin { text-anchor: end; }
   .et-phrase { font-size: 23px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
-  .et-exemple { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
   .et-aire { opacity: 0; transition: opacity 0.6s; }
   .et-un { fill: var(--dk-gris-2); }
   .et-un.et-vu { opacity: 0.55; }

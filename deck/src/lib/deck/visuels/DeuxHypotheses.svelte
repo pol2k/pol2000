@@ -9,11 +9,12 @@
    *      grammes en moyenne. C'est une exigence, un seuil, pas la moyenne
    *      connue de pommes « dans la limite ».
    *   1  Elle : son panier de POMMES.n pommes pèse POMMES.moyenne g en
-   *      moyenne, son lot dépasse POMMES.h0 g. C'est H1, ce qu'elle veut
-   *      prouver.
+   *      moyenne, son lot dépasse POMMES.h0 g. C'est H1, ce qu'elle
+   *      affirme (pas « ce qu'elle veut prouver » : PourquoiH0 dit qu'on ne
+   *      peut pas prouver H1 directement).
    *   2  Lui : peut-être que le lot est juste à POMMES.h0 g, ou moins, et
    *      qu'elle est tombée sur un bon panier, par chance. C'est H0.
-   *   3  Les étiquettes : « H1 · ce qu'elle veut prouver » sur sa bulle,
+   *   3  Les étiquettes : « H1 · ce qu'elle affirme » sur sa bulle,
    *      « H0 · l'hypothèse nulle » sur celle de l'acheteur, dont le filet
    *      passe au rouge (H0 porte le rouge partout dans le deck).
    *   4  Elle : d'accord, supposons que tu as raison. À quel point mon
@@ -65,7 +66,7 @@
     [{ t: 'À quel point mon panier', g: true }],
     [{ t: 'serait-il chanceux ?', g: true }]
   ];
-  const ETIQ_H1 = [{ t: 'H1', g: true }, { t: ' · ce qu’elle veut prouver' }];
+  const ETIQ_H1 = [{ t: 'H1', g: true }, { t: ' · ce qu’elle affirme' }];
   const ETIQ_H0 = [{ t: 'H0', g: true }, { t: ' · l’hypothèse nulle' }];
 
   const long = (segs) => segs.reduce((s, x) => s + x.t.length, 0);
@@ -107,7 +108,7 @@
 </script>
 
 <div class="visuel conversation" bind:this={hote}>
-  <svg viewBox="0 0 1000 {H}" role="img" aria-label="Exemple fictif. L’acheteur n’accepte que les lots de plus de {POMMES.h0}&#8239;g en moyenne. La pomicultrice&#8239;: mon panier de {POMMES.n} pommes pèse {POMMES.moyenne}&#8239;g en moyenne, mon lot dépasse {POMMES.h0}&#8239;g. C’est H1, ce qu’elle veut prouver. L’acheteur&#8239;: peut-être que ton lot est juste à {POMMES.h0}&#8239;g, ou moins, et que tu es tombée sur un bon panier, par chance. C’est H0, l’hypothèse nulle. La pomicultrice&#8239;: d’accord, supposons que tu as raison. À quel point mon panier serait-il chanceux&#8239;?">
+  <svg viewBox="0 0 1000 {H}" role="img" aria-label="Exemple fictif. L’acheteur n’accepte que les lots de plus de {POMMES.h0}&#8239;g en moyenne. La pomicultrice&#8239;: mon panier de {POMMES.n} pommes pèse {POMMES.moyenne}&#8239;g en moyenne, mon lot dépasse {POMMES.h0}&#8239;g. C’est H1, ce qu’elle affirme. L’acheteur&#8239;: peut-être que ton lot est juste à {POMMES.h0}&#8239;g, ou moins, et que tu es tombée sur un bon panier, par chance. C’est H0, l’hypothèse nulle. La pomicultrice&#8239;: d’accord, supposons que tu as raison. À quel point mon panier serait-il chanceux&#8239;?">
     <!-- Temps 0 : le cadre. -->
     <text x="500" y="32" class="dh-cadre">L’acheteur n’accepte que les lots de <tspan class="dh-gras">plus de {POMMES.h0}&#8239;g</tspan> en moyenne.</text>
 

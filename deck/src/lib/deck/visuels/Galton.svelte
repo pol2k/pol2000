@@ -5,7 +5,11 @@
    * droite, au hasard. En bas, elles s'empilent dans treize cases. Trois
    * temps.
    *
-   *   0  La planche vide, et la règle en une ligne.
+   *   0  La planche vide, et la règle en une ligne. En haut à gauche, la
+   *      question qui relie la planche à l'histoire du budget : « La cloche
+   *      de nos 1 000 sondages, d'où vient-elle ? » (les 1 000 sondages de
+   *      la diapo « Et si on recommençait ? », Recommencer.svelte). Elle
+   *      reste à l'écran jusqu'à la fin.
    *   1  Les billes tombent, une à une (environ six secondes); les cases se
    *      remplissent à mesure qu'elles arrivent.
    *   2  Toutes les billes sont tombées. La courbe normale, en rouge, se
@@ -112,8 +116,11 @@
 </script>
 
 <div class="visuel galton" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="La planche de Galton. Des billes tombent à travers douze rangées de clous et rebondissent à gauche ou à droite, au hasard. En bas, elles forment une cloche : la courbe normale. Pour finir au bord, il faut rebondir douze fois du même côté, c’est rare.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="La cloche de nos 1&#8239;000 sondages, d’où vient-elle&#8239;? La planche de Galton. Des billes tombent à travers douze rangées de clous et rebondissent à gauche ou à droite, au hasard. En bas, elles forment une cloche&#8239;: la courbe normale. Pour finir au bord, il faut rebondir douze fois du même côté, c’est rare.">
     <text x="980" y="22" class="ga-note">simulation</text>
+    <!-- 0 : la question, qui renvoie aux 1 000 sondages du budget. -->
+    <text x="20" y="40" class="ga-question">La cloche de nos 1&#8239;000 sondages,</text>
+    <text x="20" y="68" class="ga-question">d’où vient-elle&#8239;?</text>
     <!-- L'entonnoir. -->
     <path d="M {CX - 40} {Y0 - 50} L {CX - 8} {Y0 - 22} M {CX + 40} {Y0 - 50} L {CX + 8} {Y0 - 22}" class="ga-cadre" />
     {#each CLOUS as [x, y]}
@@ -148,6 +155,7 @@
   svg { width: 100%; height: auto; max-height: 60vh; display: block; }
   text { font-family: var(--dk-mono); }
   .ga-note { font-size: 16px; text-anchor: end; fill: var(--dk-gris); }
+  .ga-question { font-size: 22px; font-weight: 600; fill: var(--dk-encre); }
   .ga-cadre { fill: none; stroke: var(--dk-encre); stroke-width: 3; }
   .ga-clou { fill: var(--dk-encre); }
   .ga-paroi { stroke: var(--dk-gris-2); stroke-width: 2; }

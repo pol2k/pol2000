@@ -31,8 +31,12 @@
    *      rouge; le compte, PANIERS.auMoins105 (27) sur 1 000.
    *   5  La phrase du haut s'efface; la pomicultrice : « Si tu avais raison,
    *      un panier comme le mien arriverait environ 3 fois sur 100. »
-   *   6  L'acheteur : « C'est rare. D'accord, je te crois. » Et, en bas à
-   *      gauche, la phrase du cours : « On rejette H0. »
+   *   6  L'acheteur : « C'est rare. Je ne crois plus à la chance. » Et, en
+   *      bas à gauche, la phrase du cours : « On rejette H0. », puis le
+   *      seuil, à l'écran une seule fois dans le deck : « Si c'était le
+   *      hasard, ça arriverait moins de 5 fois sur 100. », et le lien avec
+   *      la marge d'erreur : « 5 sur 100, c'est le 1 sur 20 de la marge
+   *      d'erreur. » (le 19 sur 20 de la diapo « 19 fois sur 20 »).
    * Avec panier = 102 (la diapo « et si »), le monde est déjà construit,
    * trois temps (ramenés à 3, 4 et 6 ci-dessus; la bulle de la
    * pomicultrice est sautée) :
@@ -40,12 +44,15 @@
    *   1  Un panier de 102 g, et le compte, PANIERS.auMoins102 (217) sur 1 000.
    *   2  L'acheteur : « 22 fois sur 100 ? Ça peut être la chance. Pas
    *      convaincu. » En bas : « On ne rejette pas H0 : on ne peut pas
-   *      conclure. » (Ça ne prouve pas que le lot pèse 100 g ou moins,
-   *      Arel-Bundock 2021, p. 75.)
+   *      conclure. », puis la raison, comparée au seuil de la diapo
+   *      principale : « 22 fois sur 100, c'est bien plus que 5. » (Ça ne
+   *      prouve pas que le lot pèse 100 g ou moins, Arel-Bundock 2021,
+   *      p. 75.)
    *
    * « Environ k fois sur 100 » est le compte sur 1 000 divisé par 10 et
    * arrondi : un seul chiffre à l'écran, celui de la simulation. Le seuil
-   * de « rare » (moins de 50 sur 1 000) reste dans le code, pas à l'écran.
+   * de « rare », SEUIL (5 fois sur 100), décide de rare et donne le 5 et le
+   * « 1 sur 20 » affichés : une seule constante.
    *
    * Les bulles : carrées, filet de 2, une petite pointe qui descend vers le
    * nom de qui parle. Leur largeur se calcule sur la plus longue ligne
@@ -70,7 +77,7 @@
     e = 0;
     return brancherTemps(hote, { total: TOTAL, lire: () => e, ecrire: (v) => (e = v) });
   });
-  const f = (v, d = 0) => v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, ' ');
+  const f = (v, d = 0) => v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, '\u202f');
   const N = '\u202f';
   // Les temps, ramenés à ceux de la diapo principale (102 g : 3, 4, puis 6).
   const T = $derived(rapide ? [3, 4, 6][e] : e);
@@ -113,7 +120,9 @@
   const XP = x(panier);
   const nb = panier === POMMES.moyenne ? PANIERS.auMoins105 : PANIERS.auMoins102;
   const sur100 = Math.round(nb / 10);
-  const rare = nb < 50;
+  // Le seuil de « rare » : moins de SEUIL fois sur 100.
+  const SEUIL = 5;
+  const rare = nb / PANIERS.n < SEUIL / 100;
 
   // La phrase du haut, une par temps : [principale, secondaire]. Plus de
   // phrase à partir du temps 5 : les bulles prennent le relais.
@@ -143,10 +152,20 @@
   const ELLE = bulle('la pomicultrice', 'g', ['Si tu avais raison, un panier comme le mien', `arriverait environ ${sur100} fois sur 100.`], [40, 30]);
   // 6 : l'acheteur, en bas à droite, sous le titre de l'axe.
   const LUI = rare
-    ? bulle('l’acheteur', 'd', [`C’est rare. D’accord, je te crois.`], [980, 418])
+    ? bulle('l’acheteur', 'd', ['C’est rare.', 'Je ne crois plus à la chance.'], [980, 418])
     : bulle('l’acheteur', 'd', [`${sur100} fois sur 100${N}? Ça peut être la chance.`, 'Pas convaincu.'], [980, 418]);
-  // 6 : la phrase du cours, en bas à gauche.
+  // 6 : la phrase du cours, en bas à gauche, puis sa raison en plus petit
+  // (le seuil; pour 102 g, la comparaison au seuil). Le lien avec la marge
+  // d'erreur, en gris, sur la diapo principale seulement.
   const COURS = rare ? ['On rejette H0.'] : [`On ne rejette pas H0${N}:`, 'on ne peut pas conclure.'];
+  const RAISON = rare
+    ? ['Si c’était le hasard, ça arriverait', `moins de ${SEUIL} fois sur 100.`]
+    : [`${sur100} fois sur 100, c’est bien plus que ${SEUIL}.`];
+  const LIEN = rare ? `${SEUIL} sur 100, c’est le 1 sur ${100 / SEUIL} de la marge d’erreur.` : '';
+  // Sous la phrase du cours. Pour 102 g, la raison descend sous la bulle de
+  // l'acheteur (elle est plus large que la bulle n'est loin).
+  const Y_COURS = LUI.y + 30;
+  const Y_RAISON = rare ? Y_COURS + 28 : LUI.y + LUI.h + 20;
 
   const ARIA = [
     'Simulation, pommes fictives.',
@@ -155,7 +174,9 @@
     `${f(nb)} paniers sur ${TOUS} pèsent ${panier} g ou plus.`,
     rapide ? '' : `La pomicultrice${N}: ${ELLE.lignes.join(' ')}`,
     `L’acheteur${N}: ${LUI.lignes.join(' ')}`,
-    COURS.join(' ')
+    COURS.join(' '),
+    RAISON.join(' '),
+    LIEN
   ].filter(Boolean).join(' ');
 </script>
 
@@ -228,8 +249,14 @@
     <g class="ph-etape" class:ph-vu={T >= 6}>{@render dire(LUI)}</g>
     <g class="ph-etape ph-apres" class:ph-vu={T >= 6}>
       {#each COURS as c, i}
-        <text x="40" y={LUI.y + 30 + i * LH} class="ph-cours">{c}</text>
+        <text x="40" y={Y_COURS + i * LH} class="ph-cours">{c}</text>
       {/each}
+      {#each RAISON as r, i}
+        <text x="40" y={Y_RAISON + i * 22} class="ph-raison">{r}</text>
+      {/each}
+      {#if LIEN}
+        <text x="40" y={Y_RAISON + RAISON.length * 22 + 4} class="ph-lien">{LIEN}</text>
+      {/if}
     </g>
   </svg>
 </div>
@@ -261,6 +288,8 @@
   .ph-compte { font-size: 30px; font-weight: 600; fill: var(--dk-accent); }
   .ph-lab-s { font-size: 19px; fill: var(--dk-encre); }
   .ph-cours { font-size: 24px; font-weight: 600; fill: var(--dk-accent); }
+  .ph-raison { font-size: 18px; fill: var(--dk-encre); }
+  .ph-lien { font-size: 17px; fill: var(--dk-gris); }
   .bu-cadre { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 2; }
   .bu-pointe { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 2; stroke-linejoin: miter; }
   .bu-t { font-size: 21px; fill: var(--dk-encre); }

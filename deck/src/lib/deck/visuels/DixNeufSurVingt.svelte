@@ -4,27 +4,32 @@
    * puis décodée morceau par morceau, sur de vraies données. Fil rouge :
    * « Notre budget : 1 000 personnes ». Les 20 180 répondant.e.s de l'Étude
    * électorale canadienne 2025 servent de population d'exercice (parts
-   * calculées parmi celles et ceux qui déclarent un vote) : ici, on connaît la vraie part conservatrice (BUDGET.vrai),
-   * le sondeur non. On y tire 20 sondages de 1 000 personnes au hasard
-   * (SONDAGES, dans src/lib/data/seance5_budget.js). outils/seance5_budget.R
-   * calcule chaque marge d'erreur et documente la graine (SONDAGES.graine),
-   * choisie pour qu'exactement un sondage sur 20 rate la vraie part : le
-   * « 19 sur 20 » net n'est pas un hasard de la simulation.
+   * calculées parmi celles et ceux qui déclarent un vote) : ici, on connaît
+   * la vraie réponse (BUDGET.vrai, 33,1 %), le sondeur non. On y tire 20
+   * sondages de 1 000 personnes au hasard (SONDAGES, dans
+   * src/lib/data/seance5_budget.js). Le premier est NOTRE sondage au hasard,
+   * le même qu'à « Facile, ou au hasard ? » et à « La marge d'erreur »
+   * (HASARD : 30,5 %, ± 3,5 points). outils/seance5_budget.R calcule chaque
+   * marge d'erreur et documente la graine des 19 autres (SONDAGES.graine,
+   * 73), choisie pour qu'exactement un sondage sur 20 rate la vraie réponse
+   * (le 12e, 37,2 %) : le « 19 sur 20 » net n'est pas un hasard de la
+   * simulation.
    *
    * En haut, la coupure de journal, qui reste là. Le morceau qu'on décode
    * passe au rouge.
-   *   0  La coupure seule : « Conservateurs : 31,3 % / marge d'erreur de
-   *      ± 2,9 points, 19 fois sur 20 » (le premier sondage,
+   *   0  La coupure seule : « Conservateurs : 30,5 % / marge d'erreur de
+   *      ± 3,5 points, 19 fois sur 20 » (notre sondage,
    *      SONDAGES.sondages[0]).
-   *   1  « 31,3 % » : un point sur l'axe, ce que disent les 1 000 sondé.e.s.
-   *   2  « ± 2,9 points » : la règle de la diapo précédente, posée sur
-   *      31,3 %. Une fourchette rouge, avec ses deux bornes.
+   *   1  « 30,5 % » : un point sur l'axe, notre sondage au hasard de 1 000
+   *      personnes.
+   *   2  « ± 3,5 points » : la règle de la diapo précédente, posée sur
+   *      30,5 %. Une fourchette rouge, avec ses deux bornes.
    *   3  La vraie réponse (33,1 %), qu'on connaît ici et pas le sondeur : une
    *      ligne pointillée. La fourchette l'attrape.
    *   4  « 19 fois sur 20 » : on refait le sondage 20 fois. Vingt fourchettes,
-   *      celle du journal en premier. Celle qui rate est en rouge, son
-   *      étiquette du côté opposé à la vraie réponse pour ne pas croiser la
-   *      ligne pointillée.
+   *      la nôtre en premier. Celle qui rate est en rouge, son étiquette du
+   *      côté opposé à la vraie réponse pour ne pas croiser la ligne
+   *      pointillée (l'axe va jusqu'à 44 % pour qu'elle tienne à droite).
    *   5  La phrase : c'est la méthode qui attrape la vraie réponse 19 fois
    *      sur 20, pas ce sondage-là.
    *
@@ -41,17 +46,17 @@
   });
   const f = (v, d = 0) => v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, '\u202F');
   const pc = (p) => f(p * 100, 1);
-  const P0 = 24, P1 = 42, X0 = 90, X1 = 930;
+  const P0 = 24, P1 = 44, X0 = 90, X1 = 930;
   const x = (p) => X0 + ((p * 100 - P0) / (P1 - P0)) * (X1 - X0);
   const S = SONDAGES.sondages;
-  const PREMIER = S[0];
+  const PREMIER = S[0]; // notre sondage au hasard (HASARD)
   const VRAI = BUDGET.vrai;
   const COUVRENT = S.filter((s) => s.couvre).length;
   const XV = x(VRAI);
   const XP = x(PREMIER.p);
   const XG = x(PREMIER.p - PREMIER.marge), XD = x(PREMIER.p + PREMIER.marge);
 
-  // Temps 1 à 3 : le premier sondage, en grand. Temps 4 : vingt rangées serrées.
+  // Temps 1 à 3 : notre sondage, en grand. Temps 4 : vingt rangées serrées.
   const YU = 222;
   const Y1 = 158, PAS = 13, AXE = Y1 + 19 * PAS + 16;
   const yRang = (i) => Y1 + i * PAS;
@@ -63,12 +68,12 @@
 
   // Largeurs des fonds couleur papier (Plex Mono : 0,6 em par glyphe).
   const larg = (t, taille) => t.length * 0.6 * taille + 20;
-  const T1 = `ce que disent les ${f(BUDGET.n)} sondé.e.s`;
+  const T1 = `notre sondage au hasard, ${f(BUDGET.n)} personnes`;
   const T2 = `la règle de la marge d’erreur, posée sur ${pc(PREMIER.p)} %`;
 </script>
 
 <div class="visuel dix-neuf" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Dans le journal&#8239;: conservateurs {pc(PREMIER.p)}&#8239;%, marge d’erreur de plus ou moins {pc(PREMIER.marge)} points, 19 fois sur 20. {pc(PREMIER.p)}&#8239;%, c’est ce que disent les {f(BUDGET.n)} personnes sondées. Plus ou moins {pc(PREMIER.marge)} points, c’est une fourchette de {pc(PREMIER.p - PREMIER.marge)} à {pc(PREMIER.p + PREMIER.marge)}&#8239;%. La vraie part conservatrice, qu’on connaît ici et pas le sondeur, est de {pc(VRAI)}&#8239;%&#8239;: la fourchette l’attrape. On refait le sondage {S.length} fois&#8239;: {COUVRENT} fourchettes sur {S.length} attrapent la vraie réponse. C’est la méthode qui a raison 19 fois sur 20.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="Dans le journal&#8239;: conservateurs {pc(PREMIER.p)}&#8239;%, marge d’erreur de plus ou moins {pc(PREMIER.marge)} points, 19 fois sur 20. {pc(PREMIER.p)}&#8239;%, c’est notre sondage au hasard de {f(BUDGET.n)} personnes. Plus ou moins {pc(PREMIER.marge)} points, c’est une fourchette de {pc(PREMIER.p - PREMIER.marge)} à {pc(PREMIER.p + PREMIER.marge)}&#8239;%. La vraie réponse, qu’on connaît ici et pas le sondeur, est de {pc(VRAI)}&#8239;%&#8239;: la fourchette l’attrape. On refait le sondage {S.length} fois&#8239;: {COUVRENT} fourchettes sur {S.length} attrapent la vraie réponse. C’est la méthode qui a raison 19 fois sur 20.">
 
     <!-- La coupure de journal. Le morceau décodé passe au rouge. -->
     <rect x="90" y="8" width="820" height="100" class="ds-coupure" />
@@ -82,7 +87,7 @@
       <text x={XV} y="136" class="ds-vrai-t">la vraie réponse&#8239;: {pc(VRAI)}&#8239;%</text>
     </g>
 
-    <!-- 1 à 3 : un sondage, en grand. -->
+    <!-- 1 à 3 : notre sondage, en grand. -->
     <g class="ds-seul" class:ds-vu={e >= 1 && e < 4}>
       <!-- Des fonds couleur papier : la ligne de la vraie réponse passe derrière le texte. -->
       <rect x={XP - larg(T1, 21) / 2} y={YU - 52} width={larg(T1, 21)} height="30" class="ds-fond" />
@@ -113,7 +118,7 @@
     <g class="ds-etape" class:ds-vu={e >= 4}>
       <text x={X0} y="214" class="ds-cote">{S.length} sondages</text>
       <text x={X0} y="240" class="ds-cote">de {f(BUDGET.n)}</text>
-      <text x={x(S[0].p + S[0].marge) + 14} y={yRang(0) + 6} class="ds-notre">celui du journal</text>
+      <text x={x(S[0].p + S[0].marge) + 14} y={yRang(0) + 6} class="ds-notre">le nôtre, celui du journal</text>
       {#if RATE >= 0}
         <text x={XRATE} y={yRang(RATE) - 2} class="ds-pourquoi" class:ds-fin={RATE_G}>celui-ci rate,</text>
         <text x={XRATE} y={yRang(RATE) + 20} class="ds-pourquoi" class:ds-fin={RATE_G}>par hasard</text>

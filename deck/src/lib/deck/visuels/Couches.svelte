@@ -30,7 +30,7 @@
   import { GGPLOT } from '$lib/data/seance5.js';
 
   // source : un autre objet de la même forme que GGPLOT (GG, le graphique
-  // Gapminder de outils/seance5_ggplot.R; le quiz de la séance 5).
+  // CES 2025 de outils/seance5_ggplot.R; le quiz de la séance 5).
   let { etapes = [], messages = true, depart = '', source = GGPLOT } = $props();
 
   const lignesDe = (k) => source[k].code.split('\n');
