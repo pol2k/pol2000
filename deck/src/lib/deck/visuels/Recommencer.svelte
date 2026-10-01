@@ -6,7 +6,8 @@
    * mais loin de la vérité : répéter une mauvaise méthode ne la corrige pas.
    *
    * Tout vient de src/lib/data/seance5_budget.js (outils/seance5_budget.R,
-   * Étude électorale canadienne 2025, répondant.e.s qui déclarent un parti) :
+   * Étude électorale canadienne 2025, toute l'enquête comme population;
+   * parts calculées parmi celles et ceux qui déclarent un vote) :
    * BUDGET.vrai (la ligne pointillée), BUDGET.n (la taille de chaque
    * sondage), MILLE.bornes (tranches d'un demi-point, [a, a + 0,005)),
    * MILLE.hasard.effectifs et MILLE.quebec.effectifs (1 000 sondages

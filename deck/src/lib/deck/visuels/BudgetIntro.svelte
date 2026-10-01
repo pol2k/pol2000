@@ -1,26 +1,31 @@
 <script>
   /**
    * Le fil rouge de la séance : « Notre budget : 1 000 personnes ». On fait
-   * comme si les répondant.e.s de l'Étude électorale canadienne 2025 qui
-   * déclarent un parti étaient toute la population. On connaît donc la
-   * vraie part du vote conservateur. Une firme de sondage n'a les moyens de
-   * questionner que 1 000 personnes : comment les choisir ?
+   * comme si les 20 180 répondant.e.s de l'Étude électorale canadienne 2025
+   * étaient toute la population. Comme dans tout vrai sondage, une partie
+   * d'entre elles et eux ne déclare pas de vote. On connaît donc la vraie
+   * part du vote conservateur, calculée parmi celles et ceux qui déclarent
+   * un vote. Une firme de sondage n'a les moyens de questionner que 1 000
+   * personnes, tirées parmi les 20 180 : comment les choisir ?
    *
    *   0  La population d'exercice, une grande foule de points (un point
-   *      pour 20 électeurs), les conservateurs en rouge. À droite, la vraie
-   *      valeur en grand, et « ici, on connaît la réponse ».
+   *      pour 20 répondant.e.s) : vote conservateur en rouge, autre vote en
+   *      gris, pas de vote déclaré en contour pâle. À droite, la vraie
+   *      valeur en grand, « parmi les votes déclarés », et « ici, on
+   *      connaît la réponse ».
    *   1  Un porte-monnaie : « budget : 1 000 personnes », et une petite
    *      boîte de 1 000, à la même échelle que la foule (50 points vides :
    *      on ne sait pas encore qui).
    *   2  Une flèche pointillée de la foule vers la boîte, et la question en
    *      grand : « Comment choisir les 1 000 ? »
    *
-   * La taille de la population, la vraie part et le budget viennent de
-   * BUDGET (src/lib/data/seance5_budget.js, outils/seance5_budget.R, sans
-   * pondération). L'échelle (20 électeurs par point) est un choix de dessin.
-   * La place des points rouges dans la grille est tirée par un générateur
-   * congruentiel à graine fixe : le nombre de points rouges suit la vraie
-   * part, leur position ne veut rien dire.
+   * La taille de la population, le nombre de répondant.e.s qui déclarent un
+   * vote, la vraie part et le budget viennent de BUDGET
+   * (src/lib/data/seance5_budget.js, outils/seance5_budget.R, sans
+   * pondération). L'échelle (20 répondant.e.s par point) est un choix de
+   * dessin. La place des points dans la grille est tirée par un générateur
+   * congruentiel à graine fixe : le nombre de points de chaque sorte suit
+   * les données, leur position ne veut rien dire.
    */
   import { brancherTemps } from '../temps.js';
   import { BUDGET } from '$lib/data/seance5_budget.js';
@@ -37,35 +42,55 @@
   const nBudget = f(BUDGET.n);
   const vrai = f(BUDGET.vrai * 100, 1);
 
-  // Un point pour PAR électeurs, dans la foule comme dans la boîte.
+  // Un point pour PAR répondant.e.s, dans la foule comme dans la boîte.
   const PAR = 20;
   const NPOP = Math.round(BUDGET.population / PAR);
   const NBUD = Math.round(BUDGET.n / PAR);
-  const NROUGE = Math.round(NPOP * BUDGET.vrai);
+  // Trois sortes de points : vote conservateur (parmi les votes déclarés),
+  // autre vote, pas de vote déclaré.
+  const NROUGE = Math.round((BUDGET.population * (BUDGET.declares / BUDGET.population) * BUDGET.vrai) / PAR);
+  const NMUET = Math.round((BUDGET.population - BUDGET.declares) / PAR);
 
   // La foule : une grille de COLS colonnes, dans un cadre.
-  const COLS = 36, PAS = 14, R = 4.5;
+  const COLS = 46, PAS = 11, R = 3.8;
   const FX = 12, FY = 84;
   const RANGS = Math.ceil(NPOP / COLS);
   const FW = COLS * PAS + 16, FH = RANGS * PAS + 14;
 
-  // Quels points sont rouges : Fisher-Yates partiel, graine fixe.
+  // Quels points sont rouges, lesquels sont muets : Fisher-Yates partiel,
+  // graine fixe.
   function lcg(graine) {
     let s = graine >>> 0;
     return () => (s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296;
   }
   const alea = lcg(2025);
   const ordre = Array.from({ length: NPOP }, (_, i) => i);
-  for (let i = 0; i < NROUGE; i++) {
+  for (let i = 0; i < NROUGE + NMUET; i++) {
     const j = i + Math.floor(alea() * (NPOP - i));
     [ordre[i], ordre[j]] = [ordre[j], ordre[i]];
   }
   const rouges = new Set(ordre.slice(0, NROUGE));
+  const muets = new Set(ordre.slice(NROUGE, NROUGE + NMUET));
   const foule = Array.from({ length: NPOP }, (_, i) => ({
-    x: FX + 15 + (i % COLS) * PAS,
-    y: FY + 14 + Math.floor(i / COLS) * PAS,
-    rouge: rouges.has(i)
+    x: FX + 13 + (i % COLS) * PAS,
+    y: FY + 12 + Math.floor(i / COLS) * PAS,
+    classe: rouges.has(i) ? 'bi-rouge' : muets.has(i) ? 'bi-muet' : 'bi-pt'
   }));
+
+  // La légende des trois sortes de points, sur une ligne (mono : 0,6 × 18).
+  const CAR = 0.6 * 18;
+  const LY = FY + FH + 56;
+  const LEG = [
+    { classe: 'bi-rouge', mot: 'vote conservateur' },
+    { classe: 'bi-pt', mot: 'autre vote' },
+    { classe: 'bi-muet', mot: 'pas de vote déclaré' }
+  ];
+  let lx = FX + 6;
+  const legende = LEG.map((l) => {
+    const item = { ...l, cx: lx, tx: lx + 14 };
+    lx += 14 + l.mot.length * CAR + 26;
+    return item;
+  });
 
   // La colonne de droite : la vraie valeur en haut, le budget en dessous.
   const CX = 775;
@@ -73,44 +98,47 @@
   const BCOLS = 10;
   const BR = Math.ceil(NBUD / BCOLS);
   const BW = BCOLS * PAS + 16, BH = BR * PAS + 14;
-  const BX = CX - BW / 2, BY = 326;
+  const BX = CX - BW / 2, BY = 334;
   const boite = Array.from({ length: NBUD }, (_, i) => ({
-    x: BX + 15 + (i % BCOLS) * PAS,
-    y: BY + 14 + Math.floor(i / BCOLS) * PAS
+    x: BX + 13 + (i % BCOLS) * PAS,
+    y: BY + 12 + Math.floor(i / BCOLS) * PAS
   }));
 
   // La flèche pointillée, de la foule vers la boîte.
-  const AX1 = FX + FW + 10, AY1 = FY + FH - 40;
+  const AX1 = FX + FW + 10, AY1 = FY + FH - 30;
   const AX2 = BX - 12, AY2 = BY + BH / 2;
 </script>
 
 <div class="visuel budget-intro" bind:this={hote}>
-  <svg viewBox="0 0 1000 540" role="img" aria-label="Notre population d’exercice : {nPop} électeurs de l’Étude électorale canadienne 2025. Vrai vote conservateur : {vrai} %. Ici, on connaît la réponse. Notre budget : {nBudget} personnes. Comment choisir les {nBudget} ?">
+  <svg viewBox="0 0 1000 540" role="img" aria-label="Notre population d’exercice : {nPop} répondant.e.s de l’Étude électorale canadienne 2025, dont certain.e.s ne déclarent pas de vote. Vrai vote conservateur, parmi les votes déclarés : {vrai} %. Ici, on connaît la réponse. Notre budget : {nBudget} personnes. Comment choisir les {nBudget} ?">
     <!-- 0 : la population d'exercice, une foule de points. -->
     <text x={FX} y="34" class="bi-titre">notre population d’exercice</text>
-    <text x={FX} y="64" class="bi-t"><tspan class="bi-fort">{nPop}</tspan> électeurs de la CES</text>
+    <text x={FX} y="64" class="bi-t"><tspan class="bi-fort">{nPop}</tspan> répondant.e.s de la CES</text>
     <rect x={FX} y={FY} width={FW} height={FH} class="bi-cadre" />
     {#each foule as p}
-      <circle cx={p.x} cy={p.y} r={R} class={p.rouge ? 'bi-rouge' : 'bi-pt'} />
+      <circle cx={p.x} cy={p.y} r={R} class={p.classe} />
     {/each}
-    <text x={FX} y={FY + FH + 30} class="bi-leg">1 point = {PAR} électeurs</text>
-    <circle cx={FX + 300} cy={FY + FH + 24} r="6" class="bi-rouge" />
-    <text x={FX + 314} y={FY + FH + 30} class="bi-leg">vote conservateur</text>
+    <text x={FX} y={FY + FH + 28} class="bi-leg">1 point = {PAR} répondant.e.s</text>
+    {#each legende as l}
+      <circle cx={l.cx} cy={LY - 6} r="6" class={l.classe} />
+      <text x={l.tx} y={LY} class="bi-leg">{l.mot}</text>
+    {/each}
 
-    <!-- 0 : la vraie valeur, connue. -->
-    <rect x="575" y={FY} width="400" height="170" class="bi-panneau" />
-    <text x={CX} y={FY + 38} class="bi-t bi-fort bi-m">vrai vote conservateur</text>
-    <text x={CX} y={FY + 116} class="bi-vrai">{vrai}&#8239;%</text>
-    <text x={CX} y={FY + 152} class="bi-t bi-m bi-accent">ici, on connaît la réponse</text>
+    <!-- 0 : la vraie valeur, connue, parmi les votes déclarés. -->
+    <rect x="575" y={FY} width="400" height="178" class="bi-panneau" />
+    <text x={CX} y={FY + 34} class="bi-t bi-fort bi-m">vrai vote conservateur</text>
+    <text x={CX} y={FY + 60} class="bi-leg bi-m">parmi les votes déclarés</text>
+    <text x={CX} y={FY + 130} class="bi-vrai">{vrai}&#8239;%</text>
+    <text x={CX} y={FY + 162} class="bi-t bi-m bi-accent">ici, on connaît la réponse</text>
 
     <!-- 1 : le budget, et une petite boîte de 1 000, à la même échelle. -->
     <g class="bi-budget" class:bi-vu={e >= 1}>
-      <g transform="translate(582 270)">
+      <g transform="translate(582 278)">
         <rect x="0" y="6" width="58" height="38" class="bi-bourse" />
         <path d="M 0 6 L 10 -6 H 48 L 58 6" class="bi-bourse" />
         <rect x="40" y="18" width="18" height="14" class="bi-fermoir" />
       </g>
-      <text x="656" y="300" class="bi-t bi-fort">budget&#8239;: {nBudget} personnes</text>
+      <text x="656" y="308" class="bi-t bi-fort">budget&#8239;: {nBudget} personnes</text>
       <rect x={BX} y={BY} width={BW} height={BH} class="bi-cadre" />
       {#each boite as p}
         <circle cx={p.x} cy={p.y} r={R} class="bi-vide" />
@@ -124,7 +152,7 @@
       <text x="500" y="482" class="bi-grande">Comment choisir les {nBudget}&#8239;?</text>
     </g>
 
-    <text x={FX} y="530" class="bi-source">CES 2025, répondant.e.s qui déclarent un parti, sans pondération</text>
+    <text x={FX} y="530" class="bi-source">CES 2025, les {nPop} répondant.e.s, sans pondération</text>
   </svg>
 </div>
 
@@ -134,7 +162,8 @@
   text { font-family: var(--dk-mono); }
 
   .bi-cadre { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 3; }
-  .bi-pt { fill: var(--dk-gris-2); }
+  .bi-pt { fill: var(--dk-gris); }
+  .bi-muet { fill: var(--dk-fond); stroke: var(--dk-gris-2); stroke-width: 1.5; }
   .bi-rouge { fill: var(--dk-accent); }
   .bi-vide { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 2; }
   .bi-panneau { fill: var(--dk-fond-2); }

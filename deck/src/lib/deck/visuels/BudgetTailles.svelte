@@ -7,7 +7,8 @@
    * à l'écran : la forme suffit.
    *
    * Tout vient de src/lib/data/seance5_budget.js (outils/seance5_budget.R,
-   * Étude électorale canadienne 2025, répondant.e.s qui déclarent un parti) :
+   * Étude électorale canadienne 2025, toute l'enquête comme population;
+   * parts calculées parmi celles et ceux qui déclarent un vote) :
    * TAILLES (n et effectifs de chaque rangée), MILLE.bornes (tranches d'un
    * demi-point, [a, a + 0,005), les mêmes pour TAILLES), BUDGET.vrai (la
    * ligne pointillée).

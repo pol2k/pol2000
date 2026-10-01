@@ -2,9 +2,9 @@
   /**
    * « 19 fois sur 20 » : la marge d'erreur d'un sondage, lue dans le journal
    * puis décodée morceau par morceau, sur de vraies données. Fil rouge :
-   * « Notre budget : 1 000 personnes ». Les répondant.e.s de l'Étude
-   * électorale canadienne 2025 qui déclarent un parti servent de population
-   * d'exercice : ici, on connaît la vraie part conservatrice (BUDGET.vrai),
+   * « Notre budget : 1 000 personnes ». Les 20 180 répondant.e.s de l'Étude
+   * électorale canadienne 2025 servent de population d'exercice (parts
+   * calculées parmi celles et ceux qui déclarent un vote) : ici, on connaît la vraie part conservatrice (BUDGET.vrai),
    * le sondeur non. On y tire 20 sondages de 1 000 personnes au hasard
    * (SONDAGES, dans src/lib/data/seance5_budget.js). outils/seance5_budget.R
    * calcule chaque marge d'erreur et documente la graine (SONDAGES.graine),

@@ -1,9 +1,10 @@
 <script>
   /**
    * La marge d'erreur, d'où elle vient. Fil rouge : « Notre budget : 1 000
-   * personnes ». Les répondant.e.s de l'Étude électorale canadienne 2025 qui
-   * déclarent un parti servent de population d'exercice, on y connaît la
-   * vraie part conservatrice (BUDGET.vrai). On part de ce qu'on a vraiment
+   * personnes ». Les 20 180 répondant.e.s de l'Étude électorale canadienne
+   * 2025 (BUDGET.population) servent de population d'exercice, on y connaît
+   * la vraie part conservatrice (BUDGET.vrai, parmi celles et ceux qui
+   * déclarent un vote). On part de ce qu'on a vraiment
    * (un seul échantillon de 1 000), on rappelle la cloche des 1 000
    * échantillons, on y mesure une règle de ± marge, puis on pose cette règle
    * sur notre échantillon à nous. Quatre temps.

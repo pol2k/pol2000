@@ -24,7 +24,8 @@
    * conservateur par les répondant.e.s de la CES 2025. Tranches de 5 points;
    * la dernière, [100, 105), ne contient que les notes de 100 pile. La
    * tranche [0, 5) contient aussi les notes de 1 à 4 : on ne la cite donc pas
-   * comme « des zéros ».
+   * comme « des zéros ». La source affiche la taille de toute l'enquête
+   * (POP.n), jamais le nombre de répondant.e.s qui ont noté Poilievre.
    *
    * Les effectifs des données viennent de QUIZ; les moyennes de
    * HOMMES_MOYENNES (50 hommes), POILIEVRE_MOYENNES (50 notes), NYC_MOYENNES
@@ -44,7 +45,7 @@
    */
   import { brancherTemps } from '../temps.js';
   import { QUIZ, NYC_MOYENNES, POILIEVRE_MOYENNES, HOMMES_MOYENNES } from '$lib/data/seance5_normale.js';
-  import { DISTRIBUTIONS, BORNES } from '$lib/data/seance5.js';
+  import { DISTRIBUTIONS, BORNES, POP } from '$lib/data/seance5.js';
   let { cle } = $props();
   let e = $state(0);
   let hote = $state(null);
@@ -77,7 +78,7 @@
     },
     poilievre: {
       titre: () => 'Ce que les répondant.e.s pensent de Pierre Poilievre',
-      source: (q) => `Étude électorale canadienne 2025, ${f(q.n)} répondant.e.s`,
+      source: () => `Étude électorale canadienne 2025, ${f(POP.n)} répondant.e.s`,
       axe: 'note de 0 à 100', ticks: [0, 20, 40, 60, 80, 100],
       forme: 'deux camps',
       qui: 'personnes tirées au hasard',

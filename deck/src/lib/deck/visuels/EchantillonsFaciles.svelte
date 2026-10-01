@@ -1,9 +1,10 @@
 <script>
   /**
    * L'échantillon facile, puis l'échantillon au hasard, sur de vraies données.
-   * On fait comme si les répondant.e.s de l'Étude électorale canadienne 2025
-   * qui déclarent un parti étaient toute la population (BUDGET.population) :
-   * on connaît donc la vraie part conservatrice (BUDGET.vrai). Le budget :
+   * On fait comme si les 20 180 répondant.e.s de l'Étude électorale
+   * canadienne 2025 étaient toute la population (BUDGET.population) : on
+   * connaît donc la vraie part conservatrice (BUDGET.vrai, parmi celles et
+   * ceux qui déclarent un vote). Le budget :
    * BUDGET.n personnes. Chaque rangée est un échantillon de cette taille.
    * Source : src/lib/data/seance5_budget.js, généré par outils/seance5_budget.R
    * (FACILES, HASARD, graines documentées dans le script).
