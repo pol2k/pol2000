@@ -5,7 +5,7 @@
    * 2025 (BUDGET.population) servent de population d'exercice, on y connaît
    * la vraie réponse (BUDGET.vrai, 33,1 %, la part conservatrice parmi
    * celles et ceux qui déclarent un vote). Une seule marge à l'écran : celle
-   * de notre sondage (HASARD.marge, 3,5 points). Quatre temps.
+   * de notre sondage (HASARD.marge, 3,5 points). Cinq temps.
    *
    *   0  Notre sondage au hasard, le même qu'à « Facile, ou au hasard ? »
    *      (HASARD.part, 30,5 %) : un point sur l'axe. La question : est-ce la
@@ -30,6 +30,18 @@
    *      de la vraie réponse, la vraie réponse est à moins de 3,5 points de
    *      notre sondage : la règle l'attrape, 19 fois sur 20. C'est la marge
    *      d'erreur du journal, à la diapo suivante (le même sondage).
+   *   4  Comment UN sondage trouve sa propre marge, sans la vraie réponse
+   *      ni les 1 000 sondages. La cloche, l'axe, la vraie réponse et le
+   *      crochet s'effacent, notre sondage et sa règle restent. Une chaîne,
+   *      calculée ici depuis HASARD : 30,5 % (HASARD.part, parmi les
+   *      HASARD.declares = 682 qui déclarent un vote) → les gens valent 0 ou
+   *      100, leur écart type est racine(p(1 − p)) × 100 ≈ 46 points → divisé
+   *      par la racine de 682 (≈ 26), les hasards s'annulent en partie →
+   *      1,8 point, l'écart type des sondages → fois environ 2 (1,96 dans R)
+   *      → ± 3,5 points (HASARD.marge), la marge d'erreur. Les lignes
+   *      arrivent l'une après l'autre. En bas, la comparaison avec l'écart
+   *      type mesuré sur les 1 000 sondages simulés (MILLE.hasard.ecartType),
+   *      les deux arrondis au dixième (« presque » s'ils diffèrent).
    *
    * Tout vient de src/lib/data/seance5_budget.js (outils/seance5_budget.R).
    * Le facteur 1,96 est la convention des sondeurs, appliqué dans R.
@@ -41,7 +53,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 4, lire: () => e, ecrire: (v) => (e = v) });
   });
   const f = (v, d = 0) => v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, '\u202F');
   // Tout en points de pourcentage : 0,331 devient 33,1.
@@ -84,10 +96,21 @@
   // Largeur de l'étiquette de notre sondage (Plex Mono : 0,6 em par glyphe).
   const ETIQ = `notre sondage au hasard : ${f(UN, 1)} %`;
   const ETIQ_L = ETIQ.length * 0.6 * 21 + 20;
+
+  // Temps 4 : la chaîne d'un seul sondage, calculée depuis HASARD.
+  const N_DECL = HASARD.declares; // 682 qui déclarent un vote
+  const ET_GENS = Math.sqrt(HASARD.part * (1 - HASARD.part)) * 100; // ≈ 46 points, chacun.e vaut 0 ou 100
+  const RACINE = Math.sqrt(N_DECL); // ≈ 26
+  const ET_CALC = ET_GENS / RACINE; // ≈ 1,8 point
+  const MEME = f(ET_CALC, 1) === f(ET, 1);
+  // Colonnes : opération (alignée à droite), flèche et valeur (centrées), sens (à gauche).
+  const CO = 398, CV = 420, CS = 545;
+  const RANGS = [52, 130, 208, 286];
+  const FLECHES = [0, 1, 2].map((i) => ({ y1: RANGS[i] + 14, y2: RANGS[i + 1] - 28, ym: (RANGS[i] + RANGS[i + 1]) / 2 - 1 }));
 </script>
 
 <div class="visuel marge-erreur" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Notre sondage au hasard, {f(BUDGET.n)} personnes, le même qu’à «&#8239;Facile, ou au hasard&#8239;?&#8239;», donne {f(UN, 1)}&#8239;% aux conservateurs. Est-ce la vraie réponse&#8239;? Probablement pas exactement. Les résultats de {f(N_ECH)} sondages de {f(BUDGET.n)} forment une cloche autour de la vraie réponse, {f(VRAI, 1)}&#8239;%. Les sondages varient typiquement de {f(ET, 1)} {points(ET)}. {f(DEDANS)} sur {f(N_ECH)}, à peu près 19 sur 20, tombent à moins de {f(MARGE, 1)} points de la vraie réponse, environ deux écarts types des sondages. On pose la même règle autour de notre sondage&#8239;: de {f(UN - MARGE, 1)} à {f(UN + MARGE, 1)}&#8239;%. La vraie réponse est {UN_ATTRAPE ? 'dedans' : 'dehors'}. 19 fois sur 20, ça marche&#8239;: c’est la marge d’erreur.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="Notre sondage au hasard, {f(BUDGET.n)} personnes, le même qu’à «&#8239;Facile, ou au hasard&#8239;?&#8239;», donne {f(UN, 1)}&#8239;% aux conservateurs. Est-ce la vraie réponse&#8239;? Probablement pas exactement. Les résultats de {f(N_ECH)} sondages de {f(BUDGET.n)} forment une cloche autour de la vraie réponse, {f(VRAI, 1)}&#8239;%. Les sondages varient typiquement de {f(ET, 1)} {points(ET)}. {f(DEDANS)} sur {f(N_ECH)}, à peu près 19 sur 20, tombent à moins de {f(MARGE, 1)} points de la vraie réponse, environ deux écarts types des sondages. On pose la même règle autour de notre sondage&#8239;: de {f(UN - MARGE, 1)} à {f(UN + MARGE, 1)}&#8239;%. La vraie réponse est {UN_ATTRAPE ? 'dedans' : 'dehors'}. 19 fois sur 20, ça marche&#8239;: c’est la marge d’erreur. Un seul sondage suffit pour la trouver&#8239;: {f(UN, 1)}&#8239;% parmi {f(N_DECL)} qui déclarent un vote, chacun.e vaut 0 ou 100, les gens varient de {f(ET_GENS)} points. Divisé par la racine de {f(N_DECL)}, environ {f(RACINE)}, car les hasards s’annulent en partie&#8239;: {f(ET_CALC, 1)} {points(ET_CALC)}, l’écart type des sondages. Fois environ 2&#8239;: ±&#8239;{f(MARGE, 1)} points, la marge d’erreur. {MEME ? 'Le même' : 'Presque le même'} {f(ET_CALC, 1)} que nos {f(N_ECH)} sondages simulés ({f(ET, 1)}).">
 
     <!-- 0 : la question, dans l'espace que la cloche occupera. -->
     <g class="me-etape" class:me-vu={e === 0}>
@@ -100,7 +123,7 @@
     <rect x={XV - W2} y={BASE - HAUT - 8} width={2 * W2} height={HAUT + 8} class="me-bande me-etape" class:me-vu={e === 2} />
 
     <!-- 1 : la cloche des 1 000 sondages. -->
-    <g class="me-etape" class:me-vu={e >= 1}>
+    <g class="me-etape" class:me-vu={e >= 1 && e < 4}>
       {#each TRANCHES as t}
         {@const h = (t.n / MAX) * HAUT}
         {#if t.n > 0}
@@ -111,11 +134,13 @@
       <text x={X0} y="118" class="me-legende">{f(N_ECH)} parts conservatrices</text>
     </g>
 
-    <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="me-axe" />
-    {#each TICKS as a}
-      <line x1={x(a)} y1={BASE} x2={x(a)} y2={BASE + 7} class="me-axe" />
-      <text x={x(a)} y={BASE + 26} class="me-tick">{a}&#8239;%</text>
-    {/each}
+    <g class="me-etape" class:me-vu={e < 4}>
+      <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="me-axe" />
+      {#each TICKS as a}
+        <line x1={x(a)} y1={BASE} x2={x(a)} y2={BASE + 7} class="me-axe" />
+        <text x={x(a)} y={BASE + 26} class="me-tick">{a}&#8239;%</text>
+      {/each}
+    </g>
 
     <!-- La règle de ± marge : sous la vraie réponse au temps 2, sous notre sondage au temps 3. Même largeur. -->
     <g class="me-regle" class:me-vu={e >= 2} style="transform: translate({e >= 3 ? XU : XV}px, {e >= 3 ? YU : RY}px)">
@@ -140,7 +165,7 @@
     </g>
 
     <!-- La vraie réponse, connue ici seulement parce que les répondant.e.s sont une population d'exercice. -->
-    <g class="me-etape" class:me-vu={e >= 1}>
+    <g class="me-etape" class:me-vu={e >= 1 && e < 4}>
       <line x1={XV} y1="42" x2={XV} y2={BASE} class="me-vrai" />
       <line x1={XV} y1={BASE + 36} x2={XV} y2={YU + 24} class="me-vrai" />
       <text x={XV} y="30" class="me-vrai-t">la vraie réponse&#8239;: {f(VRAI, 1)}&#8239;%</text>
@@ -152,7 +177,7 @@
     <circle cx={XU} cy={YU} r="9" class="me-point" />
 
     <!-- 2 et 3 : l'écart entre notre sondage et la vraie réponse. Le même dans les deux sens. -->
-    <g class="me-etape" class:me-vu={e >= 2}>
+    <g class="me-etape" class:me-vu={e >= 2 && e < 4}>
       <line x1={Math.min(XU, XV)} y1={YU + 30} x2={Math.max(XU, XV)} y2={YU + 30} class="me-ecart" />
       <line x1={XU} y1={YU + 23} x2={XU} y2={YU + 37} class="me-ecart" />
       <line x1={XV} y1={YU + 23} x2={XV} y2={YU + 37} class="me-ecart" />
@@ -165,8 +190,43 @@
       <text x={XU + W2 + 40} y={YU + 34} class="me-pm-s">autour de notre sondage</text>
       <text x={XU - W2} y={YU + 44} class="me-borne">{f(UN - MARGE, 1)}</text>
       <text x={XU + W2} y={YU + 44} class="me-borne">{f(UN + MARGE, 1)}</text>
+    </g>
+    <g class="me-etape me-apres" class:me-vu={e === 3}>
       <text x="500" y="462" class="me-phrase">La règle, posée sur notre sondage&#8239;: la vraie réponse est {UN_ATTRAPE ? 'dedans' : 'dehors'}.</text>
       <text x="500" y="494" class="me-phrase me-rouge-t me-fin">19 fois sur 20, ça marche. C’est la marge d’erreur.</text>
+    </g>
+
+    <!-- 4 : un seul sondage trouve sa propre marge. Une ligne après l'autre. -->
+    <g class="me-etape me-chaine" class:me-vu={e >= 4} style="--d: 0s">
+      <text x={CV} y={RANGS[0]} class="me-val">{f(UN, 1)}&#8239;%</text>
+      <text x={CS} y={RANGS[0] - 6} class="me-sens me-encre">notre sondage</text>
+      <text x={CS} y={RANGS[0] + 18} class="me-sens">{f(N_DECL)} déclarent un vote</text>
+    </g>
+    <g class="me-etape me-chaine" class:me-vu={e >= 4} style="--d: 0.45s">
+      <line x1={CV} y1={FLECHES[0].y1} x2={CV} y2={FLECHES[0].y2} class="me-fleche" />
+      <path d="M {CV - 6} {FLECHES[0].y2 - 8} L {CV} {FLECHES[0].y2} L {CV + 6} {FLECHES[0].y2 - 8}" class="me-fleche" />
+      <text x={CO} y={FLECHES[0].ym + 7} class="me-op">chacun.e&#8239;: 0 ou 100</text>
+      <text x={CV} y={RANGS[1]} class="me-val">{f(ET_GENS)} points</text>
+      <text x={CS} y={RANGS[1]} class="me-sens me-encre">les gens varient</text>
+    </g>
+    <g class="me-etape me-chaine" class:me-vu={e >= 4} style="--d: 0.9s">
+      <line x1={CV} y1={FLECHES[1].y1} x2={CV} y2={FLECHES[1].y2} class="me-fleche" />
+      <path d="M {CV - 6} {FLECHES[1].y2 - 8} L {CV} {FLECHES[1].y2} L {CV + 6} {FLECHES[1].y2 - 8}" class="me-fleche" />
+      <text x={CO} y={FLECHES[1].ym + 7} class="me-op">÷ √{f(N_DECL)} ≈ {f(RACINE)}</text>
+      <text x={CV + 24} y={FLECHES[1].ym + 7} class="me-sens">les hasards s’annulent en partie</text>
+      <text x={CV} y={RANGS[2]} class="me-val">{f(ET_CALC, 1)} {points(ET_CALC)}</text>
+      <text x={CS} y={RANGS[2]} class="me-sens me-encre">l’écart type des sondages</text>
+    </g>
+    <g class="me-etape me-chaine" class:me-vu={e >= 4} style="--d: 1.35s">
+      <line x1={CV} y1={FLECHES[2].y1} x2={CV} y2={FLECHES[2].y2} class="me-fleche" />
+      <path d="M {CV - 6} {FLECHES[2].y2 - 8} L {CV} {FLECHES[2].y2} L {CV + 6} {FLECHES[2].y2 - 8}" class="me-fleche" />
+      <text x={CO} y={FLECHES[2].ym + 7} class="me-op">× environ 2</text>
+      <text x={CV} y={RANGS[3]} class="me-val me-rouge-t">±&#8239;{f(MARGE, 1)} points</text>
+      <text x={CS} y={RANGS[3]} class="me-sens me-rouge-t me-gras">la marge d’erreur</text>
+    </g>
+    <g class="me-etape me-chaine" class:me-vu={e >= 4} style="--d: 1.8s">
+      <text x="500" y="462" class="me-phrase">Un seul sondage suffit pour trouver sa marge.</text>
+      <text x="500" y="494" class="me-phrase me-rouge-t">{MEME ? 'Le même' : 'Presque le même'} {f(ET_CALC, 1)} que nos {f(N_ECH)} sondages simulés ({f(ET, 1)}).</text>
     </g>
   </svg>
 </div>
@@ -210,7 +270,16 @@
   .me-etape.me-vu { opacity: 1; transition: opacity 0.6s; }
   /* Le texte du temps 3 attend que la règle ait fini de glisser. */
   .me-etape.me-apres.me-vu { transition: opacity 0.6s 0.9s; }
+  /* Le temps 4 : la chaîne arrive une ligne après l'autre, après que la cloche s'est effacée. */
+  .me-etape.me-chaine.me-vu { transition: opacity 0.5s calc(0.35s + var(--d)); }
+  .me-val { font-size: 28px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
+  .me-op { font-size: 21px; font-weight: 600; text-anchor: end; fill: var(--dk-accent); }
+  .me-sens { font-size: 18px; fill: var(--dk-gris); }
+  .me-encre { fill: var(--dk-encre); font-size: 19px; }
+  .me-sens.me-rouge-t { fill: var(--dk-accent); font-size: 19px; }
+  .me-val.me-rouge-t { fill: var(--dk-accent); }
+  .me-fleche { stroke: var(--dk-accent); stroke-width: 2.5; fill: none; }
   @media (prefers-reduced-motion: reduce) {
-    .me-etape, .me-etape.me-vu, .me-etape.me-apres.me-vu, .me-baton, .me-regle, .me-regle.me-vu { transition: none; }
+    .me-etape, .me-etape.me-vu, .me-etape.me-apres.me-vu, .me-etape.me-chaine.me-vu, .me-baton, .me-regle, .me-regle.me-vu { transition: none; }
   }
 </style>
