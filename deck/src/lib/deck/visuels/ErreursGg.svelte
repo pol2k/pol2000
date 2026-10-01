@@ -1,9 +1,9 @@
 <script>
   /**
    * Deux erreurs classiques avec ggplot2, et ce que R répond. Le code et le
-   * message viennent d'un vrai Rscript (ERREURS dans src/lib/data/seance5.js,
-   * produit par outils/seance5_data.R, sans la trace d'appels) : rien n'est
-   * retapé.
+   * message viennent d'un vrai Rscript (GG_ERREURS dans
+   * src/lib/data/seance5_ggplot.js, produit par outils/seance5_ggplot.R, sans
+   * la trace d'appels) : rien n'est retapé.
    *
    *   0  Le pipe |> à la place du + : le coupable en rouge, la réponse de R,
    *      puis la règle en une ligne.
@@ -11,7 +11,7 @@
    */
   import { brancherTemps } from '../temps.js';
   import { surlignerR } from '../surligner.js';
-  import { ERREURS } from '$lib/data/seance5.js';
+  import { GG_ERREURS as ERREURS } from '$lib/data/seance5_ggplot.js';
 
   let e = $state(0);
   let hote = $state(null);

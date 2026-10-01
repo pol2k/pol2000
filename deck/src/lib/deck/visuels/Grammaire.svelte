@@ -5,8 +5,9 @@
    * glissent l'une sur l'autre pour former un seul graphique.
    *
    *   0  Les données : un tableau, avec les noms de colonnes
-   *      age | gauche_droite | vote et des lignes vides.
-   *   1  Les esthétiques, aes() : deux axes, x = age et y = gauche_droite.
+   *      gdpPercap | lifeExp | continent (Gapminder, l'exemple de la suite)
+   *      et des lignes vides.
+   *   1  Les esthétiques, aes() : deux axes, x = gdpPercap et y = lifeExp.
    *   2  Les géométries, geom_...() : quelques points.
    *   3  Les trois feuilles glissent au centre et s'empilent : le tableau
    *      passe derrière (son bord dépasse), les axes et les points se
@@ -14,7 +15,8 @@
    *      par des « + ».
    *
    * Schéma pur : aucune donnée. Les points sont une liste fixe, sans
-   * tendance, pour ne suggérer aucune relation entre l'âge et la position.
+   * tendance : le schéma ne montre pas la relation, le vrai graphique de R
+   * (Couches.svelte) s'en charge.
    * Source : Wickham (2010), « A Layered Grammar of Graphics ».
    */
   import { base } from '$app/paths';
@@ -46,11 +48,11 @@
 
   // Le tableau : trois colonnes, un en-tête, des lignes vides.
   const COLS = [
-    { nom: 'age', x: 32 },
-    { nom: 'gauche_droite', x: 141 },
-    { nom: 'vote', x: 254 }
+    { nom: 'gdpPercap', x: 50 },
+    { nom: 'lifeExp', x: 141 },
+    { nom: 'continent', x: 236 }
   ];
-  const SEPARATEURS = [64, 218];
+  const SEPARATEURS = [100, 182];
   const RANGEES = [80, 118, 156, 194];
 
   // Les axes : zone de tracé de x 58 à 274, de y 20 à 182.
@@ -75,7 +77,7 @@
 </script>
 
 <div class="visuel grammaire" bind:this={hote}>
-  <svg viewBox="0 0 1000 460" role="img" aria-label="Schéma de la grammaire des graphiques. Trois couches&#8239;: les données, un tableau aux colonnes age, gauche_droite et vote. Les esthétiques, aes(), qui placent l’âge en x et la position gauche-droite en y. Les géométries, geom_...(), des points. Les trois couches s’empilent en un seul graphique&#8239;: les données plus les esthétiques plus les géométries.">
+  <svg viewBox="0 0 1000 460" role="img" aria-label="Schéma de la grammaire des graphiques. Trois couches&#8239;: les données, un tableau aux colonnes gdpPercap, lifeExp et continent. Les esthétiques, aes(), qui placent le PIB par habitant en x et l’espérance de vie en y. Les géométries, geom_...(), des points. Les trois couches s’empilent en un seul graphique&#8239;: les données plus les esthétiques plus les géométries.">
     <text x="980" y="24" class="gr-note">schéma</text>
 
     <!-- Couche 1 : les données. Dessinée en premier, elle passe derrière. -->
@@ -106,8 +108,8 @@
       {#each TY as y}
         <line x1={X0 - 7} y1={y} x2={X0} y2={y} class="gr-trait" />
       {/each}
-      <text x={(X0 + X1) / 2} y="214" class="gr-axe"><tspan class="gr-xy">x =</tspan> age</text>
-      <text transform="translate(30 {(Y0 + Y1) / 2}) rotate(-90)" class="gr-axe"><tspan class="gr-xy">y =</tspan> gauche_droite</text>
+      <text x={(X0 + X1) / 2} y="214" class="gr-axe"><tspan class="gr-xy">x =</tspan> gdpPercap</text>
+      <text transform="translate(30 {(Y0 + Y1) / 2}) rotate(-90)" class="gr-axe"><tspan class="gr-xy">y =</tspan> lifeExp</text>
     </g>
 
     <!-- Couche 3 : les géométries. Sans fond : posée sur les axes, elle les laisse voir. -->
@@ -149,7 +151,7 @@
   .gr-filet { stroke: var(--dk-filet); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
   .gr-tableau { transition: opacity 0.4s; }
   .gr-tableau.gr-efface { opacity: 0; }
-  .gr-col { font-size: 18px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
+  .gr-col { font-size: 16px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .gr-axe { font-size: 18px; text-anchor: middle; fill: var(--dk-encre); font-weight: 600; }
   .gr-xy { fill: var(--dk-gris); font-weight: 400; }
   .gr-pt { fill: var(--dk-encre); }

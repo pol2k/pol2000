@@ -47,12 +47,6 @@
   import DigestHistoire from '$lib/deck/visuels/DigestHistoire.svelte';
   import DigestFiltres from '$lib/deck/visuels/DigestFiltres.svelte';
   import Leger2025 from '$lib/deck/visuels/Leger2025.svelte';
-  import PileFace from '$lib/deck/visuels/PileFace.svelte';
-  import PopulationExercice from '$lib/deck/visuels/PopulationExercice.svelte';
-  import TroisTirages from '$lib/deck/visuels/TroisTirages.svelte';
-  import MilleEchantillons from '$lib/deck/visuels/MilleEchantillons.svelte';
-  import QuatreTailles from '$lib/deck/visuels/QuatreTailles.svelte';
-  import BiaisEchantillon from '$lib/deck/visuels/BiaisEchantillon.svelte';
   import Pomicultrice from '$lib/deck/visuels/Pomicultrice.svelte';
   import DeuxHypotheses from '$lib/deck/visuels/DeuxHypotheses.svelte';
   import Proces from '$lib/deck/visuels/Proces.svelte';
@@ -73,18 +67,26 @@
   import ErreursGg from '$lib/deck/visuels/ErreursGg.svelte';
   import AvantS7 from '$lib/deck/visuels/AvantS7.svelte';
   import Galton from '$lib/deck/visuels/Galton.svelte';
+  import Des from '$lib/deck/visuels/Des.svelte';
+  import DefiInference from '$lib/deck/visuels/DefiInference.svelte';
+  import BudgetIntro from '$lib/deck/visuels/BudgetIntro.svelte';
+  import EchantillonsFaciles from '$lib/deck/visuels/EchantillonsFaciles.svelte';
+  import Recommencer from '$lib/deck/visuels/Recommencer.svelte';
+  import BudgetTailles from '$lib/deck/visuels/BudgetTailles.svelte';
   import CourbeNormale from '$lib/deck/visuels/CourbeNormale.svelte';
   import NormaleOuPas from '$lib/deck/visuels/NormaleOuPas.svelte';
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
-  import { CONSOLES } from '$lib/data/seance5.js';
+  import { GG, GG_CONSOLE } from '$lib/data/seance5_ggplot.js';
 
-  const TOTAL = 57;
+  const TOTAL = 55;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
-  // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
-  const avec = (cle, notes = [], garder = null) =>
-    CONSOLES[cle].map((l, i) => ({ ...l, note: notes[i] || '' })).filter((_, i) => !garder || garder.includes(i));
-  const c_partis_def = avec('partis', ['Les codes 1 à 5\u202F: les cinq grands partis.'], [0]);
+  // La console vient de R telle quelle (outils/seance5_ggplot.R); seules les notes sont d'ici.
+  const NOTES_GAP = [
+    'Pas dans le tidyverse. À installer une seule fois avec install.packages("gapminder").',
+    'Une ligne par pays, en 2007. La population, en millions.'
+  ];
+  const c_gapminder = GG_CONSOLE.map((l, i) => ({ ...l, note: NOTES_GAP[i] || '' }));
 
 </script>
 
@@ -129,6 +131,11 @@
       <h1 class="e">L’inférence statistique</h1>
       <hr class="filet" />
       <p class="lead e">Dire quelque chose du grand à partir du petit.</p>
+    </Slide>
+
+    <Slide bandeau="L’inférence" droite={D}>
+      <h2 class="e">Le défi de l’inférence</h2>
+      <DefiInference />
     </Slide>
 
     <Slide bandeau="L’échantillon · 1936" droite={D}>
@@ -181,6 +188,26 @@
       <PoidsColonne />
     </Slide>
 
+    <Slide bandeau="Notre budget" droite={D}>
+      <h2 class="e">Notre budget : 1 000 personnes</h2>
+      <BudgetIntro />
+    </Slide>
+
+    <Slide bandeau="Notre budget" droite={D}>
+      <h2 class="e">Facile, ou au hasard ?</h2>
+      <EchantillonsFaciles />
+    </Slide>
+
+    <Slide bandeau="Notre budget" droite={D}>
+      <h2 class="e">Et si on recommençait ?</h2>
+      <Recommencer />
+    </Slide>
+
+    <Slide bandeau="Notre budget" droite={D}>
+      <h2 class="e">Et si le budget changeait ?</h2>
+      <BudgetTailles />
+    </Slide>
+
     <!-- ================= LA COURBE NORMALE ================= -->
     <Slide bandeau="La courbe normale" droite={D}>
       <h2 class="e">La planche de Galton</h2>
@@ -188,63 +215,13 @@
     </Slide>
 
     <Slide bandeau="La courbe normale" droite={D}>
+      <h2 class="e">La moyenne de plusieurs dés</h2>
+      <Des />
+    </Slide>
+
+    <Slide bandeau="La courbe normale" droite={D}>
       <h2 class="e">La courbe normale</h2>
       <CourbeNormale />
-    </Slide>
-
-    <Slide bandeau="La courbe normale · quiz" droite={D}>
-      <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="hommes" />
-    </Slide>
-
-    <Slide bandeau="La courbe normale · quiz" droite={D}>
-      <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="adultes" />
-    </Slide>
-
-    <Slide bandeau="La courbe normale · quiz" droite={D}>
-      <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="poilievre" />
-    </Slide>
-
-    <Slide bandeau="La courbe normale · quiz" droite={D}>
-      <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="bebes" />
-    </Slide>
-
-    <Slide bandeau="La courbe normale · quiz" droite={D}>
-      <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="nyc" />
-    </Slide>
-
-    <Slide bandeau="La courbe normale · quiz" droite={D}>
-      <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="age" />
-    </Slide>
-
-    <Slide bandeau="Le hasard" droite={D}>
-      <h2 class="e">Pour s’exercer : faire comme si</h2>
-      <PopulationExercice />
-    </Slide>
-
-    <Slide bandeau="Le hasard" droite={D}>
-      <h2 class="e">La loi des grands nombres</h2>
-      <PileFace />
-    </Slide>
-
-    <Slide bandeau="Le hasard" droite={D}>
-      <h2 class="e">Trois échantillons, trois moyennes</h2>
-      <TroisTirages />
-    </Slide>
-
-    <Slide bandeau="Le hasard" droite={D}>
-      <h2 class="e">Mille échantillons</h2>
-      <MilleEchantillons />
-    </Slide>
-
-    <Slide bandeau="Le hasard" droite={D}>
-      <h2 class="e">Plus l’échantillon est grand…</h2>
-      <QuatreTailles />
     </Slide>
 
     <Slide bandeau="Le hasard" droite={D}>
@@ -252,9 +229,24 @@
       <TheoremeCentral />
     </Slide>
 
-    <Slide bandeau="Le biais" droite={D}>
-      <h2 class="e">Ne sonder que les passionné.e.s</h2>
-      <BiaisEchantillon />
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Les données ou leurs moyennes ?</h2>
+      <NormaleOuPas cle="hommes" />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Les données ou leurs moyennes ?</h2>
+      <NormaleOuPas cle="poilievre" />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Les données ou leurs moyennes ?</h2>
+      <NormaleOuPas cle="nyc" />
+    </Slide>
+
+    <Slide bandeau="La courbe normale · quiz" droite={D}>
+      <h2 class="e">Les données ou leurs moyennes ?</h2>
+      <NormaleOuPas cle="age" />
     </Slide>
 
     <Slide bandeau="L’écart type" droite={D}>
@@ -345,29 +337,29 @@
       <GabaritGg />
     </Slide>
 
-    <Slide bandeau="ggplot2 · couche par couche" droite={D}>
-      <h2 class="e">Les données, puis les axes</h2>
-      <Couches etapes={['vide', 'axes']} />
+    <Slide bandeau="En direct · ggplot2" droite={D}>
+      <h2 class="e">Les données : Gapminder 2007</h2>
+      <Console lignes={c_gapminder} />
     </Slide>
 
     <Slide bandeau="ggplot2 · couche par couche" droite={D}>
-      <h2 class="e">Les géométries</h2>
-      <Couches etapes={['points', 'jitter', 'smooth']} depart="axes" />
+      <h2 class="e">Les données, puis les axes</h2>
+      <Couches source={GG} etapes={['vide', 'axes']} />
+    </Slide>
+
+    <Slide bandeau="ggplot2 · couche par couche" droite={D}>
+      <h2 class="e">Les points, puis l’échelle</h2>
+      <Couches source={GG} etapes={['points', 'log']} depart="axes" />
+    </Slide>
+
+    <Slide bandeau="ggplot2 · couche par couche" droite={D}>
+      <h2 class="e">Une troisième et une quatrième variable</h2>
+      <Couches source={GG} etapes={['couleur', 'taille']} depart="log" />
     </Slide>
 
     <Slide bandeau="ggplot2 · couche par couche" droite={D}>
       <h2 class="e">L’habillage</h2>
-      <Couches etapes={['labs', 'theme']} depart="smooth" />
-    </Slide>
-
-    <Slide bandeau="En direct · ggplot2" droite={D}>
-      <h2 class="e">Les cinq grands partis</h2>
-      <Console lignes={c_partis_def} />
-    </Slide>
-
-    <Slide bandeau="ggplot2 · couche par couche" droite={D}>
-      <h2 class="e">Une troisième variable : la couleur</h2>
-      <Couches etapes={['couleur']} depart="theme" />
+      <Couches source={GG} etapes={['bulles', 'labs', 'theme']} depart="taille" />
     </Slide>
 
     <Slide bandeau="ggplot2" droite={D}>
@@ -408,6 +400,7 @@
         <span class="session">POL-2000 · Automne 2026</span>
       </div>
     </Slide>
+
 
   {/snippet}
 </Deck>

@@ -174,6 +174,15 @@ b_poil <- seq(min(m_poil), max(m_poil), length.out = 31)
 POILIEVRE_MOYENNES <- list(n = 50, bornes = round(b_poil, 3),
                            effectifs = as.integer(table(cut(m_poil, b_poil, include.lowest = TRUE))))
 
+# La taille des hommes (NHANES, déjà une cloche) : 1 000 moyennes de 50 hommes
+# tirés au hasard (sans remise, parmi les 2 239). Leurs moyennes aussi forment
+# une cloche, plus étroite.
+set.seed(59)
+m_hom <- replicate(1000, mean(sample(hommes, 50)))
+b_hom <- seq(min(m_hom), max(m_hom), length.out = 31)
+HOMMES_MOYENNES <- list(n = 50, bornes = round(b_hom, 3),
+                        effectifs = as.integer(table(cut(m_hom, b_hom, include.lowest = TRUE))))
+
 # ---- 4 quater. La CES ressemble-t-elle au Canada ? L'âge des répondant.e.s
 #      (brut, puis pondéré par cps25_weight_general_all, 61 poids manquants
 #      retirés) contre Statistique Canada, tableau 17-10-0005-01, estimations
@@ -268,6 +277,8 @@ out <- c(
   paste0("export const MONDES = ", J(MONDES), ";"),
   "/* Les moyennes de 1 000 échantillons de 50 notes de Pierre Poilievre. */",
   paste0("export const POILIEVRE_MOYENNES = ", J(POILIEVRE_MOYENNES), ";"),
+  "/* Les moyennes de 1 000 échantillons de 50 hommes (taille en cm, NHANES). */",
+  paste0("export const HOMMES_MOYENNES = ", J(HOMMES_MOYENNES), ";"),
   "/* Les moyennes de 1 000 échantillons de 50 pétales d'iris. */",
   paste0("export const IRIS_MOYENNES = ", J(IRIS_MOYENNES), ";"),
   "/* L'âge : Statistique Canada (1er juillet 2025) contre la CES brute et pondérée, en %. */",

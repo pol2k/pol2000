@@ -29,7 +29,8 @@
   import { surlignerR } from '../surligner.js';
   import { GGPLOT } from '$lib/data/seance5.js';
 
-  // source : un autre objet de la même forme que GGPLOT (le quiz de la séance 5).
+  // source : un autre objet de la même forme que GGPLOT (GG, le graphique
+  // Gapminder de outils/seance5_ggplot.R; le quiz de la séance 5).
   let { etapes = [], messages = true, depart = '', source = GGPLOT } = $props();
 
   const lignesDe = (k) => source[k].code.split('\n');
@@ -99,7 +100,7 @@
   .cc-gauche {
     flex: 0 0 auto;
     display: grid;
-    font-size: 0.62em;
+    font-size: 0.7em;
     /* La plus longue ligne, les marges de la règle et du bloc, un demi-caractère de jeu. */
     width: calc((var(--cc-car) + 0.5) * 1ch + 1.8em + 4px);
     max-width: 48%;

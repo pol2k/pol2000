@@ -1,22 +1,23 @@
 <script>
   /**
-   * Dans aes(), ou hors de aes() ? Le même histogramme de l'âge, deux fois,
-   * avec fill = "blue" à deux endroits. Code et images réels : GGPLOT.bleuAes
-   * et GGPLOT.bleu (src/lib/data/seance5.js, static/img/s5-bleu-aes.png et
-   * s5-bleu.png, rendus par outils/seance5_data.R).
+   * Dans aes(), ou hors de aes() ? Le même nuage de points (Gapminder 2007),
+   * deux fois, avec colour = "blue" à deux endroits. Code et images réels :
+   * GG.bleuAes et GG.bleu (src/lib/data/seance5_ggplot.js,
+   * static/img/s5-g-bleu-aes.png et s5-g-bleu.png, rendus par
+   * outils/seance5_ggplot.R).
    *
-   *   0  À gauche, fill = "blue" dans aes() : R y voit une variable qui vaut
-   *      toujours « blue ». Les barres sortent saumon, avec une légende.
-   *   1  À droite, fill = "blue" hors de aes() : une couleur fixe. Les barres
-   *      sortent bleues.
+   *   0  À gauche, colour = "blue" dans aes() : R y voit une variable qui
+   *      vaut toujours « blue ». Les points sortent saumon, avec une légende.
+   *   1  À droite, colour = "blue" hors de aes() : une couleur fixe. Les
+   *      points sortent bleus.
    *   2  Une ligne sous les deux : ce que fait aes().
    *
-   * Dans les deux codes, fill = "blue" est encadré de rouge.
+   * Dans les deux codes, colour = "blue" est encadré de rouge.
    */
   import { base } from '$app/paths';
   import { brancherTemps } from '../temps.js';
   import { surlignerR } from '../surligner.js';
-  import { GGPLOT } from '$lib/data/seance5.js';
+  import { GG } from '$lib/data/seance5_ggplot.js';
 
   let e = $state(0);
   let hote = $state(null);
@@ -26,9 +27,9 @@
     return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  // Le code coupé en trois : avant, fill = "...", après. Surligné morceau par morceau.
+  // Le code coupé en trois : avant, colour = "...", après. Surligné morceau par morceau.
   const decouper = (code) => {
-    const m = code.match(/fill = "[^"]*"/);
+    const m = code.match(/(?:colour|fill) = "[^"]*"/);
     const i = m ? m.index : code.length;
     const n = m ? m[0].length : 0;
     return [code.slice(0, i), code.slice(i, i + n), code.slice(i + n)].map(surlignerR);
@@ -36,16 +37,16 @@
 
   const COLONNES = [
     {
-      ...GGPLOT.bleuAes,
+      ...GG.bleuAes,
       ou: 'dans aes()',
       dit: 'R y voit une variable',
-      alt: 'Histogramme de l’âge aux barres saumon, avec une légende fill qui affiche blue.'
+      alt: 'Nuage de points de l’espérance de vie selon le PIB par habitant, aux points saumon, avec une légende colour qui affiche blue.'
     },
     {
-      ...GGPLOT.bleu,
+      ...GG.bleu,
       ou: 'hors de aes()',
       dit: 'une couleur fixe',
-      alt: 'Histogramme de l’âge aux barres bleues, sans légende.'
+      alt: 'Le même nuage de points, aux points bleus, sans légende.'
     }
   ].map((c) => ({ ...c, morceaux: decouper(c.code) }));
 </script>
