@@ -1,20 +1,21 @@
 <script>
   /**
    * « Une personne, une classe » : deux sortes de variation, sur un seul axe,
-   * la taille en mètres. Une personne peut être petite ou grande, les gens
+   * la taille en pieds et pouces. Une personne peut être petite ou grande, les gens
    * varient beaucoup. Mais la taille moyenne d'une classe de 50 personnes
    * tirées au hasard bouge à peine : les grands et les petits s'annulent.
    * Remplace les deux diapos des dés (Des, DesMoyenne). Cinq temps.
    *
    *   0  Six vrais adultes (PERSONNES), debout sur l'axe à leur taille. Chaque
-   *      silhouette est aussi haute que la personne (1 px par cm), avec sa
-   *      taille au-dessus. « Une personne : de … à …. Ça varie beaucoup. »
+   *      silhouette est aussi haute que la personne (2,54 px par pouce, soit
+   *      1 px par cm), avec sa taille au-dessus, sur trois rangs pour que les
+   *      étiquettes ne se chevauchent pas. « Une personne : de … à …. Ça varie beaucoup. »
    *   1  Les silhouettes s'effacent, l'histogramme gris des adultes monte
-   *      (POPULATION, tranches de 2 cm). « Les gens varient beaucoup. »
+   *      (POPULATION, tranches de 1 po). « Les gens varient beaucoup. »
    *   2  Une classe de 50 adultes tirés au hasard (CLASSE) : 50 points sur une
    *      bande au-dessus de l'histogramme, chacun à sa taille, puis leur
    *      moyenne en rouge, qu'un pointillé descend jusqu'à l'axe.
-   *   3  1 000 classes de 50 (CLASSES, tranches de 0,5 cm) : une cloche rouge
+   *   3  1 000 classes de 50 (CLASSES, tranches de 0,25 po) : une cloche rouge
    *      étroite monte en trois secondes sur le même axe. La largeur se lit
    *      d'un coup d'œil : la cloche des moyennes est bien plus étroite que
    *      l'histogramme des gens. État final fixé : dès le temps 4, ou après
@@ -38,10 +39,12 @@
    * longueur. Rien d'aléatoire, l'état final égale les effectifs de R. Le
    * petit décalage vertical des 50 points de la classe est fixe lui aussi.
    *
-   * Tailles affichées en mètres, arrondies au centimètre (Math.round sur les
-   * cm, puis /100). Tout vient de src/lib/data/seance5_tailles.js
-   * (outils/seance5_tailles.R, NHANES 2009 à 2012 par le paquet R NHANES,
-   * adultes de 20 ans et plus).
+   * Au Québec, une taille se dit en pieds et pouces. Les données arrivent en
+   * pouces (R a divisé les cm de NHANES par 2,54). Une taille s'écrit
+   * « 5 pi 7 po », arrondie au pouce près (« 6 pi » si le reste est nul).
+   * Les graduations, aux 4 pouces, s'écrivent court : « 5 pi 4 ». Tout vient
+   * de src/lib/data/seance5_tailles.js (outils/seance5_tailles.R, NHANES 2009
+   * à 2012 par le paquet R NHANES, adultes de 20 ans et plus).
    */
   import { brancherTemps } from '../temps.js';
   import { POPULATION, PERSONNES, CLASSE, CLASSES } from '$lib/data/seance5_tailles.js';
@@ -56,36 +59,43 @@
   const N = ' ';
   const f = (v, d = 0) =>
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, N);
-  // Une taille en cm, écrite en mètres au centimètre près : 150,5 cm donne « 1,51 m ».
-  const m = (cm) => `${f(Math.round(cm) / 100, 2)}${N}m`;
+  // Une taille en pouces, écrite en pieds et pouces au pouce près : 59,25 po donne « 4 pi 11 po ».
+  const pp = (po) => {
+    const t = Math.round(po);
+    const pi = Math.floor(t / 12), reste = t % 12;
+    return reste ? `${pi}${N}pi ${reste}${N}po` : `${pi}${N}pi`;
+  };
+  // Une graduation, plus courte : 64 po donne « 5 pi 4 », 60 po donne « 5 pi ».
+  const grad = (po) => (po % 12 ? `${Math.floor(po / 12)}${N}pi ${po % 12}` : `${po / 12}${N}pi`);
 
-  // L'axe : de 134 à 202 cm, les bornes de l'histogramme.
+  // L'axe : de 52 à 79 po, les bornes de l'histogramme.
   const A0 = POPULATION.bornes[0];
   const A1 = POPULATION.bornes[POPULATION.bornes.length - 1];
   const X0 = 70, X1 = 930, BASE = 400;
   const x = (v) => X0 + ((v - A0) / (A1 - A0)) * (X1 - X0);
-  const TICKS = [140, 150, 160, 170, 180, 190, 200];
+  const TICKS = [56, 60, 64, 68, 72, 76];
 
-  // 0 : six silhouettes, 1 px par cm, triées de la plus petite à la plus grande.
+  // 0 : six silhouettes, 2,54 px par pouce (1 px par cm), triées de la plus petite à la plus grande.
   const GENS = [...PERSONNES]
     .sort((a, b) => a - b)
-    .map((h, i) => {
+    .map((po, i) => {
+      const h = po * 2.54;
       const r = h * 0.07;
       return {
-        h,
-        x: x(h),
+        po,
+        x: x(po),
         tete: BASE - h + r,
         r,
         cou: BASE - h + 2 * r + 3,
         hanche: BASE - h * 0.47,
         l: h * 0.16,
         jambe: h * 0.065,
-        ly: BASE - h - 14 - (i % 2) * 28,
+        ly: BASE - h - 14 - (i % 3) * 26,
         i
       };
     });
-  const PLUS_PETIT = m(Math.min(...PERSONNES));
-  const PLUS_GRAND = m(Math.max(...PERSONNES));
+  const PLUS_PETIT = pp(Math.min(...PERSONNES));
+  const PLUS_GRAND = pp(Math.max(...PERSONNES));
 
   // 1 : l'histogramme gris des adultes.
   const HPOP = 170;
@@ -152,18 +162,18 @@
   // Le texte, une idée par temps.
   const LIGNES = [
     { l1: `Une personne${N}: de ${PLUS_PETIT} à ${PLUS_GRAND}.`, l2: 'Ça varie beaucoup.' },
-    { l1: `Les ${f(POPULATION.n)} adultes de l’enquête${N}: de ${m(POPULATION.min)} à ${m(POPULATION.max)}.`, l2: 'Les gens varient beaucoup.' },
-    { l1: `Une classe de ${f(CLASSE.n)} adultes, tirés au hasard.`, l2: `Sa taille moyenne${N}: ${m(CLASSE.moyenne)}.`, rouge: true },
-    { l1: `${f(CLASSES.nombre)} classes de ${f(CLASSES.n)}${N}: des moyennes de ${m(CLASSES.min)} à ${m(CLASSES.max)}.`, l2: 'Les moyennes de classes varient très peu.', rouge: true },
+    { l1: `Les ${f(POPULATION.n)} adultes de l’enquête${N}: de ${pp(POPULATION.min)} à ${pp(POPULATION.max)}.`, l2: 'Les gens varient beaucoup.' },
+    { l1: `Une classe de ${f(CLASSE.n)} adultes, tirés au hasard.`, l2: `Sa taille moyenne${N}: ${pp(CLASSE.moyenne)}.`, rouge: true },
+    { l1: `${f(CLASSES.nombre)} classes de ${f(CLASSES.n)}${N}: des moyennes de ${pp(CLASSES.min)} à ${pp(CLASSES.max)}.`, l2: 'Les moyennes de classes varient très peu.', rouge: true },
     { l1: `Pourquoi${N}?`, l2: 'Dans une classe, les grands et les petits s’annulent.' }
   ];
 
   const ARIA =
     `La taille des adultes de l’enquête NHANES, États-Unis, 2009 à 2012. ` +
     `Six adultes tirés au hasard mesurent de ${PLUS_PETIT} à ${PLUS_GRAND}${N}: une personne, ça varie beaucoup. ` +
-    `Les ${f(POPULATION.n)} adultes vont de ${m(POPULATION.min)} à ${m(POPULATION.max)}. ` +
-    `Une classe de ${f(CLASSE.n)} adultes tirés au hasard a une taille moyenne de ${m(CLASSE.moyenne)}. ` +
-    `Les moyennes de ${f(CLASSES.nombre)} classes de ${f(CLASSES.n)} vont de ${m(CLASSES.min)} à ${m(CLASSES.max)}, une cloche étroite${N}: ` +
+    `Les ${f(POPULATION.n)} adultes vont de ${pp(POPULATION.min)} à ${pp(POPULATION.max)}. ` +
+    `Une classe de ${f(CLASSE.n)} adultes tirés au hasard a une taille moyenne de ${pp(CLASSE.moyenne)}. ` +
+    `Les moyennes de ${f(CLASSES.nombre)} classes de ${f(CLASSES.n)} vont de ${pp(CLASSES.min)} à ${pp(CLASSES.max)}, une cloche étroite${N}: ` +
     `les moyennes de classes varient très peu, parce que dans une classe, les grands et les petits s’annulent. ` +
     `De même, une personne ou un.e répondant.e varie beaucoup, mais la moyenne d’une classe de 50 ` +
     `ou d’un sondage de 1${N}000 varie très peu.`;
@@ -182,7 +192,7 @@
                 class="ct-barre"
                 style="transform: scaleY({e >= 1 ? b.h / HPOP : 0}); transition-delay: {e >= 1 ? 300 + j * 20 : 0}ms" />
         {/each}
-        <text x={x(184)} y="322" class="ct-nom ct-l" class:ct-vu={e >= 1} style="transition-delay: {e === 1 ? 900 : 0}ms">{f(POPULATION.n)} adultes</text>
+        <text x={x(72.5)} y="322" class="ct-nom ct-l" class:ct-vu={e >= 1} style="transition-delay: {e === 1 ? 900 : 0}ms">{f(POPULATION.n)} adultes</text>
       </g>
 
       <!-- 3 : la cloche rouge des 1 000 moyennes. -->
@@ -197,9 +207,9 @@
       <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="ct-axe" />
       {#each TICKS as v}
         <line x1={x(v)} y1={BASE} x2={x(v)} y2={BASE + 8} class="ct-axe" />
-        <text x={x(v)} y={BASE + 30} class="ct-tick">{f(v / 100, 2)}</text>
+        <text x={x(v)} y={BASE + 30} class="ct-tick">{grad(v)}</text>
       {/each}
-      <text x={X1} y={BASE + 56} class="ct-tick ct-droite">taille (m)</text>
+      <text x={X1} y={BASE + 56} class="ct-tick ct-droite">taille (pieds et pouces)</text>
 
       <!-- 0 : six vraies personnes, debout à leur taille. -->
       <g class="ct-gens" class:ct-parti={e >= 1}>
@@ -210,7 +220,7 @@
             <rect x={g.x - g.l / 2} y={g.hanche - 1} width={g.jambe} height={BASE - g.hanche + 1} />
             <rect x={g.x + g.l / 2 - g.jambe} y={g.hanche - 1} width={g.jambe} height={BASE - g.hanche + 1} />
           </g>
-          <text x={g.x} y={g.ly} class="ct-taille" style="--d: {g.i * 90 + 200}ms">{m(g.h)}</text>
+          <text x={g.x} y={g.ly} class="ct-taille" style="--d: {g.i * 90 + 200}ms">{pp(g.po)}</text>
         {/each}
       </g>
 
@@ -224,7 +234,7 @@
           <line x1={XC} y1={YB} x2={XC} y2={BASE} class="ct-pointille" />
           <circle cx={XC} cy={YB} r="11" class="ct-rond" />
           <circle cx={XC} cy={BASE} r="9" class="ct-rond" />
-          <text x={XC} y="72" class="ct-moy-t">{m(CLASSE.moyenne)}</text>
+          <text x={XC} y="72" class="ct-moy-t">{pp(CLASSE.moyenne)}</text>
         </g>
         <g class="ct-cotes">
           <text x={XMIN - 16} y={YB + 7} class="ct-cote ct-droite">plus petits</text>

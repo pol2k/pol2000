@@ -8,13 +8,18 @@
    * Pas de pommes ici : la pomicultrice vient plus loin dans la séance.
    * Un tableau, une rangée par exemple fil rouge. Quatre temps.
    *
-   *   0  Les deux en-têtes et la rangée de la taille : 10 cm pour une
-   *      personne, 1,4 cm pour la moyenne d'une classe de 50.
+   *   0  Les deux en-têtes et la rangée de la taille, en pouces (au Québec,
+   *      une taille se dit en pieds et pouces) : 4 po pour une personne,
+   *      0,5 po pour la moyenne d'une classe de 50.
    *   1  La rangée de l'âge (CES 2025, déjà vu à « L'écart type ») :
    *      17,5 ans pour un.e répondant.e, 2,6 ans pour la moyenne de 50.
-   *   2  La rangée du sondage : un.e répondant.e répond oui ou non (pas
-   *      d'écart type à montrer, on l'écrit tel quel), un sondage de 1 000
-   *      varie de 1,8 point.
+   *   2  La rangée du sondage : un.e répondant.e vote conservateur ou non,
+   *      soit 100 ou 0 sur une échelle de 0 à 100. L'écart type de ce vote
+   *      0 ou 1, en points, est racine(vrai × (1 − vrai)) × 100, avec
+   *      vrai = BUDGET.vrai (la part conservatrice de la CES 2025) : environ
+   *      47 points. Un sondage de 1 000 varie de 1,8 point (plus que
+   *      47 / racine(1 000), parce que seul.e.s celles et ceux qui déclarent
+   *      un vote comptent : environ 700 sur 1 000).
    *   3  La colonne des moyennes s'encadre en rouge, celle des individus
    *      pâlit, et la phrase : la marge d'erreur utilise l'écart type des
    *      moyennes, environ deux fois cet écart, 19 fois sur 20.
@@ -28,16 +33,19 @@
    *
    * Sources, toutes générées par R :
    *   la taille : POPULATION.ecartType (les adultes de NHANES) et
-   *     CLASSES.ecartType (1 000 classes de 50), src/lib/data/seance5_tailles.js,
-   *     outils/seance5_tailles.R;
+   *     CLASSES.ecartType (1 000 classes de 50), en pouces,
+   *     src/lib/data/seance5_tailles.js, outils/seance5_tailles.R;
    *   l'âge : POP.ecartType (les 20 180 répondant.e.s de la CES 2025) et
    *     ecartTypeDesMoyennes de l'entrée à 50 de DISTRIBUTIONS (1 000
    *     échantillons de 50), src/lib/data/seance5.js, outils/seance5_data.R;
-   *   le sondage : MILLE.hasard.ecartType (la part conservatrice de 1 000
-   *     sondages de 1 000 tirés au hasard dans la CES 2025), en points,
-   *     src/lib/data/seance5_budget.js, outils/seance5_budget.R.
-   * Arrondis : au cm pour la taille des individus, au dixième ailleurs (17,5 ans,
-   * comme sur la diapo « L'écart type »).
+   *   le sondage : BUDGET.vrai (l'écart type d'un.e répondant.e se calcule
+   *     ici, en JS, à partir de cette part) et MILLE.hasard.ecartType (la part
+   *     conservatrice de 1 000 sondages de 1 000 tirés au hasard dans la
+   *     CES 2025), en points, src/lib/data/seance5_budget.js,
+   *     outils/seance5_budget.R.
+   * Arrondis : à l'unité pour la taille (au pouce) et le vote (au point) des
+   * individus, au dixième ailleurs (17,5 ans, comme sur la diapo « L'écart
+   * type »).
    */
   import { brancherTemps } from '../temps.js';
   import { POPULATION, CLASSES } from '$lib/data/seance5_tailles.js';
@@ -55,6 +63,8 @@
   const f = (v, d = 0) =>
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, N);
   const POINTS = MILLE.hasard.ecartType * 100;
+  // Un.e répondant.e : 100 (vote conservateur) ou 0. Écart type de ce vote, en points.
+  const UN_VOTE = Math.sqrt(BUDGET.vrai * (1 - BUDGET.vrai)) * 100;
   const AGE_50 = DISTRIBUTIONS.find((d) => d.n === 50);
   const point = (v) => (Math.round(v * 10) / 10 < 2 ? 'point' : 'points');
 
@@ -62,9 +72,9 @@
     {
       nom: 'taille',
       source: 'NHANES, adultes',
-      ind: `${f(POPULATION.ecartType)}${N}cm`,
+      ind: `${f(POPULATION.ecartType)}${N}po`,
       qui: 'une personne',
-      moy: `${f(CLASSES.ecartType, 1)}${N}cm`,
+      moy: `${f(CLASSES.ecartType, 1)}${N}po`,
       quoi: `une classe de ${f(CLASSES.n)}`
     },
     {
@@ -78,9 +88,8 @@
     {
       nom: 'sondage',
       source: 'CES 2025',
-      ind: 'oui ou non',
-      mot: true,
-      qui: 'un.e répondant.e',
+      ind: `${f(UN_VOTE)} ${point(UN_VOTE)}`,
+      qui: `un.e répondant.e${N}: 0 ou 100`,
       moy: `${f(POINTS, 1)} ${point(POINTS)}`,
       quoi: `un sondage de ${f(BUDGET.n)}`
     }
@@ -94,7 +103,8 @@
     `Deux écarts types. La taille${N}: une personne, écart type de ${RANGEES[0].ind}. ` +
     `La moyenne d’une classe de ${f(CLASSES.n)}${N}: ${RANGEES[0].moy}. ` +
     `L’âge dans l’Étude électorale canadienne 2025${N}: un.e répondant.e, ${RANGEES[1].ind}, la moyenne de ${f(AGE_50.n)} répondant.e.s, ${RANGEES[1].moy}. ` +
-    `Un sondage${N}: un.e répondant.e répond oui ou non, un sondage de ${f(BUDGET.n)} varie de ${RANGEES[2].moy}. ` +
+    `Un sondage${N}: un.e répondant.e vote conservateur ou non, 0 ou 100, écart type de ${RANGEES[2].ind}. ` +
+    `Un sondage de ${f(BUDGET.n)} varie de ${RANGEES[2].moy}. ` +
     `La marge d’erreur utilise l’écart type des moyennes${N}: environ deux fois cet écart, 19 fois sur 20.`;
 </script>
 
@@ -117,7 +127,7 @@
         <text x={XN} y={y + 48} class="de-nom">{r.nom}</text>
         <text x={XN} y={y + 76} class="de-source">{r.source}</text>
         <g class="de-col" class:de-pale={e >= 3}>
-          <text x={XA} y={y + 52} class="de-nombre" class:de-mot={r.mot}>{r.ind}</text>
+          <text x={XA} y={y + 52} class="de-nombre">{r.ind}</text>
           <text x={XA} y={y + 82} class="de-qui">{r.qui}</text>
         </g>
         <g class="de-moy">
@@ -150,7 +160,6 @@
   .de-nom { font-size: 28px; font-weight: 600; fill: var(--dk-encre); }
   .de-source { font-size: 18px; fill: var(--dk-gris); }
   .de-nombre { font-size: 40px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
-  .de-nombre.de-mot { font-size: 30px; fill: var(--dk-gris); }
   .de-qui { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
   .de-rouge { fill: var(--dk-accent); }
 
