@@ -252,6 +252,16 @@ CONSOLE_POIDS <- list(
 )
 options(old_w)
 
+# ---- L'exemple d'ouverture (« Le défi de l'inférence ») : l'intérêt pour la
+#      politique (cps25_interest_gen_1, de 0 à 10, valeurs hors 0-10 retirées)
+#      chez les 18 à 34 ans et chez les 55 ans et plus. Sans pondération.
+interet <- as.numeric(df_raw$cps25_interest_gen_1)
+interet[interet < 0 | interet > 10] <- NA
+INTERET_AGE <- list(
+  jeunes = mean(interet[age >= 18 & age <= 34], na.rm = TRUE),
+  aines = mean(interet[age >= 55], na.rm = TRUE)
+)
+
 # ---- Export.
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
 out <- c(
@@ -283,6 +293,8 @@ out <- c(
   paste0("export const IRIS_MOYENNES = ", J(IRIS_MOYENNES), ";"),
   "/* L'âge : Statistique Canada (1er juillet 2025) contre la CES brute et pondérée, en %. */",
   paste0("export const RECENSEMENT = ", J(RECENSEMENT), ";"),
+  "/* L'intérêt pour la politique (0 à 10) : 18 à 34 ans, 55 ans et plus. */",
+  paste0("export const INTERET_AGE = ", J(INTERET_AGE), ";"),
   "/* Le poids dans df_clean : six lignes, et la console de la moyenne brute et pondérée. */",
   paste0("export const POIDS_LIGNES = ", J(POIDS_LIGNES), ";"),
   paste0("export const CONSOLE_POIDS = ", J(CONSOLE_POIDS), ";"),

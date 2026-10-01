@@ -17,18 +17,17 @@
    *
    * Données (src/lib/data/seance5.js, généré par outils/seance5_data.R) :
    *   - POP.n : le nombre de répondant.e.s de la CES 2025.
-   *   - TESTS.naissance.estimes : les moyennes de gauche_droite selon
-   *     ne_canada, dans l'ordre du t.test de R (ne_canada = 0, puis 1),
-   *     donc [nées ailleurs, nées au Canada]. Les carrés sont placés à la
-   *     valeur brute, les étiquettes arrondies à une décimale. Ces moyennes
-   *     ne portent que sur les personnes qui ont répondu à l'échelle, sans
-   *     pondération. On ne l'écrit pas ici (diapositive d'accueil) : la
-   *     console du t.test, plus loin, le montre.
+   *   - INTERET_AGE (src/lib/data/seance5_normale.js, outils/seance5_normale.R) :
+   *     l'intérêt moyen pour la politique, de 0 à 10, chez les 18 à 34 ans et
+   *     chez les 55 ans et plus. Sans pondération. Exemple choisi le 1er
+   *     octobre 2026 à la demande de l'enseignant, pour une relation neutre
+   *     (il remplace la position gauche-droite selon le lieu de naissance).
    * Les personnes dessinées sont des pictogrammes : leur nombre ne veut
    * rien dire. Positions fixes, pas de Math.random.
    */
   import { brancherTemps } from '../temps.js';
-  import { POP, TESTS } from '$lib/data/seance5.js';
+  import { POP } from '$lib/data/seance5.js';
+  import { INTERET_AGE } from '$lib/data/seance5_normale.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -39,7 +38,7 @@
 
   const f = (x, d = 0) => x.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, ' ');
   const n = f(POP.n);
-  const [AILLEURS, CANADA] = TESTS.naissance.estimes;
+  const { jeunes: JEUNES, aines: AINES } = INTERET_AGE;
 
   // Mon échantillon : un petit groupe, 3 × 2.
   const GROUPE = Array.from({ length: 6 }, (_, i) => ({ x: 58 + (i % 3) * 26, y: 44 + Math.floor(i / 3) * 40 }));
@@ -48,8 +47,8 @@
   const RX0 = 44, RX1 = 416, RY = 238;
   const px = (v) => RX0 + (v / 10) * (RX1 - RX0);
   const POINTS = [
-    { v: CANADA, rouge: false, ty: RY - 18, ancre: 'end', dx: -16, nom: 'au Canada ' },
-    { v: AILLEURS, rouge: true, ty: RY - 18, ancre: 'start', dx: 16, nom: '' }
+    { v: JEUNES, rouge: false, ty: RY - 18, ancre: 'end', dx: -16, nom: '18-34 ans ' },
+    { v: AINES, rouge: true, ty: RY - 18, ancre: 'start', dx: 16, nom: '55+ ' }
   ].map((p) => ({ ...p, x: px(p.v), etiq: f(p.v, 1) }));
 
   // La population : une grande foule, rangées décalées.
@@ -65,7 +64,7 @@
   // La flèche, du panneau vers la foule.
   const AY = 160, AX0 = 462, AX1 = 572;
 
-  const aria = `Mon échantillon : ${n} répondant.e.s de l’Étude électorale canadienne 2025. Les personnes nées hors du Canada se placent un peu plus à droite : ${POINTS[1].etiq} sur 10, contre ${POINTS[0].etiq} pour les personnes nées au Canada. Est-ce vrai pour tous les Canadien.ne.s ? Un : mon échantillon ressemble-t-il à la population ? Deux : ce résultat pourrait-il venir du hasard ? Aujourd’hui : comment y répondre.`;
+  const aria = `Mon échantillon : ${n} répondant.e.s de l’Étude électorale canadienne 2025. Les 55 ans et plus s’intéressent plus à la politique : ${POINTS[1].etiq} sur 10, contre ${POINTS[0].etiq} chez les 18 à 34 ans. Est-ce vrai pour tous les Canadien.ne.s ? Un : mon échantillon ressemble-t-il à la population ? Deux : ce résultat pourrait-il venir du hasard ? Aujourd’hui : comment y répondre.`;
 </script>
 
 {#snippet personne(x, y, cls)}
@@ -84,12 +83,12 @@
     <text x="152" y="88" class="di-t"><tspan class="di-fort">{n}</tspan> répondant.e.s</text>
     <text x="152" y="114" class="di-gris">CES 2025</text>
 
-    <text x={RX0} y="160" class="di-t di-fort di-accent">Né.e.s hors du Canada&#8239;:</text>
-    <text x={RX0} y="188" class="di-t">un peu plus à droite.</text>
+    <text x={RX0} y="160" class="di-t di-fort di-accent">Intérêt pour la politique&#8239;:</text>
+    <text x={RX0} y="188" class="di-t">plus fort chez les 55+.</text>
 
     <line x1={RX0} y1={RY} x2={RX1} y2={RY} class="di-regle" />
-    <text x={RX0} y="264" class="di-gris">gauche</text>
-    <text x={RX1} y="264" class="di-gris" text-anchor="end">droite</text>
+    <text x={RX0} y="264" class="di-gris">0 · pas du tout</text>
+    <text x={RX1} y="264" class="di-gris" text-anchor="end">10 · beaucoup</text>
     {#each POINTS as p, k}
       <g class="di-point" style="--dx: {p.x - RX0}px; animation-delay: {200 + k * 250}ms">
         <rect x={p.x - 8} y={RY - 8} width="16" height="16" class={p.rouge ? 'di-rouge' : 'di-encre'} />
