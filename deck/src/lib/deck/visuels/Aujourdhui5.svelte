@@ -30,14 +30,14 @@
     { x: 110, lignes: ['L’inférence'], picto: 'inf' },
     { x: 320, lignes: ['Est-ce', 'le hasard ?'], picto: 'test' },
     { x: 680, lignes: ['ggplot2'], picto: 'gg' },
-    { x: 890, lignes: ['En direct', 'dans R'], picto: 'r' }
+    { x: 890, lignes: ['Un peu de R'], picto: 'r' }
   ];
   // Ordre d'apparition : la pause s'intercale entre le test et ggplot2.
   const rangDe = (i) => (i < 2 ? i : i + 1);
 </script>
 
 <div class="visuel aujourdhui5">
-  <svg viewBox="0 0 1000 300" role="img" aria-label="La séance en cinq temps, de gauche à droite : l’inférence, est-ce le hasard, la pause, ggplot2, puis en direct dans R.">
+  <svg viewBox="0 0 1000 300" role="img" aria-label="La séance en cinq temps, de gauche à droite : l’inférence, est-ce le hasard, la pause, ggplot2, puis un peu de R.">
     <!-- La ligne, coupée par la pause. -->
     <path d="M 40 {YR} H 458" pathLength="1" class="aj-rail" />
     <path d="M 542 {YR} H 958" pathLength="1" class="aj-rail aj-rail-2" />

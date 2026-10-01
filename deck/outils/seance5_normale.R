@@ -74,10 +74,17 @@ TAILLES <- list(ecart = mean(hommes) - mean(femmes),
 nyc_q <- compter(nyc, 0, 480, 4)
 nyc_q$traits <- sort(unique(floor(nyc[nyc >= 40])))
 nyc_q$plus40 <- sum(nyc >= 40); nyc_q$plus100 <- sum(nyc >= 100); nyc_q$plus200 <- sum(nyc >= 200)
+# Ce que les répondant.e.s pensent de Pierre Poilievre, de 0 à 100
+# (cps25_lead_rating_24 : le chef que les électeurs conservateurs notent 80
+# en moyenne, vérifié par vote le 1er octobre 2026). Valeurs négatives
+# (ne sait pas, refus) retirées.
+poilievre <- as.numeric(df_raw$cps25_lead_rating_24)
+poilievre <- poilievre[!is.na(poilievre) & poilievre >= 0]
 QUIZ <- list(
   c(list(cle = "hommes", forme = "cloche"), compter(hommes, 150, 206, 2)),
   c(list(cle = "adultes", forme = "cloche"), compter(nh$Height, 134, 206, 2)),
   c(list(cle = "iris", forme = "bosses"), compter(iris$Petal.Length, 1, 7.25, 0.25)),
+  c(list(cle = "poilievre", forme = "bosses"), compter(poilievre, 0, 105, 5)),
   c(list(cle = "bebes", forme = "cloche"), compter(MASS::birthwt$bwt, 400, 5200, 400)),
   c(list(cle = "nyc", forme = "queue"), nyc_q),
   c(list(cle = "age", forme = "plateau"), compter(age, 15, 100, 5))
@@ -144,6 +151,15 @@ PANIERS <- c(list(moyennes = round(paniers, 2),
                   auMoins105 = sum(paniers >= 105), auMoins102 = sum(paniers >= 102)),
              compter(paniers, 90, 110, 0.5))
 
+# Les mondes plus légers que 100 g (98 et 99 g) : 1 000 paniers chacun, et combien
+# pèsent 105 g ou plus. H0 dit « 100 g ou moins » : le monde à 100 g est le
+# plus favorable à H0.
+MONDES <- c(lapply(c(98, 99), function(mu) {
+  set.seed(58)
+  m <- replicate(1000, mean(rnorm(50, mean = mu, sd = sqrt(300))))
+  list(moyenne = mu, auMoins105 = sum(m >= 105))
+}), list(list(moyenne = 100, auMoins105 = PANIERS$auMoins105)))  # le même monde que PANIERS
+
 # ---- 4 ter. Le théorème central limite, sur trois formes : les moyennes de
 #      1 000 échantillons de 50 pétales d'iris (sans remise, parmi les 150).
 set.seed(56)
@@ -151,6 +167,12 @@ m_iris <- replicate(1000, mean(sample(iris$Petal.Length, 50)))
 b_iris <- seq(min(m_iris), max(m_iris), length.out = 31)
 IRIS_MOYENNES <- list(n = 50, bornes = round(b_iris, 3),
                       effectifs = as.integer(table(cut(m_iris, b_iris, include.lowest = TRUE))))
+
+set.seed(57)
+m_poil <- replicate(1000, mean(sample(poilievre, 50)))
+b_poil <- seq(min(m_poil), max(m_poil), length.out = 31)
+POILIEVRE_MOYENNES <- list(n = 50, bornes = round(b_poil, 3),
+                           effectifs = as.integer(table(cut(m_poil, b_poil, include.lowest = TRUE))))
 
 # ---- 4 quater. La CES ressemble-t-elle au Canada ? L'âge des répondant.e.s
 #      (brut, puis pondéré par cps25_weight_general_all, 61 poids manquants
@@ -181,7 +203,10 @@ RECENSEMENT <- list(
   groupes = c(paste0(head(br, -2), " à ", head(br, -2) + 4), paste0(br[length(br) - 1], " et +")),
   statcan = parts(sc$age, sc$VALUE),
   eecBrut = parts(age, rep(1, length(age))),
-  eecPondere = parts(age, poids_eec)
+  eecPondere = parts(age, poids_eec),
+  moyenneStatcan = round(weighted.mean(sc$age, sc$VALUE), 1),
+  moyenneCes = round(mean(age), 1),
+  moyenneCesPondere = round(weighted.mean(age[!is.na(poids_eec)], poids_eec[!is.na(poids_eec)]), 1)
 )
 
 # ---- 5. Le quiz dans R, en direct : deux histogrammes que la salle refait.
@@ -195,11 +220,6 @@ rendre <- function(nom, code, largeur = 6.4, hauteur = 4) {
     message = function(m) { messages <<- c(messages, trimws(conditionMessage(m))); invokeRestart("muffleMessage") })
   list(code = code, image = paste0("s5-n-", nom, ".png"), messages = unique(messages))
 }
-GGPLOT_NORMALE <- list(
-  iris = rendre("iris", "ggplot(iris, aes(x = Petal.Length)) +\n  geom_histogram(binwidth = 0.25)"),
-  irisEspeces = rendre("iris-especes", "ggplot(iris, aes(x = Petal.Length, fill = Species)) +\n  geom_histogram(binwidth = 0.25)")
-)
-
 # ---- Export.
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
 out <- c(
@@ -221,12 +241,15 @@ out <- c(
   paste0("export const NORMALE = ", J(NORMALE), ";"),
   "/* Le monde de H0 : 1 000 paniers de 50 pommes fictives de 100 g en moyenne. */",
   paste0("export const PANIERS = ", J(PANIERS), ";"),
+  "/* Des mondes à 98, 99 et 100 g : combien de 1 000 paniers pèsent 105 g ou plus. */",
+  paste0("export const MONDES = ", J(MONDES), ";"),
+  "/* Les moyennes de 1 000 échantillons de 50 notes de Pierre Poilievre. */",
+  paste0("export const POILIEVRE_MOYENNES = ", J(POILIEVRE_MOYENNES), ";"),
   "/* Les moyennes de 1 000 échantillons de 50 pétales d'iris. */",
   paste0("export const IRIS_MOYENNES = ", J(IRIS_MOYENNES), ";"),
   "/* L'âge : Statistique Canada (1er juillet 2025) contre la CES brute et pondérée, en %. */",
   paste0("export const RECENSEMENT = ", J(RECENSEMENT), ";"),
-  "/* Les pétales d'iris, refaits dans R : le code, l'image, les messages de R. */",
-  paste0("export const GGPLOT_NORMALE = ", J(GGPLOT_NORMALE), ";")
+  "/* (Les histogrammes refaits en direct dans R ont été retirés le 1er octobre 2026.) */"
 )
 writeLines(out, file.path(ici, "..", "src", "lib", "data", "seance5_normale.js"))
 cat("ok\n")

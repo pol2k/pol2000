@@ -1,15 +1,24 @@
 <script>
   /**
    * Normale ou pas ? Une carte du quiz de la séance 5 : on nomme ce qui a été
-   * mesuré, la salle parie sur la forme, puis R la montre. Trois temps.
+   * mesuré, la salle parie sur la forme (le h2 pose la question), puis R la
+   * montre. Trois temps.
    *
-   *   0  Ce qui a été mesuré, en grand, et sa source. « Votre pari » à la
-   *      place du verdict; le cadre du graphique est vide, un grand « ? ».
+   *   0  Ce qui a été mesuré, en grand, et sa source. Le cadre du graphique
+   *      est vide, un grand « ? ».
    *   1  L'histogramme monte, bâton par bâton (effectifs calculés par R).
    *      Pour les bâtiments de New York, tout le spectre, de 0 à 480 m, et un
    *      trait rouge sous l'axe par mètre où se trouve au moins un bâtiment
-   *      de 40 m ou plus : les tours, invisibles en bâtons, apparaissent.
-   *   2  Le verdict, en rouge, et le pourquoi en deux lignes.
+   *      de 40 m ou plus : les tours, invisibles en bâtons, apparaissent,
+   *      avec leur nombre.
+   *   2  Le verdict, en rouge, et le pourquoi en deux lignes courtes.
+   *
+   * Les cartes : hommes, adultes, poilievre, bebes, nyc, age. Poilievre :
+   * la note de 0 à 100 donnée au chef conservateur par les répondant.e.s de
+   * la CES 2025. Tranches de 5 points; la dernière, [100, 105), ne contient
+   * que les notes de 100 pile. La tranche [0, 5) contient aussi les notes
+   * de 1 à 4 : on ne la cite donc pas comme « des zéros ». Le pic à 0 est
+   * environ 3,6 fois celui à 100 : deux camps, pas de même taille.
    *
    * Les effectifs viennent de QUIZ, l'écart hommes-femmes de TAILLES
    * (src/lib/data/seance5_normale.js, produit par outils/seance5_normale.R).
@@ -44,42 +53,42 @@
       source: () => 'États-Unis, enquête NHANES, 2009 à 2012',
       axe: 'taille (cm)', ticks: [150, 160, 170, 180, 190, 200],
       verdict: 'une cloche',
-      pourquoi: () => [`Des milliers de gènes, l’alimentation, la santé${N}: chacun pousse un peu,`, 'vers le haut ou vers le bas. Comme les billes de la planche.']
+      pourquoi: () => [`Des milliers de gènes, l’alimentation${N}: chacun pousse un peu,`, 'vers le haut ou vers le bas. Comme les billes de la planche.']
     },
     adultes: {
       titre: (q) => `La taille de ${f(q.n)} adultes, hommes et femmes mélangés`,
       source: () => 'États-Unis, enquête NHANES, 2009 à 2012',
       axe: 'taille (cm)', ticks: [140, 150, 160, 170, 180, 190, 200],
       verdict: `piège${N}: une seule cloche, plus large`,
-      pourquoi: () => [`On attendait deux bosses. Les hommes mesurent ${f(TAILLES.ecart)} cm de plus en moyenne,`, `mais d’un homme à l’autre, ça va de ${f(TAILLES.hommes95[0])} à ${f(TAILLES.hommes95[1])} cm${N}: les deux cloches se fondent.`]
+      pourquoi: () => [`Les hommes mesurent ${f(TAILLES.ecart)} cm de plus en moyenne. Mais d’un homme`, `à l’autre, ça va de ${f(TAILLES.hommes95[0])} à ${f(TAILLES.hommes95[1])} cm${N}: les deux cloches se fondent.`]
     },
-    iris: {
-      titre: (q) => `La longueur des pétales de ${f(q.n)} iris`,
-      source: () => 'Anderson, 1935, en bonne partie cueillis en Gaspésie',
-      axe: 'longueur du pétale (cm)', ticks: [1, 2, 3, 4, 5, 6, 7],
-      verdict: `piège${N}: deux bosses, et un trou`,
-      pourquoi: () => ['Trois espèces d’iris mélangées. L’une, l’iris setosa, a de tout petits pétales.', 'Mélanger des groupes très différents, ça fait des bosses.']
+    poilievre: {
+      titre: () => 'Ce que les répondant.e.s pensent de Pierre Poilievre',
+      source: (q) => `Étude électorale canadienne 2025, ${f(q.n)} répondant.e.s`,
+      axe: 'note de 0 à 100', ticks: [0, 20, 40, 60, 80, 100],
+      verdict: `pas une cloche${N}: deux camps`,
+      pourquoi: () => [`Polarisation${N}: qui ne l’aime pas du tout lui donne 0,`, 'qui l’aime beaucoup lui donne 100.']
     },
     bebes: {
       titre: (q) => `Le poids de ${f(q.n)} bébés à la naissance`,
       source: () => 'Springfield (Massachusetts), 1986',
       axe: 'poids (g)', ticks: [1000, 2000, 3000, 4000, 5000],
       verdict: 'une cloche, mais pas parfaite',
-      pourquoi: (q) => [`Seulement ${f(q.n)} bébés${N}: le hasard fait des creux et des bosses.`, `Et une queue à gauche${N}: les bébés nés trop tôt, beaucoup plus légers.`]
+      pourquoi: (q) => [`Seulement ${f(q.n)} bébés${N}: le hasard fait des creux et des bosses.`, `Et une queue à gauche${N}: les bébés nés trop tôt, plus légers.`]
     },
     nyc: {
       titre: (q) => `La hauteur des ${f(q.n)} bâtiments de New York`,
       source: () => 'NYC Open Data, 2026',
       axe: 'hauteur (m)', ticks: [0, 100, 200, 300, 400],
       verdict: `pas une cloche${N}: une très longue queue`,
-      pourquoi: () => ['Rien sous zéro. Surtout des maisons de 2 ou 3 étages, collées à gauche.', 'Puis quelques tours qui montent très, très haut.']
+      pourquoi: () => ['Rien sous zéro. Surtout des maisons de 2 ou 3 étages.', 'Puis quelques tours qui montent très, très haut.']
     },
     age: {
       titre: (q) => `L’âge des ${f(q.n)} répondant.e.s de l’Étude électorale`,
       source: () => 'Étude électorale canadienne 2025',
       axe: 'âge (ans)', ticks: [20, 40, 60, 80, 100],
       verdict: `piège${N}: un plateau`,
-      pourquoi: () => [`Pas d’enfants${N}: on sonde les 18 ans et plus. Puis, comme au Canada,`, 'à peu près autant de monde à chaque âge jusque vers 70 ans. Ensuite, ça descend.']
+      pourquoi: () => [`Pas d’enfants${N}: on sonde les 18 ans et plus. Puis, comme au Canada,`, 'à peu près autant de gens à chaque âge jusque vers 70 ans.']
     }
   };
   const T = $derived(TEXTE[cle]);
@@ -101,8 +110,7 @@
     <text x={X0} y="40" class="nop-titre">{T.titre(Q)}</text>
     <text x={X0} y="70" class="nop-source">{T.source(Q)}</text>
 
-    <!-- 0 : le pari. -->
-    <text x={X0} y="120" class="nop-pari" class:nop-cache={e >= 2}>Votre pari&#8239;: une cloche, ou pas&#8239;?</text>
+    <!-- 0 : le pari, posé par le h2. -->
     <text x="500" y="350" class="nop-q" class:nop-cache={e >= 1}>?</text>
 
     <!-- 1 : l'histogramme. -->
@@ -121,7 +129,6 @@
         <text x={x(150)} y={BASE - 150} class="nop-plus nop-g">{f(Q.plus40)} bâtiments de plus de 40 m</text>
         <text x={x(150)} y={BASE - 124} class="nop-plus nop-g">{f(Q.plus100)} de plus de 100 m</text>
         <text x={x(150)} y={BASE - 98} class="nop-plus nop-g">{f(Q.plus200)} de plus de 200 m</text>
-        <text x={x(150)} y={BASE - 180} class="nop-note">trop peu pour se voir en bâtons&#8239;: un trait rouge sous l’axe par hauteur</text>
       </g>
     {/if}
 
@@ -147,7 +154,6 @@
   text { font-family: var(--dk-mono); }
   .nop-titre { font-size: 27px; font-weight: 600; fill: var(--dk-encre); }
   .nop-source { font-size: 18px; fill: var(--dk-gris); }
-  .nop-pari { font-size: 24px; fill: var(--dk-gris); transition: opacity 0.3s; }
   .nop-q { font-size: 150px; font-weight: 600; text-anchor: middle; fill: var(--dk-gris-2); transition: opacity 0.3s; }
   .nop-cache { opacity: 0; }
   .nop-baton { fill: var(--dk-encre); transform-box: fill-box; transform-origin: 50% 100%; transition: transform 0.6s cubic-bezier(0.34, 1.2, 0.64, 1), fill 0.4s; }
@@ -159,12 +165,11 @@
   .nop-fleche { fill: none; stroke: var(--dk-accent); stroke-width: 2.5; }
   .nop-plus { font-size: 19px; font-weight: 600; text-anchor: end; fill: var(--dk-accent); }
   .nop-plus.nop-g { text-anchor: start; }
-  .nop-note { font-size: 16px; fill: var(--dk-gris); }
   .nop-verdict { font-size: 27px; font-weight: 600; fill: var(--dk-accent); }
   .nop-raison { font-size: 19px; fill: var(--dk-encre); }
   .nop-etape { opacity: 0; transition: opacity 0.2s; }
   .nop-etape.nop-vu { opacity: 1; transition: opacity 0.5s 0.4s; }
   @media (prefers-reduced-motion: reduce) {
-    .nop-baton, .nop-q, .nop-pari, .nop-etape, .nop-etape.nop-vu { transition: none; }
+    .nop-baton, .nop-q, .nop-etape, .nop-etape.nop-vu { transition: none; }
   }
 </style>

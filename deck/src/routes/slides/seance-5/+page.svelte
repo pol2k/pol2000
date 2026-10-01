@@ -36,7 +36,6 @@
   import { base } from '$app/paths';
   import Deck from '$lib/deck/Deck.svelte';
   import Slide from '$lib/deck/Slide.svelte';
-  import Code from '$lib/deck/Code.svelte';
   import Session from '$lib/deck/visuels/Session.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import Inference from '$lib/deck/visuels/Inference.svelte';
@@ -49,16 +48,17 @@
   import DigestFiltres from '$lib/deck/visuels/DigestFiltres.svelte';
   import Leger2025 from '$lib/deck/visuels/Leger2025.svelte';
   import PileFace from '$lib/deck/visuels/PileFace.svelte';
+  import PopulationExercice from '$lib/deck/visuels/PopulationExercice.svelte';
   import TroisTirages from '$lib/deck/visuels/TroisTirages.svelte';
   import MilleEchantillons from '$lib/deck/visuels/MilleEchantillons.svelte';
   import QuatreTailles from '$lib/deck/visuels/QuatreTailles.svelte';
-  import Cible from '$lib/deck/visuels/Cible.svelte';
   import BiaisEchantillon from '$lib/deck/visuels/BiaisEchantillon.svelte';
   import Pomicultrice from '$lib/deck/visuels/Pomicultrice.svelte';
   import DeuxHypotheses from '$lib/deck/visuels/DeuxHypotheses.svelte';
   import Proces from '$lib/deck/visuels/Proces.svelte';
   import PourquoiH0 from '$lib/deck/visuels/PourquoiH0.svelte';
   import MargeErreur from '$lib/deck/visuels/MargeErreur.svelte';
+  import EcartTypeNormale from '$lib/deck/visuels/EcartTypeNormale.svelte';
   import TheoremeCentral from '$lib/deck/visuels/TheoremeCentral.svelte';
   import EecCanada from '$lib/deck/visuels/EecCanada.svelte';
   import Ponderation from '$lib/deck/visuels/Ponderation.svelte';
@@ -68,105 +68,21 @@
   import Couches from '$lib/deck/visuels/Couches.svelte';
   import DansHorsAes from '$lib/deck/visuels/DansHorsAes.svelte';
   import ErreursGg from '$lib/deck/visuels/ErreursGg.svelte';
-  import DeuxIC from '$lib/deck/visuels/DeuxIC.svelte';
-  import MiSession from '$lib/deck/visuels/MiSession.svelte';
   import AvantS7 from '$lib/deck/visuels/AvantS7.svelte';
   import Galton from '$lib/deck/visuels/Galton.svelte';
   import CourbeNormale from '$lib/deck/visuels/CourbeNormale.svelte';
   import NormaleOuPas from '$lib/deck/visuels/NormaleOuPas.svelte';
-  import NycMoyennes from '$lib/deck/visuels/NycMoyennes.svelte';
   import DixNeufSurVingt from '$lib/deck/visuels/DixNeufSurVingt.svelte';
   import { CONSOLES } from '$lib/data/seance5.js';
-  import { GGPLOT_NORMALE } from '$lib/data/seance5_normale.js';
 
-  const TOTAL = 72;
+  const TOTAL = 54;
   const D = 'POL-2000 · séance 5 · jeu 1er oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
   const avec = (cle, notes = [], garder = null) =>
     CONSOLES[cle].map((l, i) => ({ ...l, note: notes[i] || '' })).filter((_, i) => !garder || garder.includes(i));
-  const c_echantillon = avec('echantillon', ['', 'Le vôtre sera différent.']);
-  const c_mille = avec('mille', [], [0, 1]);
   const c_partis_def = avec('partis', ['Les codes 1 à 5\u202F: les cinq grands partis.'], [0]);
-  const c_partis = avec('partis', ['', 'et\u202F: R calcule de combien chaque moyenne peut bouger.'], [1, 2]);
-  const c_sauver = avec('sauver');
 
-  const script = `# POL-2000 · séance 5 · L'inférence statistique, et ggplot2
-# À refaire chez vous, ligne par ligne, Ctrl + Entrée.
-
-library(dplyr)
-library(ggplot2)
-
-# 0. La base propre de la séance 4
-df_clean <- readRDS("ces2025_clean.rds")
-
-# Pas de fichier ? Enlevez les # et refaites-la depuis le sondage.
-# library(ces)
-# library(haven)
-# df_raw <- get_ces("2025")
-# df_clean <- data.frame(id = 1:nrow(df_raw))
-# df_clean$gauche_droite <- na_if(df_raw$cps25_lr_scale_bef_1, -99)
-# df_clean$ne_canada <- case_when(
-#   df_raw$cps25_bornin_canada == 1 ~ 1,
-#   df_raw$cps25_bornin_canada == 2 ~ 0
-# )
-# df_clean$age <- as.numeric(df_raw$cps25_age_in_years)
-# df_clean$vote <- as_factor(df_raw$cps25_votechoice)
-
-# 1. ggplot2, couche par couche
-ggplot(df_clean, aes(x = age, y = gauche_droite)) +
-  geom_jitter(alpha = 0.1) +
-  geom_smooth() +
-  labs(title = "L'âge et la position gauche-droite",
-       x = "Âge",
-       y = "Gauche (0) à droite (10)",
-       caption = "Source : Étude électorale canadienne 2025") +
-  theme_minimal()
-
-# 2. Une couleur par parti
-partis <- df_clean |>
-  filter(as.numeric(vote) <= 5, !is.na(gauche_droite))
-ggplot(partis, aes(x = age, y = gauche_droite, colour = vote)) +
-  geom_smooth() +
-  labs(x = "Âge", y = "Gauche (0) à droite (10)", colour = NULL) +
-  theme_minimal()
-
-# 3. Normale ou pas ? Les pétales d'iris, puis une couleur par espèce
-ggplot(iris, aes(x = Petal.Length)) +
-  geom_histogram(binwidth = 0.25)
-ggplot(iris, aes(x = Petal.Length, fill = Species)) +
-  geom_histogram(binwidth = 0.25)
-
-# 4. Un échantillon de 50 (le vôtre sera différent)
-echantillon <- slice_sample(df_clean, n = 50)
-mean(echantillon$age)
-mean(df_clean$age)
-
-# 5. Mille échantillons
-moyennes <- replicate(1000, mean(slice_sample(df_clean, n = 50)$age))
-mean(moyennes)
-ggplot(data.frame(moyennes), aes(x = moyennes)) +
-  geom_histogram(binwidth = 0.5)
-
-# 6. Une moyenne par parti, avec sa marge d'erreur
-moyennes_partis <- partis |>
-  group_by(vote) |>
-  summarise(moyenne = mean(gauche_droite),
-            et = sd(gauche_droite) / sqrt(n()),
-            n = n())
-ggplot(moyennes_partis, aes(x = moyenne, y = vote)) +
-  geom_pointrange(aes(xmin = moyenne - 1.96 * et,
-                      xmax = moyenne + 1.96 * et)) +
-  xlim(0, 10) +
-  labs(x = "Gauche (0) à droite (10)", y = NULL)
-ggsave("gauche_droite_partis.png", width = 8, height = 5)
-
-# 7. À vous : la même chose, avec l'âge au lieu de la position gauche-droite.`;
-  // Trop long pour une diapo à taille lisible : coupé avant le secours et
-  // avant « 1. », « 2. », « 3. », « 4. » et « 6. ».
-  const coupes = ['\n# Pas de fichier', '\n# 1. ', '\n# 2. ', '\n# 3. ', '\n# 4. ', '\n# 6. '].map((c) => script.indexOf(c));
-  if (coupes.includes(-1)) throw new Error('seance-5 : une coupe du script est introuvable');
-  const scripts = [0, ...coupes].map((d, i, t) => script.slice(i ? d + 1 : 0, t[i + 1]));
 </script>
 
 <svelte:head>
@@ -223,7 +139,7 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     </Slide>
 
     <Slide bandeau="L’échantillon · 1936" droite={D}>
-      <h2 class="e">Qui le Digest a-t-il vraiment sondé ?</h2>
+      <h2 class="e">Quel était le problème ?</h2>
       <DigestFiltres />
     </Slide>
 
@@ -280,7 +196,7 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
 
     <Slide bandeau="La courbe normale · quiz" droite={D}>
       <h2 class="e">Normale ou pas ?</h2>
-      <NormaleOuPas cle="iris" />
+      <NormaleOuPas cle="poilievre" />
     </Slide>
 
     <Slide bandeau="La courbe normale · quiz" droite={D}>
@@ -296,6 +212,11 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     <Slide bandeau="La courbe normale · quiz" droite={D}>
       <h2 class="e">Normale ou pas ?</h2>
       <NormaleOuPas cle="age" />
+    </Slide>
+
+    <Slide bandeau="Le hasard" droite={D}>
+      <h2 class="e">Pour s’exercer : faire comme si</h2>
+      <PopulationExercice />
     </Slide>
 
     <Slide bandeau="Le hasard" droite={D}>
@@ -319,23 +240,18 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     </Slide>
 
     <Slide bandeau="Le hasard" droite={D}>
-      <h2 class="e">Même les bâtiments de New York</h2>
-      <NycMoyennes />
-    </Slide>
-
-    <Slide bandeau="Le hasard" droite={D}>
       <h2 class="e">Le théorème central limite</h2>
       <TheoremeCentral />
     </Slide>
 
     <Slide bandeau="Le biais" droite={D}>
-      <h2 class="e">Le biais et la variance</h2>
-      <Cible />
-    </Slide>
-
-    <Slide bandeau="Le biais" droite={D}>
       <h2 class="e">Ne sonder que les passionné.e.s</h2>
       <BiaisEchantillon />
+    </Slide>
+
+    <Slide bandeau="La marge d’erreur" droite={D}>
+      <h2 class="e">L’écart type</h2>
+      <EcartTypeNormale />
     </Slide>
 
     <Slide bandeau="La marge d’erreur" droite={D}>
@@ -366,7 +282,7 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ?" droite={D}>
-      <h2 class="e">Pourquoi passer par H0 ?</h2>
+      <h2 class="e">Pourquoi le monde à 100 g ?</h2>
       <PourquoiH0 />
     </Slide>
 
@@ -376,7 +292,7 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ?" droite={D}>
-      <h2 class="e">Si H0 était vraie…</h2>
+      <h2 class="e">Si ses pommes étaient ordinaires…</h2>
       <PaniersH0 panier={105} />
     </Slide>
 
@@ -449,72 +365,6 @@ ggsave("gauche_droite_partis.png", width = 8, height = 5)
     <Slide bandeau="ggplot2 · rappel" droite={D}>
       <h2 class="e">Quel graphique ?</h2>
       <QuelGraphique />
-    </Slide>
-
-    <!-- ================= 4 · EN DIRECT ================= -->
-    <Slide fond="encre" bandeau="En direct" droite={D}>
-      <h1 class="e">L’inférence, dans R</h1>
-      <hr class="filet" />
-      <p class="lead e">Ordinateurs ouverts.</p>
-    </Slide>
-
-    <Slide bandeau="En direct · normale ou pas" droite={D}>
-      <h2 class="e">Normale ou pas, dans R</h2>
-      <Couches etapes={['iris', 'irisEspeces']} source={GGPLOT_NORMALE} />
-    </Slide>
-
-    <Slide bandeau="En direct · échantillonner" droite={D}>
-      <h2 class="e">Votre échantillon de 50</h2>
-      <Console lignes={c_echantillon} />
-    </Slide>
-
-    <Slide bandeau="En direct · échantillonner" droite={D}>
-      <h2 class="e">Mille échantillons, en une ligne</h2>
-      <Console lignes={c_mille} />
-    </Slide>
-
-    <Slide bandeau="En direct · échantillonner" droite={D}>
-      <h2 class="e">Les dessiner</h2>
-      <Couches etapes={['histo']} />
-    </Slide>
-
-    <Slide bandeau="En direct · marge d’erreur" droite={D}>
-      <h2 class="e">Une moyenne par parti</h2>
-      <Console lignes={c_partis} />
-    </Slide>
-
-    <Slide bandeau="En direct · marge d’erreur" droite={D}>
-      <h2 class="e">Même code, deux tailles d’échantillon</h2>
-      <DeuxIC />
-    </Slide>
-
-    <Slide bandeau="En direct · marge d’erreur" droite={D}>
-      <h2 class="e">Sauvegarder le graphique</h2>
-      <Console lignes={c_sauver} />
-    </Slide>
-
-    {#each scripts as bout, i}
-      <Slide bandeau="En direct · le script" droite={D}>
-        <h2 class="e">Le script entier, {i + 1} de {scripts.length}</h2>
-        <Code src={bout} titre={i === 0 ? 'seance5.R · à refaire chez vous' : i === scripts.length - 1 ? 'seance5.R · la fin' : 'seance5.R · la suite'} />
-      </Slide>
-    {/each}
-
-    <!-- ================= LE TRAVAIL DE MI-SESSION ================= -->
-    <Slide fond="encre" bandeau="Mi-session" droite={D}>
-      <h1 class="e">Le travail de <span class="d-un-bloc">mi-session</span></h1>
-      <hr class="filet" />
-    </Slide>
-
-    <Slide bandeau="Mi-session" droite={D}>
-      <h2 class="e">Le travail de mi-session</h2>
-      <MiSession />
-    </Slide>
-
-    <!-- ================= AVANT LE 15 OCTOBRE ================= -->
-    <Slide fond="encre" bandeau="Avant le 15 octobre" droite={D}>
-      <h1 class="e">Avant le 15 octobre</h1>
-      <hr class="filet" />
     </Slide>
 
     <Slide bandeau="Avant le 15 octobre" droite={D}>
