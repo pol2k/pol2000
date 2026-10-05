@@ -4,6 +4,7 @@
    * examens, rouge pour les travaux, gris pour Datacamp — comme sur la
    * diapositive 16), puis la liste datée, avec l'état d'après la date.
    */
+  import { base } from '$app/paths';
   import { EVALUATIONS } from '$lib/data/cours.js';
   import { aujourdhui, moyenne, statut } from './dates.js';
 
@@ -38,8 +39,8 @@
           <p class="mode">{e.mode}{#if e.ouvre}{' · ouvre le '}{moyenne(e.ouvre)}{/if}</p>
           {#if e.fichier}
             <div class="fichier">
-              <a class="bouton rouge" href={e.fichier} download>Télécharger l'examen (.zip) <span class="fl">↓</span></a>
-              <span class="note">Décompressez le fichier avant de l'ouvrir. Sur Windows : clic droit, puis « Extraire tout ».</span>
+              <a class="bouton rouge" href={e.fichier.startsWith('http') ? e.fichier : `${base}/${e.fichier}`} download>{e.bouton} <span class="fl">↓</span></a>
+              {#if e.note}<span class="note">{e.note}</span>{/if}
             </div>
           {/if}
         </div>
