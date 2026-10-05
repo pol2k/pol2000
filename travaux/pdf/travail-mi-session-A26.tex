@@ -1,5 +1,5 @@
 % POL-2000 · Travail de mi-session (A26) · consignes aux étudiant.e.s
-% Adapted from the H24 instructions (Adrien Cloutier). Build: ./build.sh (xelatex, twice)
+% H24 instructions by Adrien Cloutier, kept nearly verbatim. Build: ./build.sh (xelatex, twice)
 \documentclass[11pt]{article}
 \usepackage{fontspec}
 \usepackage[letterpaper,top=0.6in,bottom=0.75in,left=0.8in,right=0.8in,footskip=0.4in]{geometry}
@@ -31,8 +31,8 @@
 \hypersetup{pdftitle={POL-2000 · Travail de mi-session · Consignes},pdfauthor={Laurence-Olivier M. Foisy}}
 \color{encre}
 \frenchspacing
-\setlength{\parskip}{5pt}
-\linespread{1.08}
+\setlength{\parskip}{4pt}
+\linespread{1.04}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -42,7 +42,7 @@
 
 % Titre de section : mono, filet de 2 pt
 \newcommand{\etape}[2]{%
-  \par\vspace{14pt}\Needspace{4\baselineskip}%
+  \par\vspace{10pt}\Needspace{4\baselineskip}%
   {\titre\small\color{rouge}#1}\par\vspace{-2pt}%
   {\titre\Large #2}\par\vspace{3pt}%
   {\color{encre}\hrule height 2pt}\vspace{6pt}}
@@ -60,7 +60,7 @@
 \newtcolorbox{codebloc}{enhanced,sharp corners,colback=codefond,colframe=encre,boxrule=1pt,left=10pt,right=8pt,top=4pt,bottom=4pt,before skip=4pt,after skip=6pt,fontupper=\ttfamily\small,overlay={\fill[rouge] (frame.south west) rectangle ([xshift=3.5pt]frame.north west);}}
 \newcommand{\bloc}[1]{\begin{codebloc}#1\end{codebloc}}
 % Partie du travail : numéro rouge, puis titre
-\newcommand{\partie}[2]{\par\needspace{4\baselineskip}\vspace{7pt}{\titre\large\color{rouge}#1}\hspace{0.6em}{\titre\large #2}\par\vspace{1pt}}
+\newcommand{\partie}[2]{\par\vspace{7pt}\Needspace{4\baselineskip}{\titre\large\color{rouge}#1}\hspace{0.6em}{\titre\large #2}\par\vspace{1pt}}
 
 \begin{document}
 \raggedright
@@ -69,11 +69,15 @@
 \exhyphenpenalty=10000
 \setlength{\parindent}{0pt}
 
+% Texte : consignes H24 d'Adrien Cloutier, reprises telles quelles.
+% Changements A26 seulement : banque de données (CES 2025), Positron, monPortail,
+% date, points-virgules retirés, coquilles corrigées, règle sur l'IA (plan de cours).
+
 % ---------------------------------------------------------------- en-tête
 \noindent\begin{minipage}[b]{0.7\textwidth}
 {\titre\small\color{gris}POL-2000 · MÉTHODOLOGIE QUANTITATIVE · AUTOMNE 2026}\par\vspace{4pt}
 {\titre\fontsize{24}{28}\selectfont Travail de mi-session}\par\vspace{2pt}
-{\titre\large Le devis de recherche}
+{\titre\large Consignes}
 \end{minipage}\hfill
 \begin{minipage}[b]{0.25\textwidth}\raggedleft
 \includegraphics[height=0.55in]{ulaval-logo.png}
@@ -81,108 +85,57 @@
 \par\vspace{6pt}{\color{rouge}\hrule height 2pt}\vspace{8pt}
 
 \noindent\begin{tabularx}{\textwidth}{@{}*{4}{>{\raggedright\arraybackslash}X}@{}}
-{\titre\small\color{gris}PONDÉRATION} & {\titre\small\color{gris}MODE} & {\titre\small\color{gris}RENCONTRES} & {\titre\small\color{rouge}À REMETTRE}\\
-{\titre\Large\color{rouge}20 \%} & Individuel, aucune collaboration & Semaine du 8 octobre & \textbf{Dimanche 25 octobre, 23h59}\\
+{\titre\small\color{gris}PONDÉRATION} & {\titre\small\color{gris}MODE} & {\titre\small\color{gris}REMISE} & {\titre\small\color{rouge}À REMETTRE}\\
+{\titre\Large\color{rouge}20 \%} & Individuel & Format PDF, sur monPortail & \textbf{Dimanche 25 octobre, 23h59}\\
 \end{tabularx}
 
-\vspace{6pt}
-\begin{cadre}
-\textbf{Un seul projet en deux temps.} Le travail de mi-session est une version courte de votre travail final. C'est un devis de recherche : vous posez la question, je vous donne ma rétroaction. Elle arrive avant que vous écriviez la suite. Le travail final reprend le même document, avec quatre sections de plus.
-
-\textbf{Vous remettez un seul fichier :} votre travail en format PDF, dans la boîte de dépôt du travail de mi-session sur monPortail.
-\end{cadre}
-
 % ---------------------------------------------------------------- description
-\etape{DESCRIPTION}{Ce que le travail contient}
+\etape{DESCRIPTION}{Description}
+
+Le travail de mi-session est une version courte de votre travail final. Il se veut une première version simplifiée de votre travail, à l'image d'un devis de recherche, pour obtenir une rétroaction du professeur avant la remise finale.
 
 À l'intérieur de ce travail, vous devrez :
 \begin{enumerate}
-\item concevoir une question de recherche qui met en relation une variable dépendante et une variable indépendante,
-\item présenter une courte revue de la littérature, avec des théories qui permettent de dériver des hypothèses testables empiriquement,
-\item formuler une ou des hypothèses (et leur hypothèse nulle) sur la relation entre les deux variables,
-\item présenter la base de données et les variables sélectionnées pour tester les hypothèses,
-\item justifier la pertinence et l'originalité de la question de recherche,
-\item énoncer la contribution souhaitée à la littérature scientifique,
-\item conclure par une justification personnelle du choix de la recherche.
+\item Concevoir une question de recherche mettant en relation une variable dépendante et une variable indépendante.
+\item Présenter une courte revue de la littérature avec des théories permettant de dériver des hypothèses testables empiriquement.
+\item Formuler une ou des hypothèses (et leur hypothèse nulle) sur la relation entre les deux variables.
+\item Présenter la base de données et les variables sélectionnées pour tester les hypothèses.
+\item Justifier la pertinence et l'originalité de la question de recherche.
+\item Ajouter la contribution souhaitée à la littérature scientifique.
+\item Conclure par une justification personnelle du choix de la recherche.
 \end{enumerate}
 
-\begin{regle}
-\textbf{C'est la fiche de la séance 1, remplie et justifiée.} La question, Y, X, la population, l'unité d'analyse, les niveaux de mesure, H₁ et H₀ : chaque case de la fiche trouve sa place dans votre travail.
-\end{regle}
-
-% ---------------------------------------------------------------- données
-\etape{LES DONNÉES}{La CES 2025, pour tout le monde}
-
-Tou.te.s les étudiant.e.s travaillent avec la même banque de données : l'Étude électorale canadienne 2025 (la CES), 20 180 répondant.e.s. C'est celle que nous utilisons en classe.
-
-\Needspace{7\baselineskip}
-Vous l'avez déjà. Depuis l'examen 1, les données (\code{ces\_2025\_web.dta}) et le codebook (\code{CES\_2025\_web\_codebook.pdf}) sont rangés dans votre dossier \code{pol2000/data}. Sinon, téléchargez-les de nouveau dans la console de Positron, puis rangez-les dans \code{data} :
+Ceci est un travail individuel et aucune collaboration n'est permise. \textbf{Tou.te.s les étudiant.e.s devront travailler avec la banque de données de l'Étude électorale canadienne 2025 (la CES).} Cette banque de données et son codebook sont déjà dans votre dossier \code{pol2000/data} depuis l'examen 1. Sinon, vous pouvez les télécharger dans la console de Positron :
 \bloc{ces::download\_ces\_dataset("2025")\\ces::download\_pdf\_codebook("2025")}
 
-Rangez tout ce qui concerne ce travail dans votre dossier \code{pol2000/tp\_1}.
+Le travail est à remettre en \textbf{format PDF} sur monPortail au plus tard le dimanche 25 octobre 2026, à 23h59. Veuillez prendre note qu'il n'est pas nécessaire d'utiliser Positron pour ce premier travail. Par contre, vous pouvez déjà prendre de l'avance sur le travail final, et réaliser de premiers graphiques descriptifs de vos données. Plus votre travail sera complet et avancé, plus vous aurez de la rétroaction du professeur en vue du travail final.
 
-R n'est pas obligatoire pour ce premier travail. Vous pouvez toutefois prendre de l'avance sur le travail final et produire, dans Positron, de premiers graphiques descriptifs de vos variables. Plus votre travail est complet et avancé, plus ma rétroaction vous servira pour le travail final.
+La présentation et la citation des sources seront prises en compte dans votre note. Consultez et respectez le guide de présentation des travaux du Département de science politique de l'Université Laval.
 
 % ---------------------------------------------------------------- contenu
-\etape{LE CONTENU}{Quatre parties}
+\etape{CONTENU}{Contenu}
 
-À partir de la CES 2025, votre travail inclut les éléments suivants.
+À partir de la banque de données fournie, vous devrez créer un travail qui inclut les éléments suivants :
 
 \partie{1}{Une question de recherche précise}
-À quelle question voulez-vous répondre ? Cette partie est primordiale. Pensez-y bien. Il doit être possible d'y répondre avec les données de la CES 2025. La question n'a pas besoin d'être compliquée. Elle met en relation une variable dépendante (Y) et une variable explicative, ou indépendante (X). Partez d'un sujet, puis resserrez-le jusqu'à une question testable, comme dans l'entonnoir de la séance 1.
-
-Par exemple : le fait d'avoir des enfants (X) influence-t-il l'orientation gauche-droite des parents (Y) ?
+À quelle question voudriez-vous répondre ? Cette partie est primordiale. Pensez-y bien. Il faut qu'il soit possible de répondre à cette question avec les données à votre disposition. La question n'a pas besoin d'être compliquée. Elle doit mettre en relation une variable dépendante et une variable explicative (indépendante). Par exemple, je pourrais formuler la question suivante : le fait d'avoir des enfants (variable explicative, X) influence-t-il l'orientation gauche-droite des parents (variable dépendante, Y) ?
 
 \partie{2}{Une hypothèse bien formulée, dérivée de la littérature}
-Énoncez clairement votre hypothèse (H₁). Quelle sera, selon vous, la réponse à votre question ? Pourquoi ? Énoncez aussi l'hypothèse nulle qui lui correspond (H₀).
-
-Cette section exige de mobiliser la recherche existante pertinente. Rédigez au moins deux paragraphes, avec au moins quatre références scientifiques qui soutiennent votre hypothèse. Ces références se retrouvent dans la bibliographie du travail. Dégagez une théorie de votre littérature (ou plusieurs, mais une seule est plus simple dans le cadre de ce travail). Présentez-la, puis montrez comment vous en dérivez votre hypothèse. La théorie explique pourquoi X agirait sur Y. L'hypothèse dit ce que l'on devrait alors observer dans les données.
+Énoncez clairement votre hypothèse. Quelle sera, selon vous, la réponse à votre question ? Pourquoi ? Énoncez également votre hypothèse nulle en conséquence de votre hypothèse alternative. Cette section exige une mobilisation de la recherche existante pertinente. Je vous demande de rédiger minimum deux paragraphes incluant quatre références scientifiques qui permettent de soutenir votre hypothèse. Ces références doivent se retrouver dans la bibliographie du travail. Dégagez une (ou des, mais une serait plus simple dans le cadre de ce travail) théorie de votre littérature. Présentez-la, et montrez comment, à partir de cette théorie, vous pouvez dériver votre hypothèse.
 
 \partie{3}{Une présentation des données}
-Présentez la CES 2025 et vos deux variables, pour démontrer que vous les connaissez et que vous les comprenez : la question posée aux répondant.e.s, les choix de réponse, les codes de valeurs manquantes. Précisez la population, l'unité d'analyse et le niveau de mesure de X et de Y.
-
-\begin{regle}
-\textbf{Votre variable dépendante doit être ordinale, d'intervalle ou de ratio} pour être acceptée. Autrement dit, une variable dépendante nominale (dichotomique ou autre) ne sera pas acceptée.
-
-Il est de votre entière responsabilité de vous assurer que la CES 2025 contient les variables nécessaires pour répondre à votre question. Vérifiez-le dans le codebook et dans les données avant d'écrire.
-\end{regle}
+Quelles variables voudrez-vous utiliser ? \textbf{Votre variable dépendante doit prendre une des unités de mesure suivantes pour être acceptée dans ce travail : ratio, intervalle et ordinal.} Autrement dit, des variables dépendantes nominales (dichotomiques ou autres) ne seront pas acceptées. Il est de votre entière responsabilité de vous assurer que la banque de données inclut les variables nécessaires pour répondre à votre question de recherche. Vous devez donc déterminer ceci en consultant la banque de données (et le codebook). Présentez vos données, votre base de données, pour démontrer votre connaissance et votre compréhension de celles-ci.
 
 \partie{4}{Pertinence, contribution et justification personnelle}
-En quoi votre question est-elle originale ? Comment souhaitez-vous contribuer à la littérature ? Quelles limites de la littérature souhaitez-vous montrer, puis combler ?
-
-Enfin, plus personnellement, expliquez pourquoi vous avez choisi ce sujet. Est-il important pour vous ? Comment percevez-vous votre rôle de chercheur ou de chercheuse ? Ces réflexions sont au cœur du travail de recherche. Nous devons constamment nous questionner sur notre rôle, sur l'impact de notre travail, sur nos valeurs, sur nos biais et sur ce que nous souhaitons apporter. Laissez-vous aller dans votre réflexion !
+En quoi votre question est-elle originale ? Comment souhaitez-vous contribuer à la littérature ? Quelle.s limite.s de la littérature souhaitez-vous démontrer, et combler ? Enfin, plus personnellement, expliquez-nous pourquoi vous avez choisi ce sujet. Est-il important pour vous ? Comment percevez-vous votre rôle de chercheur/chercheuse ? Ces réflexions sont au cœur du travail en recherche. Nous devons constamment nous questionner sur notre rôle, sur l'impact de notre travail, sur nos valeurs, sur nos biais et nos désirs de contribution. Laissez-vous aller dans votre réflexion !
 
 % ---------------------------------------------------------------- format
-\etape{FORMAT}{La présentation compte}
+\etape{FORMAT}{Format}
 
-\begin{itemize}
-\item \textbf{Deux pages au maximum.} La page couverture et la bibliographie ne comptent pas.
-\item Times New Roman, 12 points, interligne 1,5.
-\item Le guide de présentation des travaux du Département de science politique de l'Université Laval.
-\item Les citations et les références suivent les normes APA (auteur-date).
-\end{itemize}
-
-La présentation et la citation des sources sont prises en compte dans votre note.
+Le format du travail : longueur maximale de 2 pages (la page couverture et la bibliographie ne sont pas comprises), taille de police 12 pt, Times New Roman à 1,5 interligne. Le travail devra respecter le guide de présentation des travaux du Département de science politique de l'Université Laval. Les normes de citations et de références devront respecter le format APA (auteur-date).
 
 \begin{regle}
-\textbf{L'intelligence artificielle n'est pas permise pour la rédaction de ce travail.} Ce que vous affirmez, vous devez pouvoir le défendre dans vos propres mots. Si vous produisez des graphiques avec R, l'IA est permise pour vous aider à écrire, comprendre ou déboguer votre code, à condition de le déclarer.
-
-Ajoutez cette déclaration après la bibliographie. Elle ne compte pas dans les deux pages. Avez-vous utilisé un outil d'IA pour ce travail ? Si oui, lequel, comment et pourquoi ?
-
-Chaque référence de votre bibliographie doit exister, et vous devez l'avoir lue. Un outil d'IA invente parfois des articles qui n'existent pas.
+\textbf{Intelligence artificielle.} Permis, à condition de le déclarer : obtenir de l'aide pour écrire, comprendre ou déboguer du code R. Non permis : l'interprétation des résultats et la rédaction des travaux. Ce que vous affirmez, vous devez pouvoir le défendre. À la fin du travail, après la bibliographie, déclarez si vous avez utilisé un outil d'IA. Si oui, lequel, comment et pourquoi ?
 \end{regle}
-
-% ---------------------------------------------------------------- remise
-\etape{POUR FINIR}{Remettre}
-
-\begin{enumerate}
-\item \textbf{Relisez-vous.} Les quatre parties sont-elles là ? Le travail tient-il en deux pages ? Vos quatre références sont-elles dans la bibliographie ?
-\item \textbf{Exportez votre travail en PDF.}
-\item \textbf{Déposez le PDF} dans la boîte de dépôt du travail de mi-session, sur monPortail, au plus tard le dimanche 25 octobre à 23h59. Une pénalité de 10 \% par jour s'applique à un travail remis en retard sans justification valable. Après trois jours de retard, la note est de 0.
-\end{enumerate}
-
-\textbf{La semaine du 8 octobre, il n'y a pas de cours.} On se voit un.e à la fois, avec les auxiliaires et le tuteur, pour le travail de mi-session. Arrivez avec votre question de recherche et vos deux variables.
-
-\textbf{Un problème ?} Écrivez-moi plus tôt que tard. Je ne répondrai pas aux questions le dimanche soir. Toutes les questions doivent être posées sur Slack.
 
 \end{document}
