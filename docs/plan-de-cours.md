@@ -53,7 +53,7 @@
 |---|---|---|
 | Examen 1 — R (take-home) | 24 Sep → Sun 4 Oct 2026, 23h59 | 15 % |
 | Examen 2 — Stats descriptives (in class) | Thu 12 Nov 2026, 17h20–18h20 | 15 % |
-| Travail de mi-session | Sun 25 Oct 2026, 23h59 | 20 % |
+| Travail de mi-session | Wed 28 Oct 2026, 23h59 | 20 % |
 | Datacamp (1re partie) | Sun 25 Oct 2026, 23h59 | 5 % |
 | Examen 3 — Régressions (in class) | Thu 10 Dec 2026, 17h20–18h20 | 15 % |
 | Travail final | Fri 18 Dec 2026, 23h59 | 25 % |

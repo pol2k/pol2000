@@ -217,7 +217,8 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 
 - **Examen 1** — ouvre le jeudi 24 septembre 2026, remise au plus tard le
   **dimanche 4 octobre 2026 à 23h59**
-- **Travail de mi-session** et **Datacamp (1re partie)** — **dimanche 25 octobre 2026 à 23h59**
+- **Datacamp (1re partie)** — **dimanche 25 octobre 2026 à 23h59**
+- **Travail de mi-session** — **mercredi 28 octobre 2026 à 23h59**
 - **Travail final** et **Datacamp (1re + 2e partie)** — **vendredi 18 décembre 2026 à 23h59**
 
 **Dates institutionnelles à retenir**
@@ -241,7 +242,7 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 | | Examen 2 — Les statistiques descriptives | jeudi 12 nov. 2026, 17h20–18h20 | Individuel | 15 % |
 | | Examen 3 — Régressions linéaires simple et multiple | jeudi 10 déc. 2026, 17h20–18h20 | Individuel | 15 % |
 | **Travaux** | | | | **45 %** |
-| | Travail de mi-session | dim. 25 oct. 2026, 23h59 | Individuel | 20 % |
+| | Travail de mi-session | mer. 28 oct. 2026, 23h59 | Individuel | 20 % |
 | | Travail final | ven. 18 déc. 2026, 23h59 | Individuel | 25 % |
 | **Exercices** | | | | **10 %** |
 | | Datacamp (1re partie) | dim. 25 oct. 2026, 23h59 | Individuel | 5 % |
@@ -302,13 +303,13 @@ d'une pause de 15 minutes; l'examen occupe la dernière heure.
 
 | | |
 |---|---|
-| **Date de remise** | Dimanche 25 octobre 2026 à 23h59 |
+| **Date de remise** | Mercredi 28 octobre 2026 à 23h59 |
 | **Mode de travail** | Individuel |
 | **Remise** | Boîte de dépôt, format PDF |
 
 Le travail de mi-session est une version courte de votre travail final. Il se veut
 une première version simplifiée, à l'image d'un devis de recherche, pour obtenir une
-rétroaction de ma part avant la remise finale. La remise est fixée juste avant la
+rétroaction de ma part avant la remise finale. La remise est fixée pendant la
 semaine de lecture afin que vous receviez cette rétroaction à temps pour la suite.
 
 Vous devrez :
