@@ -8,9 +8,10 @@
    *
    * Le fil (brouillon du prof, 14 octobre 2026, pol-5a0.9) : l'examen 1, puis
    * le travail de mi-session en sept étapes (avec la recherche d'articles,
-   * pol-5a0.9.1). Après la pause : la régression, de la droite qui passe le
+   * pol-5a0.9.1). Puis la régression, de la droite qui passe le
    * plus près des points jusqu'au tableau et au graphique des coefficients.
-   * Le hasard (l'erreur type, t, p, l'intervalle) reprend le dispositif de la
+   * Pause après la variable confondante. Le hasard (l'erreur type, t, p,
+   * l'intervalle) reprend le dispositif de la
    * séance 5 et nomme enfin la valeur p (pol-vjv).
    *
    * L'exemple fil rouge : la note donnée à Mark Carney (0 à 100) selon la
@@ -221,24 +222,18 @@
 
   
 
-    <Slide bandeau="La droite" droite={D}>
+    <Slide bandeau="La droite · notre sondage de 1 000" droite={D}>
       <h2 class="e">Jouer avec la droite</h2>
       <DroiteReglable />
     </Slide>
 
-    <Slide bandeau="La droite" droite={D}>
+    <Slide bandeau="La droite · notre sondage de 1 000" droite={D}>
       <h2 class="e">Lire la pente</h2>
       <LireLaPente />
     </Slide>
 
   
 
-    <!-- ================= PAUSE ================= -->
-    <Slide fond="encre" bandeau="Pause" droite={D}>
-      <h1 class="e">Pause</h1>
-      <hr class="filet" />
-      <p class="lead e">Quinze minutes.</p>
-    </Slide>
 
 
     <!-- ================= LE BIAIS (diapo 19) ================= -->
@@ -279,7 +274,12 @@
       <GrapheEpsilon x="gauche_droite" y="note_carney" autres={[]} inconnu b1={NOTRE.coefs[1].b} goa={false} />
     </Slide>
 
-  
+    <!-- ================= PAUSE ================= -->
+    <Slide fond="encre" bandeau="Pause" droite={D}>
+      <h1 class="e">Pause</h1>
+      <hr class="filet" />
+      <p class="lead e">Quinze minutes.</p>
+    </Slide>
 
     <!-- ================= L'ERREUR TYPE (diapo 21) ================= -->
     <Slide bandeau="L’erreur type" droite={D}>

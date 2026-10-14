@@ -3,8 +3,9 @@
    * L'équation de la droite, en deux rangées alignées : en haut, la forme
    * générale (note = β0 + β1 × gauche_droite), en gris; en bas, les vrais
    * nombres, chacun dans sa case, sous son symbole. On voit ainsi qu'on
-   * « remplace » β0 et β1 par des nombres. Le signe de β1 reste dans sa case
-   * (« + −5,05 ») : c'est la substitution telle quelle.
+   * « remplace » β0 et β1 par des nombres. Le signe de β1 reste dans sa case et
+   * le « + » s'efface quand β1 est négatif (« 79,8 −5,05 × … »), comme dans
+   * RegEnMots.
    *
    * Utilisée par DroiteReglable (la droite qu'on règle) et LireLaPente.
    * `actif` ('b0' ou 'b1') met une case en rouge. Aucun calcul ici : les
@@ -18,9 +19,9 @@
   };
 </script>
 
-<div class="eq" aria-label="note égale {f(b0, 1)} plus {f(b1, 2)} fois gauche_droite">
+<div class="eq" aria-label="note égale {f(b0, 1)} {b1 < 0 ? '' : 'plus'} {f(b1, 2)} fois gauche_droite">
   <span class="g">note</span><span class="g">=</span><span class="g s">β0</span><span class="g">+</span><span class="g s">β1</span><span class="g">×</span><span class="g">gauche_droite</span>
-  <span>note</span><span>=</span><span class="case" class:on={actif === 'b0'}>{f(b0, 1)}</span><span>+</span><span class="case" class:on={actif === 'b1'}>{f(b1, 2)}</span><span>×</span><span>gauche_droite</span>
+  <span>note</span><span>=</span><span class="case" class:on={actif === 'b0'}>{f(b0, 1)}</span><span>{b1 < 0 ? '' : '+'}</span><span class="case" class:on={actif === 'b1'}>{f(b1, 2)}</span><span>×</span><span>gauche_droite</span>
 </div>
 
 <style>

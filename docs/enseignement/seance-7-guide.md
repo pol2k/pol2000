@@ -236,7 +236,8 @@ notes elles-mêmes : le dépôt est public.
   mais l'unité change (un cran sur 0 à 10, dix ans, un 0/1). Diplôme
   (+9,1) n'est pas « plus fort » que gauche-droite (−5,3) : sur toute
   l'échelle, gauche-droite fait bouger la note d'environ 53 points.
-- Pour le faire dans R (sortie réelle vérifiée) :
+- Pour le faire dans R (code exécuté tel quel le 14 octobre sur `ces1000`,
+  reconstruit comme dans `seance7_data.R`) :
 
   ```r
   library(broom); library(ggplot2); library(dplyr)
@@ -251,4 +252,5 @@ notes elles-mêmes : le dépôt est public.
 
   ggplot range les variables par ordre alphabétique de bas en haut. Pour
   garder l'ordre du tableau, ajouter
-  `mutate(term = factor(term, levels = rev(term)))` (non testé).
+  `coefs <- mutate(coefs, term = factor(term, levels = rev(term)))` avant
+  `ggplot()` (testé).
