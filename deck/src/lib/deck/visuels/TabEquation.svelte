@@ -7,15 +7,16 @@
    *
    *   0  Le tableau et l'équation vide.
    *   1  Une colonne = un modèle = une équation.
-   *   2  y : la variable en tête de colonne (la note de Carney).
-   *   3  x : le nom de la ligne (la position gauche-droite).
-   *   4  β1 : le coefficient de la ligne, −5,05.
-   *   5  β0 : la constante, 79,81.
+   *   2  y : la variable en tête de colonne (la satisfaction envers la démocratie).
+   *   3  x : le nom de la ligne (le populisme).
+   *   4  β1 : le coefficient de la ligne, −0,371.
+   *   5  β0 : la constante, 0,830.
+   * Les mots sous y et x sont les noms de R (VARS), en français courant.
    *
    * Nombres : NOTRE.coefs dans src/lib/data/seance7.js (outils/seance7_data.R).
    */
   import { brancherTemps } from '../temps.js';
-  import { NOTRE } from '$lib/data/seance7.js';
+  import { NOTRE, VARS } from '$lib/data/seance7.js';
   import TabPublie from './TabPublie.svelte';
 
   let e = $state(0);
@@ -26,10 +27,10 @@
     return brancherTemps(hote, { total: 5, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  const f = (v, d = 2) =>
+  const f = (v, d = 3) =>
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−');
   const [C0, C1] = NOTRE.coefs;
-  const ON = [[], ['col1'], ['y'], ['ligne-gauche_droite'], ['b-gauche_droite'], ['b-(Intercept)']];
+  const ON = [[], ['col1'], ['y'], [`ligne-${VARS.x.nom}`], [`b-${VARS.x.nom}`], ['b-(Intercept)']];
   const MOTS = ['', 'une colonne, un modèle', 'y : la variable en tête', 'x : le nom de la ligne', 'β1 : le coefficient', 'β0 : la constante'];
 </script>
 
@@ -48,13 +49,13 @@
       <span class="te-o">+</span>
       <span class="te-s">ε</span>
 
-      <span class="te-r" class:te-vu={e >= 2} class:te-on={e === 2}>note</span>
+      <span class="te-r" class:te-vu={e >= 2} class:te-on={e === 2}>satisfaction</span>
       <span class="te-o te-r te-vu">=</span>
       <span class="te-r" class:te-vu={e >= 5} class:te-on={e === 5}>{f(C0.b)}</span>
       <span class="te-o te-r" class:te-vu={e >= 4}>{C1.b < 0 ? '−' : '+'}</span>
       <span class="te-r" class:te-vu={e >= 4} class:te-on={e === 4}>{f(Math.abs(C1.b))}</span>
       <span class="te-o te-r te-fois te-vu">×</span>
-      <span class="te-r" class:te-vu={e >= 3} class:te-on={e === 3}>position</span>
+      <span class="te-r" class:te-vu={e >= 3} class:te-on={e === 3}>populisme</span>
       <span class="te-o te-r te-vu">+</span>
       <span class="te-o te-r te-vu">ε</span>
     </div>

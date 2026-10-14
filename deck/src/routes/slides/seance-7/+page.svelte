@@ -14,9 +14,11 @@
    * l'intervalle) reprend le dispositif de la
    * séance 5 et nomme enfin la valeur p (pol-vjv).
    *
-   * L'exemple fil rouge : la note donnée à Mark Carney (0 à 100) selon la
-   * position gauche-droite (0 à 10), dans la CES 2025. Les 20 180
-   * répondant.e.s servent de population d'exercice, comme à la séance 5 :
+   * L'exemple fil rouge (choisi par le prof le 14 octobre) : le populisme
+   * (« les politiciens ne se soucient que des riches ») et la satisfaction
+   * envers la démocratie, sondage post-électoral de la CES 2025, tout recodé
+   * de 0 à 1. Les 20 180 répondant.e.s servent de population d'exercice,
+   * comme à la séance 5 :
    * on connaît la vraie droite, et « notre sondage » tire 1 000 personnes
    * parmi les 20 180 (graine 62). Rien n'est pondéré.
    *
@@ -57,7 +59,8 @@
   import D7UnSeul from '$lib/deck/visuels/D7UnSeul.svelte';
   import GlaceNuage from '$lib/deck/visuels/GlaceNuage.svelte';
   import GrapheEpsilon from '$lib/deck/visuels/GrapheEpsilon.svelte';
-  import { NOTRE } from '$lib/data/seance7.js';
+  import PartiPente from '$lib/deck/visuels/PartiPente.svelte';
+  import { PARTI, VARS } from '$lib/data/seance7.js';
   import PenteMelange from '$lib/deck/visuels/PenteMelange.svelte';
   import PenteMondeH0 from '$lib/deck/visuels/PenteMondeH0.svelte';
   import PenteRegle from '$lib/deck/visuels/PenteRegle.svelte';
@@ -82,7 +85,7 @@
   import CoefPlusieurs from '$lib/deck/visuels/CoefPlusieurs.svelte';
   import CoefTroisQuestions from '$lib/deck/visuels/CoefTroisQuestions.svelte';
 
-  const TOTAL = 62;
+  const TOTAL = 63;
   const D = 'POL-2000 · séance 7 · jeu 15 oct';
 </script>
 
@@ -113,7 +116,7 @@
       <Session ici={7} />
     </Slide>
 
-    <!-- ================= L'EXAMEN 1 ================= -->
+    <!-- ================= L’EXAMEN 1 ================= -->
     <Slide bandeau="Examen 1" droite={D}>
       <h2 class="e">L’examen 1</h2>
       <TmExamen1 />
@@ -192,6 +195,8 @@
 
   
 
+  
+
     <!-- ================= LA RÉGRESSION LINÉAIRE ================= -->
     <Slide fond="encre" bandeau="La régression linéaire" droite={D}>
       <h1 class="e">La régression linéaire</h1>
@@ -222,19 +227,17 @@
 
   
 
-    <Slide bandeau="La droite · notre sondage de 1 000" droite={D}>
+    <Slide bandeau="La droite · notre sondage de 1 000" droite={D}>
       <h2 class="e">Jouer avec la droite</h2>
       <DroiteReglable />
     </Slide>
 
-    <Slide bandeau="La droite · notre sondage de 1 000" droite={D}>
+    <Slide bandeau="La droite · notre sondage de 1 000" droite={D}>
       <h2 class="e">Lire la pente</h2>
       <LireLaPente />
     </Slide>
 
   
-
-
 
     <!-- ================= LE BIAIS (diapo 19) ================= -->
     <Slide bandeau="Hasard et biais" droite={D}>
@@ -253,7 +256,6 @@
     </Slide>
 
     <!-- ================= LA VARIABLE CONFONDANTE (diapo 20) ================= -->
-
     <Slide bandeau="La variable confondante" droite={D}>
       <h2 class="e">Plus de crème glacée, plus de noyades</h2>
       <GlaceNuage mode="naif" />
@@ -270,9 +272,16 @@
     </Slide>
 
     <Slide bandeau="La variable confondante" droite={D}>
-      <h2 class="e">Et dans notre sondage ?</h2>
-      <GrapheEpsilon x="gauche_droite" y="note_carney" autres={[]} inconnu b1={NOTRE.coefs[1].b} goa={false} />
+      <h2 class="e">Et dans la CES ?</h2>
+      <GrapheEpsilon x="populisme" y="satisfaction" xEq={VARS.x.nom} yEq={VARS.y.nom} z="vote libéral" autres={['l’âge', 'la scolarité', 'la région']} alerte={['le vote libéral', 'pousse aussi x']} b1={PARTI.b1_seul} pied="le graphe est une hypothèse · séance 11" />
     </Slide>
+
+    <Slide bandeau="La variable confondante" droite={D}>
+      <h2 class="e">À vote égal</h2>
+      <PartiPente />
+    </Slide>
+
+  
 
     <!-- ================= PAUSE ================= -->
     <Slide fond="encre" bandeau="Pause" droite={D}>
@@ -296,8 +305,6 @@
       <h2 class="e">Et avec un seul sondage&#8239;?</h2>
       <D7UnSeul />
     </Slide>
-
-  
 
     <!-- ================= LA STATISTIQUE t ================= -->
     <Slide bandeau="Est-ce le hasard ? · la statistique t" droite={D}>
@@ -372,7 +379,7 @@
     </Slide>
 
     <Slide bandeau="Lire un tableau · le coefficient" droite={D}>
-      <h2 class="e">79,81 et −5,05 dessinent la droite</h2>
+      <h2 class="e">La constante et la pente dessinent la droite</h2>
       <TabDroite />
     </Slide>
 
@@ -387,12 +394,12 @@
     </Slide>
 
     <Slide bandeau="Lire un tableau · N" droite={D}>
-      <h2 class="e">N = 783. Pourquoi pas 1&#8239;000&#8239;?</h2>
+      <h2 class="e">N = 564. Pourquoi pas 1&#8239;000&#8239;?</h2>
       <TabN />
     </Slide>
 
     <Slide bandeau="Lire un tableau · R²" droite={D}>
-      <h2 class="e">R² = 0,14</h2>
+      <h2 class="e">R² = 0,11</h2>
       <TabR2 />
     </Slide>
 
@@ -408,9 +415,7 @@
 
   
 
-
     <!-- ================= LE GRAPHIQUE DES COEFFICIENTS ================= -->
-
     <Slide fond="encre" bandeau="Le graphique des coefficients" droite={D}>
       <h1 class="e">Le graphique des coefficients</h1>
       <hr class="filet" />

@@ -1,23 +1,23 @@
 <script>
   /**
    * Et avec un petit sondage ? 50 personnes tirées parmi les 20 180 (graine
-   * 62); R en garde 37, celles qui ont répondu aux deux questions. Même
-   * raisonnement qu'avec notre sondage : on mélange gauche_droite 1 000
+   * 62); R en garde 21, celles qui ont répondu aux deux questions. Même
+   * raisonnement qu'avec notre sondage : on mélange le populisme 1 000
    * fois, on compte les pentes au moins aussi loin de 0 que la sienne. Ici,
    * le compte n'est pas 0, et on ne rejette pas H0. Cinq temps.
    *
-   *   0  Sa pente, H0.cinquante.coefs[1].b (−4,22), en rouge sur l'axe.
+   *   0  Sa pente, H0.cinquante.coefs[1].b (−0,39), en rouge sur l'axe.
    *   1  Son monde où H0 est vraie : les 1 000 pentes des mélanges
-   *      (H0.cinquante.pentes, tranches de 0,4). Une cloche bien plus large
-   *      qu'avec 783 personnes (écart type 2,47 contre 0,48).
-   *   2  Les deux queues, au-delà de −4,22 et de +4,22, passent au rouge
+   *      (H0.cinquante.pentes, tranches de 0,04). Une cloche bien plus large
+   *      qu'avec notre sondage (écart type 0,21 contre 0,044).
+   *   2  Les deux queues, au-delà de −0,39 et de +0,39, passent au rouge
    *      (« aussi loin de 0 » se compte des deux côtés, comme dans R). Le
-   *      compte de R : H0.cinquante.aussi_loin (92) sur 1 000, « environ
-   *      9 fois sur 100 », et la valeur p de R, 0,086
-   *      (H0.cinquante.coefs[1].p) : presque la même.
-   *   3  La phrase du haut s'efface; en bas : plus que 5 fois sur 100, on
-   *      ne rejette pas H0.
-   *   4  Pourtant, ici, on connaît la vraie pente (POP.b1, −5,27, les
+   *      compte de R : H0.cinquante.aussi_loin (63) sur 1 000, « environ
+   *      6 fois sur 100 », et la valeur p de R, 0,06
+   *      (H0.cinquante.coefs[1].p) : la même, à l'arrondi près.
+   *   3  La phrase du haut s'efface; en bas : plus de 5 fois sur 100 (de
+   *      justesse), on ne rejette pas H0.
+   *   4  Pourtant, ici, on connaît la vraie pente (POP.b1, −0,31, les
    *      20 180 comme population d'exercice) : H0 est fausse. Ne pas
    *      rejeter H0, ce n'est pas prouver H0 (le procès de la séance 5 :
    *      acquittée, pas innocente).
@@ -42,11 +42,13 @@
   const TOUS = f(C.pentes.length, 0);
   const SUR100 = Math.round(LOIN / 10);
   const SEUIL = 5;
+  // La valeur p comme R l'imprime (0.06), en français.
+  const fp = (v) => v.toLocaleString('fr-CA', { maximumFractionDigits: 3 });
 
-  // L'axe des pentes, de −10 à +10.
-  const P0 = -10, P1 = 10, X0 = 70, X1 = 930, BASE = 350, HAUT = 190;
+  // L'axe des pentes, de −1 à +1.
+  const P0 = -1, P1 = 1, X0 = 70, X1 = 930, BASE = 350, HAUT = 190;
   const x = (p) => X0 + ((p - P0) / (P1 - P0)) * (X1 - X0);
-  const L = 0.4;
+  const L = 0.04;
   const tr = (p) => Math.floor(p / L + 1e-9);
   const T0 = tr(Math.min(...C.pentes));
   const COMPTES = new Array(tr(Math.max(...C.pentes)) - T0 + 1).fill(0);
@@ -66,7 +68,7 @@
 </script>
 
 <div class="visuel pente-cinquante" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Un petit sondage{N}: 50 personnes tirées parmi les 20 180, dont {C.n_modele} ont répondu aux deux questions. Sa pente{N}: {f(B)}. Dans son monde où H0 est vraie, les {TOUS} pentes des mélanges forment une cloche large. {LOIN} sur {TOUS} vont aussi loin de 0, environ {SUR100} fois sur 100. Dans R, p = {f(P, 3)}. C’est plus de {SEUIL} fois sur 100{N}: on ne rejette pas H0. Pourtant, la vraie pente est {f(POP.b1)}. Ne pas rejeter H0, ce n’est pas prouver H0.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="Un petit sondage{N}: 50 personnes tirées parmi les 20 180, dont {C.n_modele} ont répondu aux deux questions. Sa pente{N}: {f(B)}. Dans son monde où H0 est vraie, les {TOUS} pentes des mélanges forment une cloche large. {LOIN} sur {TOUS} vont aussi loin de 0, environ {SUR100} fois sur 100. Dans R, p = {fp(P)}. C’est plus de {SEUIL} fois sur 100{N}: on ne rejette pas H0. Pourtant, la vraie pente est {f(POP.b1)}. Ne pas rejeter H0, ce n’est pas prouver H0.">
     <text x="990" y="20" class="cq-note">CES 2025 · un sondage de 50, mélangé {TOUS} fois</text>
 
     {#key e}
@@ -90,9 +92,9 @@
     <line x1={x(0)} y1="128" x2={x(0)} y2={BASE} class="cq-h0" />
     <text x={x(0)} y="120" class="cq-h0-t">H0</text>
     <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="cq-axe" />
-    {#each [-10, -5, 0, 5, 10] as k}
+    {#each [-1, -0.5, 0, 0.5, 1] as k}
       <line x1={x(k)} y1={BASE} x2={x(k)} y2={BASE + 8} class="cq-axe" />
-      <text x={x(k)} y={BASE + 30} class="cq-tick" class:cq-zero={k === 0}>{k > 0 ? '+' : ''}{f(k, 0)}</text>
+      <text x={x(k)} y={BASE + 30} class="cq-tick" class:cq-zero={k === 0}>{k > 0 ? '+' : ''}{f(k, Number.isInteger(k) ? 0 : 1)}</text>
     {/each}
     <text x={X1} y={BASE + 56} class="cq-tick cq-fin">pente de la droite</text>
 
@@ -114,7 +116,7 @@
       <text x={XM + 12} y="160" class="cq-miroir-t">ou +{f(-B)}</text>
       <text x={XM + 12} y="200" class="cq-compte">{LOIN} sur {TOUS}</text>
       <text x={XM + 12} y="228" class="cq-lab-s">environ {SUR100} fois sur 100</text>
-      <text x={XM + 12} y="256" class="cq-r">dans R&#8239;: p = {f(P, 3)}</text>
+      <text x={XM + 12} y="256" class="cq-r">dans R&#8239;: p = {fp(P)}</text>
     </g>
 
     <!-- 3 : le verdict. -->

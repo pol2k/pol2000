@@ -3,15 +3,17 @@
    * Lire un graphique des coefficients en trois questions. Trois cartes,
    * chacune avec un petit dessin tiré du modèle à cinq variables de notre
    * sondage (MULTIPLE, src/lib/data/seance7.js, généré par
-   * outils/seance7_data.R), même axe de −10 à +15 dans les trois.
+   * outils/seance7_data.R), chaque carte avec son échelle (seul le 0 est
+   * marqué) : −0,4 à +0,4, puis −0,15 à +0,15, puis −0,15 à +0,3, pour
+   * que les moustaches se voient bien.
    *
    *   0  Les trois questions seules.
-   *   1  Où est le point ? Gauche-droite (−5,3) à gauche, diplôme (+9,1) à
-   *      droite : le sens et la taille de l'effet.
-   *   2  La moustache croise-t-elle 0 ? Âge : non. Québec : oui, en rouge.
-   *      Si elle croise : pas significatif à 5 %.
-   *   3  Est-elle large ? Gauche-droite (étroite) contre femme (large) :
-   *      plus elle est large, moins on est précis.
+   *   1  Où est le point ? Populisme (−0,28) à gauche, vote libéral
+   *      (+0,23) à droite : le sens et la taille de l'effet.
+   *   2  La moustache croise-t-elle 0 ? Diplôme : non. Québec : oui, en
+   *      rouge. Si elle croise : pas significatif à 5 %.
+   *   3  Est-elle large ? Vote libéral (étroite) contre âge (large) : plus
+   *      elle est large, moins on est précis.
    */
   import { brancherTemps } from '../temps.js';
   import { MULTIPLE } from '$lib/data/seance7.js';
@@ -23,27 +25,30 @@
     return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
   const C = Object.fromEntries(MULTIPLE.coefs.map((c) => [c.terme, c]));
-  const V0 = -10, V1 = 15, L = 250; // largeur du petit axe
+  const L = 250; // largeur du petit axe
   const CARTES = [
     {
       q: ['Où est', 'le point\u202F?'],
       r: ['Le sens et la taille', 'de l’effet.'],
-      rangs: [['gauche-droite', C.gauche_droite, false], ['diplôme', C.universitaire, false]]
+      bornes: [-0.4, 0.4],
+      rangs: [['populisme', C.populisme, false], ['vote libéral', C.vote_liberal, false]]
     },
     {
       q: ['La moustache', 'croise-t-elle 0\u202F?'],
       r: ['Si oui\u202F: pas', 'significatif à 5 %.'],
-      rangs: [['âge', C.age10, false], ['Québec', C.quebec, true]]
+      bornes: [-0.15, 0.15],
+      rangs: [['diplôme', C.universitaire, false], ['Québec', C.quebec, true]]
     },
     {
       q: ['Est-elle', 'large\u202F?'],
       r: ['Plus elle est large,', 'moins on est précis.'],
-      rangs: [['gauche-droite', C.gauche_droite, false], ['femme', C.femme, false]]
+      bornes: [-0.15, 0.3],
+      rangs: [['vote libéral', C.vote_liberal, false], ['âge', C.age, false]]
     }
   ];
   const LARG = 300, ECART = 30, X0 = 20;
   const ox = (k) => X0 + k * (LARG + ECART);
-  const x = (k, v) => ox(k) + 25 + ((v - V0) / (V1 - V0)) * L;
+  const x = (k, v) => { const [a, b] = CARTES[k].bornes; return ox(k) + 25 + ((v - a) / (b - a)) * L; };
   const YM = [236, 300]; // les deux rangées du petit dessin
 </script>
 

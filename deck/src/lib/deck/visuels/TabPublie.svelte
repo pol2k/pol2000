@@ -7,9 +7,12 @@
    * l'emploie possède le temps et dit quoi surligner (prop `on`).
    *
    * Tous les nombres viennent de src/lib/data/seance7.js (outils/seance7_data.R) :
-   *   modèle 1 : NOTRE  (note_carney ~ gauche_droite, 783 cas complets)
-   *   modèle 2 : MULTIPLE (+ âge, femme, Québec, universitaire, 772 cas)
-   * Arrondis à deux décimales, virgule décimale, vrai signe moins.
+   *   modèle 1 : NOTRE  (satisfaction_dem ~ populisme, les cas complets)
+   *   modèle 2 : MULTIPLE (+ vote libéral, âge, femme, Québec, universitaire)
+   * Toutes les variables vont de 0 à 1 (convention du cours). Coefficients
+   * et erreurs types à trois décimales (une erreur type de 0,044 arrondie à
+   * 0,04 fausserait le t qu'on compte à la diapo suivante), R² à deux.
+   * Virgule décimale, vrai signe moins. Les noms viennent de VARS.
    *
    *   on      — clés à surligner. Chaque cellule porte des clés : 'y' (la
    *             variable expliquée), 'col1' / 'col2' (une colonne), 'x' (les
@@ -21,25 +24,29 @@
    *   deux    — la colonne du modèle 2 et ses lignes existent (diapo de la
    *             semaine prochaine). `vu2` les fait apparaître.
    */
-  import { NOTRE, MULTIPLE } from '$lib/data/seance7.js';
+  import { NOTRE, MULTIPLE, VARS } from '$lib/data/seance7.js';
 
   let { on = [], deux = false, vu2 = false } = $props();
 
-  const f = (v, d = 2) =>
+  const f = (v, d = 3) =>
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−').replace(/\s/g, ' ');
   // Les seuils de la légende, ceux de R : *** p < 0,001, ** p < 0,01, * p < 0,05.
   const etoiles = (p) => (p < 0.001 ? '***' : p < 0.01 ? '**' : p < 0.05 ? '*' : '');
 
   // Les lignes, dans l'ordre de l'article : les variables, puis la constante.
   const NOMS = {
-    gauche_droite: ['Position gauche-droite', '(0 à 10)'],
-    age10: ['Âge', '(en dizaines d’années)'],
-    femme: ['Femme', ''],
-    quebec: ['Québec', ''],
-    universitaire: ['Diplôme universitaire', ''],
+    [VARS.x.nom]: [VARS.x.court, '(0 à 1)'],
+    vote_liberal: ['A voté libéral', '(0 = non, 1 = oui)'],
+    age: ['Âge', `(0 = ${VARS.age.min} ans, 1 = ${VARS.age.max} ans)`],
+    femme: ['Femme', '(0 = non, 1 = oui)'],
+    quebec: ['Québec', '(0 = non, 1 = oui)'],
+    universitaire: ['Diplôme universitaire', '(0 = non, 1 = oui)'],
     '(Intercept)': ['Constante', '']
   };
-  const ORDRE = ['gauche_droite', 'age10', 'femme', 'quebec', 'universitaire', '(Intercept)'];
+  // Le nom de la variable expliquée sur deux lignes, coupé à l'espace du milieu.
+  const coupe = (t) => { const m = t.lastIndexOf(' ', Math.ceil(t.length / 2)); return m > 0 ? [t.slice(0, m), t.slice(m + 1)] : [t, '']; };
+  const Y = coupe(VARS.y.court);
+  const ORDRE = [VARS.x.nom, 'vote_liberal', 'age', 'femme', 'quebec', 'universitaire', '(Intercept)'];
   const M1 = Object.fromEntries(NOTRE.coefs.map((c) => [c.terme, c]));
   const M2 = Object.fromEntries(MULTIPLE.coefs.map((c) => [c.terme, c]));
   const LIGNES = ORDRE.filter((t) => deux || M1[t]).map((t) => ({ terme: t, nom: NOMS[t], m1: M1[t], m2: M2[t], seul2: !M1[t] }));
@@ -53,7 +60,7 @@
   <thead>
     <tr>
       <th class="tp-vide"></th>
-      <th class="tp-y" class:tp-on={vu(['y'])} colspan={deux ? 2 : 1}>Note de Mark Carney<br /><span class="tp-sous">(0 à 100)</span></th>
+      <th class="tp-y" class:tp-on={vu(['y'])} colspan={deux ? 2 : 1}>{#if deux}{VARS.y.court}{:else}{Y[0]}<br />{Y[1]}{/if}<br /><span class="tp-sous">(0 à 1)</span></th>
     </tr>
     <tr class="tp-cols">
       <th></th>
@@ -96,8 +103,8 @@
     </tr>
     <tr>
       <th class="tp-nom" class:tp-on={vu(['r2'])}>R²</th>
-      <td class:tp-on={vu(['r2', 'col1'])}>{f(NOTRE.r2)}<span class="tp-et"></span></td>
-      {#if deux}<td class="tp-m2" class:tp-vu2={vu2} class:tp-on={vu(['r2', 'col2'])}>{f(MULTIPLE.r2)}<span class="tp-et"></span></td>{/if}
+      <td class:tp-on={vu(['r2', 'col1'])}>{f(NOTRE.r2, 2)}<span class="tp-et"></span></td>
+      {#if deux}<td class="tp-m2" class:tp-vu2={vu2} class:tp-on={vu(['r2', 'col2'])}>{f(MULTIPLE.r2, 2)}<span class="tp-et"></span></td>{/if}
     </tr>
   </tbody>
   <tfoot>

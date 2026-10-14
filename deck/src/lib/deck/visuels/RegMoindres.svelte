@@ -1,27 +1,35 @@
 <script>
   /**
    * Comment ça marche ? R cherche la droite qui passe le plus près de tous
-   * les points. Quinze vraies personnes de notre sondage (QUINZE, graine 15,
-   * outils/seance7_data.R). Pour chaque droite, l'écart vertical entre
-   * chaque point et la droite (un trait rouge) et le carré bâti sur cet écart
-   * (un aplat pâle). À droite, le total des carrés : plus il est petit, plus
-   * la droite passe près des points.
+   * les points. Quinze vraies personnes de notre sondage (QUINZE, graines 62
+   * puis 15, outils/seance7_data.R) : populisme (0 à 1) et satisfaction
+   * envers la démocratie (0 à 1). Pour chaque droite, l'écart vertical
+   * entre chaque point et la droite (un trait rouge) et le carré bâti sur
+   * cet écart (un aplat pâle). À droite, le total des carrés : plus il est
+   * petit, plus la droite passe près des points.
    *
    *   0  Les quinze points.
-   *   1  Une droite qui monte (20 + 6 × x) : mauvais sens, gros carrés.
+   *   1  Une droite qui monte (0,2 + 0,6 × x) : mauvais sens, gros carrés.
    *   2  La moyenne pour tout le monde (une droite plate) : mieux.
-   *   3  La droite de R, lm() : le plus petit total possible.
+   *   3  La droite de lm() : le plus petit total possible.
    *
    * Entre deux temps, la droite glisse (constante et pente interpolées) et
-   * le total se recalcule en direct sur les quinze points. Aux temps 1, 2 et
-   * 3, il vaut exactement DROITES[k].somme, calculé par R
-   * (outils/seance7_b.R) : 20 625, 11 254, 9 366. Le trajet ne descend
-   * jamais sous la valeur d'arrivée (vérifié pas à pas).
+   * le total se recalcule en direct sur les quinze vraies valeurs. Aux temps
+   * 1, 2 et 3, il vaut exactement DROITES[k].somme, calculé par R
+   * (outils/seance7_b.R) : 2,12, 0,77, 0,45. Le trajet ne descend jamais
+   * sous la valeur d'arrivée (vérifié pas à pas).
+   *
+   * Le dessin : jusqu'à six personnes partagent la même case (0,5 et
+   * « plutôt satisfait »). Le léger étalement `jx` de R ne suffit pas à les
+   * séparer dans le dessin : on les range côte à côte dans leur case, dans
+   * l'ordre de `jx`, 17 px l'une de l'autre. Le trait de chaque écart va du
+   * point à la droite à l'endroit où le point est dessiné; le total, lui,
+   * utilise les vraies valeurs de x.
    */
   import { brancherTemps } from '../temps.js';
   import { Tween } from 'svelte/motion';
   import { cubicInOut } from 'svelte/easing';
-  import { QUINZE } from '$lib/data/seance7.js';
+  import { QUINZE, VARS } from '$lib/data/seance7.js';
   import { DROITES } from '$lib/data/seance7_b.js';
 
   let e = $state(0);
@@ -39,74 +47,104 @@
     ligne.set([d.b0, d.b1], { duration: e === 0 || !lent() ? 0 : 900 });
   });
 
-  // Repères : x de 0 à 10, note de 0 à 100. Même échelle en pixels pour
-  // les deux sens d'un carré : un écart de 10 points = 10 × PX pixels.
-  const X0 = 90, X1 = 610, Y0 = 410, Y1 = 30;
-  const PX = (Y0 - Y1) / 100;
-  const sx = (v) => X0 + (v / 10) * (X1 - X0);
+  // Repères : populisme de 0 à 1 (en x), satisfaction de 0 à 1 (en y). Le
+  // carré d'un écart a le même côté en pixels dans les deux sens.
+  const X0 = 196, X1 = 676, Y0 = 392, Y1 = 46;
+  const PX = Y0 - Y1;
+  const sx = (v) => X0 + v * (X1 - X0);
   const sy = (v) => Y0 - v * PX;
+  const AXE_X = Y0 + 24, AXE_Y = X0 - 56;
+
+  // Les points rangés côte à côte dans leur case.
+  const PAS = 17;
+  const PTS = (() => {
+    const groupes = new Map();
+    QUINZE.points.forEach((p, i) => {
+      const k = p.x + '|' + p.y;
+      if (!groupes.has(k)) groupes.set(k, []);
+      groupes.get(k).push({ ...p, i });
+    });
+    const out = [];
+    for (const g of groupes.values()) {
+      g.sort((a, b) => a.jx - b.jx);
+      g.forEach((p, j) => out.push({ ...p, px: sx(p.x) + (j - (g.length - 1) / 2) * PAS }));
+    }
+    return out.sort((a, b) => a.i - b.i);
+  })();
 
   const prevu = (x) => ligne.current[0] + ligne.current[1] * x;
+  const auPixel = (px) => prevu((px - X0) / (X1 - X0));
   const total = $derived(QUINZE.points.reduce((s, p) => s + (p.y - prevu(p.x)) ** 2, 0));
   const MAXI = DROITES[0].somme;
 
-  const milliers = (n) => Math.round(n).toLocaleString('fr-CA').replace(/\s/g, ' ');
+  const virgule = (v, d = 2) => v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d });
+  // Les niveaux du codebook, en minuscules, sur deux lignes.
+  const NX = VARS.x.niveaux.map((t) => {
+    const s = t.toLowerCase();
+    const i = s.indexOf(', ');
+    if (i > 0) return [s.slice(0, i + 1), s.slice(i + 2)];
+    const j = s.indexOf(' ');
+    return [s.slice(0, j), s.slice(j + 1)];
+  });
+  const NY = VARS.y.niveaux.map((t) => t.toLowerCase().replace(' satisfait', ''));
   const ETIQ = ['une droite qui monte', 'la moyenne pour tout le monde', 'la droite de lm()'];
 </script>
 
 <div class="visuel rm" bind:this={hote}>
-  <svg viewBox="0 0 640 470" role="img"
-    aria-label="Quinze personnes : position gauche-droite et note de Carney. Trois droites essayées, chacune avec ses écarts aux points. La droite de R, celle de lm, a le plus petit total des carrés : 9 366.">
+  <svg viewBox="0 0 700 520" role="img"
+    aria-label="Quinze personnes de notre sondage : populisme et satisfaction envers la démocratie. Trois droites essayées, chacune avec ses écarts aux points. La droite de lm a le plus petit total des carrés : {virgule(DROITES[2].somme)}.">
     <defs>
-      <clipPath id="rm-cadre"><rect x={X0} y={Y1} width={X1 - X0} height={Y0 - Y1} /></clipPath>
+      <clipPath id="rm-cadre"><rect x={X0 - 60} y={Y1 - 10} width={X1 - X0 + 80} height={Y0 - Y1 + 20} /></clipPath>
     </defs>
 
-    <line x1={X0 - 14} y1={Y0 + 14} x2={X1} y2={Y0 + 14} class="axe" />
-    <line x1={X0 - 14} y1={Y0 + 14} x2={X0 - 14} y2={Y1} class="axe" />
-    {#each [0, 2, 4, 6, 8, 10] as v}
-      <line x1={sx(v)} y1={Y0 + 14} x2={sx(v)} y2={Y0 + 21} class="axe" />
-      <text x={sx(v)} y={Y0 + 42} class="tick">{v}</text>
+    <line x1={AXE_Y} y1={AXE_X} x2={X1 + 18} y2={AXE_X} class="axe" />
+    <line x1={AXE_Y} y1={AXE_X} x2={AXE_Y} y2={Y1 - 30} class="axe" />
+    {#each VARS.x.valeurs as v, i}
+      <line x1={sx(v)} y1={AXE_X} x2={sx(v)} y2={AXE_X + 7} class="axe" />
+      <text x={sx(v)} y={AXE_X + 27} class="val">{v.toLocaleString('fr-CA')}</text>
+      <text x={sx(v)} y={AXE_X + 48} class="niv">{NX[i][0]}</text>
+      <text x={sx(v)} y={AXE_X + 66} class="niv">{NX[i][1]}</text>
     {/each}
-    {#each [0, 50, 100] as v}
-      <line x1={X0 - 21} y1={sy(v)} x2={X0 - 14} y2={sy(v)} class="axe" />
-      <text x={X0 - 28} y={sy(v) + 6} class="tick d">{v}</text>
+    {#each VARS.y.valeurs as v, i}
+      <line x1={AXE_Y - 7} y1={sy(v)} x2={AXE_Y} y2={sy(v)} class="axe" />
+      <text x={AXE_Y - 13} y={sy(v) - 3} class="niv d">{NY[i]}</text>
+      <text x={AXE_Y - 13} y={sy(v) + 16} class="val d">{v.toLocaleString('fr-CA', { maximumFractionDigits: 2 })}</text>
     {/each}
-    <text x={(X0 + X1) / 2} y="466" class="titre-axe">position gauche-droite</text>
-    <text transform="translate(20 {(Y0 + Y1) / 2}) rotate(-90)" class="titre-axe">note de Carney</text>
+    <text x={(X0 + X1) / 2} y="512" class="titre-axe">populisme</text>
+    <text x={AXE_Y - 13} y={Y1 - 34} class="titre-axe d">satisfaction</text>
 
     <g clip-path="url(#rm-cadre)" class="essai" class:vu={e >= 1}>
       <!-- Les carrés, puis les écarts, puis la droite. -->
-      {#each QUINZE.points as p}
-        {@const g = p.y - prevu(p.x)}
-        {@const cote = Math.abs(g) * PX}
-        <rect x={p.x <= 5 ? sx(p.x) : sx(p.x) - cote} y={Math.min(sy(p.y), sy(prevu(p.x)))} width={cote} height={cote} class="carre" />
+      {#each PTS as p}
+        {@const cote = Math.abs(p.y - auPixel(p.px)) * PX}
+        <rect x={p.x <= 0.5 ? p.px : p.px - cote} y={Math.min(sy(p.y), sy(auPixel(p.px)))} width={cote} height={cote} class="carre" />
       {/each}
-      {#each QUINZE.points as p}
-        <line x1={sx(p.x)} y1={sy(p.y)} x2={sx(p.x)} y2={sy(prevu(p.x))} class="ecart" />
+      {#each PTS as p}
+        <line x1={p.px} y1={sy(p.y)} x2={p.px} y2={sy(auPixel(p.px))} class="ecart" />
       {/each}
-      <line x1={sx(0)} y1={sy(prevu(0))} x2={sx(10)} y2={sy(prevu(10))} class="droite" class:r={e === 3} />
+      <line x1={sx(-0.1)} y1={sy(prevu(-0.1))} x2={sx(1.1)} y2={sy(prevu(1.1))} class="droite" class:r={e === 3} />
     </g>
 
-    {#each QUINZE.points as p, i}
-      <circle cx={sx(p.x)} cy={sy(p.y)} r="8" class="pt" style="--k: {i}" />
+    {#each PTS as p, i}
+      <circle cx={p.px} cy={sy(p.y)} r="7.5" class="pt" style="--k: {i}" />
     {/each}
   </svg>
 
   <div class="cote">
     <div class="lecture" class:vu={e >= 1}>
       <span class="et">total des carrés</span>
-      <span class="val" class:r={e === 3}>{milliers(total)}</span>
+      <span class="val-g" class:r={e === 3}>{virgule(total)}</span>
       <span class="jauge"><span class="plein" class:r={e === 3} style="width: {(100 * total) / MAXI}%"></span></span>
     </div>
     <ol class="essais">
       {#each ETIQ as t, k}
         <li class:vu={e >= k + 1} class:actuel={e === k + 1}>
-          <span class="t">{t}</span><span class="s">{e >= k + 1 ? milliers(DROITES[k].somme) : ''}</span>
+          <span class="t">{t}</span><span class="s">{e >= k + 1 ? virgule(DROITES[k].somme) : ''}</span>
         </li>
       {/each}
     </ol>
     <p class="mot" class:vu={e >= 3}>la droite qui passe le plus près de tous les points</p>
-    <p class="source">15 répondant.e.s de la CES 2025</p>
+    <p class="source">15 répondant.e.s de notre sondage, CES 2025</p>
   </div>
 </div>
 
@@ -115,8 +153,10 @@
   svg { width: 100%; height: auto; max-height: 64vh; display: block; }
   text { font-family: var(--dk-mono); }
   .axe { stroke: var(--dk-encre); stroke-width: 2; }
-  .tick { font-size: 17px; text-anchor: middle; fill: var(--dk-gris); }
-  .tick.d { text-anchor: end; }
+  .val { font-size: 17px; text-anchor: middle; fill: var(--dk-gris); font-variant-numeric: tabular-nums; }
+  .niv { font-size: 13px; text-anchor: middle; fill: var(--dk-encre); }
+  .val.d, .niv.d { text-anchor: end; }
+  .titre-axe.d { text-anchor: end; }
   .titre-axe { font-size: 17px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
 
   .pt { fill: var(--dk-encre); stroke: var(--dk-fond); stroke-width: 2.5; animation: rm-pose 0.4s cubic-bezier(0.34, 1.6, 0.64, 1) both; animation-delay: calc(var(--k) * 50ms + 100ms); transform-box: fill-box; transform-origin: center; }
@@ -131,8 +171,8 @@
   .lecture { display: flex; flex-direction: column; gap: 0.15em; opacity: 0; transition: opacity 0.4s; }
   .lecture.vu { opacity: 1; }
   .et { font-size: 0.7em; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; color: var(--dk-gris); }
-  .val { white-space: nowrap; font-size: 3em; font-weight: 600; line-height: 1.05; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
-  .val.r { color: var(--dk-accent); }
+  .val-g { white-space: nowrap; font-size: 3em; font-weight: 600; line-height: 1.05; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .val-g.r { color: var(--dk-accent); }
   .jauge { display: block; height: 0.7em; border: 2px solid var(--dk-encre); }
   .plein { display: block; height: 100%; background: var(--dk-gris-2); }
   .plein.r { background: var(--dk-accent); }

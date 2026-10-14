@@ -10,8 +10,9 @@
    *   1  le verdict pour Y : nominale refusée, les deux autres acceptées;
    *   2  « oui ou non » est nominal aussi; la règle vise Y seulement.
    *
-   * Exemples : vote (le parti), scolarité en catégories, note_carney et
-   * gauche_droite (les deux variables de la séance). Pas de chiffres.
+   * Exemples : vote (le parti), les deux variables de la séance
+   * (satisfaction_dem et populisme : des échelles de réponses ordonnées,
+   * recodées de 0 à 1, donc ordinales et acceptées), l'âge. Pas de chiffres.
    */
   import { brancherTemps } from '../temps.js';
 
@@ -43,7 +44,7 @@
         <path d="M 16 116 H 100 V 86 H 190 V 24 H 284" class="tm-vd-marche" />
       </svg>
       <strong>Ordinale</strong>
-      <span>la scolarité, en catégories</span>
+      <span>satisfaction_dem · populisme</span>
       <span class="tm-vd-oui"></span>
       <span class="tm-vd-tampon">acceptée</span>
     </div>
@@ -55,7 +56,7 @@
         {/each}
       </svg>
       <strong>Intervalle · ratio</strong>
-      <span>note_carney · gauche_droite</span>
+      <span>l’âge, en années</span>
       <span class="tm-vd-oui"></span>
       <span class="tm-vd-tampon">acceptée</span>
     </div>

@@ -6,15 +6,15 @@
    * dans la fourchette ? Le même verdict que la valeur p, sans formule.
    * Quatre temps.
    *
-   *   0  Notre pente, NOTRE.coefs[1].b (−5,05), un point sur l'axe.
-   *   1  Sa fourchette, de NOTRE.coefs[1].bas à .haut (−5,93 à −4,17),
-   *      et, en bas à gauche, la commande et la ligne gauche_droite de
+   *   0  Notre pente, NOTRE.coefs[1].b (−0,37), un point sur l'axe.
+   *   1  Sa fourchette, de NOTRE.coefs[1].bas à .haut (−0,46 à −0,28),
+   *      et, en bas à gauche, la commande et la ligne populisme de
    *      confint(modele), telles que R les imprime (SORTIES.confint).
    *   2  H0, 0, en pointillé : loin hors de la fourchette. On rejette H0,
    *      comme avec p (< 0,001).
-   *   3  Le sondage de 50 (H0.cinquante.coefs[1] : −4,22, de −9,07 à
-   *      +0,63) : une fourchette bien plus large, qui attrape 0. On ne
-   *      rejette pas H0, comme avec p (0,086). Sa sortie de R à droite
+   *   3  Le sondage de 50 (H0.cinquante.coefs[1] : −0,39, de −0,80 à
+   *      +0,02) : une fourchette bien plus large, qui attrape 0, de
+   *      justesse. On ne rejette pas H0, comme avec p (0,06). Sa sortie de R à droite
    *      (SORTIES.confint50).
    *
    * Un intervalle qui exclut 0, c'est p < 0,05; un intervalle qui contient
@@ -36,18 +36,18 @@
   const fp = (p) => (p < 0.001 ? 'p < 0,001' : `p = ${p.toLocaleString('fr-CA', { maximumFractionDigits: 3 })}`);
   const dedans = (c) => c.bas <= 0 && 0 <= c.haut;
 
-  // L'axe des pentes, de −10 à +2.
-  const P0 = -10, P1 = 2, X0 = 70, X1 = 930, BASE = 330;
+  // L'axe des pentes, de −1 à +0,2.
+  const P0 = -1, P1 = 0.2, X0 = 70, X1 = 930, BASE = 330;
   const x = (p) => X0 + ((p - P0) / (P1 - P0)) * (X1 - X0);
   const RANGS = [
     { c: A, y: 182, qui: 'notre sondage', vu: 0 },
     { c: C, y: 270, qui: 'sondage de 50', vu: 3 }
   ];
 
-  // Les sorties de R : la commande, l'en-tête et la ligne gauche_droite.
+  // Les sorties de R : la commande, l'en-tête et la ligne populisme.
   const sortie = (code, txt) => {
     const l = txt.split('\n');
-    return [`> ${code}`, l.find((s) => /2\.5 %/.test(s)).trimEnd(), l.find((s) => s.startsWith('gauche_droite')).trimEnd()];
+    return [`> ${code}`, l.find((s) => /2\.5 %/.test(s)).trimEnd(), l.find((s) => s.startsWith('populisme')).trimEnd()];
   };
   const R1 = sortie(SORTIES.code_confint, SORTIES.confint);
   const R2 = sortie(SORTIES.code_confint50, SORTIES.confint50);
@@ -83,8 +83,8 @@
           <line x1={x(r.c.bas)} y1={r.y} x2={x(r.c.haut)} y2={r.y} class="ic-fourchette" />
           <line x1={x(r.c.bas)} y1={r.y - 14} x2={x(r.c.bas)} y2={r.y + 14} class="ic-borne" />
           <line x1={x(r.c.haut)} y1={r.y - 14} x2={x(r.c.haut)} y2={r.y + 14} class="ic-borne" />
-          <text x={x(r.c.bas)} y={r.y + 40} class="ic-b">{f(r.c.bas)}</text>
-          <text x={x(r.c.haut)} y={r.y + 40} class="ic-b">{f(r.c.haut)}</text>
+          <text x={x(r.c.bas) - 12} y={r.y + 7} class="ic-b ic-b-g">{f(r.c.bas)}</text>
+          <text x={x(r.c.haut) + 12} y={r.y + 7} class="ic-b ic-b-d">{f(r.c.haut)}</text>
         </g>
         <circle cx={x(r.c.b)} cy={r.y} r="10" class="ic-point" />
         {#if dedans(r.c)}
@@ -95,9 +95,9 @@
 
     <!-- L'axe. -->
     <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="ic-axe" />
-    {#each [-10, -8, -6, -4, -2, 0, 2] as k}
+    {#each [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2] as k}
       <line x1={x(k)} y1={BASE} x2={x(k)} y2={BASE + 8} class="ic-axe" />
-      <text x={x(k)} y={BASE + 30} class="ic-tick" class:ic-zero={k === 0}>{k > 0 ? '+' : ''}{k.toLocaleString('fr-CA').replace('-', '−')}</text>
+      <text x={x(k)} y={BASE + 30} class="ic-tick" class:ic-zero={k === 0}>{k > 0 ? '+' : ''}{k.toLocaleString('fr-CA', { minimumFractionDigits: Number.isInteger(k) ? 0 : 1 }).replace('-', '−')}</text>
     {/each}
     <text x={X1} y={BASE + 54} class="ic-tick ic-fin">pente de la droite</text>
 
@@ -127,7 +127,9 @@
   .ic-fourchette { stroke: var(--dk-accent); stroke-width: 12; }
   .ic-anneau { fill: none; stroke: var(--dk-encre); stroke-width: 3; }
   .ic-borne { stroke: var(--dk-encre); stroke-width: 3; }
-  .ic-b { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
+  .ic-b { font-size: 18px; fill: var(--dk-gris); }
+  .ic-b-g { text-anchor: end; }
+  .ic-b-d { text-anchor: start; }
   .ic-point { fill: var(--dk-encre); stroke: var(--dk-fond); stroke-width: 3; }
   .ic-axe { stroke: var(--dk-encre); stroke-width: 3; }
   .ic-tick { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }

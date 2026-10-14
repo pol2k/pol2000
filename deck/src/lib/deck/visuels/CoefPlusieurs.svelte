@@ -1,33 +1,38 @@
 <script>
   /**
    * Le graphique des coefficients d'un modèle à plusieurs variables : un
-   * aperçu de la séance 8. Même sondage (ces1000), 772 cas complets :
-   * note_carney ~ gauche_droite + age10 + femme + quebec + universitaire.
-   * Cinq rangées, dans l'ordre du tableau (de haut en bas), la constante
-   * laissée de côté. Deux usages, selon `mode` :
+   * aperçu de la séance 8. Même sondage (ces1000), 488 cas complets :
+   * satisfaction_dem ~ populisme + vote_liberal + age + femme + quebec +
+   * universitaire, toutes les variables codées de 0 à 1 (âge : 0 = 18 ans,
+   * 1 = la personne la plus âgée de la CES). Six rangées, dans l'ordre du
+   * tableau (de haut en bas), la constante laissée de côté. Deux usages,
+   * selon `mode` :
    *
    * mode = 'signif' (lire la significativité, colonne « significatif à 5 % ? ») :
-   *   0  Les cinq points et leurs moustaches, la ligne à 0.
-   *   1  Femme et Québec : la moustache croise 0. En rouge, « non ».
+   *   0  Les six points et leurs moustaches, la ligne à 0.
+   *   1  Âge, femme et Québec : la moustache croise 0. En rouge, « non ».
    *   2  Les trois autres ne la croisent pas : « oui ».
    *   3  Les étoiles du tableau (R : *** p < 0,001, ** < 0,01, * < 0,05)
    *      s'ajoutent à côté du « oui » : la même information.
    *
-   * mode = 'unites' (prudence avec les unités, colonne « 1 unité de x ») :
+   * mode = 'unites' (prudence avec les unités, colonne « de 0 à 1, c'est ») :
    *   0  Le même dessin.
-   *   1  Ce que vaut « une unité » pour chaque variable (un cran sur 10,
-   *      10 ans, être une femme...), et la phrase : comparer avec prudence.
+   *   1  Tout va de 0 à 1 : chaque point se lit « du minimum au maximum »,
+   *      c'est pour ça que le cours code tout de 0 à 1.
+   *   2  Mais 0 → 1 ne veut pas dire la même chose partout (cinq réponses,
+   *      oui ou non, 18 ans au plus âgé) : comparer avec prudence.
    *
-   * Tous les nombres viennent de MULTIPLE.coefs (src/lib/data/seance7.js,
-   * généré par outils/seance7_data.R : coef(summary(m2)) et confint(m2)).
-   * « Croise 0 » se lit sur les bornes : bas < 0 < haut.
+   * Tous les nombres viennent de MULTIPLE.coefs, l'âge maximal de VARS.age
+   * (src/lib/data/seance7.js, généré par outils/seance7_data.R :
+   * coef(summary(m2)) et confint(m2)). « Croise 0 » se lit sur les bornes :
+   * bas < 0 < haut.
    */
   import { brancherTemps } from '../temps.js';
-  import { MULTIPLE } from '$lib/data/seance7.js';
+  import { MULTIPLE, VARS } from '$lib/data/seance7.js';
 
   /** @type {{ mode?: 'signif' | 'unites' }} */
   let { mode = 'signif' } = $props();
-  const TOTAL = $derived(mode === 'unites' ? 1 : 3);
+  const TOTAL = $derived(mode === 'unites' ? 2 : 3);
 
   let e = $state(0);
   let hote = $state(null);
@@ -40,23 +45,24 @@
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−').replace(/\s/g, ' ');
   const etoiles = (p) => (p < 0.001 ? '***' : p < 0.01 ? '**' : p < 0.05 ? '*' : '');
 
-  // Les libellés, dans l'ordre du modèle.
+  // Les libellés, dans l'ordre du modèle : [nom, sous-titre, ce que veut dire 0 → 1, de quel genre].
   const NOMS = {
-    gauche_droite: ['Position gauche-droite', '(0 à 10)', '1 cran vers la droite'],
-    age10: ['Âge', '(par 10 ans)', '10 ans de plus'],
-    femme: ['Femme', '', 'être une femme'],
-    quebec: ['Québec', '', 'vivre au Québec'],
-    universitaire: ['Diplôme universitaire', '', 'avoir un diplôme']
+    populisme: [VARS.x.court, '', 'désaccord → accord', 'cinq réponses'],
+    vote_liberal: ['Vote libéral', '', 'autre parti → libéral', 'oui ou non'],
+    age: ['Âge', '(18 ans → le plus âgé)', `${VARS.age.min} → ${VARS.age.max} ans`, 'toute la vie adulte'],
+    femme: ['Femme', '', 'homme → femme', 'oui ou non'],
+    quebec: ['Québec', '', 'ailleurs → Québec', 'oui ou non'],
+    universitaire: ['Diplôme universitaire', '', 'sans → avec diplôme', 'oui ou non']
   };
   const RANGS = MULTIPLE.coefs
     .filter((c) => c.terme !== '(Intercept)')
     .map((c) => ({ ...c, nom: NOMS[c.terme], croise: c.bas < 0 && c.haut > 0 }));
 
-  // L'axe, plus étroit qu'aux diapos d'avant : il faut une colonne à droite.
-  const V0 = -10, V1 = 15, XL = 320, XR = 720;
+  // L'axe, dans les unités de la satisfaction (0 à 1).
+  const V0 = -0.4, V1 = 0.4, XL = 320, XR = 720;
   const x = (v) => XL + ((v - V0) / (V1 - V0)) * (XR - XL);
-  const ticks = [-10, -5, 0, 5, 10, 15];
-  const Y1 = 110, PAS = 62, AXE = Y1 + 4 * PAS + 50;
+  const ticks = [-0.4, -0.2, 0, 0.2, 0.4];
+  const Y1 = 104, PAS = 54, AXE = Y1 + 5 * PAS + 40;
   const y = (i) => Y1 + i * PAS;
   const XCOL = 750; // début de la colonne de droite
 
@@ -66,18 +72,18 @@
 </script>
 
 <div class="visuel coef-plus" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Graphique des coefficients du modèle à cinq variables, notre sondage, {MULTIPLE.n_modele} personnes. {RANGS.map((r) => `${r.nom[0]} ${r.nom[1]} : ${f(r.b)} points, de ${f(r.bas)} à ${f(r.haut)}${r.croise ? ', la moustache croise 0' : ''}.`).join(' ')}">
+  <svg viewBox="0 0 1000 {mode === 'unites' ? 480 : 500}" role="img" aria-label="Graphique des coefficients du modèle à six variables, toutes codées de 0 à 1, notre sondage, {MULTIPLE.n_modele} personnes. {RANGS.map((r) => `${r.nom[0]} : ${f(r.b, 2)}, de ${f(r.bas, 2)} à ${f(r.haut, 2)}${r.croise ? ', la moustache croise 0' : ''}.`).join(' ')}">
 
     <text x="20" y="30" class="cp-note">notre sondage · N = {MULTIPLE.n_modele.toLocaleString('fr-CA')}</text>
 
-    <!-- La colonne de droite : significatif ou pas, ou l'unité de chaque variable. -->
+    <!-- La colonne de droite : significatif ou pas, ou ce que veut dire 0 → 1. -->
     {#if mode === 'signif'}
       <g class="cp-etape" class:cp-vu={e >= 1}>
         <text x={XCOL} y="62" class="cp-tete">significatif à 5&#8239;%&#8239;?</text>
       </g>
     {:else}
-      <g class="cp-etape" class:cp-vu={e >= 1}>
-        <text x={XCOL} y="62" class="cp-tete">1 unité de x, c’est&#8239;:</text>
+      <g class="cp-etape" class:cp-vu={e >= 2}>
+        <text x={XCOL} y="62" class="cp-tete">de 0 à 1, c’est&#8239;:</text>
       </g>
     {/if}
 
@@ -86,14 +92,14 @@
     <line x1={XL} y1={AXE} x2={XR} y2={AXE} class="cp-axe" />
     {#each ticks as t}
       <line x1={x(t)} y1={AXE} x2={x(t)} y2={AXE + 9} class="cp-axe" />
-      <text x={x(t)} y={AXE + 32} class="cp-tick">{f(t, 0)}</text>
+      <text x={x(t)} y={AXE + 32} class="cp-tick">{t === 0 ? '0' : f(t, 1)}</text>
     {/each}
-    <text x={(XL + XR) / 2} y={AXE + 66} class="cp-titre-axe">effet sur la note de Carney, en points</text>
+    <text x={(XL + XR) / 2} y={AXE + 64} class="cp-titre-axe" class:cp-titre-r={mode === 'unites' && e === 1}>effet sur la satisfaction (de 0 à 1)</text>
 
     {#each RANGS as r, i}
       <g class="cp-rang" class:cp-rouge={rouge(r)} class:cp-fort={fort(r)}>
         <text x="296" y={y(i) + (r.nom[1] ? -4 : 7)} class="cp-lab">{r.nom[0]}</text>
-        {#if r.nom[1]}<text x="296" y={y(i) + 21} class="cp-sous">{r.nom[1]}</text>{/if}
+        {#if r.nom[1]}<text x="296" y={y(i) + 20} class="cp-sous">{r.nom[1]}</text>{/if}
         <line x1={x(r.bas)} y1={y(i)} x2={x(r.haut)} y2={y(i)} class="cp-moustache" />
         <line x1={x(r.bas)} y1={y(i) - 8} x2={x(r.bas)} y2={y(i) + 8} class="cp-borne" />
         <line x1={x(r.haut)} y1={y(i) - 8} x2={x(r.haut)} y2={y(i) + 8} class="cp-borne" />
@@ -109,20 +115,24 @@
           <text x={XCOL + 70} y={y(i) + 8} class="cp-etoiles">{etoiles(r.p)}</text>
         </g>
       {:else}
-        <g class="cp-etape" class:cp-vu={e >= 1} style="transition-delay: {e >= 1 ? i * 120 : 0}ms">
-          <text x={XCOL} y={y(i) + 8} class="cp-unite">{r.nom[2]}</text>
+        <g class="cp-etape" class:cp-vu={e >= 2} style="transition-delay: {e >= 2 ? i * 120 : 0}ms">
+          <text x={XCOL} y={y(i) + 2} class="cp-unite">{r.nom[2]}</text>
+          <text x={XCOL} y={y(i) + 23} class="cp-genre">{r.nom[3]}</text>
         </g>
       {/if}
     {/each}
 
     {#if mode === 'signif'}
       <g class="cp-etape" class:cp-vu={e >= 3}>
-        <text x={XCOL + 91} y={y(4) + 42} class="cp-tete cp-tete-g">les étoiles du tableau</text>
+        <text x={XCOL + 91} y={y(5) + 42} class="cp-tete cp-tete-g">les étoiles du tableau</text>
       </g>
     {/if}
   </svg>
   {#if mode === 'unites'}
-    <p class="cp-phrase cp-etape" class:cp-vu={e >= 1}>Pas la même règle&#8239;: comparer avec prudence.</p>
+    <p class="cp-phrase cp-etape" class:cp-vu={e >= 1}>
+      {#if e >= 2}<span class="cp-mais">Mais 0 → 1 n’a pas le même sens partout&#8239;: comparer avec prudence.</span>
+      {:else}Tout va de 0 à 1&#8239;: chaque point, c’est du minimum au maximum.{/if}
+    </p>
   {/if}
 </div>
 
@@ -137,9 +147,10 @@
   .cp-zero.cp-zero-r { stroke: var(--dk-accent); stroke-width: 4; }
   .cp-axe { stroke: var(--dk-encre); stroke-width: 2; }
   .cp-tick { font-size: 20px; text-anchor: middle; fill: var(--dk-gris); }
-  .cp-titre-axe { font-size: 20px; text-anchor: middle; fill: var(--dk-gris); }
+  .cp-titre-axe { font-size: 20px; text-anchor: middle; fill: var(--dk-gris); transition: fill 0.4s; }
+  .cp-titre-axe.cp-titre-r { fill: var(--dk-encre); font-weight: 600; }
   .cp-lab { font-size: 22px; font-weight: 600; text-anchor: end; fill: var(--dk-encre); transition: fill 0.4s; }
-  .cp-sous { font-size: 18px; text-anchor: end; fill: var(--dk-gris); }
+  .cp-sous { font-size: 17px; text-anchor: end; fill: var(--dk-gris); }
   .cp-moustache { stroke: var(--dk-encre); stroke-width: 5; transition: stroke 0.4s, stroke-width 0.4s; }
   .cp-borne { stroke: var(--dk-encre); stroke-width: 3; transition: stroke 0.4s; }
   .cp-point { fill: var(--dk-encre); transition: fill 0.4s; }
@@ -149,11 +160,13 @@
   .cp-verdict { font-size: 24px; font-weight: 600; fill: var(--dk-encre); }
   .cp-verdict.cp-non { fill: var(--dk-accent); }
   .cp-etoiles { font-size: 24px; font-weight: 600; fill: var(--dk-gris); }
-  .cp-unite { font-size: 21px; fill: var(--dk-encre); }
-  .cp-phrase { margin: 0.4em 0 0; font-size: 1.05em; font-weight: 600; color: var(--dk-accent); text-align: center; }
+  .cp-unite { font-size: 19px; fill: var(--dk-encre); }
+  .cp-genre { font-size: 17px; fill: var(--dk-gris); }
+  .cp-phrase { margin: 0.3em 0 0; font-size: 1em; font-weight: 600; color: var(--dk-encre); text-align: center; }
+  .cp-mais { color: var(--dk-accent); }
   .cp-etape { opacity: 0; transition: opacity 0.3s; }
   .cp-etape.cp-vu { opacity: 1; transition: opacity 0.5s; }
   @media (prefers-reduced-motion: reduce) {
-    .cp-etape, .cp-etape.cp-vu, .cp-zero, .cp-lab, .cp-moustache, .cp-borne, .cp-point { transition: none; }
+    .cp-etape, .cp-etape.cp-vu, .cp-zero, .cp-lab, .cp-moustache, .cp-borne, .cp-point, .cp-titre-axe { transition: none; }
   }
 </style>

@@ -1,26 +1,26 @@
 <script>
   /**
-   * Le monde où H0 est vraie, mille fois. On mélange la colonne
-   * gauche_droite de notre sondage 1 000 fois (la diapo précédente en
-   * montre un) : 1 000 pentes, toutes nées du hasard seul. Elles forment une
-   * cloche autour de 0, comme les 1 000 paniers de pommes de la séance 5.
-   * Puis notre vraie pente, −5,05, tombe loin, très loin. Quatre temps.
+   * Le monde où H0 est vraie, mille fois. On mélange la colonne populisme
+   * de notre sondage 1 000 fois (la diapo précédente en montre un) : 1 000
+   * pentes, toutes nées du hasard seul. Elles forment une cloche autour de
+   * 0, comme les 1 000 paniers de pommes de la séance 5. Puis notre vraie
+   * pente, −0,37, tombe loin, très loin. Quatre temps.
    *
    *   0  L'axe des pentes, H0 (0) en pointillé. Un mélange, une pente : le
-   *      premier mélange (H0.notre.pentes[0], 0,21, celui de la diapo
+   *      premier mélange (H0.notre.pentes[0], 0,04, celui de la diapo
    *      précédente), un point sur l'axe.
    *   1  Mille mélanges : les bâtons montent en trois secondes
    *      (requestAnimationFrame), une cloche autour de 0. L'état final est
    *      fixé : dès le temps 2, ou après trois secondes, les 1 000 pentes
    *      sont toutes là, toujours les mêmes. La phrase nomme le théorème
    *      central limite (séance 5) : les pentes aussi forment une cloche.
-   *   2  Notre pente, −5,05 (H0.notre.b1), en rouge, et son miroir, +5,05,
+   *   2  Notre pente, −0,37 (H0.notre.b1), en rouge, et son miroir, +0,37,
    *      en gris : « aussi loin de 0 » se compte des deux côtés. Le compte
    *      de R : H0.notre.aussi_loin (0) sur 1 000.
    *   3  La phrase du haut s'efface; en bas, la conclusion : pas une fois
    *      sur 1 000. On rejette H0.
    *
-   * Les bâtons sont des tranches de 0,1 calculées ici à partir des 1 000
+   * Les bâtons sont des tranches de 0,01 calculées ici à partir des 1 000
    * pentes de R (H0.notre.pentes, src/lib/data/seance7.js, outils/
    * seance7_data.R, graine 7). Le compte affiché est celui de R.
    */
@@ -40,11 +40,11 @@
   const B = H0.notre.b1;
   const LOIN = H0.notre.aussi_loin;
 
-  // L'axe des pentes, de −6 à +6.
-  const P0 = -6, P1 = 6, X0 = 70, X1 = 930, BASE = 350, HAUT = 190;
+  // L'axe des pentes, de −0,6 à +0,6.
+  const P0 = -0.6, P1 = 0.6, X0 = 70, X1 = 930, BASE = 350, HAUT = 190;
   const x = (p) => X0 + ((p - P0) / (P1 - P0)) * (X1 - X0);
-  // Les tranches de 0,1.
-  const L = 0.1;
+  // Les tranches de 0,01.
+  const L = 0.01;
   const tranche = (p) => Math.floor(p / L + 1e-9);
   const T0 = tranche(Math.min(...PENTES)), T1 = tranche(Math.max(...PENTES));
   const COMPTE_FINAL = (() => {
@@ -85,7 +85,7 @@
 </script>
 
 <div class="visuel pente-monde-h0" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Le monde où H0 est vraie{N}: on mélange les positions gauche-droite {TOUS} fois. {TOUS} pentes, en cloche autour de 0. Notre pente, {f(B)}, est très loin. {LOIN} mélange sur {TOUS} va aussi loin de 0. On rejette H0.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="Le monde où H0 est vraie{N}: on mélange les réponses sur le populisme {TOUS} fois. {TOUS} pentes, en cloche autour de 0. Notre pente, {f(B)}, est très loin. {LOIN} mélange sur {TOUS} va aussi loin de 0. On rejette H0.">
     <text x="990" y="20" class="mh-note">CES 2025 · notre sondage, mélangé {TOUS} fois</text>
 
     {#key e}
@@ -113,9 +113,9 @@
     <line x1={x(0)} y1="128" x2={x(0)} y2={BASE} class="mh-h0" />
     <text x={x(0)} y="120" class="mh-h0-t">H0</text>
     <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="mh-axe" />
-    {#each [-6, -4, -2, 0, 2, 4, 6] as k}
+    {#each [-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6] as k}
       <line x1={x(k)} y1={BASE} x2={x(k)} y2={BASE + 8} class="mh-axe" />
-      <text x={x(k)} y={BASE + 30} class="mh-tick" class:mh-zero={k === 0}>{k > 0 ? '+' : ''}{f(k, 0)}</text>
+      <text x={x(k)} y={BASE + 30} class="mh-tick" class:mh-zero={k === 0}>{k > 0 ? '+' : ''}{f(k, k === 0 ? 0 : 1)}</text>
     {/each}
     <text x={X1} y={BASE + 56} class="mh-tick mh-fin">pente de la droite</text>
 
@@ -127,7 +127,7 @@
       <circle cx={XB} cy={BASE} r="10" class="mh-point" />
       <text x={XB + 14} y="156" class="mh-lab">notre pente&#8239;: {f(B)}</text>
       <text x={XB + 14} y="196" class="mh-compte">{LOIN} sur {TOUS}</text>
-      <text x={XB + 14} y="222" class="mh-lab-s">mélanges aussi loin de 0</text>
+      <text x={XB + 14} y="222" class="mh-lab-s">aussi loin de 0</text>
     </g>
 
     <!-- 3 : la conclusion. -->

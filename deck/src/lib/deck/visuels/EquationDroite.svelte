@@ -1,16 +1,19 @@
 <script>
   /**
    * L'équation de la droite, en deux rangées alignées : en haut, la forme
-   * générale (note = β0 + β1 × gauche_droite), en gris; en bas, les vrais
+   * générale (satisfaction = β0 + β1 × populisme), en gris; en bas, les vrais
    * nombres, chacun dans sa case, sous son symbole. On voit ainsi qu'on
    * « remplace » β0 et β1 par des nombres. Le signe de β1 reste dans sa case et
-   * le « + » s'efface quand β1 est négatif (« 79,8 −5,05 × … »), comme dans
+   * le « + » s'efface quand β1 est négatif (« 0,83 −0,37 × … »), comme dans
    * RegEnMots.
    *
    * Utilisée par DroiteReglable (la droite qu'on règle) et LireLaPente.
    * `actif` ('b0' ou 'b1') met une case en rouge. Aucun calcul ici : les
-   * nombres arrivent du parent.
+   * nombres arrivent du parent, le nom de X vient de VARS (seance7.js).
+   * Deux décimales partout : les variables vont de 0 à 1.
    */
+  import { VARS } from '$lib/data/seance7.js';
+  const X = VARS.x.nom;
   let { b0, b1, actif = null } = $props();
   // Format québécois, vrai signe moins (U+2212), pas de trait d'union.
   const f = (v, d) => {
@@ -19,9 +22,9 @@
   };
 </script>
 
-<div class="eq" aria-label="note égale {f(b0, 1)} {b1 < 0 ? '' : 'plus'} {f(b1, 2)} fois gauche_droite">
-  <span class="g">note</span><span class="g">=</span><span class="g s">β0</span><span class="g">+</span><span class="g s">β1</span><span class="g">×</span><span class="g">gauche_droite</span>
-  <span>note</span><span>=</span><span class="case" class:on={actif === 'b0'}>{f(b0, 1)}</span><span>{b1 < 0 ? '' : '+'}</span><span class="case" class:on={actif === 'b1'}>{f(b1, 2)}</span><span>×</span><span>gauche_droite</span>
+<div class="eq" aria-label="satisfaction égale {f(b0, 2)} {b1 < 0 ? '' : 'plus'} {f(b1, 2)} fois {X}">
+  <span class="g">satisfaction</span><span class="g">=</span><span class="g s">β0</span><span class="g">+</span><span class="g s">β1</span><span class="g">×</span><span class="g">{X}</span>
+  <span>satisfaction</span><span>=</span><span class="case" class:on={actif === 'b0'}>{f(b0, 2)}</span><span>{b1 < 0 ? '' : '+'}</span><span class="case" class:on={actif === 'b1'}>{f(b1, 2)}</span><span>×</span><span>{X}</span>
 </div>
 
 <style>

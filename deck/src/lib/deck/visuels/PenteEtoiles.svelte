@@ -1,7 +1,7 @@
 <script>
   /**
    * Les étoiles de R. En haut, ce que R imprime : l'en-tête et la ligne
-   * gauche_droite de summary(), pour notre sondage (SUMMARY) et pour le
+   * populisme de summary(), pour notre sondage (SUMMARY) et pour le
    * sondage de 50 (SORTIES.summary50), puis la légende « Signif. codes »,
    * telles quelles. En bas, la légende décodée sur un axe des valeurs p.
    * Trois temps.
@@ -15,8 +15,9 @@
    *      codes de la légende, chacun dans sa tranche. 0,05 est une
    *      convention (Fisher, 1926, cité dans Arel-Bundock 2021, p. 71).
    *   2  Les deux sondages sur l'axe : le nôtre bien plus à gauche que
-   *      l'axe (<2e-16, une flèche), celui de 50 à 0,086. Le point de R :
-   *      sous 0,1 mais pas sous 0,05, donc pas significatif.
+   *      l'axe (3.74e-16, une flèche), celui de 50 à 0,06, juste à droite
+   *      de 0,05. Le point de R : sous 0,1 mais pas sous 0,05, donc pas
+   *      significatif.
    *
    * Les seuils (0,001, 0,01, 0,05, 0,1) sont ceux de la légende de R, des
    * conventions : ils sont écrits ici. La valeur p du sondage de 50 vient de
@@ -40,7 +41,7 @@
     const l = txt.split('\n');
     return {
       entete: l.find((s) => /^\s+Estimate/.test(s)).trimEnd(),
-      rang: l.find((s) => s.startsWith('gauche_droite')).trimEnd(),
+      rang: l.find((s) => s.startsWith('populisme')).trimEnd(),
       legende: l.find((s) => s.startsWith('Signif. codes')).trimEnd()
     };
   };
@@ -75,7 +76,7 @@
 </script>
 
 <div class="visuel pente-etoiles" bind:this={hote}>
-  <svg viewBox="0 0 1000 480" role="img" aria-label="Ce que R imprime{N}: notre sondage, p plus petit que 2e-16, trois étoiles. Le sondage de 50, p = {fr(P50)}, un point. La légende{N}: trois étoiles sous 0,001, deux sous 0,01, une sous 0,05, un point sous 0,1. À gauche de 0,05, on rejette H0{N}: statistiquement significatif. Le point veut dire sous 0,1 mais pas sous 0,05{N}: pas significatif.">
+  <svg viewBox="0 0 1000 480" role="img" aria-label="Ce que R imprime{N}: notre sondage, p pratiquement 0, trois étoiles. Le sondage de 50, p = {fr(P50)}, un point. La légende{N}: trois étoiles sous 0,001, deux sous 0,01, une sous 0,05, un point sous 0,1. À gauche de 0,05, on rejette H0{N}: statistiquement significatif. Le point veut dire sous 0,1 mais pas sous 0,05{N}: pas significatif.">
     <!-- 0 : ce que R imprime. -->
     <rect x={XR - 22} y="10" width="924" height="172" class="et-console" />
     {#each BLOCS as b}

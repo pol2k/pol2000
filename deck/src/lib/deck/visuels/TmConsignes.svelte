@@ -14,7 +14,7 @@
    * page 1 de travaux/POL-2000_A26_travail_mi-session.pdf, rendue par
    * pdftoppm à 120 ppp. Les cadres viennent des boîtes des mots
    * (pdftotext -bbox, page de 612 × 792 pt), en % de la page : ils suivent
-   * l'image à toutes les tailles d'écran. Le poids, la date et l'heure
+   * l'image à toutes les tailles d'affichage. Le poids, la date et l'heure
    * viennent de cours.js (EVALUATIONS, id 'misession'), comme sur le site.
    */
   import { base } from '$app/paths';

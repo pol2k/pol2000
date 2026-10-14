@@ -15,7 +15,8 @@
    *
    * Tout est fictif et le dit : trois camps nommés A, B, C, des pions sans
    * nom. Aucune vraie référence, aucun vrai compte de citations.
-   * La question au centre est celle des consignes (enfants → gauche-droite).
+   * La question au centre est celle de la séance (populisme → satisfaction
+   * envers la démocratie).
    */
   import { brancherTemps } from '../temps.js';
 
@@ -77,8 +78,8 @@
       <polygon points={t.pts} class="tm-terr tm-{t.camp}" class:tm-pris={e >= 1} style="transition-delay: {i * 90}ms" />
     {/each}
     <polygon points={CENTRE} class="tm-centre" />
-    <text x="318" y="190" class="tm-centre-t">enfants →</text>
-    <text x="318" y="212" class="tm-centre-t">gauche-droite&#8239;?</text>
+    <text x="318" y="190" class="tm-centre-t">populisme →</text>
+    <text x="318" y="212" class="tm-centre-t">satisfaction&#8239;?</text>
     <text x="318" y="240" class="tm-centre-s">votre question</text>
 
     {#each CAMPS as c}

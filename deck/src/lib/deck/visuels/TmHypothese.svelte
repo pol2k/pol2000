@@ -3,14 +3,16 @@
    * Étape 3 du travail : une hypothèse dérivée de la littérature, et son
    * hypothèse nulle (les consignes exigent les deux). À gauche, la mauvaise
    * façon : H₁ sort d'un chapeau de magicien, et on la raye. À droite, la
-   * bonne : une théorie (le camp choisi sur la carte de l'étape 2), un fait,
-   * donc H₁, et en face H₀. Exemple fil rouge de la séance : note_carney
-   * selon gauche_droite. H₀ porte déjà son nom de régression, β₁ = 0, qu'on
-   * retrouve plus loin aujourd'hui. Cinq temps :
+   * bonne : une théorie (le camp choisi sur la carte de l'étape 2), ce
+   * qu'elle implique pour notre question, donc H₁, et en face H₀. Exemple
+   * fil rouge de la séance : « Le populisme mine-t-il la satisfaction envers
+   * la démocratie ? » (satisfaction_dem selon populisme). La théorie est dite
+   * en mots, sans référence : aucune citation inventée. H₀ porte déjà son nom
+   * de régression, β₁ = 0, qu'on retrouve plus loin aujourd'hui. Cinq temps :
    *
    *   0  le chapeau, H₁ en sort;
    *   1  on raye : « Une hypothèse ne sort pas d'un chapeau. »;
-   *   2  la théorie, puis le fait;
+   *   2  la théorie, puis ce qu'elle implique pour la démocratie;
    *   3  donc H₁, avec sa droite qui descend (schéma, pas des données);
    *   4  H₀, la droite plate, et β₁ = 0.
    *
@@ -51,17 +53,17 @@
   <div class="tm-hyp-d">
     <div class="tm-hyp-b" class:tm-on={e >= 2}>
       <span class="tm-hyp-et">THÉORIE · tirée de la littérature</span>
-      <p>On aime les chef.fe.s qui pensent comme nous.</p>
+      <p>Le populisme oppose un peuple honnête à des élites qui le trahissent.</p>
     </div>
     <div class="tm-hyp-b tm-hyp-fait" class:tm-on={e >= 2} style="--d: 0.25s">
-      <span class="tm-hyp-et">FAIT</span>
-      <p>Carney mène le Parti libéral, plus à gauche que les conservateurs.</p>
+      <span class="tm-hyp-et">POUR LA DÉMOCRATIE</span>
+      <p>Si les élus ne servent que les puissants, le système fonctionne mal.</p>
     </div>
     <div class="tm-hyp-donc" class:tm-on={e >= 3}>donc</div>
     <div class="tm-hyp-hh">
       <div class="tm-hyp-b tm-hyp-h1b" class:tm-on={e >= 3}>
         <span class="tm-hyp-et tm-rouge">H₁ · L’HYPOTHÈSE</span>
-        <p>Plus on se place à droite, moins on aime Carney.</p>
+        <p>Plus on pense que les politiciens ne servent que les riches, moins on est satisfait de la démocratie.</p>
         <svg viewBox="0 0 160 70" class="tm-hyp-mini" aria-hidden="true">
           <line x1="10" y1="62" x2="150" y2="62" class="tm-hyp-axe" /><line x1="10" y1="62" x2="10" y2="6" class="tm-hyp-axe" />
           <line x1="16" y1="14" x2="146" y2="52" class="tm-hyp-droite" />
@@ -69,7 +71,7 @@
       </div>
       <div class="tm-hyp-b tm-hyp-h0b" class:tm-on={e >= 4}>
         <span class="tm-hyp-et">H₀ · L’HYPOTHÈSE NULLE</span>
-        <p>La position gauche-droite ne change rien.</p>
+        <p>Le populisme ne change rien à la satisfaction.</p>
         <svg viewBox="0 0 160 70" class="tm-hyp-mini" aria-hidden="true">
           <line x1="10" y1="62" x2="150" y2="62" class="tm-hyp-axe" /><line x1="10" y1="62" x2="10" y2="6" class="tm-hyp-axe" />
           <line x1="16" y1="33" x2="146" y2="33" class="tm-hyp-droite tm-plate" />
@@ -104,7 +106,7 @@
   .tm-hyp-hh { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; }
   .tm-hyp-h1b, .tm-hyp-h0b { border: 3px solid var(--dk-accent); padding: 0.5em 0.8em 0.6em; }
   .tm-hyp-h0b { border: 3px dashed var(--dk-gris); }
-  .tm-hyp-mini { width: 60%; height: auto; display: block; margin-top: 0.3em; }
+  .tm-hyp-mini { width: 42%; height: auto; display: block; margin-top: 0.3em; }
   .tm-hyp-axe { stroke: var(--dk-encre); stroke-width: 3; }
   .tm-hyp-droite { stroke: var(--dk-accent); stroke-width: 5; }
   .tm-hyp-droite.tm-plate { stroke: var(--dk-gris); }

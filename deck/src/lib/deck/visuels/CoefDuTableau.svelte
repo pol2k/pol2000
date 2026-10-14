@@ -2,23 +2,25 @@
   /**
    * Du tableau au graphique des coefficients : la même ligne de tableau,
    * dessinée. En haut, le tableau de notre sondage (le modèle simple
-   * note_carney ~ gauche_droite, 783 cas complets parmi les 1 000 tiré.e.s
-   * parmi les 20 180). En bas, un axe horizontal en points de note, avec
-   * une ligne verticale à 0. Les chiffres « s'envolent » du tableau vers le
-   * dessin : une copie rouge part de la cellule, l'original reste en place.
+   * satisfaction_dem ~ populisme, 564 cas complets parmi les 1 000
+   * tiré.e.s parmi les 20 180). En bas, un axe horizontal dans les unités
+   * de la satisfaction (0 à 1), avec une ligne verticale à 0. Les chiffres
+   * « s'envolent » du tableau vers le dessin : une copie rouge part de la
+   * cellule, l'original reste en place.
    *
-   *   0  Le tableau seul (constante et gauche-droite), l'axe vide.
-   *   1  Le coefficient (−5,05) quitte le tableau et devient un point. La
+   *   0  Le tableau seul (constante et populisme), l'axe vide.
+   *   1  Le coefficient (−0,37) quitte le tableau et devient un point. La
    *      constante pâlit : on ne la dessine pas.
-   *   2  Les deux bornes de l'intervalle de confiance à 95 % (−5,93 et
-   *      −4,17) s'envolent à leur tour : la moustache se trace entre elles.
+   *   2  Les deux bornes de l'intervalle de confiance à 95 % (−0,46 et
+   *      −0,28) s'envolent à leur tour : la moustache se trace entre elles.
    *
-   * Tous les nombres viennent de NOTRE.coefs (src/lib/data/seance7.js,
-   * généré par outils/seance7_data.R : coef(summary(m)) et confint(m)).
-   * L'axe (−8 à +8) est le même qu'à la diapo suivante (CoefAnatomie).
+   * Tous les nombres viennent de NOTRE.coefs, le libellé de VARS.x
+   * (src/lib/data/seance7.js, généré par outils/seance7_data.R :
+   * coef(summary(m)) et confint(m)). L'axe (−0,6 à +0,6) est le même qu'à
+   * la diapo suivante (CoefAnatomie).
    */
   import { brancherTemps } from '../temps.js';
-  import { NOTRE } from '$lib/data/seance7.js';
+  import { NOTRE, VARS } from '$lib/data/seance7.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -28,14 +30,16 @@
   });
   // Format québécois, vrai signe moins.
   const f = (v, d = 2) =>
-    v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−').replace(/\s/g, ' ');
+    v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '\u2212').replace(/\s/g, '\u202F');
   const C0 = NOTRE.coefs[0]; // la constante
-  const C1 = NOTRE.coefs[1]; // gauche_droite
+  const C1 = NOTRE.coefs[1]; // populisme
+  const NOM = VARS.x.court;
 
-  // L'axe : −8 à +8 points de note.
-  const V0 = -8, V1 = 8, XL = 350, XR = 960;
+  // L'axe : −0,6 à +0,6, dans les unités de la satisfaction (0 à 1).
+  const V0 = -0.6, V1 = 0.6, XL = 350, XR = 960;
   const x = (v) => XL + ((v - V0) / (V1 - V0)) * (XR - XL);
-  const ticks = [-8, -4, 0, 4, 8];
+  const ticks = [-0.5, -0.25, 0, 0.25, 0.5];
+  const ft = (t) => (t === 0 ? '0' : f(t, t % 0.5 === 0 ? 1 : 2));
 
   // Le tableau.
   const YH = 46, YC = 100, YG = 144;
@@ -47,7 +51,7 @@
 </script>
 
 <div class="visuel coef-tab" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Le tableau de notre sondage&#8239;: le coefficient de la position gauche-droite est de {f(C1.b)}, intervalle de confiance à 95&#8239;% de {f(C1.bas)} à {f(C1.haut)}. Dans le graphique, le coefficient devient un point à {f(C1.b)} sur un axe horizontal, et l’intervalle devient une moustache de {f(C1.bas)} à {f(C1.haut)}. Une ligne verticale marque 0.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="Le tableau de notre sondage&#8239;: le coefficient du populisme est de {f(C1.b)}, intervalle de confiance à 95&#8239;% de {f(C1.bas)} à {f(C1.haut)}. Dans le graphique, le coefficient devient un point à {f(C1.b)} sur un axe horizontal, et l’intervalle devient une moustache de {f(C1.bas)} à {f(C1.haut)}. Une ligne verticale marque 0.">
 
     <!-- Le tableau : trois filets, comme dans un article. -->
     <line x1="30" y1="14" x2="970" y2="14" class="ct-filet" />
@@ -62,7 +66,7 @@
       <text x={XA} y={YC} class="ct-cel">à</text>
       <text x={XA + 30} y={YC} class="ct-cel ct-debut">{f(C0.haut)}</text>
     </g>
-    <text x="40" y={YG} class="ct-cel ct-gauche ct-var">Position gauche-droite (0 à 10)</text>
+    <text x="40" y={YG} class="ct-cel ct-gauche ct-var">{NOM} (0 à 1)</text>
     <text x={XCOEF} y={YG} class="ct-cel" class:ct-parti={e >= 1}>{f(C1.b)}</text>
     <text x={XA - 30} y={YG} class="ct-cel ct-fin" class:ct-parti={e >= 2}>{f(C1.bas)}</text>
     <text x={XA} y={YG} class="ct-cel" class:ct-parti={e >= 2}>à</text>
@@ -74,14 +78,14 @@
     <line x1={XL} y1={AXE} x2={XR} y2={AXE} class="ct-axe" />
     {#each ticks as t}
       <line x1={x(t)} y1={AXE} x2={x(t)} y2={AXE + 9} class="ct-axe" />
-      <text x={x(t)} y={AXE + 34} class="ct-tick">{f(t, 0)}</text>
+      <text x={x(t)} y={AXE + 34} class="ct-tick">{ft(t)}</text>
     {/each}
-    <text x={(XL + XR) / 2} y="490" class="ct-titre-axe">effet sur la note de Carney, en points</text>
+    <text x={(XL + XR) / 2} y="490" class="ct-titre-axe">effet sur la satisfaction (de 0 à 1)</text>
 
     <!-- La variable, à gauche de sa rangée. -->
     <g class="ct-etape" class:ct-vu={e >= 1}>
-      <text x="320" y={YR - 4} class="ct-lab">Position gauche-droite</text>
-      <text x="320" y={YR + 22} class="ct-sous">(0 à 10)</text>
+      <text x="320" y={YR - 4} class="ct-lab">{NOM}</text>
+      <text x="320" y={YR + 22} class="ct-sous">(0 à 1)</text>
     </g>
 
     <!-- 2 : la moustache, entre les deux bornes. -->

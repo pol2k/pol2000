@@ -7,8 +7,9 @@
    * Deux usages, selon les props :
    *   - l'exemple d'Arel-Bundock (2021, p. 84) : crème glacée (x), noyades (y),
    *     et la chaleur cachée dans ε (par défaut);
-   *   - notre sondage de la CES : gauche_droite (x), note_carney (y), et un
-   *     « ? » dans ε (inconnu = true). Là, une question, aucune réponse.
+   *   - la CES : populisme (x), satisfaction envers la démocratie (y), et le
+   *     vote libéral dans ε. Là, le graphe est une hypothèse (dit en pied de
+   *     figure) : les chiffres viennent sur la diapo suivante (PartiPente).
    *
    * Quatre temps :
    *   0  L'équation, et le graphe qu'elle dessine : x → y, la flèche β1, avec
@@ -16,13 +17,15 @@
    *   1  ε devient un nuage pointillé attaché à y : tout ce qui cause y sauf x,
    *      qu'on ne voit jamais. La régression suppose qu'aucune flèche ne part
    *      de ε vers x : un trait gris barré.
-   *   2  Dans le nuage, la chaleur (ou « ? ») s'allume en rouge, et sa flèche
+   *   2  Dans le nuage, la chaleur (ou le vote) s'allume en rouge, et sa flèche
    *      vers y se trace : elle était dans ε depuis le début.
    *   3  La flèche interdite se trace en rouge : la chaleur pousse aussi x. La
-   *      supposition tombe, β1 est biaisé (ou, pour la CES, la question).
+   *      supposition tombe, β1 est biaisé.
    *
    * Schématique : aucune donnée. `b1` (facultatif) affiche la pente estimée
-   * par R, passée par la diapo depuis un module de données.
+   * par R, passée par la diapo depuis un module de données. `xEq` et `yEq` :
+   * les noms dans l'équation (les noms de colonnes); `alerte` : les deux
+   * lignes rouges du temps 3; `pied` : la légende du bas.
    */
   import { brancherTemps } from '../temps.js';
 
@@ -30,11 +33,14 @@
     x = 'crème glacée',
     y = 'noyades',
     z = 'la chaleur',
+    xEq = null,
+    yEq = null,
     autres = ['savoir nager', 'l’alcool', 'les vacances'],
-    inconnu = false,
+    alerte = null,
     b1 = null,
-    goa = true
+    pied = 'un graphe orienté acyclique (GOA) · séance 11'
   } = $props();
+  const lignes = $derived(alerte ?? [z, 'pousse aussi x']);
 
   let e = $state(0);
   let hote = $state(null);
@@ -67,25 +73,25 @@
   }
   const XY = fleche(BX.cx + BX.w / 2 + 6, BX.cy, BY.cx - BY.w / 2 - 6, BY.cy);
   const EY = fleche(NU.cx + 150, NU.cy - NU.ry + 8, BY.cx + 40, BY.cy + BY.h / 2 + 6);
-  const ZY = $derived(fleche(Z.x + (inconnu ? 14 : 50), Z.y - (inconnu ? 40 : 30), BY.cx - 70, BY.cy + BY.h / 2 + 6));
-  const ZX = $derived(fleche(Z.x - (inconnu ? 14 : 40), Z.y - (inconnu ? 42 : 34), BX.cx + 30, BX.cy + BX.h / 2 + 6, 24));
+  const ZY = fleche(Z.x + 50, Z.y - 30, BY.cx - 70, BY.cy + BY.h / 2 + 6);
+  const ZX = fleche(Z.x - 40, Z.y - 34, BX.cx + 30, BX.cy + BX.h / 2 + 6, 24);
   // Le trait gris de la supposition : même chemin que ZX, depuis le bord du nuage.
   const SUP = { x1: NU.cx - NU.rx + 12, y1: NU.cy - 22, x2: BX.cx + 30, y2: BX.cy + BX.h / 2 + 10 };
   const SUPM = { x: (SUP.x1 + SUP.x2) / 2, y: (SUP.y1 + SUP.y2) / 2 };
 
   // Les autres causes, éparpillées dans le nuage (positions fixes).
-  const POS = [{ x: 745, y: 292 }, { x: 830, y: 345 }, { x: 690, y: 390 }];
+  const POS = [{ x: 745, y: 292 }, { x: 815, y: 345 }, { x: 690, y: 390 }];
 </script>
 
 <div class="visuel ge" bind:this={hote}>
-  <p class="ge-eq">{y} = β0 + β1 × {x} + <span class="ge-eps" class:ge-allume={e >= 1}>ε</span></p>
+  <p class="ge-eq">{yEq ?? y} = β0 + β1 × {xEq ?? x} + <span class="ge-eps" class:ge-allume={e >= 1}>ε</span></p>
 
-  <svg viewBox="0 0 1000 470" role="img" aria-label="Un graphe : {x} pointe vers {y}, la flèche β1. Un nuage ε, tout ce qui cause {y} sauf {x}, pointe aussi vers {y}. {inconnu ? `Dans ε, quelque chose pourrait-il pousser aussi ${x} ?` : `Dans ε se cache ${z}, qui pousse ${y} et aussi ${x} : la pente β1 est biaisée.`}">
+  <svg viewBox="0 0 1000 470" role="img" aria-label="Un graphe : {x} pointe vers {y}, la flèche β1. Un nuage ε, tout ce qui cause {y} sauf {x}, pointe aussi vers {y}. Dans ε se cache {z}, qui pousse {y} et aussi {x} : la pente β1 est biaisée.">
     <!-- x → y : ce que la régression estime. -->
     <path d={XY.d} class="ge-fl" />
     <polygon points={XY.tete} class="ge-tete" />
-    <text x={XY.mx} y={XY.my - 22} class="ge-b1" class:ge-rouge={e >= 3 && !inconnu}>
-      {#if e >= 3 && !inconnu}β1 biaisé{:else}β1 = {b1 === null ? '?' : f(b1)}{/if}
+    <text x={XY.mx} y={XY.my - 22} class="ge-b1" class:ge-rouge={e >= 3}>
+      {#if e >= 3}β1 biaisé{:else}β1 = {b1 === null ? '?' : f(b1)}{/if}
     </text>
 
     <rect x={BX.cx - BX.w / 2} y={BX.cy - BX.h / 2} width={BX.w} height={BX.h} class="ge-boite" class:ge-touche={e >= 3} />
@@ -104,7 +110,7 @@
       {#each autres as a, i}
         <text x={POS[i].x} y={POS[i].y} class="ge-autre">{a}</text>
       {/each}
-      <text x={Z.x} y={Z.y} class="ge-z" class:ge-z-on={e >= 2} class:ge-z-q={inconnu}>{inconnu ? '?' : z}</text>
+      <text x={Z.x} y={Z.y} class="ge-z" class:ge-z-on={e >= 2}>{z}</text>
       <text x={NU.cx + NU.rx} y={NU.cy + NU.ry + 30} class="ge-cap ge-fin">tout le reste · on ne le voit jamais</text>
     </g>
 
@@ -121,26 +127,20 @@
     </g>
 
     <!-- 2 : la chaleur pousse y. -->
-    <path d={ZY.d} pathLength="1" class="ge-fl ge-rouge-fl ge-trace" class:ge-pointille={inconnu} class:ge-vu={e >= 2} />
+    <path d={ZY.d} pathLength="1" class="ge-fl ge-rouge-fl ge-trace" class:ge-vu={e >= 2} />
     <polygon points={ZY.tete} class="ge-tete ge-rouge-t ge-etape ge-tard" class:ge-vu={e >= 2} />
 
     <!-- 3 : … et x aussi. La supposition tombe. -->
-    <path d={ZX.d} pathLength="1" class="ge-fl ge-rouge-fl ge-trace ge-epais" class:ge-pointille={inconnu} class:ge-vu={e >= 3} />
+    <path d={ZX.d} pathLength="1" class="ge-fl ge-rouge-fl ge-trace ge-epais" class:ge-vu={e >= 3} />
     <polygon points={ZX.tete} class="ge-tete ge-rouge-t ge-etape ge-tard" class:ge-vu={e >= 3} />
     <g class="ge-etape ge-tard" class:ge-vu={e >= 3}>
-      {#if inconnu}
-        <text x={SUPM.x - 30} y={SUPM.y + 60} class="ge-alerte ge-fin">qu’est-ce qui</text>
-        <text x={SUPM.x - 30} y={SUPM.y + 92} class="ge-alerte ge-fin">pousserait</text>
-        <text x={SUPM.x - 30} y={SUPM.y + 124} class="ge-alerte ge-fin">les deux{N}?</text>
-      {:else}
-        <text x={SUPM.x - 30} y={SUPM.y + 60} class="ge-alerte ge-fin">{z}</text>
-        <text x={SUPM.x - 30} y={SUPM.y + 92} class="ge-alerte ge-fin">pousse aussi x</text>
-        <text x={SUPM.x - 30} y={SUPM.y + 128} class="ge-hyp ge-encre ge-fin">une variable confondante</text>
-      {/if}
+      <text x={SUPM.x - 30} y={SUPM.y + 60} class="ge-alerte ge-fin">{lignes[0]}</text>
+      <text x={SUPM.x - 30} y={SUPM.y + 92} class="ge-alerte ge-fin">{lignes[1]}</text>
+      <text x={SUPM.x - 30} y={SUPM.y + 128} class="ge-hyp ge-encre ge-fin">une variable confondante</text>
     </g>
 
-    {#if goa}
-      <text x="0" y="462" class="ge-cap">un graphe orienté acyclique (GOA) · séance 11</text>
+    {#if pied}
+      <text x="0" y="462" class="ge-cap">{pied}</text>
     {/if}
   </svg>
 </div>
@@ -170,7 +170,6 @@
   .ge-autre { font-size: 21px; text-anchor: middle; fill: var(--dk-gris); }
   .ge-z { font-size: 21px; text-anchor: middle; fill: var(--dk-gris); transition: fill 0.4s, font-size 0.4s; }
   .ge-z.ge-z-on { font-size: 28px; font-weight: 700; fill: var(--dk-accent); }
-  .ge-z.ge-z-q { font-size: 44px; font-weight: 700; }
   .ge-cap { font-size: 18px; fill: var(--dk-gris); }
   .ge-fin { text-anchor: end; }
 
@@ -187,7 +186,6 @@
   .ge-trace { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.8s ease-out; }
   .ge-trace.ge-vu { stroke-dashoffset: 0; }
   /* Pour la CES, la flèche reste une hypothèse : pointillée, une fois tracée. */
-  .ge-trace.ge-pointille.ge-vu { stroke-dasharray: 0.03 0.02; }
 
   .ge-etape { opacity: 0; transition: opacity 0.3s; }
   .ge-etape.ge-vu { opacity: 1; transition: opacity 0.5s; }

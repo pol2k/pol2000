@@ -26,11 +26,11 @@
   });
 
   const BULLES = [
-    { qui: 'vous', t: 'Je relie la position gauche-droite à la note de Carney.' },
+    { qui: 'vous', t: 'Je relie le populisme à la satisfaction envers la démocratie.' },
     { qui: 'eux', t: 'Et alors ?' },
-    { qui: 'vous', t: 'On saura si on juge un chef d’abord sur ses idées.' },
+    { qui: 'vous', t: 'On saura si se méfier des élites, c’est se détourner du régime.' },
     { qui: 'eux', t: 'Et alors ?' },
-    { qui: 'vous', t: 'Un parti saura s’il peut séduire l’autre camp.' }
+    { qui: 'vous', t: 'On saura où une démocratie perd ses citoyen.ne.s.' }
   ];
   const CERCLES = [
     { r: 62, t: 'votre question', quand: 0 },
@@ -52,7 +52,7 @@
         <circle cx="180" cy="180" r={c.r} class="tm-ea-c" class:tm-on={e >= c.quand} class:tm-actif={e === c.quand || (c.quand === 4 && e > 4)} />
       {/each}
       {#each CERCLES as c}
-        <text x="180" y={180 - c.r + (c.r === 62 ? 66 : 30)} class="tm-ea-t" class:tm-on={e >= c.quand}>{c.t}</text>
+        <text x="180" y={180 - c.r + (c.r === 62 ? 66 : c.r === 118 ? 46 : 30)} class="tm-ea-t" class:tm-on={e >= c.quand}>{c.t}</text>
       {/each}
     </svg>
     <p class="tm-ea-regle" class:tm-on={e >= 4}>Vous savez répondre à «&#8239;Et alors&#8239;?&#8239;»&#8239;: c’est votre pertinence.</p>
@@ -75,7 +75,7 @@
   .tm-ea-c { fill: var(--dk-fond); stroke: var(--dk-filet); stroke-width: 3; transition: stroke 0.4s, fill 0.4s; }
   .tm-ea-c.tm-on { stroke: var(--dk-encre); }
   .tm-ea-c.tm-actif { stroke: var(--dk-accent); stroke-width: 6; }
-  .tm-ea-t { font-family: var(--dk-mono); font-size: 17px; font-weight: 600; text-anchor: middle; fill: var(--dk-gris-2); paint-order: stroke; stroke: var(--dk-fond); stroke-width: 8px; stroke-linejoin: round; transition: fill 0.4s; }
+  .tm-ea-t { font-family: var(--dk-mono); font-size: 15px; font-weight: 600; text-anchor: middle; fill: var(--dk-gris-2); paint-order: stroke; stroke: var(--dk-fond); stroke-width: 8px; stroke-linejoin: round; transition: fill 0.4s; }
   .tm-ea-t.tm-on { fill: var(--dk-encre); }
   .tm-ea-regle { margin: 0; font-size: 0.95em; font-weight: 600; text-align: center; color: var(--dk-accent); opacity: 0; transition: opacity 0.5s 0.4s; }
   .tm-ea-regle.tm-on { opacity: 1; }

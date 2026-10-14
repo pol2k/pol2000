@@ -1,26 +1,28 @@
 <script>
   /**
-   * Corrélation ou régression ? Le même nuage (RegBulles, les 15 993 de la
-   * CES 2025), deux façons de le résumer.
+   * Corrélation ou régression ? Le même nuage (RegBulles, les 10 993 de la
+   * CES 2025 qui ont répondu aux deux questions), deux façons de le résumer.
    *
    *   0  Le nuage seul.
-   *   1  La corrélation : r = −0,38, posé sur une règle de −1 à +1. Le signe
+   *   1  La corrélation : r = −0,30, posé sur une règle de −1 à +1. Le signe
    *      donne le sens, la distance à ±1 donne la force. Un nombre sans
-   *      unité, le même dans les deux sens (gauche-droite ↔ Carney).
-   *   2  La régression : la droite, et sa pente dans les unités de la note,
-   *      −5,27 points par cran. Elle a un sens : gauche-droite → Carney.
-   *   3  Elle prédit : si je me place à 8, environ 40 points pour Carney
-   *      (predict() donne 39,67; « environ 40 » pour que 81,8 − 5,27 × 8
-   *      de la diapo suivante ne contredise rien).
-   *   4  Et elle peut garder d'autres variables constantes : la semaine
-   *      prochaine (séance 8), comme l'annoncent les diapos du tableau.
+   *      unité, le même dans les deux sens (populisme ↔ satisfaction).
+   *   2  La régression : la droite, et sa pente dans les unités de la
+   *      satisfaction, −0,31 de fortement en désaccord à fortement en
+   *      accord. Elle a un sens : populisme → satisfaction.
+   *   3  Elle prédit : « plutôt en accord » (0,75), environ 0,56 de
+   *      satisfaction (predict() donne 0,5579; 0,79 − 0,31 × 0,75 de la
+   *      diapo suivante donne aussi 0,56).
+   *   4  Et elle peut garder d'autres variables constantes : « à vote
+   *      égal », plus loin dans la séance (le vote libéral, PARTI).
    *
    * r et la prédiction : CORR (outils/seance7_b.R, cor() et predict() sur
-   * les 15 993 cas complets). La pente : POP.b1 (outils/seance7_data.R).
+   * les 10 993 cas complets; r = POP.r). La pente : POP.b1
+   * (outils/seance7_data.R).
    */
   import { brancherTemps } from '../temps.js';
   import RegBulles from './RegBulles.svelte';
-  import { POP } from '$lib/data/seance7.js';
+  import { POP, VARS } from '$lib/data/seance7.js';
   import { CORR } from '$lib/data/seance7_b.js';
 
   let e = $state(0);
@@ -34,12 +36,12 @@
   const virgule = (v, d) => (v < 0 ? '−' : '') + Math.abs(v).toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d });
   // Position de r sur la règle de −1 à +1, en pour cent de la largeur.
   const ou = (r) => ((r + 1) / 2) * 100;
-  const A8 = Math.round(CORR.a8 / 10) * 10; // « environ 40 »
+  const NIVEAU = VARS.x.niveaux[VARS.x.valeurs.indexOf(CORR.x_pred)].toLowerCase();
 </script>
 
 <div class="visuel rc" bind:this={hote}>
   <div class="graphe">
-    <RegBulles droite={e >= 2} a8={e >= 3} pale={e >= 2} />
+    <RegBulles droite={e >= 2} pred={CORR.x_pred} predire={e >= 3} pale={e >= 2} />
   </div>
 
   <div class="cartes">
@@ -52,24 +54,24 @@
         <span class="marque" style="left: {ou(e >= 1 ? CORR.r : 0)}%"></span>
         <span class="bout g">−1</span><span class="bout m">0</span><span class="bout d">+1</span>
       </div>
-      <p class="sens">gauche-droite <span class="f">↔</span> Carney</p>
+      <p class="sens">populisme <span class="f">↔</span> satisfaction</p>
     </section>
 
     <section class="carte reg" class:vu={e >= 2}>
       <h3>La régression</h3>
-      <p class="chiffre">{virgule(POP.b1, 2)} <span class="unite">points par cran</span></p>
-      <p class="pred" class:vu={e >= 3}>à 8 <span class="f">→</span> environ {A8} points</p>
-      <p class="sens">gauche-droite <span class="f">→</span> Carney</p>
+      <p class="chiffre">{virgule(POP.b1, 2)} <span class="unite">de satisfaction, d’un bout à l’autre</span></p>
+      <p class="pred" class:vu={e >= 3}>{NIVEAU} <span class="f">→</span> environ {virgule(CORR.pred, 2)}</p>
+      <p class="sens">populisme <span class="f">→</span> satisfaction</p>
     </section>
 
-    <p class="suite" class:vu={e >= 4}>et la semaine prochaine, <strong>à âge et genre égaux</strong></p>
+    <p class="suite" class:vu={e >= 4}>et plus loin aujourd’hui, <strong>à vote égal</strong></p>
   </div>
 </div>
 
 <style>
   .rc { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.4em; align-items: center; }
   .graphe { min-width: 0; }
-  .graphe :global(svg) { max-height: 62vh; }
+  .graphe :global(svg) { max-height: 64vh; }
 
   .cartes { display: flex; flex-direction: column; gap: 0.7em; }
   .carte { border: 2px solid var(--dk-encre); padding: 0.55em 0.8em 0.6em; display: flex; flex-direction: column; gap: 0.3em;
@@ -81,7 +83,7 @@
   .chiffre { font-size: 1.6em !important; font-weight: 600; line-height: 1.1 !important; font-variant-numeric: tabular-nums; }
   .chiffre .r { font-style: italic; }
   .reg .chiffre { color: var(--dk-accent); }
-  .unite { font-size: 0.5em; font-weight: 400; color: var(--dk-encre); letter-spacing: 0; }
+  .unite { font-size: 0.45em; font-weight: 400; color: var(--dk-encre); letter-spacing: 0; }
   .sens { font-size: 0.72em !important; color: var(--dk-gris); }
   .f { color: var(--dk-encre); font-weight: 600; }
   .pred { font-size: 0.9em !important; font-weight: 600; opacity: 0; transition: opacity 0.4s 0.5s; }

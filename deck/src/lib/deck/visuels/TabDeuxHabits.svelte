@@ -9,20 +9,20 @@
    * l'article.
    *
    *   0  Les deux, côte à côte.
-   *   1  Les noms : note_carney (dans l'appel) et les lignes de R deviennent
-   *      la variable en tête de colonne et les noms des lignes.
+   *   1  Les noms : satisfaction_dem (dans l'appel) et les lignes de R
+   *      deviennent la variable en tête de colonne et les noms des lignes.
    *   2  Estimate : le coefficient.
    *   3  Std. Error : l'erreur type, entre parenthèses.
    *   4  Pr(>|t|) et ses codes : les étoiles et leur légende.
-   *   5  « 217 observations deleted » et « 781 degrees of freedom » : R
-   *      n'imprime pas N, il faut le déduire (1 000 − 217 = 783).
+   *   5  « 436 observations deleted » et « 562 degrees of freedom » : R
+   *      n'imprime pas N, il faut le déduire (1 000 − 436 = 564).
    *   6  Multiple R-squared : le R², arrondi.
    *   7  Tout ce qui a son pendant reste à l'encre, le reste pâlit : ce que
    *      l'article laisse de côté (Call, Residuals, t value, l'erreur type
    *      des résidus, le R² ajusté, le test F).
    */
   import { brancherTemps } from '../temps.js';
-  import { NOTRE, CODE_SUMMARY, SUMMARY } from '$lib/data/seance7.js';
+  import { NOTRE, VARS, CODE_SUMMARY, SUMMARY } from '$lib/data/seance7.js';
   import TabPublie from './TabPublie.svelte';
 
   let e = $state(0);
@@ -33,20 +33,21 @@
     return brancherTemps(hote, { total: 7, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  const echap = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const [C0, C1] = NOTRE.coefs;
-  // Les morceaux, chacun avec le temps où il passe au rouge. Les nombres sont
-  // cherchés tels que R les imprime (4 décimales) : si R change, le motif ne
-  // trouve rien et la diapo le montre.
+  // Les lignes du bloc Coefficients commencent par le nom du terme.
+  const echap = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const TERME = `(?:\\(Intercept\\)|${echap(VARS.x.nom)})`;
+  // Les morceaux, chacun avec le temps où il passe au rouge. Ils sont repérés
+  // par leur place dans le texte de R (colonnes du bloc Coefficients), jamais
+  // retapés : si la sortie change, le surlignage suit.
   const MOTIFS = [
-    [1, /note_carney/],
-    [1, /^(\(Intercept\)|gauche_droite)(?= )/gm],
+    [1, new RegExp(echap(VARS.y.nom))],
+    [1, new RegExp(`^${TERME}(?= )`, 'gm')],
     [2, /Estimate/],
-    [2, new RegExp(`${echap(C0.b.toFixed(4))}|${echap(C1.b.toFixed(4))}`, 'g')],
+    [2, new RegExp(`(?<=^${TERME} +)-?[\\d.]+`, 'gm')],
     [3, /Std\. Error/],
-    [3, new RegExp(`${echap(C0.se.toFixed(4))}|${echap(C1.se.toFixed(4))}`, 'g')],
+    [3, new RegExp(`(?<=^${TERME} +-?[\\d.]+ +)[\\d.]+`, 'gm')],
     [4, /Pr\(>\|t\|\)/],
-    [4, /\S+ +\*+(?= *$)/gm],
+    [4, /(?:< )?\S+ +\*+(?= *$)/gm],
     [4, /Signif\. codes:.*$/m],
     [5, /\d+ degrees of freedom/],
     [5, /\(\d+ observations deleted due to missingness\)/],

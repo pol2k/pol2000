@@ -3,34 +3,39 @@
    * « Qu'est-ce qui élargit la cloche ? », séance 7 : les trois ingrédients
    * de l'erreur type de la pente, un par temps. Chaque rangée : à gauche,
    * un petit schéma de ce qui change (pas des données); au centre, les
-   * 1 000 pentes de 1 000 sondages faits de cette façon (tranches de 0,2);
-   * à droite, leur écart type, l'erreur type.
+   * 1 000 pentes de 1 000 sondages faits de cette façon (tranches de 0,02);
+   * à droite, leur écart type, l'erreur type (trois décimales).
+   *
+   * À armes égales : chaque sondage tire ici des personnes qui ont répondu
+   * aux deux questions (ERREUR_TYPE, outils/seance7_data.R), sinon le nombre
+   * de cas complets changerait d'une rangée à l'autre.
    *
    * Toutes les cloches ont la même échelle horizontale (on compare les
    * largeurs) et chacune est centrée sur sa propre moyenne. Raison : la
-   * cloche « de 4 à 6 » n'est pas centrée sur −5,27 (moyenne −8,86, parce
-   * que la note plonge entre 4 et 5 : voir POP.moyennes). Sur un axe commun,
-   * on la lirait comme un biais, ce n'est pas le propos ici. Chaque rangée
-   * est aussi à sa propre échelle verticale (son plus haut bâton touche le
-   * plafond) : c'est la largeur qui compte, pas la hauteur.
+   * cloche « 0,5 ou 0,75 » n'est pas centrée sur −0,31 (moyenne −0,21 : la
+   * satisfaction baisse moins entre ces deux niveaux, voir POP.moyennes).
+   * Sur un axe commun, on la lirait comme un biais, ce n'est pas le propos
+   * ici. Chaque rangée est aussi à sa propre échelle verticale (son plus
+   * haut bâton touche le plafond) : c'est la largeur qui compte, pas la
+   * hauteur.
    *
-   *   0  Le point de départ : 1 000 sondages de 1 000 au hasard
-   *      (MILLE.hasard, écart type MILLE.ecart_type_hasard, 0,47).
-   *   1  Moins de monde : 1 000 sondages de 100 (ERREUR_TYPE.cent, 1,54).
-   *   2  De plus grosses erreurs de prédiction : les mêmes 1 000 sondages,
-   *      dans des données modifiées où chaque personne est deux fois plus
-   *      loin de la vraie droite (DOUBLE, 0,94, exactement deux fois 0,47).
-   *      Dit à l'écran : « Données fictives » (les mêmes gens, deux fois plus loin de la droite).
-   *   3  X qui varie peu : 1 000 sondages de 1 000 parmi les personnes qui
-   *      se placent de 4 à 6 seulement (ERREUR_TYPE.centre, 1,19).
+   *   0  Le point de départ : 1 000 sondages de 500 personnes
+   *      (ERREUR_TYPE.base, 0,045).
+   *   1  Moins de monde : 1 000 sondages de 50 (ERREUR_TYPE.petit, 0,146).
+   *   2  De plus grosses erreurs de prédiction : les mêmes 1 000 sondages de
+   *      500, dans des données modifiées où chaque personne est deux fois
+   *      plus loin de la vraie droite (DOUBLE, 0,090, exactement deux fois
+   *      0,045). Dit sur la diapo : « Données fictives ».
+   *   3  X qui varie peu : 1 000 sondages de 500 parmi les personnes qui ont
+   *      répondu 0,5 ou 0,75 au populisme seulement (ERREUR_TYPE.centre,
+   *      0,096).
    *
-   * Sources : MILLE, ERREUR_TYPE (src/lib/data/seance7.js,
-   * outils/seance7_data.R); DOUBLE (src/lib/data/seance7_d.js,
-   * outils/seance7_d.R). Les schémas de gauche sont dessinés à la main, à
-   * titre d'illustration, et le disent.
+   * Sources : ERREUR_TYPE (src/lib/data/seance7.js, outils/seance7_data.R);
+   * DOUBLE (src/lib/data/seance7_d.js, outils/seance7_d.R). Les schémas de
+   * gauche sont dessinés à la main, à titre d'illustration, et le disent.
    */
   import { brancherTemps } from '../temps.js';
-  import { MILLE, ERREUR_TYPE } from '$lib/data/seance7.js';
+  import { ERREUR_TYPE } from '$lib/data/seance7.js';
   import { DOUBLE } from '$lib/data/seance7_d.js';
   let e = $state(0);
   let hote = $state(null);
@@ -45,7 +50,7 @@
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, NN).replace('-', '−');
 
   // Les cloches : même échelle pour toutes, centrées sur leur moyenne.
-  const CX = 715, PX = 38, L = 0.2, HMAX = 74;
+  const CX = 700, PX = 340, L = 0.02, HMAX = 74;
   const moyenne = (v) => v.reduce((s, p) => s + p, 0) / v.length;
   function cloche(pentes) {
     const m = moyenne(pentes);
@@ -67,19 +72,20 @@
       return { x: xs, y: 20 + 0.38 * xs + ECARTS[(i * 3) % ECARTS.length] * ampleur };
     });
 
+  const ET = ERREUR_TYPE;
   const RANGEES = [
-    { quoi: `${f(1000)} personnes`, sous: 'notre point de départ', pentes: MILLE.hasard, et: MILLE.ecart_type_hasard,
+    { quoi: `${f(ET.base.n)} personnes`, sous: 'notre point de départ', pentes: ET.base.pentes, et: ET.base.ecart_type,
       pts: schema(14, 0.65, 6, 114) },
-    { quoi: `${f(100)} personnes`, sous: 'moins de monde', pentes: ERREUR_TYPE.cent.pentes, et: ERREUR_TYPE.cent.ecart_type,
+    { quoi: `${f(ET.petit.n)} personnes`, sous: 'moins de monde', pentes: ET.petit.pentes, et: ET.petit.ecart_type,
       pts: schema(4, 0.65, 6, 114) },
     { quoi: 'erreurs 2 fois plus grandes', sous: 'Données fictives', pentes: DOUBLE.pentes, et: DOUBLE.ecart_type,
       pts: schema(14, 1.3, 6, 114) },
-    { quoi: 'gauche_droite de 4 à 6', sous: 'X varie peu', pentes: ERREUR_TYPE.centre.pentes, et: ERREUR_TYPE.centre.ecart_type,
+    { quoi: `populisme à ${ET.centre.bornes.map((b) => f(b, 2)).join(' ou ')}`, sous: 'X varie peu', pentes: ET.centre.pentes, et: ET.centre.ecart_type,
       pts: schema(14, 0.65, 48, 72) }
   ].map((r, i) => ({ ...r, y: 150 + i * 118, barres: cloche(r.pentes) }));
 
   const ARIA =
-    `Ce qui élargit la cloche des pentes. ${RANGEES.map((r) => `${r.quoi} : erreur type ${f(r.et, 2)}`).join('. ')}. ` +
+    `Ce qui élargit la cloche des pentes. ${RANGEES.map((r) => `${r.quoi} : erreur type ${f(r.et, 3)}`).join('. ')}. ` +
     `Moins de monde, de plus grosses erreurs de prédiction ou un X qui varie peu : plus d’incertitude.`;
 </script>
 
@@ -105,11 +111,11 @@
         {#each r.barres as b}
           <rect x={b.x + 0.75} y={r.y - b.h} width={b.w - 1.5} height={b.h} class="in-baton" />
         {/each}
-        <line x1={CX - 5 * PX} y1={r.y} x2={CX + 5.4 * PX} y2={r.y} class="in-axe" />
+        <line x1={CX - 0.56 * PX} y1={r.y} x2={CX + 0.6 * PX} y2={r.y} class="in-axe" />
         <line x1={CX - r.et * PX} y1={r.y + 10} x2={CX + r.et * PX} y2={r.y + 10} class="in-regle" />
 
         <!-- Le nombre. -->
-        <text x="995" y={r.y - 14} class="in-et" class:in-rouge={i > 0}>{f(r.et, 2)}</text>
+        <text x="995" y={r.y - 14} class="in-et" class:in-rouge={i > 0}>{f(r.et, 3)}</text>
       </g>
     {/each}
 

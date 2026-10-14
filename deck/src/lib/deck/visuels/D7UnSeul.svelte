@@ -8,16 +8,16 @@
    *   0  La console : le code et les trois lignes du tableau des
    *      coefficients de summary(), telles que R les imprime (SUMMARY,
    *      CODE_LM, CODE_SUMMARY). L'habillage reprend celui de Console.svelte.
-   *   1  La colonne Std. Error s'encadre en rouge, jusqu'à 0.4497 sur la
-   *      ligne de gauche_droite : l'erreur type selon R, 0,45.
+   *   1  La colonne Std. Error s'encadre en rouge, jusqu'à 0.04416 sur la
+   *      ligne de populisme : l'erreur type selon R, 0,044.
    *   2  Les deux nombres côte à côte : un seul sondage (NOTRE.coefs[1].se,
-   *      0,45) et 1 000 sondages (MILLE.ecart_type_hasard, 0,47). Presque
-   *      pareil.
+   *      0,044) et 1 000 sondages (MILLE.ecart_type_hasard, 0,045). Presque
+   *      pareil. Trois décimales, comme à la diapo « L'erreur type ».
    *   3  Comment R fait : il lit les trois ingrédients dans notre sondage.
-   *      NOTRE.n_modele (783 personnes), NOTRE.sigma (les erreurs typiques,
-   *      30,5 points, le « Residual standard error » de R), NOTRE.ecart_x
-   *      (l'écart type de gauche_droite, 2,4 crans). Pas de formule à
-   *      l'écran : elle est dans les notes de l'enseignant.
+   *      NOTRE.n_modele (564 personnes), NOTRE.sigma (l'erreur typique,
+   *      0,29 sur une échelle de 0 à 1, le « Residual standard error » de R),
+   *      NOTRE.ecart_x (l'écart type du populisme, 0,27). Pas de formule à
+   *      la diapo : elle est dans les notes de l'enseignant.
    *
    * Les colonnes de la sortie sont repérées par leur position dans le texte
    * de R (police à chasse fixe : chaque caractère fait 0,6 em de large).
@@ -26,7 +26,7 @@
    * (src/lib/data/seance7.js, outils/seance7_data.R).
    */
   import { brancherTemps } from '../temps.js';
-  import { SUMMARY, CODE_LM, CODE_SUMMARY, NOTRE, MILLE } from '$lib/data/seance7.js';
+  import { VARS, SUMMARY, CODE_LM, CODE_SUMMARY, NOTRE, MILLE } from '$lib/data/seance7.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -53,13 +53,13 @@
   const SE = NOTRE.coefs[1].se, ET = MILLE.ecart_type_hasard;
   const ING = [
     { n: f(NOTRE.n_modele), l: 'personnes' },
-    { n: f(NOTRE.sigma, 1), l: 'erreur typique (points)' },
-    { n: f(NOTRE.ecart_x, 1), l: 'écart type de gauche_droite' }
+    { n: f(NOTRE.sigma, 2), l: 'erreur typique' },
+    { n: f(NOTRE.ecart_x, 2), l: `écart type du ${VARS.x.nom}` }
   ];
 
   const ARIA =
-    `La sortie de summary() pour notre sondage. La colonne Std. Error donne l’erreur type de la pente : ${f(SE, 2)}. ` +
-    `Avec un seul sondage, R trouve ${f(SE, 2)}. Avec 1 000 sondages, l’écart type des pentes est ${f(ET, 2)}. Presque pareil. ` +
+    `La sortie de summary() pour notre sondage. La colonne Std. Error donne l’erreur type de la pente : ${f(SE, 3)}. ` +
+    `Avec un seul sondage, R trouve ${f(SE, 3)}. Avec 1 000 sondages, l’écart type des pentes est ${f(ET, 3)}. Presque pareil. ` +
     `R lit les trois ingrédients dans notre sondage : ${ING.map((i) => `${i.l} ${i.n}`).join(', ')}.`;
 </script>
 
@@ -87,10 +87,10 @@
     <!-- 2 : les deux nombres. -->
     <g class="us-etape" class:us-vu={e >= 2}>
       <text x="270" y="356" class="us-qui">un seul sondage</text>
-      <text x="270" y="414" class="us-gros us-rouge">{f(SE, 2)}</text>
+      <text x="270" y="414" class="us-gros us-rouge">{f(SE, 3)}</text>
       <text x="500" y="400" class="us-pareil">≈</text>
       <text x="730" y="356" class="us-qui">{f(1000)} sondages</text>
-      <text x="730" y="414" class="us-gros">{f(ET, 2)}</text>
+      <text x="730" y="414" class="us-gros">{f(ET, 3)}</text>
     </g>
 
     <!-- 3 : les trois ingrédients, lus dans notre sondage. -->

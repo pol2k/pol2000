@@ -15,10 +15,11 @@
    *      canadiennes : les candidates reçoivent 0,5 point de pourcentage de
    *      moins. Deux barres presque égales. p < 0,001 aussi. Sous chaque
    *      panneau, un mot : important, minuscule.
-   *   2  Une bande plus petite, notre sondage : la note de Carney que la
-   *      droite prédit à la position 0 (la constante, NOTRE.coefs[0].b,
-   *      79,8) et à la position 10 (constante + 10 × pente, 29,3). Un écart
-   *      d'environ 50 points sur 100, p < 0,001. Puis la phrase : p dit
+   *   2  Une bande plus petite, notre sondage : la satisfaction envers la
+   *      démocratie que la droite prédit à populisme 0, « fortement en
+   *      désaccord » (la constante, NOTRE.coefs[0].b, 0,83), et à populisme
+   *      1, « fortement en accord » (constante + pente, 0,46). Un écart de
+   *      0,37 sur une échelle de 0 à 1, p < 0,001. Puis la phrase : p dit
    *      « rare, si c'était le hasard », β1 dit « combien ».
    *
    * Les deux études sont des exceptions documentées dans
@@ -29,11 +30,12 @@
    * Aucun niveau de vote n'est affiché, parce qu'il n'est pas rapporté.
    *
    * La bande du bas vient de NOTRE (src/lib/data/seance7.js,
-   * outils/seance7_data.R) : les deux notes prédites sont calculées ici à
-   * partir des coefficients de R, arrondies à l'unité.
+   * outils/seance7_data.R) : les deux satisfactions prédites sont calculées
+   * ici à partir des coefficients de R, arrondies au centième. Les libellés
+   * viennent de VARS.
    */
   import { brancherTemps } from '../temps.js';
-  import { NOTRE } from '$lib/data/seance7.js';
+  import { NOTRE, VARS } from '$lib/data/seance7.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -55,17 +57,18 @@
   const LD = 236;
   const LF = LD - SAB.ecart * 4;
 
-  // Notre sondage : la note prédite à la position 0 et à la position 10.
+  // Notre sondage : la satisfaction prédite à populisme 0 et à populisme 1.
   const [CST, PENTE] = NOTRE.coefs;
-  const A0 = CST.b, A10 = CST.b + 10 * PENTE.b;
-  const ECART = Math.round(A0 - A10);
+  const A0 = CST.b, A10 = CST.b + PENTE.b;
+  const ECART = A0 - A10;
   const pS = PENTE.p < 0.001 ? 'p < 0,001' : `p = ${fr(PENTE.p, 3)}`;
-  // 100 points de note = 300.
-  const US = 3;
+  // Une satisfaction de 1 = 300.
+  const US = 300;
+  const NIV = VARS.x.niveaux;
 </script>
 
 <div class="visuel importance-pente" bind:this={hote}>
-  <svg viewBox="0 0 1000 524" role="img" aria-label="Deux études, deux valeurs p sous 0,001. Bertrand et Mullainathan (2004)&#8239;: à CV identiques, les noms perçus comme blancs reçoivent 50&#8239;% plus de rappels pour une entrevue que les noms perçus comme afro-américains. C’est important. Sevi, Arel-Bundock et Blais (2019)&#8239;: aux élections fédérales canadiennes, les candidates reçoivent 0,5 point de pourcentage de moins. C’est minuscule. Notre sondage, Étude électorale canadienne 2025{N}: la droite prédit une note de Carney de {fr(A0, 0)} à la position 0 et de {fr(A10, 0)} à la position 10, un écart d’environ {ECART} points sur 100, {pS}. La valeur p dit{N}: rare, si c’était le hasard. La pente dit{N}: combien.">
+  <svg viewBox="0 0 1000 524" role="img" aria-label="Deux études, deux valeurs p sous 0,001. Bertrand et Mullainathan (2004)&#8239;: à CV identiques, les noms perçus comme blancs reçoivent 50&#8239;% plus de rappels pour une entrevue que les noms perçus comme afro-américains. C’est important. Sevi, Arel-Bundock et Blais (2019)&#8239;: aux élections fédérales canadiennes, les candidates reçoivent 0,5 point de pourcentage de moins. C’est minuscule. Notre sondage, Étude électorale canadienne 2025{N}: la droite prédit une satisfaction envers la démocratie de {fr(A0, 2)} chez les personnes {NIV[0].toLowerCase()} et de {fr(A10, 2)} chez les personnes {NIV[4].toLowerCase()}, un écart de {fr(ECART, 2)} sur une échelle de 0 à 1, {pS}. La valeur p dit{N}: rare, si c’était le hasard. La pente dit{N}: combien.">
     <!-- Gauche : Bertrand et Mullainathan (2004). -->
     <g class="im-pan">
       <text x="30" y="28" class="im-etude">Bertrand et Mullainathan (2004)</text>
@@ -108,14 +111,14 @@
     <!-- Temps 2 : notre sondage. -->
     <g class="im-nous" class:im-vu={e >= 2}>
       <line x1="30" y1="354" x2="970" y2="354" class="im-sep-h" />
-      <text x="30" y="382" class="im-etude">notre sondage, CES 2025&#8239;: la note de Carney prédite par la droite</text>
-      <text x="272" y="420" class="im-lab im-fin">position 0, gauche</text>
+      <text x="30" y="382" class="im-etude">notre sondage, CES 2025&#8239;: la satisfaction envers la démocratie prédite (0 à 1)</text>
+      <text x="272" y="420" class="im-lab im-fin">{NIV[0].toLowerCase()}</text>
       <rect x="284" y="405" width={A0 * US} height="20" class="im-barre" />
-      <text x={284 + A0 * US + 10} y="421" class="im-val-p">{fr(A0, 0)}</text>
-      <text x="272" y="454" class="im-lab im-fin">position 10, droite</text>
+      <text x={284 + A0 * US + 10} y="421" class="im-val-p">{fr(A0, 2)}</text>
+      <text x="272" y="454" class="im-lab im-fin">{NIV[4].toLowerCase()}</text>
       <rect x="284" y="439" width={A10 * US} height="20" class="im-barre" />
-      <text x={284 + A10 * US + 10} y="455" class="im-val-p">{fr(A10, 0)}</text>
-      <text x="680" y="426" class="im-nous-ecart">{ECART} points sur 100</text>
+      <text x={284 + A10 * US + 10} y="455" class="im-val-p">{fr(A10, 2)}</text>
+      <text x="680" y="426" class="im-nous-ecart">écart&#8239;: {fr(ECART, 2)} sur 1</text>
       <rect x="680" y="436" width="128" height="30" class="im-tag" />
       <text x="744" y="457" class="im-tag-t">{pS}</text>
       <text x="30" y="508" class="im-phrase">La valeur p dit&#8239;: rare, si c’était le hasard. La pente dit&#8239;: combien.</text>

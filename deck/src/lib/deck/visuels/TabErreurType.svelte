@@ -2,21 +2,21 @@
   /**
    * L'erreur type, entre parenthèses sous le coefficient. À gauche, le
    * tableau d'article (TabPublie). À droite, une règle des pentes : 0 (aucun
-   * lien) et notre pente, −5,05. Rien de nouveau, on relie le tableau aux
+   * lien) et notre pente, −0,371. Rien de nouveau, on relie le tableau aux
    * diapos d'avant (erreur type, intervalle de confiance, t).
    *
    *   0  La règle : 0 et notre pente.
-   *   1  (0,45) : une erreur type de chaque côté de la pente, de combien
+   *   1  (0,044) : une erreur type de chaque côté de la pente, de combien
    *      elle bougerait d'un sondage à l'autre.
    *   2  L'intervalle de confiance à 95 % (bornes de confint(), NOTRE.coefs[1]
    *      bas et haut) : environ deux erreurs types de chaque côté.
-   *   3  De la pente à 0, on compte les erreurs types : 11,2. C'est le t que
+   *   3  De la pente à 0, on compte les erreurs types : 8,4. C'est le t que
    *      R imprime (t value), absent du tableau d'article.
    *
    * Nombres : NOTRE.coefs[1] (b, se, t, bas, haut) dans src/lib/data/seance7.js.
    */
   import { brancherTemps } from '../temps.js';
-  import { NOTRE } from '$lib/data/seance7.js';
+  import { NOTRE, VARS } from '$lib/data/seance7.js';
   import TabPublie from './TabPublie.svelte';
 
   let e = $state(0);
@@ -27,15 +27,17 @@
     return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  const f = (v, d = 2) =>
+  const f = (v, d = 3) =>
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−');
   const C = NOTRE.coefs[1];
-  const D0 = -7, D1 = 1, X0 = 40, X1 = 620, YA = 210;
+  const D0 = -0.6, D1 = 0.1, X0 = 40, X1 = 620, YA = 210;
+  const GRAD = [-0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1];
   const x = (v) => X0 + ((v - D0) / (D1 - D0)) * (X1 - X0);
   // Les marches d'une erreur type, de la pente vers 0.
   const N_ET = Math.floor(Math.abs(C.b) / C.se);
   const PAS = Array.from({ length: N_ET }, (_, k) => C.b + Math.sign(-C.b) * k * C.se);
-  const ON = [['b-gauche_droite'], ['se-gauche_droite'], ['se-gauche_droite', 'b-gauche_droite'], ['se-gauche_droite', 'b-gauche_droite']];
+  const BX = `b-${VARS.x.nom}`, SX = `se-${VARS.x.nom}`;
+  const ON = [[BX], [SX], [SX, BX], [SX, BX]];
   const DIT = [
     '',
     `(${f(C.se)}) : l’écart typique d’un sondage à l’autre`,
@@ -51,11 +53,11 @@
     <svg viewBox="0 0 660 290" role="img" aria-label="Une règle des pentes. Notre pente, {f(C.b)}, et son erreur type, {f(C.se)}. L’intervalle de confiance à 95 % va de {f(C.bas)} à {f(C.haut)}. Zéro est à {f(Math.abs(C.t), 1)} erreurs types de la pente.">
       <!-- La règle. -->
       <line x1={X0} y1={YA} x2={X1} y2={YA} class="tet-axe" />
-      {#each [-7, -6, -5, -4, -3, -2, -1, 0, 1] as v}
+      {#each GRAD as v}
         <line x1={x(v)} y1={YA} x2={x(v)} y2={YA + 8} class="tet-axe" />
-        <text x={x(v)} y={YA + 32} class="tet-tick">{f(v, 0)}</text>
+        <text x={x(v)} y={YA + 32} class="tet-tick">{f(v, v ? 1 : 0)}</text>
       {/each}
-      <text x={(X0 + X1) / 2} y={YA + 66} class="tet-titre">la pente (points par cran)</text>
+      <text x={(X0 + X1) / 2} y={YA + 66} class="tet-titre">la pente (de 0 à 1)</text>
 
       <!-- 0 : aucun lien. -->
       <line x1={x(0)} y1={YA} x2={x(0)} y2="40" class="tet-zero" />
