@@ -23,6 +23,11 @@
    * résultat en une phrase), sens (ce que veut dire le nombre, et la
    * prudence qui va avec). Pour la diapo de fin (ClFin) : court, fin.
    */
+  // cite : le nombre de citations selon OpenAlex (api.openalex.org, par DOI
+  // ou par titre pour le livre de Mincer), relevé le 15 octobre 2026. Le
+  // rapport de Blais et coll. (Élections Canada) n'y est pas indexé : pas de
+  // nombre plutôt qu'un nombre non vérifié. importance : une phrase, ajoutée
+  // à la demande du prof le même jour.
   export const ETUDES = {
     // Galton, F. (1886). Regression towards mediocrity in hereditary stature.
     // Journal of the Anthropological Institute, 15, 246–263.
@@ -32,6 +37,8 @@
     // (moyenne du père et de 1,08 fois la mère). Droite tracée à la main sur
     // des médianes groupées : pas encore les moindres carrés.
     galton: {
+      cite: '1 455',
+      importance: 'L’article qui a donné son nom à la régression.',
       domaine: 'Hérédité', annee: 1886,
       auteurs: 'Galton (1886)', mots: 'la taille des enfants',
       fin: { y: 'taille des enfants', x: 'taille des parents' },
@@ -52,6 +59,8 @@
     // Hommes blancs non agricoles, revenus annuels de 1959 (titre du
     // tableau), échantillon du recensement de 1960.
     mincer: {
+      cite: '5 906',
+      importance: 'L’« équation de Mincer » : la façon standard de mesurer ce que rapporte l’école.',
       domaine: 'Économie de l’éducation', annee: 1974,
       auteurs: 'Mincer (1974)', mots: 'le salaire',
       fin: { y: 'revenu', x: 'scolarité' },
@@ -77,6 +86,8 @@
     // sexe, l'origine et la scolarité. Échantillon (p. 249) : 13 494
     // membres de Kaiser Permanente (San Diego) sollicités, 9 508 réponses.
     ace: {
+      cite: '18 853',
+      importance: 'Le point de départ du score ACE, utilisé aujourd’hui en santé publique et en travail social.',
       domaine: 'Travail social', annee: 1998,
       auteurs: 'Felitti et al. (1998)', mots: 'les blessures d’enfance',
       fin: { y: 'déprime', x: 'adversités de l’enfance' },
@@ -97,6 +108,8 @@
     // 12,60*** (3,32), sans sanctions −3,82 (2,90), 148 cas, R² ajusté
     // 0,40. L'étude couvre 151 élections dans 61 démocraties depuis 1990.
     blais: {
+      cite: null,
+      importance: 'Un rapport pour Élections Canada : la régression au service d’une décision publique.',
       domaine: 'Politique comparée', annee: 2003,
       auteurs: 'Blais, Massicotte et Dobrzynska (2003)', court: 'Blais et al.', mots: 'le vote obligatoire',
       fin: { y: 'participation', x: 'vote obligatoire' },
@@ -119,6 +132,8 @@
     // ans, 46 guerres (p. 579). 161 pays, 1960-1999. Lecture des auteurs,
     // p. 581 : 10 points de plus, le risque passe de 11,5 % à 8,6 %.
     guerre: {
+      cite: '6 101',
+      importance: 'A lancé le débat « cupidité ou griefs » sur les causes des guerres civiles.',
       domaine: 'Relations internationales', annee: 2004,
       auteurs: 'Collier et Hoeffler (2004)', court: 'Collier et Hoeffler', mots: 'la guerre civile',
       fin: { y: 'guerre civile', x: 'école, croissance' },
@@ -141,6 +156,8 @@
     // p. 1571 : 9 867 736 enfants nés de 1980 à 1982, données fiscales.
     // Canada : 0.174 (0.005), panneau B, même page.
     mobilite: {
+      cite: '2 910',
+      importance: 'A montré que l’ascenseur social dépend de l’endroit où l’on grandit.',
       domaine: 'Politiques sociales', annee: 2014,
       auteurs: 'Chetty et al. (2014)', mots: 'l’ascenseur social',
       fin: { y: 'rang de l’enfant', x: 'rang des parents' },
@@ -197,6 +214,7 @@
 <div class="visuel cl-etude" bind:this={hote}>
   <div class="cl-recit">
     <span class="cl-genre">{s.genre}</span>
+    <p class="cl-poids"><span class="cl-cite">{s.cite ? `cité ${s.cite} fois` : 'rapport d’Élections Canada'}</span> {s.importance}</p>
     <p class="cl-donnees"><span class="cl-k">Données</span> {s.donnees}</p>
     <p class="cl-yx"><span class="cl-k">Y</span><span>{s.y}</span></p>
     <p class="cl-yx"><span class="cl-k">X</span><span>{s.x}</span></p>
@@ -252,4 +270,6 @@
   @media (prefers-reduced-motion: reduce) {
     .cl-page, .cl-lecture, .cl-loupe, .cl-boite { transition: none; }
   }
+  .cl-poids { margin: 0; font-size: 0.78em; line-height: 1.35; color: var(--dk-encre); }
+  .cl-cite { display: inline-block; font-weight: 700; color: var(--dk-accent); margin-right: 0.35em; }
 </style>
