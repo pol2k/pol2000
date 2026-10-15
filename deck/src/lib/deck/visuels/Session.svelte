@@ -20,7 +20,7 @@
     { n: 4, d: 'jeudi 24 septembre', c: '24 sept', p: 1, t: 'Préparer ses données avec R', q: 'Lire un codebook, recoder, gérer les valeurs manquantes.', note: "L'examen 1 ouvre aujourd'hui." },
     { n: 5, d: 'jeudi 1er octobre', c: '1 oct', p: 1, t: "L'inférence statistique", q: 'Ce que je vois dans un échantillon, puis-je le dire de toute la population ?', note: 'Examen 1 à remettre dimanche 4 octobre.' },
     { n: 6, d: 'jeudi 8 octobre', c: '8 oct', p: 0, t: 'Rencontres individuelles', q: 'Pas de cours magistral : on se voit, un.e à la fois, avec les auxiliaires et le tuteur.' },
-    { n: 7, d: 'jeudi 15 octobre', c: '15 oct', p: 2, t: 'La régression linéaire simple', q: 'Une droite qui résume une relation, et ce que ses chiffres veulent dire.' },
+    { n: 7, d: 'jeudi 15 octobre', c: '15 oct', p: 2, t: 'La régression linéaire simple', q: 'Une droite qui résume une relation entre deux variables, et comment l’interpréter.' },
     { n: 8, g: 9, d: 'jeudi 22 octobre', c: '22 oct', p: 2, t: 'La régression linéaire multiple', q: 'Plusieurs variables explicatives à la fois. Ce que « contrôler pour » veut dire.', note: 'Travail de mi-session à remettre dimanche 25 octobre.' },
     { n: 9, g: 10, d: 'jeudi 5 novembre', c: '5 nov', p: 2, t: "De la question au tableau de régression : à la main, puis avec l'IA", q: "Le travail final, du début à la fin. D'abord vous, puis un agent d'IA, et on le vérifie." },
     { n: 10, g: 12, d: 'jeudi 12 novembre', c: '12 nov', p: 3, t: "Le problème fondamental de l'inférence causale", q: 'On ne voit jamais les deux mondes à la fois. Tout part de là.', note: 'Examen 2 en classe, de 17h20 à 18h20, après le cours.' },
