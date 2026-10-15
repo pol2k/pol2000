@@ -1,7 +1,9 @@
 <script>
   /**
    * Étape 2, suite : trouver les bons articles. Deux portes d'entrée
-   * (Google Scholar, Sofia de la Bibliothèque de l'Université Laval), une
+   * (Google Scholar, Sofia de la Bibliothèque de l'Université Laval, Consensus,
+   * un moteur de recherche d'articles par IA, ajouté à la demande du prof le
+   * 15 octobre), une
    * pile de résultats, puis deux tamis. Ce qui reste va dans le travail,
    * cité en APA (auteur-date), quatre références au minimum (consignes,
    * partie 2). Quatre temps :
@@ -79,6 +81,10 @@
     <div class="tm-tr-porte">
       <strong>Sofia</strong>
       <span>Bibliothèque de l’Université Laval</span>
+    </div>
+    <div class="tm-tr-porte">
+      <strong>Consensus</strong>
+      <span>consensus.app · recherche par IA</span>
     </div>
     <div class="tm-tr-fl" aria-hidden="true">→</div>
   </div>
