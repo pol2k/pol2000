@@ -219,32 +219,32 @@
     <!-- ================= LA RÉGRESSION EST PARTOUT ================= -->
     <!-- ================= LA RÉGRESSION EST PARTOUT ================= -->
     <Slide bandeau="La régression est partout" droite={D}>
-      <h2 class="e">D’où vient le mot « régression » ?</h2>
+      <h2 class="e">La taille des enfants dépend-elle de celle de leurs parents ?</h2>
       <ClEtude id="galton" />
     </Slide>
 
     <Slide bandeau="La régression est partout" droite={D}>
-      <h2 class="e">L’école, ça paie ?</h2>
+      <h2 class="e">Combien rapporte une année d’école de plus ?</h2>
       <ClEtude id="mincer" />
     </Slide>
 
     <Slide bandeau="La régression est partout" droite={D}>
-      <h2 class="e">Une enfance difficile laisse-t-elle des traces ?</h2>
+      <h2 class="e">Une enfance difficile mène-t-elle à la dépression ?</h2>
       <ClEtude id="ace" />
     </Slide>
 
     <Slide bandeau="La régression est partout" droite={D}>
-      <h2 class="e">Obliger à voter, ça marche ?</h2>
+      <h2 class="e">Pourquoi vote-t-on davantage dans certains pays ?</h2>
       <ClEtude id="blais" />
     </Slide>
 
     <Slide bandeau="La régression est partout" droite={D}>
-      <h2 class="e">Qu’est-ce qui déclenche une guerre civile ?</h2>
+      <h2 class="e">Guerre civile : cupidité ou griefs ?</h2>
       <ClEtude id="guerre" />
     </Slide>
 
     <Slide bandeau="La régression est partout" droite={D}>
-      <h2 class="e">L’ascenseur social fonctionne-t-il ?</h2>
+      <h2 class="e">Le revenu des parents prédit-il celui de leurs enfants ?</h2>
       <ClEtude id="mobilite" />
     </Slide>
 

@@ -6,7 +6,7 @@
    *
    *   0  Une ligne « Y ~ X » par étude de la section (prop `ids`, dans
    *      l'ordre des diapos), avec l'auteur et l'année.
-   *   1  Notre ligne, en rouge : lm(interet ~ scolarite, data = ces1000),
+   *   1  Notre ligne, en rouge : lm(interet ~ scolarite, data = df_clean),
    *      le modèle qu'on ajuste dans la suite de la séance.
    *   2  La phrase : le meilleur outil qu'on a pour étudier la relation
    *      entre deux variables.
@@ -52,8 +52,8 @@
       <span class="cl-x" style="--i:{i}">{l.x}</span>
       <span class="cl-qui" style="--i:{i}">{l.qui}</span>
     {/each}
-    <code class="cl-nous" class:vu={e >= 1}>lm(interet ~ scolarite, data = ces1000)</code>
-    <span class="cl-qui cl-vous" class:vu={e >= 1}>vous, aujourd’hui</span>
+    <code class="cl-nous" class:vu={e >= 1}>lm(interet ~ scolarite, data = df_clean)</code>
+    <span class="cl-qui cl-vous" class:vu={e >= 1}>nous, aujourd’hui</span>
   </div>
 
   <p class="cl-phrase" class:vu={e >= 2}>
