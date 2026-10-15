@@ -26,11 +26,11 @@
   });
 
   const BULLES = [
-    { qui: 'vous', t: 'Je relie le populisme à la satisfaction envers la démocratie.' },
+    { qui: 'vous', t: 'Je relie la scolarité à l’intérêt pour la politique.' },
     { qui: 'eux', t: 'Et alors ?' },
-    { qui: 'vous', t: 'On saura si se méfier des élites, c’est se détourner du régime.' },
+    { qui: 'vous', t: 'On saura qui suit la politique, et qui décroche.' },
     { qui: 'eux', t: 'Et alors ?' },
-    { qui: 'vous', t: 'On saura où une démocratie perd ses citoyen.ne.s.' }
+    { qui: 'vous', t: 'Si seul.e.s les diplômé.e.s suivent, la participation devient inégale.' }
   ];
   const CERCLES = [
     { r: 62, t: 'votre question', quand: 0 },

@@ -8,16 +8,16 @@
    *   0  La console : le code et les trois lignes du tableau des
    *      coefficients de summary(), telles que R les imprime (SUMMARY,
    *      CODE_LM, CODE_SUMMARY). L'habillage reprend celui de Console.svelte.
-   *   1  La colonne Std. Error s'encadre en rouge, jusqu'à 0.04416 sur la
-   *      ligne de populisme : l'erreur type selon R, 0,044.
+   *   1  La colonne Std. Error s'encadre en rouge, jusqu'à la ligne de
+   *      scolarite : l'erreur type selon R, 0,032.
    *   2  Les deux nombres côte à côte : un seul sondage (NOTRE.coefs[1].se,
-   *      0,044) et 1 000 sondages (MILLE.ecart_type_hasard, 0,045). Presque
+   *      0,032) et 1 000 sondages (MILLE.ecart_type_hasard, 0,033). Presque
    *      pareil. Trois décimales, comme à la diapo « L'erreur type ».
    *   3  Comment R fait : il lit les trois ingrédients dans notre sondage.
-   *      NOTRE.n_modele (564 personnes), NOTRE.sigma (l'erreur typique,
-   *      0,29 sur une échelle de 0 à 1, le « Residual standard error » de R),
-   *      NOTRE.ecart_x (l'écart type du populisme, 0,27). Pas de formule à
-   *      la diapo : elle est dans les notes de l'enseignant.
+   *      NOTRE.n_modele (981 personnes), NOTRE.sigma (l'erreur typique,
+   *      0,25 sur une échelle de 0 à 1, le « Residual standard error » de R),
+   *      NOTRE.ecart_x (l'écart type de la scolarité, 0,25). Pas de formule
+   *      sur la diapo : elle est dans les notes de l'enseignant.
    *
    * Les colonnes de la sortie sont repérées par leur position dans le texte
    * de R (police à chasse fixe : chaque caractère fait 0,6 em de large).
@@ -54,7 +54,7 @@
   const ING = [
     { n: f(NOTRE.n_modele), l: 'personnes' },
     { n: f(NOTRE.sigma, 2), l: 'erreur typique' },
-    { n: f(NOTRE.ecart_x, 2), l: `écart type du ${VARS.x.nom}` }
+    { n: f(NOTRE.ecart_x, 2), l: `écart type de ${VARS.x.nom}` }
   ];
 
   const ARIA =

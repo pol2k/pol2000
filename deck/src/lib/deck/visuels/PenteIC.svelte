@@ -6,15 +6,15 @@
    * dans la fourchette ? Le même verdict que la valeur p, sans formule.
    * Quatre temps.
    *
-   *   0  Notre pente, NOTRE.coefs[1].b (−0,37), un point sur l'axe.
-   *   1  Sa fourchette, de NOTRE.coefs[1].bas à .haut (−0,46 à −0,28),
-   *      et, en bas à gauche, la commande et la ligne populisme de
+   *   0  Notre pente, NOTRE.coefs[1].b (+0,20), un point sur l'axe.
+   *   1  Sa fourchette, de NOTRE.coefs[1].bas à .haut (+0,14 à +0,27),
+   *      et, en bas à gauche, la commande et la ligne scolarite de
    *      confint(modele), telles que R les imprime (SORTIES.confint).
    *   2  H0, 0, en pointillé : loin hors de la fourchette. On rejette H0,
    *      comme avec p (< 0,001).
-   *   3  Le sondage de 50 (H0.cinquante.coefs[1] : −0,39, de −0,80 à
-   *      +0,02) : une fourchette bien plus large, qui attrape 0, de
-   *      justesse. On ne rejette pas H0, comme avec p (0,06). Sa sortie de R à droite
+   *   3  Le sondage de 50 (H0.cinquante.coefs[1] : +0,22, de −0,03 à
+   *      +0,47) : une fourchette bien plus large, qui attrape 0, de
+   *      justesse. On ne rejette pas H0, comme avec p (0,078). Sa sortie de R à droite
    *      (SORTIES.confint50).
    *
    * Un intervalle qui exclut 0, c'est p < 0,05; un intervalle qui contient
@@ -36,18 +36,18 @@
   const fp = (p) => (p < 0.001 ? 'p < 0,001' : `p = ${p.toLocaleString('fr-CA', { maximumFractionDigits: 3 })}`);
   const dedans = (c) => c.bas <= 0 && 0 <= c.haut;
 
-  // L'axe des pentes, de −1 à +0,2.
-  const P0 = -1, P1 = 0.2, X0 = 70, X1 = 930, BASE = 330;
+  // L'axe des pentes, de −0,2 à +0,6.
+  const P0 = -0.2, P1 = 0.6, X0 = 70, X1 = 930, BASE = 330;
   const x = (p) => X0 + ((p - P0) / (P1 - P0)) * (X1 - X0);
   const RANGS = [
     { c: A, y: 182, qui: 'notre sondage', vu: 0 },
     { c: C, y: 270, qui: 'sondage de 50', vu: 3 }
   ];
 
-  // Les sorties de R : la commande, l'en-tête et la ligne populisme.
+  // Les sorties de R : la commande, l'en-tête et la ligne scolarite.
   const sortie = (code, txt) => {
     const l = txt.split('\n');
-    return [`> ${code}`, l.find((s) => /2\.5 %/.test(s)).trimEnd(), l.find((s) => s.startsWith('populisme')).trimEnd()];
+    return [`> ${code}`, l.find((s) => /2\.5 %/.test(s)).trimEnd(), l.find((s) => s.startsWith('scolarite')).trimEnd()];
   };
   const R1 = sortie(SORTIES.code_confint, SORTIES.confint);
   const R2 = sortie(SORTIES.code_confint50, SORTIES.confint50);
@@ -78,7 +78,7 @@
     <!-- Les fourchettes. -->
     {#each RANGS as r}
       <g class="ic-etape" class:ic-vu={e >= r.vu}>
-        <text x={x(r.c.bas)} y={r.y - 26} class="ic-qui">{r.qui}</text>
+        <text x={Math.max(x(r.c.bas), x(0) + 12)} y={r.y - 26} class="ic-qui">{r.qui}</text>
         <g class="ic-etape" class:ic-vu={e >= Math.max(1, r.vu)}>
           <line x1={x(r.c.bas)} y1={r.y} x2={x(r.c.haut)} y2={r.y} class="ic-fourchette" />
           <line x1={x(r.c.bas)} y1={r.y - 14} x2={x(r.c.bas)} y2={r.y + 14} class="ic-borne" />
@@ -95,7 +95,7 @@
 
     <!-- L'axe. -->
     <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="ic-axe" />
-    {#each [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2] as k}
+    {#each [-0.2, 0, 0.2, 0.4, 0.6] as k}
       <line x1={x(k)} y1={BASE} x2={x(k)} y2={BASE + 8} class="ic-axe" />
       <text x={x(k)} y={BASE + 30} class="ic-tick" class:ic-zero={k === 0}>{k > 0 ? '+' : ''}{k.toLocaleString('fr-CA', { minimumFractionDigits: Number.isInteger(k) ? 0 : 1 }).replace('-', '−')}</text>
     {/each}

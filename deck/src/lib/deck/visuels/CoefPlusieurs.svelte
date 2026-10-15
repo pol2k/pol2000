@@ -1,17 +1,19 @@
 <script>
   /**
    * Le graphique des coefficients d'un modèle à plusieurs variables : un
-   * aperçu de la séance 8. Même sondage (ces1000), 488 cas complets :
-   * satisfaction_dem ~ populisme + vote_liberal + age + femme + quebec +
-   * universitaire, toutes les variables codées de 0 à 1 (âge : 0 = 18 ans,
-   * 1 = la personne la plus âgée de la CES). Six rangées, dans l'ordre du
+   * aperçu de la séance 8. Même sondage (ces1000), 877 cas complets :
+   * interet ~ scolarite + age + femme + revenu + quebec, toutes les
+   * variables codées de 0 à 1 (âge : 0 = 18 ans, 1 = MULTIPLE.age_max ans,
+   * la personne la plus âgée de la CES. Revenu : 0 = la tranche la plus
+   * basse, 1 = la plus haute, sur huit). Cinq rangées, dans l'ordre du
    * tableau (de haut en bas), la constante laissée de côté. Deux usages,
    * selon `mode` :
    *
    * mode = 'signif' (lire la significativité, colonne « significatif à 5 % ? ») :
-   *   0  Les six points et leurs moustaches, la ligne à 0.
-   *   1  Âge, femme et Québec : la moustache croise 0. En rouge, « non ».
-   *   2  Les trois autres ne la croisent pas : « oui ».
+   *   0  Les cinq points et leurs moustaches, la ligne à 0.
+   *   1  Québec : la moustache croise 0. En rouge, « non ».
+   *   2  Les quatre autres ne la croisent pas : « oui » (femme aussi, du
+   *      côté négatif).
    *   3  Les étoiles du tableau (R : *** p < 0,001, ** < 0,01, * < 0,05)
    *      s'ajoutent à côté du « oui » : la même information.
    *
@@ -19,10 +21,12 @@
    *   0  Le même dessin.
    *   1  Tout va de 0 à 1 : chaque point se lit « du minimum au maximum »,
    *      c'est pour ça que le cours code tout de 0 à 1.
-   *   2  Mais 0 → 1 ne veut pas dire la même chose partout (cinq réponses,
-   *      oui ou non, 18 ans au plus âgé) : comparer avec prudence.
+   *   2  Mais 0 → 1 ne veut pas dire la même chose partout (cinq niveaux
+   *      de diplôme, 78 ans d'écart, oui ou non, huit tranches de revenu) :
+   *      comparer avec prudence.
    *
-   * Tous les nombres viennent de MULTIPLE.coefs, l'âge maximal de VARS.age
+   * Tous les nombres viennent de MULTIPLE.coefs (l'âge maximal de
+   * MULTIPLE.age_max, le nom de la scolarité de VARS.x)
    * (src/lib/data/seance7.js, généré par outils/seance7_data.R :
    * coef(summary(m2)) et confint(m2)). « Croise 0 » se lit sur les bornes :
    * bas < 0 < haut.
@@ -45,24 +49,24 @@
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−').replace(/\s/g, ' ');
   const etoiles = (p) => (p < 0.001 ? '***' : p < 0.01 ? '**' : p < 0.05 ? '*' : '');
 
-  // Les libellés, dans l'ordre du modèle : [nom, sous-titre, ce que veut dire 0 → 1, de quel genre].
+  // Les libellés, dans l'ordre du modèle : [nom, sous-titre, de quel genre est 0 → 1, ses deux bouts].
+  const AGE_MAX = MULTIPLE.age_max;
   const NOMS = {
-    populisme: [VARS.x.court, '', 'désaccord → accord', 'cinq réponses'],
-    vote_liberal: ['Vote libéral', '', 'autre parti → libéral', 'oui ou non'],
-    age: ['Âge', '(18 ans → le plus âgé)', `${VARS.age.min} → ${VARS.age.max} ans`, 'toute la vie adulte'],
-    femme: ['Femme', '', 'homme → femme', 'oui ou non'],
-    quebec: ['Québec', '', 'ailleurs → Québec', 'oui ou non'],
-    universitaire: ['Diplôme universitaire', '', 'sans → avec diplôme', 'oui ou non']
+    scolarite: [VARS.x.court, '', `${VARS.x.niveaux.length} niveaux de diplôme`, 'secondaire → doctorat'],
+    age: ['Âge', `(18 ans → ${AGE_MAX} ans)`, `${AGE_MAX - 18} ans d’écart`, `18 → ${AGE_MAX} ans`],
+    femme: ['Femme', '', 'oui ou non', 'homme → femme'],
+    revenu: ['Revenu', '(le plus bas → le plus haut)', '8 tranches de revenu', 'basse → haute'],
+    quebec: ['Québec', '', 'oui ou non', 'ailleurs → Québec']
   };
   const RANGS = MULTIPLE.coefs
     .filter((c) => c.terme !== '(Intercept)')
     .map((c) => ({ ...c, nom: NOMS[c.terme], croise: c.bas < 0 && c.haut > 0 }));
 
-  // L'axe, dans les unités de la satisfaction (0 à 1).
-  const V0 = -0.4, V1 = 0.4, XL = 320, XR = 720;
+  // L'axe, dans les unités de l'intérêt (0 à 1).
+  const V0 = -0.2, V1 = 0.5, XL = 320, XR = 720;
   const x = (v) => XL + ((v - V0) / (V1 - V0)) * (XR - XL);
-  const ticks = [-0.4, -0.2, 0, 0.2, 0.4];
-  const Y1 = 104, PAS = 54, AXE = Y1 + 5 * PAS + 40;
+  const ticks = [-0.2, 0, 0.2, 0.4];
+  const Y1 = 108, PAS = 62, AXE = Y1 + 4 * PAS + 46;
   const y = (i) => Y1 + i * PAS;
   const XCOL = 750; // début de la colonne de droite
 
@@ -72,7 +76,7 @@
 </script>
 
 <div class="visuel coef-plus" bind:this={hote}>
-  <svg viewBox="0 0 1000 {mode === 'unites' ? 480 : 500}" role="img" aria-label="Graphique des coefficients du modèle à six variables, toutes codées de 0 à 1, notre sondage, {MULTIPLE.n_modele} personnes. {RANGS.map((r) => `${r.nom[0]} : ${f(r.b, 2)}, de ${f(r.bas, 2)} à ${f(r.haut, 2)}${r.croise ? ', la moustache croise 0' : ''}.`).join(' ')}">
+  <svg viewBox="0 0 1000 {mode === 'unites' ? 480 : 500}" role="img" aria-label="Graphique des coefficients du modèle à cinq variables, toutes codées de 0 à 1, notre sondage, {MULTIPLE.n_modele} personnes. {RANGS.map((r) => `${r.nom[0]} : ${f(r.b, 2)}, de ${f(r.bas, 2)} à ${f(r.haut, 2)}${r.croise ? ', la moustache croise 0' : ''}.`).join(' ')}">
 
     <text x="20" y="30" class="cp-note">notre sondage · N = {MULTIPLE.n_modele.toLocaleString('fr-CA')}</text>
 
@@ -94,7 +98,7 @@
       <line x1={x(t)} y1={AXE} x2={x(t)} y2={AXE + 9} class="cp-axe" />
       <text x={x(t)} y={AXE + 32} class="cp-tick">{t === 0 ? '0' : f(t, 1)}</text>
     {/each}
-    <text x={(XL + XR) / 2} y={AXE + 64} class="cp-titre-axe" class:cp-titre-r={mode === 'unites' && e === 1}>effet sur la satisfaction (de 0 à 1)</text>
+    <text x={(XL + XR) / 2} y={AXE + 64} class="cp-titre-axe" class:cp-titre-r={mode === 'unites' && e === 1}>effet sur l’intérêt (de 0 à 1)</text>
 
     {#each RANGS as r, i}
       <g class="cp-rang" class:cp-rouge={rouge(r)} class:cp-fort={fort(r)}>
@@ -124,7 +128,7 @@
 
     {#if mode === 'signif'}
       <g class="cp-etape" class:cp-vu={e >= 3}>
-        <text x={XCOL + 91} y={y(5) + 42} class="cp-tete cp-tete-g">les étoiles du tableau</text>
+        <text x={XCOL + 91} y={y(4) + 42} class="cp-tete cp-tete-g">les étoiles du tableau</text>
       </g>
     {/if}
   </svg>

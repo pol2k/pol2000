@@ -2,17 +2,17 @@
   /**
    * Du tableau au graphique des coefficients : la même ligne de tableau,
    * dessinée. En haut, le tableau de notre sondage (le modèle simple
-   * satisfaction_dem ~ populisme, 564 cas complets parmi les 1 000
-   * tiré.e.s parmi les 20 180). En bas, un axe horizontal dans les unités
-   * de la satisfaction (0 à 1), avec une ligne verticale à 0. Les chiffres
+   * interet ~ scolarite, 981 cas complets parmi les 1 000 tiré.e.s parmi
+   * les 20 180). En bas, un axe horizontal dans les unités de l'intérêt
+   * pour la politique (0 à 1), avec une ligne verticale à 0. Les chiffres
    * « s'envolent » du tableau vers le dessin : une copie rouge part de la
    * cellule, l'original reste en place.
    *
-   *   0  Le tableau seul (constante et populisme), l'axe vide.
-   *   1  Le coefficient (−0,37) quitte le tableau et devient un point. La
+   *   0  Le tableau seul (constante et scolarité), l'axe vide.
+   *   1  Le coefficient (+0,20) quitte le tableau et devient un point. La
    *      constante pâlit : on ne la dessine pas.
-   *   2  Les deux bornes de l'intervalle de confiance à 95 % (−0,46 et
-   *      −0,28) s'envolent à leur tour : la moustache se trace entre elles.
+   *   2  Les deux bornes de l'intervalle de confiance à 95 % (0,14 et
+   *      0,27) s'envolent à leur tour : la moustache se trace entre elles.
    *
    * Tous les nombres viennent de NOTRE.coefs, le libellé de VARS.x
    * (src/lib/data/seance7.js, généré par outils/seance7_data.R :
@@ -32,10 +32,10 @@
   const f = (v, d = 2) =>
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '\u2212').replace(/\s/g, '\u202F');
   const C0 = NOTRE.coefs[0]; // la constante
-  const C1 = NOTRE.coefs[1]; // populisme
+  const C1 = NOTRE.coefs[1]; // scolarite
   const NOM = VARS.x.court;
 
-  // L'axe : −0,6 à +0,6, dans les unités de la satisfaction (0 à 1).
+  // L'axe : −0,6 à +0,6, dans les unités de l'intérêt (0 à 1).
   const V0 = -0.6, V1 = 0.6, XL = 350, XR = 960;
   const x = (v) => XL + ((v - V0) / (V1 - V0)) * (XR - XL);
   const ticks = [-0.5, -0.25, 0, 0.25, 0.5];
@@ -51,7 +51,7 @@
 </script>
 
 <div class="visuel coef-tab" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Le tableau de notre sondage&#8239;: le coefficient du populisme est de {f(C1.b)}, intervalle de confiance à 95&#8239;% de {f(C1.bas)} à {f(C1.haut)}. Dans le graphique, le coefficient devient un point à {f(C1.b)} sur un axe horizontal, et l’intervalle devient une moustache de {f(C1.bas)} à {f(C1.haut)}. Une ligne verticale marque 0.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="Le tableau de notre sondage&#8239;: le coefficient de la scolarité est de {f(C1.b)}, intervalle de confiance à 95&#8239;% de {f(C1.bas)} à {f(C1.haut)}. Dans le graphique, le coefficient devient un point à {f(C1.b)} sur un axe horizontal, et l’intervalle devient une moustache de {f(C1.bas)} à {f(C1.haut)}. Une ligne verticale marque 0.">
 
     <!-- Le tableau : trois filets, comme dans un article. -->
     <line x1="30" y1="14" x2="970" y2="14" class="ct-filet" />
@@ -80,7 +80,7 @@
       <line x1={x(t)} y1={AXE} x2={x(t)} y2={AXE + 9} class="ct-axe" />
       <text x={x(t)} y={AXE + 34} class="ct-tick">{ft(t)}</text>
     {/each}
-    <text x={(XL + XR) / 2} y="490" class="ct-titre-axe">effet sur la satisfaction (de 0 à 1)</text>
+    <text x={(XL + XR) / 2} y="490" class="ct-titre-axe">effet sur l’intérêt (de 0 à 1)</text>
 
     <!-- La variable, à gauche de sa rangée. -->
     <g class="ct-etape" class:ct-vu={e >= 1}>

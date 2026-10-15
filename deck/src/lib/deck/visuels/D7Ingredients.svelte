@@ -11,11 +11,10 @@
    * de cas complets changerait d'une rangée à l'autre.
    *
    * Toutes les cloches ont la même échelle horizontale (on compare les
-   * largeurs) et chacune est centrée sur sa propre moyenne. Raison : la
-   * cloche « 0,5 ou 0,75 » n'est pas centrée sur −0,31 (moyenne −0,21 : la
-   * satisfaction baisse moins entre ces deux niveaux, voir POP.moyennes).
-   * Sur un axe commun, on la lirait comme un biais, ce n'est pas le propos
-   * ici. Chaque rangée est aussi à sa propre échelle verticale (son plus
+   * largeurs) et chacune est centrée sur sa propre moyenne. Ici, les
+   * moyennes sont toutes proches de la vraie pente (de +0,17 à +0,19) : le
+   * centrage ne cache rien, il aligne les cloches pour qu'on compare leurs
+   * largeurs d'un coup d'œil. Chaque rangée est aussi à sa propre échelle verticale (son plus
    * haut bâton touche le plafond) : c'est la largeur qui compte, pas la
    * hauteur.
    *
@@ -24,18 +23,19 @@
    *   1  Moins de monde : 1 000 sondages de 50 (ERREUR_TYPE.petit, 0,146).
    *   2  De plus grosses erreurs de prédiction : les mêmes 1 000 sondages de
    *      500, dans des données modifiées où chaque personne est deux fois
-   *      plus loin de la vraie droite (DOUBLE, 0,090, exactement deux fois
-   *      0,045). Dit sur la diapo : « Données fictives ».
-   *   3  X qui varie peu : 1 000 sondages de 500 parmi les personnes qui ont
-   *      répondu 0,5 ou 0,75 au populisme seulement (ERREUR_TYPE.centre,
-   *      0,096).
+   *      plus loin de la vraie droite (DOUBLE, 0,089, exactement deux fois
+   *      l'écart type de la rangée 0). Dit sur la diapo : « Données
+   *      fictives ».
+   *   3  X qui varie peu : 1 000 sondages de 500 parmi les personnes du
+   *      collégial et de l'université, 1er cycle, seulement
+   *      (ERREUR_TYPE.centre, 0,087).
    *
    * Sources : ERREUR_TYPE (src/lib/data/seance7.js, outils/seance7_data.R);
    * DOUBLE (src/lib/data/seance7_d.js, outils/seance7_d.R). Les schémas de
    * gauche sont dessinés à la main, à titre d'illustration, et le disent.
    */
   import { brancherTemps } from '../temps.js';
-  import { ERREUR_TYPE } from '$lib/data/seance7.js';
+  import { VARS, ERREUR_TYPE } from '$lib/data/seance7.js';
   import { DOUBLE } from '$lib/data/seance7_d.js';
   let e = $state(0);
   let hote = $state(null);
@@ -50,7 +50,7 @@
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, NN).replace('-', '−');
 
   // Les cloches : même échelle pour toutes, centrées sur leur moyenne.
-  const CX = 700, PX = 340, L = 0.02, HMAX = 74;
+  const CX = 705, PX = 300, L = 0.02, HMAX = 74;
   const moyenne = (v) => v.reduce((s, p) => s + p, 0) / v.length;
   function cloche(pentes) {
     const m = moyenne(pentes);
@@ -69,10 +69,12 @@
     Array.from({ length: n }, (_, i) => {
       const t = n === 1 ? 0.5 : i / (n - 1);
       const xs = de + t * (a - de);
-      return { x: xs, y: 20 + 0.38 * xs + ECARTS[(i * 3) % ECARTS.length] * ampleur };
+      return { x: xs, y: 64 - 0.38 * xs + ECARTS[(i * 3) % ECARTS.length] * ampleur };
     });
 
   const ET = ERREUR_TYPE;
+  // Les deux niveaux gardés pour la rangée « X varie peu », tirés du codebook (VARS).
+  const CENTRE = ET.centre.bornes.map((b) => VARS.x.niveaux[VARS.x.valeurs.indexOf(b)].toLowerCase()).join(' ou ');
   const RANGEES = [
     { quoi: `${f(ET.base.n)} personnes`, sous: 'notre point de départ', pentes: ET.base.pentes, et: ET.base.ecart_type,
       pts: schema(14, 0.65, 6, 114) },
@@ -80,7 +82,7 @@
       pts: schema(4, 0.65, 6, 114) },
     { quoi: 'erreurs 2 fois plus grandes', sous: 'Données fictives', pentes: DOUBLE.pentes, et: DOUBLE.ecart_type,
       pts: schema(14, 1.3, 6, 114) },
-    { quoi: `populisme à ${ET.centre.bornes.map((b) => f(b, 2)).join(' ou ')}`, sous: 'X varie peu', pentes: ET.centre.pentes, et: ET.centre.ecart_type,
+    { quoi: 'X varie peu', sous: CENTRE, pentes: ET.centre.pentes, et: ET.centre.ecart_type,
       pts: schema(14, 0.65, 48, 72) }
   ].map((r, i) => ({ ...r, y: 150 + i * 118, barres: cloche(r.pentes) }));
 
@@ -99,7 +101,7 @@
         <!-- Le schéma. -->
         <g transform="translate(14 {r.y - 74})">
           <rect x="0" y="0" width="120" height="80" class="in-cadre" />
-          <line x1="4" y1="21.5" x2="116" y2="64.1" class="in-droite" />
+          <line x1="4" y1="62.5" x2="116" y2="19.9" class="in-droite" />
           {#each r.pts as p}
             <circle cx={p.x} cy={p.y} r="4" class="in-pt" />
           {/each}

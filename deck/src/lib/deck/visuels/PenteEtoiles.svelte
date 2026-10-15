@@ -1,7 +1,7 @@
 <script>
   /**
    * Les étoiles de R. En haut, ce que R imprime : l'en-tête et la ligne
-   * populisme de summary(), pour notre sondage (SUMMARY) et pour le
+   * scolarite de summary(), pour notre sondage (SUMMARY) et pour le
    * sondage de 50 (SORTIES.summary50), puis la légende « Signif. codes »,
    * telles quelles. En bas, la légende décodée sur un axe des valeurs p.
    * Trois temps.
@@ -15,8 +15,8 @@
    *      codes de la légende, chacun dans sa tranche. 0,05 est une
    *      convention (Fisher, 1926, cité dans Arel-Bundock 2021, p. 71).
    *   2  Les deux sondages sur l'axe : le nôtre bien plus à gauche que
-   *      l'axe (3.74e-16, une flèche), celui de 50 à 0,06, juste à droite
-   *      de 0,05. Le point de R : sous 0,1 mais pas sous 0,05, donc pas
+   *      l'axe (3.87e-10, une flèche), celui de 50 à 0,078, à droite de
+   *      0,05. Le point de R : sous 0,1 mais pas sous 0,05, donc pas
    *      significatif.
    *
    * Les seuils (0,001, 0,01, 0,05, 0,1) sont ceux de la légende de R, des
@@ -41,7 +41,7 @@
     const l = txt.split('\n');
     return {
       entete: l.find((s) => /^\s+Estimate/.test(s)).trimEnd(),
-      rang: l.find((s) => s.startsWith('populisme')).trimEnd(),
+      rang: l.find((s) => s.startsWith('scolarite')).trimEnd(),
       legende: l.find((s) => s.startsWith('Signif. codes')).trimEnd()
     };
   };

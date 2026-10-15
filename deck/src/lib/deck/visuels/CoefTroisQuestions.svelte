@@ -4,15 +4,15 @@
    * chacune avec un petit dessin tiré du modèle à cinq variables de notre
    * sondage (MULTIPLE, src/lib/data/seance7.js, généré par
    * outils/seance7_data.R), chaque carte avec son échelle (seul le 0 est
-   * marqué) : −0,4 à +0,4, puis −0,15 à +0,15, puis −0,15 à +0,3, pour
+   * marqué) : −0,2 à +0,45, puis −0,1 à +0,2, puis −0,15 à +0,3, pour
    * que les moustaches se voient bien.
    *
    *   0  Les trois questions seules.
-   *   1  Où est le point ? Populisme (−0,28) à gauche, vote libéral
-   *      (+0,23) à droite : le sens et la taille de l'effet.
-   *   2  La moustache croise-t-elle 0 ? Diplôme : non. Québec : oui, en
+   *   1  Où est le point ? Femme (−0,09) à gauche, âge (+0,35) à
+   *      droite : le sens et la taille de l'effet.
+   *   2  La moustache croise-t-elle 0 ? Revenu : non. Québec : oui, en
    *      rouge. Si elle croise : pas significatif à 5 %.
-   *   3  Est-elle large ? Vote libéral (étroite) contre âge (large) : plus
+   *   3  Est-elle large ? Femme (étroite) contre scolarité (large) : plus
    *      elle est large, moins on est précis.
    */
   import { brancherTemps } from '../temps.js';
@@ -30,20 +30,20 @@
     {
       q: ['Où est', 'le point\u202F?'],
       r: ['Le sens et la taille', 'de l’effet.'],
-      bornes: [-0.4, 0.4],
-      rangs: [['populisme', C.populisme, false], ['vote libéral', C.vote_liberal, false]]
+      bornes: [-0.2, 0.45],
+      rangs: [['femme', C.femme, false], ['âge', C.age, false]]
     },
     {
       q: ['La moustache', 'croise-t-elle 0\u202F?'],
       r: ['Si oui\u202F: pas', 'significatif à 5 %.'],
-      bornes: [-0.15, 0.15],
-      rangs: [['diplôme', C.universitaire, false], ['Québec', C.quebec, true]]
+      bornes: [-0.1, 0.2],
+      rangs: [['revenu', C.revenu, false], ['Québec', C.quebec, true]]
     },
     {
       q: ['Est-elle', 'large\u202F?'],
       r: ['Plus elle est large,', 'moins on est précis.'],
       bornes: [-0.15, 0.3],
-      rangs: [['vote libéral', C.vote_liberal, false], ['âge', C.age, false]]
+      rangs: [['femme', C.femme, false], ['scolarité', C.scolarite, false]]
     }
   ];
   const LARG = 300, ECART = 30, X0 = 20;

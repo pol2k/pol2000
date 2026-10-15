@@ -5,7 +5,7 @@
    * cachée qui se retournent une par une : une méthode, une théorie, une
    * perspective, une population, une variable, une mesure, une question.
    * Chaque carte a son glyphe et un exemple de trois mots, pensé pour la
-   * question de la séance (satisfaction_dem selon populisme). La huitième
+   * question de la séance (interet selon scolarite). La huitième
    * case donne la règle : une seule suffit, mais il faut la nommer.
    * Huit temps (0 à 7) : 0 tout est caché; k = la carte k se retourne; au
    * temps 7, la règle s'affiche avec la dernière carte.
@@ -26,7 +26,7 @@
     { k: 'perspective', mot: 'perspective', ex: 'un autre angle' },
     { k: 'population', mot: 'population', ex: 'les 18-24 ans seulement' },
     { k: 'variable', mot: 'variable', ex: 'ajouter l’âge' },
-    { k: 'mesure', mot: 'mesure', ex: 'un autre indice de populisme' },
+    { k: 'mesure', mot: 'mesure', ex: 'une autre mesure de l’intérêt' },
     { k: 'question', mot: 'question', ex: 'jamais posée' }
   ];
 </script>

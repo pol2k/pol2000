@@ -4,10 +4,10 @@
    * petit dessin d'emblée. Chaque clic donne la réponse pour notre modèle,
    * pour que la salle réponde avant.
    *
-   *   1  Le sens : le signe du coefficient (−, la satisfaction baisse).
-   *   2  La taille : en unités de y, par unité de x (de 0 à 1 : tout l'éventail de x, ici 0,37).
+   *   1  Le sens : le signe du coefficient (+, l'intérêt monte).
+   *   2  La taille : en unités de y, par unité de x (de 0 à 1 : tout l'éventail de x, ici 0,20, soit 2 points sur 10).
    *   3  Le hasard : les étoiles (*** : le hasard l'explique mal).
-   *   4  Le contexte : N et R² (564 personnes, 11 % de la variation).
+   *   4  Le contexte : N et R² (981 personnes, 4 % de la variation).
    *
    * Nombres : NOTRE dans src/lib/data/seance7.js (outils/seance7_data.R).
    */
@@ -25,10 +25,11 @@
   const f = (v, d = 2) =>
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−').replace(/\s/g, ' ');
   const C = NOTRE.coefs[1];
+  const MONTE = C.b > 0;
   const et = (p) => (p < 0.001 ? '***' : p < 0.01 ? '**' : p < 0.05 ? '*' : 'aucune');
   const CARTES = [
-    { q: 'Le sens ?', r: C.b < 0 ? '− : plus populiste, moins satisfait' : '+ : plus populiste, plus satisfait', icone: 'sens' },
-    { q: 'La taille ?', r: `${f(Math.abs(C.b))} de ${C.b < 0 ? 'moins' : 'plus'}, de 0 à 1`, icone: 'taille' },
+    { q: 'Le sens ?', r: MONTE ? '+ : plus scolarisé, plus intéressé' : '− : plus scolarisé, moins intéressé', icone: 'sens' },
+    { q: 'La taille ?', r: `${MONTE ? '+' : '−'}${f(Math.abs(C.b))} de 0 à 1, soit ${f(Math.abs(C.b) * 10, 0)} points sur 10`, icone: 'taille' },
     { q: 'Le hasard ?', r: C.p < 0.05 ? `${et(C.p)} : le hasard l’explique mal` : 'pas d’étoile : le hasard peut l’expliquer', icone: 'hasard' },
     { q: 'Le contexte ?', r: `N = ${f(NOTRE.n_modele, 0)} · R² = ${f(NOTRE.r2)}`, icone: 'contexte' }
   ];
@@ -40,14 +41,15 @@
       <span class="tq-num">{i + 1}</span>
       <svg viewBox="0 0 120 80" class="tq-icone" aria-hidden="true">
         {#if c.icone === 'sens'}
-          <line x1="14" y1="16" x2="106" y2="64" class="tq-trait tq-rouge" />
-          <text x="60" y="30" class="tq-signe">−</text>
-          <text x="80" y="80" class="tq-signe tq-gris">+</text>
-          <line x1="14" y1="64" x2="106" y2="16" class="tq-trait tq-pale" />
+          <!-- La droite du signe de notre pente en rouge, l'autre pâle. -->
+          <line x1="14" y1={MONTE ? 16 : 64} x2="106" y2={MONTE ? 64 : 16} class="tq-trait tq-pale" />
+          <line x1="14" y1={MONTE ? 64 : 16} x2="106" y2={MONTE ? 16 : 64} class="tq-trait tq-rouge" />
+          <text x="60" y="30" class="tq-signe">{MONTE ? '+' : '−'}</text>
+          <text x="80" y="80" class="tq-signe tq-gris">{MONTE ? '−' : '+'}</text>
         {:else if c.icone === 'taille'}
-          <path d="M14 18 H60 V58 H106" class="tq-trait" />
+          <path d={MONTE ? 'M14 58 H60 V18 H106' : 'M14 18 H60 V58 H106'} class="tq-trait" />
           <line x1="60" y1="18" x2="60" y2="58" class="tq-trait tq-rouge" />
-          <text x="37" y="12" class="tq-petit">0 → 1</text>
+          <text x="37" y={MONTE ? 78 : 12} class="tq-petit">0 → 1</text>
         {:else if c.icone === 'hasard'}
           <text x="60" y="58" class="tq-etoiles">***</text>
         {:else}

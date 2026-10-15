@@ -3,7 +3,7 @@
    * « 19 fois sur 20 », pour la pente : le miroir de DixNeufSurVingt (la
    * marge d'erreur, séance 5), même dessin, pour que la salle le
    * reconnaisse. Les 20 180 répondant.e.s de la CES 2025 sont la population
-   * d'exercice : on y connaît la vraie pente (POP.b1, −0,31), R non. On y
+   * d'exercice : on y connaît la vraie pente (POP.b1, +0,17), R non. On y
    * tire 20 sondages de 1 000 personnes au hasard (VINGT.sondages, dans
    * src/lib/data/seance7.js); le premier est NOTRE sondage. Pour les 19
    * autres, outils/seance7_data.R prend la première graine à partir de 70
@@ -15,7 +15,7 @@
    * passe au rouge.
    *   0  L'encadré : notre pente et son intervalle de confiance à 95 %
    *      (NOTRE.coefs[1]). Dessous, en grand, notre fourchette.
-   *   1  La vraie pente, −0,31, en pointillé : ici, on la connaît; R, non.
+   *   1  La vraie pente, +0,17, en pointillé : ici, on la connaît; R, non.
    *      La fourchette l'attrape.
    *   2  On refait le sondage 20 fois : vingt fourchettes, la nôtre en
    *      premier. Celle qui rate est en rouge, son étiquette du côté opposé
@@ -41,8 +41,8 @@
   const VRAI = POP.b1;
   const COUVRENT = S.filter((s) => s.couvre).length;
 
-  // L'axe des pentes, de −0,65 à −0,1 (de la place à gauche pour l'étiquette du raté).
-  const P0 = -0.65, P1 = -0.1, X0 = 90, X1 = 930;
+  // L'axe des pentes, de −0,1 à +0,35 (de la place à gauche pour l'étiquette du raté).
+  const P0 = -0.1, P1 = 0.35, X0 = 90, X1 = 930;
   const x = (p) => X0 + ((p - P0) / (P1 - P0)) * (X1 - X0);
   const XV = x(VRAI);
 
@@ -54,7 +54,7 @@
   // L'étiquette du raté, du côté opposé à la vraie pente.
   const RATE_G = RATE >= 0 && S[RATE].haut < VRAI;
   const XRATE = RATE < 0 ? 0 : RATE_G ? x(S[RATE].bas) - 14 : x(S[RATE].haut) + 14;
-  const TICKS = [-0.6, -0.5, -0.4, -0.3, -0.2, -0.1];
+  const TICKS = [-0.1, 0, 0.1, 0.2, 0.3];
   const larg = (t, taille) => t.length * 0.6 * taille + 20;
   const T1 = `notre sondage au hasard, ${f(NOTRE.n, 0)} personnes`;
 </script>
@@ -100,7 +100,7 @@
     <g class="vp-etape" class:vp-vu={e >= 2}>
       <text x={X0} y="214" class="vp-cote">{S.length} sondages</text>
       <text x={X0} y="240" class="vp-cote">de {f(NOTRE.n, 0)}</text>
-      <text x={x(S[0].bas) - 14} y={yRang(0) + 6} class="vp-notre vp-fin">le nôtre</text>
+      <text x={x(S[0].haut) + 14} y={yRang(0) + 6} class="vp-notre">le nôtre</text>
       {#if RATE >= 0}
         <text x={XRATE} y={yRang(RATE) - 2} class="vp-pourquoi" class:vp-fin={RATE_G}>celui-ci rate,</text>
         <text x={XRATE} y={yRang(RATE) + 20} class="vp-pourquoi" class:vp-fin={RATE_G}>par hasard</text>
@@ -110,7 +110,7 @@
     <line x1={X0} y1={AXE} x2={X1} y2={AXE} class="vp-axe" />
     {#each TICKS as t}
       <line x1={x(t)} y1={AXE} x2={x(t)} y2={AXE + 8} class="vp-axe" />
-      <text x={x(t)} y={AXE + 30} class="vp-tick">{f(t, 1)}</text>
+      <text x={x(t)} y={AXE + 30} class="vp-tick">{t > 0 ? '+' : ''}{f(t, t === 0 ? 0 : 1)}</text>
     {/each}
     <text x={X1 + 12} y={AXE + 6} class="vp-tick vp-debut">pente</text>
 
@@ -149,7 +149,6 @@
   .vp-axe { stroke: var(--dk-encre); stroke-width: 3; }
   .vp-tick { font-size: 18px; text-anchor: middle; fill: var(--dk-gris); }
   .vp-tick.vp-debut { text-anchor: start; }
-  .vp-notre.vp-fin { text-anchor: end; }
   .vp-phrase { font-size: 24px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
   .vp-seul { opacity: 0; transition: opacity 0.3s; }
   .vp-seul.vp-vu { opacity: 1; transition: opacity 0.5s; }

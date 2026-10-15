@@ -1,30 +1,32 @@
 <script>
   /**
    * Comment ça marche ? R cherche la droite qui passe le plus près de tous
-   * les points. Quinze vraies personnes de notre sondage (QUINZE, graines 62
-   * puis 15, outils/seance7_data.R) : populisme (0 à 1) et satisfaction
-   * envers la démocratie (0 à 1). Pour chaque droite, l'écart vertical
-   * entre chaque point et la droite (un trait rouge) et le carré bâti sur
-   * cet écart (un aplat pâle). À droite, le total des carrés : plus il est
-   * petit, plus la droite passe près des points.
+   * les points. Quinze vraies personnes de notre sondage (QUINZE, graine 62
+   * puis 28, outils/seance7_data.R) : scolarité (0 à 1) et intérêt pour la
+   * politique (0 à 1). Pour chaque droite, l'écart vertical entre chaque
+   * point et la droite (un trait rouge) et le carré bâti sur cet écart (un
+   * aplat pâle). À droite, le total des carrés : plus il est petit, plus la
+   * droite passe près des points.
    *
    *   0  Les quinze points.
-   *   1  Une droite qui monte (0,2 + 0,6 × x) : mauvais sens, gros carrés.
-   *   2  La moyenne pour tout le monde (une droite plate) : mieux.
-   *   3  La droite de lm() : le plus petit total possible.
+   *   1  Une droite qui descend (0,95 − 0,5 × x) : à l'envers, gros carrés.
+   *   2  La moyenne pour tout le monde (une droite plate) : bien mieux.
+   *   3  La droite de lm() : le plus petit total possible, un peu sous la
+   *      moyenne (avec 15 personnes, la scolarité n'explique qu'une petite
+   *      part de l'intérêt : c'est le petit R² qu'on lira plus loin).
    *
    * Entre deux temps, la droite glisse (constante et pente interpolées) et
    * le total se recalcule en direct sur les quinze vraies valeurs. Aux temps
    * 1, 2 et 3, il vaut exactement DROITES[k].somme, calculé par R
-   * (outils/seance7_b.R) : 2,12, 0,77, 0,45. Le trajet ne descend jamais
+   * (outils/seance7_b.R) : 1,67, 1,27, 1,25. Le trajet ne descend jamais
    * sous la valeur d'arrivée (vérifié pas à pas).
    *
-   * Le dessin : jusqu'à six personnes partagent la même case (0,5 et
-   * « plutôt satisfait »). Le léger étalement `jx` de R ne suffit pas à les
-   * séparer dans le dessin : on les range côte à côte dans leur case, dans
-   * l'ordre de `jx`, 17 px l'une de l'autre. Le trait de chaque écart va du
-   * point à la droite à l'endroit où le point est dessiné; le total, lui,
-   * utilise les vraies valeurs de x.
+   * Le dessin : des personnes partagent parfois la même case (deux à
+   * « université, 1er cycle » et 0,8, deux à 0,3). Le léger étalement `jx`
+   * de R ne suffit pas à les séparer dans le dessin : on les range côte à
+   * côte dans leur case, dans l'ordre de `jx`, 17 px l'une de l'autre. Le
+   * trait de chaque écart va du point à la droite à l'endroit où le point
+   * est dessiné; le total, lui, utilise les vraies valeurs de x.
    */
   import { brancherTemps } from '../temps.js';
   import { Tween } from 'svelte/motion';
@@ -47,7 +49,7 @@
     ligne.set([d.b0, d.b1], { duration: e === 0 || !lent() ? 0 : 900 });
   });
 
-  // Repères : populisme de 0 à 1 (en x), satisfaction de 0 à 1 (en y). Le
+  // Repères : scolarité de 0 à 1 (en x), intérêt de 0 à 1 (en y). Le
   // carré d'un écart a le même côté en pixels dans les deux sens.
   const X0 = 196, X1 = 676, Y0 = 392, Y1 = 46;
   const PX = Y0 - Y1;
@@ -84,15 +86,17 @@
     const i = s.indexOf(', ');
     if (i > 0) return [s.slice(0, i + 1), s.slice(i + 2)];
     const j = s.indexOf(' ');
-    return [s.slice(0, j), s.slice(j + 1)];
+    return j > 0 ? [s.slice(0, j), s.slice(j + 1)] : [s, ''];
   });
-  const NY = VARS.y.niveaux.map((t) => t.toLowerCase().replace(' satisfait', ''));
-  const ETIQ = ['une droite qui monte', 'la moyenne pour tout le monde', 'la droite de lm()'];
+  // Les bornes du curseur, sur deux lignes (« beaucoup / d'intérêt »).
+  const BORNES = VARS.y.bornes.map((t) => { const s = t.toLowerCase(); const j = s.indexOf(' '); return [s.slice(0, j), s.slice(j + 1)]; });
+  const TICKS = [0, 0.2, 0.4, 0.6, 0.8, 1];
+  const ETIQ = ['une droite qui descend', 'la moyenne pour tout le monde', 'la droite de lm()'];
 </script>
 
 <div class="visuel rm" bind:this={hote}>
   <svg viewBox="0 0 700 520" role="img"
-    aria-label="Quinze personnes de notre sondage : populisme et satisfaction envers la démocratie. Trois droites essayées, chacune avec ses écarts aux points. La droite de lm a le plus petit total des carrés : {virgule(DROITES[2].somme)}.">
+    aria-label="Quinze personnes de notre sondage : scolarité et intérêt pour la politique. Trois droites essayées, chacune avec ses écarts aux points. La droite de lm a le plus petit total des carrés : {virgule(DROITES[2].somme)}.">
     <defs>
       <clipPath id="rm-cadre"><rect x={X0 - 60} y={Y1 - 10} width={X1 - X0 + 80} height={Y0 - Y1 + 20} /></clipPath>
     </defs>
@@ -105,13 +109,16 @@
       <text x={sx(v)} y={AXE_X + 48} class="niv">{NX[i][0]}</text>
       <text x={sx(v)} y={AXE_X + 66} class="niv">{NX[i][1]}</text>
     {/each}
-    {#each VARS.y.valeurs as v, i}
+    {#each TICKS as v}
       <line x1={AXE_Y - 7} y1={sy(v)} x2={AXE_Y} y2={sy(v)} class="axe" />
-      <text x={AXE_Y - 13} y={sy(v) - 3} class="niv d">{NY[i]}</text>
-      <text x={AXE_Y - 13} y={sy(v) + 16} class="val d">{v.toLocaleString('fr-CA', { maximumFractionDigits: 2 })}</text>
+      <text x={AXE_Y - 13} y={sy(v) + 6} class="val d">{v.toLocaleString('fr-CA')}</text>
     {/each}
-    <text x={(X0 + X1) / 2} y="512" class="titre-axe">populisme</text>
-    <text x={AXE_Y - 13} y={Y1 - 34} class="titre-axe d">satisfaction</text>
+    <text x={AXE_Y - 52} y={sy(1) - 2} class="niv d">{BORNES[1][0]}</text>
+    <text x={AXE_Y - 52} y={sy(1) + 15} class="niv d">{BORNES[1][1]}</text>
+    <text x={AXE_Y - 52} y={sy(0) - 2} class="niv d">{BORNES[0][0]}</text>
+    <text x={AXE_Y - 52} y={sy(0) + 15} class="niv d">{BORNES[0][1]}</text>
+    <text x={(X0 + X1) / 2} y="512" class="titre-axe">scolarité</text>
+    <text x={AXE_Y - 13} y="14" class="titre-axe d">intérêt</text>
 
     <g clip-path="url(#rm-cadre)" class="essai" class:vu={e >= 1}>
       <!-- Les carrés, puis les écarts, puis la droite. -->

@@ -2,22 +2,26 @@
   /**
    * Pourquoi la régression ? Pour décrire une relation en chiffres. Le nuage
    * de la population se résume, clic après clic, jusqu'à un seul nombre. À
-   * droite, l'échelle de la compression : 10 993 personnes, 5 moyennes,
+   * droite, l'échelle de la compression : 19 736 personnes, 5 moyennes,
    * 1 droite, 1 nombre.
    *
-   *   0  Le nuage en bulles : 10 993 personnes, 20 cases (RegBulles).
-   *   1  Les cinq moyennes, une par niveau de populisme (POP.moyennes).
+   *   0  Le nuage en bulles pâles : 19 736 personnes, 55 cases (RegBulles).
+   *   1  Les cinq moyennes, une par niveau de scolarité, des points rouges
+   *      dont la taille suit le nombre de personnes (POP.moyennes) : elles
+   *      montent d'un niveau à l'autre, presque en ligne droite.
    *   2  La droite de la population (POP.b0, POP.b1).
-   *   3  Le nombre : −0,31. De fortement en désaccord à fortement en
-   *      accord (x de 0 à 1, toute l'échelle), la satisfaction baisse de
-   *      0,31 sur une échelle de 0 à 1.
+   *   3  Le nombre : +0,17. Du secondaire non terminé à la maîtrise ou au
+   *      doctorat (x de 0 à 1, toute l'échelle), l'intérêt monte de 0,17 sur
+   *      une échelle de 0 à 1.
    *
    * Tout vient de la population d'exercice : les 20 180 de la CES 2025, dont
-   * 10 993 ont répondu aux deux questions (POP, outils/seance7_data.R).
+   * 19 736 ont répondu aux deux questions (POP, outils/seance7_data.R). La
+   * phrase « du … à la … » est écrite ici (la grammaire l'exige), sur les
+   * deux bouts de VARS.x.niveaux.
    */
   import { brancherTemps } from '../temps.js';
   import RegBulles from './RegBulles.svelte';
-  import { POP, VARS } from '$lib/data/seance7.js';
+  import { POP } from '$lib/data/seance7.js';
 
   let e = $state(0);
   let hote = $state(null);
@@ -27,11 +31,9 @@
     return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  // Format québécois, vrai signe moins.
-  const virgule = (v, d) => (v < 0 ? '−' : '') + Math.abs(v).toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d });
+  // Format québécois, signe explicite (vrai signe moins).
+  const signe = (v, d) => (v < 0 ? '−' : '+') + Math.abs(v).toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d });
   const milliers = (n) => n.toLocaleString('fr-CA').replace(/\s/g, ' ');
-  const bas = VARS.x.niveaux[0].toLowerCase();
-  const haut = VARS.x.niveaux[VARS.x.niveaux.length - 1].toLowerCase();
 
   const ECHELLE = [
     { n: milliers(POP.n_modele), t: 'personnes' },
@@ -42,7 +44,7 @@
 
 <div class="visuel rp" bind:this={hote}>
   <div class="graphe">
-    <RegBulles moyennes={e >= 1} droite={e >= 2} pale={e >= 2} />
+    <RegBulles moyennes={e >= 1} droite={e >= 2} pale={e >= 1} />
   </div>
 
   <div class="cote">
@@ -53,9 +55,9 @@
       <span class="fleche" class:vu={e >= i + 1}>↓</span>
     {/each}
     <div class="nombre" class:vu={e >= 3}>
-      <span class="de">de {bas}<br />à {haut}</span>
-      <span class="grand">{virgule(POP.b1, 2)}</span>
-      <span class="sous">de satisfaction<br />(sur 0 à 1)</span>
+      <span class="de">du secondaire non terminé<br />à la maîtrise ou au doctorat</span>
+      <span class="grand">{signe(POP.b1, 2)}</span>
+      <span class="sous">d’intérêt<br />(sur 0 à 1)</span>
     </div>
     <p class="source">CES 2025 · plus la bulle est grosse, plus il y a de monde</p>
   </div>

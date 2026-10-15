@@ -7,9 +7,10 @@
    * Deux usages, selon les props :
    *   - l'exemple d'Arel-Bundock (2021, p. 84) : crème glacée (x), noyades (y),
    *     et la chaleur cachée dans ε (par défaut);
-   *   - la CES : populisme (x), satisfaction envers la démocratie (y), et le
-   *     vote libéral dans ε. Là, le graphe est une hypothèse (dit en pied de
-   *     figure) : les chiffres viennent sur la diapo suivante (PartiPente).
+   *   - la CES : scolarité (x), intérêt pour la politique (y), et l'âge dans
+   *     ε, qui pousse la scolarité vers le bas et l'intérêt vers le haut (les
+   *     deux flèches portent une étiquette). Les chiffres viennent sur la
+   *     diapo suivante (TiersPente).
    *
    * Quatre temps :
    *   0  L'équation, et le graphe qu'elle dessine : x → y, la flèche β1, avec
@@ -17,7 +18,7 @@
    *   1  ε devient un nuage pointillé attaché à y : tout ce qui cause y sauf x,
    *      qu'on ne voit jamais. La régression suppose qu'aucune flèche ne part
    *      de ε vers x : un trait gris barré.
-   *   2  Dans le nuage, la chaleur (ou le vote) s'allume en rouge, et sa flèche
+   *   2  Dans le nuage, la chaleur (ou l'âge) s'allume en rouge, et sa flèche
    *      vers y se trace : elle était dans ε depuis le début.
    *   3  La flèche interdite se trace en rouge : la chaleur pousse aussi x. La
    *      supposition tombe, β1 est biaisé.
@@ -25,7 +26,8 @@
    * Schématique : aucune donnée. `b1` (facultatif) affiche la pente estimée
    * par R, passée par la diapo depuis un module de données. `xEq` et `yEq` :
    * les noms dans l'équation (les noms de colonnes); `alerte` : les deux
-   * lignes rouges du temps 3; `pied` : la légende du bas.
+   * lignes rouges du temps 3; `pied` : la légende du bas; `etiqY` et `etiqX` :
+   * ce que disent les flèches rouges vers y (temps 2) et vers x (temps 3).
    */
   import { brancherTemps } from '../temps.js';
 
@@ -38,6 +40,8 @@
     autres = ['savoir nager', 'l’alcool', 'les vacances'],
     alerte = null,
     b1 = null,
+    etiqY = '',
+    etiqX = '',
     pied = 'un graphe orienté acyclique (GOA) · séance 11'
   } = $props();
   const lignes = $derived(alerte ?? [z, 'pousse aussi x']);
@@ -72,7 +76,7 @@
     };
   }
   const XY = fleche(BX.cx + BX.w / 2 + 6, BX.cy, BY.cx - BY.w / 2 - 6, BY.cy);
-  const EY = fleche(NU.cx + 150, NU.cy - NU.ry + 8, BY.cx + 40, BY.cy + BY.h / 2 + 6);
+  const EY = fleche(BY.cx + 100, NU.cy - 60, BY.cx + 100, BY.cy + BY.h / 2 + 6);
   const ZY = fleche(Z.x + 50, Z.y - 30, BY.cx - 70, BY.cy + BY.h / 2 + 6);
   const ZX = fleche(Z.x - 40, Z.y - 34, BX.cx + 30, BX.cy + BX.h / 2 + 6, 24);
   // Le trait gris de la supposition : même chemin que ZX, depuis le bord du nuage.
@@ -129,10 +133,16 @@
     <!-- 2 : la chaleur pousse y. -->
     <path d={ZY.d} pathLength="1" class="ge-fl ge-rouge-fl ge-trace" class:ge-vu={e >= 2} />
     <polygon points={ZY.tete} class="ge-tete ge-rouge-t ge-etape ge-tard" class:ge-vu={e >= 2} />
+    {#if etiqY}
+      <text x={ZY.mx + 24} y={ZY.my - 10} class="ge-etiq ge-etape ge-tard" class:ge-vu={e >= 2}>{etiqY}</text>
+    {/if}
 
     <!-- 3 : … et x aussi. La supposition tombe. -->
     <path d={ZX.d} pathLength="1" class="ge-fl ge-rouge-fl ge-trace ge-epais" class:ge-vu={e >= 3} />
     <polygon points={ZX.tete} class="ge-tete ge-rouge-t ge-etape ge-tard" class:ge-vu={e >= 3} />
+    {#if etiqX}
+      <text x={ZX.mx - 60} y={ZX.my - 16} class="ge-etiq ge-fin ge-etape ge-tard" class:ge-vu={e >= 3}>{etiqX}</text>
+    {/if}
     <g class="ge-etape ge-tard" class:ge-vu={e >= 3}>
       <text x={SUPM.x - 30} y={SUPM.y + 60} class="ge-alerte ge-fin">{lignes[0]}</text>
       <text x={SUPM.x - 30} y={SUPM.y + 92} class="ge-alerte ge-fin">{lignes[1]}</text>
@@ -177,6 +187,7 @@
   .ge-croix-f { fill: var(--dk-fond); stroke: var(--dk-gris); stroke-width: 2.5; }
   .ge-croix { stroke: var(--dk-gris); stroke-width: 3; }
   .ge-hyp { font-size: 21px; fill: var(--dk-gris); }
+  .ge-etiq { font-size: 21px; font-weight: 600; fill: var(--dk-accent); }
   .ge-alerte { font-size: 26px; font-weight: 700; fill: var(--dk-accent); }
   .ge-hyp.ge-encre { fill: var(--dk-encre); font-weight: 600; }
 

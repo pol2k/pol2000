@@ -14,10 +14,10 @@
    * l'intervalle) reprend le dispositif de la
    * séance 5 et nomme enfin la valeur p (pol-vjv).
    *
-   * L'exemple fil rouge (choisi par le prof le 14 octobre) : le populisme
-   * (« les politiciens ne se soucient que des riches ») et la satisfaction
-   * envers la démocratie, sondage post-électoral de la CES 2025, tout recodé
-   * de 0 à 1. Les 20 180 répondant.e.s servent de population d'exercice,
+   * L'exemple fil rouge (choisi par le prof le 14 octobre) : un classique,
+   * la scolarité (cinq niveaux) et l'intérêt pour la politique (le curseur de
+   * 0 à 10), dans la CES 2025, tout recodé de 0 à 1. Les 20 180 répondant.e.s
+   * servent de population d'exercice,
    * comme à la séance 5 :
    * on connaît la vraie droite, et « notre sondage » tire 1 000 personnes
    * parmi les 20 180 (graine 62). Rien n'est pondéré.
@@ -59,8 +59,8 @@
   import D7UnSeul from '$lib/deck/visuels/D7UnSeul.svelte';
   import GlaceNuage from '$lib/deck/visuels/GlaceNuage.svelte';
   import GrapheEpsilon from '$lib/deck/visuels/GrapheEpsilon.svelte';
-  import PartiPente from '$lib/deck/visuels/PartiPente.svelte';
-  import { PARTI, VARS } from '$lib/data/seance7.js';
+  import TiersPente from '$lib/deck/visuels/TiersPente.svelte';
+  import { TIERS, VARS } from '$lib/data/seance7.js';
   import PenteMelange from '$lib/deck/visuels/PenteMelange.svelte';
   import PenteMondeH0 from '$lib/deck/visuels/PenteMondeH0.svelte';
   import PenteRegle from '$lib/deck/visuels/PenteRegle.svelte';
@@ -195,8 +195,6 @@
 
   
 
-  
-
     <!-- ================= LA RÉGRESSION LINÉAIRE ================= -->
     <Slide fond="encre" bandeau="La régression linéaire" droite={D}>
       <h1 class="e">La régression linéaire</h1>
@@ -273,12 +271,12 @@
 
     <Slide bandeau="La variable confondante" droite={D}>
       <h2 class="e">Et dans la CES ?</h2>
-      <GrapheEpsilon x="populisme" y="satisfaction" xEq={VARS.x.nom} yEq={VARS.y.nom} z="vote libéral" autres={['l’âge', 'la scolarité', 'la région']} alerte={['le vote libéral', 'pousse aussi x']} b1={PARTI.b1_seul} pied="le graphe est une hypothèse · séance 11" />
+      <GrapheEpsilon x="scolarité" y="intérêt" xEq={VARS.x.nom} yEq={VARS.y.nom} z="l’âge" autres={['le revenu', 'le genre', 'la région']} alerte={['l’âge', 'touche aussi x']} etiqY="plus d’intérêt" etiqX="moins de scolarité" b1={TIERS.b1_seul} pied="le graphe est une hypothèse · séance 11" />
     </Slide>
 
     <Slide bandeau="La variable confondante" droite={D}>
-      <h2 class="e">À vote égal</h2>
-      <PartiPente />
+      <h2 class="e">À âge égal</h2>
+      <TiersPente />
     </Slide>
 
   
@@ -306,7 +304,6 @@
       <D7UnSeul />
     </Slide>
 
-    <!-- ================= LA STATISTIQUE t ================= -->
     <Slide bandeau="Est-ce le hasard ? · la statistique t" droite={D}>
       <h2 class="e">Et si H0 était vraie ?</h2>
       <PenteMelange />
@@ -394,12 +391,12 @@
     </Slide>
 
     <Slide bandeau="Lire un tableau · N" droite={D}>
-      <h2 class="e">N = 564. Pourquoi pas 1&#8239;000&#8239;?</h2>
+      <h2 class="e">N = 981. Pourquoi pas 1&#8239;000&#8239;?</h2>
       <TabN />
     </Slide>
 
     <Slide bandeau="Lire un tableau · R²" droite={D}>
-      <h2 class="e">R² = 0,11</h2>
+      <h2 class="e">R² = 0,04</h2>
       <TabR2 />
     </Slide>
 

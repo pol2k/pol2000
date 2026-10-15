@@ -1,20 +1,20 @@
 <script>
   /**
    * La statistique t : à combien d'erreurs types de zéro tombe notre pente ?
-   * On mesure la distance entre H0 (0) et notre pente (−0,37) avec une règle
-   * dont chaque bloc vaut une erreur type (0,044, calculée par R avec notre
+   * On mesure la distance entre H0 (0) et notre pente (+0,20) avec une règle
+   * dont chaque bloc vaut une erreur type (0,032, calculée par R avec notre
    * seul sondage). Quatre temps.
    *
    *   0  L'axe des pentes, H0 en pointillé, la cloche pâle du monde où H0
    *      est vraie (H0.notre.pentes, tranches de 0,01), notre pente en rouge.
    *      Sous l'axe, un seul bloc, rouge : une erreur type, NOTRE.coefs[1].se.
    *      Sa largeur est à peu près celle de la cloche (écart type des 1 000
-   *      mélanges : H0.notre.ecart_type, 0,044; R, avec un seul sondage :
-   *      0,044). On dit « à peu près » : ce sont deux façons de l'estimer.
-   *   1  Les blocs s'ajoutent un à un jusqu'à notre pente : 8, et un bout.
-   *   2  En haut, en grand : t = −8,397, la colonne « t value » de R
+   *      mélanges : H0.notre.ecart_type, 0,033; R, avec un seul sondage :
+   *      0,032). On dit « à peu près » : ce sont deux façons de l'estimer.
+   *   1  Les blocs s'ajoutent un à un, de 0 vers notre pente : 6, et un bout.
+   *   2  En haut, en grand : t = 6,324, la colonne « t value » de R
    *      (découpée dans SUMMARY, telle que R l'imprime), et la phrase : à
-   *      plus de 8 erreurs types de zéro.
+   *      plus de 6 erreurs types de zéro.
    *   3  Sous la règle, le panier de pommes de la séance 5 : à 2 erreurs
    *      types de 100 g (POMMES.t, 2,04, src/lib/data/seance5.js, exemple
    *      du livre), et c'était déjà rare. Puis la règle du pouce : au-delà
@@ -38,11 +38,13 @@
   const N = ' ';
   const C = NOTRE.coefs[1];
   const B = C.b, SE = C.se;
-  // Le t tel que R l'imprime (colonne « t value » de la ligne populisme).
-  const T = Number(SUMMARY.split('\n').find((l) => l.startsWith('populisme')).trim().split(/\s+/)[3]);
+  // Le t tel que R l'imprime (colonne « t value » de la ligne scolarite).
+  const T = Number(SUMMARY.split('\n').find((l) => l.startsWith('scolarite')).trim().split(/\s+/)[3]);
+  // Avec son signe : +0,20.
+  const fs = (v, d = 2) => (v > 0 ? '+' : '') + f(v, d);
 
-  // L'axe des pentes, de −0,45 à +0,2.
-  const P0 = -0.45, P1 = 0.2, X0 = 60, X1 = 940, BASE = 296;
+  // L'axe des pentes, de −0,12 à +0,25.
+  const P0 = -0.12, P1 = 0.25, X0 = 60, X1 = 940, BASE = 296;
   const x = (p) => X0 + ((p - P0) / (P1 - P0)) * (X1 - X0);
   const XB = x(B), XZ = x(0);
   const BLOC = x(SE) - x(0);
@@ -58,13 +60,13 @@
 
   // Les blocs : autant d'erreurs types entières qu'il en tient, et le bout.
   const ENTIERS = Math.floor(Math.abs(B) / SE);
-  const BLOCS = Array.from({ length: ENTIERS }, (_, i) => ({ i, x: XZ - (i + 1) * BLOC }));
+  const BLOCS = Array.from({ length: ENTIERS }, (_, i) => ({ i, x: XZ + i * BLOC }));
   const BOUT = Math.abs(B) / SE - ENTIERS;
   const YR = 336, HR = 34;
   // Le panier de pommes : POMMES.t erreurs types.
   const YP = 414;
   const PT = POMMES.t;
-  const PANIER = Array.from({ length: Math.floor(PT) }, (_, i) => XZ - (i + 1) * BLOC);
+  const PANIER = Array.from({ length: Math.floor(PT) }, (_, i) => XZ + i * BLOC);
   const PBOUT = PT - Math.floor(PT);
 
   const PHRASES = [
@@ -74,7 +76,7 @@
 </script>
 
 <div class="visuel pente-regle" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="La règle{N}: une erreur type, {f(SE, 3)}, de combien le hasard fait bouger une pente d’habitude. Entre 0 et notre pente, {f(B)}, on compte {ENTIERS} erreurs types, et un bout. t = {f(T, 3)}{N}: notre pente est à plus de {ENTIERS} erreurs types de 0. Le panier de pommes de la séance 5 était à {f(PT)} erreurs types, et c’était déjà rare. Au-delà d’environ 2 erreurs types, c’est rare si H0 était vraie.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="La règle{N}: une erreur type, {f(SE, 3)}, de combien le hasard fait bouger une pente d’habitude. Entre 0 et notre pente, {fs(B)}, on compte {ENTIERS} erreurs types, et un bout. t = {f(T, 3)}{N}: notre pente est à plus de {ENTIERS} erreurs types de 0. Le panier de pommes de la séance 5 était à {f(PT)} erreurs types, et c’était déjà rare. Au-delà d’environ 2 erreurs types, c’est rare si H0 était vraie.">
     <!-- La phrase (0 et 1), puis t (2 et 3). -->
     {#key e < 2 ? e : 2}
       {#if e < 2}
@@ -101,15 +103,15 @@
     <line x1={XZ} y1="132" x2={XZ} y2={BASE} class="rg-h0" />
     <text x={XZ} y="124" class="rg-h0-t">H0</text>
     <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="rg-axe" />
-    {#each [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2] as k}
+    {#each [-0.1, 0, 0.1, 0.2] as k}
       <line x1={x(k)} y1={BASE} x2={x(k)} y2={BASE + 7} class="rg-axe" />
-      {#if Math.abs(k - B) > 0.04}
+      {#if Math.abs(k - B) > 0.02}
         <text x={x(k)} y={BASE + 28} class="rg-tick" class:rg-zero={k === 0}>{k > 0 ? '+' : ''}{f(k, k === 0 ? 0 : 1)}</text>
       {/if}
     {/each}
     <line x1={XB} y1="124" x2={XB} y2={YR + HR} class="rg-notre" />
     <circle cx={XB} cy={BASE} r="10" class="rg-point" />
-    <text x={XB + 14} y="148" class="rg-lab">notre pente&#8239;: {f(B)}</text>
+    <text x={XB - 14} y="148" class="rg-lab rg-fin">notre pente&#8239;: {fs(B)}</text>
 
     <!-- La règle : un bloc au temps 0, tous au temps 1. -->
     {#each BLOCS as c}
@@ -120,9 +122,9 @@
         {/if}
       </g>
     {/each}
-    <rect x={XB} y={YR} width={BOUT * BLOC} height={HR} class="rg-bout rg-pas" class:rg-vu={e >= 1} style="transition-delay: {e >= 1 ? ENTIERS * 110 : 0}ms" />
+    <rect x={XZ + ENTIERS * BLOC} y={YR} width={BOUT * BLOC} height={HR} class="rg-bout rg-pas" class:rg-vu={e >= 1} style="transition-delay: {e >= 1 ? ENTIERS * 110 : 0}ms" />
     <g class="rg-etape" class:rg-vu={e === 0}>
-      <text x={XZ - BLOC - 12} y={YR + 25} class="rg-une">une erreur type&#8239;: {f(SE, 3)}</text>
+      <text x={XZ + BLOC + 12} y={YR + 25} class="rg-une">une erreur type&#8239;: {f(SE, 3)}</text>
     </g>
 
     <!-- 3 : le panier de pommes, et la règle du pouce. -->
@@ -130,9 +132,9 @@
       {#each PANIER as px, i}
         <rect x={px} y={YP} width={BLOC} height={HR} class="rg-bloc" class:rg-pair={i % 2 === 1} />
       {/each}
-      <rect x={XZ - PT * BLOC} y={YP} width={PBOUT * BLOC} height={HR} class="rg-bout" />
+      <rect x={XZ + Math.floor(PT) * BLOC} y={YP} width={PBOUT * BLOC} height={HR} class="rg-bout" />
       <line x1={XZ} y1={YP - 6} x2={XZ} y2={YP + HR + 6} class="rg-axe" />
-      <text x={XZ - PT * BLOC - 14} y={YP + 24} class="rg-pom">le panier de pommes (séance 5)&#8239;: {f(PT)}</text>
+      <text x={XZ + PT * BLOC + 14} y={YP + 24} class="rg-pom">le panier de pommes (séance 5)&#8239;: {f(PT)}</text>
       <text x="40" y="490" class="rg-pouce">Au-delà d’environ 2 erreurs types&#8239;: rare, si H0 était vraie.</text>
     </g>
   </svg>
@@ -164,8 +166,9 @@
   .rg-bout { fill: none; stroke: var(--dk-encre); stroke-width: 2; stroke-dasharray: 4 4; }
   .rg-num { font-size: 17px; font-weight: 600; text-anchor: middle; fill: var(--dk-fond); }
   .rg-num.rg-num-pair { fill: var(--dk-encre); }
-  .rg-une { font-size: 20px; font-weight: 600; text-anchor: end; fill: var(--dk-accent); }
-  .rg-pom { font-size: 19px; text-anchor: end; fill: var(--dk-encre); }
+  .rg-une { font-size: 20px; font-weight: 600; fill: var(--dk-accent); }
+  .rg-fin { text-anchor: end; }
+  .rg-pom { font-size: 19px; fill: var(--dk-encre); }
   .rg-pouce { font-size: 22px; font-weight: 600; fill: var(--dk-encre); }
   .rg-pas { opacity: 0; transition: opacity 0.15s; }
   .rg-pas.rg-vu { opacity: 1; transition: opacity 0.25s; }

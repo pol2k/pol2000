@@ -1,31 +1,32 @@
 <script>
   /**
-   * « Jouer avec la droite » : le vrai nuage de notre sondage (les 564
+   * « Jouer avec la droite » : le vrai nuage de notre sondage (les 981
    * personnes qui ont répondu aux deux questions, NOTRE.points de
    * src/lib/data/seance7.js), une droite, et son équation dont les nombres
-   * suivent la droite. Les deux variables n'ont que 5 et 4 valeurs (VARS) :
-   * chaque personne est dessinée à (jx, jy), un léger étalement autour de sa
-   * case, pour le dessin seulement. Le calcul utilise les vraies valeurs.
-   * On règle β0 (l'ordonnée à l'origine) et β1 (la pente) de trois façons :
-   * au clic (télécommande), avec les deux curseurs, ou en tirant les deux
-   * poignées posées sur la droite (le point rouge à 0 = β0, le cercle au
-   * bout = β1, qui fait pivoter la droite autour de β0).
+   * suivent la droite. X (scolarite) n'a que cinq niveaux et Y (interet)
+   * onze valeurs (VARS) : chaque personne est dessinée à (jx, jy), un léger
+   * étalement qui forme cinq colonnes, pour le dessin seulement. Le calcul
+   * utilise les vraies valeurs. On règle β0 (l'ordonnée à l'origine) et β1
+   * (la pente) de trois façons : au clic (télécommande), avec les deux
+   * curseurs, ou en tirant les deux poignées posées sur la droite (le point
+   * rouge à 0 = β0, le cercle au bout = β1, qui fait pivoter la droite
+   * autour de β0).
    *
    * « Total des carrés » (le mot de RegMoindres) : la somme des carrés des
    * écarts verticaux entre chaque point et la droite. Calculé ici à partir
    * de six sommes faites une fois, sur les vraies valeurs (x, y). Il est au
-   * plus bas sur la droite de R (NOTRE.coefs : 0,83 et −0,37) : la barre
+   * plus bas sur la droite de R (NOTRE.coefs : 0,54 et +0,20) : la barre
    * touche alors le trait « minimum ». La barre part de zéro (pas d'axe
    * menteur) : l'écart entre une droite plate et la meilleure est réel, mais
-   * modeste (R² = 0,11, soit 1 − 45,8 / 51,5).
+   * petit (R² = 0,04, soit 1 − 60,5 / 63,0). La pente, elle, est nette.
    *
    * Temps (clic, flèche, télécommande) :
-   *   0  une droite plate à la moyenne de la satisfaction (0,60) : β1 = 0
+   *   0  une droite plate à la moyenne de l'intérêt (0,67) : β1 = 0
    *      (sans animation : c'est l'état d'arrivée);
    *   1  on change β0 seulement : la droite monte et descend sans tourner,
-   *      et s'arrête trop haut (0,90);
+   *      et s'arrête trop bas (0,30);
    *   2  on change β1 seulement : la droite pivote autour de β0 et
-   *      s'arrête trop raide (−0,75);
+   *      s'arrête trop raide (+0,80);
    *   3  la droite de R : le total des carrés touche son minimum.
    *
    * Curseurs et temps. Les curseurs et les poignées règlent la droite
@@ -65,11 +66,11 @@
 
   // Le scénario des temps : les positions (β0, β1) par lesquelles passe la droite.
   const TOTAL = 3;
-  const HAUT = 0.9, RAIDE = -0.75;
+  const BAS = 0.3, RAIDE = 0.8;
   const SCENARIO = [
     { cibles: [[MOY, 0]], duree: 0 },
-    { cibles: [[0.97, 0], [0.15, 0], [HAUT, 0]], duree: 800 },
-    { cibles: [[HAUT, -0.95], [HAUT, 0.3], [HAUT, RAIDE]], duree: 800 },
+    { cibles: [[0.95, 0], [0.12, 0], [BAS, 0]], duree: 800 },
+    { cibles: [[BAS, -0.6], [BAS, 1], [BAS, RAIDE]], duree: 800 },
     { cibles: [[R0, R1]], duree: 1200 }
   ];
 
@@ -166,8 +167,8 @@
   }
 
   // ---- Le dessin. Les deux axes vont de 0 à 1; le cadre déborde un peu
-  // (de −0,1 à 1,1 et de −0,13 à 1,13) pour les grappes étalées.
-  const DX = [-0.1, 1.1], DY = [-0.13, 1.13];
+  // (de −0,1 à 1,1 et de −0,05 à 1,05) pour les colonnes étalées.
+  const DX = [-0.1, 1.1], DY = [-0.05, 1.05];
   const X0 = 124, X1 = 632, YB = 352, YT = 14;
   const x = (v) => X0 + ((v - DX[0]) / (DX[1] - DX[0])) * (X1 - X0);
   const y = (v) => YB - ((v - DY[0]) / (DY[1] - DY[0])) * (YB - YT);
@@ -179,13 +180,17 @@
   // Un libellé sur deux lignes : au premier espace si le reste tient, sinon au milieu.
   const deuxLignes = (t) => {
     const i = t.indexOf(' ');
+    if (i < 0) return [t, ''];
     if (i > 0 && t.length - i - 1 <= 15) return [t.slice(0, i), t.slice(i + 1)];
     const m = t.lastIndexOf(' ', Math.ceil(t.length / 2));
     return [t.slice(0, m), t.slice(m + 1)];
   };
   const REP_X = VARS.x.valeurs.map((v, i) => ({ v, lignes: deuxLignes(VARS.x.niveaux[i]) }));
-  // En y, « satisfait » est dans le titre de l'axe : on garde le début du libellé.
-  const REP_Y = VARS.y.valeurs.map((v, i) => ({ v, court: VARS.y.niveaux[i].replace(/ satisfait$/, '') }));
+  // En y : 0 à 1 par pas de 0,2 (le curseur de 0 à 10, divisé par 10), et
+  // les deux bornes du curseur (VARS.y.bornes) sous 0 et sous 1.
+  const REP_Y = [0, 0.2, 0.4, 0.6, 0.8, 1].map((v) => ({
+    v, lignes: v === 0 ? deuxLignes(VARS.y.bornes[0]) : v === 1 ? deuxLignes(VARS.y.bornes[1]) : null
+  }));
 
   // Le bout de la droite visible à droite : à 1, ou là où elle sort de 0 à 1.
   const xFin = $derived.by(() => {
@@ -263,7 +268,7 @@
   <EquationDroite {b0} {b1} {actif} />
 
   <div class="corps">
-    <svg bind:this={svg} viewBox="0 0 640 448" role="img" aria-label="Nuage de points de notre sondage, {nb(n)} personnes&#8239;: la satisfaction envers la démocratie, de 0 à 1, selon le populisme, de 0 à 1. Une droite qu’on règle avec son ordonnée à l’origine et sa pente. La droite de R, {nb(R0, 2)} moins {nb(-R1, 2)} fois populisme, est celle dont le total des carrés est le plus petit.">
+    <svg bind:this={svg} viewBox="0 0 640 448" role="img" aria-label="Nuage de points de notre sondage, {nb(n)} personnes&#8239;: l’intérêt pour la politique, de 0 à 1, selon la scolarité, de 0 à 1. Une droite qu’on règle avec son ordonnée à l’origine et sa pente. La droite de R, {nb(R0, 2)} plus {nb(R1, 2)} fois scolarité, est celle dont le total des carrés est le plus petit.">
       <defs>
         <clipPath id="dr-cadre"><rect x={X0} y={YT} width={X1 - X0} height={YB - YT} /></clipPath>
       </defs>
@@ -280,12 +285,15 @@
       {#each REP_Y as r}
         <line x1={X0 - 7} y1={y(r.v)} x2={X0} y2={y(r.v)} class="axe" />
         <text x={X0 - 12} y={y(r.v) + 1} class="tick fin">{nb2(r.v)}</text>
-        <text x={X0 - 12} y={y(r.v) + 17} class="niveau fin">{r.court}</text>
+        {#if r.lignes}
+          <text x={X0 - 12} y={y(r.v) + 17} class="niveau fin">{r.lignes[0]}</text>
+          <text x={X0 - 12} y={y(r.v) + 31} class="niveau fin">{r.lignes[1]}</text>
+        {/if}
       {/each}
       <text x={(X1 + X0) / 2} y={YB + 86} class="titre-axe">{VARS.x.nom}</text>
       <text transform="translate(18 {(YB + YT) / 2}) rotate(-90)" class="titre-axe">{VARS.y.nom}</text>
 
-      <!-- Les 564 personnes : dessinées une fois, elles ne dépendent pas de la droite. -->
+      <!-- Les 981 personnes : dessinées une fois, elles ne dépendent pas de la droite. -->
       <g class="nuage">
         {#each PTS as p}<circle cx={x(p.jx)} cy={y(p.jy)} r="3.3" />{/each}
       </g>
@@ -295,12 +303,12 @@
         <line x1={x(0)} y1={y(b0)} x2={x(1)} y2={y(b0 + b1)} class="droite" class:min={auMinimum} />
       </g>
 
-      <!-- Les étiquettes, posées dans les couloirs vides entre les rangées de grappes. -->
+      <!-- Les étiquettes, détourées couleur papier pour rester lisibles sur les colonnes. -->
       {#if aPlat}
-        <text x={x(1.08)} y={y(0.47)} class="ecrit fin">{T_MOY}</text>
+        <text x={x(1.08)} y={y(MOY) - 16} class="ecrit fin">{T_MOY}</text>
       {/if}
       {#if auMinimum}
-        <text x={x(0.12)} y={y(0.8)} class="ecrit rouge">{T_R}</text>
+        <text x={x(0.33)} y={y(R0 + R1 * 0.33) + 30} class="ecrit rouge">{T_R}</text>
       {/if}
 
       <!-- Les poignées : β0 à gauche (monte et descend), β1 au bout (fait pivoter). -->

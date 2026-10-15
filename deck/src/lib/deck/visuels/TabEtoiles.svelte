@@ -8,12 +8,12 @@
    *   0  Le tableau, les étoiles en rouge.
    *   1  L'échelle de la légende : plus il y a d'étoiles, plus p est petite,
    *      moins le hasard seul (H0) explique la pente.
-   *   2  Notre pente tombe dans la case *** (p < 0,001 : R imprime 3.74e-16, soit 0,000 000 000 000 000 374).
+   *   2  Notre pente tombe dans la case *** (p < 0,001 : R imprime 3.87e-10, soit 0,000 000 000 387).
    *   3  Le garde-fou : des étoiles ne veulent dire ni « important » ni
    *      « causal ».
    *
    * La valeur p vient de NOTRE.coefs[1].p (src/lib/data/seance7.js). On ne
-   * l'écrit pas en entier : elle a 15 zéros après la virgule.
+   * l'écrit pas en entier : elle a 9 zéros après la virgule.
    */
   import { brancherTemps } from '../temps.js';
   import { NOTRE, VARS } from '$lib/data/seance7.js';
@@ -48,7 +48,7 @@
         <div class="tes-case" class:tes-ici={e >= 2 && i === ICI} style="transition-delay: {i * 90}ms">
           <span class="tes-et" class:tes-aucune={!c.et}>{c.et || 'aucune'}</span>
           <span class="tes-seuil">{c.seuil}</span>
-          {#if i === ICI}<span class="tes-nous" class:tes-vu={e >= 2}>{VARS.x.nom}</span>{/if}
+          {#if i === ICI}<span class="tes-nous" class:tes-vu={e >= 2}>{VARS.x.court.toLowerCase()}</span>{/if}
         </div>
       {/each}
       <div class="tes-fleche">

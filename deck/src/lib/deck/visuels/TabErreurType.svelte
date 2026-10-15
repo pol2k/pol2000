@@ -2,15 +2,15 @@
   /**
    * L'erreur type, entre parenthèses sous le coefficient. À gauche, le
    * tableau d'article (TabPublie). À droite, une règle des pentes : 0 (aucun
-   * lien) et notre pente, −0,371. Rien de nouveau, on relie le tableau aux
+   * lien) et notre pente, +0,203. Rien de nouveau, on relie le tableau aux
    * diapos d'avant (erreur type, intervalle de confiance, t).
    *
    *   0  La règle : 0 et notre pente.
-   *   1  (0,044) : une erreur type de chaque côté de la pente, de combien
+   *   1  (0,032) : une erreur type de chaque côté de la pente, de combien
    *      elle bougerait d'un sondage à l'autre.
    *   2  L'intervalle de confiance à 95 % (bornes de confint(), NOTRE.coefs[1]
    *      bas et haut) : environ deux erreurs types de chaque côté.
-   *   3  De la pente à 0, on compte les erreurs types : 8,4. C'est le t que
+   *   3  De la pente à 0, on compte les erreurs types : 6,3. C'est le t que
    *      R imprime (t value), absent du tableau d'article.
    *
    * Nombres : NOTRE.coefs[1] (b, se, t, bas, haut) dans src/lib/data/seance7.js.
@@ -30,8 +30,9 @@
   const f = (v, d = 3) =>
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−');
   const C = NOTRE.coefs[1];
-  const D0 = -0.6, D1 = 0.1, X0 = 40, X1 = 620, YA = 210;
-  const GRAD = [-0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1];
+  // La règle couvre 0 et l'intervalle de confiance, avec un peu d'air.
+  const D0 = -0.05, D1 = 0.3, X0 = 40, X1 = 620, YA = 210;
+  const GRAD = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3];
   const x = (v) => X0 + ((v - D0) / (D1 - D0)) * (X1 - X0);
   // Les marches d'une erreur type, de la pente vers 0.
   const N_ET = Math.floor(Math.abs(C.b) / C.se);
@@ -55,7 +56,7 @@
       <line x1={X0} y1={YA} x2={X1} y2={YA} class="tet-axe" />
       {#each GRAD as v}
         <line x1={x(v)} y1={YA} x2={x(v)} y2={YA + 8} class="tet-axe" />
-        <text x={x(v)} y={YA + 32} class="tet-tick">{f(v, v ? 1 : 0)}</text>
+        <text x={x(v)} y={YA + 32} class="tet-tick">{f(v, v ? 2 : 0)}</text>
       {/each}
       <text x={(X0 + X1) / 2} y={YA + 66} class="tet-titre">la pente (de 0 à 1)</text>
 

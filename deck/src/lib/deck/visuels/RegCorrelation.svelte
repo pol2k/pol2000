@@ -1,23 +1,25 @@
 <script>
   /**
-   * Corrélation ou régression ? Le même nuage (RegBulles, les 10 993 de la
+   * Corrélation ou régression ? Le même nuage (RegBulles, les 19 736 de la
    * CES 2025 qui ont répondu aux deux questions), deux façons de le résumer.
    *
    *   0  Le nuage seul.
-   *   1  La corrélation : r = −0,30, posé sur une règle de −1 à +1. Le signe
+   *   1  La corrélation : r = 0,17, posé sur une règle de −1 à +1. Le signe
    *      donne le sens, la distance à ±1 donne la force. Un nombre sans
-   *      unité, le même dans les deux sens (populisme ↔ satisfaction).
-   *   2  La régression : la droite, et sa pente dans les unités de la
-   *      satisfaction, −0,31 de fortement en désaccord à fortement en
-   *      accord. Elle a un sens : populisme → satisfaction.
-   *   3  Elle prédit : « plutôt en accord » (0,75), environ 0,56 de
-   *      satisfaction (predict() donne 0,5579; 0,79 − 0,31 × 0,75 de la
-   *      diapo suivante donne aussi 0,56).
-   *   4  Et elle peut garder d'autres variables constantes : « à vote
-   *      égal », plus loin dans la séance (le vote libéral, PARTI).
+   *      unité, le même dans les deux sens (scolarité ↔ intérêt).
+   *   2  La régression : la droite, et sa pente dans les unités de
+   *      l'intérêt, +0,17 d'un bout à l'autre de la scolarité. Elle a un
+   *      sens : scolarité → intérêt. Ici, les deux nombres se ressemblent
+   *      (0,1697 et 0,1717) : une coïncidence, les deux variables ayant à
+   *      peu près le même écart type. La carte le dit.
+   *   3  Elle prédit : « université, 1er cycle » (0,75), environ 0,69
+   *      d'intérêt (predict() donne 0,6936; 0,56 + 0,17 × 0,75 de la diapo
+   *      suivante donne aussi 0,69).
+   *   4  Et elle peut garder d'autres variables constantes : « à âge
+   *      égal », plus loin dans la séance (TIERS).
    *
    * r et la prédiction : CORR (outils/seance7_b.R, cor() et predict() sur
-   * les 10 993 cas complets; r = POP.r). La pente : POP.b1
+   * les 19 736 cas complets; r = POP.r). La pente : POP.b1
    * (outils/seance7_data.R).
    */
   import { brancherTemps } from '../temps.js';
@@ -54,17 +56,18 @@
         <span class="marque" style="left: {ou(e >= 1 ? CORR.r : 0)}%"></span>
         <span class="bout g">−1</span><span class="bout m">0</span><span class="bout d">+1</span>
       </div>
-      <p class="sens">populisme <span class="f">↔</span> satisfaction</p>
+      <p class="sens">scolarité <span class="f">↔</span> intérêt</p>
     </section>
 
     <section class="carte reg" class:vu={e >= 2}>
       <h3>La régression</h3>
-      <p class="chiffre">{virgule(POP.b1, 2)} <span class="unite">de satisfaction, d’un bout à l’autre</span></p>
+      <p class="chiffre">+{virgule(POP.b1, 2)} <span class="unite">d’intérêt, d’un bout à l’autre</span></p>
+      <p class="hasard">le même chiffre que r, ici par hasard</p>
       <p class="pred" class:vu={e >= 3}>{NIVEAU} <span class="f">→</span> environ {virgule(CORR.pred, 2)}</p>
-      <p class="sens">populisme <span class="f">→</span> satisfaction</p>
+      <p class="sens">scolarité <span class="f">→</span> intérêt</p>
     </section>
 
-    <p class="suite" class:vu={e >= 4}>et plus loin aujourd’hui, <strong>à vote égal</strong></p>
+    <p class="suite" class:vu={e >= 4}>et plus loin aujourd’hui, <strong>à âge égal</strong></p>
   </div>
 </div>
 
@@ -86,6 +89,7 @@
   .unite { font-size: 0.45em; font-weight: 400; color: var(--dk-encre); letter-spacing: 0; }
   .sens { font-size: 0.72em !important; color: var(--dk-gris); }
   .f { color: var(--dk-encre); font-weight: 600; }
+  .hasard { font-size: 0.66em !important; color: var(--dk-gris); font-style: italic; margin-top: -0.2em !important; }
   .pred { font-size: 0.9em !important; font-weight: 600; opacity: 0; transition: opacity 0.4s 0.5s; }
   .pred.vu { opacity: 1; }
   .pred .f { color: var(--dk-accent); }

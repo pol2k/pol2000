@@ -6,13 +6,12 @@
    *
    *   0  Le modèle 1, comme sur les diapos d'avant (la colonne du modèle 2
    *      garde sa largeur, invisible, ses lignes sont repliées).
-   *   1  Le modèle 2 apparaît : une colonne de plus, cinq lignes de plus.
-   *   2  Le populisme d'une colonne à l'autre : −0,37, puis −0,28. Il
-   *      rétrécit (attention : 564 puis 488 personnes, pas tout à fait les
-   *      mêmes).
-   *   3  A voté libéral : +0,23, la variable cachée de la section
-   *      « confusion » (PARTI), maintenant dans le modèle.
-   *   4  Âge, femme, Québec : pas d'étoile.
+   *   1  Le modèle 2 apparaît : une colonne de plus, quatre lignes de plus.
+   *   2  La scolarité d'une colonne à l'autre : +0,20, puis +0,19. À peine
+   *      bougé (et sur 981 puis 877 personnes, pas tout à fait les mêmes).
+   *   3  L'âge : +0,35, la troisième variable de la section TIERS, maintenant
+   *      dans le modèle (« à âge égal »).
+   *   4  Québec : pas d'étoile.
    *
    * Nombres : NOTRE et MULTIPLE dans src/lib/data/seance7.js. Le modèle 2 a
    * son propre N et son propre R² : chaque colonne a son pied.
@@ -34,14 +33,15 @@
   const X = VARS.x.nom;
   const b1 = NOTRE.coefs.find((c) => c.terme === X).b;
   const b2 = MULTIPLE.coefs.find((c) => c.terme === X).b;
-  const lib = MULTIPLE.coefs.find((c) => c.terme === 'vote_liberal').b;
-  const ON = [[], ['col2'], [`b-${X}`], ['ligne-vote_liberal'], ['ligne-age', 'ligne-femme', 'ligne-quebec']];
+  const age = MULTIPLE.coefs.find((c) => c.terme === 'age').b;
+  const sg = (v) => (v > 0 ? '+' : '') + f(v);
+  const ON = [[], ['col2'], [`b-${X}`], ['ligne-age'], ['ligne-quebec']];
   const DIT = [
     '',
     'une colonne de plus, des lignes de plus',
-    `${VARS.x.court.toLowerCase()} : ${f(b1)}, puis ${f(b2)}`,
-    `a voté libéral : ${lib > 0 ? '+' : ''}${f(lib)}`,
-    'âge, femme, Québec : pas d’étoile'
+    `${VARS.x.court.toLowerCase()} : ${sg(b1)}, puis ${sg(b2)}`,
+    `âge : ${sg(age)}`,
+    'Québec : pas d’étoile'
   ];
 </script>
 

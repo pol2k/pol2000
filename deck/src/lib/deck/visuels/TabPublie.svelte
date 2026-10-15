@@ -7,11 +7,11 @@
    * l'emploie possède le temps et dit quoi surligner (prop `on`).
    *
    * Tous les nombres viennent de src/lib/data/seance7.js (outils/seance7_data.R) :
-   *   modèle 1 : NOTRE  (satisfaction_dem ~ populisme, les cas complets)
-   *   modèle 2 : MULTIPLE (+ vote libéral, âge, femme, Québec, universitaire)
+   *   modèle 1 : NOTRE  (interet ~ scolarite, les cas complets)
+   *   modèle 2 : MULTIPLE (+ âge, femme, revenu, Québec)
    * Toutes les variables vont de 0 à 1 (convention du cours). Coefficients
-   * et erreurs types à trois décimales (une erreur type de 0,044 arrondie à
-   * 0,04 fausserait le t qu'on compte à la diapo suivante), R² à deux.
+   * et erreurs types à trois décimales (une erreur type de 0,032 arrondie à
+   * 0,03 fausserait le t qu'on compte à la diapo suivante), R² à deux.
    * Virgule décimale, vrai signe moins. Les noms viennent de VARS.
    *
    *   on      — clés à surligner. Chaque cellule porte des clés : 'y' (la
@@ -36,17 +36,16 @@
   // Les lignes, dans l'ordre de l'article : les variables, puis la constante.
   const NOMS = {
     [VARS.x.nom]: [VARS.x.court, '(0 à 1)'],
-    vote_liberal: ['A voté libéral', '(0 = non, 1 = oui)'],
-    age: ['Âge', `(0 = ${VARS.age.min} ans, 1 = ${VARS.age.max} ans)`],
+    age: ['Âge', `(0 = 18 ans, 1 = ${MULTIPLE.age_max} ans)`],
     femme: ['Femme', '(0 = non, 1 = oui)'],
+    revenu: ['Revenu', '(8 tranches, de 0 à 1)'],
     quebec: ['Québec', '(0 = non, 1 = oui)'],
-    universitaire: ['Diplôme universitaire', '(0 = non, 1 = oui)'],
     '(Intercept)': ['Constante', '']
   };
   // Le nom de la variable expliquée sur deux lignes, coupé à l'espace du milieu.
   const coupe = (t) => { const m = t.lastIndexOf(' ', Math.ceil(t.length / 2)); return m > 0 ? [t.slice(0, m), t.slice(m + 1)] : [t, '']; };
   const Y = coupe(VARS.y.court);
-  const ORDRE = [VARS.x.nom, 'vote_liberal', 'age', 'femme', 'quebec', 'universitaire', '(Intercept)'];
+  const ORDRE = [VARS.x.nom, 'age', 'femme', 'revenu', 'quebec', '(Intercept)'];
   const M1 = Object.fromEntries(NOTRE.coefs.map((c) => [c.terme, c]));
   const M2 = Object.fromEntries(MULTIPLE.coefs.map((c) => [c.terme, c]));
   const LIGNES = ORDRE.filter((t) => deux || M1[t]).map((t) => ({ terme: t, nom: NOMS[t], m1: M1[t], m2: M2[t], seul2: !M1[t] }));

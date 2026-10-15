@@ -1,21 +1,23 @@
 <script>
   /**
    * L'anatomie d'un graphique des coefficients, un morceau par clic, sur le
-   * modèle simple de notre sondage (satisfaction_dem ~ populisme, 564 cas
+   * modèle simple de notre sondage (interet ~ scolarite, 981 cas
    * complets). Le morceau qu'on nomme est en rouge, les précédents restent
    * en encre.
    *
    *   0  Le dessin seul : un point, sa moustache, la ligne à 0, l'axe.
-   *   1  Le point : le coefficient, −0,37.
+   *   1  Le point : le coefficient, +0,20.
    *   2  La moustache : l'intervalle de confiance à 95 % (la méthode qui
    *      attrape la vraie pente 19 fois sur 20, comme à la section d'avant).
    *   3  La ligne à 0 : H0, « aucun effet ».
-   *   4  À gauche de 0 : négatif (la satisfaction baisse). À droite : positif.
-   *   5  La distance à 0 : la taille de l'effet, dans les unités de la
-   *      satisfaction (0 à 1), quand le populisme va de 0 à 1, c'est-à-dire
-   *      de « fortement en désaccord » à « fortement en accord ».
+   *   4  À gauche de 0 : négatif (l'intérêt baisse). À droite : positif.
+   *   5  La distance à 0 : la taille de l'effet, dans les unités de
+   *      l'intérêt (0 à 1), quand la scolarité va de 0 à 1, c'est-à-dire du
+   *      secondaire non terminé à la maîtrise ou au doctorat. Le crochet
+   *      est à droite de 0 (là où est le point), son texte à gauche (la
+   *      place libre).
    *
-   * Les nombres viennent de NOTRE.coefs[1], les libellés de VARS.x
+   * Les nombres viennent de NOTRE.coefs[1], le libellé de VARS.x
    * (src/lib/data/seance7.js, généré par outils/seance7_data.R). L'axe
    * (−0,6 à +0,6) est celui de CoefDuTableau.
    */
@@ -29,30 +31,30 @@
     return brancherTemps(hote, { total: 5, lire: () => e, ecrire: (v) => (e = v) });
   });
   const f = (v, d = 2) =>
-    v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−').replace(/\s/g, ' ');
+    v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '\u2212').replace(/\s/g, '\u202F');
   const C = NOTRE.coefs[1];
   const NOM = VARS.x.court;
-  // « Fortement en désaccord » et « fortement en accord » : les deux bouts de l'échelle.
+  // Le bas de l'échelle (« secondaire non terminé »), tiré de VARS.
   const BAS = VARS.x.niveaux[0].toLowerCase();
-  const HAUT = VARS.x.niveaux[VARS.x.niveaux.length - 1].toLowerCase();
 
   const V0 = -0.6, V1 = 0.6, XL = 350, XR = 960;
   const x = (v) => XL + ((v - V0) / (V1 - V0)) * (XR - XL);
   const ticks = [-0.5, -0.25, 0, 0.25, 0.5];
   const ft = (t) => (t === 0 ? '0' : f(t, t % 0.5 === 0 ? 1 : 2));
   const X0 = x(0), XB = x(C.b), XG = x(C.bas), XD = x(C.haut);
-  const YR = 290, AXE = 450, YDIST = 336;
+  const YR = 290, AXE = 450, YDIST = 338;
+  const XTXT = 990; // fin du texte de la moustache, à droite
 </script>
 
 <div class="visuel coef-ana" bind:this={hote}>
-  <svg viewBox="0 0 1000 530" role="img" aria-label="Le graphique des coefficients, morceau par morceau. Le point est le coefficient, {f(C.b)}. La moustache est l’intervalle de confiance à 95&#8239;%, de {f(C.bas)} à {f(C.haut)}&#8239;: la méthode attrape la vraie pente 19 fois sur 20. La ligne à 0, c’est H0&#8239;: aucun effet. À gauche de 0, l’effet est négatif, la satisfaction baisse. À droite, il est positif. La distance à 0 donne la taille de l’effet&#8239;: {f(-C.b)} de moins sur l’échelle de 0 à 1, de {BAS} à {HAUT}.">
+  <svg viewBox="0 0 1000 530" role="img" aria-label="Le graphique des coefficients, morceau par morceau. Le point est le coefficient, {f(C.b)}. La moustache est l’intervalle de confiance à 95&#8239;%, de {f(C.bas)} à {f(C.haut)}&#8239;: la méthode attrape la vraie pente 19 fois sur 20. La ligne à 0, c’est H0&#8239;: aucun effet. À gauche de 0, l’effet est négatif, l’intérêt baisse. À droite, il est positif. La distance à 0 donne la taille de l’effet&#8239;: {f(C.b)} de plus sur l’échelle de 0 à 1, du {BAS} à la maîtrise ou au doctorat.">
 
     <!-- 4 : à gauche, négatif. À droite, positif. -->
     <g class="ca-etape" class:ca-vu={e >= 4} class:ca-ici={e === 4}>
       <text x={(XL + X0) / 2} y="150" class="ca-cote ca-signe">&#8592; négatif</text>
-      <text x={(XL + X0) / 2} y="178" class="ca-cote-s">la satisfaction baisse</text>
+      <text x={(XL + X0) / 2} y="178" class="ca-cote-s">l’intérêt baisse</text>
       <text x={(X0 + XR) / 2} y="150" class="ca-cote ca-signe">positif &#8594;</text>
-      <text x={(X0 + XR) / 2} y="178" class="ca-cote-s">la satisfaction monte</text>
+      <text x={(X0 + XR) / 2} y="178" class="ca-cote-s">l’intérêt monte</text>
     </g>
 
     <!-- 3 : la ligne à 0. -->
@@ -61,13 +63,13 @@
       <text x={X0} y="78" class="ca-cote">0 = aucun effet (H0)</text>
     </g>
 
-    <!-- L'axe, dans les unités de la satisfaction. -->
+    <!-- L'axe, dans les unités de l'intérêt. -->
     <line x1={XL} y1={AXE} x2={XR} y2={AXE} class="ca-axe" class:ca-rouge-l={e === 4} />
     {#each ticks as t}
       <line x1={x(t)} y1={AXE} x2={x(t)} y2={AXE + 9} class="ca-axe" />
       <text x={x(t)} y={AXE + 34} class="ca-tick">{ft(t)}</text>
     {/each}
-    <text x={(XL + XR) / 2} y="522" class="ca-titre-axe">effet sur la satisfaction (de 0 à 1)</text>
+    <text x={(XL + XR) / 2} y="522" class="ca-titre-axe">effet sur l’intérêt (de 0 à 1)</text>
 
     <!-- La rangée : la variable, sa moustache, son point. -->
     <text x="320" y={YR - 4} class="ca-lab">{NOM}</text>
@@ -83,21 +85,21 @@
       <text x={XB} y="256" class="ca-cote ca-gros">{f(C.b)}</text>
     </g>
 
-    <!-- 2 : la moustache. -->
+    <!-- 2 : la moustache. Le texte est sous le crochet de la distance, à droite. -->
     <g class="ca-etape" class:ca-vu={e >= 2} class:ca-ici={e === 2}>
-      <line x1={XG - 30} y1="338" x2={XG + 6} y2={YR + 14} class="ca-renvoi" />
-      <text x={XG - 36} y="350" class="ca-cote ca-fin">l’intervalle de confiance</text>
-      <text x={XG - 36} y="378" class="ca-cote-s ca-fin ca-suit">à 95&#8239;% · 19 fois sur 20</text>
+      <line x1={XD + 40} y1="370" x2={XD - 4} y2={YR + 14} class="ca-renvoi" />
+      <text x={XTXT} y="396" class="ca-cote ca-moyen ca-fin">l’intervalle de confiance</text>
+      <text x={XTXT} y="422" class="ca-cote-s ca-fin ca-suit">à 95&#8239;% · 19 fois sur 20</text>
     </g>
 
-    <!-- 5 : la distance à 0, dans les unités de la satisfaction. -->
+    <!-- 5 : la distance à 0, dans les unités de l'intérêt. -->
     <g class="ca-etape" class:ca-vu={e >= 5} class:ca-ici={e === 5}>
-      <line x1={XB} y1={YDIST} x2={X0} y2={YDIST} class="ca-dist" />
+      <line x1={X0} y1={YDIST} x2={XB} y2={YDIST} class="ca-dist" />
       <line x1={XB} y1={YDIST - 10} x2={XB} y2={YDIST + 10} class="ca-dist" />
       <line x1={X0} y1={YDIST - 10} x2={X0} y2={YDIST + 10} class="ca-dist" />
-      <text x={X0 + 18} y={YDIST + 8} class="ca-cote ca-debut">{f(-C.b)} de moins</text>
-      <text x={X0 + 18} y={YDIST + 36} class="ca-cote-s ca-debut ca-suit">de {BAS}</text>
-      <text x={X0 + 18} y={YDIST + 62} class="ca-cote-s ca-debut ca-suit">à {HAUT}</text>
+      <text x={X0 - 18} y={YDIST + 8} class="ca-cote ca-fin">{f(C.b)} de plus</text>
+      <text x={X0 - 18} y={YDIST + 36} class="ca-cote-s ca-fin ca-suit">du {BAS}</text>
+      <text x={X0 - 18} y={YDIST + 62} class="ca-cote-s ca-fin ca-suit">à la maîtrise ou au doctorat</text>
     </g>
   </svg>
 </div>
@@ -121,6 +123,7 @@
   .ca-cote { font-size: 22px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); transition: fill 0.4s; }
   .ca-cote-s { font-size: 20px; text-anchor: middle; fill: var(--dk-gris); transition: fill 0.4s; }
   .ca-gros { font-size: 28px; }
+  .ca-moyen { font-size: 20px; }
   .ca-fin { text-anchor: end; }
   .ca-debut { text-anchor: start; }
   .ca-ici .ca-cote, .ca-ici .ca-suit { fill: var(--dk-accent); }

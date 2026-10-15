@@ -9,13 +9,13 @@
    * l'article.
    *
    *   0  Les deux, côte à côte.
-   *   1  Les noms : satisfaction_dem (dans l'appel) et les lignes de R
+   *   1  Les noms : interet (dans l'appel) et les lignes de R
    *      deviennent la variable en tête de colonne et les noms des lignes.
    *   2  Estimate : le coefficient.
    *   3  Std. Error : l'erreur type, entre parenthèses.
    *   4  Pr(>|t|) et ses codes : les étoiles et leur légende.
-   *   5  « 436 observations deleted » et « 562 degrees of freedom » : R
-   *      n'imprime pas N, il faut le déduire (1 000 − 436 = 564).
+   *   5  « 19 observations deleted » et « 979 degrees of freedom » : R
+   *      n'imprime pas N, il faut le déduire (1 000 − 19 = 981).
    *   6  Multiple R-squared : le R², arrondi.
    *   7  Tout ce qui a son pendant reste à l'encre, le reste pâlit : ce que
    *      l'article laisse de côté (Call, Residuals, t value, l'erreur type

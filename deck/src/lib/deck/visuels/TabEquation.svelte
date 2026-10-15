@@ -7,10 +7,10 @@
    *
    *   0  Le tableau et l'équation vide.
    *   1  Une colonne = un modèle = une équation.
-   *   2  y : la variable en tête de colonne (la satisfaction envers la démocratie).
-   *   3  x : le nom de la ligne (le populisme).
-   *   4  β1 : le coefficient de la ligne, −0,371.
-   *   5  β0 : la constante, 0,830.
+   *   2  y : la variable en tête de colonne (l'intérêt pour la politique).
+   *   3  x : le nom de la ligne (la scolarité).
+   *   4  β1 : le coefficient de la ligne, +0,203.
+   *   5  β0 : la constante, 0,540.
    * Les mots sous y et x sont les noms de R (VARS), en français courant.
    *
    * Nombres : NOTRE.coefs dans src/lib/data/seance7.js (outils/seance7_data.R).
@@ -49,13 +49,13 @@
       <span class="te-o">+</span>
       <span class="te-s">ε</span>
 
-      <span class="te-r" class:te-vu={e >= 2} class:te-on={e === 2}>satisfaction</span>
+      <span class="te-r" class:te-vu={e >= 2} class:te-on={e === 2}>intérêt</span>
       <span class="te-o te-r te-vu">=</span>
       <span class="te-r" class:te-vu={e >= 5} class:te-on={e === 5}>{f(C0.b)}</span>
       <span class="te-o te-r" class:te-vu={e >= 4}>{C1.b < 0 ? '−' : '+'}</span>
       <span class="te-r" class:te-vu={e >= 4} class:te-on={e === 4}>{f(Math.abs(C1.b))}</span>
       <span class="te-o te-r te-fois te-vu">×</span>
-      <span class="te-r" class:te-vu={e >= 3} class:te-on={e === 3}>populisme</span>
+      <span class="te-r" class:te-vu={e >= 3} class:te-on={e === 3}>scolarité</span>
       <span class="te-o te-r te-vu">+</span>
       <span class="te-o te-r te-vu">ε</span>
     </div>

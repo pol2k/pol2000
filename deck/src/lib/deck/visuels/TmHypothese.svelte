@@ -5,14 +5,15 @@
    * façon : H₁ sort d'un chapeau de magicien, et on la raye. À droite, la
    * bonne : une théorie (le camp choisi sur la carte de l'étape 2), ce
    * qu'elle implique pour notre question, donc H₁, et en face H₀. Exemple
-   * fil rouge de la séance : « Le populisme mine-t-il la satisfaction envers
-   * la démocratie ? » (satisfaction_dem selon populisme). La théorie est dite
+   * fil rouge de la séance : « Plus on est scolarisé, plus on s'intéresse à
+   * la politique ? » (interet selon scolarite). La théorie, un classique
+   * (les ressources : compétences civiques, information, réseaux), est dite
    * en mots, sans référence : aucune citation inventée. H₀ porte déjà son nom
    * de régression, β₁ = 0, qu'on retrouve plus loin aujourd'hui. Cinq temps :
    *
    *   0  le chapeau, H₁ en sort;
    *   1  on raye : « Une hypothèse ne sort pas d'un chapeau. »;
-   *   2  la théorie, puis ce qu'elle implique pour la démocratie;
+   *   2  la théorie, puis ce qu'elle implique pour l'intérêt;
    *   3  donc H₁, avec sa droite qui descend (schéma, pas des données);
    *   4  H₀, la droite plate, et β₁ = 0.
    *
@@ -53,25 +54,25 @@
   <div class="tm-hyp-d">
     <div class="tm-hyp-b" class:tm-on={e >= 2}>
       <span class="tm-hyp-et">THÉORIE · tirée de la littérature</span>
-      <p>Le populisme oppose un peuple honnête à des élites qui le trahissent.</p>
+      <p>L’école donne des ressources&#8239;: des compétences, de l’information, des réseaux.</p>
     </div>
     <div class="tm-hyp-b tm-hyp-fait" class:tm-on={e >= 2} style="--d: 0.25s">
-      <span class="tm-hyp-et">POUR LA DÉMOCRATIE</span>
-      <p>Si les élus ne servent que les puissants, le système fonctionne mal.</p>
+      <span class="tm-hyp-et">POUR LA POLITIQUE</span>
+      <p>Avec ces ressources, suivre la politique coûte moins d’effort.</p>
     </div>
     <div class="tm-hyp-donc" class:tm-on={e >= 3}>donc</div>
     <div class="tm-hyp-hh">
       <div class="tm-hyp-b tm-hyp-h1b" class:tm-on={e >= 3}>
         <span class="tm-hyp-et tm-rouge">H₁ · L’HYPOTHÈSE</span>
-        <p>Plus on pense que les politiciens ne servent que les riches, moins on est satisfait de la démocratie.</p>
+        <p>Plus on est scolarisé, plus on s’intéresse à la politique.</p>
         <svg viewBox="0 0 160 70" class="tm-hyp-mini" aria-hidden="true">
           <line x1="10" y1="62" x2="150" y2="62" class="tm-hyp-axe" /><line x1="10" y1="62" x2="10" y2="6" class="tm-hyp-axe" />
-          <line x1="16" y1="14" x2="146" y2="52" class="tm-hyp-droite" />
+          <line x1="16" y1="52" x2="146" y2="14" class="tm-hyp-droite" />
         </svg>
       </div>
       <div class="tm-hyp-b tm-hyp-h0b" class:tm-on={e >= 4}>
         <span class="tm-hyp-et">H₀ · L’HYPOTHÈSE NULLE</span>
-        <p>Le populisme ne change rien à la satisfaction.</p>
+        <p>La scolarité ne change rien à l’intérêt.</p>
         <svg viewBox="0 0 160 70" class="tm-hyp-mini" aria-hidden="true">
           <line x1="10" y1="62" x2="150" y2="62" class="tm-hyp-axe" /><line x1="10" y1="62" x2="10" y2="6" class="tm-hyp-axe" />
           <line x1="16" y1="33" x2="146" y2="33" class="tm-hyp-droite tm-plate" />

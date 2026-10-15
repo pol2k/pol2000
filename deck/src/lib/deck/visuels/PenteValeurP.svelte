@@ -13,10 +13,10 @@
    *      Dessous, la définition en une question : si H0 était vraie, combien
    *      de fois verrait-on un résultat au moins aussi loin que le nôtre ?
    *   2  Notre pente : H0.notre.aussi_loin (0) mélange sur 1 000 aussi loin.
-   *      Dessous, l'en-tête et la ligne populisme de summary(), telles
+   *      Dessous, l'en-tête et la ligne scolarite de summary(), telles
    *      que R les imprime (découpées dans SUMMARY, rien n'est retapé). Le
    *      titre de colonne Pr(>|t|) passe au rouge et la valeur est encadrée :
-   *      « 3.74e-16 », pratiquement 0.
+   *      « 3.87e-10 », pratiquement 0.
    *
    * Données : PANIERS (src/lib/data/seance5_normale.js), H0 et SUMMARY
    * (src/lib/data/seance7.js).
@@ -36,10 +36,10 @@
   const SUR100 = Math.round(PANIERS.auMoins105 / 10);
   const TOUS = f(H0.notre.pentes.length);
 
-  // Les deux lignes de R : l'en-tête des coefficients et la ligne populisme.
+  // Les deux lignes de R : l'en-tête des coefficients et la ligne scolarite.
   const LIGNES = SUMMARY.split('\n');
   const ENTETE = LIGNES.find((l) => /^\s+Estimate/.test(l)).trimEnd();
-  const RANG = LIGNES.find((l) => l.startsWith('populisme')).trimEnd();
+  const RANG = LIGNES.find((l) => l.startsWith('scolarite')).trimEnd();
   // La colonne p : sa position dans la ligne (Plex Mono, 0,6 em par caractère).
   const P_TXT = RANG.trim().split(/\s+/)[4];
   const P_COL = RANG.indexOf(P_TXT);

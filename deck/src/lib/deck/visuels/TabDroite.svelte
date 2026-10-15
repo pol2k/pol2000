@@ -1,20 +1,20 @@
 <script>
   /**
    * Les deux nombres du haut du tableau dessinent la droite. À gauche, le
-   * tableau d'article (TabPublie). À droite, notre sondage en grappes : les
-   * deux variables n'ont que 5 et 4 valeurs, `jx` et `jy` étalent chaque
-   * personne un peu autour de sa case pour le dessin seulement (le modèle
-   * utilise x et y). Les axes vont de 0 à 1, avec les niveaux du codebook
-   * (VARS). Par-dessus, la droite de R.
+   * tableau d'article (TabPublie). À droite, notre sondage en colonnes de
+   * points : la scolarité n'a que 5 niveaux et l'intérêt 11 valeurs, `jx`
+   * et `jy` étalent un peu chaque personne pour le dessin seulement (le
+   * modèle utilise x et y). Les axes vont de 0 à 1, avec les niveaux et les
+   * bornes du codebook (VARS). Par-dessus, la droite de R.
    *
    *   0  Le nuage seul.
-   *   1  La constante, 0,83 : la satisfaction que la droite prédit à 0
-   *      (fortement en désaccord). Un point sur l'axe vertical.
-   *   2  Le signe : la droite part de ce point et descend. Négatif = plus
-   *      populiste, moins satisfait.
-   *   3  La pente se lit de 0 à 1, sur tout l'éventail : de fortement en
-   *      désaccord à fortement en accord, 0,37 de moins.
-   *   4  Un niveau de l'échelle vaut 0,25 : quatre marches d'environ 0,09.
+   *   1  La constante : l'intérêt que la droite prédit à 0 (secondaire non
+   *      terminé). Un point sur l'axe vertical.
+   *   2  Le signe : la droite part de ce point et monte. Positif = plus
+   *      scolarisé, plus intéressé.
+   *   3  La pente se lit de 0 à 1, sur tout l'éventail : du secondaire non
+   *      terminé à la maîtrise ou au doctorat, +0,20, soit 2 points sur 10.
+   *   4  Un niveau de scolarité vaut 0,25 : quatre marches d'environ +0,05.
    *
    * Nombres : NOTRE.coefs, NOTRE.points et VARS dans src/lib/data/seance7.js
    * (outils/seance7_data.R). Les marches sont calculées depuis la pente.
@@ -32,34 +32,38 @@
   });
 
   const f = (v, d = 2) =>
-    v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−');
+    v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '\u2212');
+  const sg = (v, d = 2) => (v > 0 ? '+' : '') + f(v, d);
+  const nb = (v) => v.toLocaleString('fr-CA', { maximumFractionDigits: 2 });
   const B0 = NOTRE.coefs[0].b, B1 = NOTRE.coefs[1].b;
-  const X0 = 150, X1 = 585, Y0 = 350, Y1 = 40;
+  const X0 = 160, X1 = 560, Y0 = 350, Y1 = 40;
   const x = (v) => X0 + v * (X1 - X0);
   const y = (v) => Y0 - v * (Y0 - Y1);
   const yd = (v) => y(B0 + B1 * v);
   const PTS = NOTRE.points;
-  // Les niveaux du codebook, en forme courte : en x sur deux lignes, en y le début du libellé.
+  // Les niveaux de scolarité sur deux lignes, coupés à la virgule ou au premier espace.
   const deuxLignes = (t) => {
     const s = t.toLowerCase(), i = s.indexOf(', ');
-    if (i > 0) return ['ni l’un', 'ni l’autre']; // « ni en accord, ni en désaccord », trop long sous l'axe
+    if (i > 0) return [s.slice(0, i + 1), s.slice(i + 2)];
     const j = s.indexOf(' ');
-    return [s.slice(0, j), s.slice(j + 1)];
+    return j > 0 ? [s.slice(0, j), s.slice(j + 1)] : [s, ''];
   };
   const NX = VARS.x.valeurs.map((v, i) => ({ v, l: deuxLignes(VARS.x.niveaux[i]) }));
-  const NY = VARS.y.valeurs.map((v, i) => ({ v, l: VARS.y.niveaux[i].toLowerCase().replace(/ satisfait$/, '') }));
-  const PAS = VARS.x.valeurs[1] - VARS.x.valeurs[0]; // un niveau de l'échelle : 0,25
+  // En y, le curseur de 0 à 10 ramené de 0 à 1 : une graduation par point, les bornes nommées.
+  const GY = Array.from({ length: VARS.y.max - VARS.y.min + 1 }, (_, k) => k / (VARS.y.max - VARS.y.min));
+  const BORNES = VARS.y.bornes.map((t) => t.toLowerCase().split(' '));
+  const PAS = VARS.x.valeurs[1] - VARS.x.valeurs[0]; // un niveau de scolarité : 0,25
   const MARCHES = VARS.x.valeurs.slice(0, -1);
-  const K = MARCHES[2]; // la marche étiquetée : de 0,5 à 0,75
+  const K = MARCHES[2]; // la marche en rouge : de 0,5 à 0,75
   const BX = `b-${VARS.x.nom}`;
   const ON = [[], ['b-(Intercept)'], [BX], [BX], [BX]];
-  const moins = B1 < 0 ? 'moins' : 'plus';
+  const sur10 = (v) => f(Math.abs(v) * 10, 0);
   const DIT = [
     '',
-    `à 0, la droite prédit ${f(B0)}`,
-    B1 < 0 ? 'négatif : plus populiste, moins satisfait' : 'positif : plus populiste, plus satisfait',
-    `de 0 à 1, tout l’éventail : ${f(Math.abs(B1))} de ${moins}`,
-    `un niveau de plus (+${f(PAS)}) : environ ${f(Math.abs(B1 * PAS))} de ${moins}`
+    `${VARS.x.niveaux[0].toLowerCase()}\u202f: la droite prédit ${f(B0)}`,
+    B1 > 0 ? 'positif\u202f: plus scolarisé, plus intéressé' : 'négatif\u202f: plus scolarisé, moins intéressé',
+    `de 0 à 1\u202f: ${sg(B1)}, soit ${sur10(B1)} points sur 10`,
+    `un niveau de plus (+${f(PAS)})\u202f: environ ${sg(B1 * PAS)}`
   ];
 </script>
 
@@ -67,50 +71,51 @@
   <div class="td-tab"><TabPublie on={ON[e]} /></div>
 
   <div class="td-fig">
-    <svg viewBox="0 0 640 470" role="img" aria-label="Les {PTS.length} personnes de notre sondage, en grappes autour des 20 cases (5 niveaux de populisme, 4 de satisfaction), et la droite de R. À 0, fortement en désaccord, la droite prédit une satisfaction de {f(B0)}. Elle descend de {f(Math.abs(B1))} de 0 à 1, soit environ {f(Math.abs(B1 * PAS))} par niveau de l’échelle.">
-      <!-- Le nuage en grappes, pâle : le décor. -->
-      {#each PTS as p}<circle cx={x(p.jx)} cy={y(p.jy)} r="2.6" class="td-pt" />{/each}
+    <svg viewBox="0 0 640 470" role="img" aria-label="Les {PTS.length} personnes de notre sondage, en colonnes, une par niveau de scolarité, et la droite de R. À 0, {VARS.x.niveaux[0].toLowerCase()}, la droite prédit un intérêt de {f(B0)}. Elle monte de {f(B1)} de 0 à 1, soit {sur10(B1)} points sur 10, et d’environ {f(B1 * PAS)} par niveau.">
+      <!-- Le nuage en colonnes, pâle : le décor. -->
+      {#each PTS as p}<circle cx={x(p.jx)} cy={y(p.jy)} r="2.4" class="td-pt" />{/each}
 
-      <!-- Les axes, avec les niveaux du codebook. -->
-      <line x1={X0 - 24} y1={Y0 + 24} x2={X1 + 24} y2={Y0 + 24} class="td-axe" />
-      <line x1={X0 - 24} y1={Y0 + 24} x2={X0 - 24} y2={Y1 - 24} class="td-axe" />
+      <!-- Les axes, avec les niveaux et les bornes du codebook. -->
+      <line x1={X0 - 30} y1={Y0 + 16} x2={X1 + 30} y2={Y0 + 16} class="td-axe" />
+      <line x1={X0 - 30} y1={Y0 + 16} x2={X0 - 30} y2={Y1 - 16} class="td-axe" />
       {#each NX as t}
-        <line x1={x(t.v)} y1={Y0 + 24} x2={x(t.v)} y2={Y0 + 31} class="td-axe" />
-        <text x={x(t.v)} y={Y0 + 50} class="td-tick">{t.v.toLocaleString('fr-CA', { maximumFractionDigits: 2 })}</text>
-        <text x={x(t.v)} y={Y0 + 70} class="td-niv">{t.l[0]}</text>
-        <text x={x(t.v)} y={Y0 + 86} class="td-niv">{t.l[1]}</text>
+        <line x1={x(t.v)} y1={Y0 + 16} x2={x(t.v)} y2={Y0 + 23} class="td-axe" />
+        <text x={x(t.v)} y={Y0 + 42} class="td-tick">{nb(t.v)}</text>
+        <text x={x(t.v)} y={Y0 + 62} class="td-niv">{t.l[0]}</text>
+        <text x={x(t.v)} y={Y0 + 78} class="td-niv">{t.l[1]}</text>
       {/each}
-      {#each NY as t}
-        <line x1={X0 - 31} y1={y(t.v)} x2={X0 - 24} y2={y(t.v)} class="td-axe" />
-        <text x={X0 - 36} y={y(t.v) + 5} class="td-niv td-g">{t.l}</text>
-      {/each}
-      <text x="4" y="16" class="td-titre-axe td-g0">satisfaction</text>
-      <text x={(X0 + X1) / 2} y="462" class="td-titre-axe">populisme</text>
+      {#each GY as v}<line x1={X0 - 36} y1={y(v)} x2={X0 - 30} y2={y(v)} class="td-axe td-fine" />{/each}
+      {#each [0, 0.5, 1] as v}<text x={X0 - 42} y={y(v) + 6} class="td-tick td-g">{nb(v)}</text>{/each}
+      <text x={X0 - 42} y={y(1) + 26} class="td-niv td-g">{BORNES[1][0]}</text>
+      <text x={X0 - 42} y={y(1) + 42} class="td-niv td-g">{BORNES[1].slice(1).join(' ')}</text>
+      <text x={X0 - 42} y={y(0) - 30} class="td-niv td-g">{BORNES[0][0]}</text>
+      <text x={X0 - 42} y={y(0) - 14} class="td-niv td-g">{BORNES[0].slice(1).join(' ')}</text>
+      <text x="4" y="16" class="td-titre-axe td-g0">intérêt</text>
+      <text x={(X0 + X1) / 2} y="460" class="td-titre-axe">scolarité</text>
 
       <!-- 2 · La droite, qui se dessine depuis la constante. -->
       <line x1={x(0)} y1={yd(0)} x2={x(1)} y2={yd(1)} class="td-droite" class:td-vu={e >= 2} pathLength="1" />
 
-      <!-- 3 · De 0 à 1 : on avance sur tout l'éventail, on descend de la pente. -->
+      <!-- 3 · De 0 à 1 : on avance sur tout l'éventail, on monte de la pente. -->
       <g class="td-une" class:td-vu={e === 3}>
         <line x1={x(0)} y1={yd(0)} x2={x(1)} y2={yd(0)} class="td-pas td-tir" />
         <line x1={x(1)} y1={yd(0)} x2={x(1)} y2={yd(1)} class="td-pas td-chute" />
-        <text x={x(1) - 12} y={(yd(0) + yd(1)) / 2 - 14} class="td-lib td-fin">{f(B1)}</text>
-        <text x={x(0.5)} y={yd(0) - 12} class="td-lib td-encre">de 0 à 1</text>
+        <text x={x(1) + 12} y={(yd(0) + yd(1)) / 2 + 9} class="td-lib td-g0">{sg(B1)}</text>
+        <text x={x(0.5)} y={yd(0) + 34} class="td-lib td-encre">de 0 à 1</text>
       </g>
 
-      <!-- 4 · Les quatre marches d'un niveau (0,25) : on descend, puis on avance. -->
+      <!-- 4 · Les quatre marches d'un niveau (0,25) : on avance, puis on monte. -->
       <g class="td-marches" class:td-vu={e >= 4}>
         {#each MARCHES as k, i}
-          <path d="M{x(k)} {yd(k)} V{yd(k + PAS)} H{x(k + PAS)}" class="td-marche" class:td-rouge={k === K} style="transition-delay: {i * 90}ms" />
+          <path d="M{x(k)} {yd(k)} H{x(k + PAS)} V{yd(k + PAS)}" class="td-marche" class:td-rouge={k === K} style="transition-delay: {i * 90}ms" />
         {/each}
-        <text x={x(K) - 10} y={yd(K + PAS) + 8} class="td-lib td-fin">{f(B1 * PAS)}</text>
-        <text x={x(K + PAS / 2)} y={yd(K + PAS) + 30} class="td-lib td-encre td-petit">+{f(PAS)}</text>
+        <text x={x(K + PAS / 2)} y={yd(K) + 30} class="td-lib td-encre td-petit">+{f(PAS)}</text>
       </g>
 
       <!-- 1 · La constante : le point à 0. -->
       <g class="td-const" class:td-vu={e >= 1}>
         <circle cx={x(0)} cy={yd(0)} r="8" class="td-c" />
-        <text x={x(0) + 14} y={yd(0) - 14} class="td-lib td-g0" class:td-pale={e >= 2}>{f(B0)}</text>
+        <text x={x(0) + 6} y={yd(0) - 18} class="td-lib td-g0" class:td-pale={e >= 2}>{f(B0)}</text>
       </g>
     </svg>
     <p class="td-dit" class:td-vu={e > 0}>{DIT[e] || ' '}</p>
@@ -124,6 +129,8 @@
   svg { width: 100%; height: auto; display: block; max-height: 64vh; }
   .td-pt { fill: var(--dk-encre); opacity: 0.16; }
   .td-axe { stroke: var(--dk-encre); stroke-width: 2; }
+  .td-fine { stroke-width: 1.5; }
+  .td-tick.td-g { text-anchor: end; }
   .td-tick { font-family: var(--dk-mono); font-size: 17px; font-weight: 600; fill: var(--dk-encre); text-anchor: middle; }
   .td-niv { font-family: var(--dk-mono); font-size: 14px; fill: var(--dk-gris); text-anchor: middle; }
   .td-niv.td-g { text-anchor: end; }

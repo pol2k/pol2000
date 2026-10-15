@@ -6,14 +6,14 @@
    * 1 000 pentes de « Et si on recommençait ? ».
    *
    *   0  Les 1 000 pentes de sondages de 1 000 au hasard (MILLE.hasard,
-   *      tranches de 0,01), et la vraie pente en pointillé (POP.b1, −0,31).
+   *      tranches de 0,01), et la vraie pente en pointillé (POP.b1, +0,17).
    *   1  Notre sondage dans la cloche : un triangle à NOTRE.coefs[1].b
-   *      (−0,37), une pente parmi les autres, à 0,06 de la vraie.
-   *   2  La règle rouge d'une erreur type (MILLE.ecart_type_hasard, 0,045,
+   *      (+0,20), une pente parmi les autres, à 0,03 de la vraie.
+   *   2  La règle rouge d'une erreur type (MILLE.ecart_type_hasard, 0,033,
    *      l'écart type des 1 000 pentes), de chaque côté de la vraie pente,
    *      et la définition en mots. Pas de formule. L'erreur type s'écrit
-   *      avec trois décimales (0,045), comme à la diapo « Et avec un seul
-   *      sondage ? » (0,044).
+   *      avec trois décimales, comme à la diapo « Et avec un seul
+   *      sondage ? » (0,032).
    *
    * Sources : POP, NOTRE, MILLE (src/lib/data/seance7.js, outils/seance7_data.R).
    */
@@ -31,7 +31,8 @@
   const f = (v, d = 0) =>
     v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, NN).replace('-', '−');
 
-  const A0 = -0.47, A1 = -0.14, X0 = 80, X1 = 920, AXE = 330, HMAX = 186;
+  const sg = (v, d) => (v > 0 ? '+' : '') + f(v, d);
+  const A0 = 0.04, A1 = 0.3, X0 = 80, X1 = 920, AXE = 330, HMAX = 186;
   const x = (v) => X0 + ((v - A0) / (A1 - A0)) * (X1 - X0);
   const L = 0.01;
   const NB = Math.round((A1 - A0) / L);
@@ -39,15 +40,15 @@
   for (const p of MILLE.hasard) C[Math.min(NB - 1, Math.max(0, Math.floor((p - A0) / L + 1e-9)))]++;
   const YMAX = Math.max(...C);
   const BARRES = C.map((c, j) => ({ a: A0 + j * L, c, h: (c / YMAX) * HMAX, d: j * 18 })).filter((b) => b.c > 0);
-  const TICKS = [-0.45, -0.4, -0.35, -0.3, -0.25, -0.2, -0.15];
+  const TICKS = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3];
 
   const V = POP.b1, ET = MILLE.ecart_type_hasard, NOUS = NOTRE.coefs[1].b;
   const XV = x(V), XG = x(V - ET), XD = x(V + ET), XN = x(NOUS);
   const YR = 122;
 
   const ARIA =
-    `Les pentes de 1 000 sondages de 1 000 personnes tirées au hasard, en cloche autour de la vraie pente, ${f(V, 2)}. ` +
-    `Notre sondage, ${f(NOUS, 2)}, est l’une d’elles. La distance typique entre la pente d’un sondage et la vraie pente est de ${f(ET, 3)} : c’est l’erreur type.`;
+    `Les pentes de 1 000 sondages de 1 000 personnes tirées au hasard, en cloche autour de la vraie pente, ${sg(V, 2)}. ` +
+    `Notre sondage, ${sg(NOUS, 2)}, est l’une d’elles. La distance typique entre la pente d’un sondage et la vraie pente est de ${f(ET, 3)} : c’est l’erreur type.`;
 </script>
 
 <div class="visuel d7-erreur type" bind:this={hote}>
@@ -63,7 +64,7 @@
     {/each}
 
     <line x1={XV} y1="66" x2={XV} y2={AXE} class="et-vrai" />
-    <text x={XV} y="56" class="et-vrai-t">la vraie pente{NN}: {f(V, 2)}</text>
+    <text x={XV} y="56" class="et-vrai-t">la vraie pente{NN}: {sg(V, 2)}</text>
 
     <line x1={X0} y1={AXE} x2={X1} y2={AXE} class="et-axe" />
     {#each TICKS as t}
@@ -74,7 +75,7 @@
     <!-- 1 : notre sondage. -->
     <g class="et-etape" class:et-vu={e >= 1}>
       <path d="M {XN} {AXE + 40} l -11 18 h 22 z" class="et-tri" />
-      <text x={XN + 18} y={AXE + 58} class="et-nous">notre sondage{NN}: {f(NOUS, 2)}</text>
+      <text x={XN + 18} y={AXE + 58} class="et-nous">notre sondage{NN}: {sg(NOUS, 2)}</text>
     </g>
 
     <!-- 2 : la règle, de chaque côté. -->

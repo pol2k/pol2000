@@ -4,22 +4,22 @@
    * les mêmes colonnes : chaque terme garde sa place et sa couleur d'une
    * rangée à l'autre.
    *
-   *   rouge          ce qu'on explique (y, la satisfaction envers la
-   *                  démocratie);
+   *   rouge          ce qu'on explique (y, l'intérêt pour la politique);
    *   encadré        les deux nombres que R trouve (β0, β1);
-   *   encre          ce qu'on connaît de chaque personne (x, le populisme);
+   *   encre          ce qu'on connaît de chaque personne (x, la scolarité);
    *   gris           tout le reste (ε, l'erreur).
    *
    *   0  y = β0 + β1x + ε, en grand.
    *   1  Les mots descendent sous chaque symbole, de gauche à droite.
-   *   2  La CES : satisfaction = 0,79 − 0,31 × populisme + erreur. Le
-   *      signe moins appartient à la pente : la case de β1 porte −0,31 et
-   *      le « + » de la rangée tombe.
+   *   2  La CES : intérêt = 0,56 + 0,17 × scolarité + erreur. La pente
+   *      est positive : la case de β1 porte 0,17 et le « + » reste. (Si une
+   *      pente était négative, le signe moins irait dans la case et le
+   *      « + » tomberait : le code le fait seul.)
    *
    * Vocabulaire : Arel-Bundock (2021, ch. 5) dit « constante » ou
    * « ordonnée à l'origine » pour β0; on garde « constante », comme la
    * sortie de R lue plus loin. Les nombres sont ceux de la population
-   * d'exercice (POP : lm sur les 20 180 de la CES 2025, 10 993 cas complets,
+   * d'exercice (POP : lm sur les 20 180 de la CES 2025, 19 736 cas complets,
    * outils/seance7_data.R). Les deux variables vont de 0 à 1.
    */
   import { brancherTemps } from '../temps.js';
@@ -37,7 +37,7 @@
 </script>
 
 <div class="visuel rem" bind:this={hote}
-  aria-label="y égale bêta zéro plus bêta un fois x plus epsilon. En mots : variable dépendante égale constante plus pente fois variable indépendante plus erreur. Dans la CES : satisfaction égale {virgule(POP.b0, 2)} moins {virgule(-POP.b1, 2)} fois populisme plus erreur.">
+  aria-label="y égale bêta zéro plus bêta un fois x plus epsilon. En mots : variable dépendante égale constante plus pente fois variable indépendante plus erreur. Dans la CES : intérêt égale {virgule(POP.b0, 2)} plus {virgule(POP.b1, 2)} fois scolarité plus erreur.">
   <div class="grille">
     <!-- Rangée 1 : les symboles. -->
     <span class="c sym y" style="--k: 0">y</span>
@@ -62,17 +62,17 @@
     <span class="c mot eps" class:vu={e >= 1} style="--k: 4">erreur</span>
 
     <!-- Rangée 3 : la CES. -->
-    <span class="c ces y" class:vu={e >= 2} style="--k: 0">satisfaction</span>
+    <span class="c ces y" class:vu={e >= 2} style="--k: 0">intérêt</span>
     <span class="c ces op" class:vu={e >= 2} style="--k: 0">=</span>
     <span class="c ces b" class:vu={e >= 2} style="--k: 1"><span class="case">{virgule(POP.b0, 2)}</span></span>
-    <span class="c ces op" class:vu={e >= 2} style="--k: 1"></span>
+    <span class="c ces op" class:vu={e >= 2} style="--k: 1">{POP.b1 < 0 ? '' : '+'}</span>
     <span class="c ces b" class:vu={e >= 2} style="--k: 2"><span class="case">{virgule(POP.b1, 2)}</span></span>
     <span class="c ces op" class:vu={e >= 2} style="--k: 2">×</span>
-    <span class="c ces x" class:vu={e >= 2} style="--k: 3">populisme</span>
+    <span class="c ces x" class:vu={e >= 2} style="--k: 3">scolarité</span>
     <span class="c ces op" class:vu={e >= 2} style="--k: 3">+</span>
     <span class="c ces eps" class:vu={e >= 2} style="--k: 4">erreur</span>
   </div>
-  <p class="source" class:vu={e >= 2}>CES 2025 · 10 993 des 20 180 répondant.e.s · tout de 0 à 1</p>
+  <p class="source" class:vu={e >= 2}>CES 2025 · 19 736 des 20 180 répondant.e.s · tout de 0 à 1</p>
 </div>
 
 <style>
