@@ -133,7 +133,7 @@
     // p. 581 : 10 points de plus, le risque passe de 11,5 % à 8,6 %.
     guerre: {
       cite: '6 101',
-      importance: 'A lancé le débat « cupidité ou griefs » sur les causes des guerres civiles.',
+      importance: 'A lancé le grand débat sur les causes des guerres civiles : l’appât du gain ou les injustices ?',
       domaine: 'Relations internationales', annee: 2004,
       auteurs: 'Collier et Hoeffler (2004)', court: 'Collier et Hoeffler', mots: 'la guerre civile',
       fin: { y: 'guerre civile', x: 'école, croissance' },

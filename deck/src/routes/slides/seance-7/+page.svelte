@@ -239,7 +239,7 @@
     </Slide>
 
     <Slide bandeau="La régression est partout" droite={D}>
-      <h2 class="e">Guerre civile : cupidité ou griefs ?</h2>
+      <h2 class="e">L’école secondaire protège-t-elle de la guerre civile ?</h2>
       <ClEtude id="guerre" />
     </Slide>
 
