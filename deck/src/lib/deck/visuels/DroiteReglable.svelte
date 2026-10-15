@@ -166,9 +166,10 @@
     aller(TOTAL);
   }
 
-  // ---- Le dessin. Les deux axes vont de 0 à 1; le cadre déborde un peu
-  // (de −0,1 à 1,1 et de −0,05 à 1,05) pour les colonnes étalées.
-  const DX = [-0.1, 1.1], DY = [-0.05, 1.05];
+  // ---- Le dessin. Les deux axes partent de 0, à la même origine (demande du
+  // prof, 15 oct.). Le cadre dépasse un peu 1 pour les colonnes étalées; ce
+  // qui déborde sous 0 (l'étalement de la colonne 0) est coupé au cadre.
+  const DX = [0, 1.08], DY = [0, 1.04];
   const X0 = 124, X1 = 632, YB = 352, YT = 14;
   const x = (v) => X0 + ((v - DX[0]) / (DX[1] - DX[0])) * (X1 - X0);
   const y = (v) => YB - ((v - DY[0]) / (DY[1] - DY[0])) * (YB - YT);
@@ -186,11 +187,10 @@
     return [t.slice(0, m), t.slice(m + 1)];
   };
   const REP_X = VARS.x.valeurs.map((v, i) => ({ v, lignes: deuxLignes(VARS.x.niveaux[i]) }));
-  // En y : 0 à 1 par pas de 0,2 (le curseur de 0 à 10, divisé par 10), et
-  // les deux bornes du curseur (VARS.y.bornes) sous 0 et sous 1.
-  const REP_Y = [0, 0.2, 0.4, 0.6, 0.8, 1].map((v) => ({
-    v, lignes: v === 0 ? deuxLignes(VARS.y.bornes[0]) : v === 1 ? deuxLignes(VARS.y.bornes[1]) : null
-  }));
+  // En y : 0 à 1 par pas de 0,2 (le curseur de 0 à 10, divisé par 10). Les
+  // deux bornes du curseur (VARS.y.bornes) vont sous le titre de l'axe : à
+  // l'origine, elles se heurtaient aux niveaux de scolarité.
+  const REP_Y = [0, 0.2, 0.4, 0.6, 0.8, 1].map((v) => ({ v }));
 
   // Le bout de la droite visible à droite : à 1, ou là où elle sort de 0 à 1.
   const xFin = $derived.by(() => {
@@ -265,7 +265,7 @@
 </script>
 
 <div class="visuel reglable" bind:this={hote} data-temps={e}>
-  <EquationDroite {b0} {b1} {actif} />
+  <EquationDroite {b0} {b1} {actif} grand />
 
   <div class="corps">
     <svg bind:this={svg} viewBox="0 0 640 448" role="img" aria-label="Nuage de points de notre sondage, {nb(n)} personnes&#8239;: l’intérêt pour la politique, de 0 à 1, selon la scolarité, de 0 à 1. Une droite qu’on règle avec son ordonnée à l’origine et sa pente. La droite de R, {nb(R0, 2)} plus {nb(R1, 2)} fois scolarité, est celle dont le total des carrés est le plus petit.">
@@ -285,16 +285,13 @@
       {#each REP_Y as r}
         <line x1={X0 - 7} y1={y(r.v)} x2={X0} y2={y(r.v)} class="axe" />
         <text x={X0 - 12} y={y(r.v) + 1} class="tick fin">{nb2(r.v)}</text>
-        {#if r.lignes}
-          <text x={X0 - 12} y={y(r.v) + 17} class="niveau fin">{r.lignes[0]}</text>
-          <text x={X0 - 12} y={y(r.v) + 31} class="niveau fin">{r.lignes[1]}</text>
-        {/if}
       {/each}
       <text x={(X1 + X0) / 2} y={YB + 86} class="titre-axe">{VARS.x.nom}</text>
-      <text transform="translate(18 {(YB + YT) / 2}) rotate(-90)" class="titre-axe">{VARS.y.nom}</text>
+      <text transform="translate(22 {(YB + YT) / 2}) rotate(-90)" class="titre-axe">{VARS.y.nom}</text>
+      <text transform="translate(44 {(YB + YT) / 2}) rotate(-90)" class="niveau">0 = {VARS.y.bornes[0].toLowerCase()} · 1 = {VARS.y.bornes[1].toLowerCase()}</text>
 
       <!-- Les 981 personnes : dessinées une fois, elles ne dépendent pas de la droite. -->
-      <g class="nuage">
+      <g class="nuage" clip-path="url(#dr-cadre)">
         {#each PTS as p}<circle cx={x(p.jx)} cy={y(p.jy)} r="3.3" />{/each}
       </g>
 
@@ -357,14 +354,13 @@
 <style>
   .reglable { display: flex; flex-direction: column; gap: 0.5em; }
   .corps { display: grid; grid-template-columns: 1.45fr 1fr; gap: 1.4em; align-items: center; }
-  svg { width: 100%; height: auto; max-height: 58vh; display: block; }
+  svg { width: 100%; height: auto; max-height: 53vh; display: block; }
 
   .axe { stroke: var(--dk-encre); stroke-width: 2.5; }
   .tick { font-family: var(--dk-mono); font-size: 16px; text-anchor: middle; fill: var(--dk-gris); }
   .tick.fin { text-anchor: end; }
   .titre-axe { font-family: var(--dk-mono); font-size: 17px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .niveau { font-family: var(--dk-mono); font-size: 12.5px; text-anchor: middle; fill: var(--dk-gris); }
-  .niveau.fin { text-anchor: end; }
 
   .nuage circle { fill: var(--dk-accent); opacity: 0.22; }
 

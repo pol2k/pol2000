@@ -4,7 +4,8 @@
    * autour d'elle : environ deux erreurs types de chaque côté, calculée par
    * R (confint). Puis la question de H0 lue directement sur l'axe : 0 est-il
    * dans la fourchette ? Le même verdict que la valeur p, sans formule.
-   * Quatre temps.
+   * Trois temps. (Le sondage de 50 est retiré le 15 octobre 2026, avec sa
+   * diapo.)
    *
    *   0  Notre pente, NOTRE.coefs[1].b (+0,20), un point sur l'axe.
    *   1  Sa fourchette, de NOTRE.coefs[1].bas à .haut (+0,14 à +0,27),
@@ -12,36 +13,31 @@
    *      confint(modele), telles que R les imprime (SORTIES.confint).
    *   2  H0, 0, en pointillé : loin hors de la fourchette. On rejette H0,
    *      comme avec p (< 0,001).
-   *   3  Le sondage de 50 (H0.cinquante.coefs[1] : +0,22, de −0,03 à
-   *      +0,47) : une fourchette bien plus large, qui attrape 0, de
-   *      justesse. On ne rejette pas H0, comme avec p (0,078). Sa sortie de R à droite
-   *      (SORTIES.confint50).
    *
-   * Un intervalle qui exclut 0, c'est p < 0,05; un intervalle qui contient
-   * 0, c'est p ≥ 0,05 (à 95 % et 0,05, les deux vont ensemble).
+   * Un intervalle qui exclut 0, c'est p < 0,05 (à 95 % et 0,05, les deux
+   * vont ensemble).
    */
   import { brancherTemps } from '../temps.js';
-  import { NOTRE, H0 } from '$lib/data/seance7.js';
+  import { NOTRE } from '$lib/data/seance7.js';
   import { SORTIES } from '$lib/data/seance7_f.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
   });
   const f = (v, d = 2) => (v > 0 ? '+' : '') + v.toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−');
   const N = ' ';
-  const A = NOTRE.coefs[1], C = H0.cinquante.coefs[1];
+  const A = NOTRE.coefs[1];
   const fp = (p) => (p < 0.001 ? 'p < 0,001' : `p = ${p.toLocaleString('fr-CA', { maximumFractionDigits: 3 })}`);
   const dedans = (c) => c.bas <= 0 && 0 <= c.haut;
 
-  // L'axe des pentes, de −0,2 à +0,6.
-  const P0 = -0.2, P1 = 0.6, X0 = 70, X1 = 930, BASE = 330;
+  // L'axe des pentes, de −0,1 à +0,35.
+  const P0 = -0.1, P1 = 0.35, X0 = 70, X1 = 930, BASE = 330;
   const x = (p) => X0 + ((p - P0) / (P1 - P0)) * (X1 - X0);
   const RANGS = [
-    { c: A, y: 182, qui: 'notre sondage', vu: 0 },
-    { c: C, y: 270, qui: 'sondage de 50', vu: 3 }
+    { c: A, y: 230, qui: 'notre sondage', vu: 0 }
   ];
 
   // Les sorties de R : la commande, l'en-tête et la ligne scolarite.
@@ -50,18 +46,16 @@
     return [`> ${code}`, l.find((s) => /2\.5 %/.test(s)).trimEnd(), l.find((s) => s.startsWith('scolarite')).trimEnd()];
   };
   const R1 = sortie(SORTIES.code_confint, SORTIES.confint);
-  const R2 = sortie(SORTIES.code_confint50, SORTIES.confint50);
 
   const PHRASES = [
     [`Notre pente${N}: ${f(A.b)}.`, `Une estimation. À quel point est-elle précise${N}?`],
     ['L’intervalle de confiance à 95\u202f%', 'Notre pente, plus ou moins environ 2 erreurs types.'],
-    [`0 est-il dans l’intervalle${N}? Non.`, `On rejette H0. Même verdict qu’avec la valeur p (${fp(A.p)}).`],
-    [`Le sondage de 50${N}: 0 est dedans.`, `On ne rejette pas H0. Même verdict qu’avec la valeur p (${fp(C.p)}).`]
+    [`0 est-il dans l’intervalle${N}? Non.`, `On rejette H0. Même verdict qu’avec la valeur p (${fp(A.p)}).`]
   ];
 </script>
 
 <div class="visuel pente-ic" bind:this={hote}>
-  <svg viewBox="0 0 1000 500" role="img" aria-label="Notre pente, {f(A.b)}. Son intervalle de confiance à 95{N}%, de {f(A.bas)} à {f(A.haut)}{N}: environ 2 erreurs types de chaque côté. 0 n’est pas dedans{N}: on rejette H0, le même verdict que la valeur p. Le sondage de 50{N}: pente de {f(C.b)}, intervalle de {f(C.bas)} à {f(C.haut)}. 0 est dedans{N}: on ne rejette pas H0, {fp(C.p)}.">
+  <svg viewBox="0 0 1000 500" role="img" aria-label="Notre pente, {f(A.b)}. Son intervalle de confiance à 95{N}%, de {f(A.bas)} à {f(A.haut)}{N}: environ 2 erreurs types de chaque côté. 0 n’est pas dedans{N}: on rejette H0, le même verdict que la valeur p.">
     {#key e}
       <g class="ic-phrase">
         <text x="40" y="42" class="ic-titre">{PHRASES[e][0]}</text>
@@ -95,14 +89,14 @@
 
     <!-- L'axe. -->
     <line x1={X0} y1={BASE} x2={X1} y2={BASE} class="ic-axe" />
-    {#each [-0.2, 0, 0.2, 0.4, 0.6] as k}
+    {#each [-0.1, 0, 0.1, 0.2, 0.3] as k}
       <line x1={x(k)} y1={BASE} x2={x(k)} y2={BASE + 8} class="ic-axe" />
       <text x={x(k)} y={BASE + 30} class="ic-tick" class:ic-zero={k === 0}>{k > 0 ? '+' : ''}{k.toLocaleString('fr-CA', { minimumFractionDigits: Number.isInteger(k) ? 0 : 1 }).replace('-', '−')}</text>
     {/each}
     <text x={X1} y={BASE + 54} class="ic-tick ic-fin">pente de la droite</text>
 
     <!-- Les sorties de R. -->
-    {#each [{ l: R1, x: 40, vu: 1 }, { l: R2, x: 520, vu: 3 }] as s}
+    {#each [{ l: R1, x: 280, vu: 1 }] as s}
       <g class="ic-etape" class:ic-vu={e >= s.vu}>
         <rect x={s.x} y="404" width="440" height="92" class="ic-console" />
         {#each s.l as ligne, i}

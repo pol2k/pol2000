@@ -8,7 +8,8 @@
    *   1  le poids : 20 %;
    *   2  la date : mercredi 28 octobre, 23h59;
    *   3  la remise : un PDF, sur monPortail (pas de .docx);
-   *   4  les sept éléments du travail : le parcours qu'on suit ensuite.
+   *   4  les sept éléments du travail (cadre sur la page) : le parcours
+   *      qu'on suit ensuite s'affiche en bas.
    *
    * L'image (static/img/s7-consignes-mi-session.jpg, 1020 × 1320) est la
    * page 1 de travaux/POL-2000_A26_travail_mi-session.pdf, rendue par
@@ -76,12 +77,6 @@
             <span class="tm-cons-pdf">PDF</span>
             <span class="tm-cons-docx">.docx</span>
             <span class="tm-cons-et">sur monPortail</span>
-          </div>
-        {/if}
-        {#if e >= 4}
-          <div class="tm-cons-t tm-cons-sept tm-actif">
-            <span class="tm-cons-gros">7</span>
-            <span class="tm-cons-et">éléments, une étape à la fois</span>
           </div>
         {/if}
       </div>

@@ -1,15 +1,15 @@
 <script>
   /**
-   * Étape 5 du travail : la pertinence. Le test du « Et alors ? » : on
-   * énonce sa question, on se fait répondre « Et alors ? », on répond, et on
+   * Étape 5 du travail : la pertinence. Le test du « Ok, donc ? » : on
+   * énonce sa question, on se fait répondre « Ok, donc ? », on répond, et on
    * recommence. Chaque réponse porte plus loin : de votre question à la
    * science politique, puis à la société. À droite, trois cercles qui
    * s'allument au même rythme. Cinq temps :
    *
    *   0  votre question (l'exemple de la séance);
-   *   1  « Et alors ? »;
+   *   1  « Ok, donc ? »;
    *   2  ce que la science politique y gagne (cercle du milieu);
-   *   3  « Et alors ? »;
+   *   3  « Ok, donc ? »;
    *   4  ce que la société y gagne (grand cercle), et la règle : vous tenez
    *      votre pertinence quand vous savez répondre.
    *
@@ -27,10 +27,10 @@
 
   const BULLES = [
     { qui: 'vous', t: 'Je relie la scolarité à l’intérêt pour la politique.' },
-    { qui: 'eux', t: 'Et alors ?' },
+    { qui: 'eux', t: 'Ok, donc ?' },
     { qui: 'vous', t: 'On saura qui suit la politique, et qui décroche.' },
-    { qui: 'eux', t: 'Et alors ?' },
-    { qui: 'vous', t: 'Si seul.e.s les diplômé.e.s suivent, la participation devient inégale.' }
+    { qui: 'eux', t: 'Ok, donc ?' },
+    { qui: 'vous', t: 'Si seul.e.s les diplômé.e.s s’intéressent, la participation devient inégale.' }
   ];
   const CERCLES = [
     { r: 62, t: 'votre question', quand: 0 },
@@ -55,7 +55,7 @@
         <text x="180" y={180 - c.r + (c.r === 62 ? 66 : c.r === 118 ? 46 : 30)} class="tm-ea-t" class:tm-on={e >= c.quand}>{c.t}</text>
       {/each}
     </svg>
-    <p class="tm-ea-regle" class:tm-on={e >= 4}>Vous savez répondre à «&#8239;Et alors&#8239;?&#8239;»&#8239;: c’est votre pertinence.</p>
+    <p class="tm-ea-regle" class:tm-on={e >= 4}>Vous savez répondre à «&#8239;Ok, donc&#8239;?&#8239;»&#8239;: c’est votre pertinence.</p>
   </div>
 </div>
 

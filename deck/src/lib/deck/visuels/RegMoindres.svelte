@@ -3,30 +3,33 @@
    * Comment ça marche ? R cherche la droite qui passe le plus près de tous
    * les points. Quinze vraies personnes de notre sondage (QUINZE, graine 62
    * puis 28, outils/seance7_data.R) : scolarité (0 à 1) et intérêt pour la
-   * politique (0 à 1). Pour chaque droite, l'écart vertical entre chaque
-   * point et la droite (un trait rouge) et le carré bâti sur cet écart (un
-   * aplat pâle). À droite, le total des carrés : plus il est petit, plus la
-   * droite passe près des points.
+   * politique (0 à 1). D'abord seulement la distance verticale entre chaque
+   * point et la droite (un trait rouge), puis le carré bâti sur cette
+   * distance (un aplat pâle). À droite, l'aire totale des carrés : plus elle
+   * est petite, plus la droite passe près des points. Pourquoi des carrés
+   * plutôt que les distances : la diapo suivante (RegCarres).
    *
    *   0  Les quinze points.
-   *   1  Une droite qui descend (0,95 − 0,5 × x) : à l'envers, gros carrés.
-   *   2  La moyenne pour tout le monde (une droite plate) : bien mieux.
-   *   3  La droite de lm() : le plus petit total possible, un peu sous la
-   *      moyenne (avec 15 personnes, la scolarité n'explique qu'une petite
-   *      part de l'intérêt : c'est le petit R² qu'on lira plus loin).
+   *   1  Une droite qui descend (0,95 − 0,5 × x) et, pour chaque personne,
+   *      sa distance à la droite. Rien d'autre.
+   *   2  Sur chaque distance, un carré. L'aire totale des carrés apparaît.
+   *   3  La moyenne pour tout le monde (une droite plate) : bien mieux.
+   *   4  La droite de lm() : la plus petite aire totale possible, un peu
+   *      sous la moyenne (avec 15 personnes, la scolarité n'explique qu'une
+   *      petite part de l'intérêt : c'est le petit R² qu'on lira plus loin).
    *
    * Entre deux temps, la droite glisse (constante et pente interpolées) et
-   * le total se recalcule en direct sur les quinze vraies valeurs. Aux temps
-   * 1, 2 et 3, il vaut exactement DROITES[k].somme, calculé par R
-   * (outils/seance7_b.R) : 1,67, 1,27, 1,25. Le trajet ne descend jamais
-   * sous la valeur d'arrivée (vérifié pas à pas).
+   * l'aire se recalcule en direct sur les quinze vraies valeurs. Aux temps
+   * 2, 3 et 4, elle vaut exactement DROITES[k].somme, calculé par R
+   * (outils/seance7_b.R, somme des carrés des écarts) : 1,67, 1,27, 1,25.
+   * Le trajet ne descend jamais sous la valeur d'arrivée (vérifié pas à pas).
    *
    * Le dessin : des personnes partagent parfois la même case (deux à
    * « université, 1er cycle » et 0,8, deux à 0,3). Le léger étalement `jx`
    * de R ne suffit pas à les séparer dans le dessin : on les range côte à
    * côte dans leur case, dans l'ordre de `jx`, 17 px l'une de l'autre. Le
-   * trait de chaque écart va du point à la droite à l'endroit où le point
-   * est dessiné; le total, lui, utilise les vraies valeurs de x.
+   * trait de chaque distance va du point à la droite à l'endroit où le point
+   * est dessiné; l'aire, elle, utilise les vraies valeurs de x.
    */
   import { brancherTemps } from '../temps.js';
   import { Tween } from 'svelte/motion';
@@ -39,13 +42,13 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 4, lire: () => e, ecrire: (v) => (e = v) });
   });
 
   const lent = () => typeof window !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ligne = new Tween([DROITES[0].b0, DROITES[0].b1], { duration: 900, easing: cubicInOut });
   $effect(() => {
-    const d = DROITES[Math.max(0, e - 1)];
+    const d = DROITES[Math.max(0, e - 2)];
     ligne.set([d.b0, d.b1], { duration: e === 0 || !lent() ? 0 : 900 });
   });
 
@@ -121,15 +124,17 @@
     <text x={AXE_Y - 13} y="14" class="titre-axe d">intérêt</text>
 
     <g clip-path="url(#rm-cadre)" class="essai" class:vu={e >= 1}>
-      <!-- Les carrés, puis les écarts, puis la droite. -->
-      {#each PTS as p}
-        {@const cote = Math.abs(p.y - auPixel(p.px)) * PX}
-        <rect x={p.x <= 0.5 ? p.px : p.px - cote} y={Math.min(sy(p.y), sy(auPixel(p.px)))} width={cote} height={cote} class="carre" />
-      {/each}
+      <!-- Les carrés (à partir du temps 2), puis les distances, puis la droite. -->
+      <g class="carres" class:vu={e >= 2}>
+        {#each PTS as p}
+          {@const cote = Math.abs(p.y - auPixel(p.px)) * PX}
+          <rect x={p.x <= 0.5 ? p.px : p.px - cote} y={Math.min(sy(p.y), sy(auPixel(p.px)))} width={cote} height={cote} class="carre" />
+        {/each}
+      </g>
       {#each PTS as p}
         <line x1={p.px} y1={sy(p.y)} x2={p.px} y2={sy(auPixel(p.px))} class="ecart" />
       {/each}
-      <line x1={sx(-0.1)} y1={sy(prevu(-0.1))} x2={sx(1.1)} y2={sy(prevu(1.1))} class="droite" class:r={e === 3} />
+      <line x1={sx(-0.1)} y1={sy(prevu(-0.1))} x2={sx(1.1)} y2={sy(prevu(1.1))} class="droite" class:r={e === 4} />
     </g>
 
     {#each PTS as p, i}
@@ -138,19 +143,23 @@
   </svg>
 
   <div class="cote">
-    <div class="lecture" class:vu={e >= 1}>
-      <span class="et">total des carrés</span>
-      <span class="val-g" class:r={e === 3}>{virgule(total)}</span>
-      <span class="jauge"><span class="plein" class:r={e === 3} style="width: {(100 * total) / MAXI}%"></span></span>
+    <ul class="legende">
+      <li class:vu={e >= 1}><svg viewBox="0 0 30 30" class="ic"><line x1="15" y1="3" x2="15" y2="27" class="ecart" /></svg><span>la distance entre le point et la droite</span></li>
+      <li class:vu={e >= 2}><svg viewBox="0 0 30 30" class="ic"><rect x="3" y="3" width="24" height="24" class="carre" /><line x1="3" y1="3" x2="3" y2="27" class="ecart" /></svg><span>le carré bâti sur cette distance</span></li>
+    </ul>
+    <div class="lecture" class:vu={e >= 2}>
+      <span class="et">l'aire totale des carrés</span>
+      <span class="val-g" class:r={e === 4}>{virgule(total)}</span>
+      <span class="jauge"><span class="plein" class:r={e === 4} style="width: {(100 * total) / MAXI}%"></span></span>
     </div>
     <ol class="essais">
       {#each ETIQ as t, k}
-        <li class:vu={e >= k + 1} class:actuel={e === k + 1}>
-          <span class="t">{t}</span><span class="s">{e >= k + 1 ? virgule(DROITES[k].somme) : ''}</span>
+        <li class:vu={e >= k + 2} class:actuel={e === k + 2}>
+          <span class="t">{t}</span><span class="s">{e >= k + 2 ? virgule(DROITES[k].somme) : ''}</span>
         </li>
       {/each}
     </ol>
-    <p class="mot" class:vu={e >= 3}>la droite qui passe le plus près de tous les points</p>
+    <p class="mot" class:vu={e >= 4}>la droite qui passe le plus près de tous les points</p>
     <p class="source">15 répondant.e.s de notre sondage, CES 2025</p>
   </div>
 </div>
@@ -167,14 +176,18 @@
   .titre-axe { font-size: 17px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
 
   .pt { fill: var(--dk-encre); stroke: var(--dk-fond); stroke-width: 2.5; animation: rm-pose 0.4s cubic-bezier(0.34, 1.6, 0.64, 1) both; animation-delay: calc(var(--k) * 50ms + 100ms); transform-box: fill-box; transform-origin: center; }
-  .essai { opacity: 0; transition: opacity 0.4s; }
-  .essai.vu { opacity: 1; }
+  .essai, .carres { opacity: 0; transition: opacity 0.5s; }
+  .essai.vu, .carres.vu { opacity: 1; }
   .carre { fill: var(--dk-accent); fill-opacity: 0.07; stroke: var(--dk-accent); stroke-opacity: 0.3; stroke-width: 1; }
   .ecart { stroke: var(--dk-accent); stroke-width: 3; }
   .droite { stroke: var(--dk-gris); stroke-width: 5; transition: stroke 0.4s; }
   .droite.r { stroke: var(--dk-encre); }
 
   .cote { display: flex; flex-direction: column; gap: 0.9em; }
+  .legende { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.3em; }
+  .legende li { display: flex; align-items: center; gap: 0.6em; margin: 0; font-size: 0.8em; line-height: 1.25; opacity: 0; transition: opacity 0.4s; }
+  .legende li.vu { opacity: 1; }
+  .ic { width: 1.5em; height: 1.5em; flex: none; overflow: visible; }
   .lecture { display: flex; flex-direction: column; gap: 0.15em; opacity: 0; transition: opacity 0.4s; }
   .lecture.vu { opacity: 1; }
   .et { font-size: 0.7em; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; color: var(--dk-gris); }
@@ -198,6 +211,6 @@
   @keyframes rm-pose { from { opacity: 0; transform: scale(0.2); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) {
     .pt { animation: none; }
-    .essai, .lecture, .essais li, .mot { transition: none; }
+    .essai, .carres, .legende li, .lecture, .essais li, .mot { transition: none; }
   }
 </style>

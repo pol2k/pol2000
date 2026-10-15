@@ -3,14 +3,17 @@
    * « Lire la pente » : ce que veut dire β1 = +0,20, sur la droite de R
    * (notre sondage, NOTRE.coefs de src/lib/data/seance7.js : 0,54 et
    * +0,20). Pas de nuage ici : la droite seule. L'axe des x porte les cinq
-   * niveaux de scolarité (VARS.x). L'axe des y va de 0,4 à 0,85 (pas de 0
-   * à 1) pour que les marches se voient : c'est une droite, pas des barres,
-   * et les repères sont écrits.
+   * niveaux de scolarité (VARS.x). Les deux axes partent de 0, à la même
+   * origine, et l'axe des y va jusqu'à 1.
    *
    * Toutes les variables du cours vont de 0 à 1 : la pente se lit donc « de
    * 0 à 1 », d'un bout à l'autre de l'échelle. On compare deux positions sur
    * la droite (secondaire non terminé et maîtrise ou doctorat), pas une
    * personne qui retourne aux études : la régression compare des gens.
+   *
+   * Sous l'équation, toujours visible : « toute la CES (20 180) : 0,17 ·
+   * notre sondage (1 000, R en garde 981) : 0,20 » (POP.b1, NOTRE.coefs),
+   * pour qu'on sache d'où vient 0,20.
    *
    * Temps :
    *   0  la droite de R et son équation;
@@ -27,7 +30,7 @@
    *      et « toutes choses égales par ailleurs » annoncé pour la séance 8.
    */
   import { brancherTemps } from '../temps.js';
-  import { NOTRE, VARS } from '$lib/data/seance7.js';
+  import { NOTRE, POP, VARS } from '$lib/data/seance7.js';
   import EquationDroite from './EquationDroite.svelte';
 
   const R0 = NOTRE.coefs[0].b;
@@ -53,9 +56,13 @@
   const NIVEAU = 0.25;
   const B_NIVEAU = sg(R1 * NIVEAU); // +0,05
   const NIV0 = VARS.x.niveaux[0];
+  // D'où vient 0,20 et pas 0,17 : la ligne sous l'équation (demande du prof, 15 oct.).
+  const mille = (v) => v.toLocaleString('fr-CA').replace(/\s/g, '\u202F');
+  const P_POP = f(POP.b1), P_NOTRE = f(R1);
 
-  // Le dessin : x de 0 à 1 (un peu de marge), y de 0,4 à 0,85.
-  const DX = [-0.05, 1.05], DY = [0.4, 0.85];
+  // Le dessin : les deux axes partent de 0, à la même origine (demande du
+  // prof, 15 oct., comme « Jouer avec la droite »). y de 0 à 1.
+  const DX = [0, 1.06], DY = [0, 1];
   const X0 = 124, X1 = 628, YB = 340, YT = 22;
   const x = (v) => X0 + ((v - DX[0]) / (DX[1] - DX[0])) * (X1 - X0);
   const y = (v) => YB - ((v - DY[0]) / (DY[1] - DY[0])) * (YB - YT);
@@ -70,7 +77,7 @@
     return [t.slice(0, m), t.slice(m + 1)];
   };
   const REP_X = VARS.x.valeurs.map((v, i) => ({ v, lignes: deuxLignes(VARS.x.niveaux[i]) }));
-  const REP_Y = [0.4, 0.5, 0.6, 0.7, 0.8];
+  const REP_Y = [0, 0.2, 0.4, 0.6, 0.8, 1];
 
   // La grande marche (sous la droite) et les petites (au-dessus).
   const GRANDE = `M ${x(0)} ${y(pred(0))} H ${x(1)} V ${y(pred(1))}`;
@@ -84,6 +91,7 @@
 
 <div class="visuel lire-pente" bind:this={hote} data-temps={e}>
   <EquationDroite b0={R0} b1={R1} {actif} />
+  <p class="deux-pentes">toute la CES ({mille(POP.n)})&#8239;: {P_POP} · <b>notre sondage ({mille(NOTRE.n)}, R en garde {mille(NOTRE.n_modele)})&#8239;: {P_NOTRE}</b></p>
 
   <div class="corps">
     <svg viewBox="0 0 640 432" role="img" aria-label="La droite de R&#8239;: intérêt égale {B0} plus {MONTE} fois scolarité. De {NIV0.toLowerCase()} à la maîtrise ou au doctorat, de 0 à 1, la droite monte de {MONTE}, soit {SUR_DIX} points sur 10. Un niveau de 0,25 vaut environ {B_NIVEAU}. À 0, {NIV0.toLowerCase()}, la droite prédit {B0}.">
@@ -121,7 +129,7 @@
         <path d={petite(a)} pathLength="1" class="trace fine" class:lue={a === LUE} class:vu={e >= 3} style="transition-delay: {e >= 3 ? 150 + i * 200 : 0}ms" />
       {/each}
       <g class="apparait" class:vu={e >= 3} style="transition-delay: {e >= 3 ? 1000 : 0}ms">
-        <text x={x(LUE) - 10} y={y((pred(LUE) + pred(LUE + NIVEAU)) / 2) + 7} class="note-m rouge fin petit">{B_NIVEAU}</text>
+        <text x={x(LUE) - 8} y={y(pred(LUE + NIVEAU)) - 6} class="note-m rouge fin petit">{B_NIVEAU}</text>
         <text x={x(LUE + NIVEAU / 2)} y={y(pred(LUE + NIVEAU)) - 14} class="note-m petit">+0,25</text>
       </g>
 
@@ -149,6 +157,8 @@
 
 <style>
   .lire-pente { display: flex; flex-direction: column; gap: 0.5em; }
+  .deux-pentes { margin: 0; text-align: center; font-size: 0.74em !important; color: var(--dk-gris); font-variant-numeric: tabular-nums; }
+  .deux-pentes b { color: var(--dk-accent); font-weight: 600; }
   .corps { display: grid; grid-template-columns: minmax(0, 1.12fr) 1fr; gap: 1.6em; align-items: center; }
   svg { width: 100%; height: auto; max-height: 61vh; display: block; }
 

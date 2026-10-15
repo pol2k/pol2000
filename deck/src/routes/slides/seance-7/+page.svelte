@@ -47,7 +47,6 @@
   import RegTitre from '$lib/deck/visuels/RegTitre.svelte';
   import RegPourquoi from '$lib/deck/visuels/RegPourquoi.svelte';
   import RegMoindres from '$lib/deck/visuels/RegMoindres.svelte';
-  import RegCorrelation from '$lib/deck/visuels/RegCorrelation.svelte';
   import RegEnMots from '$lib/deck/visuels/RegEnMots.svelte';
   import DroiteReglable from '$lib/deck/visuels/DroiteReglable.svelte';
   import LireLaPente from '$lib/deck/visuels/LireLaPente.svelte';
@@ -55,7 +54,6 @@
   import D7Recommencer from '$lib/deck/visuels/D7Recommencer.svelte';
   import D7Epsilon from '$lib/deck/visuels/D7Epsilon.svelte';
   import D7ErreurType from '$lib/deck/visuels/D7ErreurType.svelte';
-  import D7Ingredients from '$lib/deck/visuels/D7Ingredients.svelte';
   import D7UnSeul from '$lib/deck/visuels/D7UnSeul.svelte';
   import GlaceNuage from '$lib/deck/visuels/GlaceNuage.svelte';
   import GrapheEpsilon from '$lib/deck/visuels/GrapheEpsilon.svelte';
@@ -65,7 +63,6 @@
   import PenteMondeH0 from '$lib/deck/visuels/PenteMondeH0.svelte';
   import PenteRegle from '$lib/deck/visuels/PenteRegle.svelte';
   import PenteValeurP from '$lib/deck/visuels/PenteValeurP.svelte';
-  import PenteCinquante from '$lib/deck/visuels/PenteCinquante.svelte';
   import PenteEtoiles from '$lib/deck/visuels/PenteEtoiles.svelte';
   import CeQuePNestPasPente from '$lib/deck/visuels/CeQuePNestPasPente.svelte';
   import ImportancePente from '$lib/deck/visuels/ImportancePente.svelte';
@@ -74,7 +71,6 @@
   import TabDeuxHabits from '$lib/deck/visuels/TabDeuxHabits.svelte';
   import TabEquation from '$lib/deck/visuels/TabEquation.svelte';
   import TabDroite from '$lib/deck/visuels/TabDroite.svelte';
-  import TabErreurType from '$lib/deck/visuels/TabErreurType.svelte';
   import TabEtoiles from '$lib/deck/visuels/TabEtoiles.svelte';
   import TabN from '$lib/deck/visuels/TabN.svelte';
   import TabR2 from '$lib/deck/visuels/TabR2.svelte';
@@ -94,13 +90,15 @@
   import CoefGabarit from '$lib/deck/visuels/CoefGabarit.svelte';
   import { GABARIT } from '$lib/data/seance7_h.js';
 
-  import ClMur from '$lib/deck/visuels/ClMur.svelte';
   import ClEtude from '$lib/deck/visuels/ClEtude.svelte';
   import ClFin from '$lib/deck/visuels/ClFin.svelte';
 
+  import SondageDansLaCes from '$lib/deck/visuels/SondageDansLaCes.svelte';
+
+  import RegCarres from '$lib/deck/visuels/RegCarres.svelte';
   const CLASSIQUES = ['galton', 'mincer', 'ace', 'blais', 'guerre', 'mobilite'];
 
-  const TOTAL = 80;
+  const TOTAL = 77;
   const D = 'POL-2000 · séance 7 · jeu 15 oct';
 </script>
 
@@ -157,7 +155,7 @@
 
     <Slide bandeau="Travail de mi-session · étape 2" droite={D}>
       <TmParcours ici={2} />
-      <h2 class="e">La littérature, comme au Risk</h2>
+      <h2 class="e">La littérature, comme à Risk</h2>
       <TmRisque />
     </Slide>
 
@@ -187,13 +185,13 @@
 
     <Slide bandeau="Travail de mi-session · étape 5" droite={D}>
       <TmParcours ici={5} />
-      <h2 class="e">La pertinence&#8239;: et alors&#8239;?</h2>
+      <h2 class="e">La pertinence&#8239;: ok, donc&#8239;?</h2>
       <TmEtAlors />
     </Slide>
 
     <Slide bandeau="Travail de mi-session · étape 6" droite={D}>
       <TmParcours ici={6} />
-      <h2 class="e">La contribution&#8239;: quoi de neuf&#8239;?</h2>
+      <h2 class="e">La contribution</h2>
       <TmContribution />
     </Slide>
 
@@ -220,11 +218,6 @@
 
     <!-- ================= LA RÉGRESSION EST PARTOUT ================= -->
     <!-- ================= LA RÉGRESSION EST PARTOUT ================= -->
-    <Slide bandeau="La régression est partout" droite={D}>
-      <h2 class="e">La régression est partout</h2>
-      <ClMur ids={CLASSIQUES} />
-    </Slide>
-
     <Slide bandeau="La régression est partout" droite={D}>
       <h2 class="e">D’où vient le mot « régression » ?</h2>
       <ClEtude id="galton" />
@@ -256,7 +249,7 @@
     </Slide>
 
     <Slide bandeau="La régression est partout" droite={D}>
-      <h2 class="e">La même idée, partout</h2>
+      <h2 class="e">La même méthode depuis 140 ans</h2>
       <ClFin ids={CLASSIQUES} />
     </Slide>
 
@@ -272,8 +265,8 @@
     </Slide>
 
     <Slide bandeau="La régression linéaire" droite={D}>
-      <h2 class="e">Corrélation ou régression ?</h2>
-      <RegCorrelation />
+      <h2 class="e">Pourquoi des carrés ?</h2>
+      <RegCarres />
     </Slide>
 
     <Slide bandeau="La régression linéaire" droite={D}>
@@ -282,6 +275,11 @@
     </Slide>
 
   
+
+    <Slide bandeau="Notre sondage de 1&#8239;000" droite={D}>
+      <h2 class="e">Dans la vraie vie, on a un sondage</h2>
+      <SondageDansLaCes />
+    </Slide>
 
     <Slide bandeau="La droite · notre sondage de 1 000" droite={D}>
       <h2 class="e">Jouer avec la droite</h2>
@@ -353,11 +351,6 @@
     </Slide>
 
     <Slide bandeau="L’erreur type" droite={D}>
-      <h2 class="e">Qu’est-ce qui élargit la cloche&#8239;?</h2>
-      <D7Ingredients />
-    </Slide>
-
-    <Slide bandeau="L’erreur type" droite={D}>
       <h2 class="e">Et avec un seul sondage&#8239;?</h2>
       <D7UnSeul />
     </Slide>
@@ -368,7 +361,7 @@
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ? · la statistique t" droite={D}>
-      <h2 class="e">Mille mélanges</h2>
+      <h2 class="e">La cloche, posée sur 0</h2>
       <PenteMondeH0 />
     </Slide>
 
@@ -381,11 +374,6 @@
     <Slide bandeau="Est-ce le hasard ? · la valeur p" droite={D}>
       <h2 class="e">Vous connaissez l’idée. Voici son nom.</h2>
       <PenteValeurP />
-    </Slide>
-
-    <Slide bandeau="Est-ce le hasard ? · la valeur p" droite={D}>
-      <h2 class="e">Et avec 50 personnes ?</h2>
-      <PenteCinquante />
     </Slide>
 
     <Slide bandeau="Est-ce le hasard ? · la valeur p" droite={D}>
@@ -438,11 +426,6 @@
       <TabDroite />
     </Slide>
 
-    <Slide bandeau="Lire un tableau · l’erreur type" droite={D}>
-      <h2 class="e">Entre parenthèses, l’erreur type</h2>
-      <TabErreurType />
-    </Slide>
-
     <Slide bandeau="Lire un tableau · les étoiles" droite={D}>
       <h2 class="e">Les étoiles, la valeur p en raccourci</h2>
       <TabEtoiles />
@@ -486,11 +469,6 @@
     </Slide>
 
   
-
-    <Slide bandeau="La semaine prochaine" droite={D}>
-      <h2 class="e">La semaine prochaine : plusieurs variables</h2>
-      <TabSuite />
-    </Slide>
 
   
 
@@ -555,6 +533,11 @@
   
 
   
+
+    <Slide bandeau="La semaine prochaine" droite={D}>
+      <h2 class="e">La semaine prochaine : plusieurs variables</h2>
+      <TabSuite />
+    </Slide>
 
     <!-- ================= FIN ================= -->
     <Slide bandeau="Avant le 22 octobre" droite={D}>

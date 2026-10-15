@@ -1,1 +1,0 @@
-import{D as e,E as t,ft as n,q as r,y as i}from"../chunks/B2ffvAZD.js";import"../chunks/xihTtKlq.js";/* empty css                */var a=n({prerender:()=>!0,trailingSlash:()=>o}),o=`always`;function s(n,a){var o=e(),s=r(o);i(s,()=>a.children),t(n,o)}export{s as component,a as universal};

@@ -4,14 +4,11 @@
    * pour vous ? Deux moitiés, deux silhouettes : vous (le personnel) et
    * vous en chercheur.e (le professionnel, la loupe à la main). Les
    * questions viennent des consignes (partie 4) et du plan de l'enseignant.
-   * Quatre temps :
+   * Trois temps :
    *
    *   0  les deux silhouettes;
-   *   1  le personnel : pourquoi ce sujet, ce qu'il vous apporte;
-   *   2  le professionnel : votre rôle de chercheur.e, vos valeurs et vos
-   *      biais;
-   *   3  la phrase des consignes : « Laissez-vous aller dans votre
-   *      réflexion ! »
+   *   1  le personnel : pourquoi ce sujet, pourquoi c'est important pour vous;
+   *   2  le professionnel : ce que le sujet apporte à votre parcours.
    */
   import { brancherTemps } from '../temps.js';
 
@@ -20,12 +17,12 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
   });
 
   const COTES = [
-    { et: 'PERSONNEL', qs: ['Pourquoi ce sujet ?', 'Pourquoi compte-t-il pour vous ?'], loupe: false },
-    { et: 'PROFESSIONNEL', qs: ['Qu’apporte-t-il à votre parcours ?', 'Votre rôle de chercheur.e, vos valeurs, vos biais ?'], loupe: true }
+    { et: 'PERSONNEL', qs: ['Pourquoi ce sujet ?', 'Pourquoi c’est important pour vous ?'], loupe: false },
+    { et: 'PROFESSIONNEL', qs: ['Qu’apporte-t-il à votre parcours ?'], loupe: true }
   ];
 </script>
 
@@ -51,7 +48,6 @@
       {#if i === 0}<div class="tm-pv-sep" aria-hidden="true"></div>{/if}
     {/each}
   </div>
-  <p class="tm-pv-cite" class:tm-on={e >= 3}>«&#8239;Laissez-vous aller dans votre réflexion&#8239;!&#8239;» <span>les consignes</span></p>
 </div>
 
 <style>
@@ -70,9 +66,6 @@
   .tm-pv-cote ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35em; min-height: 5.6em; }
   .tm-pv-cote li { margin: 0; font-size: 1.15em; line-height: 1.3; opacity: 0; transform: translateY(0.4em); transition: opacity 0.4s, transform 0.4s; transition-delay: calc(var(--k) * 200ms); }
   .tm-pv-cote.tm-on li { opacity: 1; transform: none; }
-  .tm-pv-cite { margin: 0; font-size: 1.4em; font-weight: 600; color: var(--dk-accent); border-top: 3px solid var(--dk-encre); padding-top: 0.5em; opacity: 0; transition: opacity 0.5s; }
-  .tm-pv-cite.tm-on { opacity: 1; }
-  .tm-pv-cite span { font-size: 0.5em; font-weight: 400; letter-spacing: 0.06em; color: var(--dk-gris); margin-left: 0.8em; }
   @keyframes tm-pv-f { from { opacity: 0; transform: translateY(0.4em); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .tm-pv-cote { animation: none; } .tm-pv-cote li, .tm-pv-cite, .tm-pv-sil { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .tm-pv-cote { animation: none; } .tm-pv-cote li, .tm-pv-sil { transition: none; } }
 </style>

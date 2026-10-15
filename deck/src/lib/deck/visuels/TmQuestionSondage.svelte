@@ -11,9 +11,9 @@
    *   2  interet (Y) : la question et son curseur de 0 à 10, divisé par 10;
    *   3  « Ne sais pas / Préfère ne pas répondre » (code 12, ou -99 pour le
    *      curseur) devient NA;
-   *   4  pourquoi regrouper : combien de personnes donnent chaque réponse.
-   *      Les codes 1 à 3 ne comptent que 77 personnes sur 20 180, trop peu
-   *      pour un niveau à eux seuls.
+   *   4  combien de personnes donnent chaque réponse : les codes 1 à 3 (en
+   *      rouge) ne comptent que 77 personnes sur 20 180, trop peu pour un
+   *      niveau à eux seuls. On le dit de vive voix.
    *
    * Questions, réponses, niveaux et codes : VARS dans seance7.js
    * (outils/seance7_data.R), copiés du codebook officiel de la CES 2025
@@ -105,10 +105,6 @@
     </div>
   </div>
 
-  <div class="tm-qs-note" class:tm-on={e >= 4}>
-    <span class="tm-qs-note-et">POURQUOI REGROUPER</span>
-    <p>Codes 1 à 3&#8239;: {SCOL_CODES.codes_1_a_3} personnes sur {nb(SCOL_CODES.n)}. Trop peu pour un niveau à elles seules.</p>
-  </div>
 </div>
 
 <style>
@@ -158,14 +154,10 @@
   .tm-qs-ligne.tm-on b, .tm-qs-groupe.tm-qs-na.tm-on b { color: var(--dk-fond); background: var(--dk-accent); padding: 0 0.35em; }
   .tm-qs-groupe.tm-qs-na { background: none; border-left-color: var(--dk-filet); }
 
-  .tm-qs-note { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 1em; background: var(--dk-encre); color: var(--dk-fond); padding: 0.45em 1em; border-left: 0.5em solid var(--dk-accent); opacity: 0; transform: translateY(0.5em); transition: opacity 0.45s, transform 0.45s; }
-  .tm-qs-note.tm-on { opacity: 1; transform: none; }
-  .tm-qs-note-et { font-size: 0.6em; font-weight: 600; letter-spacing: 0.14em; color: var(--dk-accent-clair); white-space: nowrap; }
-  .tm-qs-note p { margin: 0; font-size: 0.86em; line-height: 1.35; }
 
   @keyframes tm-qs-f { from { opacity: 0; transform: translateY(0.4em); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) {
     .tm-qs-col { animation: none; }
-    .tm-qs-corps, .tm-qs-quoi, .tm-qs-ces, .tm-qs-note, .tm-qs-na, .tm-qs-eff { transition: none; }
+    .tm-qs-corps, .tm-qs-quoi, .tm-qs-ces, .tm-qs-na, .tm-qs-eff { transition: none; }
   }
 </style>

@@ -5,7 +5,7 @@
    * pour que la salle réponde avant.
    *
    *   1  Le sens : le signe du coefficient (+, l'intérêt monte).
-   *   2  La taille : en unités de y, par unité de x (de 0 à 1 : tout l'éventail de x, ici 0,20, soit 2 points sur 10).
+   *   2  La taille : en unités de y, par unité de x (de 0 à 1 : tout l'éventail de x, ici 0,20).
    *   3  Le hasard : les étoiles (*** : le hasard l'explique mal).
    *   4  Le contexte : N et R² (981 personnes, 4 % de la variation).
    *
@@ -29,7 +29,7 @@
   const et = (p) => (p < 0.001 ? '***' : p < 0.01 ? '**' : p < 0.05 ? '*' : 'aucune');
   const CARTES = [
     { q: 'Le sens ?', r: MONTE ? '+ : plus scolarisé, plus intéressé' : '− : plus scolarisé, moins intéressé', icone: 'sens' },
-    { q: 'La taille ?', r: `${MONTE ? '+' : '−'}${f(Math.abs(C.b))} de 0 à 1, soit ${f(Math.abs(C.b) * 10, 0)} points sur 10`, icone: 'taille' },
+    { q: 'La taille ?', r: `${MONTE ? '+' : '−'}${f(Math.abs(C.b))} de 0 à 1`, icone: 'taille' },
     { q: 'Le hasard ?', r: C.p < 0.05 ? `${et(C.p)} : le hasard l’explique mal` : 'pas d’étoile : le hasard peut l’expliquer', icone: 'hasard' },
     { q: 'Le contexte ?', r: `N = ${f(NOTRE.n_modele, 0)} · R² = ${f(NOTRE.r2)}`, icone: 'contexte' }
   ];

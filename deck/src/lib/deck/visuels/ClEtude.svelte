@@ -1,335 +1,180 @@
 <script module>
   /**
    * Les six études classiques de « La régression est partout ». Chaque
-   * nombre est recopié de l'article lui-même (page lue sur l'image de la
-   * page, pas dans une source secondaire); le dossier complet, avec les
-   * adresses des PDF, est dans le rapport de l'agent i (/tmp/s7/classiques/
-   * DOSSIER.md, à verser dans docs/ si le prof le souhaite). Seuls changent
-   * le séparateur décimal (virgule) et le zéro avant la virgule (.133 →
-   * 0,133); le nombre de décimales est celui de l'article. Les noms de
-   * variables sont traduits par nous, sauf Blais et coll. (édition
-   * française officielle).
+   * nombre est recopié de l'article lui-même, lu sur l'image de la page.
+   * Le dossier complet (adresses des PDF, tableaux, pages, droits) :
+   * /tmp/s7/classiques/DOSSIER.md et dossier-{ace,guerre,mobilite}.md.
    *
-   * Champs : domaine, annee, auteurs, revue, vignette, genre (le badge),
-   * y et x (la régression en mots), piece ('tableau' | 'equation' |
-   * 'image'), titre (tableau et page), tableau (ClTableau), grand et
-   * lecture (le temps 2). Facultatifs, pour la frise (ClMur) et la diapo
-   * de fin (ClFin) : court (nom court), mots (la question en trois mots),
-   * fin ({ y, x } en deux ou trois mots). Sans eux, on les déduit de
-   * auteurs, y et x.
+   * Chaque diapo montre la VRAIE page : la région de la page où le
+   * tableau ou le graphique de la régression est imprimé, rendue depuis le
+   * PDF à 300 ppp, recadrée serré, en gris (static/img/s7-classique-<id>-
+   * page.png, moins de 110 Ko, nette à 2x). Le prof l'a demandé même pour
+   * les articles sous droits; la référence complète, le tableau et la page
+   * sont écrits sous l'image. `boite` : le cadre rouge autour du
+   * coefficient clé, en % de l'image, calculé à partir des coordonnées des
+   * mots dans le PDF (pdftotext -bbox), sauf Galton (planche gravée, sans
+   * texte : placé à l'œil et vérifié). `zoom` : le grossissement de la
+   * page au temps 2, centré sur le cadre (1 = pas de zoom), pour lire le
+   * chiffre dans les tableaux serrés.
    *
-   * En réserve, sans diapo : Okun (la section garde six études), Tufte et
-   * Gerber et Green (une seule étude de science politique est montrée,
-   * Blais et al., à la demande du prof).
-   *
-   * Droits : Galton (1886) est du domaine public, d'où l'image de sa vraie
-   * planche. Les autres ne sont pas sous licence libre : une vignette de la
-   * première page, et seulement les lignes utiles du tableau, recomposées.
+   * Champs du récit (le prof n'a pas lu les articles : la diapo doit se
+   * suffire) : genre (simple, multiple, logistique), donnees (qui, où,
+   * quand, combien), y et x en mots, grand (le nombre encadré), lecture (le
+   * résultat en une phrase), sens (ce que veut dire le nombre, et la
+   * prudence qui va avec). Pour la diapo de fin (ClFin) : court, fin.
    */
   export const ETUDES = {
     // Galton, F. (1886). Regression towards mediocrity in hereditary stature.
-    // J. of the Anthropological Institute, 15, 246–263. doi:10.2307/2841583.
-    // Planche IX, fig. (a) : « The Deviates of the Children are to those of
-    // their Mid-Parents as 2 to 3. » Texte, p. 252 : « two-thirds ».
-    // La droite est tracée à la main sur des médianes groupées : pas encore
-    // les moindres carrés.
+    // Journal of the Anthropological Institute, 15, 246–263.
+    // doi:10.2307/2841583. Domaine public. Planche IX, fig. (a) : « The
+    // Deviates of the Children are to those of their Mid-Parents as 2 to
+    // 3. » Tableau I, p. 248 : 928 enfants adultes de 205 « mid-parents »
+    // (moyenne du père et de 1,08 fois la mère). Droite tracée à la main sur
+    // des médianes groupées : pas encore les moindres carrés.
     galton: {
       domaine: 'Hérédité', annee: 1886,
-      mots: 'la taille des enfants', fin: { y: 'taille des enfants', x: 'taille des parents' },
-      auteurs: 'Galton (1886)', revue: 'Journal of the Anthropological Institute',
-      vignette: 's7-classique-galton-p1.png',
-      genre: 'une droite tracée à la main',
-      y: 'la taille des enfants', x: 'la taille des parents',
-      piece: 'image', image: 's7-classique-galton-planche.png',
-      alt: 'Planche IX de Galton : la droite des parents et la droite des enfants, moins pentue',
-      // Le cadre rouge autour de « as 2 to 3 », en % de l'image recadrée.
-      boite: { x: 55.6, y: 13.4, l: 12.6, h: 5.6 },
-      titre: 'Planche IX, fig. a · domaine public',
+      auteurs: 'Galton (1886)', mots: 'la taille des enfants',
+      fin: { y: 'taille des enfants', x: 'taille des parents' },
+      genre: 'une droite, tracée à la main',
+      donnees: '928 enfants adultes et leurs parents (205 couples), familles britanniques.',
+      y: 'la taille des enfants, adultes', x: 'la taille moyenne des deux parents',
+      page: 's7-classique-galton-page.png',
+      boite: { x: 55.6, y: 13.4, l: 12.6, h: 5.6 }, zoom: 1,
+      alt: 'Planche IX de Galton : la droite des parents, et celle des enfants, moins pentue',
+      credit: 'Galton, F. (1886). Regression towards mediocrity in hereditary stature. Journal of the Anthropological Institute, 15, 246–263. Planche IX, fig. a. Domaine public.',
       grand: '2/3',
-      lecture: 'Des parents 3 pouces au-dessus de la moyenne, des enfants 2 pouces au-dessus. Ils « régressent » vers la moyenne.'
-    },
-    // Okun, A. M. (1962). Potential GNP: Its measurement and significance.
-    // Proceedings of the Business and Economic Statistics Section, ASA.
-    // Tiré à part : Cowles Foundation Paper 190, p. 2 (le tiré à part ne
-    // porte pas la pagination des Proceedings). « Y = .30 - .30X (r=.79) »,
-    // 55 trimestres, 1947-II à 1960-IV. Y : variation trimestrielle du taux
-    // de chômage (points), X : variation trimestrielle du PNB réel (%).
-    okun: {
-      domaine: 'Économie', annee: 1962,
-      mots: 'le chômage', fin: { y: 'chômage', x: 'croissance' },
-      auteurs: 'Okun (1962)', revue: 'Proceedings of the American Statistical Association',
-      vignette: 's7-classique-okun-p1.png',
-      genre: 'régression simple · 55 trimestres',
-      y: 'la variation du chômage (points)', x: 'la croissance du PIB réel (%)',
-      piece: 'equation',
-      equation: { debut: 'Y = 0,30', pente: '− 0,30 X', r: '(r = 0,79)' },
-      titre: 'Équation, p. 2 du tiré à part · recomposée',
-      grand: '−0,30',
-      lecture: '1 % de croissance de plus, 0,3 point de chômage de moins.'
+      lecture: 'Des parents 3 pouces plus grands que la moyenne ont des enfants 2 pouces plus grands, en moyenne.',
+      sens: 'Les enfants « régressent » vers la moyenne. D’où le mot régression.'
     },
     // Mincer, J. (1974). Schooling, experience, and earnings. NBER.
     // Tableau 5.1, p. 92, ligne S(1) : « ln Y = 7.58 + .070s », rapport t
-    // (43.8), R² .067. Note du tableau : « Figures in parentheses are t
-    // ratios. » Hommes blancs non agricoles, revenus de 1959.
+    // (43.8), R² .067. Note : « Figures in parentheses are t ratios. »
+    // Hommes blancs non agricoles, revenus annuels de 1959 (titre du
+    // tableau), échantillon du recensement de 1960.
     mincer: {
       domaine: 'Économie de l’éducation', annee: 1974,
-      mots: 'le salaire', fin: { y: 'revenu', x: 'scolarité' },
-      auteurs: 'Mincer (1974)', revue: 'Schooling, Experience, and Earnings',
-      vignette: 's7-classique-mincer-p1.png',
+      auteurs: 'Mincer (1974)', mots: 'le salaire',
+      fin: { y: 'revenu', x: 'scolarité' },
       genre: 'régression simple',
-      y: 'le revenu annuel', x: 'les années de scolarité',
-      piece: 'tableau',
-      titre: 'Tableau 5.1, ligne S(1), p. 92 · recomposé',
-      tableau: {
-        y: 'Revenu annuel 1959', ysous: '(en logarithme)',
-        lignes: [
-          { nom: 'Scolarité', sous: '(années)', b: '0,070', par: '(43,8)', cle: true },
-          { nom: 'Constante', b: '7,58' }
-        ],
-        pied: [['R²', '0,067']],
-        notes: ['Rapports t entre parenthèses.']
-      },
+      donnees: 'Hommes blancs, hors agriculture, au recensement des États-Unis de 1960 (revenus de 1959).',
+      y: 'le revenu annuel (en logarithme)', x: 'les années d’école',
+      page: 's7-classique-mincer-page.png',
+      boite: { x: 27.0, y: 22.8, l: 8.4, h: 7.0 }, zoom: 1,
+      alt: 'Tableau 5.1 de Mincer : dix équations de revenu, la première est ln Y = 7.58 + .070s',
+      credit: 'Mincer, J. (1974). Schooling, experience, and earnings. NBER. Tableau 5.1, ligne S(1), p. 92.',
       grand: '0,070',
-      lecture: 'Une année d’école de plus, environ 7 % de revenu de plus.'
+      lecture: 'Une année d’école de plus : environ 7 % de revenu de plus.',
+      sens: 'Le revenu est en logarithme, donc 0,070 se lit à peu près comme 7 %. Entre parenthèses, le t (43,8) : pas le hasard.'
     },
-    // Tufte, E. R. (1975). Determinants of the outcomes of midterm
-    // congressional elections. APSR, 69(3), 812–826. doi:10.2307/1958391.
-    // Tableau 2, p. 818 : β1 = .133* (.033), β2 = .035* (.006), constante
-    // −11.083, R² = 0.912, * significatif à .01. N = 8 élections de
-    // mi-mandat, 1938 à 1970 sans 1942 (tableau 1, p. 816). Sa lecture,
-    // p. 818 : 10 points de popularité, 1,3 point de vote.
-    tufte: {
-      domaine: 'Science politique', annee: 1975,
-      mots: 'les élections', fin: { y: 'vote', x: 'popularité + économie' },
-      auteurs: 'Tufte (1975)', revue: 'American Political Science Review',
-      vignette: 's7-classique-tufte-p1.png',
-      genre: 'régression multiple · 2 X · 8 élections',
-      y: 'le recul du parti du président', x: 'sa popularité, le revenu des ménages',
-      piece: 'tableau',
-      titre: 'Tableau 2, p. 818 · recomposé',
-      tableau: {
-        y: 'Vote du parti du président', ysous: '(écart à sa normale, en points)',
-        lignes: [
-          { nom: 'Popularité du président', sous: '(%)', b: '0,133', et: '*', par: '(0,033)', cle: true },
-          { nom: 'Variation du revenu réel', sous: '($)', b: '0,035', et: '*', par: '(0,006)' },
-          { nom: 'Constante', b: '−11,083' }
-        ],
-        pied: [['R²', '0,912']],
-        notes: ['* significatif au seuil de 0,01.', 'Erreurs types entre parenthèses.']
-      },
-      grand: '0,133',
-      lecture: '10 points de popularité de plus, 1,3 point de vote de plus.'
-    },
-    // Gerber, A. S., & Green, D. P. (2000). The effects of canvassing,
-    // telephone calls, and direct mail on voter turnout. APSR, 94(3),
-    // 653–663. doi:10.2307/2585837.
-    // Tableau 5, p. 659, 1re colonne (« Two-stage least squares », sans
-    // covariables) : contact en personne .087 (.026), envois .0058 (.0027),
-    // téléphone −.047 (.023), constante .445, degrés de liberté 29,376.
-    // Moindres carrés en deux étapes, pas les MCO simples : tout le monde
-    // n'a pas ouvert sa porte. L'attribution est tirée au sort.
-    gerber: {
-      domaine: 'Science politique', annee: 2000,
-      mots: 'le porte-à-porte', fin: { y: 'participation', x: 'porte-à-porte' },
-      auteurs: 'Gerber et Green (2000)', revue: 'American Political Science Review',
-      vignette: 's7-classique-gerber-green-p1.png',
-      genre: 'expérience · tirage au sort',
-      y: 'a voté ou non', x: 'une visite à la porte',
-      piece: 'tableau',
-      titre: 'Tableau 5, 1re colonne, p. 659 · recomposé',
-      tableau: {
-        y: 'A voté en 1998', ysous: '(1 = oui, 0 = non)',
-        lignes: [
-          { nom: 'Contact en personne', b: '0,087', par: '(0,026)', cle: true },
-          { nom: 'Envois postaux', sous: '(0 à 3)', b: '0,0058', par: '(0,0027)' },
-          { nom: 'Appel téléphonique', b: '−0,047', par: '(0,023)' },
-          { nom: 'Constante', b: '0,445' }
-        ],
-        pied: [['Degrés de liberté', '29 376']],
-        notes: ['Moindres carrés en deux étapes.', 'Erreurs types entre parenthèses.']
-      },
-      grand: '0,087',
-      lecture: 'Une visite à la porte, 8,7 points de participation de plus.'
+    // Felitti, V. J., Anda, R. F., et al. (1998). Relationship of childhood
+    // abuse and household dysfunction to many of the leading causes of death
+    // in adults: The Adverse Childhood Experiences (ACE) Study. American
+    // Journal of Preventive Medicine, 14(4), 245–258.
+    // doi:10.1016/S0749-3797(98)00017-8. Tableau 4, p. 252, bloc « Two or
+    // more weeks of depressed mood in the past year », « 4 or more » :
+    // 542 personnes, rapport de cotes ajusté 4.6 (IC 95 % 3.8–5.6), N du
+    // bloc 7,945. Régression logistique (p. 249), ajustée pour l'âge, le
+    // sexe, l'origine et la scolarité. Échantillon (p. 249) : 13 494
+    // membres de Kaiser Permanente (San Diego) sollicités, 9 508 réponses.
+    ace: {
+      domaine: 'Travail social', annee: 1998,
+      auteurs: 'Felitti et al. (1998)', mots: 'les blessures d’enfance',
+      fin: { y: 'déprime', x: 'adversités de l’enfance' },
+      genre: 'régression logistique',
+      donnees: '9 508 adultes d’une assurance santé de San Diego (Kaiser Permanente), 7 945 pour cette ligne.',
+      y: 'deux semaines ou plus de déprime dans l’année (oui ou non)', x: 'le nombre d’adversités vécues enfant (violence, négligence, parent en prison…)',
+      page: 's7-classique-ace-page.png',
+      boite: { x: 74.4, y: 78.3, l: 24.2, h: 3.2 }, zoom: 1,
+      alt: 'Tableau 4 de Felitti et al. : rapports de cotes selon le nombre d’adversités, pour cinq problèmes de santé',
+      credit: 'Felitti, V. J., Anda, R. F., et al. (1998). Relationship of childhood abuse and household dysfunction to many of the leading causes of death in adults. American Journal of Preventive Medicine, 14(4), 245–258. Tableau 4, p. 252.',
+      grand: '4,6',
+      lecture: 'Avec 4 adversités ou plus, la cote de déprime est 4,6 fois celle d’une enfance sans adversité.',
+      sens: 'Un rapport de cotes : 1 veut dire aucune différence. À âge, sexe, origine et scolarité égaux. Une association, pas une preuve.'
     },
     // Blais, A., Massicotte, L., & Dobrzynska, A. (2003). Pourquoi le taux
     // de participation est-il plus élevé dans certains pays que d'autres ?
-    // Élections Canada (SE3-89/2003F). Tableau 2A, p. 10 (p. 9 en anglais) :
-    // vote obligatoire avec sanctions 12,60*** (3,32), sans sanctions −3,82
-    // (2,90), RP et mixte compensatoire 4,80** (2,19), constante 56,84***
-    // (10,80), 148 cas, R² ajusté 0,40. Seuils : * 0,10, ** 0,05,
-    // *** 0,01. Cinq lignes omises : Amérique du Nord, Europe de l'Est,
-    // population (log), PIB par habitant (log), Mali.
+    // Élections Canada. Tableau 2A, p. 10 : vote obligatoire avec sanctions
+    // 12,60*** (3,32), sans sanctions −3,82 (2,90), 148 cas, R² ajusté
+    // 0,40. L'étude couvre 151 élections dans 61 démocraties depuis 1990.
     blais: {
       domaine: 'Politique comparée', annee: 2003,
-      court: 'Blais et al.', mots: 'le vote obligatoire', fin: { y: 'participation', x: 'vote obligatoire' },
-      auteurs: 'Blais, Massicotte et Dobrzynska (2003)', revue: 'Élections Canada',
-      vignette: 's7-classique-blais-p1.png',
-      genre: 'régression multiple · 148 élections',
-      y: 'le taux de participation', x: 'le vote obligatoire',
-      piece: 'tableau',
-      titre: 'Tableau 2A, p. 10 · recomposé',
-      tableau: {
-        y: 'Taux de participation', ysous: '(% des électeurs inscrits)',
-        lignes: [
-          { nom: 'Vote obligatoire avec sanctions', b: '12,60', et: '***', par: '(3,32)', cle: true },
-          { nom: 'Vote obligatoire sans sanctions', b: '−3,82', par: '(2,90)' },
-          { nom: 'RP et mixte compensatoire', b: '4,80', et: '**', par: '(2,19)' },
-          { nom: '… et 5 autres variables', ellipse: true },
-          { nom: 'Constante', b: '56,84', et: '***', par: '(10,80)' }
-        ],
-        pied: [['Nombre de cas', '148'], ['R² ajusté', '0,40']],
-        notes: ['*** significatif à 0,01 · ** à 0,05 · * à 0,10', 'Erreurs types entre parenthèses.']
-      },
+      auteurs: 'Blais, Massicotte et Dobrzynska (2003)', court: 'Blais et al.', mots: 'le vote obligatoire',
+      fin: { y: 'participation', x: 'vote obligatoire' },
+      genre: 'régression multiple',
+      donnees: '148 élections dans 61 démocraties, depuis 1990. Trois chercheurs de l’Université de Montréal.',
+      y: 'le taux de participation (% des inscrits)', x: 'le vote obligatoire, avec ou sans amende, et le mode de scrutin, la région, la taille, la richesse',
+      page: 's7-classique-blais-page.png',
+      boite: { x: 43.9, y: 51.9, l: 39.8, h: 4.9 }, zoom: 1,
+      alt: 'Tableau 2A de Blais et al. : les déterminants de la participation électorale',
+      credit: 'Blais, A., Massicotte, L., & Dobrzynska, A. (2003). Pourquoi le taux de participation est-il plus élevé dans certains pays que d’autres ? Élections Canada. Tableau 2A, p. 10.',
       grand: '12,60',
-      lecture: 'Là où l’abstention est punie, 12,6 points de participation de plus.'
-    },
-    // Chetty, R., Hendren, N., Kline, P., & Saez, E. (2014). Where is the land
-    // of opportunity? The geography of intergenerational mobility in the
-    // United States. Quarterly Journal of Economics, 129(4), 1553–1623.
-    // doi:10.1093/qje/qju022. (Document de travail NBER w19843, révisé en
-    // juin 2014 : mêmes nombres au tableau I, p. 70 du PDF.)
-    // Tableau I, p. 1571, ligne 4 (« Family income rank » sur « Family income
-    // rank »), colonne 1 (« Core sample ») : 0.341 (0.0003). Nombre
-    // d'observations, même colonne (p. 1572, suite du tableau) : 9,867,736.
-    // Note du tableau, p. 1572 : « Each cell in this table reports the
-    // coefficient from a univariate OLS regression [...] with standard
-    // errors in parentheses. » Pas de constante ni de R² au tableau.
-    // Échantillon : enfants nés de 1980 à 1982, revenu familial moyen
-    // 2011-2012 (vers 30 ans), parents : revenu familial moyen 1996-2000.
-    // Même pente, p. 1575 (texte) et figure II, panneau A, p. 1576
-    // (« Rank-Rank Slope = 0.341 (0.0003) »). Lecture des auteurs, résumé,
-    // p. 1553 : « a 10 percentile increase in parent income is associated
-    // with a 3.4 percentile increase in a child's income ».
-    // Selon la ville (tableau III, p. 1594-1595) : Salt Lake City 0.264,
-    // Charlotte 0.397. Canada : 0.174 (0.005), figure II, panneau B, p. 1576.
-    mobilite: {
-      domaine: 'Politiques sociales', annee: 2014,
-      mots: 'l’ascenseur social', fin: { y: 'rang de l’enfant', x: 'rang des parents' },
-      auteurs: 'Chetty et al. (2014)', revue: 'Quarterly Journal of Economics',
-      vignette: 's7-classique-mobilite-p1.png',
-      genre: 'régression simple · 9,9 millions d’enfants',
-      y: 'le rang de revenu de l’enfant, adulte', x: 'le rang de revenu des parents',
-      piece: 'tableau',
-      titre: 'Tableau I, p. 1571 · recomposé',
-      tableau: {
-        y: 'Rang de revenu de l’enfant', ysous: '(centile, vers 30 ans)',
-        lignes: [
-          { nom: 'Rang de revenu des parents', sous: '(centile)', b: '0,341', et: '', par: '(0,0003)', cle: true }
-        ],
-        pied: [['Nombre d’enfants', '9 867 736']],
-        notes: ['Régression MCO à une seule variable X.', 'Erreur type entre parenthèses.', 'Données fiscales des États-Unis, enfants nés de 1980 à 1982.']
-      },
-      grand: '0,34',
-      lecture: 'Des parents 10 rangs plus haut, un enfant 3,4 rangs plus haut.'
-    },
-    // Felitti, V. J., Anda, R. F., Nordenberg, D., Williamson, D. F., Spitz,
-    // A. M., Edwards, V., Koss, M. P., & Marks, J. S. (1998). Relationship of
-    // childhood abuse and household dysfunction to many of the leading causes
-    // of death in adults: The Adverse Childhood Experiences (ACE) Study.
-    // American Journal of Preventive Medicine, 14(4), 245–258.
-    // doi:10.1016/S0749-3797(98)00017-8.
-    // Tableau 4, p. 252 (lu sur l'image de la page), bloc « Two or more weeks
-    // of depressed mood in the past year » : rapports de cotes ajustés (IC 95 %)
-    // 0 = 1.0 (Referent), 1 = 1.5 (1.3–1.7), 2 = 2.4 (2.0–2.8),
-    // 3 = 2.6 (2.1–3.2), 4 or more = 4.6 (3.8–5.6). N total du bloc 7,945.
-    // Prévalences (même bloc, ajustées pour l'âge seulement) : 0 = 14.2 %,
-    // 4 or more = 50.7 %. Note c du tableau : « Odds ratios adjusted for age,
-    // gender, race, and educational attainment. »
-    // Méthode, p. 249 : « Logistic regression analysis was employed to adjust
-    // for the potential confounding effects of age, sex, race, and educational
-    // attainment ». Régression logistique (une cousine de la régression
-    // linéaire), pas des MCO : on lit des rapports de cotes, pas des b.
-    // Droits : © 1998 American Journal of Preventive Medicine (Elsevier), pas
-    // de licence libre. Lignes recomposées, vignette de la p. 245.
-    ace: {
-      domaine: 'Travail social', annee: 1998,
-      mots: 'les blessures d’enfance', fin: { y: 'déprime', x: 'adversités de l’enfance' },
-      auteurs: 'Felitti et al. (1998)', revue: 'American Journal of Preventive Medicine',
-      vignette: 's7-classique-ace-p1.png',
-      genre: 'régression logistique multiple · 7 945 adultes',
-      y: 'avoir vécu deux semaines ou plus de déprime dans l’année', x: 'le nombre d’adversités vécues dans l’enfance',
-      piece: 'tableau',
-      titre: 'Tableau 4, p. 252 · recomposé',
-      tableau: {
-        y: 'Humeur dépressive', ysous: '(rapport de cotes ajusté)',
-        lignes: [
-          { nom: 'Aucune adversité', sous: '(référence)', b: '1,0' },
-          { nom: 'Une adversité', b: '1,5', par: '(1,3 à 1,7)' },
-          { nom: 'Deux adversités', b: '2,4', par: '(2,0 à 2,8)' },
-          { nom: 'Trois adversités', b: '2,6', par: '(2,1 à 3,2)' },
-          { nom: 'Quatre ou plus', b: '4,6', par: '(3,8 à 5,6)', cle: true }
-        ],
-        pied: [['N', '7 945']],
-        notes: ['Ajusté pour l’âge, le sexe, l’origine ethnoraciale et la scolarité.', 'Intervalles de confiance à 95 % entre parenthèses.']
-      },
-      grand: '4,6',
-      lecture: 'Quatre adversités ou plus : une cote de déprime 4,6 fois celle des enfances sans adversité.'
+      lecture: 'Là où l’abstention est punie d’une amende, la participation est 12,6 points plus haute.',
+      sens: 'À pays comparables. Une obligation sans amende ne change rien (−3,82, sans étoile).'
     },
     // Collier, P., & Hoeffler, A. (2004). Greed and grievance in civil war.
     // Oxford Economic Papers, 56(4), 563–595. doi:10.1093/oep/gpf064.
-    // Tableau 5 (« Combined opportunity and grievance model »), pp. 578-579,
-    // colonne 5 = le modèle de base (« baseline model of column 5 », p. 580).
-    // Régression logistique (« through a logit regression », p. 572).
-    // Col. 5 : exportations de produits primaires/PIB 18.937 (5.865)***,
-    // leur carré −29.443 (11.781)***, scolarisation secondaire masculine
-    // −0.031 (0.010)***, (croissance du PIB) t−1 −0.115 (0.043)***, plus
-    // 5 autres variables (durée de la paix, dispersion géographique, ln
-    // population, fractionnement social, dominance ethnique). N 688, 46
-    // guerres, pseudo-R² 0.24 (p. 579). Constante incluse, non publiée.
-    // *** significatif à 1 % (note du tableau, p. 579).
-    // Y : début d'une guerre civile (≥ 1 000 morts au combat par an, p. 565)
-    // pendant une période de cinq ans, 1965-69 à 1995-99 (p. 572).
-    // Scolarisation : % des garçons à l'école secondaire (tableau 2, p. 568).
-    // Lecture, p. 581 : « If the enrollment rate for secondary schooling is
-    // ten percentage points higher than the average the risk of war is
-    // reduced by about three percentage points (a decline in the risk from
-    // 11.5% to 8.6%). »
+    // Tableau 5, p. 578 (imprimé de côté, tourné ici), colonne 5 (le modèle
+    // de base, p. 580) : scolarisation secondaire masculine −0.031
+    // (0.010)***. Régression logistique (p. 572). N 688 périodes de cinq
+    // ans, 46 guerres (p. 579). 161 pays, 1960-1999. Lecture des auteurs,
+    // p. 581 : 10 points de plus, le risque passe de 11,5 % à 8,6 %.
     guerre: {
       domaine: 'Relations internationales', annee: 2004,
-      court: 'Collier et Hoeffler', mots: 'la guerre civile', fin: { y: 'guerre civile', x: 'école, croissance' },
-      auteurs: 'Collier et Hoeffler (2004)', revue: 'Oxford Economic Papers',
-      vignette: 's7-classique-guerre-p1.png',
-      genre: 'régression logistique · 688 périodes de 5 ans',
-      y: 'une guerre civile éclate ou non', x: 'les garçons à l’école secondaire, la croissance',
-      piece: 'tableau',
-      titre: 'Tableau 5, col. 5, p. 578 · recomposé',
-      tableau: {
-        y: 'Début d’une guerre civile', ysous: '(dans les 5 ans, 1 = oui)',
-        lignes: [
-          { nom: 'Exportations primaires', sous: '(part du PIB)', b: '18,937', et: '***', par: '(5,865)' },
-          { nom: 'Exportations primaires²', b: '−29,443', et: '***', par: '(11,781)' },
-          { nom: 'Garçons au secondaire', sous: '(% scolarisés)', b: '−0,031', et: '***', par: '(0,010)', cle: true },
-          { nom: 'Croissance du PIB', sous: '(période précédente)', b: '−0,115', et: '***', par: '(0,043)' },
-          { nom: '… et 5 autres variables', ellipse: true }
-        ],
-        pied: [['N', '688'], ['Guerres', '46'], ['Pseudo-R²', '0,24']],
-        notes: ['Régression logistique, une cousine de la régression linéaire.', '*** significatif à 0,01 · erreurs types entre parenthèses.']
-      },
+      auteurs: 'Collier et Hoeffler (2004)', court: 'Collier et Hoeffler', mots: 'la guerre civile',
+      fin: { y: 'guerre civile', x: 'école, croissance' },
+      genre: 'régression logistique',
+      donnees: '161 pays, de 1960 à 1999, en 688 périodes de cinq ans. 46 guerres civiles éclatent.',
+      y: 'une guerre civile éclate ou non dans les cinq ans', x: 'la part des garçons à l’école secondaire, la croissance, les exportations',
+      page: 's7-classique-guerre-page.png',
+      boite: { x: 88.4, y: 64.1, l: 10.9, h: 13.5 }, zoom: 1,
+      alt: 'Tableau 5 de Collier et Hoeffler : le modèle combiné, colonnes 1 à 5',
+      credit: 'Collier, P., & Hoeffler, A. (2004). Greed and grievance in civil war. Oxford Economic Papers, 56(4), 563–595. Tableau 5, col. 5, p. 578.',
       grand: '−0,031',
-      lecture: '10 points de garçons de plus au secondaire, le risque de guerre passe de 11,5 % à 8,6 %.'
+      lecture: 'Plus il y a de garçons à l’école secondaire, moins une guerre civile risque d’éclater.',
+      sens: '10 points de garçons scolarisés de plus : le risque passe de 11,5 % à 8,6 %. Une association, pas une preuve.'
+    },
+    // Chetty, R., Hendren, N., Kline, P., & Saez, E. (2014). Where is the
+    // land of opportunity? Quarterly Journal of Economics, 129(4),
+    // 1553–1623. doi:10.1093/qje/qju022. Figure II, panneau A, p. 1576
+    // (imprimée de côté, tournée ici) : « Rank-Rank Slope = 0.341
+    // (0.0003) », MCO (légende de la figure). Même pente au tableau I,
+    // p. 1571 : 9 867 736 enfants nés de 1980 à 1982, données fiscales.
+    // Canada : 0.174 (0.005), panneau B, même page.
+    mobilite: {
+      domaine: 'Politiques sociales', annee: 2014,
+      auteurs: 'Chetty et al. (2014)', mots: 'l’ascenseur social',
+      fin: { y: 'rang de l’enfant', x: 'rang des parents' },
+      genre: 'régression simple',
+      donnees: '9,9 millions d’enfants nés aux États-Unis de 1980 à 1982, suivis dans les déclarations de revenus.',
+      y: 'le rang de revenu de l’enfant, vers 30 ans (0 à 100)', x: 'le rang de revenu de ses parents (0 à 100)',
+      page: 's7-classique-mobilite-page.png',
+      boite: { x: 63.7, y: 75.8, l: 33.6, h: 11.5 }, zoom: 1,
+      alt: 'Figure II, panneau A de Chetty et al. : le rang moyen des enfants monte en ligne droite avec le rang des parents',
+      credit: 'Chetty, R., Hendren, N., Kline, P., & Saez, E. (2014). Where is the land of opportunity? Quarterly Journal of Economics, 129(4), 1553–1623. Figure II, panneau A, p. 1576.',
+      grand: '0,341',
+      lecture: 'Des parents 10 rangs plus haut : un enfant 3,4 rangs plus haut, une fois adulte.',
+      sens: 'Les points sont presque sur la droite. Au Canada, la pente est d’environ 0,17 : la moitié.'
     }
   };
 </script>
 
 <script>
   /**
-   * Une étude classique, une diapo. À gauche, l'article (le domaine, la
-   * vignette de la première page, la référence, le genre de
-   * régression). À droite, la régression en mots (Y et X), puis la pièce
-   * (le tableau recomposé, l'équation, ou la planche de Galton), puis la
-   * lecture en une ligne. Deux temps.
+   * Une étude classique, une diapo qui se suffit : la vraie page de
+   * l'article en grand, et le récit en clair à côté. Deux temps.
    *
-   *   0  L'article et sa régression en mots : Y, X.
-   *   1  La pièce : le tableau tel que publié (ou l'équation, ou la planche).
-   *   2  Le coefficient clé passe au rouge, le reste au gris; à côté, le
-   *      nombre en grand et sa lecture en une ligne.
+   *   0  Le récit : le genre de régression, les données (qui, où, quand,
+   *      combien), Y et X en mots. La place de la page est vide.
+   *   1  La page : la région du tableau ou du graphique, telle qu'imprimée,
+   *      avec la référence complète, le tableau et la page dessous.
+   *   2  Le coefficient clé encadré en rouge (la page grossit autour de lui
+   *      si le tableau est serré), puis le nombre en grand, le résultat en
+   *      une phrase et ce que veut dire le nombre.
    *
-   * Les données de chaque étude, avec leur page, sont dans le module
-   * ci-dessus (ETUDES). `id` choisit l'étude.
+   * Les données de chaque étude sont dans le module ci-dessus (ETUDES).
    */
   import { base } from '$app/paths';
   import { brancherTemps } from '../temps.js';
-  import ClTableau from './ClTableau.svelte';
 
   let { id } = $props();
   const s = $derived(ETUDES[id]);
@@ -341,92 +186,70 @@
     e = 0;
     return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
   });
+
+  // Le zoom se fait autour du cadre : son centre, sauf s'il touche un bord
+  // de l'image, auquel cas on ancre à ce bord pour que le cadre reste
+  // entier à l'écran.
+  const axe = (debut, long) => (debut + long > 85 ? 100 : debut < 15 ? 0 : debut + long / 2);
+  const origine = $derived(`${axe(s.boite.x, s.boite.l)}% ${axe(s.boite.y, s.boite.h)}%`);
 </script>
 
 <div class="visuel cl-etude" bind:this={hote}>
-  <aside class="cl-papier">
-    <span class="cl-tag">{s.domaine}</span>
-    <img class="cl-vignette" src="{base}/img/{s.vignette}" alt="Première page : {s.auteurs}" />
-    <strong class="cl-auteurs">{s.auteurs}</strong>
-    <em class="cl-revue">{s.revue}</em>
+  <div class="cl-recit">
     <span class="cl-genre">{s.genre}</span>
-  </aside>
+    <p class="cl-donnees"><span class="cl-k">Données</span> {s.donnees}</p>
+    <p class="cl-yx"><span class="cl-k">Y</span><span>{s.y}</span></p>
+    <p class="cl-yx"><span class="cl-k">X</span><span>{s.x}</span></p>
 
-  <div class="cl-droite">
-    <div class="cl-yx">
-      <span class="cl-k">Y</span><span class="cl-v">{s.y}</span>
-      <span class="cl-k">X</span><span class="cl-v">{s.x}</span>
-    </div>
-
-    <div class="cl-bas">
-      <figure class="cl-piece" class:vu={e >= 1}>
-        {#if s.piece === 'tableau'}
-          <ClTableau t={s.tableau} cle={e >= 2} />
-        {:else if s.piece === 'equation'}
-          <div class="cl-eq" class:cle={e >= 2}>
-            <span>{s.equation.debut} <b>{s.equation.pente}</b></span>
-            <span class="cl-r">{s.equation.r}</span>
-          </div>
-        {:else if s.piece === 'image'}
-          <div class="cl-planche">
-            <img src="{base}/img/{s.image}" alt={s.alt} />
-            <span class="cl-boite" class:vu={e >= 2}
-              style="left:{s.boite.x}%; top:{s.boite.y}%; width:{s.boite.l}%; height:{s.boite.h}%"></span>
-          </div>
-        {/if}
-        <figcaption>{s.titre}</figcaption>
-      </figure>
-
-      <div class="cl-lecture" class:vu={e >= 2}>
-        <span class="cl-grand">{s.grand}</span>
-        <span class="cl-phrase">{s.lecture}</span>
-      </div>
+    <div class="cl-lecture" class:vu={e >= 2}>
+      <span class="cl-grand">{s.grand}</span>
+      <span class="cl-phrase">{s.lecture}</span>
+      <span class="cl-sens">{s.sens}</span>
     </div>
   </div>
+
+  <figure class="cl-page" class:vu={e >= 1}>
+    <div class="cl-cadre">
+      <div class="cl-loupe" style="transform-origin: {origine}; transform: scale({e >= 2 ? s.zoom : 1})">
+        <img src="{base}/img/{s.page}" alt={s.alt} />
+        <span class="cl-boite" class:vu={e >= 2}
+          style="left:{s.boite.x}%; top:{s.boite.y}%; width:{s.boite.l}%; height:{s.boite.h}%"></span>
+      </div>
+    </div>
+    <figcaption>{s.credit}</figcaption>
+  </figure>
 </div>
 
 <style>
-  .cl-etude { display: grid; grid-template-columns: 11.5em 1fr; gap: 1.8em; align-items: start; }
+  .cl-etude { display: grid; grid-template-columns: minmax(15em, 0.8fr) 1.45fr; gap: 1.6em; align-items: start; }
 
-  /* L'article */
-  .cl-papier { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35em; }
-  .cl-tag { font-size: 0.62em; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; color: var(--dk-fond); background: var(--dk-accent); padding: 0.2em 0.55em; }
-  .cl-vignette { display: block; width: auto; max-width: 100%; max-height: 13em; border: 2px solid var(--dk-encre); background: #fff; margin: 0.25em 0 0.2em; }
-  .cl-auteurs { font-size: 0.82em; line-height: 1.3; }
-  .cl-revue { font-size: 0.62em; line-height: 1.35; color: var(--dk-gris); }
-  .cl-genre { font-size: 0.62em; line-height: 1.35; border: 2px solid var(--dk-encre); padding: 0.2em 0.5em; margin-top: 0.3em; }
-
-  /* La régression en mots */
-  .cl-droite { display: flex; flex-direction: column; gap: 1.1em; min-width: 0; }
-  .cl-yx { display: grid; grid-template-columns: auto 1fr; column-gap: 0.7em; row-gap: 0.25em; align-items: baseline; font-size: 1.05em; }
+  /* Le récit */
+  .cl-recit { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em; }
+  .cl-genre { font-size: 0.66em; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; color: var(--dk-fond); background: var(--dk-accent); padding: 0.25em 0.6em; }
+  .cl-recit p { margin: 0; font-size: 0.8em; line-height: 1.4; }
   .cl-k { font-weight: 600; color: var(--dk-accent); }
-  .cl-v { line-height: 1.3; }
+  .cl-donnees .cl-k { display: block; margin-bottom: 0.1em; font-size: 0.8em; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dk-gris); }
+  .cl-donnees { padding-bottom: 0.3em; border-bottom: 2px solid var(--dk-filet); }
+  .cl-yx { display: grid; grid-template-columns: 1.4em 1fr; }
 
-  .cl-bas { display: grid; grid-template-columns: auto 1fr; gap: 1.8em; align-items: center; }
-
-  /* La pièce */
-  .cl-piece { margin: 0; opacity: 0; transform: translateY(10px); transition: opacity 0.45s, transform 0.45s; font-size: 0.86em; }
-  .cl-piece.vu { opacity: 1; transform: none; }
-  .cl-piece figcaption { margin-top: 0.5em; font-size: 0.66em; color: var(--dk-gris); }
-
-  .cl-eq { display: flex; flex-direction: column; gap: 0.4em; border: 2px solid var(--dk-encre); background: #fff; padding: 0.8em 1.2em; font-size: 1.9em; white-space: nowrap; }
-  .cl-eq b { font-weight: 400; transition: color 0.3s; }
-  .cl-eq.cle b { color: var(--dk-accent); font-weight: 600; }
-  .cl-r { font-size: 0.6em; color: var(--dk-gris); }
-
-  .cl-planche { position: relative; line-height: 0; border: 2px solid var(--dk-encre); }
-  .cl-planche img { display: block; height: 16em; width: auto; }
-  .cl-boite { position: absolute; border: 3px solid var(--dk-accent); background: rgba(198, 16, 46, 0.1); opacity: 0; transform: scale(1.4); transition: opacity 0.35s, transform 0.45s cubic-bezier(0.34, 1.6, 0.64, 1); }
-  .cl-boite.vu { opacity: 1; transform: none; }
-
-  /* La lecture */
-  .cl-lecture { display: flex; flex-direction: column; gap: 0.35em; border-left: 0.32em solid var(--dk-accent); padding: 0.2em 0 0.2em 0.7em;
-    opacity: 0; transform: scale(0.92); transform-origin: left center; transition: opacity 0.4s, transform 0.5s cubic-bezier(0.34, 1.6, 0.64, 1); }
+  .cl-lecture { display: flex; flex-direction: column; gap: 0.3em; margin-top: 0.4em; border-left: 0.32em solid var(--dk-accent); padding: 0.15em 0 0.15em 0.7em;
+    opacity: 0; transform: translateY(8px); transition: opacity 0.45s 0.35s, transform 0.45s 0.35s; }
   .cl-lecture.vu { opacity: 1; transform: none; }
-  .cl-grand { font-size: 2.6em; font-weight: 600; line-height: 1; letter-spacing: -0.04em; color: var(--dk-accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .cl-phrase { font-size: 0.92em; line-height: 1.4; }
+  .cl-grand { font-size: 2.3em; font-weight: 600; line-height: 1; letter-spacing: -0.04em; color: var(--dk-accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .cl-phrase { font-size: 0.86em; line-height: 1.38; font-weight: 600; }
+  .cl-sens { font-size: 0.72em; line-height: 1.4; color: var(--dk-gris); }
+
+  /* La page */
+  .cl-page { margin: 0; opacity: 0; transform: translateY(12px); transition: opacity 0.5s, transform 0.5s; min-width: 0; }
+  .cl-page.vu { opacity: 1; transform: none; }
+  .cl-cadre { overflow: hidden; border: 2px solid var(--dk-encre); background: #fff; line-height: 0; width: fit-content; max-width: 100%; }
+  .cl-loupe { position: relative; transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.2, 1); }
+  .cl-loupe img { display: block; max-width: 100%; max-height: 62vh; width: auto; height: auto; }
+  .cl-boite { position: absolute; border: 3px solid var(--dk-accent); background: rgba(198, 16, 46, 0.1); opacity: 0; transition: opacity 0.4s 0.5s; }
+  .cl-boite.vu { opacity: 1; }
+  .cl-page figcaption { margin-top: 0.45em; font-size: 0.56em; line-height: 1.4; color: var(--dk-gris); max-width: 62em; }
 
   @media (prefers-reduced-motion: reduce) {
-    .cl-piece, .cl-lecture, .cl-boite { transition: none; }
+    .cl-page, .cl-lecture, .cl-loupe, .cl-boite { transition: none; }
   }
 </style>

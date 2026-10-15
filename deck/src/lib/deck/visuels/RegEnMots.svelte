@@ -7,18 +7,23 @@
    *   rouge          ce qu'on explique (y, l'intérêt pour la politique);
    *   encadré        les deux nombres que R trouve (β0, β1);
    *   encre          ce qu'on connaît de chaque personne (x, la scolarité);
-   *   gris           tout le reste (ε, l'erreur).
+   *   gris           tout le reste (ε, l'erreur) : dans la CES, l'âge, le
+   *                  genre et tout ce qu'on n'a pas mis dans l'équation.
    *
    *   0  y = β0 + β1x + ε, en grand.
    *   1  Les mots descendent sous chaque symbole, de gauche à droite.
-   *   2  La CES : intérêt = 0,56 + 0,17 × scolarité + erreur. La pente
-   *      est positive : la case de β1 porte 0,17 et le « + » reste. (Si une
-   *      pente était négative, le signe moins irait dans la case et le
-   *      « + » tomberait : le code le fait seul.)
+   *   2  La CES : intérêt = 0,56 + 0,17 × scolarité + âge + genre + …
+   *      La pente est positive : la case de β1 porte 0,17 et le « + »
+   *      reste. (Si une pente était négative, le signe moins irait dans la
+   *      case et le « + » tomberait : le code le fait seul.) Sous ε, au lieu
+   *      du mot « erreur », ce qui s'y cache : des variables qui poussent à
+   *      la fois la scolarité et l'intérêt. L'âge est celle de la section sur
+   *      la variable confondante (TIERS); le genre est dans la régression
+   *      multiple (MULTIPLE). Le « … » : tout le reste.
    *
    * Vocabulaire : Arel-Bundock (2021, ch. 5) dit « constante » ou
-   * « ordonnée à l'origine » pour β0; on garde « constante », comme la
-   * sortie de R lue plus loin. Les nombres sont ceux de la population
+   * « ordonnée à l'origine » pour β0; le prof veut « ordonnée à l'origine »
+   * (revue du 15 octobre). Les nombres sont ceux de la population
    * d'exercice (POP : lm sur les 20 180 de la CES 2025, 19 736 cas complets,
    * outils/seance7_data.R). Les deux variables vont de 0 à 1.
    */
@@ -37,7 +42,7 @@
 </script>
 
 <div class="visuel rem" bind:this={hote}
-  aria-label="y égale bêta zéro plus bêta un fois x plus epsilon. En mots : variable dépendante égale constante plus pente fois variable indépendante plus erreur. Dans la CES : intérêt égale {virgule(POP.b0, 2)} plus {virgule(POP.b1, 2)} fois scolarité plus erreur.">
+  aria-label="y égale bêta zéro plus bêta un fois x plus epsilon. En mots : variable dépendante égale ordonnée à l’origine plus pente fois variable indépendante plus erreur. Dans la CES : intérêt égale {virgule(POP.b0, 2)} plus {virgule(POP.b1, 2)} fois scolarité plus âge plus genre plus tout le reste.">
   <div class="grille">
     <!-- Rangée 1 : les symboles. -->
     <span class="c sym y" style="--k: 0">y</span>
@@ -53,7 +58,7 @@
     <!-- Rangée 2 : les mots. -->
     <span class="c mot y" class:vu={e >= 1} style="--k: 0">variable dépendante</span>
     <span class="c mot op" class:vu={e >= 1} style="--k: 0">=</span>
-    <span class="c mot b" class:vu={e >= 1} style="--k: 1">constante</span>
+    <span class="c mot b" class:vu={e >= 1} style="--k: 1">ordonnée à l’origine</span>
     <span class="c mot op" class:vu={e >= 1} style="--k: 1">+</span>
     <span class="c mot b" class:vu={e >= 1} style="--k: 2">pente</span>
     <span class="c mot op" class:vu={e >= 1} style="--k: 2">×</span>
@@ -70,7 +75,7 @@
     <span class="c ces op" class:vu={e >= 2} style="--k: 2">×</span>
     <span class="c ces x" class:vu={e >= 2} style="--k: 3">scolarité</span>
     <span class="c ces op" class:vu={e >= 2} style="--k: 3">+</span>
-    <span class="c ces eps" class:vu={e >= 2} style="--k: 4">erreur</span>
+    <span class="c ces eps" class:vu={e >= 2} style="--k: 4"><span class="cache">âge + genre + …</span></span>
   </div>
   <p class="source" class:vu={e >= 2}>CES 2025 · 19 736 des 20 180 répondant.e.s · tout de 0 à 1</p>
 </div>
@@ -79,7 +84,7 @@
   .rem { display: flex; flex-direction: column; align-items: center; gap: 1.4em; padding-top: 1.2em; }
   .grille {
     display: grid;
-    grid-template-columns: 1.25fr auto 1fr auto 1fr auto 1.35fr auto 0.9fr;
+    grid-template-columns: 1.1fr auto 1.1fr auto 0.8fr auto 1.25fr auto 1.45fr;
     grid-template-rows: auto auto auto;
     column-gap: 0.5em;
     row-gap: 0.45em;
@@ -109,6 +114,7 @@
   .eps { color: var(--dk-gris); }
   .mot.b { font-weight: 600; }
 
+  .cache { font-weight: 600; }
   .case { display: inline-block; border: 3px solid var(--dk-encre); padding: 0.1em 0.35em; font-size: 1.15em; }
 
   .source { margin: 0; font-size: 0.7em; letter-spacing: 0.1em; color: var(--dk-gris); opacity: 0; transition: opacity 0.4s 0.8s; }

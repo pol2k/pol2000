@@ -10,14 +10,16 @@
    *      CODE_LM, CODE_SUMMARY). L'habillage reprend celui de Console.svelte.
    *   1  La colonne Std. Error s'encadre en rouge, jusqu'à la ligne de
    *      scolarite : l'erreur type selon R, 0,032.
-   *   2  Les deux nombres côte à côte : un seul sondage (NOTRE.coefs[1].se,
-   *      0,032) et 1 000 sondages (MILLE.ecart_type_hasard, 0,033). Presque
-   *      pareil. Trois décimales, comme à la diapo « L'erreur type ».
-   *   3  Comment R fait : il lit les trois ingrédients dans notre sondage.
-   *      NOTRE.n_modele (981 personnes), NOTRE.sigma (l'erreur typique,
-   *      0,25 sur une échelle de 0 à 1, le « Residual standard error » de R),
-   *      NOTRE.ecart_x (l'écart type de la scolarité, 0,25). Pas de formule
-   *      sur la diapo : elle est dans les notes de l'enseignant.
+   *   2  Une flèche descend de la colonne vers le premier nombre : un seul
+   *      sondage, 0,032 (NOTRE.coefs[1].se, le 0.03212 de la ligne
+   *      scolarite). À côté, 1 000 sondages, 0,033 (MILLE.ecart_type_hasard,
+   *      l'écart type des 1 000 pentes, la règle rouge de la diapo
+   *      précédente « L'erreur type »). Presque pareil. Trois décimales
+   *      sur les deux diapos.
+   *   3  La phrase à retenir : avec un seul sondage, R retrouve presque
+   *      pile la dispersion des 1 000. Pas de formule sur la diapo (elle
+   *      est dans les notes de l'enseignant) : chaque nombre de la diapo se
+   *      lit dans la sortie de R ou sur la diapo précédente.
    *
    * Les colonnes de la sortie sont repérées par leur position dans le texte
    * de R (police à chasse fixe : chaque caractère fait 0,6 em de large).
@@ -26,7 +28,7 @@
    * (src/lib/data/seance7.js, outils/seance7_data.R).
    */
   import { brancherTemps } from '../temps.js';
-  import { VARS, SUMMARY, CODE_LM, CODE_SUMMARY, NOTRE, MILLE } from '$lib/data/seance7.js';
+  import { SUMMARY, CODE_LM, CODE_SUMMARY, NOTRE, MILLE } from '$lib/data/seance7.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -51,16 +53,12 @@
   const col = (k) => TX + k * CW;
 
   const SE = NOTRE.coefs[1].se, ET = MILLE.ecart_type_hasard;
-  const ING = [
-    { n: f(NOTRE.n_modele), l: 'personnes' },
-    { n: f(NOTRE.sigma, 2), l: 'erreur typique' },
-    { n: f(NOTRE.ecart_x, 2), l: `écart type de ${VARS.x.nom}` }
-  ];
+  const XG = col(COL_D) + ((COL_F - COL_D) * CW) / 2, XD = 800;
 
   const ARIA =
-    `La sortie de summary() pour notre sondage. La colonne Std. Error donne l’erreur type de la pente : ${f(SE, 3)}. ` +
-    `Avec un seul sondage, R trouve ${f(SE, 3)}. Avec 1 000 sondages, l’écart type des pentes est ${f(ET, 3)}. Presque pareil. ` +
-    `R lit les trois ingrédients dans notre sondage : ${ING.map((i) => `${i.l} ${i.n}`).join(', ')}.`;
+    `La sortie de summary() pour notre sondage. La colonne Std. Error donne l’erreur type de la pente de scolarite : 0.03212, soit ${f(SE, 3)}. ` +
+    `Avec un seul sondage, R trouve ${f(SE, 3)}. Avec ${f(1000)} sondages, l’écart type des pentes est ${f(ET, 3)}. Presque pareil. ` +
+    `Avec un seul sondage, R retrouve presque pile la dispersion des ${f(1000)}.`;
 </script>
 
 <div class="visuel d7-un-seul" bind:this={hote}>
@@ -81,25 +79,24 @@
     <rect x={col(COL_D) - 5} y={YT[0] - 26} width={(COL_F - COL_D) * CW + 10} height={YT[2] - YT[0] + 38}
           class="us-cadre" class:us-vu={e >= 1} />
     <g class="us-etape" class:us-vu={e >= 1}>
-      <text x={col(COL_D) + ((COL_F - COL_D) * CW) / 2} y="300" class="us-lab">l’erreur type, selon R</text>
+      <text x={XG} y="300" class="us-lab">l’erreur type, selon R</text>
     </g>
 
-    <!-- 2 : les deux nombres. -->
+    <!-- 2 : de la colonne au nombre, puis les 1 000 sondages. -->
     <g class="us-etape" class:us-vu={e >= 2}>
-      <text x="270" y="356" class="us-qui">un seul sondage</text>
-      <text x="270" y="414" class="us-gros us-rouge">{f(SE, 3)}</text>
-      <text x="500" y="400" class="us-pareil">≈</text>
-      <text x="730" y="356" class="us-qui">{f(1000)} sondages</text>
-      <text x="730" y="414" class="us-gros">{f(ET, 3)}</text>
+      <line x1={XG} y1="314" x2={XG} y2="346" class="us-fleche" />
+      <path d="M {XG - 8} 338 L {XG} 352 L {XG + 8} 338 Z" class="us-pointe" />
+      <text x={XG} y="410" class="us-gros us-rouge">{f(SE, 3)}</text>
+      <text x={XG} y="446" class="us-qui">un seul sondage</text>
+      <text x={(XG + XD) / 2} y="400" class="us-pareil">≈</text>
+      <text x={XD} y="410" class="us-gros">{f(ET, 3)}</text>
+      <text x={XD} y="446" class="us-qui">{f(1000)} sondages</text>
+      <text x={XD} y="472" class="us-note">l’écart type des pentes</text>
     </g>
 
-    <!-- 3 : les trois ingrédients, lus dans notre sondage. -->
+    <!-- 3 : la phrase à retenir. -->
     <g class="us-etape" class:us-vu={e >= 3}>
-      <text x="500" y="460" class="us-comment">R lit les trois ingrédients dans notre sondage{NN}:</text>
-      {#each ING as g, i}
-        <text x={180 + i * 320} y="506" class="us-ing-n">{g.n}</text>
-        <text x={180 + i * 320} y="532" class="us-ing">{g.l}</text>
-      {/each}
+      <text x="500" y="526" class="us-comment">Avec un seul sondage, R retrouve presque pile la dispersion des {f(1000)}.</text>
     </g>
   </svg>
 </div>
@@ -126,8 +123,9 @@
   .us-pareil { font-size: 48px; text-anchor: middle; fill: var(--dk-gris); }
 
   .us-comment { font-size: 22px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
-  .us-ing { font-size: 19px; text-anchor: middle; fill: var(--dk-gris); }
-  .us-ing-n { font-size: 30px; font-weight: 700; text-anchor: middle; fill: var(--dk-encre); }
+  .us-note { font-size: 19px; text-anchor: middle; fill: var(--dk-gris); }
+  .us-fleche { stroke: var(--dk-accent); stroke-width: 3; }
+  .us-pointe { fill: var(--dk-accent); }
 
   .us-etape { opacity: 0; transition: opacity 0.2s; }
   .us-etape.us-vu { opacity: 1; transition: opacity 0.4s; }

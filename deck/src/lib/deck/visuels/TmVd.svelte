@@ -8,7 +8,7 @@
    *
    *   0  les trois niveaux, avec un exemple de la CES chacun;
    *   1  le verdict pour Y : nominale refusée, les deux autres acceptées;
-   *   2  « oui ou non » est nominal aussi; la règle vise Y seulement.
+   *   2  « oui ou non » est nominal aussi.
    *
    * Exemples : vote (le parti), les deux variables de la séance : scolarite
    * (cinq niveaux ordonnés, recodés de 0 à 1 : ordinale) et interet (un
@@ -62,7 +62,6 @@
       <span class="tm-vd-tampon">acceptée</span>
     </div>
   </div>
-  <p class="tm-vd-bas" class:tm-on={e >= 2}>La règle vise <b>Y</b>, la variable dépendante. Votre X peut être nominale.</p>
 </div>
 
 <style>
@@ -90,9 +89,6 @@
   .tm-vd-non.tm-juge svg, .tm-vd-non.tm-juge strong { opacity: 0.35; }
   .tm-vd-non.tm-juge strong { text-decoration: line-through; text-decoration-color: var(--dk-accent); text-decoration-thickness: 0.12em; }
 
-  .tm-vd-bas { margin: 0; font-size: 1.05em; border-left: 0.34em solid var(--dk-accent); padding-left: 0.7em; opacity: 0; transition: opacity 0.4s; }
-  .tm-vd-bas.tm-on { opacity: 1; }
-  .tm-vd-bas b { color: var(--dk-accent); }
   @keyframes tm-vd-f { from { opacity: 0; transform: translateY(0.4em); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .tm-vd-niv { animation: none; } .tm-vd-tampon, .tm-vd-oui, .tm-vd-bas { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .tm-vd-niv { animation: none; } .tm-vd-tampon, .tm-vd-oui { transition: none; } }
 </style>

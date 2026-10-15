@@ -11,17 +11,18 @@
    *      1 000 sondages au hasard et la vraie pente diffèrent d'un millième,
    *      deux décimales pourraient créer une fausse différence d'arrondi.
    *      Les deux cloches ont chacune leur rangée (le hasard en haut, les
-   *      gens déjà intéressés en bas), sur le même axe des pentes.
+   *      électeurs conservateurs en bas), sur le même axe des pentes.
    *   1  1 000 sondages de 1 000 au hasard : les droites arrivent en trois
    *      secondes (encre très pâle : là où elles s'accumulent, c'est foncé)
    *      et leurs pentes s'empilent en cloche autour de la vraie. C'est le
    *      hasard (la variance), pas un biais. L'état final est fixé dès le
    *      temps 2.
-   *   2  1 000 sondages « faciles » : seulement des gens déjà intéressés, 6
-   *      sur 10 ou plus (MILLE.facile_nom). Une sélection sur Y : droites
-   *      presque plates et cloche rouge autour de MILLE.moyenne_facile
-   *      (+0,05). Toujours du même côté : c'est le biais. État final fixé au
-   *      temps 3.
+   *   2  1 000 sondages « faciles » : seulement des électeurs et électrices
+   *      conservateurs (intention de vote, MILLE.facile_nom). Droites plus
+   *      plates et cloche rouge autour de MILLE.moyenne_facile (+0,12).
+   *      Toujours du même côté : c'est le biais. État final fixé au temps 3.
+   *      (Choix du prof, 15 octobre : le Québec seulement donnait un écart
+   *      trop petit, 0,159 contre 0,172.)
    *   3  Les deux mots à côté des cloches (« le hasard », « le biais ») et la
    *      phrase de la séance 5 : plus de sondages ne corrigent pas une
    *      mauvaise méthode.
@@ -59,7 +60,7 @@
   const VRAIE = ligne(POP.b0, POP.b1);
 
   // À droite : l'histogramme des pentes, de −0,05 à 0,3, tranches de 0,005.
-  // Deux rangées sur le même axe : le hasard en haut, les gens déjà intéressés en bas.
+  // Deux rangées sur le même axe : le hasard en haut, les conservateurs en bas.
   const A0 = -0.05, A1 = 0.3, HX0 = 560, HX1 = 960, AXE = 400, AXH = 262, HMAX = 112;
   const hx = (v) => HX0 + ((v - A0) / (A1 - A0)) * (HX1 - HX0);
   const L = 0.005;
@@ -109,7 +110,7 @@
   const ARIA =
     `On refait notre sondage de ${f(1000)} personnes mille fois. Au hasard, les droites se dispersent autour de la vraie droite ` +
     `et leurs pentes s’empilent en cloche autour de la vraie pente, ${sg(POP.b1, 3)}${NN}: c’est le hasard. ` +
-    `Avec ${MILLE.facile_nom}, les droites sont presque plates et les pentes s’empilent autour de ${sg(MILLE.moyenne_facile, 3)}${NN}: c’est le biais. ` +
+    `Avec ${MILLE.facile_nom}, les droites sont plus plates et les pentes s’empilent autour de ${sg(MILLE.moyenne_facile, 3)}${NN}: c’est le biais. ` +
     `Plus de sondages ne corrigent pas une mauvaise méthode.`;
 </script>
 
@@ -122,7 +123,7 @@
     <!-- Les compteurs. -->
     <text x={GX0 - 40} y="34" class="rc-compte rc-etape" class:rc-vu={e >= 1}>{f(Math.max(kH, 1))} sondages au hasard</text>
     <text x={HX1} y="34" class="rc-moy rc-etape" class:rc-vu={e >= 1}>moyenne des pentes{NN}: {sg(mH, 3)}</text>
-    <text x={GX0 - 40} y="68" class="rc-compte rc-rouge rc-etape" class:rc-vu={e >= 2}>{f(Math.max(kQ, 1))} sondages de gens déjà intéressés</text>
+    <text x={GX0 - 40} y="68" class="rc-compte rc-rouge rc-etape" class:rc-vu={e >= 2}>{f(Math.max(kQ, 1))} sondages d’électeurs conservateurs</text>
     <text x={HX1} y="68" class="rc-moy rc-rouge rc-etape" class:rc-vu={e >= 2}>moyenne des pentes{NN}: {sg(mQ, 3)}</text>
 
     <!-- À gauche : les droites. -->

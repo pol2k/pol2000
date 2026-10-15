@@ -49,7 +49,9 @@ ces <- data.frame(
   age = (ans - 18) / (max(ans, na.rm = TRUE) - 18),
   femme = ifelse(genre %in% c(1, 2), as.numeric(genre == 2), NA),
   revenu = (rev - 1) / 7,
-  quebec = as.numeric(grepl("Quebec", prov))
+  quebec = as.numeric(grepl("Quebec", prov)),
+  # Pour le sondage « facile » : l'intention de vote conservatrice.
+  vote_conservateur = as.numeric(as.numeric(d$cps25_votechoice) %in% 2)
 )
 stopifnot(nrow(ces) == 20180)
 N_POP <- nrow(ces)
@@ -156,22 +158,24 @@ QUINZE <- list(graine = g15,
 )
 
 # ---- 4. Mille sondages de 1 000 au hasard, puis mille sondages « faciles » :
-# seulement des gens déjà intéressés par la politique (intérêt de 6 sur 10 ou
-# plus). Une sélection sur Y : la pente s'aplatit, chaque fois.
+# seulement des électeurs et électrices conservateurs (intention de vote
+# pendant la campagne, cps25_votechoice = 2). Choix du prof (15 octobre) :
+# un sondage « au Québec seulement » donnait 0,159 contre 0,172, un écart trop
+# petit devant le hasard. Chez les conservateurs, la pente tombe à 0,124.
 set.seed(2025)
 hasard <- replicate(1000, pente(tirer(ces)))
-interesses <- ces[!is.na(ces$interet) & ces$interet >= 0.6, ]
+conserv <- ces[ces$vote_conservateur %in% 1, ]
 set.seed(2026)
-facile <- replicate(1000, pente(tirer(interesses)))
+facile <- replicate(1000, pente(tirer(conserv)))
 MILLE <- list(
   hasard = r(hasard), facile = r(facile),
-  facile_nom = "seulement des gens déjà intéressés (6 sur 10 ou plus)",
+  facile_nom = "seulement des électeurs conservateurs",
   moyenne_hasard = r(mean(hasard)), moyenne_facile = r(mean(facile)),
   ecart_type_hasard = r(sd(hasard)), ecart_type_facile = r(sd(facile)),
-  n_facile_pop = nrow(interesses),
-  b1_facile_pop = r(coef(lm(interet ~ scolarite, data = interesses))[[2]]),
-  # La moyenne de l'intérêt à chaque niveau, chez les gens déjà intéressés.
-  moyennes_facile = moyennes(interesses)
+  n_facile_pop = nrow(conserv),
+  b1_facile_pop = r(coef(lm(interet ~ scolarite, data = conserv))[[2]]),
+  # La moyenne de l'intérêt à chaque niveau, chez les conservateurs.
+  moyennes_facile = moyennes(conserv)
 )
 
 # ---- 5. Ce qui fait grandir l'erreur type (vraies données). Chaque sondage

@@ -13,14 +13,17 @@
 #
 # Ce que ce script ajoute :
 #   DROITES    les 1 000 sondages de 1 000 au hasard (graine 2025) et les
-#              1 000 sondages de gens déjà intéressés, 6 sur 10 ou plus
-#              (graine 2026) : les MÊMES tirages que MILLE, avec cette fois la
-#              constante et la pente de chacun, pour dessiner les droites.
-#              Vérifié contre MILLE.
-#   INTERESSES les gens déjà intéressés de la CES, niveau par niveau : leur
+#              1 000 sondages d'électeurs et électrices conservateurs
+#              (intention de vote, cps25_votechoice = 2, graine 2026) : les
+#              MÊMES tirages que MILLE, avec cette fois la constante et la pente
+#              de chacun, pour dessiner les droites. Vérifié contre MILLE.
+#   CONSERVATEURS  les conservateurs de la CES, niveau par niveau : leur
 #              intérêt moyen, leur ε moyen (distance à la VRAIE droite, celle
-#              des 20 180), la part des gens de ce niveau qu'on garde, et leur
-#              droite. Vérifié contre MILLE$moyennes_facile et b1_facile_pop.
+#              des 20 180), la part de conservateurs à chaque niveau de
+#              scolarité, et leur droite. Vérifié contre MILLE$moyennes_facile
+#              et b1_facile_pop. Plus l'intérêt moyen des conservateurs et des
+#              autres : le vote conservateur est lié à X (plus fréquent chez
+#              les moins scolarisé.e.s) et à Y (plus d'intérêt).
 #   DOUBLE     les 1 000 sondages de 500 de ERREUR_TYPE$base (graine 500, parmi
 #              les cas complets), dans des données modifiées où chaque personne
 #              est deux fois plus loin de la vraie droite (intérêt = droite +
@@ -39,7 +42,8 @@ d <- if (nzchar(cache) && file.exists(cache)) readRDS(cache) else ces::get_ces("
 int <- as.numeric(d$cps25_interest_gen_1); int[!is.na(int) & int < 0] <- NA
 edu <- as.numeric(d$cps25_education); edu[!(edu %in% 1:11)] <- NA
 niveau <- cut(edu, c(0, 4, 5, 7, 9, 11), labels = FALSE)
-ces <- data.frame(interet = int / 10, scolarite = (niveau - 1) / 4)
+ces <- data.frame(interet = int / 10, scolarite = (niveau - 1) / 4,
+                  vote_conservateur = as.numeric(as.numeric(d$cps25_votechoice) %in% 2))
 stopifnot(nrow(ces) == 20180)
 BUDGET <- 1000
 NX <- c(0, 0.25, 0.5, 0.75, 1)
@@ -60,10 +64,10 @@ stopifnot(nobs(m_pop) == POP7$n_modele, isTRUE(all.equal(r(coef(m_pop)[[2]]), PO
 # ---- 1. Les droites des 2 × 1 000 sondages (mêmes graines que seance7_data.R).
 set.seed(2025)
 hasard <- t(replicate(1000, droite(tirer(ces))))
-interesses <- ces[!is.na(ces$interet) & ces$interet >= 0.6, ]
-stopifnot(nrow(interesses) == MILLE7$n_facile_pop)
+conserv <- ces[ces$vote_conservateur %in% 1, ]
+stopifnot(nrow(conserv) == MILLE7$n_facile_pop)
 set.seed(2026)
-facile <- t(replicate(1000, droite(tirer(interesses))))
+facile <- t(replicate(1000, droite(tirer(conserv))))
 stopifnot(isTRUE(all.equal(r(hasard[, 2]), MILLE7$hasard)),
           isTRUE(all.equal(r(facile[, 2]), MILLE7$facile)))
 DROITES <- list(
@@ -71,26 +75,30 @@ DROITES <- list(
   facile = list(b0 = r(facile[, 1]), b1 = r(facile[, 2]))
 )
 
-# ---- 2. Les gens déjà intéressés, niveau par niveau.
+# ---- 2. Les conservateurs, niveau par niveau.
 pc <- complets(ces)
-ic <- complets(interesses)
-m_i <- lm(interet ~ scolarite, data = ic)
-stopifnot(isTRUE(all.equal(r(coef(m_i)[[2]]), MILLE7$b1_facile_pop)))
-# L'erreur (ε) de chaque personne gardée par rapport à la VRAIE droite.
-e_i <- ic$interet - predict(m_pop, newdata = ic)
-INTERESSES <- list(
-  seuil = 0.6, n = nrow(interesses), n_modele = nobs(m_i),
-  b0 = r(coef(m_i)[[1]]), b1 = r(coef(m_i)[[2]]),
-  # Le lien entre ces erreurs et la scolarité, chez les gens gardés (zéro sur les 20 180).
-  correlation = r(cor(e_i, ic$scolarite), 2),
+cc <- complets(conserv)
+m_c <- lm(interet ~ scolarite, data = cc)
+stopifnot(isTRUE(all.equal(r(coef(m_c)[[2]]), MILLE7$b1_facile_pop)))
+# L'erreur (ε) de chaque conservateur par rapport à la VRAIE droite.
+e_c <- cc$interet - predict(m_pop, newdata = cc)
+CONSERVATEURS <- list(
+  n = nrow(conserv), n_modele = nobs(m_c),
+  b0 = r(coef(m_c)[[1]]), b1 = r(coef(m_c)[[2]]),
+  # Le lien entre ces erreurs et la scolarité, chez les conservateurs (zéro sur les 20 180).
+  correlation = r(cor(e_c, cc$scolarite), 2),
+  # Intérêt moyen : conservateurs et autres (lien avec Y).
+  interet_moyen = list(conservateurs = r(mean(cc$interet)),
+                       autres = r(mean(pc$interet[pc$vote_conservateur == 0]))),
   moyennes = lapply(NX, function(a) {
-    k <- abs(ic$scolarite - a) < 1e-9
-    tous <- sum(abs(pc$scolarite - a) < 1e-9)
-    list(x = a, moyenne = r(mean(ic$interet[k])), epsilon = r(mean(e_i[k])), n = sum(k),
-         part_gardee = r(sum(k) / tous, 3))
+    k <- abs(cc$scolarite - a) < 1e-9
+    tous <- abs(pc$scolarite - a) < 1e-9
+    # part = la part de conservateurs parmi les gens de ce niveau (lien avec X).
+    list(x = a, moyenne = r(mean(cc$interet[k])), epsilon = r(mean(e_c[k])), n = sum(k),
+         part = r(mean(pc$vote_conservateur[tous]), 3))
   })
 )
-stopifnot(isTRUE(all.equal(sapply(INTERESSES$moyennes, `[[`, "moyenne"), MILLE7$moyennes_facile$moyenne)))
+stopifnot(isTRUE(all.equal(sapply(CONSERVATEURS$moyennes, `[[`, "moyenne"), MILLE7$moyennes_facile$moyenne)))
 
 # ---- 3. Les 1 000 sondages de 500 de ERREUR_TYPE$base, erreurs doublées.
 pool <- pc
@@ -117,20 +125,21 @@ writeLines(c(
   "   sans pondération. interet (0 à 1) selon scolarite (0 à 1).",
   "   Ne pas modifier à la main. */",
   "",
-  "/* Constante et pente des 1 000 sondages au hasard et des 1 000 sondages de gens déjà",
-  "   intéressés : les mêmes tirages que MILLE dans seance7.js (vérifié par le script). */",
+  "/* Constante et pente des 1 000 sondages au hasard et des 1 000 sondages d'électeurs",
+  "   conservateurs : les mêmes tirages que MILLE dans seance7.js (vérifié par le script). */",
   paste0("export const DROITES = ", J(DROITES), ";"),
-  "/* Les gens déjà intéressés (6 sur 10 ou plus) : intérêt moyen, ε moyen (distance à la",
-  "   vraie droite), part gardée de chaque niveau, et leur droite. */",
-  paste0("export const INTERESSES = ", J(INTERESSES), ";"),
+  "/* Les conservateurs : intérêt moyen, ε moyen (distance à la vraie droite) et part de",
+  "   conservateurs à chaque niveau de scolarité, leur droite, intérêt moyen comparé. */",
+  paste0("export const CONSERVATEURS = ", J(CONSERVATEURS), ";"),
   "/* DONNÉES MODIFIÉES (fictives) : les sondages de 500 de ERREUR_TYPE.base, chaque",
   "   personne deux fois plus loin de la vraie droite. Les pentes et leur écart type. */",
   paste0("export const DOUBLE = ", J(DOUBLE), ";")
 ), file.path(ici, "..", "src", "lib", "data", "seance7_d.js"))
 
 cat("DROITES b0 moy hasard =", r(mean(hasard[, 1])), " facile =", r(mean(facile[, 1])), "\n")
-cat("INTERESSES n =", INTERESSES$n, " n_modele =", INTERESSES$n_modele, " b0 =", INTERESSES$b0,
-    " b1 =", INTERESSES$b1, " cor =", INTERESSES$correlation, "\n")
-print(do.call(rbind, lapply(INTERESSES$moyennes, unlist)))
+cat("CONSERVATEURS n =", CONSERVATEURS$n, " n_modele =", CONSERVATEURS$n_modele, " b0 =", CONSERVATEURS$b0,
+    " b1 =", CONSERVATEURS$b1, " cor =", CONSERVATEURS$correlation, "\n")
+print(unlist(CONSERVATEURS$interet_moyen))
+print(do.call(rbind, lapply(CONSERVATEURS$moyennes, unlist)))
 cat("DOUBLE moy =", DOUBLE$moyenne, " et =", DOUBLE$ecart_type, " (base", ET7$base$ecart_type, ")",
     " sigma =", DOUBLE$sigma_vrai, "->", DOUBLE$sigma_double, "\n")

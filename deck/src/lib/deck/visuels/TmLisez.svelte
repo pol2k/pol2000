@@ -16,7 +16,7 @@
   const ms = EVALUATIONS.find((v) => v.id === 'misession');
   const jour = new Date(ms.date + 'T12:00:00').toLocaleDateString('fr-CA', { weekday: 'long', day: 'numeric', month: 'long' });
 
-  const LISTE = ['2 pages, sans couverture ni bibliographie', '4 références scientifiques, au moins', 'H₁ et H₀', 'Y n’est pas nominale', 'APA, auteur-date', 'Déclaration d’IA, à la fin'];
+  const LISTE = ['2 pages sans compter la couverture et la bibliographie', '4 références scientifiques, au moins', 'H₁ et H₀', 'Pas de variables nominales', 'APA, auteur-date', 'Déclaration d’IA, à la fin'];
 
   let e = $state(0);
   let hote = $state(null);

@@ -3,19 +3,18 @@
    * Étape 3 du travail : une hypothèse dérivée de la littérature, et son
    * hypothèse nulle (les consignes exigent les deux). À gauche, la mauvaise
    * façon : H₁ sort d'un chapeau de magicien, et on la raye. À droite, la
-   * bonne : une théorie (le camp choisi sur la carte de l'étape 2), ce
-   * qu'elle implique pour notre question, donc H₁, et en face H₀. Exemple
-   * fil rouge de la séance : « Plus on est scolarisé, plus on s'intéresse à
-   * la politique ? » (interet selon scolarite). La théorie, un classique
-   * (les ressources : compétences civiques, information, réseaux), est dite
-   * en mots, sans référence : aucune citation inventée. H₀ porte déjà son nom
-   * de régression, β₁ = 0, qu'on retrouve plus loin aujourd'hui. Cinq temps :
+   * bonne : la revue de littérature (la carte de l'étape 2, en petit, le
+   * camp choisi en rouge), donc H₁, et en face H₀. Exemple fil rouge de la
+   * séance : « Plus on est scolarisé, plus on s'intéresse à la politique ? »
+   * (interet selon scolarite). La théorie se dit de vive voix, pas à l'écran
+   * (demande de l'enseignant, 15 octobre). H₀ porte déjà son nom de
+   * régression, β₁ = 0, qu'on retrouve plus loin aujourd'hui. Quatre temps :
    *
    *   0  le chapeau, H₁ en sort;
    *   1  on raye : « Une hypothèse ne sort pas d'un chapeau. »;
-   *   2  la théorie, puis ce qu'elle implique pour l'intérêt;
-   *   3  donc H₁, avec sa droite qui descend (schéma, pas des données);
-   *   4  H₀, la droite plate, et β₁ = 0.
+   *   2  la revue de littérature, donc H₁, avec sa droite qui monte
+   *      (schéma, pas des données);
+   *   3  H₀, la droite plate, et β₁ = 0.
    *
    * La phrase de l'enseignant était plus crue; l'idée est la même.
    */
@@ -26,7 +25,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 4, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
 </script>
 
@@ -52,17 +51,19 @@
   </div>
 
   <div class="tm-hyp-d">
-    <div class="tm-hyp-b" class:tm-on={e >= 2}>
-      <span class="tm-hyp-et">THÉORIE · tirée de la littérature</span>
-      <p>L’école donne des ressources&#8239;: des compétences, de l’information, des réseaux.</p>
+    <div class="tm-hyp-lit" class:tm-on={e >= 2}>
+      <!-- La carte de l'étape 2, en petit : le camp choisi est en rouge. -->
+      <svg viewBox="0 0 200 120" aria-hidden="true">
+        <polygon points="10,10 80,6 92,44 70,70 14,62" class="tm-hyp-t tm-choisi" />
+        <polygon points="92,44 80,6 160,10 192,30 176,66 124,62" class="tm-hyp-t" />
+        <polygon points="14,62 70,70 124,62 176,66 150,114 30,110" class="tm-hyp-t tm-hach" />
+        <polygon points="70,70 92,44 124,62" class="tm-hyp-q" />
+      </svg>
+      <span class="tm-hyp-et">VOTRE REVUE DE LITTÉRATURE · le camp choisi</span>
     </div>
-    <div class="tm-hyp-b tm-hyp-fait" class:tm-on={e >= 2} style="--d: 0.25s">
-      <span class="tm-hyp-et">POUR LA POLITIQUE</span>
-      <p>Avec ces ressources, suivre la politique coûte moins d’effort.</p>
-    </div>
-    <div class="tm-hyp-donc" class:tm-on={e >= 3}>donc</div>
+    <div class="tm-hyp-donc" class:tm-on={e >= 2}>donc</div>
     <div class="tm-hyp-hh">
-      <div class="tm-hyp-b tm-hyp-h1b" class:tm-on={e >= 3}>
+      <div class="tm-hyp-b tm-hyp-h1b" class:tm-on={e >= 2} style="--d: 0.3s">
         <span class="tm-hyp-et tm-rouge">H₁ · L’HYPOTHÈSE</span>
         <p>Plus on est scolarisé, plus on s’intéresse à la politique.</p>
         <svg viewBox="0 0 160 70" class="tm-hyp-mini" aria-hidden="true">
@@ -70,7 +71,7 @@
           <line x1="16" y1="52" x2="146" y2="14" class="tm-hyp-droite" />
         </svg>
       </div>
-      <div class="tm-hyp-b tm-hyp-h0b" class:tm-on={e >= 4}>
+      <div class="tm-hyp-b tm-hyp-h0b" class:tm-on={e >= 3}>
         <span class="tm-hyp-et">H₀ · L’HYPOTHÈSE NULLE</span>
         <p>La scolarité ne change rien à l’intérêt.</p>
         <svg viewBox="0 0 160 70" class="tm-hyp-mini" aria-hidden="true">
@@ -99,7 +100,12 @@
 
   .tm-hyp-d { display: flex; flex-direction: column; gap: 0.5em; }
   .tm-hyp-b { display: flex; flex-direction: column; gap: 0.2em; border-left: 5px solid var(--dk-encre); padding: 0.3em 0 0.3em 0.8em; opacity: 0; transform: translateX(0.6em); transition: opacity 0.45s, transform 0.45s; transition-delay: var(--d, 0s); }
-  .tm-hyp-fait { border-left-color: var(--dk-gris-2); }
+  .tm-hyp-lit { display: flex; align-items: center; gap: 1em; opacity: 0; transform: translateX(0.6em); transition: opacity 0.45s, transform 0.45s; }
+  .tm-hyp-lit svg { width: 9em; height: auto; flex: none; }
+  .tm-hyp-t { fill: var(--dk-encre); stroke: var(--dk-fond); stroke-width: 3; }
+  .tm-hyp-t.tm-choisi { fill: var(--dk-accent); }
+  .tm-hyp-t.tm-hach { fill: var(--dk-gris-2); }
+  .tm-hyp-q { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 2; }
   .tm-hyp-b p { margin: 0; font-size: 1em; line-height: 1.35; }
   .tm-hyp-et { font-size: 0.6em; font-weight: 600; letter-spacing: 0.14em; color: var(--dk-gris); }
   .tm-hyp-et.tm-rouge { color: var(--dk-accent); }
@@ -120,6 +126,6 @@
   @media (prefers-reduced-motion: reduce) {
     .tm-hyp-sort { animation: none; }
     .tm-hyp-x.tm-on line { animation: none; stroke-dashoffset: 0; }
-    .tm-hyp-punch, .tm-hyp-b, .tm-hyp-donc { transition: none; }
+    .tm-hyp-punch, .tm-hyp-b, .tm-hyp-donc, .tm-hyp-lit { transition: none; }
   }
 </style>

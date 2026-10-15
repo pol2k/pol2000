@@ -8,13 +8,20 @@
    * bornes du codebook (VARS). Par-dessus, la droite de R.
    *
    *   0  Le nuage seul.
-   *   1  La constante : l'intérêt que la droite prédit à 0 (secondaire non
-   *      terminé). Un point sur l'axe vertical.
+   *   1  L'ordonnée à l'origine (la constante du tableau) : l'intérêt que la
+   *      droite prédit à 0 (secondaire non terminé). Un point sur l'axe
+   *      vertical.
    *   2  Le signe : la droite part de ce point et monte. Positif = plus
    *      scolarisé, plus intéressé.
    *   3  La pente se lit de 0 à 1, sur tout l'éventail : du secondaire non
-   *      terminé à la maîtrise ou au doctorat, +0,20, soit 2 points sur 10.
+   *      terminé à la maîtrise ou au doctorat, +0,20.
    *   4  Un niveau de scolarité vaut 0,25 : quatre marches d'environ +0,05.
+   *
+   * Les deux axes partent du même 0, sans marge (demande de l'enseignant,
+   * 15 octobre). Pour que les colonnes de points restent dans le cadre, le
+   * léger étalement du dessin (`jx`, `jy`) est replié vers l'intérieur aux
+   * bords (à 0 et à 1) : il reste du même côté que le cadre, rien d'autre ne
+   * bouge. La graduation 0 est commune aux deux axes.
    *
    * Nombres : NOTRE.coefs, NOTRE.points et VARS dans src/lib/data/seance7.js
    * (outils/seance7_data.R). Les marches sont calculées depuis la pente.
@@ -36,11 +43,13 @@
   const sg = (v, d = 2) => (v > 0 ? '+' : '') + f(v, d);
   const nb = (v) => v.toLocaleString('fr-CA', { maximumFractionDigits: 2 });
   const B0 = NOTRE.coefs[0].b, B1 = NOTRE.coefs[1].b;
-  const X0 = 160, X1 = 560, Y0 = 350, Y1 = 40;
+  const X0 = 170, X1 = 590, Y0 = 350, Y1 = 30;
   const x = (v) => X0 + v * (X1 - X0);
   const y = (v) => Y0 - v * (Y0 - Y1);
   const yd = (v) => y(B0 + B1 * v);
-  const PTS = NOTRE.points;
+  // L'étalement du dessin, replié vers l'intérieur aux bords : rien ne dépasse 0 ni 1.
+  const replier = (v, c) => (c <= 0 ? c + Math.abs(v - c) : c >= 1 ? c - Math.abs(v - c) : v);
+  const PTS = NOTRE.points.map((p) => ({ ...p, jx: replier(p.jx, p.x), jy: replier(p.jy, p.y) }));
   // Les niveaux de scolarité sur deux lignes, coupés à la virgule ou au premier espace.
   const deuxLignes = (t) => {
     const s = t.toLowerCase(), i = s.indexOf(', ');
@@ -57,12 +66,11 @@
   const K = MARCHES[2]; // la marche en rouge : de 0,5 à 0,75
   const BX = `b-${VARS.x.nom}`;
   const ON = [[], ['b-(Intercept)'], [BX], [BX], [BX]];
-  const sur10 = (v) => f(Math.abs(v) * 10, 0);
   const DIT = [
     '',
-    `${VARS.x.niveaux[0].toLowerCase()}\u202f: la droite prédit ${f(B0)}`,
+    `l’ordonnée à l’origine (la constante du tableau)\u202f: ${f(B0)}`,
     B1 > 0 ? 'positif\u202f: plus scolarisé, plus intéressé' : 'négatif\u202f: plus scolarisé, moins intéressé',
-    `de 0 à 1\u202f: ${sg(B1)}, soit ${sur10(B1)} points sur 10`,
+    `de 0 à 1\u202f: ${sg(B1)}`,
     `un niveau de plus (+${f(PAS)})\u202f: environ ${sg(B1 * PAS)}`
   ];
 </script>
@@ -71,27 +79,31 @@
   <div class="td-tab"><TabPublie on={ON[e]} /></div>
 
   <div class="td-fig">
-    <svg viewBox="0 0 640 470" role="img" aria-label="Les {PTS.length} personnes de notre sondage, en colonnes, une par niveau de scolarité, et la droite de R. À 0, {VARS.x.niveaux[0].toLowerCase()}, la droite prédit un intérêt de {f(B0)}. Elle monte de {f(B1)} de 0 à 1, soit {sur10(B1)} points sur 10, et d’environ {f(B1 * PAS)} par niveau.">
+    <svg viewBox="0 0 680 462" role="img" aria-label="Les {PTS.length} personnes de notre sondage, en colonnes, une par niveau de scolarité, et la droite de R. À 0, {VARS.x.niveaux[0].toLowerCase()}, la droite prédit un intérêt de {f(B0)}. Elle monte de {f(B1)} de 0 à 1, et d’environ {f(B1 * PAS)} par niveau.">
       <!-- Le nuage en colonnes, pâle : le décor. -->
       {#each PTS as p}<circle cx={x(p.jx)} cy={y(p.jy)} r="2.4" class="td-pt" />{/each}
 
       <!-- Les axes, avec les niveaux et les bornes du codebook. -->
-      <line x1={X0 - 30} y1={Y0 + 16} x2={X1 + 30} y2={Y0 + 16} class="td-axe" />
-      <line x1={X0 - 30} y1={Y0 + 16} x2={X0 - 30} y2={Y1 - 16} class="td-axe" />
+      <!-- Des repères pâles à chaque dixième en y : on lit la droite sans effort. -->
+      {#each GY.slice(1) as v}<line x1={X0} y1={y(v)} x2={X1} y2={y(v)} class="td-grille" class:td-demi={v === 0.5 || v === 1} />{/each}
+      <line x1={X0} y1={Y0} x2={X1} y2={Y0} class="td-axe" />
+      <line x1={X0} y1={Y0} x2={X0} y2={Y1} class="td-axe" />
       {#each NX as t}
-        <line x1={x(t.v)} y1={Y0 + 16} x2={x(t.v)} y2={Y0 + 23} class="td-axe" />
-        <text x={x(t.v)} y={Y0 + 42} class="td-tick">{nb(t.v)}</text>
-        <text x={x(t.v)} y={Y0 + 62} class="td-niv">{t.l[0]}</text>
-        <text x={x(t.v)} y={Y0 + 78} class="td-niv">{t.l[1]}</text>
+        <line x1={x(t.v)} y1={Y0} x2={x(t.v)} y2={Y0 + 8} class="td-axe" />
+        {#if t.v > 0}<text x={x(t.v)} y={Y0 + 30} class="td-tick">{nb(t.v)}</text>{/if}
+        <text x={x(t.v)} y={Y0 + 50} class="td-niv">{t.l[0]}</text>
+        <text x={x(t.v)} y={Y0 + 66} class="td-niv">{t.l[1]}</text>
       {/each}
-      {#each GY as v}<line x1={X0 - 36} y1={y(v)} x2={X0 - 30} y2={y(v)} class="td-axe td-fine" />{/each}
-      {#each [0, 0.5, 1] as v}<text x={X0 - 42} y={y(v) + 6} class="td-tick td-g">{nb(v)}</text>{/each}
-      <text x={X0 - 42} y={y(1) + 26} class="td-niv td-g">{BORNES[1][0]}</text>
-      <text x={X0 - 42} y={y(1) + 42} class="td-niv td-g">{BORNES[1].slice(1).join(' ')}</text>
-      <text x={X0 - 42} y={y(0) - 30} class="td-niv td-g">{BORNES[0][0]}</text>
-      <text x={X0 - 42} y={y(0) - 14} class="td-niv td-g">{BORNES[0].slice(1).join(' ')}</text>
+      {#each GY as v}<line x1={X0 - 7} y1={y(v)} x2={X0} y2={y(v)} class="td-axe td-fine" />{/each}
+      {#each [0.5, 1] as v}<text x={X0 - 12} y={y(v) + 6} class="td-tick td-g">{nb(v)}</text>{/each}
+      <text x={X0 - 12} y={y(1) + 26} class="td-niv td-g">{BORNES[1][0]}</text>
+      <text x={X0 - 12} y={y(1) + 42} class="td-niv td-g">{BORNES[1].slice(1).join(' ')}</text>
+      <text x={X0 - 12} y={y(0) - 26} class="td-niv td-g">{BORNES[0][0]}</text>
+      <text x={X0 - 12} y={y(0) - 10} class="td-niv td-g">{BORNES[0].slice(1).join(' ')}</text>
+      <!-- L'origine : un seul 0, commun aux deux axes. -->
+      <text x={X0 - 10} y={Y0 + 22} class="td-tick td-g">0</text>
       <text x="4" y="16" class="td-titre-axe td-g0">intérêt</text>
-      <text x={(X0 + X1) / 2} y="460" class="td-titre-axe">scolarité</text>
+      <text x={(X0 + X1) / 2} y="452" class="td-titre-axe">scolarité</text>
 
       <!-- 2 · La droite, qui se dessine depuis la constante. -->
       <line x1={x(0)} y1={yd(0)} x2={x(1)} y2={yd(1)} class="td-droite" class:td-vu={e >= 2} pathLength="1" />
@@ -127,7 +139,9 @@
   .td-tab { font-size: 0.92em; }
   .td-fig { display: flex; flex-direction: column; gap: 0.3em; }
   svg { width: 100%; height: auto; display: block; max-height: 64vh; }
-  .td-pt { fill: var(--dk-encre); opacity: 0.16; }
+  .td-pt { fill: var(--dk-encre); opacity: 0.13; }
+  .td-grille { stroke: var(--dk-filet); stroke-width: 1; }
+  .td-grille.td-demi { stroke: var(--dk-gris-2); stroke-dasharray: 4 4; }
   .td-axe { stroke: var(--dk-encre); stroke-width: 2; }
   .td-fine { stroke-width: 1.5; }
   .td-tick.td-g { text-anchor: end; }

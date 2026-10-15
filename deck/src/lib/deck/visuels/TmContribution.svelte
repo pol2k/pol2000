@@ -5,10 +5,9 @@
    * cachée qui se retournent une par une : une méthode, une théorie, une
    * perspective, une population, une variable, une mesure, une question.
    * Chaque carte a son glyphe et un exemple de trois mots, pensé pour la
-   * question de la séance (interet selon scolarite). La huitième
-   * case donne la règle : une seule suffit, mais il faut la nommer.
+   * question de la séance (interet selon scolarite).
    * Huit temps (0 à 7) : 0 tout est caché; k = la carte k se retourne; au
-   * temps 7, la règle s'affiche avec la dernière carte.
+   * temps 7, la dernière carte est retournée.
    */
   import { brancherTemps } from '../temps.js';
 
@@ -72,10 +71,6 @@
       </div>
     </div>
   {/each}
-  <div class="tm-ct-regle" class:tm-on={e >= 7}>
-    <strong>Une seule suffit.</strong>
-    <span>Dites laquelle.</span>
-  </div>
 </div>
 
 <style>
@@ -104,11 +99,7 @@
   .tm-g-dents { fill: none; stroke: var(--dk-encre); stroke-width: 9; stroke-dasharray: 7 7; }
   .tm-g-q { font-family: var(--dk-mono); font-size: 58px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
 
-  .tm-ct-regle { display: flex; flex-direction: column; justify-content: center; gap: 0.3em; padding: 0.6em 1em; border-left: 0.4em solid var(--dk-accent); opacity: 0; transform: translateX(0.6em); transition: opacity 0.5s 0.5s, transform 0.5s 0.5s; }
-  .tm-ct-regle.tm-on { opacity: 1; transform: none; }
-  .tm-ct-regle strong { font-size: 1.4em; line-height: 1.15; color: var(--dk-accent); }
-  .tm-ct-regle span { font-size: 1.05em; }
 
   @keyframes tm-ct-f { from { opacity: 0; transform: translateY(0.5em); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .tm-ct-carte { animation: none; } .tm-ct-in, .tm-ct-regle { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .tm-ct-carte { animation: none; } .tm-ct-in { transition: none; } }
 </style>

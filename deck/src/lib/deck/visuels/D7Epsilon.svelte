@@ -1,41 +1,43 @@
 <script>
   /**
-   * « Ce qui reste : ε », séance 7. Pourquoi les sondages de gens déjà
-   * intéressés ratent toujours du même côté ? Par ε, ce que la droite ne
-   * prédit pas : la distance verticale entre une personne et la vraie
-   * droite. Ici, la sélection se fait sur Y (l'intérêt lui-même).
+   * « Ce qui reste : ε », séance 7. Pourquoi les sondages d'électeurs et
+   * électrices conservateurs ratent toujours du même côté ? Par ε, ce que la
+   * droite ne prédit pas : la distance verticale entre une personne et la
+   * vraie droite. Ici, on choisit les gens selon une variable (le vote
+   * conservateur) liée à la fois à X et à Y.
    *
    *   0  L'équation, ε en rouge (« tout le reste »). Dessous, la population :
-   *      ronds pâles (POP.cases), l'intérêt moyen de chaque niveau en
-   *      anneaux d'encre (POP.moyennes, taille selon le nombre de gens), et
-   *      la vraie droite (pointillé). Sur les 20 180, ε n'a aucun lien avec
-   *      la scolarité : c'est ainsi que R choisit la droite.
-   *   1  La coupe : on ne garde que les gens à 6 sur 10 ou plus
-   *      (INTERESSES.seuil). Les ronds sous la coupe pâlissent. En haut de
-   *      chaque colonne, la part des gens gardée (INTERESSES.moyennes[i].
-   *      part_gardee) : 56 % au secondaire non terminé, 82 % à la maîtrise
-   *      ou au doctorat. On enlève plus de monde à gauche.
-   *   2  L'intérêt moyen des gens gardés, en rouge (INTERESSES.moyennes,
+   *      l'intérêt moyen de chaque niveau en anneaux d'encre (POP.moyennes,
+   *      taille selon le nombre de gens) et la vraie droite (pointillé). Sur
+   *      les 20 180, ε n'a aucun lien avec la scolarité : c'est ainsi que R
+   *      choisit la droite.
+   *   1  Qui garde-t-on ? En haut de chaque colonne, la part de conservateurs
+   *      (CONSERVATEURS.moyennes[i].part) : 29 % au secondaire non terminé,
+   *      18 % à la maîtrise ou au doctorat (lien avec X). Et ils
+   *      s'intéressent plus à la politique que les autres
+   *      (CONSERVATEURS.interet_moyen, 0,70 contre 0,66 : lien avec Y).
+   *   2  L'intérêt moyen des conservateurs, en rouge (CONSERVATEURS.moyennes,
    *      les mêmes valeurs que MILLE.moyennes_facile), avec un trait de la
-   *      vraie droite jusqu'à leur moyenne : leur ε moyen. Il est positif
-   *      partout (on n'a gardé que des gens intéressés), mais beaucoup plus
-   *      grand à gauche (+0,21) qu'à droite (+0,09) : les peu scolarisé.e.s
-   *      qu'on garde sont celles et ceux qui sont inhabituellement
-   *      intéressé.e.s pour leur niveau. Leur ε est lié à la scolarité
-   *      (corrélation INTERESSES.correlation, −0,22).
-   *   3  La droite des gens gardés (INTERESSES.b0, INTERESSES.b1) se trace :
-   *      presque plate, +0,05 au lieu de +0,17. C'est la cloche rouge de la
-   *      diapo précédente (MILLE.moyenne_facile).
+   *      vraie droite jusqu'à leur moyenne : leur ε moyen. Positif partout,
+   *      mais plus grand à gauche (+0,07) qu'à droite (+0,02) : les
+   *      conservateurs peu scolarisés sont inhabituellement intéressés pour
+   *      leur niveau. Leur ε baisse avec la scolarité.
+   *   3  La droite des conservateurs (CONSERVATEURS.b0, CONSERVATEURS.b1) se
+   *      trace : plus plate, +0,12 au lieu de +0,17. C'est la cloche rouge
+   *      de la diapo précédente (MILLE.moyenne_facile).
    *   4  La leçon : quand ε bouge avec x, la pente se trompe. Puis la
    *      question qui mène à la section suivante : qu'est-ce qui se cache
    *      dans ε ?
    *
+   * L'axe vertical est un zoom (de 0,5 à 0,85, graduations écrites) : les
+   * écarts sont de 0,02 à 0,07 sur une échelle de 0 à 1.
+   *
    * Sources : VARS, POP (src/lib/data/seance7.js, outils/seance7_data.R);
-   * INTERESSES (src/lib/data/seance7_d.js, outils/seance7_d.R).
+   * CONSERVATEURS (src/lib/data/seance7_d.js, outils/seance7_d.R).
    */
   import { brancherTemps } from '../temps.js';
   import { VARS, POP } from '$lib/data/seance7.js';
-  import { INTERESSES } from '$lib/data/seance7_d.js';
+  import { CONSERVATEURS } from '$lib/data/seance7_d.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -57,30 +59,27 @@
   };
   const NX = VARS.x.valeurs.map((v, i) => ({ v, l: deuxLignes(VARS.x.niveaux[i]) }));
 
-  // Le graphique : scolarité et intérêt de 0 à 1.
-  const X0 = 160, X1 = 660, Y0 = 470, Y1 = 140;
+  // Le graphique : scolarité de 0 à 1, intérêt moyen de 0,5 à 0,85 (zoom).
+  const X0 = 160, X1 = 660, Y0 = 470, Y1 = 150, N0 = 0.5, N1 = 0.85;
   const X = (v) => X0 + v * (X1 - X0);
-  const Y = (v) => Y0 - v * (Y0 - Y1);
+  const Y = (v) => Y0 - ((v - N0) / (N1 - N0)) * (Y0 - Y1);
   const vraie = (x) => POP.b0 + POP.b1 * x;
-  const gardes = (x) => INTERESSES.b0 + INTERESSES.b1 * x;
-  const SEUIL = INTERESSES.seuil;
-  const YC = Y(SEUIL - 0.05);
+  const C = CONSERVATEURS;
+  const leurs = (x) => C.b0 + C.b1 * x;
 
-  const MAXC = Math.max(...POP.cases.map((c) => c.n));
-  const CASES = POP.cases.filter((c) => c.n > 0).map((c) => ({ ...c, r: Math.sqrt(c.n / MAXC) * 14, garde: c.y >= SEUIL - 1e-9 }));
   const taille = (n, max) => 6 + Math.sqrt(n / max) * 8;
   const MAXP = Math.max(...POP.moyennes.map((m) => m.n));
   const GRIS = POP.moyennes.map((m) => ({ ...m, r: taille(m.n, MAXP) }));
-  const MAXI = Math.max(...INTERESSES.moyennes.map((m) => m.n));
-  const ROUGE = INTERESSES.moyennes.map((m, i) => ({ ...m, r: taille(m.n, MAXI), d: i * 90 }));
+  const MAXC = Math.max(...C.moyennes.map((m) => m.n));
+  const ROUGE = C.moyennes.map((m, i) => ({ ...m, r: taille(m.n, MAXC), d: i * 90 }));
   const PREMIER = ROUGE[0], DERNIER = ROUGE[ROUGE.length - 1];
 
   const ARIA =
     `${VARS.y.nom} = β0 + β1 × ${VARS.x.nom} + ε. ε, c’est tout le reste${NN}: la distance entre une personne et la vraie droite. ` +
-    `On ne garde que les gens déjà intéressés, 6 sur 10 ou plus. On enlève plus de monde chez les peu scolarisé.e.s : ` +
-    `on en garde ${f(PREMIER.part_gardee * 100)} %, contre ${f(DERNIER.part_gardee * 100)} % à la maîtrise ou au doctorat. ` +
-    `Les peu scolarisé.e.s qui restent sont inhabituellement intéressé.e.s : leur ε moyen est de ${sg(PREMIER.epsilon, 2)}, contre ${sg(DERNIER.epsilon, 2)} à droite. ` +
-    `Leur droite est presque plate, ${sg(INTERESSES.b1, 2)} au lieu de ${sg(POP.b1, 2)}. Quand ε bouge avec x, la pente se trompe.`;
+    `On ne garde que les électeurs conservateurs. Ils sont plus nombreux chez les moins scolarisé.e.s (${f(PREMIER.part * 100)} % contre ${f(DERNIER.part * 100)} %) ` +
+    `et s’intéressent plus à la politique (${f(C.interet_moyen.conservateurs, 2)} contre ${f(C.interet_moyen.autres, 2)}). ` +
+    `Leur ε moyen est de ${sg(PREMIER.epsilon, 2)} à gauche et ${sg(DERNIER.epsilon, 2)} à droite. ` +
+    `Leur droite est plus plate, ${sg(C.b1, 2)} au lieu de ${sg(POP.b1, 2)}. Quand ε bouge avec x, la pente se trompe.`;
 </script>
 
 <div class="visuel d7-epsilon" bind:this={hote}>
@@ -97,32 +96,28 @@
       <text x={X(t.v)} y={Y0 + 72} class="ep-niv">{t.l[0]}</text>
       <text x={X(t.v)} y={Y0 + 90} class="ep-niv">{t.l[1]}</text>
     {/each}
-    {#each [0, 0.5, 1] as t}
-      <text x={X0 - 52} y={Y(t) + 6} class="ep-tick ep-fin">{f(t, t % 1 ? 1 : 0)}</text>
+    {#each [0.5, 0.6, 0.7, 0.8] as t}
+      <text x={X0 - 52} y={Y(t) + 6} class="ep-tick ep-fin">{f(t, 1)}</text>
     {/each}
     <text x={X1 + 30} y={Y0 + 116} class="ep-tick ep-fin">{VARS.x.nom}</text>
-    <text x={X0 - 40} y={Y1 - 50} class="ep-tick ep-debut">{VARS.y.nom}</text>
+    <text x={X0 - 40} y={Y1 - 50} class="ep-tick ep-debut">{VARS.y.nom} (moyenne)</text>
 
-    <!-- 0 : la population. 1 : ce qui est sous la coupe pâlit. -->
-    {#each CASES as c}
-      <circle cx={X(c.x)} cy={Y(c.y)} r={c.r} class="ep-case" class:ep-coupe={e >= 1 && !c.garde} />
-    {/each}
+    <!-- 0 : la population, niveau par niveau, et la vraie droite. -->
     {#each GRIS as m}
       <circle cx={X(m.x)} cy={Y(m.moyenne)} r={m.r} class="ep-pop" />
     {/each}
     <line x1={X(0)} y1={Y(vraie(0))} x2={X(1)} y2={Y(vraie(1))} class="ep-halo" />
     <line x1={X(0)} y1={Y(vraie(0))} x2={X(1)} y2={Y(vraie(1))} class="ep-vrai" />
 
-    <!-- 1 : la coupe, et la part gardée de chaque niveau. -->
+    <!-- 1 : la part de conservateurs à chaque niveau. -->
     <g class="ep-etape" class:ep-vu={e >= 1}>
-      <line x1={X0 - 40} y1={YC} x2={X1 + 30} y2={YC} class="ep-seuil" />
-      <text x={X0 - 52} y={Y1 - 22} class="ep-garde ep-fin">gardé.e.s</text>
+      <text x={X0 - 52} y={Y1 - 22} class="ep-garde ep-fin">conservateurs</text>
       {#each ROUGE as m}
-        <text x={X(m.x)} y={Y1 - 22} class="ep-garde">{f(m.part_gardee * 100)}{NN}%</text>
+        <text x={X(m.x)} y={Y1 - 22} class="ep-garde">{f(m.part * 100)}{NN}%</text>
       {/each}
     </g>
 
-    <!-- 2 : les gens gardés, et leur ε moyen. -->
+    <!-- 2 : les conservateurs, et leur ε moyen. -->
     <g class="ep-etape" class:ep-vu={e >= 2}>
       {#each ROUGE as m}
         <line x1={X(m.x)} y1={Y(vraie(m.x))} x2={X(m.x)} y2={Y(m.moyenne)} class="ep-eps-t" style="transition-delay: {e >= 2 ? m.d : 0}ms" />
@@ -131,7 +126,7 @@
     </g>
 
     <!-- 3 : leur droite. -->
-    <line x1={X(0)} y1={Y(gardes(0))} x2={X(1)} y2={Y(gardes(1))} pathLength="1" class="ep-gardes" class:ep-trace={e >= 3} />
+    <line x1={X(0)} y1={Y(leurs(0))} x2={X(1)} y2={Y(leurs(1))} pathLength="1" class="ep-gardes" class:ep-trace={e >= 3} />
 
     <!-- Les étiquettes, à droite. -->
     <g>
@@ -141,20 +136,20 @@
       <text x="784" y="209" class="ep-g">les {f(POP.n)}</text>
     </g>
     <g class="ep-etape" class:ep-vu={e >= 1}>
-      <line x1="720" y1="242" x2="770" y2="242" class="ep-seuil" />
-      <text x="784" y="249" class="ep-g ep-r">on garde 6 sur 10</text>
-      <text x="784" y="273" class="ep-g ep-r">ou plus</text>
+      <text x="720" y="252" class="ep-g">intérêt moyen{NN}:</text>
+      <text x="720" y="278" class="ep-g">conservateurs <tspan class="ep-fort">{f(C.interet_moyen.conservateurs, 2)}</tspan></text>
+      <text x="720" y="302" class="ep-g">les autres <tspan class="ep-fort ep-encre">{f(C.interet_moyen.autres, 2)}</tspan></text>
     </g>
     <g class="ep-etape" class:ep-vu={e >= 2}>
-      <circle cx="745" cy="314" r="10" class="ep-rouge ep-leg" />
-      <text x="784" y="321" class="ep-l ep-r">les gens gardés</text>
-      <text x="720" y="360" class="ep-g">ε à gauche{NN}: <tspan class="ep-fort">{sg(PREMIER.epsilon, 2)}</tspan></text>
-      <text x="720" y="386" class="ep-g">ε à droite{NN}: <tspan class="ep-fort">{sg(DERNIER.epsilon, 2)}</tspan></text>
+      <circle cx="745" cy="344" r="10" class="ep-rouge ep-leg" />
+      <text x="784" y="351" class="ep-l ep-r">les conservateurs</text>
+      <text x="720" y="388" class="ep-g">ε à gauche{NN}: <tspan class="ep-fort">{sg(PREMIER.epsilon, 2)}</tspan></text>
+      <text x="720" y="414" class="ep-g">ε à droite{NN}: <tspan class="ep-fort">{sg(DERNIER.epsilon, 2)}</tspan></text>
     </g>
     <g class="ep-etape" class:ep-vu={e >= 3}>
-      <text x="720" y="432" class="ep-g">leur pente</text>
-      <text x="720" y="476" class="ep-gros">{sg(INTERESSES.b1, 2)}</text>
-      <text x="720" y="504" class="ep-g">au lieu de {sg(POP.b1, 2)}</text>
+      <text x="720" y="458" class="ep-g">leur pente</text>
+      <text x="720" y="502" class="ep-gros">{sg(C.b1, 2)}</text>
+      <text x="720" y="530" class="ep-g">au lieu de {sg(POP.b1, 2)}</text>
     </g>
 
     <!-- 4 : la leçon, et la question. -->
@@ -181,12 +176,9 @@
   .ep-fin { text-anchor: end; }
   .ep-debut { text-anchor: start; }
 
-  .ep-case { fill: var(--dk-gris-2); fill-opacity: 0.3; transition: fill-opacity 0.6s; }
-  .ep-case.ep-coupe { fill-opacity: 0.06; }
   .ep-pop { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 3; }
   .ep-halo { stroke: var(--dk-fond); stroke-width: 9; }
   .ep-vrai { stroke: var(--dk-encre); stroke-width: 4; stroke-dasharray: 12 8; }
-  .ep-seuil { stroke: var(--dk-accent); stroke-width: 2.5; stroke-dasharray: 4 5; }
   .ep-garde { font-size: 17px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
   .ep-garde.ep-fin { text-anchor: end; }
 
@@ -201,6 +193,7 @@
   .ep-r { fill: var(--dk-accent); }
   .ep-g { font-size: 19px; fill: var(--dk-gris); }
   .ep-fort { font-weight: 700; fill: var(--dk-accent); }
+  .ep-fort.ep-encre { fill: var(--dk-encre); }
   .ep-gros { font-size: 40px; font-weight: 700; fill: var(--dk-accent); }
   .ep-lecon { font-size: 26px; font-weight: 700; text-anchor: middle; fill: var(--dk-encre); }
   .ep-question { font-size: 23px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
@@ -209,6 +202,6 @@
   .ep-etape.ep-vu { opacity: 1; transition: opacity 0.4s; }
 
   @media (prefers-reduced-motion: reduce) {
-    .ep-case, .ep-etape, .ep-etape.ep-vu, .ep-etape .ep-rouge, .ep-etape .ep-eps-t, .ep-gardes { transition: none; }
+    .ep-etape, .ep-etape.ep-vu, .ep-etape .ep-rouge, .ep-etape .ep-eps-t, .ep-gardes { transition: none; }
   }
 </style>

@@ -18,7 +18,7 @@
    *      plate.
    *   2  Les mois doux (autour de 4 °C), même chose.
    *   3  Les mois chauds (autour de 19 °C), même chose.
-   *   4  Les trois droites ensemble, et la leçon : une relation fallacieuse.
+   *   4  Les trois droites ensemble, et la leçon : une relation biaisée.
    *
    * Tout vient de src/lib/data/seance7_e.js (outils/seance7_e.R) : MOIS (les
    * points), NAIF (lm(noyades ~ cremes) sur les 240 mois), TRANCHES (la même
@@ -117,7 +117,7 @@
       <text x={X0 + 30} y={Y1 + 26} class="gn-pente" class:gn-recule-t={e >= 1}>toute l’année{N}: {signe(NAIF.b1)}</text>
       <g class="gn-etape" class:gn-vu={e >= 4}>
         <text x={X0 + 30} y={Y1 + 66} class="gn-pente">à chaleur égale{N}: ≈ 0</text>
-        <text x={X0 + 30} y={Y1 + 100} class="gn-lecon">une relation fallacieuse</text>
+        <text x={X0 + 30} y={Y1 + 100} class="gn-lecon">une relation biaisée</text>
       </g>
 
       <!-- Les tranches : leur droite reste une fois tracée. -->

@@ -15,7 +15,9 @@
   import { VARS } from '$lib/data/seance7.js';
   // Le mot affiché : « scolarité » (VARS.x.court, en minuscules), pas le nom de colonne.
   const X = VARS.x.court.toLowerCase();
-  let { b0, b1, actif = null } = $props();
+  // grand = la version en-tête (DroiteReglable) : plus grosse, avec le nom de
+  // chaque case dessous, le même que sur son curseur.
+  let { b0, b1, actif = null, grand = false } = $props();
   // Format québécois, vrai signe moins (U+2212), pas de trait d'union.
   const f = (v, d) => {
     const t = Math.abs(v).toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -23,9 +25,12 @@
   };
 </script>
 
-<div class="eq" aria-label="intérêt égale {f(b0, 2)} {b1 < 0 ? '' : 'plus'} {f(b1, 2)} fois {X}">
+<div class="eq" class:grand aria-label="intérêt égale {f(b0, 2)} {b1 < 0 ? '' : 'plus'} {f(b1, 2)} fois {X}">
   <span class="g">intérêt</span><span class="g">=</span><span class="g s">β0</span><span class="g">+</span><span class="g s">β1</span><span class="g">×</span><span class="g">{X}</span>
   <span>intérêt</span><span>=</span><span class="case" class:on={actif === 'b0'}>{f(b0, 2)}</span><span>{b1 < 0 ? '' : '+'}</span><span class="case" class:on={actif === 'b1'}>{f(b1, 2)}</span><span>×</span><span>{X}</span>
+  {#if grand}
+    <span></span><span></span><span class="nom" class:on={actif === 'b0'}>ordonnée à l’origine</span><span></span><span class="nom" class:on={actif === 'b1'}>pente</span><span></span><span></span>
+  {/if}
 </div>
 
 <style>
@@ -51,5 +56,9 @@
     font-weight: 600;
     transition: color 0.25s, border-color 0.25s, background-color 0.25s;
   }
+  .eq.grand { font-size: 1.75em; row-gap: 0.05em; }
+  .eq.grand .case { min-width: 4.2em; border-width: 3px; }
+  .nom { font-size: 0.4em; letter-spacing: 0.06em; color: var(--dk-gris); transition: color 0.25s; }
+  .nom.on { color: var(--dk-accent); font-weight: 600; }
   .case.on { color: var(--dk-fond); background: var(--dk-accent); border-color: var(--dk-accent); }
 </style>

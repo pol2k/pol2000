@@ -2,11 +2,13 @@
   /**
    * 95 %, 99 %, 99,9 % : le même graphique des coefficients (le modèle à
    * plusieurs variables de notre sondage, 877 cas complets), avec des
-   * moustaches de plus en plus sûres, donc de plus en plus longues. Les
-   * moustaches s'emboîtent : 95 % épaisse en encre devant, 99 % moyenne en
-   * gris, 99,9 % fine en gris derrière. Une moustache qui touche 0 passe au
-   * rouge. À droite, trois colonnes : une étoile quand la moustache de ce
-   * niveau évite 0.
+   * moustaches de plus en plus sûres, donc de plus en plus longues. Une
+   * seule couleur : l'épaisseur dit le niveau (95 % la plus épaisse, 99 %
+   * moyenne, 99,9 % la plus fine). Trois traits simples qui partent du
+   * point, sans embouts. Une moustache qui touche 0 passe au rouge. À
+   * droite, trois colonnes : une étoile quand la moustache de ce niveau
+   * évite 0. L'en-tête de chaque colonne montre l'épaisseur de son niveau
+   * (c'est la légende).
    *
    *   0  95 % seulement (19 fois sur 20). Colonne 95 % : une étoile pour
    *      tout sauf Québec.
@@ -61,7 +63,7 @@
   const Y1 = 128, PAS = 60, AXE = Y1 + 4 * PAS + 44;
   const y = (i) => Y1 + i * PAS;
   const XC = [830, 895, 965]; // centres des trois colonnes d'étoiles
-  const EP = [10, 6, 3.5]; // épaisseur des moustaches 95, 99, 99,9
+  const EP = [12, 6, 2.5]; // épaisseur des moustaches 95, 99, 99,9
   const REVENU = RANGS.findIndex((r) => r.terme === 'revenu');
 </script>
 
@@ -71,9 +73,12 @@
     <!-- Ce que veut dire le niveau affiché. -->
     <text x="20" y="34" class="cn-niveau">{PHRASES[Math.min(e, 2)]}</text>
 
-    <!-- Les en-têtes des trois colonnes d'étoiles. -->
+    <!-- Les en-têtes des trois colonnes d'étoiles, avec l'épaisseur du niveau : la légende. -->
     {#each COLONNES as c, k}
-      <text x={XC[k]} y="92" class="cn-tete cn-etape" class:cn-vu={e >= k}>{c}</text>
+      <g class="cn-etape" class:cn-vu={e >= k}>
+        <line x1={XC[k] - 24} y1="64" x2={XC[k] + 24} y2="64" style="stroke-width: {EP[k]}px" class="cn-legende" />
+        <text x={XC[k]} y="96" class="cn-tete">{c}</text>
+      </g>
     {/each}
 
     <!-- 3 : la rangée Revenu, encadrée. -->
@@ -93,13 +98,11 @@
       <!-- Les moustaches, de la plus sûre (derrière) à 95 % (devant). Chacune pousse depuis le point. -->
       {#each [2, 1, 0] as k}
         <g class="cn-moust" class:cn-pousse={e >= k} class:cn-rouge={!r.evite[k]}>
-          <line x1={x(r.b)} y1={y(i)} x2={x(r.bas[k])} y2={y(i)} pathLength="1" style="stroke-width: {EP[k]}px" class="cn-trait cn-n{k}" />
-          <line x1={x(r.b)} y1={y(i)} x2={x(r.haut[k])} y2={y(i)} pathLength="1" style="stroke-width: {EP[k]}px" class="cn-trait cn-n{k}" />
-          <line x1={x(r.bas[k])} y1={y(i) - 10} x2={x(r.bas[k])} y2={y(i) + 10} class="cn-borne cn-n{k}" />
-          <line x1={x(r.haut[k])} y1={y(i) - 10} x2={x(r.haut[k])} y2={y(i) + 10} class="cn-borne cn-n{k}" />
+          <line x1={x(r.b)} y1={y(i)} x2={x(r.bas[k])} y2={y(i)} pathLength="1" style="stroke-width: {EP[k]}px" class="cn-trait" />
+          <line x1={x(r.b)} y1={y(i)} x2={x(r.haut[k])} y2={y(i)} pathLength="1" style="stroke-width: {EP[k]}px" class="cn-trait" />
         </g>
       {/each}
-      <circle cx={x(r.b)} cy={y(i)} r="9" class="cn-point" />
+      <circle cx={x(r.b)} cy={y(i)} r="11" class="cn-point" />
 
       <!-- Une étoile par moustache qui évite 0. -->
       {#each [0, 1, 2] as k}
@@ -129,12 +132,9 @@
   .cn-lab.cn-lab-r { fill: var(--dk-accent); }
   .cn-trait { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.7s ease-out; }
   .cn-pousse .cn-trait { stroke-dashoffset: 0; }
-  .cn-borne { stroke-width: 2.5; opacity: 0; transition: opacity 0.3s; }
-  .cn-pousse .cn-borne { opacity: 1; transition: opacity 0.3s 0.6s; }
-  .cn-n0 { stroke: var(--dk-encre); }
-  .cn-n1 { stroke: var(--dk-gris); }
-  .cn-n2 { stroke: var(--dk-gris); opacity: 0.75; }
-  .cn-rouge .cn-n0, .cn-rouge .cn-n1, .cn-rouge .cn-n2 { stroke: var(--dk-accent); }
+  .cn-trait { stroke: var(--dk-encre); stroke-linecap: butt; }
+  .cn-rouge .cn-trait { stroke: var(--dk-accent); }
+  .cn-legende { stroke: var(--dk-encre); }
   .cn-point { fill: var(--dk-encre); }
   .cn-etoile { font-size: 34px; font-weight: 600; text-anchor: middle; fill: var(--dk-encre); }
   .cn-phrase { margin: 0.3em 0 0; font-size: 1em; font-weight: 600; color: var(--dk-encre); text-align: center; transition: color 0.4s; }
@@ -143,6 +143,6 @@
   .cn-etape { opacity: 0; transition: opacity 0.3s; }
   .cn-etape.cn-vu { opacity: 1; transition: opacity 0.5s 0.4s; }
   @media (prefers-reduced-motion: reduce) {
-    .cn-trait, .cn-borne, .cn-pousse .cn-borne, .cn-etape, .cn-etape.cn-vu, .cn-lab, .cn-phrase { transition: none; }
+    .cn-trait, .cn-etape, .cn-etape.cn-vu, .cn-lab, .cn-phrase { transition: none; }
   }
 </style>
