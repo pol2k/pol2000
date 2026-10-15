@@ -14,9 +14,12 @@
    *   2  Elles s'écartent : chacune prend une place à elle dans un rectangle
    *      autour de sa case. La foule apparaît, plus dense là où il y a du
    *      monde.
-   *   3  Elles se regroupent : dans chaque case, une barre de carrés serrés
-   *      dont la largeur suit le nombre de personnes. On voit où sont les
-   *      gens.
+   *   3  Elles se regroupent : chaque case devient une barre pleine,
+   *      centrée, de même hauteur partout, dont la largeur est exactement
+   *      proportionnelle au nombre de personnes (même échelle pour les cinq
+   *      colonnes) : un histogramme couché, symétrique, par niveau. Les
+   *      carrés glissent dans le rectangle de leur barre; à l'arrivée, la
+   *      barre est dessinée d'un seul aplat, sans rangée incomplète.
    *   4  Les cinq moyennes, des points rouges dont la taille suit le nombre
    *      de personnes du niveau (POP.moyennes). La foule pâlit.
    *   5  La droite de la population (POP.b0, POP.b1).
@@ -73,10 +76,12 @@
     };
   }
   const alea = mulberry32(2025);
+  // Les barres du regroupement : une par case, centrée sur la case.
+  const BARRES = POP.cases.map((c) => ({ cx: sx(c.x), cy: sy(c.y), l: (c.n / MAXC) * LARGE }));
   {
     let i = 0;
-    for (const c of POP.cases) {
-      const cx = sx(c.x), cy = sy(c.y);
+    for (const [ci, c] of POP.cases.entries()) {
+      const cx = sx(c.x), cy = sy(c.y), l = BARRES[ci].l;
       const debut = i;
       const u = new Float32Array(c.n);
       for (let k = 0; k < c.n; k++, i++) {
@@ -87,12 +92,13 @@
         DY[i] = cy + (v * 2 - 1) * DEMI_H;
       }
       // Regroupées : on range de gauche à droite dans l'ordre où elles
-      // étaient écartées, pour que le geste soit lisible.
+      // étaient écartées, pour que le geste soit lisible, en colonnes
+      // réparties sur toute la largeur de la barre.
       const ordre = [...u.keys()].sort((a, b) => u[a] - u[b]);
       const cols = Math.ceil(c.n / RANGS);
       ordre.forEach((k, rang) => {
         const col = Math.floor(rang / RANGS), ligne = rang % RANGS;
-        GX[debut + k] = cx + (col - (cols - 1) / 2) * PAS;
+        GX[debut + k] = cx - l / 2 + ((col + 0.5) * l) / cols;
         GY[debut + k] = cy + (ligne - (RANGS - 1) / 2) * PAS;
       });
     }
@@ -107,6 +113,7 @@
   let ctx = null;
   const PX = new Float32Array(N), PY = new Float32Array(N); // positions affichées
   const FX = new Float32Array(N), FY = new Float32Array(N); // départ d'un trajet
+  let plein = false; // vrai : les barres pleines remplacent les carrés
   let taille = TAILLE[0], alpha = 0, t0 = 0, de = { taille, alpha }, vers = 0, anim = 0;
   const DUREE = 1100, DECALAGE = 350;
   const lisse = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -140,7 +147,16 @@
     if (!ctx || !image) return;
     const L = toile.width, Hh = toile.height;
     couv.fill(0);
-    if (alpha > 0) {
+    if (alpha > 0 && plein) {
+      // Une barre par case, bords arrondis au pixel près, symétrique.
+      const hb = (RANGS * PAS * echelle) / 2;
+      for (const b of BARRES) {
+        const cx = b.cx * echelle + ox, cy = b.cy * echelle + oy, d = (b.l * echelle) / 2;
+        const x0 = Math.max(0, Math.round(cx - d)), x1 = Math.min(L, Math.max(x0 + 1, Math.round(cx + d)));
+        const y0 = Math.max(0, Math.round(cy - hb)), y1 = Math.min(Hh, Math.round(cy + hb));
+        for (let y = y0; y < y1; y++) couv.fill(alpha, y * L + x0, y * L + x1);
+      }
+    } else if (alpha > 0) {
       const c = Math.max(1, taille * echelle);
       const d = c / 2;
       for (let i = 0; i < N; i++) {
@@ -163,7 +179,7 @@
   function aller(k) {
     const [TX, TY] = cible(k);
     if (!lent()) {
-      PX.set(TX); PY.set(TY); taille = TAILLE[k]; alpha = ALPHA[k]; vers = k;
+      PX.set(TX); PY.set(TY); taille = TAILLE[k]; alpha = ALPHA[k]; vers = k; plein = k >= 3;
       dessiner();
       return;
     }
@@ -172,6 +188,7 @@
     if (vers === 0 && k >= 1) { FX.set(TX); for (let i = 0; i < N; i++) FY[i] = TY[i] - 60; }
     de = { taille, alpha };
     vers = k;
+    plein = false;
     t0 = performance.now();
     cancelAnimationFrame(anim);
     anim = requestAnimationFrame(pas);
@@ -190,6 +207,7 @@
       PX[i] = FX[i] + (TX[i] - FX[i]) * s;
       PY[i] = FY[i] + (TY[i] - FY[i]) * s;
     }
+    plein = vers >= 3 && t >= 1;
     dessiner();
     if (t < 1) anim = requestAnimationFrame(pas);
   }
