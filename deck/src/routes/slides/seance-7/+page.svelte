@@ -85,7 +85,16 @@
   import CoefPlusieurs from '$lib/deck/visuels/CoefPlusieurs.svelte';
   import CoefTroisQuestions from '$lib/deck/visuels/CoefTroisQuestions.svelte';
 
-  const TOTAL = 63;
+  import MsDefaut from '$lib/deck/visuels/MsDefaut.svelte';
+  import MsBeau from '$lib/deck/visuels/MsBeau.svelte';
+  import MsDeux from '$lib/deck/visuels/MsDeux.svelte';
+  import MsExport from '$lib/deck/visuels/MsExport.svelte';
+  import Code from '$lib/deck/Code.svelte';
+  import CoefNiveaux from '$lib/deck/visuels/CoefNiveaux.svelte';
+  import CoefGabarit from '$lib/deck/visuels/CoefGabarit.svelte';
+  import { GABARIT } from '$lib/data/seance7_h.js';
+
+  const TOTAL = 72;
   const D = 'POL-2000 · séance 7 · jeu 15 oct';
 </script>
 
@@ -405,6 +414,30 @@
       <TabQuatre />
     </Slide>
 
+    <!-- ================= FAIRE SON TABLEAU · modelsummary ================= -->
+    <!-- ================= FAIRE SON TABLEAU (modelsummary) ================= -->
+    <Slide bandeau="Faire son tableau · modelsummary" droite={D}>
+      <h2 class="e">Une ligne, un tableau</h2>
+      <MsDefaut />
+    </Slide>
+
+    <Slide bandeau="Faire son tableau · modelsummary" droite={D}>
+      <h2 class="e">Un argument à la fois</h2>
+      <MsBeau />
+    </Slide>
+
+    <Slide bandeau="Faire son tableau · modelsummary" droite={D}>
+      <h2 class="e">Deux modèles côte à côte</h2>
+      <MsDeux />
+    </Slide>
+
+    <Slide bandeau="Faire son tableau · modelsummary" droite={D}>
+      <h2 class="e">Du tableau au PDF</h2>
+      <MsExport />
+    </Slide>
+
+  
+
     <Slide bandeau="La semaine prochaine" droite={D}>
       <h2 class="e">La semaine prochaine : plusieurs variables</h2>
       <TabSuite />
@@ -443,6 +476,34 @@
       <h2 class="e">Lire le graphique en 3 questions</h2>
       <CoefTroisQuestions />
     </Slide>
+
+    <!-- ================= 95, 99, 99,9 % · UN GABARIT ================= -->
+    <Slide bandeau="Le graphique des coefficients" droite={D}>
+      <h2 class="e">95&#8239;%, 99&#8239;%, 99,9&#8239;%</h2>
+      <CoefNiveaux />
+    </Slide>
+
+    <Slide bandeau="Un gabarit pour vos travaux" droite={D}>
+      <h2 class="e">Un graphique à réutiliser</h2>
+      <CoefGabarit vue="resultat" />
+    </Slide>
+
+    <Slide bandeau="Un gabarit pour vos travaux" droite={D}>
+      <h2 class="e">1. Préparer les coefficients</h2>
+      <Code src={GABARIT.preparer} titre="gabarit.R · après votre lm()" />
+    </Slide>
+
+    <Slide bandeau="Un gabarit pour vos travaux" droite={D}>
+      <h2 class="e">2. Dessiner et enregistrer</h2>
+      <Code src={GABARIT.dessiner + '\n\n' + GABARIT.enregistrer} titre="gabarit.R · la suite" />
+    </Slide>
+
+    <Slide bandeau="Un gabarit pour vos travaux" droite={D}>
+      <h2 class="e">Plus court&#8239;: modelplot()</h2>
+      <CoefGabarit vue="modelplot" />
+    </Slide>
+
+  
 
   
 

@@ -217,3 +217,69 @@ corrigent. On dit où en est la correction.
     geom_pointrange() +
     labs(x = "Effet sur l'intérêt pour la politique (de 0 à 1)", y = NULL)
   ```
+
+## 10. Faire son tableau avec modelsummary
+
+- `modelsummary(modele, stars = TRUE)` : un tableau de publication en une
+  ligne (il s'ouvre dans le Viewer de Positron). Par défaut, il ajoute du
+  bruit pour nous : R2 Adj., AIC, BIC, Log.Lik., RMSE, et le seuil « + »
+  à 0,1.
+- `coef_rename = c("(Intercept)" = "Constante", "scolarite" = "Scolarité (0 à 1)")`
+  renomme les lignes (`coef_map` renomme, réordonne et retire ce qui n'est
+  pas listé). `gof_map = c("nobs", "r.squared")` ne garde que N et R².
+  `options(OutDec = ",")` met la virgule décimale partout. `title` et
+  `notes` ajoutent un titre et une note.
+- Deux modèles : `modelsummary(list("Modèle 1" = modele, "Modèle 2" = modele2), ...)`.
+- **Exporter** : `output = "tableau.docx"` (Word, puis enregistrer en PDF)
+  ou `output = "tableau.png"`. Installation unique :
+  `install.packages(c("modelsummary", "pandoc"))`, et
+  `pandoc::pandoc_install()` si R ne trouve pas pandoc (Positron sans
+  RStudio). Le .png demande aussi `install.packages("webshot2")` et
+  Chrome. `.html` marche toujours.
+- **Pièges vérifiés** : dans le .docx, la légende « + p < 0,1 » devient
+  une puce (pandoc la lit comme une liste) et un modèle non nommé perd son
+  en-tête « (1) ». Nommer le modèle dans une liste, ou préférer le .png.
+- modelsummary 2.6.0 a été installé dans le R 4.6 de l'ordinateur du
+  cours le 15 octobre (il n'était que dans l'ancienne bibliothèque 4.5).
+
+## 11. 95 %, 99 %, 99,9 %, et un gabarit de graphique
+
+- Même estimation, seule la marge change : b ± k × ET, avec k ≈ 1,96
+  (95 %), 2,58 (99 %), 3,29 (99,9 %). La moustache à 99,9 % est environ
+  1,7 fois celle à 95 %. « 99,9 % » : la méthode attrape la vraie valeur
+  999 fois sur 1 000.
+- **Les étoiles sont les moustaches** : * = la moustache à 95 % évite 0,
+  ** = celle à 99 % aussi, *** = même celle à 99,9 %. Revenu (b = 0,085,
+  ET 0,031, p = 0,007) : 95 % de 0,024 à 0,146, 99 % de 0,004 à 0,166,
+  99,9 % de −0,018 à 0,188. Deux étoiles. Québec croise 0 partout.
+- Le gabarit (testé, il produit l'image de la diapo) :
+
+  ```r
+  library(broom)
+  library(dplyr)
+  noms <- c(scolarite = "Scolarité", age = "Âge",
+            femme = "Femme", revenu = "Revenu",
+            quebec = "Québec")
+  coefs <- tidy(modele, conf.int = TRUE) |>
+    filter(term != "(Intercept)") |>
+    mutate(variable = factor(noms[term], levels = rev(noms)))
+  library(ggplot2)
+  ggplot(coefs, aes(x = estimate, y = variable)) +
+    geom_vline(xintercept = 0, linetype = "dashed", colour = "grey60") +
+    geom_pointrange(aes(xmin = conf.low, xmax = conf.high),
+                    size = 0.7, linewidth = 1) +
+    scale_x_continuous(labels = scales::label_number(decimal.mark = ",")) +
+    labs(x = "Effet sur l'intérêt pour la politique (0 à 1)", y = NULL,
+         caption = "Intervalles de confiance à 95 %.") +
+    theme_minimal(base_size = 15) +
+    theme(panel.grid.minor = element_blank(),
+          panel.grid.major.y = element_blank(),
+          axis.text.y = element_text(colour = "black"),
+          plot.caption = element_text(colour = "grey40"))
+  ggsave("graphique.png", width = 7, height = 4, dpi = 300)
+  ```
+
+  Plus court : `modelplot(modele, coef_map = rev(noms)) + geom_vline(xintercept = 0, linetype = "dashed")`.
+  Une variante à deux moustaches (95 % épaisse, 99 % fine) :
+  `tidy(modele, conf.int = TRUE, conf.level = 0.99)` et deux
+  `geom_linerange()` de largeurs différentes.
