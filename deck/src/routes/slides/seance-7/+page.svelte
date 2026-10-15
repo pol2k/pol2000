@@ -94,7 +94,13 @@
   import CoefGabarit from '$lib/deck/visuels/CoefGabarit.svelte';
   import { GABARIT } from '$lib/data/seance7_h.js';
 
-  const TOTAL = 72;
+  import ClMur from '$lib/deck/visuels/ClMur.svelte';
+  import ClEtude from '$lib/deck/visuels/ClEtude.svelte';
+  import ClFin from '$lib/deck/visuels/ClFin.svelte';
+
+  const CLASSIQUES = ['galton', 'mincer', 'ace', 'blais', 'guerre', 'mobilite'];
+
+  const TOTAL = 80;
   const D = 'POL-2000 · séance 7 · jeu 15 oct';
 </script>
 
@@ -211,6 +217,49 @@
       <p class="lead e">Une droite pour résumer une relation.</p>
       <RegTitre />
     </Slide>
+
+    <!-- ================= LA RÉGRESSION EST PARTOUT ================= -->
+    <!-- ================= LA RÉGRESSION EST PARTOUT ================= -->
+    <Slide bandeau="La régression est partout" droite={D}>
+      <h2 class="e">La régression est partout</h2>
+      <ClMur ids={CLASSIQUES} />
+    </Slide>
+
+    <Slide bandeau="La régression est partout" droite={D}>
+      <h2 class="e">D’où vient le mot « régression » ?</h2>
+      <ClEtude id="galton" />
+    </Slide>
+
+    <Slide bandeau="La régression est partout" droite={D}>
+      <h2 class="e">L’école, ça paie ?</h2>
+      <ClEtude id="mincer" />
+    </Slide>
+
+    <Slide bandeau="La régression est partout" droite={D}>
+      <h2 class="e">Une enfance difficile laisse-t-elle des traces ?</h2>
+      <ClEtude id="ace" />
+    </Slide>
+
+    <Slide bandeau="La régression est partout" droite={D}>
+      <h2 class="e">Obliger à voter, ça marche ?</h2>
+      <ClEtude id="blais" />
+    </Slide>
+
+    <Slide bandeau="La régression est partout" droite={D}>
+      <h2 class="e">Qu’est-ce qui déclenche une guerre civile ?</h2>
+      <ClEtude id="guerre" />
+    </Slide>
+
+    <Slide bandeau="La régression est partout" droite={D}>
+      <h2 class="e">L’ascenseur social fonctionne-t-il ?</h2>
+      <ClEtude id="mobilite" />
+    </Slide>
+
+    <Slide bandeau="La régression est partout" droite={D}>
+      <h2 class="e">La même idée, partout</h2>
+      <ClFin ids={CLASSIQUES} />
+    </Slide>
+
 
     <Slide bandeau="La régression linéaire" droite={D}>
       <h2 class="e">Pourquoi la régression ?</h2>
