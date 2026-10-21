@@ -1,16 +1,16 @@
 <script>
   /**
-   * Le parcours de l'atelier de la séance 8, en bande mince en tête de
+   * Le parcours de « Blais en 2025 » (séance 8), en bande mince en tête de
    * chaque diapo de code (comme TmParcours) : l'étape du moment en rouge,
    * celles d'avant cochées, celles d'après pâles.
    *
    * ici = 1 à 6 (l'étape en cours); 0 = toutes à égalité (vue d'ensemble).
    */
   let { ici = 0 } = $props();
-  const ETAPES = ['Charger', 'Nettoyer', 'Vérifier', 'Modéliser', 'Tableau', 'Graphique'];
+  const ETAPES = ['Charger', 'Y : le vote', 'X : catholique', 'Contrôles', 'Modéliser', 'Tableau'];
 </script>
 
-<ol class="visuel m8-etapes" aria-label="Les six étapes de l'atelier{ici ? `, étape ${ici}` : ''}">
+<ol class="visuel m8-etapes" aria-label="Les six étapes{ici ? `, étape ${ici}` : ''}">
   {#each ETAPES as nom, i}
     {@const n = i + 1}
     <li class:fait={ici && n < ici} class:ici={n === ici} class:apres={ici && n > ici} style="--i: {i}">

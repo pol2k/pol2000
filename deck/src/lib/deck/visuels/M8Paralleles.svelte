@@ -10,8 +10,9 @@
    *   1  les points prennent leur couleur : femmes en rouge, hommes à l'encre;
    *   2  la droite seule s'efface, deux droites parallèles la remplacent :
    *      la même pente pour tout le monde;
-   *   3  l'écart entre les deux droites, partout le même : le coefficient
-   *      de « femme », à scolarité égale.
+   *   3  l'écart entre les deux droites, partout le même. On ne le chiffre
+   *      pas : « femme » est un contrôle, on ne lit que la pente de la
+   *      scolarité (le piège de la table 2, plus loin).
    *
    * Tout vient de PARALLELES (src/lib/data/seance8.js, outils/seance8_data.R).
    * jx et jy étalent les points pour le dessin seulement.
@@ -35,11 +36,11 @@
   const S0 = P.seule[0].b, S1 = P.seule[1].b;
   const D0 = P.deux[0].b, D1 = P.deux[1].b, DF = P.deux[2].b;
   const NIV = ['Secondaire non terminé', 'Secondaire', 'Collégial', 'Université, 1er cycle', 'Maîtrise, doctorat'];
-  const XG = 0.5; // où l'on mesure l'écart
+  const XG = 0.25; // où l'on mesure l'écart
 </script>
 
 <div class="visuel m8p" bind:this={hote}>
-  <svg viewBox="0 0 1000 540" role="img" aria-label="Notre sondage : l'intérêt pour la politique selon la scolarité. Seule, la pente est {sg(S1)}. Avec « femme » dans le modèle, deux droites parallèles de pente {sg(D1)}, celle des femmes {f(DF)} plus bas, à scolarité égale.">
+  <svg viewBox="0 0 1000 540" role="img" aria-label="Notre sondage : l'intérêt pour la politique selon la scolarité. Seule, la pente est {sg(S1)}. Avec « femme » dans le modèle, deux droites parallèles de même pente, {sg(D1)}, séparées par le même écart partout.">
     <!-- Axes -->
     <line x1={X0 - 50} y1={Y0} x2={X0 + LX + 50} y2={Y0} class="axe" />
     <line x1={X0 - 50} y1={Y0} x2={X0 - 50} y2={py(1)} class="axe" />
@@ -79,8 +80,8 @@
     <!-- 3 : l'écart, à scolarité égale -->
     <g class="etape" class:vu={e >= 3}>
       <line x1={px(XG)} y1={py(D0 + D1 * XG) + 4} x2={px(XG)} y2={py(D0 + DF + D1 * XG) - 4} class="ecart" />
-      <text x={px(XG) + 14} y={py(D0 + D1 * XG + DF / 2) + 10} class="gros rouge">femme{' '}: {sg(DF)}</text>
-      <text x={px(XG) + 14} y={py(D0 + D1 * XG + DF / 2) + 40} class="lab">à scolarité égale</text>
+      <text x={px(XG) + 14} y={py(D0 + DF + D1 * XG) + 56} class="gros rouge">le même écart partout</text>
+      <text x={px(XG) + 14} y={py(D0 + DF + D1 * XG) + 86} class="lab">la pente se lit dans chaque groupe</text>
     </g>
 
     <text x="0" y="534" class="source">Notre sondage de la séance 7 · les {P.n} qui ont répondu aux trois questions (scolarité, intérêt, genre)</text>

@@ -5,7 +5,7 @@
 #
 # Sans CES2025_RDS, ces::get_ces("2025"). Aucune pondération.
 #
-# Deux moitiés, comme la séance.
+# Deux moitiés, comme la séance (la première heure, Zotero, n'a pas de données).
 #
 # 1. Comprendre (avant la pause) : la suite exacte de la séance 7. Mêmes
 #    variables, même préparation que outils/seance7_data.R, même sondage
@@ -13,12 +13,16 @@
 #    fin que le modèle à plusieurs variables est celui de seance7.js
 #    (MULTIPLE).
 #
-# 2. L'atelier (après la pause) : toute la CES, comme dans le travail. Le
-#    code affiché est une chaîne, et c'est CETTE chaîne qui est exécutée
-#    (eval(parse())), dans un dossier temporaire qui contient ces2025.rds,
-#    comme le dossier de la salle. La syntaxe est celle de la séance 4
-#    (df_raw, df_clean, case_when). Les tableaux et le graphique sont rendus
-#    par modelsummary et modelplot eux-mêmes. Rien n'est retapé à la main.
+# 2. Blais en 2025 (après la pause) : Blais (2005, CJPS 38:4) trouve, en
+#    Ontario et dans l'Atlantique de 1965 à 2004, que les catholiques ont
+#    18 points de plus de chances de voter libéral. On le teste sur toute la
+#    CES 2025 : deux variables nettoyées en classe (liberal, catho), les
+#    contrôles fournis tout prêts. Le code affiché est une chaîne, et c'est
+#    CETTE chaîne qui est exécutée (eval(parse())), dans un dossier
+#    temporaire qui contient ces2025.rds, comme le dossier de la salle. La
+#    syntaxe est celle de la séance 4 (df_raw, df_clean, case_when). Le
+#    tableau est rendu par modelsummary lui-même. Rien n'est retapé à la
+#    main, sauf les chiffres publiés de Blais (BLAIS, ci-dessous, cités).
 suppressPackageStartupMessages({ library(haven); library(modelsummary); library(ggplot2) })
 options(width = 100)
 
@@ -34,8 +38,10 @@ coefs <- function(m) {
   s <- coef(summary(m)); ci <- confint(m)
   lapply(seq_len(nrow(s)), function(i) list(
     terme = rownames(s)[i], b = r(s[i, 1]), se = r(s[i, 2]), t = r(s[i, 3], 2),
-    p = signif(s[i, 4], 3), bas = r(ci[i, 1]), haut = r(ci[i, 2])))
+    p = signif(s[i, 4], 3), bas = r(ci[i, 1]), haut = r(ci[i, 2]), etoiles = etoiles(s[i, 4])))
 }
+# Les étoiles de modelsummary(stars = TRUE) : + 0,1 · * 0,05 · ** 0,01 · *** 0,001.
+etoiles <- function(p) if (p < 0.001) "***" else if (p < 0.01) "**" else if (p < 0.05) "*" else if (p < 0.1) "+" else ""
 
 # ======================================================================
 # 1. COMPRENDRE : la préparation de outils/seance7_data.R, à l'identique.
@@ -125,25 +131,30 @@ ESCALIER <- list(n = nrow(k5), modeles = lapply(seq_along(FORMULES), function(i)
 }))
 stopifnot(ESCALIER$n == nobs(m_multi))
 
-# ---- 1e. La constante et des profils : predict() sur le modèle de la
-# séance 7 (MULTIPLE). Les âges en années, convertis comme les données.
-a01 <- function(a) (a - 18) / (AGE_MAX - 18)
-PROFILS_DEF <- list(
-  list(nom = "Tout à zéro", desc = c("homme", "18 ans", "secondaire non terminé", "revenu le plus bas", "hors Québec"),
-       x = data.frame(scolarite = 0, age = a01(18), femme = 0, revenu = 0, quebec = 0)),
-  list(nom = "Camille", desc = c("femme", "24 ans", "collégial", "60 001 $ à 90 000 $", "au Québec"),
-       x = data.frame(scolarite = 0.5, age = a01(24), femme = 1, revenu = 3 / 7, quebec = 1)),
-  list(nom = "Robert", desc = c("homme", "70 ans", "maîtrise, doctorat", "110 001 $ à 150 000 $", "en Ontario"),
-       x = data.frame(scolarite = 1, age = a01(70), femme = 0, revenu = 5 / 7, quebec = 0))
-)
-PROFILS <- lapply(PROFILS_DEF, function(p) list(nom = p$nom, desc = p$desc,
-  valeurs = lapply(as.list(p$x), function(v) r(v)), prediction = r(unname(predict(m_multi, p$x)))))
-stopifnot(abs(PROFILS[[1]]$prediction - r(coef(m_multi)[[1]])) < 1e-9)
+# ---- 1e. Le modèle de la séance 7, pour lire une seule ligne (la scolarité).
 MULTI <- list(n_modele = nobs(m_multi), r2 = r(summary(m_multi)$r.squared, 3), coefs = coefs(m_multi), age_max = AGE_MAX)
 
 # ======================================================================
-# 2. L'ATELIER : le code exact de la salle, exécuté tel quel.
+# 2. BLAIS EN 2025 : le code exact de la salle, exécuté tel quel.
 # ======================================================================
+# Ce que Blais a publié : son tableau 1 (p. 824) et son tableau 2 (p. 826),
+# recopiés de l'article. Logit, CES 1965-2004 empilées. « Impact » : la
+# différence de probabilité de voter libéral (sa note 1).
+BLAIS <- list(
+  reference = "Blais, André. 2005. « Accounting for the Electoral Success of the Liberal Party in Canada ». Revue canadienne de science politique 38 (4) : 821-840.",
+  doi = "10.1017/S0008423905050304",
+  est = list(titre = "Ontario et Atlantique", n = 11157, lignes = list(
+    list(nom = "Atlantique", coef = "0,00", impact = ""),
+    list(nom = "Catholique", coef = "0,72**", impact = "0,18", cle = TRUE),
+    list(nom = "Français", coef = "0,33**", impact = "0,08"),
+    list(nom = "Europe de l'Est", coef = "0,03", impact = ""),
+    list(nom = "Europe du Sud", coef = "0,53**", impact = "0,13"),
+    list(nom = "Europe de l'Ouest", coef = "−0,20**", impact = "−0,05"),
+    list(nom = "Asie, Amérique latine, Afrique", coef = "0,98**", impact = "0,23"),
+    list(nom = "Constante", coef = "−0,48**", impact = ""))),
+  catho = 0.18, catho_ouest = 0.12, n_ouest = 6736
+)
+
 tmp <- tempfile("s8-"); dir.create(tmp)
 saveRDS(d, file.path(tmp, "ces2025.rds"))
 ancien <- setwd(tmp)
@@ -163,64 +174,61 @@ ATELIER$charger <- console(
   "nrow(df_raw)",
   "df_clean <- data.frame(id = 1:nrow(df_raw))"
 )
-ATELIER$interet <- console(
-  "table(df_raw$cps25_interest_gen_1)",
-  paste0("df_clean$interet <- case_when(\n",
-         "  df_raw$cps25_interest_gen_1 >= 0 ~ df_raw$cps25_interest_gen_1 / 10\n",
+# Y : le vote libéral (intention de vote pendant la campagne).
+ATELIER$vote <- console(
+  "table(as_factor(df_raw$cps25_votechoice))"
+)
+ATELIER$liberal <- console(
+  paste0("df_clean$liberal <- case_when(\n",
+         "  df_raw$cps25_votechoice == 1 ~ 1,             # le Parti libéral\n",
+         "  df_raw$cps25_votechoice %in% c(2:6, 8) ~ 0    # un autre parti\n",
+         "  # 7 (ne sait pas) : aucune ligne, donc NA\n",
          ")"),
-  "table(df_clean$interet, useNA = \"ifany\")"
+  "table(df_clean$liberal, useNA = \"ifany\")"
 )
-ATELIER$scolarite <- console(
-  paste0("df_clean$scolarite <- case_when(\n",
-         "  df_raw$cps25_education <= 4  ~ 0,     # secondaire non terminé\n",
-         "  df_raw$cps25_education == 5  ~ 0.25,  # secondaire\n",
-         "  df_raw$cps25_education <= 7  ~ 0.5,   # collégial\n",
-         "  df_raw$cps25_education <= 9  ~ 0.75,  # université, 1er cycle\n",
-         "  df_raw$cps25_education <= 11 ~ 1     # maîtrise, doctorat\n",
+# X : catholique ou non.
+ATELIER$religion <- console(
+  "table(df_raw$cps25_religion)"
+)
+ATELIER$catho <- console(
+  paste0("df_clean$catho <- case_when(\n",
+         "  df_raw$cps25_religion == 10 ~ 1,   # catholique\n",
+         "  df_raw$cps25_religion <= 22 ~ 0    # une autre religion, ou aucune\n",
+         "  # 23 (ne sait pas) : aucune ligne, donc NA\n",
          ")"),
-  "table(df_clean$scolarite, useNA = \"ifany\")"
+  "table(df_clean$catho, useNA = \"ifany\")"
 )
-ATELIER$age <- console(
-  "summary(df_raw$cps25_age_in_years)",
-  "df_clean$age <- (df_raw$cps25_age_in_years - 18) / (96 - 18)",
-  "summary(df_clean$age)"
+# Les contrôles, fournis tout prêts (un bloc à copier).
+CONTROLES <- paste0(
+  "# Les contrôles, tout prêts : copiez-collez ce bloc\n",
+  "df_clean$region <- case_when(\n",
+  "  df_raw$cps25_province == 9 ~ \"Ontario\",\n",
+  "  df_raw$cps25_province %in% c(4, 5, 7, 10) ~ \"Atlantique\",\n",
+  "  df_raw$cps25_province %in% c(1, 2, 3, 12) ~ \"Ouest\"\n",
+  "  # le Québec et les territoires : NA, comme chez Blais\n",
+  ")\n",
+  "df_clean$atlantique <- case_when(\n",
+  "  df_clean$region == \"Atlantique\" ~ 1,\n",
+  "  df_clean$region == \"Ontario\" ~ 0\n",
+  ")\n",
+  "df_clean$immigrant <- case_when(\n",
+  "  df_raw$cps25_bornin_canada == 2 ~ 1,   # né.e hors du Canada\n",
+  "  df_raw$cps25_bornin_canada == 1 ~ 0\n",
+  ")")
+ATELIER$controles <- console(CONTROLES, "table(df_clean$region, useNA = \"ifany\")")
+ATELIER$filtrer <- console(
+  "df_blais <- filter(df_clean, region %in% c(\"Ontario\", \"Atlantique\"))",
+  "nrow(df_blais)"
 )
-ATELIER$femme <- console(
-  paste0("df_clean$femme <- case_when(\n",
-         "  df_raw$cps25_genderid == 2 ~ 1,   # une femme\n",
-         "  df_raw$cps25_genderid == 1 ~ 0    # un homme\n",
-         ")"),
-  "table(df_clean$femme, useNA = \"ifany\")"
-)
-ATELIER$revenu <- console(
-  "table(df_raw$cps25_income)",
-  paste0("df_clean$revenu <- case_when(\n",
-         "  df_raw$cps25_income <= 8 ~ (df_raw$cps25_income - 1) / 7\n",
-         ")"),
-  "table(round(df_clean$revenu, 2), useNA = \"ifany\")"
-)
-ATELIER$quebec <- console(
-  paste0("df_clean$quebec <- case_when(\n",
-         "  df_raw$cps25_province == 11 ~ 1,\n",
-         "  df_raw$cps25_province != 11 ~ 0\n",
-         ")"),
-  "table(df_clean$quebec, useNA = \"ifany\")"
-)
-ATELIER$verifier <- console(
-  "colSums(is.na(df_clean))"
-)
-MANQUANTS <- as.list(colSums(is.na(df_clean)))
-# Le nettoyage de la salle donne-t-il les mêmes variables que la première moitié ?
-for (v in c("interet", "scolarite", "age", "femme", "revenu", "quebec"))
-  stopifnot(isTRUE(all.equal(as.numeric(df_clean[[v]]), as.numeric(ces[[v]]))))
 ATELIER$modeles <- console(
-  "modele1 <- lm(interet ~ scolarite, data = df_clean)",
-  "modele2 <- lm(interet ~ scolarite + age + femme, data = df_clean)",
-  "modele3 <- lm(interet ~ scolarite + age + femme + revenu + quebec, data = df_clean)",
+  "modele1 <- lm(liberal ~ catho, data = df_blais)",
+  "modele2 <- lm(liberal ~ catho + atlantique + immigrant, data = df_blais)",
   "nobs(modele1)",
-  "nobs(modele2)",
-  "nobs(modele3)"
+  "nobs(modele2)"
 )
+MANQUANTS <- as.list(colSums(is.na(df_blais[, c("liberal", "catho", "atlantique", "immigrant")])))
+# Garde-fou : l'essai exploratoire du 21 octobre (n = 5 835, b = 0,017).
+stopifnot(nobs(modele2) == 5835, abs(coef(modele2)[["catho"]] - 0.017) < 0.002)
 
 # Une image rendue par modelsummary : on ajoute seulement output = "….png" à
 # la dernière ligne, comme dans outils/seance7_ms.R.
@@ -239,73 +247,36 @@ rendre_png <- function(code, fichier) {
 TABLEAU <- rendre_png(paste0(
   "library(modelsummary)\n",
   "options(OutDec = \",\")\n",
-  "noms <- c(\"(Intercept)\" = \"Constante\",\n",
-  "  \"scolarite\" = \"Scolarité (0 à 1)\", \"age\" = \"Âge (0 à 1)\",\n",
-  "  \"femme\" = \"Femme\", \"revenu\" = \"Revenu (0 à 1)\",\n",
-  "  \"quebec\" = \"Québec\")\n",
-  "modeles <- list(\"Modèle 1\" = modele1, \"Modèle 2\" = modele2,\n",
-  "                \"Modèle 3\" = modele3)\n",
+  "noms <- c(\"(Intercept)\" = \"Constante\", \"catho\" = \"Catholique\",\n",
+  "  \"atlantique\" = \"Atlantique\", \"immigrant\" = \"Né.e hors du Canada\")\n",
+  "modeles <- list(\"Catholique seul\" = modele1, \"Avec contrôles\" = modele2)\n",
   "modelsummary(modeles, stars = TRUE, coef_rename = noms,\n",
   "  gof_map = c(\"nobs\", \"r.squared\"))"), "s8-tableau.png")
 
-# Le graphique des coefficients, en une ligne. ggsave() l'enregistre.
-# Piège réel : avec options(OutDec = ","), modelplot() dessine un graphique
-# vide (« NAs introduced by coercion »). On revient au point avant.
-GRAPHIQUE <- list(code = paste0(
-  "library(ggplot2)          # pour labs() et ggsave()\n",
-  "options(OutDec = \".\")   # modelplot() n'aime pas la virgule\n",
-  "modelplot(modeles, coef_rename = noms, coef_omit = \"Intercept\") +\n",
-  "  labs(x = \"Coefficient et intervalle de confiance à 95 %\", caption = NULL)"))
-g <- eval(parse(text = GRAPHIQUE$code), envir = globalenv())
-GRAPHIQUE$enregistrer <- "ggsave(\"coefficients.png\", width = 8, height = 5)"
-# Pour la diapo : le même graphique, exporté plus petit (6 × 3,75 po à 200 ppp),
-# pour que le texte se lise du fond de la salle.
-ggsave(file.path(IMG, "s8-modelplot.png"), g, width = 6, height = 3.75, dpi = 200)
-eval(parse(text = GRAPHIQUE$enregistrer), envir = globalenv())   # dans le dossier temporaire
-stopifnot(file.exists("coefficients.png"))
-dg <- dim(png::readPNG(file.path(IMG, "s8-modelplot.png")))
-GRAPHIQUE <- c(GRAPHIQUE, list(img = "s8-modelplot.png", l = dg[2], h = dg[1]))
+# Le même tableau, dans un fichier Word (il faut le paquet pandoc; Positron
+# fournit le programme pandoc lui-même).
+WORD <- list(code = paste0(
+  "modelsummary(modeles, stars = TRUE, coef_rename = noms,\n",
+  "  gof_map = c(\"nobs\", \"r.squared\"), output = \"blais2025.docx\")"))
+eval(parse(text = WORD$code), envir = globalenv())
+stopifnot(file.exists("blais2025.docx"))
 
-# Une variable catégorielle : le diplôme en mots. Les numéros en tête
-# fixent l'ordre (R prend la première en ordre alphabétique comme référence).
-ATELIER$categorie <- console(
-  paste0("df_clean$diplome <- case_when(\n",
-         "  df_raw$cps25_education <= 4  ~ \"1. Secondaire non terminé\",\n",
-         "  df_raw$cps25_education == 5  ~ \"2. Secondaire\",\n",
-         "  df_raw$cps25_education <= 7  ~ \"3. Collégial\",\n",
-         "  df_raw$cps25_education <= 9  ~ \"4. Université, 1er cycle\",\n",
-         "  df_raw$cps25_education <= 11 ~ \"5. Maîtrise, doctorat\"\n",
-         ")"),
-  "modele4 <- lm(interet ~ diplome + age + femme + revenu + quebec, data = df_clean)",
-  "round(coef(modele4), 3)"
+# Si on a le temps : l'Ouest (le tableau 2 de Blais : 12 points).
+ATELIER$ouest <- console(
+  "df_ouest <- filter(df_clean, region == \"Ouest\")",
+  "modele3 <- lm(liberal ~ catho + immigrant, data = df_ouest)",
+  "round(coef(modele3), 3)"
 )
-
-# À vous : la satisfaction envers la démocratie (recodée à la séance 4).
-ATELIER$satisfaction <- console(
-  paste0("df_clean$satisfaction <- case_when(\n",
-         "  df_raw$cps25_demsat == 1 ~ 1,\n",
-         "  df_raw$cps25_demsat == 2 ~ 0.67,\n",
-         "  df_raw$cps25_demsat == 3 ~ 0.33,\n",
-         "  df_raw$cps25_demsat == 4 ~ 0\n",
-         ")"),
-  "table(df_clean$satisfaction, useNA = \"ifany\")"
-)
-EXERCICE <- rendre_png(paste0(
-  "options(OutDec = \",\")\n",
-  "modele5 <- lm(satisfaction ~ scolarite + age + femme + revenu + quebec,\n",
-  "              data = df_clean)\n",
-  "modelsummary(list(\"Intérêt\" = modele3, \"Satisfaction\" = modele5),\n",
-  "  stars = TRUE, coef_rename = noms, gof_map = c(\"nobs\", \"r.squared\"))"), "s8-exercice.png")
-# Les coefficients des deux modèles, pour écrire les phrases de la diapo.
 options(OutDec = ".")
+# Le vote libéral chez les non-catholiques et chez les catholiques
+# (modele1 : la constante, puis la constante + le coefficient).
+parts <- tapply(model.frame(modele1)$liberal, model.frame(modele1)$catho, mean)
 COEFS <- list(modele1 = coefs(modele1), modele2 = coefs(modele2), modele3 = coefs(modele3),
-              modele4 = coefs(modele4), modele5 = coefs(modele5),
-              manquants = MANQUANTS, n_ces = nrow(df_raw),
-              diplomes = as.list(table(model.frame(modele4)$diplome)),
-              n = list(modele1 = nobs(modele1), modele2 = nobs(modele2), modele3 = nobs(modele3),
-                       modele4 = nobs(modele4), modele5 = nobs(modele5)),
-              r2 = list(modele1 = r(summary(modele1)$r.squared, 3), modele2 = r(summary(modele2)$r.squared, 3),
-                        modele3 = r(summary(modele3)$r.squared, 3), modele5 = r(summary(modele5)$r.squared, 3)))
+              manquants = MANQUANTS, n_ces = nrow(df_raw), n_blais = nrow(df_blais),
+              parts = list(non = r(parts[["0"]]), catho = r(parts[["1"]])),
+              n_groupes = as.list(table(model.frame(modele1)$catho)),
+              n = list(modele1 = nobs(modele1), modele2 = nobs(modele2), modele3 = nobs(modele3)))
+stopifnot(abs(COEFS$parts$catho - COEFS$parts$non - coef(modele1)[["catho"]]) < 1e-3)
 setwd(ancien)
 
 # ---- Le script complet de la salle : tout le code affiché, dans l'ordre, en
@@ -314,19 +285,19 @@ setwd(ancien)
 # ces2025.rds : c'est ce que la salle fera.
 ins <- function(cle) paste(sapply(ATELIER[[cle]], `[[`, "in"), collapse = "\n")
 SCRIPT <- c(
-  paste0("# POL-2000 · séance 8 · l'atelier\n",
+  paste0("# POL-2000 · séance 8 · Blais (2005) en 2025\n",
          "# À refaire chez vous, ligne par ligne, Ctrl + Entrée.\n\n",
-         ins("charger"), "\n\n", ins("interet"), "\n\n", ins("scolarite")),
-  paste(ins("age"), ins("femme"), ins("revenu"), sep = "\n\n"),
-  paste(ins("quebec"), ins("verifier"), ins("modeles"), sep = "\n\n"),
-  paste(TABLEAU$code, paste0(GRAPHIQUE$code, "\n", GRAPHIQUE$enregistrer), sep = "\n\n"),
-  paste(ins("categorie"), ins("satisfaction"), EXERCICE$code, sep = "\n\n")
+         ins("charger"), "\n\n", ins("vote"), "\n", ins("liberal")),
+  paste(ins("religion"), ins("catho"), sep = "\n\n"),
+  ins("controles"),
+  paste(ins("filtrer"), ins("modeles"), TABLEAU$code, WORD$code, sep = "\n\n"),
+  paste0("# Si on a le temps : l'Ouest\n", ins("ouest"))
 )
 vierge <- tempfile("s8-vierge-"); dir.create(vierge)
 saveRDS(d, file.path(vierge, "ces2025.rds"))
 writeLines(paste(SCRIPT, collapse = "\n\n"), file.path(vierge, "seance8.R"))
 statut <- system(sprintf("cd %s && Rscript --vanilla seance8.R > /dev/null 2>&1", shQuote(vierge)))
-stopifnot(statut == 0)
+stopifnot(statut == 0, file.exists(file.path(vierge, "blais2025.docx")))
 
 # ---- Écriture.
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
@@ -341,24 +312,25 @@ writeLines(c(
   paste0("export const TRANCHES = ", J(TRANCHES), ";"),
   "/* La pente de la scolarité, variable ajoutée par variable ajoutée, sur les mêmes 877. */",
   paste0("export const ESCALIER = ", J(ESCALIER), ";"),
-  "/* Le modèle à plusieurs variables de la séance 7, et trois profils (predict()). */",
+  "/* Le modèle à plusieurs variables de la séance 7. */",
   paste0("export const MULTI = ", J(MULTI), ";"),
-  paste0("export const PROFILS = ", J(PROFILS), ";"),
-  "/* L'atelier : toute la CES. Les consoles, à options(width = 100), dans l'ordre. */",
+  "/* Blais (2005), tableau 1 (p. 824) et tableau 2 (p. 826) : recopiés de l'article. */",
+  paste0("export const BLAIS = ", J(BLAIS), ";"),
+  "/* Blais en 2025 : toute la CES. Les consoles, à options(width = 100), dans l'ordre. */",
   paste0("export const ATELIER = ", J(ATELIER), ";"),
-  "/* Le tableau à trois colonnes, le graphique des coefficients et l'exercice (images). */",
+  paste0("export const CONTROLES = ", J(CONTROLES), ";"),
+  "/* Le tableau à deux colonnes (image) et le même tableau dans Word. */",
   paste0("export const TABLEAU = ", J(TABLEAU), ";"),
-  paste0("export const GRAPHIQUE = ", J(GRAPHIQUE), ";"),
-  paste0("export const EXERCICE = ", J(EXERCICE), ";"),
-  "/* Les coefficients des modèles de l'atelier, N et R². */",
+  paste0("export const WORD = ", J(WORD), ";"),
+  "/* Les coefficients des modèles, N et le vote libéral par groupe. */",
   paste0("export const COEFS = ", J(COEFS), ";"),
   "/* Le script complet, en cinq morceaux : vérifié dans une session R vierge. */",
   paste0("export const SCRIPT = ", J(SCRIPT), ";")
 ), file.path(ici, "..", "src", "lib", "data", "seance8.js"))
 
 cat("PARALLELES n =", PARALLELES$n, " seule b1 =", PARALLELES$seule[[2]]$b, " deux :", sapply(PARALLELES$deux, `[[`, "b"), "\n")
-cat("TRANCHES :", TRANCHES$b1_seul, "->", TRANCHES$b1_a_egal, " | ", sapply(TRANCHES$tranches, function(t) paste(t$nom, t$n, t$b1)), "\n")
-cat("ESCALIER :", sapply(ESCALIER$modeles, `[[`, "b"), " r2", sapply(ESCALIER$modeles, `[[`, "r2"), "\n")
-cat("PROFILS :", sapply(PROFILS, `[[`, "prediction"), "\n")
-cat("ATELIER N :", unlist(COEFS$n), "\n")
-cat("tableau", TABLEAU$l, "x", TABLEAU$h, " exercice", EXERCICE$l, "x", EXERCICE$h, " graphique", GRAPHIQUE$l, "x", GRAPHIQUE$h, "\n")
+cat("TRANCHES :", TRANCHES$b1_seul, "->", TRANCHES$b1_a_egal, "\n")
+cat("ESCALIER :", sapply(ESCALIER$modeles, `[[`, "b"), "\n")
+for (m in c("modele1", "modele2", "modele3")) cat(m, "n =", COEFS$n[[m]], ":", sapply(COEFS[[m]], function(c) paste0(c$terme, " ", c$b, c$etoiles, " [", c$bas, "; ", c$haut, "]")), "\n")
+cat("parts :", unlist(COEFS$parts), " groupes :", unlist(COEFS$n_groupes), " manquants :", unlist(MANQUANTS), "\n")
+cat("tableau", TABLEAU$l, "x", TABLEAU$h, "\n")

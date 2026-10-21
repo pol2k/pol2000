@@ -17,11 +17,12 @@
    *   mouvement  — « passer de 18 à 96 ans »
    *   b          — le coefficient (échelle de 0 à 1)
    *   y          — « d'intérêt »
-   *   echelle    — « points sur 10 » (b × 10), ou '' pour ne pas convertir
+   *   echelle    — « sur 10 » (b × 10), ou '' pour ne pas convertir
+   *   pp         — true : un Y de 0 ou 1, converti en points de pourcentage (b × 100)
    *   etoiles    — false : le coefficient n'a pas d'étoile
    */
   import { brancherTemps } from '../temps.js';
-  let { autres, mouvement, b, y = 'd’intérêt', echelle = 'sur 10', etoiles = true } = $props();
+  let { autres, mouvement, b, y = 'd’intérêt', echelle = 'sur 10', pp = false, etoiles = true } = $props();
 
   let e = $state(0);
   let hote = $state(null);
@@ -33,8 +34,9 @@
 
   const f = (v, d = 2) => Math.abs(v).toLocaleString('fr-CA', { minimumFractionDigits: d, maximumFractionDigits: d });
   const sens = $derived(b < 0 ? 'de moins' : 'de plus');
-  const dix = $derived(f(b * 10, 1));
-  const point = $derived(Math.abs(b * 10) < 2 ? 'point' : 'points');
+  const fois = $derived(pp ? 100 : 10);
+  const dix = $derived(f(b * fois, 1));
+  const point = $derived((Math.abs(b * fois) < 2 ? 'point' : 'points') + (pp ? ' de pourcentage' : ''));
 </script>
 
 <div class="visuel m8ph" bind:this={hote}>
@@ -42,11 +44,8 @@
   <p class="ligne"><span class="case" class:pleine={e >= 2}><span class="vide">X, de son minimum à son maximum</span><span class="mot">{mouvement}</span></span></p>
   <p class="ligne">est associé à <span class="case" class:pleine={e >= 3}><span class="vide">le coefficient</span><span class="mot">{f(b, Math.abs(b) < 0.01 ? 3 : 2)} {sens}</span></span> {y} (sur 1).</p>
   <p class="fin" class:vu={e >= 4}>
-    {#if etoiles}
-      {#if echelle}Soit <strong>{dix} {point} {sens}</strong> {echelle}.{/if}
-    {:else}
-      <strong>Pas d’étoile</strong>{' '}: on ne peut pas le distinguer de zéro.
-    {/if}
+    {#if pp}Soit <strong>{dix} {point} {sens}</strong>.{:else if etoiles && echelle}Soit <strong>{dix} {point} {sens}</strong> {echelle}.{/if}
+    {#if !etoiles}<strong>Pas d’étoile</strong>{' '}: on ne peut pas le distinguer de zéro.{/if}
   </p>
 </div>
 
