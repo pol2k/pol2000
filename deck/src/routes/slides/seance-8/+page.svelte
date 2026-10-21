@@ -53,9 +53,9 @@
   import Console from '$lib/deck/visuels/Console.svelte';
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
   import { TIERS, VARS } from '$lib/data/seance7.js';
-  import { MULTI, ATELIER, TABLEAU, GRAPHIQUE, EXERCICE, COEFS } from '$lib/data/seance8.js';
+  import { MULTI, ATELIER, TABLEAU, GRAPHIQUE, EXERCICE, COEFS, SCRIPT } from '$lib/data/seance8.js';
 
-  const TOTAL = 49;
+  const TOTAL = 51;
   const D = 'POL-2000 · séance 8 · jeu 22 oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -64,7 +64,7 @@
   const coef = (m, t) => m.find((c) => c.terme === t).b;
   const N = COEFS.n;
 
-  const c_charger = avec('charger', ['', 'ces2025.rds, sauvegardé à la séance 2', `vous devriez voir ${COEFS.n_ces}`, 'df_raw ne change jamais']);
+  const c_charger = avec('charger', ['', 'haven : pour lire les codes de la CES', 'ces2025.rds, sauvegardé à la séance 2', `vous devriez voir ${COEFS.n_ces}`, 'df_raw ne change jamais']);
   const c_interet = avec('interet', ['-99 : « préfère ne pas répondre »', '', '-99 est devenu NA']);
   const c_scolarite = avec('scolarite', ['', 'code 12 (ne sait pas) : NA']);
   const c_age = avec('age', ['', 'on enlève 18 ans, on divise par 78 : 18 ans donne 0, 96 ans donne 1', '']);
@@ -76,30 +76,8 @@
   const c_categorie = avec('categorie', ['les numéros fixent l’ordre : la première catégorie est la référence', '', 'pas de ligne pour « 1. Secondaire non terminé » : c’est la référence']);
   const c_satisfaction = avec('satisfaction', ['la recette de la séance 4', '']);
 
-  // Le script complet, tel qu'exécuté par R (outils/seance8_data.R).
-  const ins = (cle) => ATELIER[cle].map((l) => l.in).join('\n');
-  const SCRIPT_1 = `# POL-2000 · séance 8 · l'atelier
-# À refaire chez vous, ligne par ligne, Ctrl + Entrée.
-
-${ins('charger')}
-
-# Y : l'intérêt pour la politique
-${ATELIER.interet[1].in}
-
-# Les variables explicatives
-${ATELIER.scolarite[0].in}`;
-  const SCRIPT_2 = `${ATELIER.age[1].in}
-${ATELIER.femme[0].in}
-${ATELIER.revenu[1].in}
-${ATELIER.quebec[0].in}
-
-colSums(is.na(df_clean))   # toujours vérifier
-
-${ATELIER.modeles.slice(0, 3).map((l) => l.in).join('\n')}`;
-  const SCRIPT_3 = `${TABLEAU.code}
-
-${GRAPHIQUE.code}
-${GRAPHIQUE.enregistrer}`;
+  // Le script complet : SCRIPT, vérifié dans une session R vierge (outils/seance8_data.R).
+  const TITRES = ['seance8.R · à refaire chez vous', 'seance8.R · la suite', 'seance8.R · la suite', 'seance8.R · tableau et graphique', 'seance8.R · catégories et exercice'];
 
   // Les phrases : les coefficients de la séance 7 (notre sondage, MULTI).
   const MC = MULTI.coefs;
@@ -309,7 +287,7 @@ ${GRAPHIQUE.enregistrer}`;
 
     <Slide bandeau="Atelier · graphique" droite={D}>
       <M8Etapes ici={6} />
-      <M8Image code={GRAPHIQUE.code + '\n' + GRAPHIQUE.enregistrer} img={GRAPHIQUE.img} l={GRAPHIQUE.l} h={GRAPHIQUE.h} px={68} nouveau={[0]} dit="sans la première ligne : un graphique vide" alt="Le graphique de modelplot : les coefficients des trois modèles et leurs intervalles de confiance à 95 %." />
+      <M8Image code={GRAPHIQUE.code + '\n' + GRAPHIQUE.enregistrer} img={GRAPHIQUE.img} l={GRAPHIQUE.l} h={GRAPHIQUE.h} px={68} nouveau={[1]} dit="sans la ligne OutDec : un graphique vide" alt="Le graphique de modelplot : les coefficients des trois modèles et leurs intervalles de confiance à 95 %." />
     </Slide>
 
     <Slide bandeau="Atelier · lire" droite={D}>
@@ -359,17 +337,11 @@ ${GRAPHIQUE.enregistrer}`;
     </Slide>
 
     <!-- ================= LE SCRIPT ================= -->
-    <Slide bandeau="Le script complet" droite={D}>
-      <Code src={SCRIPT_1} titre="seance8.R · à refaire chez vous" />
-    </Slide>
-
-    <Slide bandeau="Le script complet" droite={D}>
-      <Code src={SCRIPT_2} titre="seance8.R · la suite" />
-    </Slide>
-
-    <Slide bandeau="Le script complet" droite={D}>
-      <Code src={SCRIPT_3} titre="seance8.R · la fin" />
-    </Slide>
+    {#each SCRIPT as bout, i}
+      <Slide bandeau="Le script complet" droite={D}>
+        <Code src={bout} titre={TITRES[i]} />
+      </Slide>
+    {/each}
 
     <!-- ================= FIN ================= -->
     <Slide bandeau="Après la semaine de lecture" droite={D}>

@@ -158,6 +158,7 @@ console <- function(...) lapply(c(...), function(code) list(`in` = code, out = s
 ATELIER <- list()
 ATELIER$charger <- console(
   "library(dplyr)",
+  "library(haven)",
   "df_raw <- readRDS(\"ces2025.rds\")",
   "nrow(df_raw)",
   "df_clean <- data.frame(id = 1:nrow(df_raw))"
@@ -251,6 +252,7 @@ TABLEAU <- rendre_png(paste0(
 # Piège réel : avec options(OutDec = ","), modelplot() dessine un graphique
 # vide (« NAs introduced by coercion »). On revient au point avant.
 GRAPHIQUE <- list(code = paste0(
+  "library(ggplot2)          # pour labs() et ggsave()\n",
   "options(OutDec = \".\")   # modelplot() n'aime pas la virgule\n",
   "modelplot(modeles, coef_rename = noms, coef_omit = \"Intercept\") +\n",
   "  labs(x = \"Coefficient et intervalle de confiance à 95 %\", caption = NULL)"))
@@ -306,6 +308,26 @@ COEFS <- list(modele1 = coefs(modele1), modele2 = coefs(modele2), modele3 = coef
                         modele3 = r(summary(modele3)$r.squared, 3), modele5 = r(summary(modele5)$r.squared, 3)))
 setwd(ancien)
 
+# ---- Le script complet de la salle : tout le code affiché, dans l'ordre, en
+# cinq morceaux (une diapo chacun). Il doit tourner seul, dans une session R
+# vierge (Rscript --vanilla), dans un dossier qui ne contient que
+# ces2025.rds : c'est ce que la salle fera.
+ins <- function(cle) paste(sapply(ATELIER[[cle]], `[[`, "in"), collapse = "\n")
+SCRIPT <- c(
+  paste0("# POL-2000 · séance 8 · l'atelier\n",
+         "# À refaire chez vous, ligne par ligne, Ctrl + Entrée.\n\n",
+         ins("charger"), "\n\n", ins("interet"), "\n\n", ins("scolarite")),
+  paste(ins("age"), ins("femme"), ins("revenu"), sep = "\n\n"),
+  paste(ins("quebec"), ins("verifier"), ins("modeles"), sep = "\n\n"),
+  paste(TABLEAU$code, paste0(GRAPHIQUE$code, "\n", GRAPHIQUE$enregistrer), sep = "\n\n"),
+  paste(ins("categorie"), ins("satisfaction"), EXERCICE$code, sep = "\n\n")
+)
+vierge <- tempfile("s8-vierge-"); dir.create(vierge)
+saveRDS(d, file.path(vierge, "ces2025.rds"))
+writeLines(paste(SCRIPT, collapse = "\n\n"), file.path(vierge, "seance8.R"))
+statut <- system(sprintf("cd %s && Rscript --vanilla seance8.R > /dev/null 2>&1", shQuote(vierge)))
+stopifnot(statut == 0)
+
 # ---- Écriture.
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
 writeLines(c(
@@ -329,7 +351,9 @@ writeLines(c(
   paste0("export const GRAPHIQUE = ", J(GRAPHIQUE), ";"),
   paste0("export const EXERCICE = ", J(EXERCICE), ";"),
   "/* Les coefficients des modèles de l'atelier, N et R². */",
-  paste0("export const COEFS = ", J(COEFS), ";")
+  paste0("export const COEFS = ", J(COEFS), ";"),
+  "/* Le script complet, en cinq morceaux : vérifié dans une session R vierge. */",
+  paste0("export const SCRIPT = ", J(SCRIPT), ";")
 ), file.path(ici, "..", "src", "lib", "data", "seance8.js"))
 
 cat("PARALLELES n =", PARALLELES$n, " seule b1 =", PARALLELES$seule[[2]]$b, " deux :", sapply(PARALLELES$deux, `[[`, "b"), "\n")
