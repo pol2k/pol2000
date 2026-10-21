@@ -42,7 +42,7 @@
 <div class="visuel m8ph" bind:this={hote}>
   <p class="ligne">À <span class="case" class:pleine={e >= 1}><span class="vide">les autres variables</span><span class="mot">{autres}</span></span> égaux,</p>
   <p class="ligne"><span class="case" class:pleine={e >= 2}><span class="vide">X, de son minimum à son maximum</span><span class="mot">{mouvement}</span></span></p>
-  <p class="ligne">est associé à <span class="case" class:pleine={e >= 3}><span class="vide">le coefficient</span><span class="mot">{f(b, Math.abs(b) < 0.01 ? 3 : 2)} {sens}</span></span> {y} (sur 1).</p>
+  <p class="ligne">est associé à <span class="case" class:pleine={e >= 3}><span class="vide">le coefficient</span><span class="mot">{f(b, pp || Math.abs(b) < 0.01 ? 3 : 2)} {sens}</span></span> {y} (sur 1).</p>
   <p class="fin" class:vu={e >= 4}>
     {#if pp}Soit <strong>{dix} {point} {sens}</strong>.{:else if etoiles && echelle}Soit <strong>{dix} {point} {sens}</strong> {echelle}.{/if}
     {#if !etoiles}<strong>Pas d’étoile</strong>{' '}: on ne peut pas le distinguer de zéro.{/if}

@@ -327,6 +327,7 @@
       <div class="avant">
         <Code src={WORD.code} titre="seance8.R" />
         <p class="e petit-dit">blais2025.docx apparaît dans le dossier du projet. Copiez-le dans votre travail.</p>
+        <p class="e petit-dit">Si R se plaint de pandoc : <code>pandoc::pandoc_install()</code>, une seule fois.</p>
       </div>
     </Slide>
 

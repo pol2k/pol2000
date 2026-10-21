@@ -7,7 +7,7 @@
    *   1  2025 : le coefficient de « catholique » avec contrôles, et son
    *      intervalle de confiance à 95 %;
    *   2  l'intervalle touche zéro (pas d'étoile), mais il est loin de 18 :
-   *      on peut exclure le chiffre de Blais.
+   *      on peut exclure 18 points en 2025 (pas réfuter Blais pour 1965-2004).
    *
    * Blais vient de BLAIS (recopié de l'article), 2025 de COEFS.modele2.
    */
@@ -58,7 +58,7 @@
       <text x={(px(haut) + px(bl)) / 2} y="150" class="lab-fort mid">loin hors de l’intervalle</text>
     </g>
   </svg>
-  <p class="fin-p" class:vu={e >= 2}>Pas d’étoile : on ne distingue pas 2025 de zéro. Mais <strong>on peut exclure les 18 points de Blais</strong>.</p>
+  <p class="fin-p" class:vu={e >= 2}>Pas d’étoile : on ne distingue pas 2025 de zéro. Mais <strong>on peut exclure 18 points en 2025</strong>.</p>
 </div>
 
 <style>
