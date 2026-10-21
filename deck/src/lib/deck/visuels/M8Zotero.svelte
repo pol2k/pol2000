@@ -1,7 +1,7 @@
 <script>
   /**
-   * Zotero en trois morceaux, puis l'essai en direct : ajouter Blais (2005)
-   * par son DOI. Un schéma, pas une capture.
+   * Zotero en trois morceaux, puis l'essai en direct : ajouter Blais et
+   * Gélineau (2007) par son DOI. Un schéma, pas une capture.
    *
    *   0  le navigateur (le connecteur), Zotero (la bibliothèque), Word (le module);
    *   1  la démo : la baguette magique, puis le DOI de Blais;
@@ -42,7 +42,7 @@
     </div>
     <div class="demo" class:vu={e >= 2}>
       <span class="tete">Dans Word</span>
-      <span>(Blais, 2005) dans le texte, la référence complète à la fin</span>
+      <span>(Blais et Gélineau, 2007) dans le texte, la référence complète à la fin</span>
       <span class="style">un clic change le style pour tout le travail</span>
     </div>
   </div>

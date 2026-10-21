@@ -9,24 +9,28 @@
    * Le fil (pol-7ds). La dernière séance avant la semaine de lecture, après
    * une semaine d'examens : trois blocs, du concret. 1. Citer (une vingtaine
    * de minutes) : le slogan de Google Scholar, d'où il vient, pourquoi
-   * citer, deux trucs de Scholar, Zotero; on ajoute Blais (2005) par son
-   * DOI. 2. Ajouter des variables, à la manière d'Arel-Bundock : deux
+   * citer, deux trucs de Scholar, Zotero; on ajoute Blais et Gélineau
+   * (2007) par son DOI. 2. Ajouter des variables, à la manière d'Arel-Bundock : deux
    * droites parallèles, à âge égal, ce que le modèle met de côté, et une
    * seule ligne se lit (on ne lit jamais les contrôles : le piège de la
-   * table 2). 3. Après la pause, Blais (2005) testé en 2025 : son tableau 1,
-   * puis deux variables nettoyées en classe, lentement, les contrôles
-   * fournis, le tableau, jusque dans Word, et le verdict.
+   * table 2). 3. Après la pause, Blais et Gélineau (2007) testés en 2025 :
+   * leur tableau 1 (la satisfaction envers la démocratie avant et après
+   * l'élection de 1997), puis deux variables nettoyées en classe, lentement
+   * (Y : la satisfaction après; X : gagnant), le contrôle (la même question,
+   * avant), le tableau, jusque dans Word, et 1997 contre 2025. Le Y n'est
+   * pas binaire (consigne des TP).
    *
    * Sources. Le cours 9 d'Adrien Cloutier (hiver 2024) et Arel-Bundock
-   * (2021), chapitre 5. Blais, A. (2005), RCSP 38(4), 821-840,
-   * doi:10.1017/S0008423905050304 (tableaux 1 et 2 recopiés dans BLAIS).
+   * (2021), chapitre 5. Blais, A. et F. Gélineau (2007), Political Studies
+   * 55(2), 425-441, doi:10.1111/j.1467-9248.2007.00659.x (CES 1997; le
+   * tableau 1 et une ligne du tableau 2 recopiés dans BG).
    * Westreich et Greenland (2013), « The Table 2 Fallacy », American
    * Journal of Epidemiology 177(4). Le chemin Obtenir@ULaval : les guides
    * de la Bibliothèque (bibl.ulaval.ca).
    *
    * Données. Avant la pause : notre sondage de la séance 7 (1 000 parmi les
-   * 20 180, graine 62), pour retrouver les mêmes chiffres. Blais en 2025 :
-   * toute la CES. Rien n'est inventé pour une sortie de R ni pour une
+   * 20 180, graine 62), pour retrouver les mêmes chiffres. Blais et
+   * Gélineau en 2025 : toute la CES. Rien n'est inventé pour une sortie de R ni pour une
    * figure : tout vient de src/lib/data/seance8.js et static/img/s8-*.png,
    * générés par outils/seance8_data.R.
    */
@@ -50,18 +54,17 @@
   import M8Phrase from '$lib/deck/visuels/M8Phrase.svelte';
   import M8UneLigne from '$lib/deck/visuels/M8UneLigne.svelte';
   import M8Limites from '$lib/deck/visuels/M8Limites.svelte';
-  import M8Blais from '$lib/deck/visuels/M8Blais.svelte';
+  import M8Gelineau from '$lib/deck/visuels/M8Gelineau.svelte';
   import M8Etapes from '$lib/deck/visuels/M8Etapes.svelte';
-  import M8ZeroUn from '$lib/deck/visuels/M8ZeroUn.svelte';
   import M8Image from '$lib/deck/visuels/M8Image.svelte';
-  import M8Verdict from '$lib/deck/visuels/M8Verdict.svelte';
+  import M8AvantApres from '$lib/deck/visuels/M8AvantApres.svelte';
   import M8Ecarts from '$lib/deck/visuels/M8Ecarts.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
   import { TIERS, VARS } from '$lib/data/seance7.js';
-  import { MULTI, BLAIS, ATELIER, CONTROLES, TABLEAU, WORD, COEFS, SCRIPT } from '$lib/data/seance8.js';
+  import { MULTI, BG, ATELIER, TABLEAU, WORD, COEFS, SCRIPT } from '$lib/data/seance8.js';
 
-  const TOTAL = 51;
+  const TOTAL = 49;
   const D = 'POL-2000 · séance 8 · jeu 22 oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -71,26 +74,25 @@
   const N = COEFS.n;
 
   const c_charger = avec('charger', ['', 'haven : pour lire les codes de la CES', 'ces2025.rds, sauvegardé à la séance 2', `vous devriez voir ${nb(COEFS.n_ces)}`, 'df_raw ne change jamais']);
-  const c_vote = avec('vote', ['as_factor() montre les étiquettes : 1 = libéral, 7 = ne sait pas']);
-  const c_liberal = avec('liberal', ['l’ordre compte : R prend la première ligne vraie', 'NA : pas de parti, ou pas de réponse']);
-  const c_religion = avec('religion', ['10 : catholique · 23 : ne sait pas, préfère ne pas répondre']);
-  const c_catho = avec('catho', ['10 est pris par la première ligne avant la deuxième', '']);
-  const c_region = avec('controles', ['', 'NA : le Québec et les territoires']).slice(1);
-  const c_filtrer = avec('filtrer', ['comme Blais : l’Ontario et l’Atlantique', `vous devriez voir ${nb(COEFS.n_blais)}`]);
-  const c_modeles = avec('modeles', ['', '', `vous devriez voir ${nb(N.modele1)}`, `${N.modele1 - N.modele2} de moins : le lieu de naissance manquant`]);
-  const c_ouest = avec('ouest', ['', 'pas de colonne atlantique : on est dans l’Ouest', '']);
+  const c_question = avec('question', ['pes25 : le sondage après l’élection, aux mêmes personnes']);
+  const c_apres = avec('apres', ['la recette de la séance 4', 'NA : pas de réponse après l’élection, ou « ne sait pas »']);
+  const c_vote = avec('vote', ['les libéraux ont formé le gouvernement']);
+  const c_gagnant = avec('gagnant', ['', 'NA : n’a pas voté, vote annulé, ne sait pas']);
+  const c_avant = avec('avant', ['cps25 : la même question, pendant la campagne', '']);
+  const c_moyennes = avec('moyennes', ['le tableau 1 de l’article, en 2025']);
+  const c_modeles = avec('modeles', ['', 'à satisfaction égale avant l’élection', `vous devriez voir ${nb(N.modele1)}`, '']);
+  const c_perdants = avec('perdants', ['les numéros fixent l’ordre : « 1. Gagnant » est la référence', '', '']);
 
   // Les noms affichés pour les tableaux à une ligne.
   const NOMS7 = { scolarite: 'Scolarité', age: 'Âge', femme: 'Femme', revenu: 'Revenu', quebec: 'Québec' };
-  const NOMS8 = { catho: 'Catholique', atlantique: 'Atlantique', immigrant: 'Né.e hors du Canada' };
-
-  // Le bloc des contrôles (exécuté d'un seul tenant par R), affiché en deux diapos.
-  const coupe = CONTROLES.indexOf('df_clean$atlantique');
-  const CTRL = [CONTROLES.slice(0, coupe).trimEnd(), CONTROLES.slice(coupe)];
+  const NOMS8 = { gagnant: 'Gagnant', avant: 'Satisfaction avant l’élection' };
 
   // Le script complet : SCRIPT, vérifié dans une session R vierge (outils/seance8_data.R).
-  const TITRES = ['seance8.R · à refaire chez vous', 'seance8.R · la suite', 'seance8.R · les contrôles', 'seance8.R · modèles et tableau', 'seance8.R · si on a le temps'];
-  const C3 = COEFS.modele3.find((c) => c.terme === 'catho');
+  const TITRES = ['seance8.R · à refaire chez vous', 'seance8.R · la suite', 'seance8.R · modèles et tableau', 'seance8.R · si on a le temps'];
+  const G2 = coef(COEFS.modele2, 'gagnant');
+  const cran = (G2 / 0.33).toLocaleString('fr-CA', { maximumFractionDigits: 1 });
+  const C3 = (t) => COEFS.modele3.find((c) => c.terme === t);
+  const v3 = (t) => (C3(t).b < 0 ? '−' : '+') + Math.abs(C3(t).b).toLocaleString('fr-CA', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + C3(t).etoiles;
 </script>
 
 <svelte:head>
@@ -154,7 +156,7 @@
 
     <Slide bandeau="Citer · Zotero" droite={D}>
       <h2 class="e">Zotero : chercher, garder, citer</h2>
-      <M8Zotero doi={BLAIS.doi} />
+      <M8Zotero doi={BG.doi} />
     </Slide>
 
     <!-- ================= AJOUTER DES VARIABLES ================= -->
@@ -221,28 +223,34 @@
       <p class="lead e">Quinze minutes. Au retour, ouvrez Positron.</p>
     </Slide>
 
-    <!-- ================= BLAIS EN 2025 ================= -->
-    <Slide fond="encre" bandeau="Blais (2005), en 2025" droite={D}>
-      <h1 class="e">Blais (2005), en 2025</h1>
+    <!-- ================= BLAIS ET GÉLINEAU EN 2025 ================= -->
+    <Slide fond="encre" bandeau="Blais et Gélineau (2007), en 2025" droite={D}>
+      <h1 class="e">Blais et Gélineau (2007), en 2025</h1>
       <hr class="filet" />
-      <p class="lead e">Un président de l’Association canadienne de science politique, et sa découverte. Testons-la.</p>
+      <p class="lead e">André Blais (Montréal) et François Gélineau (Laval, votre département). Testons-les.</p>
     </Slide>
 
-    <Slide bandeau="Blais (2005)" droite={D}>
-      <h2 class="e">Pourquoi les libéraux gagnent-ils ?</h2>
-      <M8Blais />
+    <Slide bandeau="Blais et Gélineau (2007)" droite={D}>
+      <h2 class="e">Gagner une élection rend-il plus satisfait de la démocratie ?</h2>
+      <M8Gelineau />
     </Slide>
 
-    <Slide bandeau="Blais (2005), en 2025" droite={D}>
+    <Slide bandeau="Blais et Gélineau (2007)" droite={D}>
+      <h2 class="e">Leur conclusion</h2>
+      <p class="grande-q e">À satisfaction égale avant l’élection, les gagnants deviennent plus satisfaits que les perdants.</p>
+      <p class="e petit-dit">Leur tableau 2 : perdre au pays et dans sa circonscription, {BG.perdre} (probit ordonné, {nb(BG.n_tableau2)} personnes).</p>
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025" droite={D}>
       <h2 class="e">Notre question</h2>
-      <p class="grande-q e">En 2025, en Ontario et dans l’Atlantique, les catholiques votent-ils encore plus libéral ?</p>
+      <p class="grande-q e">Après l’élection du 28 avril 2025, les gagnants sont-ils plus satisfaits de la démocratie que les perdants ?</p>
       <div class="hyp">
-        <p class="e"><strong>Hypothèse :</strong> oui, à région et lieu de naissance égaux.</p>
+        <p class="e"><strong>Hypothèse :</strong> oui, à satisfaction égale avant l’élection.</p>
         <p class="e"><strong>Hypothèse nulle :</strong> aucune différence.</p>
       </div>
     </Slide>
 
-    <Slide bandeau="Blais en 2025" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025" droite={D}>
       <h2 class="e">Six étapes, lentement</h2>
       <M8Etapes />
       <div class="avant">
@@ -252,104 +260,93 @@
       </div>
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · charger" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · charger" droite={D}>
       <M8Etapes ici={1} />
       <h2 class="e">Charger, et préparer df_clean</h2>
       <Console lignes={c_charger} />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · Y" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · Y" droite={D}>
       <M8Etapes ici={2} />
-      <h2 class="e">Y : pour qui allez-vous voter ?</h2>
+      <h2 class="e">Y : satisfait de la démocratie, après l’élection ?</h2>
+      <Console lignes={c_question} />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · Y" droite={D}>
+      <M8Etapes ici={2} />
+      <h2 class="e">Y : de 0 (pas du tout) à 1 (très)</h2>
+      <Console lignes={c_apres} />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · X" droite={D}>
+      <M8Etapes ici={3} />
+      <h2 class="e">X : pour qui avez-vous voté ?</h2>
       <Console lignes={c_vote} />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · Y" droite={D}>
-      <M8Etapes ici={2} />
-      <h2 class="e">Y : libéral (1) ou un autre parti (0)</h2>
-      <Console lignes={c_liberal} />
-    </Slide>
-
-    <Slide bandeau="Blais en 2025 · X" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · X" droite={D}>
       <M8Etapes ici={3} />
-      <h2 class="e">X : quelle est votre religion ?</h2>
-      <Console lignes={c_religion} />
+      <h2 class="e">X : gagnant (1) ou perdant (0)</h2>
+      <Console lignes={c_gagnant} />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · X" droite={D}>
-      <M8Etapes ici={3} />
-      <h2 class="e">X : catholique (1) ou non (0)</h2>
-      <Console lignes={c_catho} />
-    </Slide>
-
-    <Slide bandeau="Blais en 2025 · contrôles" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · contrôle" droite={D}>
       <M8Etapes ici={4} />
-      <h2 class="e">Les contrôles, tout prêts (1/2)</h2>
-      <Console lignes={[{ in: CTRL[0], out: '', note: 'à copier tel quel' }]} />
+      <h2 class="e">Le contrôle : la même question, avant</h2>
+      <Console lignes={c_avant} />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · contrôles" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · regarder" droite={D}>
       <M8Etapes ici={4} />
-      <h2 class="e">Les contrôles, tout prêts (2/2)</h2>
-      <Console lignes={[{ in: CTRL[1], out: '', note: 'même recette : 1, 0, ou NA' }]} />
+      <h2 class="e">Avant, après : leur tableau 1, en 2025</h2>
+      <Console lignes={c_moyennes} />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · contrôles" droite={D}>
-      <M8Etapes ici={4} />
-      <h2 class="e">Garder l’échantillon de Blais</h2>
-      <Console lignes={[...c_region, ...c_filtrer]} />
+    <Slide bandeau="Blais et Gélineau, en 2025 · regarder" droite={D}>
+      <h2 class="e">1997 et 2025</h2>
+      <M8AvantApres />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · modéliser" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · modéliser" droite={D}>
       <M8Etapes ici={5} />
-      <h2 class="e">Deux modèles : seul, puis avec les contrôles</h2>
+      <h2 class="e">Deux modèles : seul, puis à satisfaction égale avant</h2>
       <Console lignes={c_modeles} />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · un Y de 0 ou 1" droite={D}>
-      <h2 class="e">Un Y de 0 ou 1 : des points de pourcentage</h2>
-      <M8ZeroUn />
-    </Slide>
-
-    <Slide bandeau="Blais en 2025 · tableau" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · tableau" droite={D}>
       <M8Etapes ici={6} />
-      <M8Image code={TABLEAU.code} img={TABLEAU.img} l={TABLEAU.l} h={TABLEAU.h} px={100} nouveau={[5, 6]} dit="deux modèles = deux colonnes" alt="Le tableau de modelsummary : le modèle « catholique seul » et le modèle avec contrôles, côte à côte, avec Num.Obs. et R2." />
+      <M8Image code={TABLEAU.code} img={TABLEAU.img} l={TABLEAU.l} h={TABLEAU.h} px={100} nouveau={[5, 6]} dit="deux modèles = deux colonnes" alt="Le tableau de modelsummary : le modèle « gagnant seul » et le modèle à satisfaction égale avant l’élection, côte à côte, avec Num.Obs. et R2." />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · lire" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · lire" droite={D}>
       <h2 class="e">Une seule ligne se lit, encore</h2>
-      <M8UneLigne coefs={COEFS.modele2} noms={NOMS8} cle="catho" n={N.modele2} titre="CES 2025 · Ontario et Atlantique · Y = vote libéral (0 ou 1)" />
+      <M8UneLigne coefs={COEFS.modele2} noms={NOMS8} cle="gagnant" n={N.modele2} titre="CES 2025 · Y = satisfaction envers la démocratie après l’élection (0 à 1)" />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · Word" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · Word" droite={D}>
       <M8Etapes ici={6} />
       <h2 class="e">Le même tableau, dans Word</h2>
       <div class="avant">
         <Code src={WORD.code} titre="seance8.R" />
-        <p class="e petit-dit">blais2025.docx apparaît dans le dossier du projet. Copiez-le dans votre travail.</p>
+        <p class="e petit-dit">gagnants2025.docx apparaît dans le dossier du projet. Copiez-le dans votre travail.</p>
         <p class="e petit-dit">Si R se plaint de pandoc : <code>pandoc::pandoc_install()</code>, une seule fois.</p>
       </div>
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · lire" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · lire" droite={D}>
       <h2 class="e">La phrase, pour notre seule ligne</h2>
-      <M8Phrase autres="région et lieu de naissance" mouvement="être catholique plutôt que non" b={coef(COEFS.modele2, 'catho')} y="de probabilité de voter libéral" pp etoiles={false} />
+      <M8Phrase autres="satisfaction avant l’élection" mouvement="avoir voté pour le parti gagnant plutôt que pour un perdant" b={G2} y="de satisfaction" fin={`Soit ${cran} « cran » de l’échelle (un cran = 0,33).`} />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · le verdict" droite={D}>
-      <h2 class="e">Blais, et nous</h2>
-      <M8Verdict />
-    </Slide>
-
-    <Slide bandeau="Blais en 2025 · honnêtement" droite={D}>
+    <Slide bandeau="Blais et Gélineau, en 2025 · honnêtement" droite={D}>
       <h2 class="e">Un test, pas une réplication</h2>
       <M8Ecarts />
     </Slide>
 
-    <Slide bandeau="Blais en 2025 · si on a le temps" droite={D}>
-      <h2 class="e">Et dans l’Ouest ? Blais : +{Math.round(BLAIS.catho_ouest * 100)} points</h2>
-      <Console lignes={c_ouest} />
-      <p class="e petit-dit">En 2025 : {(C3.b * 100).toLocaleString('fr-CA', { maximumFractionDigits: 1 }).replace('-', '−')} points, {C3.etoiles}. Le signe s’est inversé.</p>
+    <Slide bandeau="Blais et Gélineau, en 2025 · si on a le temps" droite={D}>
+      <h2 class="e">Les perdants sont-ils tous pareils ?</h2>
+      <Console lignes={c_perdants} />
+      <p class="e petit-dit">À satisfaction égale avant : conservateurs {v3('camp2. Conservateur')}, autres partis {v3('camp3. Autre parti')}. Perdre fait plus mal quand on pouvait gagner, comme en 1997 (leur tableau 4).</p>
     </Slide>
 
     <!-- ================= LE SCRIPT ================= -->
@@ -362,7 +359,7 @@
     <!-- ================= FIN ================= -->
     <Slide bandeau="Après la semaine de lecture" droite={D}>
       <h2 class="e">Le 5 novembre : votre question, à la main, puis avec l’IA</h2>
-      <p class="grande-q e">Aujourd’hui, on a testé la question de Blais. La prochaine fois, c’est la vôtre.</p>
+      <p class="grande-q e">Aujourd’hui, on a testé la question de Blais et Gélineau. La prochaine fois, c’est la vôtre.</p>
     </Slide>
 
     <Slide bandeau="Avant le 5 novembre" droite={D}>

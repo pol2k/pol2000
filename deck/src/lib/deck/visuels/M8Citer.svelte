@@ -1,8 +1,6 @@
 <script>
   /**
-   * Pourquoi citer : trois tuiles, une par clic. « Rendons à César ce qui
-   * revient à César » est de Blais lui-même (2005, p. 834), l'article de
-   * la deuxième moitié. Pas de données.
+   * Pourquoi citer : trois tuiles, une par clic. Pas de données.
    */
   import { brancherTemps } from '../temps.js';
   let e = $state(0);

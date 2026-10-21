@@ -1,7 +1,7 @@
 <script>
   /**
-   * Un test, pas une réplication : ce qui change entre Blais (2005) et
-   * notre essai sur la CES 2025. Deux colonnes, une ligne par clic.
+   * Un test, pas une réplication : ce qui change entre Blais et Gélineau
+   * (2007) et notre essai sur la CES 2025. Deux colonnes, une ligne par clic.
    */
   import { brancherTemps } from '../temps.js';
   let e = $state(0);
@@ -12,16 +12,16 @@
     return brancherTemps(hote, { total: 4, lire: () => e, ecrire: (v) => (e = v) });
   });
   const LIGNES = [
-    { quoi: 'Les données', blais: '11 études électorales empilées, 1965-2004', nous: 'une seule, 2025' },
-    { quoi: 'Le vote', blais: 'le vote libéral', nous: 'l’intention de vote, pendant la campagne' },
-    { quoi: 'L’origine', blais: 'six groupes d’origine ethnique', nous: 'né.e hors du Canada (en 2025, l’origine est du texte libre)' },
-    { quoi: 'La méthode', blais: 'un logit, traduit en « impact »', nous: 'une régression linéaire, × 100' },
-    { quoi: 'Pareil', blais: 'l’Ontario et l’Atlantique, sans le Québec', nous: 'idem' }
+    { quoi: 'Les données', blais: 'CES 1997, avant et après l’élection', nous: 'CES 2025, avant et après l’élection' },
+    { quoi: 'Gagner', blais: 'au pays et dans sa circonscription', nous: 'au pays seulement' },
+    { quoi: 'Les contrôles', blais: 'satisfaction avant, économie, cynisme, partis, région, âge…', nous: 'satisfaction avant seulement' },
+    { quoi: 'La méthode', blais: 'un probit ordonné', nous: 'une régression linéaire' },
+    { quoi: 'Pareil', blais: 'même question, de 0 à 1 · les libéraux réélus', nous: 'idem' }
   ];
 </script>
 
 <div class="visuel m8e" bind:this={hote}>
-  <div class="ligne tete"><span></span><span>Blais (2005)</span><span class="rouge">Nous (2025)</span></div>
+  <div class="ligne tete"><span></span><span>Blais et Gélineau (2007)</span><span class="rouge">Nous (2025)</span></div>
   {#each LIGNES as l, i}
     <div class="ligne" class:vu={e >= i} class:pareil={i === 4}>
       <strong>{l.quoi}</strong><span>{l.blais}</span><span class="nous">{l.nous}</span>

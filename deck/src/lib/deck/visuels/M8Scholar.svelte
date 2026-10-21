@@ -30,8 +30,8 @@
   <div class="carte" class:vu={e >= 1}>
     <div class="haut">
       <div>
-        <p class="titre">Accounting for the Electoral Success of the Liberal Party in Canada</p>
-        <p class="qui">A Blais · Canadian Journal of Political Science, 2005</p>
+        <p class="titre">Winning, Losing and Satisfaction with Democracy</p>
+        <p class="qui">A Blais, F Gélineau · Political Studies, 2007</p>
         <span class="barre"></span><span class="barre courte"></span>
       </div>
       <span class="lien" class:allume={e === 1}>Obtenir@ULaval</span>

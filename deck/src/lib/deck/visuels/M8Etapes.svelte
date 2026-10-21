@@ -1,13 +1,13 @@
 <script>
   /**
-   * Le parcours de « Blais en 2025 » (séance 8), en bande mince en tête de
+   * Le parcours de « Blais et Gélineau en 2025 » (séance 8), en bande mince en tête de
    * chaque diapo de code (comme TmParcours) : l'étape du moment en rouge,
    * celles d'avant cochées, celles d'après pâles.
    *
    * ici = 1 à 6 (l'étape en cours); 0 = toutes à égalité (vue d'ensemble).
    */
   let { ici = 0 } = $props();
-  const ETAPES = ['Charger', 'Y : le vote', 'X : catholique', 'Contrôles', 'Modéliser', 'Tableau'];
+  const ETAPES = ['Charger', 'Y : après', 'X : gagnant', 'Contrôle : avant', 'Modéliser', 'Tableau'];
 </script>
 
 <ol class="visuel m8-etapes" aria-label="Les six étapes{ici ? `, étape ${ici}` : ''}">

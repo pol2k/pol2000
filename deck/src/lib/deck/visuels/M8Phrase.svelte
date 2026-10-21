@@ -20,9 +20,10 @@
    *   echelle    — « sur 10 » (b × 10), ou '' pour ne pas convertir
    *   pp         — true : un Y de 0 ou 1, converti en points de pourcentage (b × 100)
    *   etoiles    — false : le coefficient n'a pas d'étoile
+   *   fin        — une phrase de fin à la place de la conversion (le mot clé en gras)
    */
   import { brancherTemps } from '../temps.js';
-  let { autres, mouvement, b, y = 'd’intérêt', echelle = 'sur 10', pp = false, etoiles = true } = $props();
+  let { autres, mouvement, b, y = 'd’intérêt', echelle = 'sur 10', pp = false, etoiles = true, fin = '' } = $props();
 
   let e = $state(0);
   let hote = $state(null);
@@ -44,7 +45,7 @@
   <p class="ligne"><span class="case" class:pleine={e >= 2}><span class="vide">X, de son minimum à son maximum</span><span class="mot">{mouvement}</span></span></p>
   <p class="ligne">est associé à <span class="case" class:pleine={e >= 3}><span class="vide">le coefficient</span><span class="mot">{f(b, pp || Math.abs(b) < 0.01 ? 3 : 2)} {sens}</span></span> {y} (sur 1).</p>
   <p class="fin" class:vu={e >= 4}>
-    {#if pp}Soit <strong>{dix} {point} {sens}</strong>.{:else if etoiles && echelle}Soit <strong>{dix} {point} {sens}</strong> {echelle}.{/if}
+    {#if fin}<strong>{fin}</strong>{:else if pp}Soit <strong>{dix} {point} {sens}</strong>.{:else if etoiles && echelle}Soit <strong>{dix} {point} {sens}</strong> {echelle}.{/if}
     {#if !etoiles}<strong>Pas d’étoile</strong>{' '}: on ne peut pas le distinguer de zéro.{/if}
   </p>
 </div>

@@ -13,16 +13,18 @@
 #    fin que le modèle à plusieurs variables est celui de seance7.js
 #    (MULTIPLE).
 #
-# 2. Blais en 2025 (après la pause) : Blais (2005, CJPS 38:4) trouve, en
-#    Ontario et dans l'Atlantique de 1965 à 2004, que les catholiques ont
-#    18 points de plus de chances de voter libéral. On le teste sur toute la
-#    CES 2025 : deux variables nettoyées en classe (liberal, catho), les
-#    contrôles fournis tout prêts. Le code affiché est une chaîne, et c'est
+# 2. Blais et Gélineau en 2025 (après la pause) : Blais et Gélineau (2007,
+#    Political Studies 55:2) trouvent, dans la CES 1997, que les gagnants
+#    d'une élection deviennent plus satisfaits de la démocratie que les
+#    perdants, même à satisfaction égale avant l'élection. La CES 2025 pose
+#    la même question pendant la campagne et après l'élection, aux mêmes
+#    personnes : on le teste. Deux variables nettoyées en classe (apres,
+#    gagnant), puis le contrôle (avant), même recette que Y. Le code affiché est une chaîne, et c'est
 #    CETTE chaîne qui est exécutée (eval(parse())), dans un dossier
 #    temporaire qui contient ces2025.rds, comme le dossier de la salle. La
 #    syntaxe est celle de la séance 4 (df_raw, df_clean, case_when). Le
 #    tableau est rendu par modelsummary lui-même. Rien n'est retapé à la
-#    main, sauf les chiffres publiés de Blais (BLAIS, ci-dessous, cités).
+#    main, sauf les chiffres publiés de l'article (BG, ci-dessous, cités).
 suppressPackageStartupMessages({ library(haven); library(modelsummary); library(ggplot2) })
 options(width = 100)
 
@@ -135,24 +137,22 @@ stopifnot(ESCALIER$n == nobs(m_multi))
 MULTI <- list(n_modele = nobs(m_multi), r2 = r(summary(m_multi)$r.squared, 3), coefs = coefs(m_multi), age_max = AGE_MAX)
 
 # ======================================================================
-# 2. BLAIS EN 2025 : le code exact de la salle, exécuté tel quel.
+# 2. BLAIS ET GÉLINEAU EN 2025 : le code exact de la salle, exécuté tel quel.
 # ======================================================================
-# Ce que Blais a publié : son tableau 1 (p. 824) et son tableau 2 (p. 826),
-# recopiés de l'article. Logit, CES 1965-2004 empilées. « Impact » : la
-# différence de probabilité de voter libéral (sa note 1).
-BLAIS <- list(
-  reference = "Blais, André. 2005. « Accounting for the Electoral Success of the Liberal Party in Canada ». Revue canadienne de science politique 38 (4) : 821-840.",
-  doi = "10.1017/S0008423905050304",
-  est = list(titre = "Ontario et Atlantique", n = 11157, lignes = list(
-    list(nom = "Atlantique", coef = "0,00", impact = ""),
-    list(nom = "Catholique", coef = "0,72**", impact = "0,18", cle = TRUE),
-    list(nom = "Français", coef = "0,33**", impact = "0,08"),
-    list(nom = "Europe de l'Est", coef = "0,03", impact = ""),
-    list(nom = "Europe du Sud", coef = "0,53**", impact = "0,13"),
-    list(nom = "Europe de l'Ouest", coef = "−0,20**", impact = "−0,05"),
-    list(nom = "Asie, Amérique latine, Afrique", coef = "0,98**", impact = "0,23"),
-    list(nom = "Constante", coef = "−0,48**", impact = ""))),
-  catho = 0.18, catho_ouest = 0.12, n_ouest = 6736
+# Ce que l'article publie : son tableau 1 (p. 431), recopié. La satisfaction
+# envers la démocratie de 0 à 1, avant et après l'élection de 1997, mêmes
+# personnes (CES 1997). Et la ligne clé de son tableau 2 (p. 432, probit
+# ordonné) : perdre aux deux niveaux, à satisfaction égale avant.
+BG <- list(
+  reference = "Blais, André et François Gélineau. 2007. « Winning, Losing and Satisfaction with Democracy ». Political Studies 55 (2) : 425-441.",
+  doi = "10.1111/j.1467-9248.2007.00659.x",
+  tableau1 = list(
+    list(groupe = "Gagne au pays et dans sa circonscription", court = "gagnants", avant = 0.645, apres = 0.738, diff = "+0,09", n = 373, cle = "gagnant"),
+    list(groupe = "Gagne au pays, perd dans sa circonscription", court = "", avant = 0.634, apres = 0.688, diff = "+0,05", n = 206),
+    list(groupe = "Perd au pays, gagne dans sa circonscription", court = "", avant = 0.455, apres = 0.587, diff = "+0,13", n = 428),
+    list(groupe = "Perd au pays et dans sa circonscription", court = "perdants", avant = 0.526, apres = 0.579, diff = "+0,05", n = 624, cle = "perdant"),
+    list(groupe = "N'a pas voté", court = "abstention", avant = 0.493, apres = 0.577, diff = "+0,08", n = 503, cle = "abstention")),
+  perdre = "−0,447***", n_tableau2 = 1922
 )
 
 tmp <- tempfile("s8-"); dir.create(tmp)
@@ -174,61 +174,56 @@ ATELIER$charger <- console(
   "nrow(df_raw)",
   "df_clean <- data.frame(id = 1:nrow(df_raw))"
 )
-# Y : le vote libéral (intention de vote pendant la campagne).
+# Y : la satisfaction envers la démocratie, APRÈS l'élection (sondage postélectoral).
+ATELIER$question <- console(
+  "table(as_factor(df_raw$pes25_dem_sat))"
+)
+ATELIER$apres <- console(
+  paste0("df_clean$apres <- case_when(\n",
+         "  df_raw$pes25_dem_sat == 1 ~ 1,      # très satisfait\n",
+         "  df_raw$pes25_dem_sat == 2 ~ 0.67,   # plutôt satisfait\n",
+         "  df_raw$pes25_dem_sat == 3 ~ 0.33,   # peu satisfait\n",
+         "  df_raw$pes25_dem_sat == 4 ~ 0       # pas du tout satisfait\n",
+         ")"),
+  "table(df_clean$apres, useNA = \"ifany\")"
+)
+# X : a voté pour le parti gagnant (les libéraux) ou pour un autre.
 ATELIER$vote <- console(
-  "table(as_factor(df_raw$cps25_votechoice))"
+  "table(as_factor(df_raw$pes25_votechoice2025))"
 )
-ATELIER$liberal <- console(
-  paste0("df_clean$liberal <- case_when(\n",
-         "  df_raw$cps25_votechoice == 1 ~ 1,             # le Parti libéral\n",
-         "  df_raw$cps25_votechoice %in% c(2:6, 8) ~ 0    # un autre parti\n",
-         "  # 7 (ne sait pas) : aucune ligne, donc NA\n",
+ATELIER$gagnant <- console(
+  paste0("df_clean$gagnant <- case_when(\n",
+         "  df_raw$pes25_votechoice2025 == 1 ~ 1,          # les libéraux ont gagné\n",
+         "  df_raw$pes25_votechoice2025 %in% 2:7 ~ 0       # un autre parti\n",
+         "  # 8 (vote annulé), 9 (ne sait pas) : aucune ligne, donc NA\n",
          ")"),
-  "table(df_clean$liberal, useNA = \"ifany\")"
+  "table(df_clean$gagnant, useNA = \"ifany\")"
 )
-# X : catholique ou non.
-ATELIER$religion <- console(
-  "table(df_raw$cps25_religion)"
-)
-ATELIER$catho <- console(
-  paste0("df_clean$catho <- case_when(\n",
-         "  df_raw$cps25_religion == 10 ~ 1,   # catholique\n",
-         "  df_raw$cps25_religion <= 22 ~ 0    # une autre religion, ou aucune\n",
-         "  # 23 (ne sait pas) : aucune ligne, donc NA\n",
+# Le contrôle : la même question, AVANT l'élection (sondage de campagne).
+ATELIER$avant <- console(
+  paste0("df_clean$avant <- case_when(\n",
+         "  df_raw$cps25_demsat == 1 ~ 1,\n",
+         "  df_raw$cps25_demsat == 2 ~ 0.67,\n",
+         "  df_raw$cps25_demsat == 3 ~ 0.33,\n",
+         "  df_raw$cps25_demsat == 4 ~ 0\n",
          ")"),
-  "table(df_clean$catho, useNA = \"ifany\")"
+  "table(df_clean$avant, useNA = \"ifany\")"
 )
-# Les contrôles, fournis tout prêts (un bloc à copier).
-CONTROLES <- paste0(
-  "# Les contrôles, tout prêts : copiez-collez ce bloc\n",
-  "df_clean$region <- case_when(\n",
-  "  df_raw$cps25_province == 9 ~ \"Ontario\",\n",
-  "  df_raw$cps25_province %in% c(4, 5, 7, 10) ~ \"Atlantique\",\n",
-  "  df_raw$cps25_province %in% c(1, 2, 3, 12) ~ \"Ouest\"\n",
-  "  # le Québec et les territoires : NA, comme chez Blais\n",
-  ")\n",
-  "df_clean$atlantique <- case_when(\n",
-  "  df_clean$region == \"Atlantique\" ~ 1,\n",
-  "  df_clean$region == \"Ontario\" ~ 0\n",
-  ")\n",
-  "df_clean$immigrant <- case_when(\n",
-  "  df_raw$cps25_bornin_canada == 2 ~ 1,   # né.e hors du Canada\n",
-  "  df_raw$cps25_bornin_canada == 1 ~ 0\n",
-  ")")
-ATELIER$controles <- console(CONTROLES, "table(df_clean$region, useNA = \"ifany\")")
-ATELIER$filtrer <- console(
-  "df_blais <- filter(df_clean, region %in% c(\"Ontario\", \"Atlantique\"))",
-  "nrow(df_blais)"
+# Le tableau 1 de l'article, en 2025 : les moyennes avant et après.
+ATELIER$moyennes <- console(
+  paste0("df_clean |>\n",
+         "  filter(!is.na(gagnant), !is.na(apres), !is.na(avant)) |>\n",
+         "  group_by(gagnant) |>\n",
+         "  summarise(avant = mean(avant), apres = mean(apres), n = n())")
 )
 ATELIER$modeles <- console(
-  "modele1 <- lm(liberal ~ catho, data = df_blais)",
-  "modele2 <- lm(liberal ~ catho + atlantique + immigrant, data = df_blais)",
+  "modele1 <- lm(apres ~ gagnant, data = df_clean)",
+  "modele2 <- lm(apres ~ gagnant + avant, data = df_clean)",
   "nobs(modele1)",
   "nobs(modele2)"
 )
-MANQUANTS <- as.list(colSums(is.na(df_blais[, c("liberal", "catho", "atlantique", "immigrant")])))
-# Garde-fou : l'essai exploratoire du 21 octobre (n = 5 835, b = 0,017).
-stopifnot(nobs(modele2) == 5835, abs(coef(modele2)[["catho"]] - 0.017) < 0.002)
+# Garde-fou : l'essai exploratoire du 21 octobre (n = 11 632, b = 0,144).
+stopifnot(nobs(modele2) == 11632, abs(coef(modele2)[["gagnant"]] - 0.144) < 0.003)
 
 # Une image rendue par modelsummary : on ajoute seulement output = "….png" à
 # la dernière ligne, comme dans outils/seance7_ms.R.
@@ -247,9 +242,9 @@ rendre_png <- function(code, fichier) {
 TABLEAU <- rendre_png(paste0(
   "library(modelsummary)\n",
   "options(OutDec = \",\")\n",
-  "noms <- c(\"(Intercept)\" = \"Constante\", \"catho\" = \"Catholique\",\n",
-  "  \"atlantique\" = \"Atlantique\", \"immigrant\" = \"Né.e hors du Canada\")\n",
-  "modeles <- list(\"Catholique seul\" = modele1, \"Avec contrôles\" = modele2)\n",
+  "noms <- c(\"(Intercept)\" = \"Constante\", \"gagnant\" = \"Gagnant\",\n",
+  "  \"avant\" = \"Satisfaction avant l'élection\")\n",
+  "modeles <- list(\"Gagnant seul\" = modele1, \"À satisfaction égale avant\" = modele2)\n",
   "modelsummary(modeles, stars = TRUE, coef_rename = noms,\n",
   "  gof_map = c(\"nobs\", \"r.squared\"))"), "s8-tableau.png")
 
@@ -257,47 +252,58 @@ TABLEAU <- rendre_png(paste0(
 # fournit le programme pandoc lui-même).
 WORD <- list(code = paste0(
   "modelsummary(modeles, stars = TRUE, coef_rename = noms,\n",
-  "  gof_map = c(\"nobs\", \"r.squared\"), output = \"blais2025.docx\")"))
+  "  gof_map = c(\"nobs\", \"r.squared\"), output = \"gagnants2025.docx\")"))
 eval(parse(text = WORD$code), envir = globalenv())
-stopifnot(file.exists("blais2025.docx"))
+stopifnot(file.exists("gagnants2025.docx"))
 
-# Si on a le temps : l'Ouest (le tableau 2 de Blais : 12 points).
-ATELIER$ouest <- console(
-  "df_ouest <- filter(df_clean, region == \"Ouest\")",
-  "modele3 <- lm(liberal ~ catho + immigrant, data = df_ouest)",
+# Si on a le temps : les perdants sont-ils tous pareils ? (le tableau 4 de
+# l'article : les perdants qui pouvaient gouverner, PC et Réforme, contre
+# les autres).
+ATELIER$perdants <- console(
+  paste0("df_clean$camp <- case_when(\n",
+         "  df_raw$pes25_votechoice2025 == 1 ~ \"1. Gagnant\",\n",
+         "  df_raw$pes25_votechoice2025 == 2 ~ \"2. Conservateur\",\n",
+         "  df_raw$pes25_votechoice2025 %in% 3:7 ~ \"3. Autre parti\"\n",
+         ")"),
+  "modele3 <- lm(apres ~ camp + avant, data = df_clean)",
   "round(coef(modele3), 3)"
 )
 options(OutDec = ".")
-# Le vote libéral chez les non-catholiques et chez les catholiques
-# (modele1 : la constante, puis la constante + le coefficient).
-parts <- tapply(model.frame(modele1)$liberal, model.frame(modele1)$catho, mean)
+
+# La figure avant/après : les trois groupes de l'article, en 2025. Les
+# abstentionnistes (pes25_turnout2025 de 2 à 5) ne sont pas dans le code de
+# la salle; calculés ici, de la même façon.
+s01 <- function(v) ifelse(v == 1, 1, ifelse(v == 2, 0.67, ifelse(v == 3, 0.33, ifelse(v == 4, 0, NA))))
+to <- as.numeric(d$pes25_turnout2025)
+abst <- data.frame(apres = s01(as.numeric(d$pes25_dem_sat)), avant = s01(as.numeric(d$cps25_demsat)))[to %in% 2:5, ]
+abst <- abst[complete.cases(abst), ]
+k <- df_clean[!is.na(df_clean$gagnant) & !is.na(df_clean$apres) & !is.na(df_clean$avant), ]
+groupe <- function(g) list(avant = r(mean(g$avant), 3), apres = r(mean(g$apres), 3), n = nrow(g))
+AVANT_APRES <- list(gagnants = groupe(k[k$gagnant == 1, ]), perdants = groupe(k[k$gagnant == 0, ]), abstention = groupe(abst))
+
 COEFS <- list(modele1 = coefs(modele1), modele2 = coefs(modele2), modele3 = coefs(modele3),
-              manquants = MANQUANTS, n_ces = nrow(df_raw), n_blais = nrow(df_blais),
-              parts = list(non = r(parts[["0"]]), catho = r(parts[["1"]])),
-              n_groupes = as.list(table(model.frame(modele1)$catho)),
+              n_ces = nrow(df_raw),
               n = list(modele1 = nobs(modele1), modele2 = nobs(modele2), modele3 = nobs(modele3)))
-stopifnot(abs(COEFS$parts$catho - COEFS$parts$non - coef(modele1)[["catho"]]) < 1e-3)
 setwd(ancien)
 
 # ---- Le script complet de la salle : tout le code affiché, dans l'ordre, en
-# cinq morceaux (une diapo chacun). Il doit tourner seul, dans une session R
+# quatre morceaux (une diapo chacun). Il doit tourner seul, dans une session R
 # vierge (Rscript --vanilla), dans un dossier qui ne contient que
 # ces2025.rds : c'est ce que la salle fera.
 ins <- function(cle) paste(sapply(ATELIER[[cle]], `[[`, "in"), collapse = "\n")
 SCRIPT <- c(
-  paste0("# POL-2000 · séance 8 · Blais (2005) en 2025\n",
+  paste0("# POL-2000 · séance 8 · Blais et Gélineau (2007) en 2025\n",
          "# À refaire chez vous, ligne par ligne, Ctrl + Entrée.\n\n",
-         ins("charger"), "\n\n", ins("vote"), "\n", ins("liberal")),
-  paste(ins("religion"), ins("catho"), sep = "\n\n"),
-  ins("controles"),
-  paste(ins("filtrer"), ins("modeles"), TABLEAU$code, WORD$code, sep = "\n\n"),
-  paste0("# Si on a le temps : l'Ouest\n", ins("ouest"))
+         ins("charger"), "\n\n", ins("question"), "\n", ins("apres")),
+  paste(ins("vote"), ins("gagnant"), ins("avant"), sep = "\n\n"),
+  paste(ins("moyennes"), ins("modeles"), TABLEAU$code, WORD$code, sep = "\n\n"),
+  paste0("# Si on a le temps : les perdants sont-ils tous pareils ?\n", ins("perdants"))
 )
 vierge <- tempfile("s8-vierge-"); dir.create(vierge)
 saveRDS(d, file.path(vierge, "ces2025.rds"))
 writeLines(paste(SCRIPT, collapse = "\n\n"), file.path(vierge, "seance8.R"))
 statut <- system(sprintf("cd %s && Rscript --vanilla seance8.R > /dev/null 2>&1", shQuote(vierge)))
-stopifnot(statut == 0, file.exists(file.path(vierge, "blais2025.docx")))
+stopifnot(statut == 0, file.exists(file.path(vierge, "gagnants2025.docx")))
 
 # ---- Écriture.
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
@@ -314,23 +320,22 @@ writeLines(c(
   paste0("export const ESCALIER = ", J(ESCALIER), ";"),
   "/* Le modèle à plusieurs variables de la séance 7. */",
   paste0("export const MULTI = ", J(MULTI), ";"),
-  "/* Blais (2005), tableau 1 (p. 824) et tableau 2 (p. 826) : recopiés de l'article. */",
-  paste0("export const BLAIS = ", J(BLAIS), ";"),
-  "/* Blais en 2025 : toute la CES. Les consoles, à options(width = 100), dans l'ordre. */",
+  "/* Blais et Gélineau (2007), tableau 1 (p. 431) et une ligne du tableau 2 : recopiés de l'article. */",
+  paste0("export const BG = ", J(BG), ";"),
+  "/* Blais et Gélineau en 2025 : toute la CES. Les consoles, à options(width = 100), dans l'ordre. */",
   paste0("export const ATELIER = ", J(ATELIER), ";"),
-  paste0("export const CONTROLES = ", J(CONTROLES), ";"),
   "/* Le tableau à deux colonnes (image) et le même tableau dans Word. */",
   paste0("export const TABLEAU = ", J(TABLEAU), ";"),
   paste0("export const WORD = ", J(WORD), ";"),
-  "/* Les coefficients des modèles, N et le vote libéral par groupe. */",
+  "/* La satisfaction avant et après, par groupe, en 2025. */",
+  paste0("export const AVANT_APRES = ", J(AVANT_APRES), ";"),
+  "/* Les coefficients des modèles et N. */",
   paste0("export const COEFS = ", J(COEFS), ";"),
-  "/* Le script complet, en cinq morceaux : vérifié dans une session R vierge. */",
+  "/* Le script complet, en quatre morceaux : vérifié dans une session R vierge. */",
   paste0("export const SCRIPT = ", J(SCRIPT), ";")
 ), file.path(ici, "..", "src", "lib", "data", "seance8.js"))
 
-cat("PARALLELES n =", PARALLELES$n, " seule b1 =", PARALLELES$seule[[2]]$b, " deux :", sapply(PARALLELES$deux, `[[`, "b"), "\n")
-cat("TRANCHES :", TRANCHES$b1_seul, "->", TRANCHES$b1_a_egal, "\n")
 cat("ESCALIER :", sapply(ESCALIER$modeles, `[[`, "b"), "\n")
 for (m in c("modele1", "modele2", "modele3")) cat(m, "n =", COEFS$n[[m]], ":", sapply(COEFS[[m]], function(c) paste0(c$terme, " ", c$b, c$etoiles, " [", c$bas, "; ", c$haut, "]")), "\n")
-cat("parts :", unlist(COEFS$parts), " groupes :", unlist(COEFS$n_groupes), " manquants :", unlist(MANQUANTS), "\n")
+str(AVANT_APRES)
 cat("tableau", TABLEAU$l, "x", TABLEAU$h, "\n")

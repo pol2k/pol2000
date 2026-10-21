@@ -1,12 +1,12 @@
 <script>
   /**
    * Le plan de la séance 8, en trois blocs : citer (Zotero), ajouter des
-   * variables, la pause, puis Blais (2005) testé en 2025. Pas de temps.
+   * variables, la pause, puis Blais et Gélineau (2007) testés en 2025.
    */
   const BLOCS = [
     { n: '1', titre: 'Citer', items: ['Google Scholar', 'Zotero'] },
     { n: '2', titre: 'Ajouter des variables', items: ['À âge égal', 'Une seule ligne se lit'] },
-    { n: '3', titre: 'Blais (2005), en 2025', items: ['Deux variables, du brut au modèle', 'Le tableau, jusque dans Word'] }
+    { n: '3', titre: 'Blais et Gélineau (2007), en 2025', items: ['Deux variables, du brut au modèle', 'Le tableau, jusque dans Word'] }
   ];
 </script>
 
