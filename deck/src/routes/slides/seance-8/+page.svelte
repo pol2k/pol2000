@@ -57,6 +57,12 @@
   import M8Limites from '$lib/deck/visuels/M8Limites.svelte';
   import M8Gelineau from '$lib/deck/visuels/M8Gelineau.svelte';
   import M8Tableau2 from '$lib/deck/visuels/M8Tableau2.svelte';
+  import M8Art1 from '$lib/deck/visuels/M8Art1.svelte';
+  import M8Art2 from '$lib/deck/visuels/M8Art2.svelte';
+  import M8Art3 from '$lib/deck/visuels/M8Art3.svelte';
+  import M8Art4 from '$lib/deck/visuels/M8Art4.svelte';
+  import M8Art5 from '$lib/deck/visuels/M8Art5.svelte';
+  import M8Art6 from '$lib/deck/visuels/M8Art6.svelte';
   import M8LeurTP from '$lib/deck/visuels/M8LeurTP.svelte';
   import TmParcours from '$lib/deck/visuels/TmParcours.svelte';
   import M8Etapes from '$lib/deck/visuels/M8Etapes.svelte';
@@ -218,37 +224,37 @@
     <Slide bandeau="Leur TP 1 · étape 1" droite={D}>
       <TmParcours ici={1} />
       <h2 class="e">Une question claire</h2>
-      <M8LeurTP etape={1} />
+      <M8Art1 />
     </Slide>
 
     <Slide bandeau="Leur TP 1 · étape 2" droite={D}>
       <TmParcours ici={2} />
-      <h2 class="e">La littérature et une théorie</h2>
-      <M8LeurTP etape={2} />
+      <h2 class="e">La littérature, comme à Risk</h2>
+      <M8Art2 />
     </Slide>
 
     <Slide bandeau="Leur TP 1 · étape 3" droite={D}>
       <TmParcours ici={3} />
-      <h2 class="e">Une hypothèse et son hypothèse nulle</h2>
-      <M8LeurTP etape={3} />
+      <h2 class="e">Des hypothèses tirées de la littérature</h2>
+      <M8Art3 />
     </Slide>
 
     <Slide bandeau="Leur TP 1 · étape 4" droite={D}>
       <TmParcours ici={4} />
       <h2 class="e">Les données et les variables</h2>
-      <M8LeurTP etape={4} />
+      <M8Art4 />
     </Slide>
 
     <Slide bandeau="Leur TP 1 · étape 5" droite={D}>
       <TmParcours ici={5} />
       <h2 class="e">La pertinence : ok, donc ?</h2>
-      <M8LeurTP etape={5} />
+      <M8Art5 />
     </Slide>
 
     <Slide bandeau="Leur TP 1 · étape 6" droite={D}>
       <TmParcours ici={6} />
       <h2 class="e">La contribution</h2>
-      <M8LeurTP etape={6} />
+      <M8Art6 />
     </Slide>
 
     <Slide bandeau="Leur TP 1 · étape 7" droite={D}>
