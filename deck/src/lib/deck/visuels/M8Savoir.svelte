@@ -1,26 +1,27 @@
 <script>
   /**
-   * Une variable qui change beaucoup la pente : le temps passé aux nouvelles
-   * (cps25_news_cons). Même dessin que l'âge (M8Pente) : les mêmes points,
-   * les mêmes axes. Puis le piège : la scolarité mène aux nouvelles, c'est
-   * un descendant de X. Règle 1 d'Arel-Bundock (M8DeuxRegles) : on ne la
-   * contrôle pas. Aucune variable de la CES d'avant la scolarité ne change
-   * autant la pente (outils/seance8_bruit.R).
+   * Une variable qui change beaucoup la pente : savoir le nom de la
+   * gouverneure générale du Canada (CES 2025, pendant la campagne :
+   * « What is the name of the Governor-General of Canada? », Mary Simon).
+   * Même dessin que l'âge (M8Pente) : les mêmes points, les mêmes axes.
+   * Puis le piège : la scolarité mène à le savoir, c'est un descendant de
+   * X. Règle 1 d'Arel-Bundock (M8DeuxRegles) : on ne la contrôle pas.
+   * Aucune variable de la CES d'avant la scolarité ne change autant la
+   * pente (outils/seance8_bruit.R).
    *
-   *   0  la droite de la scolarité seule;
-   *   1  les nouvelles entrent dans le modèle : la droite glisse (celle de
-   *      quelqu'un qui ne suit pas les nouvelles), la pente baisse beaucoup;
-   *   2  une droite par temps passé aux nouvelles : parallèles, la même
-   *      pente, écrite sur chacune;
-   *   3  le piège : scolarité → nouvelles → intérêt. Un descendant.
+   *   0  la droite de la scolarité seule, et la question;
+   *   1  « sait » entre dans le modèle : la droite glisse (celle de qui ne
+   *      sait pas), la pente baisse beaucoup;
+   *   2  la droite de qui sait : parallèle, la même pente;
+   *   3  le piège : scolarité → sait son nom. Un descendant.
    *
-   * Tout vient de NOUVELLES et POINTS (src/lib/data/seance8_bruit.js).
+   * Tout vient de SAVOIR et POINTS (src/lib/data/seance8_bruit.js).
    */
   import { Tween } from 'svelte/motion';
   import { cubicInOut } from 'svelte/easing';
   import { brancherTemps } from '../temps.js';
   import { PARALLELES as P } from '$lib/data/seance8.js';
-  import { NOUVELLES as A, POINTS } from '$lib/data/seance8_bruit.js';
+  import { SAVOIR as A, POINTS } from '$lib/data/seance8_bruit.js';
 
   let e = $state(0);
   let hote = $state(null);
@@ -45,7 +46,10 @@
   const px = (x) => X0 + x * LX;
   const py = (y) => Y0 - y * LY;
   const AX = X0 - 50;
-  const PAN = 960; // la colonne de droite
+  // Les deux ordonnées à l'origine sont proches ici : pas de flèche, les
+  // deux valeurs s'écartent l'une de l'autre.
+  const SERRE = Math.abs(A.seule.b0 - A.avec.b0) * 400 < 60;
+  const PAN = 990; // la colonne de droite
   const NIV = ['Secondaire non terminé', 'Secondaire', 'Collégial', 'Université, 1er cycle', 'Maîtrise, doctorat'];
   const PTS = P.points.filter((p, i) => POINTS[i].m === 1);
   const b0 = $derived(ligne.current[0]);
@@ -56,7 +60,7 @@
 </script>
 
 <div class="visuel m8a" bind:this={hote}>
-  <svg viewBox="0 0 1200 560" role="img" aria-label="Notre sondage : la droite de la scolarité seule a une pente de {sg(A.seule.b1)}. Avec le temps passé aux nouvelles dans le modèle, la pente tombe à {sg(A.avec.b1)}. Une droite par temps passé aux nouvelles, parallèles. Mais la scolarité mène aux nouvelles : c'est un descendant, on ne le contrôle pas.">
+  <svg viewBox="0 0 1200 560" role="img" aria-label="Notre sondage : la droite de la scolarité seule a une pente de {sg(A.seule.b1)}. La question : quel est le nom de la gouverneure générale du Canada ? Avec « sait son nom » dans le modèle, la pente tombe à {sg(A.avec.b1)}. Deux droites parallèles, sait et ne sait pas. Mais la scolarité mène à le savoir : c'est un descendant, on ne le contrôle pas.">
     <!-- Axes -->
     <line x1={AX} y1={Y0 + 10} x2={X0 + LX + 40} y2={Y0 + 10} class="axe" />
     <line x1={AX} y1={Y0 + 10} x2={AX} y2={py(1) - 6} class="axe" />
@@ -100,11 +104,11 @@
     <!-- L'ordonnée à l'origine, sur l'axe -->
     <text x={AX - 16} y={py(A.seule.b0) - 58} class="cap fin">ordonnée</text>
     <text x={AX - 16} y={py(A.seule.b0) - 34} class="cap fin">à l’origine</text>
-    <text x={AX - 16} y={py(A.seule.b0) + 8} class="val fin" class:pale={e >= 1}>{f(A.seule.b0)}</text>
+    <text x={AX - 16} y={py(A.seule.b0) + 8 - (SERRE && e >= 1 ? 14 : 0)} class="val fin" class:pale={e >= 1}>{f(A.seule.b0)}</text>
     <g class="etape" class:vu={e >= 1}>
-      <line x1={AX - 40} y1={py(A.seule.b0) + 18} x2={AX - 40} y2={py(A.avec.b0) - 30} class="fl" />
-      <polygon points="{AX - 40},{py(A.avec.b0) - 18} {AX - 48},{py(A.avec.b0) - 32} {AX - 32},{py(A.avec.b0) - 32}" class="tete" />
-      <text x={AX - 16} y={py(A.avec.b0) + 8} class="val fin rouge">{f(A.avec.b0)}</text>
+      {#if !SERRE}<line x1={AX - 40} y1={py(A.seule.b0) + 18} x2={AX - 40} y2={py(A.avec.b0) - 30} class="fl" />
+      <polygon points="{AX - 40},{py(A.avec.b0) - 18} {AX - 48},{py(A.avec.b0) - 32} {AX - 32},{py(A.avec.b0) - 32}" class="tete" />{/if}
+      <text x={AX - 16} y={py(A.avec.b0) + 8 + (SERRE ? 14 : 0)} class="val fin rouge">{f(A.avec.b0)}</text>
     </g>
 
     <!-- Au bout des droites -->
@@ -113,30 +117,36 @@
       <text x={px(1) + 22} y={py(L0.b0 + L0.b1) + 8} class="lab rouge">{L0.nom}</text>
     </g>
 
+    <!-- À droite : la question -->
+    <g>
+      <text x={PAN} y="40" class="q-eti">LA QUESTION</text>
+      <text x={PAN} y="70" class="q-t">Quel est le nom</text>
+      <text x={PAN} y="94" class="q-t">de la gouverneure</text>
+      <text x={PAN} y="118" class="q-t">générale du Canada ?</text>
+      <text x={PAN} y="150" class="q-r">{Math.round(A.part * 100)} % disent Mary Simon</text>
+    </g>
+
     <!-- À droite : la pente -->
     <g class="pan">
       <text x={PAN} y="220" class="pan-nom">pente</text>
       <text x={PAN} y="262" class="pan-val" class:barre={e >= 1}>{sg(A.seule.b1)}</text>
       <g class="etape" class:vu={e >= 1}>
         <text x={PAN} y="310" class="pan-val rouge">{sg(A.avec.b1)}</text>
-        <text x={PAN} y="342" class="pan-nom">avec les nouvelles</text>
+        <text x={PAN} y="342" class="pan-nom">avec « sait »</text>
       </g>
     </g>
 
     <!-- 3 : le piège -->
     <g class="etape" class:vu={e >= 3}>
-      <rect x={PAN - 18} y="380" width="252" height="160" class="piege-fond" />
-      <text x={PAN} y="414" class="piege-t">scolarité</text>
-      <text x={PAN + 6} y="446" class="piege-f">↓</text>
-      <text x={PAN} y="478" class="piege-t rouge">nouvelles</text>
-      <text x={PAN + 6} y="510" class="piege-f">↓</text>
-      <text x={PAN + 124} y="450" class="piege-r">un</text>
-      <text x={PAN + 124} y="472" class="piege-r">descendant</text>
-      <text x={PAN + 124} y="494" class="piege-r">de X</text>
-      <text x={PAN} y="532" class="piege-t">intérêt</text>
+      <rect x={PAN - 14} y="380" width="222" height="160" class="piege-fond" />
+      <text x={PAN} y="412" class="piege-t">scolarité</text>
+      <text x={PAN + 6} y="442" class="piege-f">↓</text>
+      <text x={PAN} y="472" class="piege-t rouge">sait son nom</text>
+      <text x={PAN} y="504" class="piege-r">un descendant de X</text>
+      <text x={PAN} y="527" class="piege-r">on ne le contrôle pas</text>
     </g>
 
-    <text x="0" y="552" class="source">Notre sondage de la séance 7 · droites{' '}: les {A.n} qui ont dit leur temps aux nouvelles</text>
+    <text x="0" y="552" class="source">Notre sondage de la séance 7 · droites : les {A.n} qui ont répondu à la question</text>
   </svg>
 </div>
 
@@ -180,7 +190,10 @@
   .piege-fond { fill: var(--dk-fond); stroke: var(--dk-accent); stroke-width: 3; }
   .piege-t { font-size: 21px; font-weight: 700; fill: var(--dk-encre); }
   .piege-f { font-size: 22px; font-weight: 700; fill: var(--dk-accent); }
-  .piege-r { font-size: 17px; fill: var(--dk-accent); font-weight: 600; }
+  .q-eti { font-size: 15px; letter-spacing: 0.08em; font-weight: 600; fill: var(--dk-gris); }
+  .q-t { font-size: 19px; font-weight: 700; fill: var(--dk-encre); }
+  .q-r { font-size: 16px; fill: var(--dk-gris); }
+  .piege-r { font-size: 16px; fill: var(--dk-accent); font-weight: 600; }
   .pente-l { font-size: 19px; font-weight: 700; fill: var(--dk-accent); text-anchor: middle; paint-order: stroke; stroke: var(--dk-fond); stroke-width: 6px; stroke-linejoin: round; }
 
   .trace { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.2s; }

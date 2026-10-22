@@ -58,7 +58,7 @@
   import M8Gelineau from '$lib/deck/visuels/M8Gelineau.svelte';
   import M8Tableau2 from '$lib/deck/visuels/M8Tableau2.svelte';
   import M8Fil from '$lib/deck/visuels/M8Fil.svelte';
-  import M8Nouvelles from '$lib/deck/visuels/M8Nouvelles.svelte';
+  import M8Savoir from '$lib/deck/visuels/M8Savoir.svelte';
   import M8DeuxVoies from '$lib/deck/visuels/M8DeuxVoies.svelte';
   import M8Note1 from '$lib/deck/visuels/M8Note1.svelte';
   import M8Lecture3 from '$lib/deck/visuels/M8Lecture3.svelte';
@@ -192,7 +192,7 @@
 
     <Slide bandeau="Ajouter des variables · un piège" droite={D}>
       <h2 class="e">Une variable qui change beaucoup la pente</h2>
-      <M8Nouvelles />
+      <M8Savoir />
     </Slide>
 
     <Slide bandeau="Ajouter des variables · à âge égal" droite={D}>

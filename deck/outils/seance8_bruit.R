@@ -19,13 +19,14 @@
 #   AGE    les mêmes 877 :
 #          la droite de la scolarité seule, puis avec l'âge (ordonnée à
 #          l'origine et pente), et la droite du modèle à 18, 50 et 80 ans;
-#   NOUVELLES les mêmes 877, moins celles qui ne savent pas (cps25_news_cons,
-#          7) : la scolarité seule, puis avec le temps passé aux nouvelles
-#          (de 0, aucun, à 1, plus de 2 h par jour). Elle change beaucoup la
-#          pente, mais c'est un descendant de la scolarité (règle 1 : on ne
-#          la contrôle pas). Aucune variable d'avant la scolarité de la CES
-#          ne la change autant (essai du 22 octobre : l'âge, +9 %, est celle
-#          qui la change le plus);
+#   SAVOIR les mêmes 877, moins celles qui préfèrent ne pas répondre : la
+#          scolarité seule, puis avec « connaît le nom de la gouverneure
+#          générale » (cps25_govgen_name == 3, Mary Simon; « je ne sais pas »
+#          et les mauvais noms = 0). Elle change beaucoup la pente, mais
+#          c'est un descendant de la scolarité (règle 1 : on ne la contrôle
+#          pas). Aucune variable d'avant la scolarité de la CES ne la change
+#          autant (essai du 22 octobre : l'âge, +9 %, est celle qui la change
+#          le plus);
 #   POINTS pour chacune des 969 personnes de PARALLELES, dans le même ordre :
 #          son âge en années et si elle fait partie des 877.
 suppressPackageStartupMessages(library(haven))
@@ -100,21 +101,21 @@ AGE <- list(
   lignes = lapply(c(18, 50, 80), ligne_a),
   sigma_seule = r(summary(a_seule)$sigma), sigma_age = r(summary(a_age)$sigma)
 )
-# Le temps passé aux nouvelles, pour les mêmes personnes (le numéro de ligne
-# de ces1000 est celui de la CES).
-nv <- as.numeric(d$cps25_news_cons); nv[!(nv %in% 1:6)] <- NA
-kn <- k5; kn$nouvelles <- ((nv - 1) / 5)[as.numeric(rownames(k5))]
-kn <- kn[!is.na(kn$nouvelles), ]
-n_seule <- lm(interet ~ scolarite, data = kn)
-n_avec <- lm(interet ~ scolarite + nouvelles, data = kn)
-ligne_n <- function(v, nom) list(nom = nom, b0 = r(coef(n_avec)[[1]] + coef(n_avec)[["nouvelles"]] * v), b1 = r(coef(n_avec)[["scolarite"]]))
-NOUVELLES <- list(
-  n = nrow(kn),
-  seule = list(b0 = r(coef(n_seule)[[1]]), b1 = r(coef(n_seule)[[2]])),
-  avec = list(b0 = r(coef(n_avec)[[1]]), b1 = r(coef(n_avec)[["scolarite"]]), nouvelles = r(coef(n_avec)[["nouvelles"]])),
-  lignes = list(ligne_n(0, "aucun"), ligne_n(0.4, "11 à 30 min"), ligne_n(1, "plus de 2 h"))
+# Connaît le nom de la gouverneure générale, pour les mêmes personnes (le
+# numéro de ligne de ces1000 est celui de la CES).
+gg <- as.numeric(d$cps25_govgen_name); gg[!(gg %in% 1:5)] <- NA
+ks <- k5; ks$sait <- as.numeric(gg == 3)[as.numeric(rownames(k5))]
+ks <- ks[!is.na(ks$sait), ]
+s_seule <- lm(interet ~ scolarite, data = ks)
+s_avec <- lm(interet ~ scolarite + sait, data = ks)
+ligne_s <- function(v, nom) list(nom = nom, b0 = r(coef(s_avec)[[1]] + coef(s_avec)[["sait"]] * v), b1 = r(coef(s_avec)[["scolarite"]]))
+SAVOIR <- list(
+  n = nrow(ks), part = r(mean(ks$sait), 2),
+  seule = list(b0 = r(coef(s_seule)[[1]]), b1 = r(coef(s_seule)[[2]])),
+  avec = list(b0 = r(coef(s_avec)[[1]]), b1 = r(coef(s_avec)[["scolarite"]]), sait = r(coef(s_avec)[["sait"]])),
+  lignes = list(ligne_s(0, "ne sait pas"), ligne_s(1, "sait"))
 )
-stopifnot(NOUVELLES$avec$b1 < 0.8 * NOUVELLES$seule$b1)
+stopifnot(SAVOIR$avec$b1 < 0.8 * SAVOIR$seule$b1)
 POINTS <- lapply(seq_len(nrow(k)), function(i) list(ans = k$ans[i], m = as.numeric(dans5[i])))
 
 # ---- Vérifications : PARALLELES et ESCALIER de seance8.js.
@@ -139,10 +140,10 @@ writeLines(c(
   paste0("export const GENRE = ", J(GENRE), ";"),
   "/* Les 877 d'ESCALIER : la scolarité seule, puis avec l'âge, et la droite du modèle à 18, 50 et 80 ans. */",
   paste0("export const AGE = ", J(AGE), ";"),
-  "/* Les 877, moins « ne sait pas » : la scolarité seule, puis avec le temps passé aux nouvelles (un descendant). */",
-  paste0("export const NOUVELLES = ", J(NOUVELLES), ";"),
+  "/* Les 877, moins « préfère ne pas répondre » : la scolarité seule, puis avec « connaît le nom de la gouverneure générale » (un descendant). */",
+  paste0("export const SAVOIR = ", J(SAVOIR), ";"),
   "/* Pour chacune des 969 de PARALLELES.points, dans le même ordre : l'âge (ans) et m = 1 si elle est dans les 877. */",
   paste0("export const POINTS = ", J(POINTS), ";")
 ), file.path(ici, "..", "src", "lib", "data", "seance8_bruit.js"))
 
-str(GENRE); str(AGE); str(NOUVELLES)
+str(GENRE); str(AGE); str(SAVOIR)
