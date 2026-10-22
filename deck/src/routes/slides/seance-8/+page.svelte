@@ -6,21 +6,19 @@
    * Doctrine : moins de texte, plus de figure. Une idée par diapo, une phrase
    * parlée au plus; le reste se dessine et bouge.
    *
-   * Le fil (pol-7ds). La dernière séance avant la semaine de lecture, après
-   * une semaine d'examens : trois blocs, du concret. 1. Citer (une vingtaine
-   * de minutes) : le slogan de Google Scholar, d'où il vient, pourquoi
-   * citer, deux trucs de Scholar, Zotero; on ajoute Blais et Gélineau
-   * (2007) par son DOI. 2. Ajouter des variables, à la manière d'Arel-Bundock : deux
-   * droites parallèles, à âge égal, ce que le modèle met de côté, et une
-   * seule ligne se lit (on ne lit jamais les contrôles : le piège de la
-   * table 2). 3. Après la pause, Blais et Gélineau (2007) : d'abord leur
-   * article raconté comme un TP 1 (les sept étapes de TmParcours, M8LeurTP),
-   * leurs vrais tableaux 1 et 2 (découpés du PDF, outils/seance8_tableaux.sh),
-   * puis testés en 2025 : leur tableau 1 (la satisfaction envers la démocratie avant et après
-   * l'élection de 1997), puis deux variables nettoyées en classe, lentement
-   * (Y : la satisfaction après; X : gagnant), le contrôle (la même question,
-   * avant), le tableau, jusque dans Word, et 1997 contre 2025. Le Y n'est
-   * pas binaire (consigne des TP).
+   * Le fil (pol-7ds, refait dans pol-wca). La dernière séance avant la
+   * semaine de lecture : trois blocs. 1. Zotero (une vingtaine de minutes) :
+   * le slogan de Google Scholar, pourquoi citer, deux trucs de Scholar,
+   * Zotero et Word; on ajoute Blais et Gélineau (2007) par son DOI.
+   * 2. Ajouter des variables à la régression, à la manière d'Arel-Bundock :
+   * sortir une variable du bruit, ce que le contrôle change à la droite, les
+   * deux règles, et on n'interprète pas les contrôles. 3. Pratique dans R :
+   * Blais et Gélineau (2007), d'abord leur article raconté comme un TP 1
+   * (TmParcours, M8LeurTP), leurs vrais tableaux 1 et 2 (découpés du PDF,
+   * outils/seance8_tableaux.sh), puis testés en 2025 : deux variables
+   * nettoyées en classe (Y : la satisfaction après; X : gagnant), le
+   * contrôle (la même question, avant), le tableau, jusque dans Word. Le Y
+   * n'est pas binaire (consigne des TP).
    *
    * Sources. Le cours 9 d'Adrien Cloutier (hiver 2024) et Arel-Bundock
    * (2021), chapitre 5. Blais, A. et F. Gélineau (2007), Political Studies
@@ -43,18 +41,19 @@
   import Session from '$lib/deck/visuels/Session.svelte';
   import Aujourdhui8 from '$lib/deck/visuels/Aujourdhui8.svelte';
   import TabSuite from '$lib/deck/visuels/TabSuite.svelte';
-  import GrapheEpsilon from '$lib/deck/visuels/GrapheEpsilon.svelte';
-  import M8Geants from '$lib/deck/visuels/M8Geants.svelte';
+  import M8Intuition from '$lib/deck/visuels/M8Intuition.svelte';
+  import M8DeuxRegles from '$lib/deck/visuels/M8DeuxRegles.svelte';
   import M8Citer from '$lib/deck/visuels/M8Citer.svelte';
   import M8Scholar from '$lib/deck/visuels/M8Scholar.svelte';
   import M8Zotero from '$lib/deck/visuels/M8Zotero.svelte';
   import M8Paralleles from '$lib/deck/visuels/M8Paralleles.svelte';
-  import M8Tranches from '$lib/deck/visuels/M8Tranches.svelte';
+  import M8Bruit from '$lib/deck/visuels/M8Bruit.svelte';
+  import M8Pente from '$lib/deck/visuels/M8Pente.svelte';
   import M8Venn from '$lib/deck/visuels/M8Venn.svelte';
   import M8Raisons from '$lib/deck/visuels/M8Raisons.svelte';
   import M8Escalier from '$lib/deck/visuels/M8Escalier.svelte';
-  import M8Phrase from '$lib/deck/visuels/M8Phrase.svelte';
-  import M8UneLigne from '$lib/deck/visuels/M8UneLigne.svelte';
+  import M8Lecture2025 from '$lib/deck/visuels/M8Lecture2025.svelte';
+  import M8Controles from '$lib/deck/visuels/M8Controles.svelte';
   import M8Limites from '$lib/deck/visuels/M8Limites.svelte';
   import M8Gelineau from '$lib/deck/visuels/M8Gelineau.svelte';
   import M8Tableau2 from '$lib/deck/visuels/M8Tableau2.svelte';
@@ -63,19 +62,16 @@
   import M8Etapes from '$lib/deck/visuels/M8Etapes.svelte';
   import M8Image from '$lib/deck/visuels/M8Image.svelte';
   import M8AvantApres from '$lib/deck/visuels/M8AvantApres.svelte';
-  import M8Ecarts from '$lib/deck/visuels/M8Ecarts.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
-  import { TIERS, VARS } from '$lib/data/seance7.js';
-  import { MULTI, BG, ATELIER, TABLEAU, WORD, COEFS, SCRIPT } from '$lib/data/seance8.js';
+  import { BG, ATELIER, TABLEAU, WORD, COEFS } from '$lib/data/seance8.js';
 
-  const TOTAL = 59;
+  const TOTAL = 48;
   const D = 'POL-2000 · séance 8 · jeu 22 oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
   const avec = (cle, notes = []) => ATELIER[cle].map((l, i) => ({ ...l, note: notes[i] || '' }));
   const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
-  const coef = (m, t) => m.find((c) => c.terme === t).b;
   const N = COEFS.n;
 
   const c_charger = avec('charger', ['', 'haven : pour lire les codes de la CES', 'ces2025.rds, sauvegardé à la séance 2', `vous devriez voir ${nb(COEFS.n_ces)}`, 'df_raw ne change jamais']);
@@ -86,18 +82,8 @@
   const c_avant = avec('avant', ['cps25 : la même question, pendant la campagne', '']);
   const c_moyennes = avec('moyennes', ['le tableau 1 de l’article, en 2025']);
   const c_modeles = avec('modeles', ['', 'à satisfaction égale avant l’élection', `vous devriez voir ${nb(N.modele1)}`, '']);
-  const c_perdants = avec('perdants', ['les numéros fixent l’ordre : « 1. Gagnant » est la référence', '', '']);
 
-  // Les noms affichés pour les tableaux à une ligne.
-  const NOMS7 = { scolarite: 'Scolarité', age: 'Âge', femme: 'Femme', revenu: 'Revenu', quebec: 'Québec' };
-  const NOMS8 = { gagnant: 'Gagnant', avant: 'Satisfaction avant l’élection' };
 
-  // Le script complet : SCRIPT, vérifié dans une session R vierge (outils/seance8_data.R).
-  const TITRES = ['seance8.R · à refaire chez vous', 'seance8.R · la suite', 'seance8.R · modèles et tableau', 'seance8.R · si on a le temps'];
-  const G2 = coef(COEFS.modele2, 'gagnant');
-  const cran = (G2 / 0.33).toLocaleString('fr-CA', { maximumFractionDigits: 1 });
-  const C3 = (t) => COEFS.modele3.find((c) => c.terme === t);
-  const v3 = (t) => (C3(t).b < 0 ? '−' : '+') + Math.abs(C3(t).b).toLocaleString('fr-CA', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + C3(t).etoiles;
 </script>
 
 <svelte:head>
@@ -132,67 +118,66 @@
       <Aujourdhui8 />
     </Slide>
 
-    <!-- ================= CITER ================= -->
-    <Slide fond="encre" bandeau="Citer" droite={D}>
-      <h1 class="e">Citer</h1>
+    <!-- ================= ZOTERO ================= -->
+    <Slide fond="encre" bandeau="Zotero" droite={D}>
+      <h1 class="e">Zotero</h1>
       <hr class="filet" />
-      <p class="lead e">Google Scholar, puis Zotero.</p>
+      <p class="lead e">Pourquoi citer, Google Scholar, puis Zotero.</p>
     </Slide>
 
-    <Slide bandeau="Citer" droite={D}>
-      <p class="slogan e">« Sur les épaules d’un géant »</p>
-      <p class="grande-q e">Pourquoi Google Scholar écrit-il ça sur sa page d’accueil ?</p>
+    <Slide bandeau="Zotero" droite={D}>
+      <p class="slogan e" lang="en">« Stand on the shoulders <span class="nowrap">of giants »</span></p>
+      <p class="grande-q e">Pourquoi Google Scholar <span class="nowrap">écrit-il</span> ça sur sa page d’accueil ?</p>
     </Slide>
 
-    <Slide bandeau="Citer · les géants" droite={D}>
-      <h2 class="e">Une phrase de 900 ans</h2>
-      <M8Geants />
-    </Slide>
-
-    <Slide bandeau="Citer · pourquoi" droite={D}>
+    <Slide bandeau="Zotero · pourquoi citer" droite={D}>
       <h2 class="e">Pourquoi citer ?</h2>
       <M8Citer />
     </Slide>
 
-    <Slide bandeau="Citer · Google Scholar" droite={D}>
+    <Slide bandeau="Zotero · Google Scholar" droite={D}>
       <h2 class="e">Deux trucs de Google Scholar</h2>
       <M8Scholar />
     </Slide>
 
-    <Slide bandeau="Citer · Zotero" droite={D}>
-      <h2 class="e">Zotero : chercher, garder, citer</h2>
+    <Slide bandeau="Zotero" droite={D}>
+      <h2 class="e">Zotero : du DOI à la bibliographie</h2>
       <M8Zotero doi={BG.doi} />
     </Slide>
 
     <!-- ================= AJOUTER DES VARIABLES ================= -->
     <Slide bandeau="La semaine passée" droite={D}>
-      <h2 class="e">Vous l’avez vu. Aujourd’hui, on le lit.</h2>
+      <h2 class="e">Rappel : la régression multiple de la séance 7</h2>
       <TabSuite />
     </Slide>
 
-    <Slide bandeau="La semaine passée" droite={D}>
-      <h2 class="e">Une seule variable, et tout le reste dans ε</h2>
-      <GrapheEpsilon x="scolarité" y="intérêt" xEq={VARS.x.nom} yEq={VARS.y.nom} z="l’âge" autres={['le revenu', 'le genre', 'la région']} alerte={['l’âge', 'touche aussi x']} etiqY="plus d’intérêt" etiqX="moins de scolarité" b1={TIERS.b1_seul} pied="le graphe est une hypothèse · séance 11" />
+    <Slide bandeau="Ajouter des variables" droite={D}>
+      <h2 class="e">Deux chemins entre scolarité et intérêt</h2>
+      <M8Intuition />
     </Slide>
 
-    <Slide fond="encre" bandeau="Ajouter des variables" droite={D}>
-      <h1 class="e">Ajouter des variables</h1>
-      <hr class="filet" />
-      <p class="lead e">Sortir une variable du bruit, et la mettre dans le modèle.</p>
+    <Slide bandeau="Ajouter des variables · quels contrôles" droite={D}>
+      <h2 class="e">Deux règles pour choisir les contrôles</h2>
+      <M8DeuxRegles />
     </Slide>
 
     <Slide bandeau="Ajouter des variables" droite={D}>
-      <h2 class="e">Deux droites parallèles</h2>
+      <h2 class="e">Sortir une variable du bruit</h2>
+      <M8Bruit />
+    </Slide>
+
+    <Slide bandeau="Ajouter des variables · le genre" droite={D}>
+      <h2 class="e">Le genre entre dans le modèle</h2>
       <M8Paralleles />
     </Slide>
 
-    <Slide bandeau="Ajouter des variables · à âge égal" droite={D}>
-      <h2 class="e">À âge égal, tranche par tranche</h2>
-      <M8Tranches />
+    <Slide bandeau="Ajouter des variables · l’âge" droite={D}>
+      <h2 class="e">L’âge entre dans le modèle</h2>
+      <M8Pente />
     </Slide>
 
     <Slide bandeau="Ajouter des variables · à âge égal" droite={D}>
-      <h2 class="e">Ce que le modèle met de côté</h2>
+      <h2 class="e">La part propre de la scolarité</h2>
       <M8Venn />
     </Slide>
 
@@ -207,32 +192,21 @@
     </Slide>
 
     <Slide bandeau="Ajouter des variables · lire" droite={D}>
-      <h2 class="e">La phrase à retenir</h2>
-      <M8Phrase autres="âge, genre, revenu et région" mouvement="passer de « secondaire non terminé » à « maîtrise, doctorat »" b={coef(MULTI.coefs, 'scolarite')} />
-    </Slide>
-
-    <Slide bandeau="Ajouter des variables · lire" droite={D}>
-      <h2 class="e">Une seule ligne se lit</h2>
-      <M8UneLigne coefs={MULTI.coefs} noms={NOMS7} cle="scolarite" n={MULTI.n_modele} titre="notre sondage de la séance 7 · Y = l’intérêt pour la politique" />
+      <h2 class="e">On n’interprète pas les variables de contrôle</h2>
+      <M8Controles />
     </Slide>
 
     <Slide bandeau="Ajouter des variables · les limites" droite={D}>
-      <h2 class="e">Ce que contrôler ne fait pas</h2>
+      <h2 class="e">Ce que contrôler ne règle pas</h2>
       <M8Limites />
     </Slide>
 
-    <!-- ================= PAUSE ================= -->
-    <Slide fond="encre" bandeau="Pause" droite={D}>
-      <h1 class="e">Pause</h1>
-      <hr class="filet" />
-      <p class="lead e">Quinze minutes. Au retour, ouvrez Positron.</p>
-    </Slide>
-
     <!-- ================= BLAIS ET GÉLINEAU EN 2025 ================= -->
-    <Slide fond="encre" bandeau="Blais et Gélineau (2007), en 2025" droite={D}>
-      <h1 class="e">Blais et Gélineau (2007), en 2025</h1>
-      <hr class="filet" />
-      <p class="lead e">André Blais (Montréal) et François Gélineau (Laval, votre département). Leur TP 1, puis leur test, en 2025.</p>
+    <Slide bandeau="Pratique dans R" droite={D}>
+      <div class="une">
+        <img class="e" src="{base}/img/s8-bg-une.png" alt="La première page de l’article : Winning, Losing and Satisfaction with Democracy, André Blais (Université de Montréal) et François Gélineau (Université Laval), Political Studies, 2007, vol. 55, p. 425-441." />
+        <p class="e" lang="en">Blais, A., &amp; Gélineau, F. (2007). Winning, losing and satisfaction with democracy. <em>Political Studies</em>, <em>55</em>(2), 425–441. <span class="doi">https://doi.org/{BG.doi}</span></p>
+      </div>
     </Slide>
 
     <Slide bandeau="Leur TP 1" droite={D}>
@@ -279,21 +253,16 @@
 
     <Slide bandeau="Leur TP 1 · étape 7" droite={D}>
       <TmParcours ici={7} />
-      <h2 class="e">Et eux, pourquoi ce sujet ?</h2>
+      <h2 class="e">Pourquoi ce sujet ?</h2>
       <M8LeurTP etape={7} />
     </Slide>
 
-    <Slide bandeau="Leur TP 1 · et le travail final" droite={D}>
-      <h2 class="e">Ce que le travail final ajoute</h2>
-      <M8LeurTP etape={8} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau (2007) · leur tableau 1" droite={D}>
+    <Slide bandeau="Blais et Gélineau (2007) · tableau 1/2" droite={D}>
       <h2 class="e">Gagner une élection rend-il plus satisfait de la démocratie ?</h2>
       <M8Gelineau />
     </Slide>
 
-    <Slide bandeau="Blais et Gélineau (2007) · leur tableau 2" droite={D}>
+    <Slide bandeau="Blais et Gélineau (2007) · tableau 2/2" droite={D}>
       <M8Tableau2 />
     </Slide>
 
@@ -380,8 +349,8 @@
     </Slide>
 
     <Slide bandeau="Blais et Gélineau, en 2025 · lire" droite={D}>
-      <h2 class="e">Une seule ligne se lit, encore</h2>
-      <M8UneLigne coefs={COEFS.modele2} noms={NOMS8} cle="gagnant" n={N.modele2} titre="CES 2025 · Y = satisfaction envers la démocratie après l’élection (0 à 1)" />
+      <h2 class="e">Lire le tableau : le coefficient de Gagnant</h2>
+      <M8Lecture2025 />
     </Slide>
 
     <Slide bandeau="Blais et Gélineau, en 2025 · Word" droite={D}>
@@ -392,35 +361,6 @@
         <p class="e petit-dit">gagnants2025.docx apparaît dans le dossier du projet. Copiez-le dans votre travail.</p>
         <p class="e petit-dit">Si R se plaint de pandoc : <code>pandoc::pandoc_install()</code>, une seule fois.</p>
       </div>
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · lire" droite={D}>
-      <h2 class="e">La phrase, pour notre seule ligne</h2>
-      <M8Phrase autres="satisfaction avant l’élection" mouvement="avoir voté pour le parti gagnant plutôt que pour un perdant" b={G2} y="de satisfaction" fin={`Soit ${cran} « cran » de l’échelle (un cran = 0,33).`} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · honnêtement" droite={D}>
-      <h2 class="e">Un test, pas une réplication</h2>
-      <M8Ecarts />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · si on a le temps" droite={D}>
-      <h2 class="e">Les perdants sont-ils tous pareils ?</h2>
-      <Console lignes={c_perdants} />
-      <p class="e petit-dit">À satisfaction égale avant : conservateurs {v3('camp2. Conservateur')}, autres partis {v3('camp3. Autre parti')}. Perdre fait plus mal quand on pouvait gagner, comme en 1997 (leur tableau 4).</p>
-    </Slide>
-
-    <!-- ================= LE SCRIPT ================= -->
-    {#each SCRIPT as bout, i}
-      <Slide bandeau="Le script complet" droite={D}>
-        <Code src={bout} titre={TITRES[i]} />
-      </Slide>
-    {/each}
-
-    <!-- ================= FIN ================= -->
-    <Slide bandeau="Après la semaine de lecture" droite={D}>
-      <h2 class="e">Le 5 novembre : votre question, à la main, puis avec l’IA</h2>
-      <p class="grande-q e">Aujourd’hui, on a testé la question de Blais et Gélineau. La prochaine fois, c’est la vôtre.</p>
     </Slide>
 
     <Slide bandeau="Avant le 5 novembre" droite={D}>
@@ -463,7 +403,12 @@
 .avant { max-width: 44em; margin: 1.6em auto 0; display: flex; flex-direction: column; gap: 0.8em; }
 .petit-dit { margin: 0; color: var(--dk-gris); font-size: 0.85em; }
 .grande-q { font-size: 2em; line-height: 1.3; max-width: 22em; margin-top: 1.2em; }
-.slogan { font-size: 3.2em; line-height: 1.2; margin: 1.4em 0 0; color: var(--dk-accent); font-weight: 600; }
+.une { display: flex; flex-direction: column; align-items: center; gap: 1em; margin-top: 0.2em; }
+.une img { height: 66vh; width: auto; border: 2px solid var(--dk-filet); background: #fff; display: block; }
+.une p { margin: 0; max-width: 46em; font-size: 0.95em; line-height: 1.45; text-align: center; }
+.une .doi { color: var(--dk-accent); }
+.nowrap { white-space: nowrap; }
+.slogan { max-width: none; font-size: 2.8em; line-height: 1.2; margin: 1.4em 0 0; color: var(--dk-accent); font-weight: 600; }
 .hyp { margin-top: 1.6em; display: flex; flex-direction: column; gap: 0.5em; font-size: 1.25em; }
 .hyp p { margin: 0; }
 </style>

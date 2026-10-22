@@ -4,20 +4,19 @@
    * travail de mi-session (les mêmes que TmParcours, séance 7), remplies
    * avec leur article. À gauche, la consigne (les mots de
    * travaux/pdf/travail-mi-session-A26.tex, raccourcis); à droite, leur
-   * réponse, en clair, avec la page de l'article.
+   * réponse, avec la page de l'article.
    *
-   *   etape 0     l'article, et la règle du jeu (17 pages contre 2);
-   *   etape 1-7   une étape;
-   *   etape 8     le TP 1 s'arrête aux données : ce que le travail final
-   *               ajoute, et où le trouver dans leur article.
+   *   etape 0     la référence APA de l'article;
+   *   etape 1-6   une étape;
+   *   etape 7     la consigne seule : la partie de droite reste vide
+   *               (demande du professeur).
    *
    * Deux étapes ont un temps (un clic) : 2 (ce qu'on sait, puis ce qu'on ne
    * sait pas) et 3 (leurs trois hypothèses, dont deux tombent).
    *
    * Tout vient de Blais et Gélineau (2007), Political Studies 55(2),
    * 425-441 : les pages sont indiquées. Rien n'est prêté aux auteurs qui ne
-   * soit dans l'article; l'étape 7 le dit (un article n'a pas de
-   * justification personnelle). Les variables de 2025 sont celles de
+   * soit dans l'article. Les variables de 2025 sont celles de
    * l'atelier (outils/seance8_data.R).
    */
   import { brancherTemps } from '../temps.js';
@@ -45,7 +44,7 @@
   };
 </script>
 
-<div class="visuel m8tp" class:seul={etape === 0 || etape === 8} bind:this={hote}>
+<div class="visuel m8tp" class:seul={etape === 0} bind:this={hote}>
   {#if CONSIGNE[etape]}
     <aside class="consigne">
       <span class="eti">La consigne</span>
@@ -56,17 +55,12 @@
   <div class="eux">
     {#if etape === 0}
       <div class="ref">
-        <p>Blais, A. et Gélineau, F. (2007). Winning, losing and satisfaction with democracy. <em>Political Studies</em>, <em>55</em>(2), 425-441. <span class="doi">https://doi.org/{BG.doi}</span></p>
+        <p>Blais, A., &amp; Gélineau, F. (2007). Winning, losing and satisfaction with democracy. <em>Political Studies</em>, <em>55</em>(2), 425-441. <span class="doi">https://doi.org/{BG.doi}</span></p>
       </div>
-      <div class="pages">
-        <div class="pg"><span class="nb">17</span><span>pages, leur article</span></div>
-        <div class="pg rouge"><span class="nb">2</span><span>pages, votre TP 1</span></div>
-      </div>
-      <p class="dit">Les sept étapes de votre TP 1. Leurs réponses, en clair.</p>
 
     {:else if etape === 1}
       <span class="eti">Blais et Gélineau</span>
-      <p class="question">Gagner une élection <span class="tag x">X</span> rend-il plus satisfait de la démocratie <span class="tag y">Y</span>&#8239;?</p>
+      <p class="question"><span class="tag x">X</span> Gagner une élection rend-il plus <span class="tag y">Y</span> satisfait de la démocratie&#8239;?</p>
       <p class="src">p. 425-426</p>
 
     {:else if etape === 2}
@@ -131,21 +125,6 @@
       </ol>
       <p class="src">p. 426-427</p>
 
-    {:else if etape === 7}
-      <span class="eti">Blais et Gélineau</span>
-      <p class="grand">Leur article n’en dit rien.</p>
-      <p class="moyen">Un article n’a pas cette section. Votre TP 1, oui.</p>
-      <p class="dit">Ici, vous en direz plus qu’eux.</p>
-
-    {:else if etape === 8}
-      <div class="final">
-        <div class="f"><strong>Statistiques descriptives</strong><span>leur tableau 1</span></div>
-        <div class="f"><strong>Un GOA</strong><span class="gris">à vous</span></div>
-        <div class="f"><strong>Une régression linéaire et son tableau</strong><span>leur tableau 2, en plus simple</span></div>
-        <div class="f"><strong>Interpréter</strong><span>leur conclusion</span></div>
-        <div class="f"><strong>Biais et limites</strong><span class="gris">à vous</span></div>
-      </div>
-      <p class="dit">Le TP 1 s’arrête aux données. Positron n’y est pas obligatoire.</p>
     {/if}
   </div>
 </div>
@@ -193,17 +172,6 @@
   .apports { margin: 0.2em 0 0; padding: 0; list-style: none; counter-reset: a; display: flex; flex-direction: column; gap: 0.5em; }
   .apports li { counter-increment: a; display: grid; grid-template-columns: 1.8em minmax(0, 1fr); gap: 0.5em; font-size: 1.2em; align-items: baseline; }
   .apports li::before { content: counter(a); font-weight: 700; color: var(--dk-fond); background: var(--dk-accent); text-align: center; }
-  .dit { padding: 0.55em 0.9em; background: var(--dk-encre); color: var(--dk-fond); font-size: 1.05em; }
   .ref { border-left: 6px solid var(--dk-accent); padding: 0.3em 0 0.3em 0.9em; font-size: 1.05em; line-height: 1.45; }
-  .pages { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; }
-  .pg { border: 2px solid var(--dk-encre); padding: 0.5em 0.8em; display: flex; align-items: baseline; gap: 0.5em; }
-  .pg .nb { font-size: 2.6em; font-weight: 700; line-height: 1; }
-  .pg.rouge { border-color: var(--dk-accent); }
-  .pg.rouge .nb { color: var(--dk-accent); }
-  .final { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8em; }
-  .f { border-top: 4px solid var(--dk-encre); padding-top: 0.5em; display: flex; flex-direction: column; gap: 0.3em; }
-  .f strong { font-size: 1.05em; line-height: 1.3; }
-  .f span { color: var(--dk-accent); font-weight: 600; font-size: 0.85em; }
-  .f span.gris { color: var(--dk-gris); }
   @media (prefers-reduced-motion: reduce) { .boite.trou, .autres { transition: none; } }
 </style>

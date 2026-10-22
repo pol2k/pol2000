@@ -1,22 +1,30 @@
 <script>
   /**
    * Le vrai tableau 2 de Blais et Gélineau (2007, p. 432), tel qu'imprimé,
-   * en entier : un grand tableau, et la question « combien de variables se
-   * lisent ? ». Le piège de la table 2, sur leur propre tableau 2.
+   * à la largeur de la diapo. Trop haut pour tenir à l'écran : il défile
+   * dans une fenêtre de la hauteur de la diapo, au clic, de haut en bas.
    *
-   *   0  le tableau entier : 19 variables (et les seuils, et l'ajustement);
-   *   1  leur X, en quatre groupes (la référence : gagnant partout), cadré;
-   *      tout le reste est un contrôle, on ne le lit pas;
-   *   2  une ligne : perdre au pays et dans sa circonscription, agrandie
-   *      (static/img/s8-bg-ligne.png), lue par le signe et les étoiles.
+   *   0  le haut : le titre, les deux modèles. (1) sans les groupes
+   *      gagnant / perdant, (2) avec;
+   *   1  leur X, cadré : quatre lignes, comparées au groupe de référence
+   *      (gagner au pays et dans sa circonscription, absent du tableau).
+   *      Tout le reste, voilé : des contrôles;
+   *   2  une ligne : perdre au pays et dans sa circonscription, −0,447***.
+   *      La ligne « Prior level of satisfaction » est rappelée : c'est elle
+   *      qui fait dire « à satisfaction égale avant »;
+   *   3  le bas : 1 922 répondants, et la légende des étoiles.
+   *
+   * Une barre à droite montre où l'on est dans le tableau.
    *
    * Leur modèle est un probit ordonné (leur note 7), pas une régression
-   * linéaire : on ne lit pas la taille du coefficient. Les auteurs, eux,
-   * commentent certains contrôles dans leur texte; on ne le dit pas sur la
-   * diapo.
+   * linéaire : on ne lit pas la taille du coefficient, seulement le signe
+   * et les étoiles. Les auteurs commentent aussi certains contrôles dans
+   * leur texte; on ne le dit pas sur la diapo.
    *
-   * Images : outils/seance8_tableaux.sh. Cadres en % de la découpe
-   * (x 86 à 448 pt, y 54 à 628 pt), depuis pdftotext -bbox.
+   * Image : outils/seance8_tableaux.sh (2011 × 3189, 400 ppp). Cadres et
+   * voiles en % de la découpe (x 86 à 448 pt, y 54 à 628 pt), depuis
+   * pdftotext -bbox : ils suivent l'image à toutes les tailles. Le
+   * défilement est mesuré en pixels (hauteur de la fenêtre et de l'image).
    */
   import { base } from '$app/paths';
   import { brancherTemps } from '../temps.js';
@@ -25,62 +33,138 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
   });
-  const CADRES = [
-    { x: 5.5, y: 12.7, l: 90.0, h: 13.4 },
-    { x: 5.5, y: 19.5, l: 90.0, h: 3.3 }
-  ];
+
+  // Hauteurs mesurées : la fenêtre (vue) et l'image entière (page).
+  let hVue = $state(0);
+  let hPage = $state(0);
+  // Le haut de la fenêtre, en % de l'image, à chaque temps (3 = tout en bas).
+  const HAUT = [0, 5.4, 5.4, 100];
+  const decalage = $derived(Math.max(0, Math.min((HAUT[e] / 100) * hPage, hPage - hVue)));
+  const pouce = $derived(hPage ? { y: (decalage / hPage) * 100, h: Math.min(100, (hVue / hPage) * 100) } : { y: 0, h: 100 });
+
+  // [haut, bas] en % de la hauteur de l'image.
+  const X = [12.85, 26.15];
+  const PERDU = [19.45, 22.85];
+  const PRIOR = [9.45, 12.8];
+  const N = [81.8, 83.8];
+  const ETOILES = [93.0, 94.9];
 </script>
 
 <div class="visuel m8t2" bind:this={hote}>
-  <figure>
-    <div class="feuille">
-      <img src="{base}/img/s8-bg-tableau2.png" alt="Le tableau 2 de l’article, en anglais : deux modèles, une vingtaine de variables et leurs coefficients. Dans le modèle 2, perdre au pays et dans sa circonscription : −0,447, trois étoiles." />
-      {#each CADRES as c, i}
-        <span class="m8-cadre" class:on={e === i + 1} class:pale={i === 0 && e === 2} style="left: {c.x}%; top: {c.y}%; width: {c.l}%; height: {c.h}%"></span>
-      {/each}
-    </div>
-    <figcaption>Blais et Gélineau (2007), tableau 2, p. 432</figcaption>
-  </figure>
+  <div class="m8t2-scene">
+    <div class="m8t2-vue" bind:clientHeight={hVue}>
+      <div class="m8t2-page" bind:clientHeight={hPage} style="transform: translateY({-decalage}px)">
+        <img src="{base}/img/s8-bg-tableau2.png" alt="Le tableau 2 de l’article, en anglais : deux modèles, une vingtaine de variables et leurs coefficients. Dans le modèle 2, perdre au pays et dans sa circonscription : −0,447, trois étoiles. 1 922 répondants." />
 
-  <div class="droite">
-    {#if e === 0}
-      <p class="q">19 variables.<br />Combien se lisent&#8239;?</p>
-    {:else if e === 1}
-      <div class="bloc">
-        <p class="gros"><span class="rouge">Leur X</span>&#8239;: quatre lignes (dont l’abstention)</p>
-        <p class="moyen">comparées aux gagnants partout</p>
+        <!-- temps 0 : les deux modèles -->
+        <span class="m8t2-tag m8t2-mod" class:on={e === 0} style="left: 59.1%">sans gagner / perdre</span>
+        <span class="m8t2-tag m8t2-mod m8t2-rouge" class:on={e === 0} style="left: 88.1%">avec gagner / perdre</span>
+
+        <!-- temps 1 et 2 : les voiles (contrôles), puis les autres lignes du X -->
+        <span class="m8t2-voile" class:on={e === 1 || e === 3} style="top: {PRIOR[0]}%; height: {PRIOR[1] - PRIOR[0]}%"></span>
+        <span class="m8t2-voile" class:on={e >= 1} style="top: {X[1]}%; height: {N[0] - X[1]}%"></span>
+        <span class="m8t2-voile" class:on={e === 3} style="top: {N[1]}%; height: {ETOILES[0] - N[1]}%"></span>
+        <span class="m8t2-voile m8t2-leger" class:on={e === 2} style="top: {X[0]}%; height: {PERDU[0] - X[0]}%"></span>
+        <span class="m8t2-voile m8t2-leger" class:on={e === 2} style="top: {PERDU[1]}%; height: {X[1] - PERDU[1]}%"></span>
+
+        <!-- temps 1 : leur X -->
+        <span class="m8t2-cadre" class:on={e === 1} style="top: {X[0]}%; height: {X[1] - X[0]}%"></span>
+        <span class="m8t2-tag m8t2-sur m8t2-rouge" class:on={e === 1} style="top: {X[0]}%">leur X · comparé à « gagner partout »</span>
+        <span class="m8t2-etiq" class:on={e === 1} style="top: 28.6%">le reste&#8239;: des contrôles, on ne les lit pas</span>
+
+        <!-- temps 2 : une ligne -->
+        <span class="m8t2-cadre m8t2-pointille" class:on={e === 2} style="top: {PRIOR[0]}%; height: {PRIOR[1] - PRIOR[0]}%"></span>
+        <span class="m8t2-tag m8t2-sur m8t2-droite" class:on={e === 2} style="top: {PRIOR[0]}%">satisfaction avant l’élection&#8239;: contrôlée</span>
+        <span class="m8t2-cadre" class:on={e === 2} style="top: {PERDU[0]}%; height: {PERDU[1] - PERDU[0]}%"></span>
+        <span class="m8t2-teinte" class:on={e === 2}></span>
+        <div class="m8t2-glose" class:on={e === 2} style="top: {X[1] + 1.2}%">
+          <span class="m8t2-glose-t">Perdre au pays et dans sa circonscription</span>
+          <span class="m8t2-glose-s"><b>moins satisfait</b> que gagner partout, à satisfaction égale avant l’élection</span>
+        </div>
+
+        <!-- temps 3 : le bas -->
+        <span class="m8t2-cadre m8t2-encre" class:on={e === 3} style="top: {N[0]}%; height: {N[1] - N[0]}%"></span>
+        <span class="m8t2-tag m8t2-dessous" class:on={e === 3} style="top: {N[1]}%">1&#8239;922 répondants</span>
+        <span class="m8t2-cadre m8t2-encre m8t2-etoiles" class:on={e === 3} style="top: {ETOILES[0]}%; height: {ETOILES[1] - ETOILES[0]}%"></span>
+        <span class="m8t2-tag m8t2-cote" class:on={e === 3} style="top: {(ETOILES[0] + ETOILES[1]) / 2}%">la légende des étoiles</span>
       </div>
-      <div class="bloc gris">
-        <p class="moyen">Tout le reste&#8239;: des contrôles.<br /><strong>On ne les lit pas.</strong></p>
-      </div>
-    {:else}
-      <div class="zoom"><img src="{base}/img/s8-bg-ligne.png" alt="La ligne agrandie : Lose federal/lose constituency, −0,447, trois étoiles, erreur type 0,120." /></div>
-      <p class="gros">Perdre au pays et chez soi&#8239;: <span class="rouge">moins satisfait</span> que les gagnants partout, après l’élection, à satisfaction égale avant.</p>
-      <p class="moyen gris">Pas une régression linéaire&#8239;: on lit le signe (−) et les étoiles (***).</p>
-    {/if}
+    </div>
+    <!-- où l'on est dans le tableau -->
+    <div class="m8t2-rail" aria-hidden="true"><span style="top: {pouce.y}%; height: {pouce.h}%"></span></div>
+  </div>
+  <div class="m8t2-pied">
+    <span>Blais et Gélineau (2007), tableau 2, p. 432 · CES 1997</span>
+    <span class="m8t2-probit">probit ordonné&#8239;: on lit le signe et les étoiles</span>
   </div>
 </div>
 
 <style>
-  .m8t2 { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2.2em; align-items: center; }
-  figure { margin: 0; }
-  .feuille { position: relative; height: 66vh; aspect-ratio: 1100 / 1744; border: 2px solid var(--dk-filet); background: #fff; }
-  .feuille img { display: block; width: 100%; height: 100%; }
-  .m8-cadre { position: absolute; outline: 3px solid var(--dk-accent); opacity: 0; transition: opacity 0.35s; }
-  .m8-cadre.on { opacity: 1; }
-  .m8-cadre.pale { opacity: 0.35; outline-width: 2px; }
-  figcaption { margin-top: 0.3em; color: var(--dk-gris); font-size: 0.62em; }
-  .droite { display: flex; flex-direction: column; gap: 0.9em; }
-  .q { margin: 0; font-size: 2em; font-weight: 700; line-height: 1.25; }
-  .bloc { border-left: 6px solid var(--dk-accent); padding: 0.2em 0 0.2em 0.8em; }
-  .bloc.gris { border-left-color: var(--dk-gris-2); }
-  .gros { margin: 0; font-size: 1.3em; font-weight: 700; line-height: 1.3; }
-  .moyen { margin: 0.2em 0 0; font-size: 1em; line-height: 1.35; }
-  .gris { color: var(--dk-gris); }
-  .rouge { color: var(--dk-accent); }
-  .zoom { border: 4px solid var(--dk-accent); background: #fff; padding: 0.3em 0.5em; }
-  .zoom img { display: block; width: 100%; height: auto; }
-  @media (prefers-reduced-motion: reduce) { .m8-cadre { transition: none; } }
+/* La diapo entière : le tableau prend toute la largeur sous le bandeau. */
+:global(.diapo-in:has(> .m8t2)) { max-width: none; padding: 0.6em 1.6em 2.5em; justify-content: stretch; }
+
+  .m8t2 { flex: 1 1 auto; min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 0.35em; }
+  .m8t2-scene { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 0.4em; gap: 0.4em; }
+  .m8t2-vue { position: relative; min-height: 0; overflow: hidden; border: 2px solid var(--dk-filet); background: #fff; }
+  .m8t2-page { position: absolute; left: 0; right: 0; top: 0; transition: transform 1.3s cubic-bezier(0.65, 0, 0.35, 1); }
+  .m8t2-page img { display: block; width: 100%; height: auto; }
+
+  .m8t2-voile { position: absolute; left: 0; right: 0; background: rgba(255, 255, 255, 0.88); opacity: 0; transition: opacity 0.4s; }
+  .m8t2-leger { background: rgba(255, 255, 255, 0.66); }
+  .m8t2-voile.on { opacity: 1; }
+
+  /* x 108 à 425 pt : des étiquettes de lignes à la colonne (2) */
+  .m8t2-cadre { position: absolute; left: 6.1%; width: 87.5%; outline: 4px solid var(--dk-accent); outline-offset: -4px; opacity: 0; transition: opacity 0.35s 0.2s; }
+  .m8t2-cadre.on { opacity: 1; }
+  .m8t2-pointille { outline: 3px dashed var(--dk-encre); outline-offset: -3px; }
+  .m8t2-encre { outline: 3px solid var(--dk-encre); outline-offset: -3px; }
+  .m8t2-etoiles { left: 1.4%; width: 31.5%; }
+  /* −0,447*** : x 390,9 à 421,8 pt, y 167,1 à 174,9 pt */
+  .m8t2-teinte { position: absolute; left: 83.4%; width: 9.6%; top: 19.6%; height: 1.8%; background: rgba(198, 16, 46, 0.22); mix-blend-mode: multiply; opacity: 0; transition: opacity 0.35s 0.3s; }
+  .m8t2-teinte.on { opacity: 1; }
+
+  .m8t2-tag {
+    position: absolute; font-size: 0.7em; font-weight: 600; white-space: nowrap; line-height: 1;
+    padding: 0.3em 0.6em; background: var(--dk-encre); color: var(--dk-fond);
+    opacity: 0; transition: opacity 0.35s 0.2s;
+  }
+  .m8t2-tag.on { opacity: 1; }
+  .m8t2-rouge { background: var(--dk-accent); }
+  /* au-dessus des en-têtes (1) et (2), y 93 pt */
+  .m8t2-mod { top: 6.5%; transform: translate(-50%, -100%); }
+  .m8t2-sur { left: 6.1%; transform: translateY(-100%); }
+  .m8t2-dessous { left: 6.1%; }
+  .m8t2-droite { left: auto; right: 6.4%; }
+  /* à droite du cadre des étoiles (x 1,4 à 32,9 %) */
+  .m8t2-cote { left: 34.2%; transform: translateY(-50%); }
+
+  .m8t2-etiq {
+    position: absolute; left: 6.1%; font-size: 0.8em; font-weight: 600; color: var(--dk-gris);
+    border-left: 4px solid var(--dk-gris-2); padding: 0.25em 0.7em; background: #fff;
+    opacity: 0; transition: opacity 0.35s 0.25s;
+  }
+  .m8t2-etiq { transform: translateY(-50%); }
+  .m8t2-etiq.on { opacity: 1; }
+
+  .m8t2-glose {
+    position: absolute; left: 6.1%; width: 87.5%; box-sizing: border-box;
+    display: flex; flex-direction: column; gap: 0.2em;
+    padding: 0.5em 0.8em; border-left: 6px solid var(--dk-accent); background: var(--dk-fond);
+    opacity: 0; transform: translateY(0.4em); transition: opacity 0.4s 0.35s, transform 0.4s 0.35s;
+  }
+  .m8t2-glose.on { opacity: 1; transform: none; }
+  .m8t2-glose-t { font-size: 1.05em; font-weight: 700; }
+  .m8t2-glose-s { font-size: 0.95em; }
+  .m8t2-glose-s b { color: var(--dk-accent); font-weight: 700; }
+
+  .m8t2-rail { position: relative; background: var(--dk-filet); }
+  .m8t2-rail span { position: absolute; left: 0; right: 0; background: var(--dk-accent); transition: top 1.3s cubic-bezier(0.65, 0, 0.35, 1), height 0.3s; }
+
+  .m8t2-pied { display: flex; justify-content: space-between; gap: 1em; font-size: 0.62em; color: var(--dk-gris); }
+  .m8t2-probit { color: var(--dk-encre); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .m8t2-page, .m8t2-rail span, .m8t2-voile, .m8t2-cadre, .m8t2-teinte, .m8t2-tag, .m8t2-etiq, .m8t2-glose { transition: none; }
+  }
 </style>

@@ -7,7 +7,6 @@
    *
    *   0  1997 : les trois lignes montent;
    *   1  2025 : les gagnants montent, les perdants et les abstentionnistes baissent;
-   *   2  le verdict : l'écart se creuse toujours; la lune de miel, non.
    *
    * 1997 vient de BG, 2025 de AVANT_APRES (outils/seance8_data.R).
    */
@@ -18,7 +17,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 1, lire: () => e, ecrire: (v) => (e = v) });
   });
   const f = (v) => v.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const t1 = (cle) => BG.tableau1.find((g) => g.cle === cle);
@@ -66,7 +65,6 @@
     {/each}
     <text x="0" y="444" class="source">1997 : Blais et Gélineau (2007), tableau 1 · 2025 : CES, mêmes personnes avant et après · satisfaction de 0 à 1</text>
   </svg>
-  <p class="verdict" class:vu={e >= 2}>L’écart entre gagnants et perdants se creuse toujours. <strong>La lune de miel pour tout le monde, non.</strong></p>
 </div>
 
 <style>
@@ -89,8 +87,5 @@
   .source { font-size: 14px; fill: var(--dk-gris); }
   .etape { opacity: 0; transition: opacity 0.4s; }
   .etape.vu { opacity: 1; }
-  .verdict { margin: 0; padding: 0.6em 0.9em; background: var(--dk-encre); color: var(--dk-fond); font-size: 1.2em; opacity: 0; transition: opacity 0.4s; }
-  .verdict.vu { opacity: 1; }
-  .verdict strong { color: var(--dk-accent-clair); }
-  @media (prefers-reduced-motion: reduce) { .etape, .verdict { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .etape { transition: none; } }
 </style>
