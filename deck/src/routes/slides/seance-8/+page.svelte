@@ -13,8 +13,10 @@
    * (2007) par son DOI. 2. Ajouter des variables, à la manière d'Arel-Bundock : deux
    * droites parallèles, à âge égal, ce que le modèle met de côté, et une
    * seule ligne se lit (on ne lit jamais les contrôles : le piège de la
-   * table 2). 3. Après la pause, Blais et Gélineau (2007) testés en 2025 :
-   * leur tableau 1 (la satisfaction envers la démocratie avant et après
+   * table 2). 3. Après la pause, Blais et Gélineau (2007) : d'abord leur
+   * article raconté comme un TP 1 (les sept étapes de TmParcours, M8LeurTP),
+   * leurs vrais tableaux 1 et 2 (découpés du PDF, outils/seance8_tableaux.sh),
+   * puis testés en 2025 : leur tableau 1 (la satisfaction envers la démocratie avant et après
    * l'élection de 1997), puis deux variables nettoyées en classe, lentement
    * (Y : la satisfaction après; X : gagnant), le contrôle (la même question,
    * avant), le tableau, jusque dans Word, et 1997 contre 2025. Le Y n'est
@@ -55,6 +57,9 @@
   import M8UneLigne from '$lib/deck/visuels/M8UneLigne.svelte';
   import M8Limites from '$lib/deck/visuels/M8Limites.svelte';
   import M8Gelineau from '$lib/deck/visuels/M8Gelineau.svelte';
+  import M8Tableau2 from '$lib/deck/visuels/M8Tableau2.svelte';
+  import M8LeurTP from '$lib/deck/visuels/M8LeurTP.svelte';
+  import TmParcours from '$lib/deck/visuels/TmParcours.svelte';
   import M8Etapes from '$lib/deck/visuels/M8Etapes.svelte';
   import M8Image from '$lib/deck/visuels/M8Image.svelte';
   import M8AvantApres from '$lib/deck/visuels/M8AvantApres.svelte';
@@ -64,7 +69,7 @@
   import { TIERS, VARS } from '$lib/data/seance7.js';
   import { MULTI, BG, ATELIER, TABLEAU, WORD, COEFS, SCRIPT } from '$lib/data/seance8.js';
 
-  const TOTAL = 49;
+  const TOTAL = 59;
   const D = 'POL-2000 · séance 8 · jeu 22 oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -227,18 +232,74 @@
     <Slide fond="encre" bandeau="Blais et Gélineau (2007), en 2025" droite={D}>
       <h1 class="e">Blais et Gélineau (2007), en 2025</h1>
       <hr class="filet" />
-      <p class="lead e">André Blais (Montréal) et François Gélineau (Laval, votre département). Testons-les.</p>
+      <p class="lead e">André Blais (Montréal) et François Gélineau (Laval, votre département). Leur TP 1, puis leur test, en 2025.</p>
     </Slide>
 
-    <Slide bandeau="Blais et Gélineau (2007)" droite={D}>
+    <Slide bandeau="Leur TP 1" droite={D}>
+      <h2 class="e">Et si Blais et Gélineau remettaient votre TP 1 ?</h2>
+      <TmParcours />
+      <M8LeurTP etape={0} />
+    </Slide>
+
+    <Slide bandeau="Leur TP 1 · étape 1" droite={D}>
+      <TmParcours ici={1} />
+      <h2 class="e">Une question claire</h2>
+      <M8LeurTP etape={1} />
+    </Slide>
+
+    <Slide bandeau="Leur TP 1 · étape 2" droite={D}>
+      <TmParcours ici={2} />
+      <h2 class="e">La littérature et une théorie</h2>
+      <M8LeurTP etape={2} />
+    </Slide>
+
+    <Slide bandeau="Leur TP 1 · étape 3" droite={D}>
+      <TmParcours ici={3} />
+      <h2 class="e">Une hypothèse et son hypothèse nulle</h2>
+      <M8LeurTP etape={3} />
+    </Slide>
+
+    <Slide bandeau="Leur TP 1 · étape 4" droite={D}>
+      <TmParcours ici={4} />
+      <h2 class="e">Les données et les variables</h2>
+      <M8LeurTP etape={4} />
+    </Slide>
+
+    <Slide bandeau="Leur TP 1 · étape 5" droite={D}>
+      <TmParcours ici={5} />
+      <h2 class="e">La pertinence : ok, donc ?</h2>
+      <M8LeurTP etape={5} />
+    </Slide>
+
+    <Slide bandeau="Leur TP 1 · étape 6" droite={D}>
+      <TmParcours ici={6} />
+      <h2 class="e">La contribution</h2>
+      <M8LeurTP etape={6} />
+    </Slide>
+
+    <Slide bandeau="Leur TP 1 · étape 7" droite={D}>
+      <TmParcours ici={7} />
+      <h2 class="e">Et eux, pourquoi ce sujet ?</h2>
+      <M8LeurTP etape={7} />
+    </Slide>
+
+    <Slide bandeau="Leur TP 1 · et le travail final" droite={D}>
+      <h2 class="e">Ce que le travail final ajoute</h2>
+      <M8LeurTP etape={8} />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau (2007) · leur tableau 1" droite={D}>
       <h2 class="e">Gagner une élection rend-il plus satisfait de la démocratie ?</h2>
       <M8Gelineau />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau (2007) · leur tableau 2" droite={D}>
+      <M8Tableau2 />
     </Slide>
 
     <Slide bandeau="Blais et Gélineau (2007)" droite={D}>
       <h2 class="e">Leur conclusion</h2>
       <p class="grande-q e">À satisfaction égale avant l’élection, les gagnants deviennent plus satisfaits que les perdants.</p>
-      <p class="e petit-dit">Leur tableau 2 : perdre au pays et dans sa circonscription, {BG.perdre} (probit ordonné, {nb(BG.n_tableau2)} personnes).</p>
     </Slide>
 
     <Slide bandeau="Blais et Gélineau, en 2025" droite={D}>
