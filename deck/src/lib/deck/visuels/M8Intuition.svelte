@@ -9,14 +9,21 @@
    *   1  l'âge apparaît et pousse les deux boîtes : moins de scolarité,
    *      plus d'intérêt (les cohortes plus âgées). Un deuxième chemin, en
    *      rouge, qui passe par l'âge;
-   *   2  on contrôle l'âge : la boîte est encadrée (la convention de la
+   *   2  on contrôle l'âge : son flux s'arrête à la coupure; la boîte est encadrée (la convention de la
    *      figure 6.1 d'Arel-Bundock 2021, p. 128 : les variables encadrées
    *      sont contrôlées), le chemin par l'âge est coupé, il reste la
    *      comparaison à âge égal (M8Pente la dessine ensuite).
    *
+   * Le flux (Flux.svelte) : des points voyagent le long de chaque flèche, de
+   * la cause vers l'effet. Au temps 1, l'intérêt reçoit deux flux, celui de
+   * la scolarité et celui de l'âge : la droite simple les mélange. Au temps
+   * 2, l'âge est contrôlé : ses points s'arrêtent à la coupure, seul le flux
+   * de la scolarité arrive encore à l'intérêt.
+   *
    * Schéma : aucune donnée.
    */
   import { brancherTemps } from '../temps.js';
+  import Flux from './Flux.svelte';
 
   let e = $state(0);
   let hote = $state(null);
@@ -55,6 +62,7 @@
     <!-- 0 : scolarité → intérêt. -->
     <path d={SI.d} class="m8i-fl" class:m8i-epais={e >= 2} />
     <polygon points={SI.tete} class="m8i-tete" />
+    <Flux d={SI.d} n={4} duree={2.2} r={8} />
     <text x={SI.mx} y={SI.my - 22} class="m8i-q">?</text>
     <text x={SI.mx} y={SI.my + 48} class="m8i-reste m8i-etape m8i-tard" class:m8i-vu={e >= 2}>à âge égal</text>
 
@@ -76,6 +84,9 @@
       <text x={AS.mx - 34} y={AS.my - 4} class="m8i-etiq m8i-fin m8i-etape m8i-tard" class:m8i-vu={e >= 1}>moins de scolarité</text>
       <text x={AI.mx + 34} y={AI.my - 4} class="m8i-etiq m8i-etape m8i-tard" class:m8i-vu={e >= 1}>plus d’intérêt</text>
     </g>
+
+    <Flux d={AS.d} actif={e >= 1} arret={e >= 2 ? 0.47 : 1} rouge n={3} duree={1.9} r={8} />
+    <Flux d={AI.d} actif={e >= 1} arret={e >= 2 ? 0.47 : 1} rouge n={3} duree={1.9} r={8} />
 
     <!-- 2 : on contrôle l'âge, le chemin est coupé. -->
     <g class="m8i-etape" class:m8i-vu={e >= 2}>

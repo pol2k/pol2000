@@ -21,14 +21,25 @@
    * modèle de la séance (M8Escalier) le contrôle. Le descendant
    * dessiné ici est la lecture des nouvelles.
    *
-   *   0  règle 1 et son schéma : scolarité → lecture des nouvelles → intérêt;
-   *   1  verdict : la lecture des nouvelles est barrée (ne pas contrôler);
-   *   2  règle 2 et son schéma : l'âge pousse la scolarité et l'intérêt;
-   *   3  verdict : l'âge est encadré (contrôler), le chemin par l'âge coupé.
+   *   0  règle 1 et son schéma : scolarité → lecture des nouvelles → intérêt.
+   *      Le flux (Flux.svelte) part de la scolarité par les deux chemins,
+   *      direct et par la lecture : tout l'effet arrive à l'intérêt;
+   *   1  on contrôle (à tort) la lecture des nouvelles : la boîte est
+   *      encadrée, ses points s'arrêtent à la boîte, plus rien ne passe de
+   *      la lecture à l'intérêt. Seul le flux direct arrive : une partie de
+   *      l'effet de la scolarité est perdue. Verdict : ne pas la contrôler;
+   *   2  règle 2 et son schéma : l'âge pousse la scolarité et l'intérêt
+   *      (flux rouge), en plus du flux scolarité → intérêt;
+   *   3  verdict : l'âge est encadré (contrôler), ses points s'arrêtent aux
+   *      coupures, comme dans M8Intuition; le flux direct continue.
+   *
+   * Toutes les flèches vont de la cause vers l'effet : les points du flux
+   * voyagent dans le bon sens.
    *
    * Schéma : aucune donnée.
    */
   import { brancherTemps } from '../temps.js';
+  import Flux from './Flux.svelte';
 
   let e = $state(0);
   let hote = $state(null);
@@ -46,6 +57,10 @@
     const mx = (ax + bx) / 2, my = (ay + by) / 2;
     return {
       d: `M ${ax} ${ay} L ${px} ${py}`,
+      // Longueur du tracé (sans la pointe) et fraction du tracé où les
+      // points s'arrêtent, juste avant la coupure dessinée au milieu.
+      long: L - pointe,
+      coupe: (L / 2 - 12) / (L - pointe),
       tete: `${bx},${by} ${px + nx},${py + ny} ${px - nx},${py - ny}`,
       mx, my,
       cx1: mx - uy * 20, cy1: my + ux * 20, cx2: mx + uy * 20, cy2: my - ux * 20
@@ -58,14 +73,20 @@
   const S1 = { cx: 120, cy: 70 }, I1 = { cx: 480, cy: 70 };
   const M = { cx: 300, cy: 268, w: 280, h: 104 };
   const SI1 = fleche(S1.cx + W / 2 + 6, S1.cy, I1.cx - W / 2 - 6, I1.cy);
-  const SM = fleche(S1.cx + 20, S1.cy + H / 2 + 6, M.cx - 70, M.cy - M.h / 2 - 6);
-  const MI = fleche(M.cx + 70, M.cy - M.h / 2 - 6, I1.cx - 20, I1.cy + H / 2 + 6);
+  // Les flèches de la lecture s'arrêtent à 16 de la boîte : la place du
+  // cadre « contrôlé » au temps 1.
+  const SM = fleche(S1.cx + 20, S1.cy + H / 2 + 6, M.cx - 70, M.cy - M.h / 2 - 16);
+  const MI = fleche(M.cx + 70, M.cy - M.h / 2 - 16, I1.cx - 20, I1.cy + H / 2 + 6);
   // Panneau 2 : la cause commune en haut, X et Y en bas.
   const A = { cx: 300, cy: 72, w: 170, h: 84 };
   const S2 = { cx: 120, cy: 268 }, I2 = { cx: 480, cy: 268 };
   const SI2 = fleche(S2.cx + W / 2 + 6, S2.cy, I2.cx - W / 2 - 6, I2.cy);
   const AS = fleche(A.cx - 50, A.cy + A.h / 2 + 6, S2.cx + 20, S2.cy - H / 2 - 6);
   const AI = fleche(A.cx + 50, A.cy + A.h / 2 + 6, I2.cx - 20, I2.cy - H / 2 - 6);
+
+  // Même vitesse sur toutes les flèches : la durée suit la longueur.
+  const VIT = 95;
+  const duree = (f) => f.long / VIT;
 </script>
 
 {#snippet boite(b, nom, role)}
@@ -85,21 +106,36 @@
           <p class="m8d-glose">une variable que X cause</p>
         </div>
       </header>
-      <svg viewBox="0 0 600 340" role="img" aria-label="La scolarité pointe vers l’intérêt, et aussi vers la lecture des nouvelles, qui pointe vers l’intérêt. La lecture des nouvelles est un descendant de la scolarité : on ne la contrôle pas.">
+      <svg viewBox="0 0 600 340" role="img" aria-label="La scolarité pointe vers l’intérêt, et aussi vers la lecture des nouvelles, qui pointe vers l’intérêt. Contrôler la lecture des nouvelles arrête l’effet qui passe par elle : une partie de l’effet de la scolarité est perdue. On ne la contrôle pas.">
         <path d={SI1.d} class="m8d-fl" />
         <polygon points={SI1.tete} class="m8d-pointe" />
         <path d={SM.d} class="m8d-fl" />
         <polygon points={SM.tete} class="m8d-pointe" />
-        <path d={MI.d} class="m8d-fl" />
-        <polygon points={MI.tete} class="m8d-pointe" />
+        <g class="m8d-arriere" class:m8d-coupe={e >= 1}>
+          <path d={MI.d} class="m8d-fl" />
+          <polygon points={MI.tete} class="m8d-pointe" />
+        </g>
+        <!-- Le flux : tout l'effet part de la scolarité, par les deux chemins.
+             Au temps 1, la lecture contrôlée absorbe ses points. -->
+        <Flux d={SI1.d} n={2} duree={duree(SI1)} r={7} />
+        <Flux d={SM.d} arret={e >= 1 ? 0.96 : 1} n={2} duree={duree(SM)} r={7} />
+        <Flux d={MI.d} actif={e < 1} n={2} duree={duree(MI)} r={7} />
+
         {@render boite(S1, 'scolarité', 'X')}
         {@render boite(I1, 'intérêt', 'Y')}
-        <rect x={M.cx - M.w / 2} y={M.cy - M.h / 2} width={M.w} height={M.h} class="m8d-boite" class:m8d-pale={e >= 1} />
-        <text x={M.cx} y={M.cy - 6} class="m8d-nom m8d-petit" class:m8d-gris={e >= 1}>lecture des</text>
-        <text x={M.cx} y={M.cy + 26} class="m8d-nom m8d-petit" class:m8d-gris={e >= 1}>nouvelles</text>
-        <g class="m8d-etape" class:m8d-vu={e >= 1} transform="translate({M.cx + M.w / 2} {M.cy + M.h / 2})">
-          <rect x="-22" y="-22" width="44" height="44" class="m8d-badge" />
-          <path d="M -10 -10 L 10 10 M 10 -10 L -10 10" class="m8d-badge-x" />
+        <rect x={M.cx - M.w / 2} y={M.cy - M.h / 2} width={M.w} height={M.h} class="m8d-boite" />
+        <text x={M.cx} y={M.cy - 6} class="m8d-nom m8d-petit">lecture des</text>
+        <text x={M.cx} y={M.cy + 26} class="m8d-nom m8d-petit">nouvelles</text>
+
+        <!-- 1 : la lecture contrôlée, une partie de l'effet perdue. -->
+        <g class="m8d-etape" class:m8d-vu={e >= 1}>
+          <rect x={M.cx - M.w / 2 - 11} y={M.cy - M.h / 2 - 11} width={M.w + 22} height={M.h + 22} class="m8d-cadre" />
+          <text x={M.cx} y="142" class="m8d-perte">une partie de</text>
+          <text x={M.cx} y="166" class="m8d-perte">l’effet perdue</text>
+          <g transform="translate({M.cx + M.w / 2 + 11} {M.cy - M.h / 2 - 11})">
+            <rect x="-22" y="-22" width="44" height="44" class="m8d-badge" />
+            <path d="M -10 -10 L 10 10 M 10 -10 L -10 10" class="m8d-badge-x" />
+          </g>
         </g>
       </svg>
       <p class="m8d-verdict m8d-etape" class:m8d-vu={e >= 1}><span class="m8d-non" aria-hidden="true"></span>ne pas la contrôler</p>
@@ -114,7 +150,7 @@
           <p class="m8d-glose">les causes de la cause</p>
         </div>
       </header>
-      <svg viewBox="0 0 600 340" role="img" aria-label="L’âge pointe vers la scolarité et vers l’intérêt : un chemin par la porte arrière. On contrôle l’âge, ce qui bloque ce chemin.">
+      <svg viewBox="0 0 600 340" role="img" aria-label="L’âge pointe vers la scolarité et vers l’intérêt : un chemin par la porte arrière. On contrôle l’âge : son effet s’arrête aux coupures, il reste l’effet de la scolarité.">
         <path d={SI2.d} class="m8d-fl" class:m8d-epais={e >= 3} />
         <polygon points={SI2.tete} class="m8d-pointe" />
         <g class="m8d-arriere" class:m8d-coupe={e >= 3}>
@@ -123,6 +159,9 @@
           <path d={AI.d} pathLength="1" class="m8d-fl m8d-rouge m8d-trace" class:m8d-vu={e >= 2} />
           <polygon points={AI.tete} class="m8d-pointe m8d-rouge-t m8d-etape m8d-tard" class:m8d-vu={e >= 2} />
         </g>
+        <Flux d={SI2.d} actif={e >= 2} n={2} duree={duree(SI2)} r={7} />
+        <Flux d={AS.d} actif={e >= 2} arret={e >= 3 ? AS.coupe : 1} rouge n={2} duree={duree(AS)} r={7} />
+        <Flux d={AI.d} actif={e >= 2} arret={e >= 3 ? AI.coupe : 1} rouge n={2} duree={duree(AI)} r={7} />
         {@render boite(S2, 'scolarité', 'X')}
         {@render boite(I2, 'intérêt', 'Y')}
         <rect x={A.cx - A.w / 2} y={A.cy - A.h / 2} width={A.w} height={A.h} class="m8d-boite m8d-age" />
@@ -157,9 +196,8 @@
   text { font-family: var(--dk-mono); }
   .m8d-boite { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 3; transition: opacity 0.4s; }
   .m8d-boite.m8d-age { stroke: var(--dk-accent); }
-  .m8d-pale { stroke: var(--dk-gris-2); stroke-dasharray: 10 7; }
-  .m8d-nom.m8d-gris { fill: var(--dk-gris-2); }
   .m8d-badge { fill: var(--dk-accent); }
+  .m8d-perte { font-size: 20px; font-weight: 600; text-anchor: middle; fill: var(--dk-accent); }
   .m8d-badge-x { stroke: #fff; stroke-width: 5; }
   .m8d-nom { font-size: 28px; font-weight: 700; text-anchor: middle; fill: var(--dk-encre); }
   .m8d-nom.m8d-petit { font-size: 26px; }
