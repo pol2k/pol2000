@@ -265,6 +265,11 @@ WORD <- list(code = paste0(
   "  gof_map = c(\"nobs\", \"r.squared\"), output = \"gagnants2025.docx\")"))
 eval(parse(text = WORD$code), envir = globalenv())
 stopifnot(file.exists("gagnants2025.docx"))
+# Étape 10 du plan : sauvegarder df_clean, pour ne pas tout refaire la
+# prochaine fois.
+SAUVER <- list(code = "saveRDS(df_clean, \"df_clean.rds\")")
+eval(parse(text = SAUVER$code), envir = globalenv())
+stopifnot(file.exists("df_clean.rds"))
 
 # ---- Faire mieux : leur note 1. Le vote de 2021, demandé pendant la
 # campagne de 2025 (avant le résultat), aux mêmes personnes.
@@ -357,13 +362,14 @@ SCRIPT <- c(
   paste0("# Faire mieux : leur note 1, l'élection de 2021\n",
          paste(ins("vote2021"), ins("gagnant2021"), ins("modele3"), TABLEAU3$code, sep = "\n\n")),
   paste0("# Si on a le temps : X mesuré avant le résultat\n", ins("intention"), "\n", ins("campagne"), "\n\n",
-         "# Si on a le temps : les perdants sont-ils tous pareils ?\n", ins("perdants"))
+         "# Si on a le temps : les perdants sont-ils tous pareils ?\n", ins("perdants"), "\n\n",
+         "# Sauvegarder df_clean\n", SAUVER$code)
 )
 vierge <- tempfile("s8-vierge-"); dir.create(vierge)
 saveRDS(d, file.path(vierge, "ces2025.rds"))
 writeLines(paste(SCRIPT, collapse = "\n\n"), file.path(vierge, "seance8.R"))
 statut <- system(sprintf("cd %s && Rscript --vanilla seance8.R > /dev/null 2>&1", shQuote(vierge)))
-stopifnot(statut == 0, file.exists(file.path(vierge, "gagnants2025.docx")))
+stopifnot(statut == 0, file.exists(file.path(vierge, "gagnants2025.docx")), file.exists(file.path(vierge, "df_clean.rds")))
 
 # ---- Écriture.
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
@@ -387,6 +393,7 @@ writeLines(c(
   "/* Le tableau à deux colonnes (image) et le même tableau dans Word. */",
   paste0("export const TABLEAU = ", J(TABLEAU), ";"),
   paste0("export const WORD = ", J(WORD), ";"),
+  paste0("export const SAUVER = ", J(SAUVER), ";"),
   "/* Faire mieux : le tableau à trois colonnes (+ gagnant en 2021). */",
   paste0("export const TABLEAU3 = ", J(TABLEAU3), ";"),
   "/* La satisfaction avant et après, par groupe, en 2025. */",

@@ -58,6 +58,7 @@
   import M8Gelineau from '$lib/deck/visuels/M8Gelineau.svelte';
   import M8Tableau2 from '$lib/deck/visuels/M8Tableau2.svelte';
   import M8Fil from '$lib/deck/visuels/M8Fil.svelte';
+  import M8Nouvelles from '$lib/deck/visuels/M8Nouvelles.svelte';
   import M8LeurTP from '$lib/deck/visuels/M8LeurTP.svelte';
   import TmParcours from '$lib/deck/visuels/TmParcours.svelte';
   import M8Etapes from '$lib/deck/visuels/M8Etapes.svelte';
@@ -65,11 +66,13 @@
   import M8AvantApres from '$lib/deck/visuels/M8AvantApres.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
-  import { BG, ATELIER, TABLEAU, WORD, COEFS } from '$lib/data/seance8.js';
+  import { BG, ATELIER, TABLEAU, WORD, SAUVER, COEFS } from '$lib/data/seance8.js';
 
-  const TOTAL = 41;
+  const TOTAL = 43;
   // Le bandeau de la diapo de l'article (M8Fil) : il suit la marche.
   let bandeauArt = $state('Pratique dans R');
+  // Le plan du code : des commentaires d'abord (la diapo « Planifions notre code »).
+  const PLAN = "# 1. La régression qu'on veut, au bout du compte\n#    lm(apres ~ gagnant + avant, data = df_clean)\n# 2. Charger les données\n# 3. Créer df_clean\n# 4. Quelles variables ? Comment les nettoyer ?\n# 5. Nettoyer chacune\n# 6. Faire chaque modèle de régression\n# 7. Interpréter les résultats\n# 8. Créer le tableau\n# 9. Sortir le tableau (Word)\n# 10. Sauvegarder df_clean";
   const D = 'POL-2000 · séance 8 · jeu 22 oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -179,6 +182,11 @@
       <M8Pente />
     </Slide>
 
+    <Slide bandeau="Ajouter des variables · un piège" droite={D}>
+      <h2 class="e">Une variable qui change beaucoup la pente</h2>
+      <M8Nouvelles />
+    </Slide>
+
     <Slide bandeau="Ajouter des variables · à âge égal" droite={D}>
       <h2 class="e">La part propre de la scolarité</h2>
       <M8Venn />
@@ -238,9 +246,16 @@
       </div>
     </Slide>
 
+    <Slide bandeau="Blais et Gélineau, en 2025 · le plan" droite={D}>
+      <h2 class="e">Planifions notre code</h2>
+      <div class="plan">
+        <Code src={PLAN} titre="seance8.R" />
+        <p class="e petit-dit">D’abord les commentaires. Le code vient ensuite, sous chacun.</p>
+      </div>
+    </Slide>
+
     <Slide bandeau="Blais et Gélineau, en 2025" droite={D}>
-      <h2 class="e">Six étapes, lentement</h2>
-      <M8Etapes />
+      <h2 class="e">Avant de commencer, dans Positron</h2>
       <div class="avant">
         <p class="e">Dans votre projet Positron :</p>
         <Code src={'# un nouveau fichier : seance8.R\ninstall.packages(c("modelsummary", "pandoc"))   # une seule fois'} titre="seance8.R" />
@@ -318,6 +333,7 @@
         <Code src={WORD.code} titre="seance8.R" />
         <p class="e petit-dit">gagnants2025.docx apparaît dans le dossier du projet. Copiez-le dans votre travail.</p>
         <p class="e petit-dit">Si R se plaint de pandoc : <code>pandoc::pandoc_install()</code>, une seule fois.</p>
+        <Code src={'# 10. Sauvegarder df_clean, pour ne pas tout refaire\n' + SAUVER.code} titre="seance8.R" />
       </div>
     </Slide>
 
@@ -359,6 +375,7 @@
 .entete-ul .session { margin-left: auto; font-size: 0.72em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dk-accent); font-weight: 600; }
 
 .avant { max-width: 44em; margin: 1.6em auto 0; display: flex; flex-direction: column; gap: 0.8em; }
+.plan { max-width: 46em; margin: 1em auto 0; display: flex; flex-direction: column; gap: 0.8em; }
 .petit-dit { margin: 0; color: var(--dk-gris); font-size: 0.85em; }
 .grande-q { font-size: 2em; line-height: 1.3; max-width: 22em; margin-top: 1.2em; }
 .nowrap { white-space: nowrap; }
