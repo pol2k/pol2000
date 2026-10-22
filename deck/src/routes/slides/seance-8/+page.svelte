@@ -62,6 +62,7 @@
   import M8DeuxVoies from '$lib/deck/visuels/M8DeuxVoies.svelte';
   import M8Note1 from '$lib/deck/visuels/M8Note1.svelte';
   import M8Lecture3 from '$lib/deck/visuels/M8Lecture3.svelte';
+  import M8TroisModeles from '$lib/deck/visuels/M8TroisModeles.svelte';
   import M8LeurTP from '$lib/deck/visuels/M8LeurTP.svelte';
   import TmParcours from '$lib/deck/visuels/TmParcours.svelte';
   import M8Etapes from '$lib/deck/visuels/M8Etapes.svelte';
@@ -71,11 +72,11 @@
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
   import { BG, ATELIER, TABLEAU, TABLEAU3, WORD, SAUVER, COEFS } from '$lib/data/seance8.js';
 
-  const TOTAL = 53;
+  const TOTAL = 55;
   // Le bandeau de la diapo de l'article (M8Fil) : il suit la marche.
   let bandeauArt = $state('Pratique dans R');
   // Le plan du code : des commentaires d'abord (la diapo « Planifions notre code »).
-  const PLAN = "# 1. La régression qu'on veut, au bout du compte\n#    lm(apres ~ gagnant + avant, data = df_clean)\n# 2. Charger les données\n# 3. Créer df_clean\n# 4. Quelles variables ? Comment les nettoyer ?\n# 5. Nettoyer chacune\n# 6. Faire chaque modèle de régression\n# 7. Interpréter les résultats\n# 8. Créer le tableau\n# 9. Sortir le tableau (Word)\n# 10. Sauvegarder df_clean";
+  const PLAN = "# 1. La régression qu'on veut, au bout du compte\n#    lm(apres ~ gagnant + avant + gagnant_2021, data = df_clean)\n# 2. Charger les données\n# 3. Créer df_clean\n# 4. Quelles variables ? Comment les nettoyer ?\n# 5. Nettoyer chacune\n# 6. Faire chaque modèle de régression\n# 7. Interpréter les résultats\n# 8. Créer le tableau\n# 9. Sortir le tableau (Word)\n# 10. Sauvegarder df_clean";
   const D = 'POL-2000 · séance 8 · jeu 22 oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -108,6 +109,7 @@
   {#snippet children()}
 
     <!-- ================= OUVERTURE ================= -->
+
     <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
       <div class="titre">
         <p class="surtitre e">POL-2000 · Méthodologie quantitative</p>
@@ -133,6 +135,7 @@
     </Slide>
 
     <!-- ================= ZOTERO ================= -->
+
     <Slide fond="encre" bandeau="Zotero" droite={D}>
       <h1 class="e">Zotero</h1>
       <hr class="filet" />
@@ -160,6 +163,7 @@
     </Slide>
 
     <!-- ================= AJOUTER DES VARIABLES ================= -->
+
     <Slide bandeau="La semaine passée" droite={D}>
       <h2 class="e">Rappel : la régression multiple de la séance 7</h2>
       <TabSuite />
@@ -221,6 +225,7 @@
     </Slide>
 
     <!-- ================= BLAIS ET GÉLINEAU EN 2025 ================= -->
+
     <Slide bandeau={bandeauArt} droite={D}>
       <M8Fil bind:bandeau={bandeauArt} />
     </Slide>
@@ -259,6 +264,16 @@
       </div>
     </Slide>
 
+    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
+      <h2 class="e">Ils y avaient pensé</h2>
+      <M8Note1 />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · trois modèles" droite={D}>
+      <h2 class="e">Trois modèles</h2>
+      <M8TroisModeles />
+    </Slide>
+
     <Slide bandeau="Blais et Gélineau, en 2025 · le plan" droite={D}>
       <h2 class="e">Planifions notre code</h2>
       <div class="plan">
@@ -267,71 +282,9 @@
       </div>
     </Slide>
 
-    <Slide bandeau="Blais et Gélineau, en 2025" droite={D}>
-      <h2 class="e">Avant de commencer, dans Positron</h2>
-      <div class="avant">
-        <p class="e">Dans votre projet Positron :</p>
-        <Code src={'# un nouveau fichier : seance8.R\ninstall.packages(c("modelsummary", "pandoc"))   # une seule fois'} titre="seance8.R" />
-        <p class="e petit-dit">ces2025.rds doit être dans le dossier du projet (séance 2).</p>
-      </div>
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · charger" droite={D}>
-      <M8Etapes ici={1} />
-      <h2 class="e">Charger, et préparer df_clean</h2>
-      <Console lignes={c_charger} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · Y" droite={D}>
-      <M8Etapes ici={2} />
-      <h2 class="e">Y : satisfait de la démocratie, après l’élection ?</h2>
-      <Console lignes={c_question} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · Y" droite={D}>
-      <M8Etapes ici={2} />
-      <h2 class="e">Y : de 0 (pas du tout) à 1 (très)</h2>
-      <Console lignes={c_apres} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · X" droite={D}>
-      <M8Etapes ici={3} />
-      <h2 class="e">X : pour qui avez-vous voté ?</h2>
-      <Console lignes={c_vote} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · X" droite={D}>
-      <M8Etapes ici={3} />
-      <h2 class="e">X : gagnant (1) ou perdant (0)</h2>
-      <Console lignes={c_gagnant} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · contrôle" droite={D}>
-      <M8Etapes ici={4} />
-      <h2 class="e">Le contrôle : la même question, avant</h2>
-      <Console lignes={c_avant} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · regarder" droite={D}>
-      <M8Etapes ici={4} />
-      <h2 class="e">Avant, après : leur tableau 1, en 2025</h2>
-      <Console lignes={c_moyennes} />
-    </Slide>
-
     <Slide bandeau="Blais et Gélineau, en 2025 · regarder" droite={D}>
       <h2 class="e">1997 et 2025</h2>
       <M8AvantApres />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · modéliser" droite={D}>
-      <M8Etapes ici={5} />
-      <h2 class="e">Deux modèles : seul, puis à satisfaction égale avant</h2>
-      <Console lignes={c_modeles} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · tableau" droite={D}>
-      <M8Etapes ici={6} />
-      <M8Image code={TABLEAU.code} img={TABLEAU.img} l={TABLEAU.l} h={TABLEAU.h} px={100} nouveau={[5, 6]} dit="deux modèles = deux colonnes" alt="Le tableau de modelsummary : le modèle « gagnant seul » et le modèle à satisfaction égale avant l’élection, côte à côte, avec Num.Obs. et R2." />
     </Slide>
 
     <Slide bandeau="Blais et Gélineau, en 2025 · lire" droite={D}>
@@ -339,64 +292,14 @@
       <M8Lecture2025 />
     </Slide>
 
-    <Slide bandeau="Blais et Gélineau, en 2025 · Word" droite={D}>
-      <M8Etapes ici={6} />
-      <h2 class="e">Le même tableau, dans Word</h2>
-      <div class="avant">
-        <Code src={WORD.code} titre="seance8.R" />
-        <p class="e petit-dit">gagnants2025.docx apparaît dans le dossier du projet. Copiez-le dans votre travail.</p>
-        <p class="e petit-dit">Si R se plaint de pandoc : <code>pandoc::pandoc_install()</code>, une seule fois.</p>
-        <Code src={'# 10. Sauvegarder df_clean, pour ne pas tout refaire\n' + SAUVER.code} titre="seance8.R" />
-      </div>
-    </Slide>
-
-    <!-- ================= FAIRE MIEUX : LEUR NOTE 1 ================= -->
     <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
       <h2 class="e">Vérifié. Maintenant, faire mieux</h2>
       <M8DeuxVoies ici={2} />
     </Slide>
 
     <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
-      <h2 class="e">Ils y avaient pensé</h2>
-      <M8Note1 />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
-      <M8Etapes ici={7} />
-      <h2 class="e">Pour qui avez-vous voté en 2021 ?</h2>
-      <Console lignes={c_vote2021} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
-      <M8Etapes ici={7} />
-      <h2 class="e">gagnant_2021 : gagnant (1) ou perdant (0) en 2021</h2>
-      <Console lignes={c_gagnant2021} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
-      <M8Etapes ici={7} />
-      <h2 class="e">Leur modèle, plus le vote de 2021</h2>
-      <Console lignes={c_modele3} />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
-      <M8Etapes ici={7} />
-      <M8Image code={TABLEAU3.code} img={TABLEAU3.img} l={TABLEAU3.l} h={TABLEAU3.h} px={100} nouveau={[0, 1]} dit="leur modèle, puis le nôtre" alt="Le tableau de modelsummary : leur modèle et le même avec le vote de 2021, côte à côte, avec Num.Obs. et R2." />
-    </Slide>
-
-    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
       <h2 class="e">Lire le tableau : Gagnant, encore</h2>
       <M8Lecture3 />
-    </Slide>
-
-    <Slide bandeau="Si on a le temps · X mesuré avant" droite={D}>
-      <h2 class="e">Et si X était mesuré avant le résultat ?</h2>
-      <Console lignes={c_intention} />
-    </Slide>
-
-    <Slide bandeau="Si on a le temps · X mesuré avant" droite={D}>
-      <h2 class="e">gagnant_campagne : l’intention de vote</h2>
-      <Console lignes={c_campagne} />
     </Slide>
 
     <Slide bandeau="Avant le 5 novembre" droite={D}>
@@ -421,6 +324,120 @@
         <span class="dept">Département de science politique<br />Faculté des sciences sociales</span>
         <span class="session">POL-2000 · Automne 2026</span>
       </div>
+    </Slide>
+
+    <!-- ================= ANNEXE : TOUT LE CODE ================= -->
+
+    <Slide fond="encre" bandeau="Annexe" droite={D}>
+      <h1 class="e">Annexe : tout le code</h1>
+      <hr class="filet" />
+      <p class="lead e">Blais et Gélineau en 2025, étape par étape. À refaire chez vous, ligne par ligne.</p>
+    </Slide>
+
+    <Slide bandeau="Annexe · code" droite={D}>
+      <h2 class="e">Avant de commencer, dans Positron</h2>
+      <div class="avant">
+        <p class="e">Dans votre projet Positron :</p>
+        <Code src={'# un nouveau fichier : seance8.R\ninstall.packages(c("modelsummary", "pandoc"))   # une seule fois'} titre="seance8.R" />
+        <p class="e petit-dit">ces2025.rds doit être dans le dossier du projet (séance 2).</p>
+      </div>
+    </Slide>
+
+    <Slide bandeau="Annexe · charger" droite={D}>
+      <M8Etapes ici={1} />
+      <h2 class="e">Charger, et préparer df_clean</h2>
+      <Console lignes={c_charger} />
+    </Slide>
+
+    <Slide bandeau="Annexe · Y" droite={D}>
+      <M8Etapes ici={2} />
+      <h2 class="e">Y : satisfait de la démocratie, après l’élection ?</h2>
+      <Console lignes={c_question} />
+    </Slide>
+
+    <Slide bandeau="Annexe · Y" droite={D}>
+      <M8Etapes ici={2} />
+      <h2 class="e">Y : de 0 (pas du tout) à 1 (très)</h2>
+      <Console lignes={c_apres} />
+    </Slide>
+
+    <Slide bandeau="Annexe · X" droite={D}>
+      <M8Etapes ici={3} />
+      <h2 class="e">X : pour qui avez-vous voté ?</h2>
+      <Console lignes={c_vote} />
+    </Slide>
+
+    <Slide bandeau="Annexe · X" droite={D}>
+      <M8Etapes ici={3} />
+      <h2 class="e">X : gagnant (1) ou perdant (0)</h2>
+      <Console lignes={c_gagnant} />
+    </Slide>
+
+    <Slide bandeau="Annexe · contrôle" droite={D}>
+      <M8Etapes ici={4} />
+      <h2 class="e">Le contrôle : la même question, avant</h2>
+      <Console lignes={c_avant} />
+    </Slide>
+
+    <Slide bandeau="Annexe · regarder" droite={D}>
+      <M8Etapes ici={4} />
+      <h2 class="e">Avant, après : leur tableau 1, en 2025</h2>
+      <Console lignes={c_moyennes} />
+    </Slide>
+
+    <Slide bandeau="Annexe · modéliser" droite={D}>
+      <M8Etapes ici={5} />
+      <h2 class="e">Deux modèles : seul, puis à satisfaction égale avant</h2>
+      <Console lignes={c_modeles} />
+    </Slide>
+
+    <Slide bandeau="Annexe · tableau" droite={D}>
+      <M8Etapes ici={6} />
+      <M8Image code={TABLEAU.code} img={TABLEAU.img} l={TABLEAU.l} h={TABLEAU.h} px={100} nouveau={[5, 6]} dit="deux modèles = deux colonnes" alt="Le tableau de modelsummary : le modèle « gagnant seul » et le modèle à satisfaction égale avant l’élection, côte à côte, avec Num.Obs. et R2." />
+    </Slide>
+
+    <Slide bandeau="Annexe · Word" droite={D}>
+      <M8Etapes ici={6} />
+      <h2 class="e">Le même tableau, dans Word</h2>
+      <div class="avant">
+        <Code src={WORD.code} titre="seance8.R" />
+        <p class="e petit-dit">gagnants2025.docx apparaît dans le dossier du projet. Copiez-le dans votre travail.</p>
+        <p class="e petit-dit">Si R se plaint de pandoc : <code>pandoc::pandoc_install()</code>, une seule fois.</p>
+        <Code src={'# 10. Sauvegarder df_clean, pour ne pas tout refaire\n' + SAUVER.code} titre="seance8.R" />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Annexe · faire mieux" droite={D}>
+      <M8Etapes ici={7} />
+      <h2 class="e">Pour qui avez-vous voté en 2021 ?</h2>
+      <Console lignes={c_vote2021} />
+    </Slide>
+
+    <Slide bandeau="Annexe · faire mieux" droite={D}>
+      <M8Etapes ici={7} />
+      <h2 class="e">gagnant_2021 : gagnant (1) ou perdant (0) en 2021</h2>
+      <Console lignes={c_gagnant2021} />
+    </Slide>
+
+    <Slide bandeau="Annexe · faire mieux" droite={D}>
+      <M8Etapes ici={7} />
+      <h2 class="e">Leur modèle, plus le vote de 2021</h2>
+      <Console lignes={c_modele3} />
+    </Slide>
+
+    <Slide bandeau="Annexe · faire mieux" droite={D}>
+      <M8Etapes ici={7} />
+      <M8Image code={TABLEAU3.code} img={TABLEAU3.img} l={TABLEAU3.l} h={TABLEAU3.h} px={100} nouveau={[0, 1]} dit="leur modèle, puis le nôtre" alt="Le tableau de modelsummary : leur modèle et le même avec le vote de 2021, côte à côte, avec Num.Obs. et R2." />
+    </Slide>
+
+    <Slide bandeau="Annexe · X mesuré avant le résultat" droite={D}>
+      <h2 class="e">Et si X était mesuré avant le résultat ?</h2>
+      <Console lignes={c_intention} />
+    </Slide>
+
+    <Slide bandeau="Annexe · X mesuré avant le résultat" droite={D}>
+      <h2 class="e">gagnant_campagne : l’intention de vote</h2>
+      <Console lignes={c_campagne} />
     </Slide>
 
   {/snippet}
