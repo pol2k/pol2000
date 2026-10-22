@@ -1,13 +1,12 @@
-<script>
+<script module>
   /**
    * TP 1, étape 3 (l'hypothèse), dans le vrai article : comment Blais et
    * Gélineau tirent leurs hypothèses de la littérature. La théorie (p. 426)
    * donne l'hypothèse principale; une prémisse sur le régime parlementaire
    * donne, « for this reason », la deuxième (p. 427); la théorie des
    * anticipations rationnelles donne la troisième (p. 427). Le résumé
-   * (p. 425) dit ensuite lesquelles tiennent. M8Article.
+   * (p. 425) dit ensuite lesquelles tiennent. La carte de M8Fil.
    */
-  import M8Article from './M8Article.svelte';
 
   const THEORIE = 'Citizens who cast their vote for the winning party are more inclined to display faith in the way democracy works, because they like and/or trust the party/individual who has been elected.';
   const PREMISSE = 'In a parliamentary regime, the stakes are arguably higher in the national contest. After all, it is the party that elects the most candidates that forms the government.';
@@ -15,7 +14,7 @@
   const MUTH = 'as proposed by the rational expectations theory (Muth, 1961)';
   const ATTENTES = 'we suggest that only voters who wrongly assessed the chances of their party to win or lose will change their assessment of democracy after the election.';
 
-  const ETATS = [
+  export const ETATS = [
     { passages: [{ phrase: THEORIE, ton: 'encre' }] },
     { passages: [{ phrase: PREMISSE, ton: 'encre' }] },
     { passages: [{ phrase: PREMISSE, ton: 'encre' }, { phrase: NATIONAL }], focus: 1 },
@@ -31,6 +30,11 @@
   ];
 </script>
 
+<script>
+  // e : le temps de cette étape (0 = son premier passage). M8Fil.
+  let { e = 0 } = $props();
+</script>
+
 {#snippet fleche()}
   <div class="m8n-donc">
     <svg viewBox="0 0 20 44" aria-hidden="true"><path d="M10 2 V40 M3 32 L10 41 L17 32" /></svg>
@@ -38,36 +42,32 @@
   </div>
 {/snippet}
 
-<M8Article etats={ETATS}>
-  {#snippet note(e)}
-    {#if e === 0}
-      <span class="m8n-eti">La consigne</span>
-      <p class="m8n-consigne">Énoncez votre hypothèse. Énoncez aussi votre hypothèse nulle.</p>
-      <div class="m8n-premisse"><span class="m8n-eti">Théorie, p. 426</span><p>On aime le parti qu’on a élu.</p></div>
-      {@render fleche()}
-      <div class="m8n-hyp m8n-hyp-0">
-        <p><strong>Hypothèse&#8239;:</strong> à satisfaction égale avant l’élection, les gagnants deviennent plus satisfaits que les perdants.</p>
-        <p class="m8n-nulle"><strong>Hypothèse nulle&#8239;:</strong> gagner ou perdre ne change rien.</p>
-      </div>
-    {:else if e === 1}
-      <div class="m8n-premisse"><span class="m8n-eti">Prémisse, p. 427</span><p>Le gouvernement se joue à l’échelle du pays.</p></div>
-    {:else if e === 2}
-      <div class="m8n-premisse"><span class="m8n-eti">Prémisse, p. 427</span><p>Le gouvernement se joue à l’échelle du pays.</p></div>
-      {@render fleche()}
-      <div class="m8n-hyp"><span class="m8n-eti">Hypothèse</span><p class="m8n-grand">Gagner au pays compte plus que gagner dans sa circonscription.</p></div>
-    {:else if e === 3}
-      <div class="m8n-premisse"><span class="m8n-eti">Théorie, p. 427</span><p>Les anticipations rationnelles (Muth, 1961)</p></div>
-      {@render fleche()}
-      <div class="m8n-hyp"><span class="m8n-eti">Hypothèse</span><p class="m8n-grand">Seuls ceux qui se sont trompés sur l’issue changent d’avis.</p></div>
-    {:else}
-      <span class="m8n-eti">Leur résumé, p. 425</span>
-      <p class="m8n-res"><span class="m8n-oui">✓</span><span>Gagner rend plus satisfait, à satisfaction égale avant.</span></p>
-      <p class="m8n-res"><span class="m8n-non">✕</span><span>La circonscription compte autant que le pays.</span></p>
-      <p class="m8n-res"><span class="m8n-non">✕</span><span>Pas d’effet significatif des attentes.</span></p>
-      <p class="m8n-dit">Une hypothèse peut tomber. C’est un résultat.</p>
-    {/if}
-  {/snippet}
-</M8Article>
+{#if e === 0}
+  <span class="m8n-eti">La consigne</span>
+  <p class="m8n-consigne">Énoncez votre hypothèse. Énoncez aussi votre hypothèse nulle.</p>
+  <div class="m8n-premisse"><span class="m8n-eti">Théorie, p. 426</span><p>On aime le parti qu’on a élu.</p></div>
+  {@render fleche()}
+  <div class="m8n-hyp m8n-hyp-0">
+    <p><strong>Hypothèse&#8239;:</strong> à satisfaction égale avant l’élection, les gagnants deviennent plus satisfaits que les perdants.</p>
+    <p class="m8n-nulle"><strong>Hypothèse nulle&#8239;:</strong> gagner ou perdre ne change rien.</p>
+  </div>
+{:else if e === 1}
+  <div class="m8n-premisse"><span class="m8n-eti">Prémisse, p. 427</span><p>Le gouvernement se joue à l’échelle du pays.</p></div>
+{:else if e === 2}
+  <div class="m8n-premisse"><span class="m8n-eti">Prémisse, p. 427</span><p>Le gouvernement se joue à l’échelle du pays.</p></div>
+  {@render fleche()}
+  <div class="m8n-hyp"><span class="m8n-eti">Hypothèse</span><p class="m8n-grand">Gagner au pays compte plus que gagner dans sa circonscription.</p></div>
+{:else if e === 3}
+  <div class="m8n-premisse"><span class="m8n-eti">Théorie, p. 427</span><p>Les anticipations rationnelles (Muth, 1961)</p></div>
+  {@render fleche()}
+  <div class="m8n-hyp"><span class="m8n-eti">Hypothèse</span><p class="m8n-grand">Seuls ceux qui se sont trompés sur l’issue changent d’avis.</p></div>
+{:else}
+  <span class="m8n-eti">Leur résumé, p. 425</span>
+  <p class="m8n-res"><span class="m8n-oui">✓</span><span>Gagner rend plus satisfait, à satisfaction égale avant.</span></p>
+  <p class="m8n-res"><span class="m8n-non">✕</span><span>La circonscription compte autant que le pays.</span></p>
+  <p class="m8n-res"><span class="m8n-non">✕</span><span>Pas d’effet significatif des attentes.</span></p>
+  <p class="m8n-dit">Une hypothèse peut tomber. C’est un résultat.</p>
+{/if}
 
 <style>
   .m8n-eti { font-size: 0.62em; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--dk-gris); }

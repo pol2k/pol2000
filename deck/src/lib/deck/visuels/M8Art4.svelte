@@ -1,12 +1,11 @@
-<script>
+<script module>
   /**
    * TP 1, étape 4 (les données et les variables), dans le vrai article : la
    * section « Model and Data » (p. 428), lue dans l'ordre. Les données (la
    * CES 1997), le Y, la limite de la mesure, reconnue, le contrôle (la même
-   * question avant l'élection), puis le X. M8Article.
+   * question avant l'élection), puis le X. La carte de M8Fil.
    */
-  import M8Article from './M8Article.svelte';
-  const ETATS = [
+  export const ETATS = [
     { passages: [
       { phrase: 'Model and Data', ton: 'encre' },
       { phrase: 'we use the 1997 Canadian Election Study (CES). The study includes a rolling campaign cross-section survey of 3,949 respondents and a post-election re-interview of 3,170 of them.' }
@@ -24,36 +23,37 @@
   ];
 </script>
 
-<M8Article etats={ETATS}>
-  {#snippet note(e)}
-    {#if e === 0}
-      <span class="m8n-eti">Les données, p. 428</span>
-      <p class="m8n-grand">La CES 1997</p>
-      <p class="m8n-chiffre"><strong>3 949</strong><span>répondants pendant la campagne</span></p>
-      <p class="m8n-chiffre"><strong>3 170</strong><span>réinterrogés après l’élection</span></p>
-      <p class="m8n-vous"><span class="m8n-eti">Vous</span>La CES 2025</p>
-    {:else if e === 1}
-      <span class="m8n-eti">La consigne</span>
-      <p class="m8n-consigne">Votre variable dépendante&#8239;: ratio, intervalle ou ordinale. Pas de Y nominal.</p>
-      <p class="m8n-ligne"><span class="m8n-tag m8n-y">Y</span><strong>La satisfaction</strong></p>
-      <p class="m8n-gris">envers la démocratie, en 4 choix, de «&#8239;pas du tout&#8239;» à «&#8239;très satisfait&#8239;»</p>
-      <p class="m8n-ok">Ordinale ✓ <span class="m8n-eti">annexe, p. 437</span></p>
-    {:else if e === 2}
-      <span class="m8n-eti">Une limite reconnue</span>
-      <p class="m8n-grand">Une mesure imparfaite, qu’ils défendent.</p>
-      <p class="m8n-gris">Une bonne pratique&#8239;: nommer la limite de sa mesure.</p>
-    {:else if e === 3}
-      <span class="m8n-eti">Le contrôle principal</span>
-      <p class="m8n-grand">La même question, avant l’élection</p>
-      <p class="m8n-gris">Les mêmes personnes, interrogées deux fois. On mesure le changement.</p>
-    {:else}
-      <p class="m8n-ligne"><span class="m8n-tag">X</span><span><strong>Gagner ou perdre</strong></span></p>
-      <p class="m8n-gris">Au pays&#8239;: a voté libéral</p>
-      <p class="m8n-gris">Dans sa circonscription&#8239;: a voté pour le candidat élu</p>
-      <p class="m8n-vous"><span class="m8n-eti">Vous, en 2025</span>A voté libéral = gagnant</p>
-    {/if}
-  {/snippet}
-</M8Article>
+<script>
+  // e : le temps de cette étape (0 = son premier passage). M8Fil.
+  let { e = 0 } = $props();
+</script>
+
+{#if e === 0}
+  <span class="m8n-eti">Les données, p. 428</span>
+  <p class="m8n-grand">La CES 1997</p>
+  <p class="m8n-chiffre"><strong>3 949</strong><span>répondants pendant la campagne</span></p>
+  <p class="m8n-chiffre"><strong>3 170</strong><span>réinterrogés après l’élection</span></p>
+  <p class="m8n-vous"><span class="m8n-eti">Vous</span>La CES 2025</p>
+{:else if e === 1}
+  <span class="m8n-eti">La consigne</span>
+  <p class="m8n-consigne">Votre variable dépendante&#8239;: ratio, intervalle ou ordinale. Pas de Y nominal.</p>
+  <p class="m8n-ligne"><span class="m8n-tag m8n-y">Y</span><strong>La satisfaction</strong></p>
+  <p class="m8n-gris">envers la démocratie, en 4 choix, de «&#8239;pas du tout&#8239;» à «&#8239;très satisfait&#8239;»</p>
+  <p class="m8n-ok">Ordinale ✓ <span class="m8n-eti">annexe, p. 437</span></p>
+{:else if e === 2}
+  <span class="m8n-eti">Une limite reconnue</span>
+  <p class="m8n-grand">Une mesure imparfaite, qu’ils défendent.</p>
+  <p class="m8n-gris">Une bonne pratique&#8239;: nommer la limite de sa mesure.</p>
+{:else if e === 3}
+  <span class="m8n-eti">Le contrôle principal</span>
+  <p class="m8n-grand">La même question, avant l’élection</p>
+  <p class="m8n-gris">Les mêmes personnes, interrogées deux fois. On mesure le changement.</p>
+{:else}
+  <p class="m8n-ligne"><span class="m8n-tag">X</span><span><strong>Gagner ou perdre</strong></span></p>
+  <p class="m8n-gris">Au pays&#8239;: a voté libéral</p>
+  <p class="m8n-gris">Dans sa circonscription&#8239;: a voté pour le candidat élu</p>
+  <p class="m8n-vous"><span class="m8n-eti">Vous, en 2025</span>A voté libéral = gagnant</p>
+{/if}
 
 <style>
   .m8n-eti { font-size: 0.62em; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--dk-gris); }

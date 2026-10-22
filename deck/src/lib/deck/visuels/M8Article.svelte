@@ -16,6 +16,8 @@
    *             focus   l'indice du passage à centrer (défaut 0), ou
    *                     { page, y } en % pour viser un endroit sans surligner.
    *   note    snippet (e) : l'explication du temps e, posée sur la page.
+   *   e       le temps en cours (bind:e), pour qu'un parent suive la marche
+   *           (M8Fil change le titre et la bande des étapes avec lui).
    *
    * Pages et boîtes des mots : outils/seance8_article.py →
    * static/img/s8-art-p*.png et src/lib/data/seance8_article.js.
@@ -26,12 +28,11 @@
   import { trouver } from '../article.js';
   import { PAGES, MOTS } from '$lib/data/seance8_article.js';
 
-  let { etats, note } = $props();
+  let { etats, note, e = $bindable(0) } = $props();
 
   // Chaque passage, retrouvé dans l'article une fois pour toutes.
   const RES = etats.map((et) => ({ ...et, passages: (et.passages || []).map((p) => ({ ton: 'rouge', ...p, ...trouver(MOTS, p.phrase) })) }));
 
-  let e = $state(0);
   let hote = $state(null);
   $effect(() => {
     if (!hote) return;

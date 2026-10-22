@@ -1,12 +1,11 @@
-<script>
+<script module>
   /**
    * TP 1, étape 5 (la pertinence), dans le vrai article : l'affirmation en
    * une phrase en tête de la p. 426, puis le raisonnement qui la justifie,
    * maillon par maillon (« ok, donc ? »). Chaque temps surligne la phrase de
-   * l'article et ajoute un maillon à la chaîne de la carte. M8Article.
+   * l'article et ajoute un maillon à la chaîne de la carte. La carte de M8Fil.
    */
-  import M8Article from './M8Article.svelte';
-  const ETATS = [
+  export const ETATS = [
     { passages: [{ phrase: 'Exploring the winner/loser gap is crucial for the study of democracy.' }] },
     { passages: [{ phrase: 'Democratic contests inevitably produce winners and losers.' }] },
     { passages: [{ phrase: 'The democratic process is based on the premise that losers consent to their loss' }] },
@@ -27,31 +26,32 @@
   ];
 </script>
 
-<M8Article etats={ETATS}>
-  {#snippet note(e)}
-    {#if e === 0}
-      <span class="m8n-eti">La consigne</span>
-      <p class="m8n-consigne">Justifiez la pertinence et l’originalité de votre question.</p>
-      <span class="m8n-eti">En une phrase · p.&nbsp;426</span>
-      <p class="m8n-grand">Étudier l’écart gagnants‑perdants est crucial pour la démocratie.</p>
-    {:else}
-      <span class="m8n-eti">Leur justification · p.&nbsp;426</span>
-      <ol class="m8n-chaine">
-        {#each CHAINE.slice(0, e) as m, i}
-          {#if i}
-            <li class="m8n-fleche" class:on={i === e - 1} aria-hidden="true">
-              <svg viewBox="0 0 20 22" width="0.7em" height="0.77em"><line x1="10" y1="1" x2="10" y2="14" /><polygon points="4,12 16,12 10,21" /></svg>
-            </li>
-          {/if}
-          <li class="m8n-maillon" class:on={i === e - 1}>
-            {#if i === CHAINE.length - 1}<span class="m8n-donc">Donc</span>{/if}
-            <span>{m}</span>
-          </li>
-        {/each}
-      </ol>
-    {/if}
-  {/snippet}
-</M8Article>
+<script>
+  // e : le temps de cette étape (0 = son premier passage). M8Fil.
+  let { e = 0 } = $props();
+</script>
+
+{#if e === 0}
+  <span class="m8n-eti">La consigne</span>
+  <p class="m8n-consigne">Justifiez la pertinence et l’originalité de votre question.</p>
+  <span class="m8n-eti">En une phrase · p.&nbsp;426</span>
+  <p class="m8n-grand">Étudier l’écart gagnants‑perdants est crucial pour la démocratie.</p>
+{:else}
+  <span class="m8n-eti">Leur justification · p.&nbsp;426</span>
+  <ol class="m8n-chaine">
+    {#each CHAINE.slice(0, e) as m, i}
+      {#if i}
+        <li class="m8n-fleche" class:on={i === e - 1} aria-hidden="true">
+          <svg viewBox="0 0 20 22" width="0.7em" height="0.77em"><line x1="10" y1="1" x2="10" y2="14" /><polygon points="4,12 16,12 10,21" /></svg>
+        </li>
+      {/if}
+      <li class="m8n-maillon" class:on={i === e - 1}>
+        {#if i === CHAINE.length - 1}<span class="m8n-donc">Donc</span>{/if}
+        <span>{m}</span>
+      </li>
+    {/each}
+  </ol>
+{/if}
 
 <style>
   .m8n-eti { font-size: 0.62em; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--dk-gris); }

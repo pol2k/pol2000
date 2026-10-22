@@ -1,34 +1,34 @@
-<script>
+<script module>
   /**
    * TP 1, étape 1 (la question), dans le vrai article : la question en une
    * phrase dans le résumé (p. 425), son X et son Y, puis la même question,
-   * mot pour mot, au début du cadre théorique (p. 426). M8Article.
+   * mot pour mot, au début du cadre théorique (p. 426). La carte de M8Fil.
    */
-  import M8Article from './M8Article.svelte';
   const Q = 'whether it is the fact of winning (losing), per se, that generates (dis)satisfaction with democracy';
-  const ETATS = [
+  export const ETATS = [
     { passages: [{ phrase: Q }], focus: { page: 0, y: 14 } },
     { passages: [{ phrase: 'winning (losing)', ton: 'x', tag: 'X' }, { phrase: '(dis)satisfaction with democracy', ton: 'y', tag: 'Y' }] },
     { passages: [{ phrase: 'But do we know whether it is the fact of winning (losing), per se, that generates (dis)satisfaction with democracy?' }] }
   ];
 </script>
 
-<M8Article etats={ETATS}>
-  {#snippet note(e)}
-    {#if e === 0}
-      <span class="m8n-eti">La consigne</span>
-      <p class="m8n-consigne">Une question de recherche qui met en relation une variable dépendante et une variable indépendante.</p>
-      <span class="m8n-eti">Leur résumé, p. 425</span>
-      <p class="m8n-grand">Gagner une élection rend-il plus satisfait de la démocratie&#8239;?</p>
-    {:else if e === 1}
-      <p class="m8n-ligne"><span class="m8n-tag">X</span><span><strong>Gagner ou perdre</strong> l’élection</span></p>
-      <p class="m8n-ligne"><span class="m8n-tag m8n-y">Y</span><span><strong>La satisfaction</strong> envers la démocratie</span></p>
-    {:else}
-      <span class="m8n-eti">p. 426, au début du cadre théorique</span>
-      <p class="m8n-grand">La même question, mot pour mot.</p>
-    {/if}
-  {/snippet}
-</M8Article>
+<script>
+  // e : le temps de cette étape (0 = son premier passage). M8Fil.
+  let { e = 0 } = $props();
+</script>
+
+{#if e === 0}
+  <span class="m8n-eti">La consigne</span>
+  <p class="m8n-consigne">Une question de recherche qui met en relation une variable dépendante et une variable indépendante.</p>
+  <span class="m8n-eti">Leur résumé, p. 425</span>
+  <p class="m8n-grand">Gagner une élection rend-il plus satisfait de la démocratie&#8239;?</p>
+{:else if e === 1}
+  <p class="m8n-ligne"><span class="m8n-tag">X</span><span><strong>Gagner ou perdre</strong> l’élection</span></p>
+  <p class="m8n-ligne"><span class="m8n-tag m8n-y">Y</span><span><strong>La satisfaction</strong> envers la démocratie</span></p>
+{:else}
+  <span class="m8n-eti">p. 426, au début du cadre théorique</span>
+  <p class="m8n-grand">La même question, mot pour mot.</p>
+{/if}
 
 <style>
   .m8n-eti { font-size: 0.62em; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--dk-gris); }

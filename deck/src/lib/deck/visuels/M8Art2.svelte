@@ -1,4 +1,4 @@
-<script>
+<script module>
   /**
    * TP 1, étape 2 (la littérature et une théorie), dans le vrai article :
    * leur revue de la littérature (p. 425-427) lue comme une partie de Risk
@@ -16,12 +16,11 @@
    * Le plateau est un schéma, mais les noms et le compte (10 références dans
    * la parenthèse de la p. 426) sont ceux de l'article. Aucun camp rival :
    * l'article n'en présente pas. Le plateau est redessiné à chaque temps
-   * (M8Article remonte la carte) : ce qui est acquis est statique, seul ce
+   * (M8Article remonte la carte à chaque temps) : ce qui est acquis est statique, seul ce
    * qui arrive au temps e s'anime.
    */
-  import M8Article from './M8Article.svelte';
 
-  const ETATS = [
+  export const ETATS = [
     { passages: [
       { phrase: 'The extant literature has provided ample empirical evidence', ton: 'encre' },
       { phrase: 'those who vote for the winning party in electoral contests are generally more satisfied with democracy than those who vote for the losing parties' }
@@ -59,84 +58,85 @@
   const I2005 = 4;
 </script>
 
-<M8Article etats={ETATS}>
-  {#snippet note(e)}
-    <span class="m8n-eti">{ETI[e]}</span>
-    <svg class="m8r" viewBox="0 0 320 246" role="img" aria-label="Plateau schématique de leur revue de la littérature : le camp établi et ses dix articles, sa théorie, le front avec le territoire inexploré, et leur drapeau.">
-      <defs>
-        <pattern id="m8r-hach" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <rect width="9" height="9" class="m8r-hach-fond" />
-          <line x1="0" y1="0" x2="0" y2="9" class="m8r-hach" />
-        </pattern>
-      </defs>
+<script>
+  // e : le temps de cette étape (0 = son premier passage). M8Fil.
+  let { e = 0 } = $props();
+</script>
 
-      <!-- Le territoire inexploré : dessiné en filet, rempli au temps 3. -->
-      <polygon points={INCONNU} class="m8r-vide" class:m8r-explore={e >= 3} class:m8r-neuf={e === 3} />
+<span class="m8n-eti">{ETI[e]}</span>
+<svg class="m8r" viewBox="0 0 320 246" role="img" aria-label="Plateau schématique de leur revue de la littérature : le camp établi et ses dix articles, sa théorie, le front avec le territoire inexploré, et leur drapeau.">
+  <defs>
+    <pattern id="m8r-hach" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="9" height="9" class="m8r-hach-fond" />
+      <line x1="0" y1="0" x2="0" y2="9" class="m8r-hach" />
+    </pattern>
+  </defs>
 
-      <!-- 0 · le camp établi -->
-      <g class:m8r-neuf={e === 0}>
-        <polygon points={CAMP} class="m8r-camp" />
-        <text x="96" y="36" class="m8r-t-camp">gagner →</text>
-        <text x="96" y="55" class="m8r-t-camp">plus satisfait</text>
-      </g>
+  <!-- Le territoire inexploré : dessiné en filet, rempli au temps 3. -->
+  <polygon points={INCONNU} class="m8r-vide" class:m8r-explore={e >= 3} class:m8r-neuf={e === 3} />
 
-      <!-- 1 · ses armées -->
-      {#if e >= 1}
-        {#each PIONS as p, i}
-          <rect x={p.x - 9} y={p.y - 9} width="18" height="18" class="m8r-pion" class:m8r-rouge={e >= 3 && i === I2005} class:m8r-tombe={e === 1} style="--i: {i}" />
-        {/each}
-        <text x="96" y="160" class="m8r-t-compte" class:m8r-neuf={e === 1}>10 articles</text>
-      {/if}
+  <!-- 0 · le camp établi -->
+  <g class:m8r-neuf={e === 0}>
+    <polygon points={CAMP} class="m8r-camp" />
+    <text x="96" y="36" class="m8r-t-camp">gagner →</text>
+    <text x="96" y="55" class="m8r-t-camp">plus satisfait</text>
+  </g>
 
-      <!-- 2 · sa théorie -->
-      {#if e >= 2}
-        <g class:m8r-neuf={e === 2}>
-          <rect x="18" y="172" width="148" height="42" class="m8r-banniere" />
-          <text x="92" y="189" class="m8r-t-ban">on fait confiance</text>
-          <text x="92" y="206" class="m8r-t-ban">au gagnant</text>
-        </g>
-      {/if}
+  <!-- 1 · ses armées -->
+  {#if e >= 1}
+    {#each PIONS as p, i}
+      <rect x={p.x - 9} y={p.y - 9} width="18" height="18" class="m8r-pion" class:m8r-rouge={e >= 3 && i === I2005} class:m8r-tombe={e === 1} style="--i: {i}" />
+    {/each}
+    <text x="96" y="160" class="m8r-t-compte" class:m8r-neuf={e === 1}>10 articles</text>
+  {/if}
 
-      <!-- 3 · le front et les deux exceptions -->
-      {#if e >= 3}
-        <path d={FRONT} class="m8r-front" class:m8r-trace={e === 3} pathLength="1" />
-        <g class:m8r-neuf={e === 3}>
-          <text x="254" y="48" class="m8r-t-zone">avant</text>
-          <text x="254" y="68" class="m8r-t-zone">l’élection&#8239;?</text>
-          <text x="156" y="82" class="m8r-t-an">2005</text>
-          <rect x="207" y="111" width="18" height="18" class="m8r-pion m8r-rouge" />
-          <text x="232" y="118" class="m8r-t-an m8r-g">LoTempio</text>
-          <text x="232" y="134" class="m8r-t-an m8r-g">2002</text>
-          <text x="207" y="158" class="m8r-t-exc">2 exceptions</text>
-        </g>
-      {/if}
+  <!-- 2 · sa théorie -->
+  {#if e >= 2}
+    <g class:m8r-neuf={e === 2}>
+      <rect x="18" y="172" width="148" height="42" class="m8r-banniere" />
+      <text x="92" y="189" class="m8r-t-ban">on fait confiance</text>
+      <text x="92" y="206" class="m8r-t-ban">au gagnant</text>
+    </g>
+  {/if}
 
-      <!-- 4 · leur coup -->
-      {#if e >= 4}
-        <g class="m8r-drapeau" class:m8r-plante={e === 4}>
-          <line x1="262" y1="166" x2="262" y2="216" class="m8r-mat" />
-          <rect x="262" y="166" width="46" height="26" class="m8r-toile" />
-          <text x="285" y="184" class="m8r-t-toile">2007</text>
-        </g>
-      {/if}
-    </svg>
-    <div class="m8n-bas">
-    {#if e === 0}
-      <span class="m8n-eti">La consigne</span>
-      <p class="m8n-consigne">Deux paragraphes, quatre références scientifiques. Dégagez une théorie.</p>
-    {:else}
-    <p class="m8n-legende">
-      {#if e === 1}<b>Un territoire</b> = un camp<br /><b>Un pion</b> = un article cité
-      {:else if e === 2}<b>La théorie</b> = pourquoi le camp tient
-      {:else if e === 3}<b>Le front</b> = presque tout est mesuré après l’élection
-      {:else}<b>Leur drapeau</b> = avant et après l’élection
-      {/if}
-    </p>
-    {/if}
-    </div>
-    <span class="m8n-note">Schéma. Années et compte réels.</span>
-  {/snippet}
-</M8Article>
+  <!-- 3 · le front et les deux exceptions -->
+  {#if e >= 3}
+    <path d={FRONT} class="m8r-front" class:m8r-trace={e === 3} pathLength="1" />
+    <g class:m8r-neuf={e === 3}>
+      <text x="254" y="48" class="m8r-t-zone">avant</text>
+      <text x="254" y="68" class="m8r-t-zone">l’élection&#8239;?</text>
+      <text x="156" y="82" class="m8r-t-an">2005</text>
+      <rect x="207" y="111" width="18" height="18" class="m8r-pion m8r-rouge" />
+      <text x="232" y="118" class="m8r-t-an m8r-g">LoTempio</text>
+      <text x="232" y="134" class="m8r-t-an m8r-g">2002</text>
+      <text x="207" y="158" class="m8r-t-exc">2 exceptions</text>
+    </g>
+  {/if}
+
+  <!-- 4 · leur coup -->
+  {#if e >= 4}
+    <g class="m8r-drapeau" class:m8r-plante={e === 4}>
+      <line x1="262" y1="166" x2="262" y2="216" class="m8r-mat" />
+      <rect x="262" y="166" width="46" height="26" class="m8r-toile" />
+      <text x="285" y="184" class="m8r-t-toile">2007</text>
+    </g>
+  {/if}
+</svg>
+<div class="m8n-bas">
+{#if e === 0}
+  <span class="m8n-eti">La consigne</span>
+  <p class="m8n-consigne">Deux paragraphes, quatre références scientifiques. Dégagez une théorie.</p>
+{:else}
+<p class="m8n-legende">
+  {#if e === 1}<b>Un territoire</b> = un camp<br /><b>Un pion</b> = un article cité
+  {:else if e === 2}<b>La théorie</b> = pourquoi le camp tient
+  {:else if e === 3}<b>Le front</b> = presque tout est mesuré après l’élection
+  {:else}<b>Leur drapeau</b> = avant et après l’élection
+  {/if}
+</p>
+{/if}
+</div>
+<span class="m8n-note">Schéma. Années et compte réels.</span>
 
 <style>
   .m8n-eti { font-size: 0.62em; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--dk-gris); }

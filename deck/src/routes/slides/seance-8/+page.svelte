@@ -57,12 +57,7 @@
   import M8Limites from '$lib/deck/visuels/M8Limites.svelte';
   import M8Gelineau from '$lib/deck/visuels/M8Gelineau.svelte';
   import M8Tableau2 from '$lib/deck/visuels/M8Tableau2.svelte';
-  import M8Art1 from '$lib/deck/visuels/M8Art1.svelte';
-  import M8Art2 from '$lib/deck/visuels/M8Art2.svelte';
-  import M8Art3 from '$lib/deck/visuels/M8Art3.svelte';
-  import M8Art4 from '$lib/deck/visuels/M8Art4.svelte';
-  import M8Art5 from '$lib/deck/visuels/M8Art5.svelte';
-  import M8Art6 from '$lib/deck/visuels/M8Art6.svelte';
+  import M8Fil from '$lib/deck/visuels/M8Fil.svelte';
   import M8LeurTP from '$lib/deck/visuels/M8LeurTP.svelte';
   import TmParcours from '$lib/deck/visuels/TmParcours.svelte';
   import M8Etapes from '$lib/deck/visuels/M8Etapes.svelte';
@@ -72,7 +67,9 @@
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
   import { BG, ATELIER, TABLEAU, WORD, COEFS } from '$lib/data/seance8.js';
 
-  const TOTAL = 48;
+  const TOTAL = 43;
+  // L'étape du TP 1 en cours sur la diapo de l'article (M8Fil), pour le bandeau.
+  let etapeArt = $state(1);
   const D = 'POL-2000 · séance 8 · jeu 22 oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -221,40 +218,8 @@
       <M8LeurTP etape={0} />
     </Slide>
 
-    <Slide bandeau="Leur TP 1 · étape 1" droite={D}>
-      <TmParcours ici={1} />
-      <h2 class="e">Une question claire</h2>
-      <M8Art1 />
-    </Slide>
-
-    <Slide bandeau="Leur TP 1 · étape 2" droite={D}>
-      <TmParcours ici={2} />
-      <h2 class="e">La littérature, comme à Risk</h2>
-      <M8Art2 />
-    </Slide>
-
-    <Slide bandeau="Leur TP 1 · étape 3" droite={D}>
-      <TmParcours ici={3} />
-      <h2 class="e">Des hypothèses tirées de la littérature</h2>
-      <M8Art3 />
-    </Slide>
-
-    <Slide bandeau="Leur TP 1 · étape 4" droite={D}>
-      <TmParcours ici={4} />
-      <h2 class="e">Les données et les variables</h2>
-      <M8Art4 />
-    </Slide>
-
-    <Slide bandeau="Leur TP 1 · étape 5" droite={D}>
-      <TmParcours ici={5} />
-      <h2 class="e">La pertinence : ok, donc ?</h2>
-      <M8Art5 />
-    </Slide>
-
-    <Slide bandeau="Leur TP 1 · étape 6" droite={D}>
-      <TmParcours ici={6} />
-      <h2 class="e">La contribution</h2>
-      <M8Art6 />
+    <Slide bandeau="Leur TP 1 · étape {etapeArt}" droite={D}>
+      <M8Fil bind:etape={etapeArt} />
     </Slide>
 
     <Slide bandeau="Leur TP 1 · étape 7" droite={D}>

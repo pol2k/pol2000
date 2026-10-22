@@ -1,15 +1,14 @@
-<script>
+<script module>
   /**
    * TP 1, étape 6 (la contribution), dans le vrai article : la contribution
    * annoncée dès le résumé (p. 425), théorique et méthodologique, puis, dans
    * le texte, la limite des études antérieures (p. 426) et les trois apports
-   * de l'étude (p. 427), un par temps. M8Article.
+   * de l'étude (p. 427), un par temps. La carte de M8Fil.
    */
-  import M8Article from './M8Article.svelte';
   const C1 = 'The current study, contrary to previous ones, looks at satisfaction with democracy immediately before and immediately after an election.';
   const C2 = 'it is important to consider as well those that are neither winners nor losers, that is, those who did not vote.';
   const C3 = 'There is no comparable analysis for parliamentary regimes, distinguishing winners and losers at the local and national levels. The current study fills that gap.';
-  const ETATS = [
+  export const ETATS = [
     {
       passages: [
         { phrase: 'It makes a theoretical and methodological contribution to our understanding of the factors that foster satisfaction with democracy.' },
@@ -29,6 +28,11 @@
   ];
 </script>
 
+<script>
+  // e : le temps de cette étape (0 = son premier passage). M8Fil.
+  let { e = 0 } = $props();
+</script>
+
 {#snippet temps(plein)}
   <svg class="m8n-temps" viewBox="0 0 300 64" aria-hidden="true">
     <line x1="20" y1="24" x2="280" y2="24" class="m8n-axe" />
@@ -41,33 +45,29 @@
   </svg>
 {/snippet}
 
-<M8Article etats={ETATS}>
-  {#snippet note(e)}
-    {#if e === 0}
-      <span class="m8n-eti">La consigne</span>
-      <p class="m8n-consigne">Comment voulez-vous contribuer à la littérature&#8239;? Quelle limite voulez-vous combler&#8239;?</p>
-      <span class="m8n-eti">Leur résumé, p. 425</span>
-      <p class="m8n-grand">La contribution, annoncée dès le résumé</p>
-      <p class="m8n-deux"><span class="m8n-chip">Théorique</span><span class="m8n-chip">Méthodologique</span></p>
-    {:else if e === 1}
-      <span class="m8n-eti">La limite qu’ils comblent, p. 426</span>
-      <p class="m8n-grand">Une seule mesure, après l’élection</p>
-      {@render temps(false)}
-    {:else}
-      <span class="m8n-eti">Leurs trois apports, p. 427</span>
-      <ol class="m8n-liste">
-        {#each APPORTS.slice(0, e - 1) as a, i}
-          <li class:on={i === e - 2}>
-            <span class="m8n-num">{i + 1}</span>
-            <span class="m8n-txt">{@html a.txt}</span>
-            <span class="m8n-type">{a.type}</span>
-          </li>
-        {/each}
-      </ol>
-      {#if e === 2}{@render temps(true)}{/if}
-    {/if}
-  {/snippet}
-</M8Article>
+{#if e === 0}
+  <span class="m8n-eti">La consigne</span>
+  <p class="m8n-consigne">Comment voulez-vous contribuer à la littérature&#8239;? Quelle limite voulez-vous combler&#8239;?</p>
+  <span class="m8n-eti">Leur résumé, p. 425</span>
+  <p class="m8n-grand">La contribution, annoncée dès le résumé</p>
+  <p class="m8n-deux"><span class="m8n-chip">Théorique</span><span class="m8n-chip">Méthodologique</span></p>
+{:else if e === 1}
+  <span class="m8n-eti">La limite qu’ils comblent, p. 426</span>
+  <p class="m8n-grand">Une seule mesure, après l’élection</p>
+  {@render temps(false)}
+{:else}
+  <span class="m8n-eti">Leurs trois apports, p. 427</span>
+  <ol class="m8n-liste">
+    {#each APPORTS.slice(0, e - 1) as a, i}
+      <li class:on={i === e - 2}>
+        <span class="m8n-num">{i + 1}</span>
+        <span class="m8n-txt">{@html a.txt}</span>
+        <span class="m8n-type">{a.type}</span>
+      </li>
+    {/each}
+  </ol>
+  {#if e === 2}{@render temps(true)}{/if}
+{/if}
 
 <style>
   .m8n-eti { font-size: 0.62em; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--dk-gris); }
