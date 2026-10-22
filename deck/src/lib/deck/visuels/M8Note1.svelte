@@ -10,7 +10,7 @@
    *   2  raison 1 (rouge) : la satisfaction avant « capte » déjà l'élection
    *      précédente. En 2025, on peut le tester;
    *   3  raison 2 (rouge) : le souvenir du vote est douteux. Vrai aussi en
-   *      2025 : on le dira.
+   *      2025.
    *
    * Cadres en % de la découpe (x 38 à 396 pt, y 335 à 408 pt), depuis
    * pdftotext -bbox, une boîte par ligne.
@@ -58,7 +58,7 @@
     <div class="m8n1-carte" class:on={e >= 3}>
       <span class="m8n1-eti"><b>2</b> Leur raison</span>
       <p>Le souvenir du vote passé est douteux.</p>
-      <p class="m8n1-nous">Vrai aussi en 2025. On le dira.</p>
+      <p class="m8n1-nous">Vrai aussi en 2025.</p>
     </div>
   </div>
 </div>
