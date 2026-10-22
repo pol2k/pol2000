@@ -70,7 +70,7 @@
 </script>
 
 <div class="visuel m8p" bind:this={hote}>
-  <svg viewBox="0 0 1200 560" role="img" aria-label="Notre sondage : l'intérêt pour la politique selon la scolarité. Une seule droite, pente {sg(S1)}. En couleur, les hommes sont au-dessus de la droite, les femmes en dessous. Avec le genre dans le modèle, deux droites parallèles de même pente, {sg(D1)}, séparées par un écart de {f(DF)}.">
+  <svg viewBox="0 0 1200 560" role="img" aria-label="Notre sondage : l'intérêt pour la politique selon la scolarité. Une seule droite, pente {sg(S1)}. En couleur, les hommes sont au-dessus de la droite, les femmes en dessous. Avec le sexe dans le modèle, deux droites parallèles de même pente, {sg(D1)}, séparées par un écart de {f(DF)}.">
     <!-- Axes -->
     <line x1={X0 - 50} y1={Y0 + 10} x2={X0 + LX + 40} y2={Y0 + 10} class="axe" />
     <line x1={X0 - 50} y1={Y0 + 10} x2={X0 - 50} y2={py(1) - 6} class="axe" />
@@ -140,7 +140,7 @@
       <text x={PAN} y="320" class="pan-nom">pour les deux</text>
     </g>
 
-    <text x="0" y="552" class="source">Notre sondage de la séance 7 · {G.n} personnes · gros points{' '}: intérêt moyen par niveau et par genre</text>
+    <text x="0" y="552" class="source">Notre sondage de la séance 7 · {G.n} personnes · gros points{' '}: intérêt moyen par niveau et par sexe</text>
   </svg>
 </div>
 

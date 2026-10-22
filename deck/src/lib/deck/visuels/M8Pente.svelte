@@ -13,8 +13,10 @@
    *      reste en pointillé. L'ordonnée à l'origine du modèle est celle d'une
    *      personne de 18 ans (l'âge vaut 0 à 18 ans) : c'est écrit au bout de
    *      la droite;
-   *   2  une droite par âge (50 et 80 ans) : toutes parallèles, la même pente.
-   *      L'ancienne droite passe près de celle de 50 ans, l'âge moyen.
+   *   2  une droite par âge (50 et 80 ans) : toutes parallèles, la même pente,
+   *      écrite sur chacune (le modèle n'a qu'une pente pour la scolarité :
+   *      l'âge déplace la droite, il ne la penche pas). L'ancienne droite
+   *      passe près de celle de 50 ans, l'âge moyen.
    *
    * Tout vient de AGE et POINTS (src/lib/data/seance8_bruit.js,
    * outils/seance8_bruit.R) et de PARALLELES (les points étalés).
@@ -53,6 +55,9 @@
   const PTS = P.points.filter((p, i) => POINTS[i].m === 1);
   const b0 = $derived(ligne.current[0]);
   const b1 = $derived(ligne.current[1]);
+  // La pente écrite sur chaque droite d'âge, le long du trait.
+  const XP = 0.6;
+  const angle = (-Math.atan2(A.avec.b1 * LY, LX) * 180) / Math.PI;
 </script>
 
 <div class="visuel m8a" bind:this={hote}>
@@ -77,6 +82,13 @@
     {#each A.lignes.slice(1) as l, i}
       <line x1={px(0)} y1={py(l.b0)} x2={px(1)} y2={py(l.b0 + l.b1)} pathLength="1" class="dr-age trace" class:vu={e >= 2} style="transition-delay: {e >= 2 ? i * 0.25 : 0}s" />
       <text x={px(1) + 22} y={py(l.b0 + l.b1) + 8} class="lab rouge etape" class:vu={e >= 2}>{l.ans} ans</text>
+    {/each}
+
+    <!-- 2 : la pente, sur chaque droite : la même -->
+    {#each A.lignes as l, i}
+      {@const x = px(XP)}
+      {@const yy = py(l.b0 + l.b1 * XP) - 12}
+      <text x={x} y={yy} transform="rotate({angle} {x} {yy})" class="pente-l etape" class:vu={e >= 2} style="transition-delay: {e >= 2 ? 0.6 + i * 0.25 : 0}s">pente {sg(l.b1)}</text>
     {/each}
 
     <!-- 1 : l'ancienne droite, en pointillé -->
@@ -160,6 +172,7 @@
   .pan-val.barre { fill: var(--dk-gris-2); text-decoration: line-through; }
 
   .source { font-size: 17px; fill: var(--dk-gris); }
+  .pente-l { font-size: 19px; font-weight: 700; fill: var(--dk-accent); text-anchor: middle; paint-order: stroke; stroke: var(--dk-fond); stroke-width: 6px; stroke-linejoin: round; }
 
   .trace { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.2s; }
   .trace.vu { stroke-dashoffset: 0; transition: stroke-dashoffset 0.7s ease-out; }

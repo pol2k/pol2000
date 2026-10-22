@@ -11,11 +11,12 @@
    * « ici » change sur place (M8Fil) : la couleur glisse alors d'une étape
    * à l'autre.
    */
-  let { ici = 0 } = $props();
+  // cache : la bande garde sa place mais ne se voit pas (M8Fil, sur la une).
+  let { ici = 0, cache = false } = $props();
   const ETAPES_MS = ['Question', 'Littérature', 'Hypothèse', 'Données', 'Pertinence', 'Contribution', 'Vous'];
 </script>
 
-<ol class="visuel tm-parcours" aria-label="Les sept étapes du travail de mi-session{ici ? `, étape ${ici}` : ''}">
+<ol class="visuel tm-parcours" class:tm-cache={cache} aria-label="Les sept étapes du travail de mi-session{ici ? `, étape ${ici}` : ''}">
   {#each ETAPES_MS as nom, i}
     {@const n = i + 1}
     <li class:tm-fait={ici && n < ici} class:tm-ici={n === ici} class:tm-apres={ici && n > ici} style="--i: {i}">
@@ -33,6 +34,8 @@
   .tm-fait .tm-n::after { content: ' ✓'; }
   .tm-apres { color: var(--dk-gris-2); border-top-color: var(--dk-filet) !important; }
   .tm-ici { background: var(--dk-accent); color: var(--dk-fond); border-top-color: var(--dk-accent) !important; font-weight: 600; }
+  .tm-parcours { transition: opacity 0.6s; }
+  .tm-cache { opacity: 0; }
   @keyframes tm-p-fondu { from { opacity: 0; transform: translateY(-0.3em); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .tm-parcours li { animation: none; transition: none; } }
 </style>

@@ -67,9 +67,9 @@
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
   import { BG, ATELIER, TABLEAU, WORD, COEFS } from '$lib/data/seance8.js';
 
-  const TOTAL = 43;
-  // L'étape du TP 1 en cours sur la diapo de l'article (M8Fil), pour le bandeau.
-  let etapeArt = $state(1);
+  const TOTAL = 41;
+  // Le bandeau de la diapo de l'article (M8Fil) : il suit la marche.
+  let bandeauArt = $state('Pratique dans R');
   const D = 'POL-2000 · séance 8 · jeu 22 oct';
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
@@ -169,8 +169,8 @@
       <M8Bruit />
     </Slide>
 
-    <Slide bandeau="Ajouter des variables · le genre" droite={D}>
-      <h2 class="e">Le genre entre dans le modèle</h2>
+    <Slide bandeau="Ajouter des variables · le sexe" droite={D}>
+      <h2 class="e">Le sexe entre dans le modèle</h2>
       <M8Paralleles />
     </Slide>
 
@@ -205,21 +205,8 @@
     </Slide>
 
     <!-- ================= BLAIS ET GÉLINEAU EN 2025 ================= -->
-    <Slide bandeau="Pratique dans R" droite={D}>
-      <div class="une">
-        <img class="e" src="{base}/img/s8-bg-une.png" alt="La première page de l’article : Winning, Losing and Satisfaction with Democracy, André Blais (Université de Montréal) et François Gélineau (Université Laval), Political Studies, 2007, vol. 55, p. 425-441." />
-        <p class="e" lang="en">Blais, A., &amp; Gélineau, F. (2007). Winning, losing and satisfaction with democracy. <em>Political Studies</em>, <em>55</em>(2), 425–441. <span class="doi">https://doi.org/{BG.doi}</span></p>
-      </div>
-    </Slide>
-
-    <Slide bandeau="Leur TP 1" droite={D}>
-      <h2 class="e">Et si Blais et Gélineau remettaient votre TP 1 ?</h2>
-      <TmParcours />
-      <M8LeurTP etape={0} />
-    </Slide>
-
-    <Slide bandeau="Leur TP 1 · étape {etapeArt}" droite={D}>
-      <M8Fil bind:etape={etapeArt} />
+    <Slide bandeau={bandeauArt} droite={D}>
+      <M8Fil bind:bandeau={bandeauArt} />
     </Slide>
 
     <Slide bandeau="Leur TP 1 · étape 7" droite={D}>
@@ -374,10 +361,6 @@
 .avant { max-width: 44em; margin: 1.6em auto 0; display: flex; flex-direction: column; gap: 0.8em; }
 .petit-dit { margin: 0; color: var(--dk-gris); font-size: 0.85em; }
 .grande-q { font-size: 2em; line-height: 1.3; max-width: 22em; margin-top: 1.2em; }
-.une { display: flex; flex-direction: column; align-items: center; gap: 1em; margin-top: 0.2em; }
-.une img { height: 66vh; width: auto; border: 2px solid var(--dk-filet); background: #fff; display: block; }
-.une p { margin: 0; max-width: 46em; font-size: 0.95em; line-height: 1.45; text-align: center; }
-.une .doi { color: var(--dk-accent); }
 .nowrap { white-space: nowrap; }
 .slogan { max-width: none; font-size: 2.8em; line-height: 1.2; margin: 1.4em 0 0; color: var(--dk-accent); font-weight: 600; }
 .hyp { margin-top: 1.6em; display: flex; flex-direction: column; gap: 0.5em; font-size: 1.25em; }

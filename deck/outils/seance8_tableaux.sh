@@ -9,6 +9,10 @@
 #   static/img/s8-bg-tableau2.png   Table 2, p. 432 (PDF page 8), whole, at
 #                                   full resolution: M8Tableau2 shows it at
 #                                   slide width and scrolls through it
+#   static/img/s8-bg-note1.png      Note 1, p. 439 (PDF page 15), with the
+#                                   « Notes » heading: why they did not
+#                                   control for the previous election
+#                                   (M8Note1)
 #
 # The boxes are in PDF points (page 484.7 × 697.3), read from
 # `pdftotext -bbox`; they leave out the « Downloaded from … » margin and
@@ -26,15 +30,17 @@ R=400   # dpi; 1 pt = R/72 px
 
 pdftoppm -f 1 -l 1 -r "$R" -png "$PDF" "$TMP/pg"
 pdftoppm -f 7 -l 8 -r "$R" -png "$PDF" "$TMP/pg"
+pdftoppm -f 15 -l 15 -r "$R" -png "$PDF" "$TMP/pg"
 
 # crop PAGE X0 Y0 X1 Y1 OUT [resize]
 crop() {
   local g
   g=$(python3 -c "s=$R/72; print(f'{round(($4-$2)*s)}x{round(($5-$3)*s)}+{round($2*s)}+{round($3*s)}')")
-  magick "$TMP/pg-0$1.png" -crop "$g" +repage ${7:+-resize $7} -strip "$6"
+  magick "$TMP/pg-$(printf %02d "$1").png" -crop "$g" +repage ${7:+-resize $7} -strip "$6"
 }
 
 crop 1  34  22 458 624.5 "$OUT/s8-bg-une.png" 1296x
 crop 7  38  54 394 210 "$OUT/s8-bg-tableau1.png"
 crop 8  86  54 448 628 "$OUT/s8-bg-tableau2.png"
+crop 15 38 335 396 408 "$OUT/s8-bg-note1.png" 1400x
 identify "$OUT"/s8-bg-*.png

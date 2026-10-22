@@ -25,6 +25,16 @@
 #    syntaxe est celle de la séance 4 (df_raw, df_clean, case_when). Le
 #    tableau est rendu par modelsummary lui-même. Rien n'est retapé à la
 #    main, sauf les chiffres publiés de l'article (BG, ci-dessous, cités).
+#
+#    Deux façons de contribuer : VÉRIFIER (leur modèle, en 2025 : modele1,
+#    modele2), puis FAIRE MIEUX. Leur note 1 (p. 439) dit qu'ils n'ont pas
+#    contrôlé l'élection précédente : la satisfaction avant « capte » déjà
+#    son influence, et le souvenir du vote est douteux. La CES 2025 demande,
+#    pendant la campagne, le vote de 2021 (cps25_vote_2021) : modele3 ajoute
+#    gagnant_2021 (les libéraux avaient aussi gagné en 2021). Si on a le
+#    temps : X mesuré AVANT le résultat, l'intention de vote de la campagne
+#    (cps25_votechoice; 7 = ne sait pas et 8 = PPC, pas les codes de
+#    pes25_votechoice2025), à la place de gagnant (modele4).
 suppressPackageStartupMessages({ library(haven); library(modelsummary); library(ggplot2) })
 options(width = 100)
 
@@ -256,6 +266,51 @@ WORD <- list(code = paste0(
 eval(parse(text = WORD$code), envir = globalenv())
 stopifnot(file.exists("gagnants2025.docx"))
 
+# ---- Faire mieux : leur note 1. Le vote de 2021, demandé pendant la
+# campagne de 2025 (avant le résultat), aux mêmes personnes.
+ATELIER$vote2021 <- console(
+  "table(as_factor(df_raw$cps25_vote_2021))"
+)
+ATELIER$gagnant2021 <- console(
+  paste0("df_clean$gagnant_2021 <- case_when(\n",
+         "  df_raw$cps25_vote_2021 == 1 ~ 1,          # les libéraux avaient gagné en 2021\n",
+         "  df_raw$cps25_vote_2021 %in% 2:6 ~ 0       # un autre parti\n",
+         "  # 7 (ne sait pas) ou pas voté en 2021 : NA\n",
+         ")"),
+  "table(df_clean$gagnant_2021, useNA = \"ifany\")"
+)
+ATELIER$modele3 <- console(
+  "modele3 <- lm(apres ~ gagnant + avant + gagnant_2021, data = df_clean)",
+  "nobs(modele3)"
+)
+stopifnot(nobs(modele3) == 10046, abs(coef(modele3)[["gagnant"]] - 0.122) < 0.003)
+# Hors de la salle : leur modèle sur les mêmes personnes que modele3, pour
+# montrer que la baisse vient du contrôle, pas des personnes perdues.
+modele2_meme <- lm(apres ~ gagnant + avant, data = df_clean[!is.na(df_clean$gagnant_2021), ])
+stopifnot(nobs(modele2_meme) == nobs(modele3))
+TABLEAU3 <- rendre_png(paste0(
+  "noms <- c(noms, \"gagnant_2021\" = \"Gagnant en 2021\")\n",
+  "modeles <- list(\"Leur modèle\" = modele2, \"+ gagnant en 2021\" = modele3)\n",
+  "modelsummary(modeles, stars = TRUE, coef_rename = noms,\n",
+  "  gof_map = c(\"nobs\", \"r.squared\"))"), "s8-tableau3.png")
+
+# ---- Si on a le temps : X mesuré avant le résultat (l'intention de vote
+# pendant la campagne), à la place de gagnant. Une variable à la fois :
+# on compare à modele2.
+ATELIER$intention <- console(
+  "table(as_factor(df_raw$cps25_votechoice))"
+)
+ATELIER$campagne <- console(
+  paste0("df_clean$gagnant_campagne <- case_when(\n",
+         "  df_raw$cps25_votechoice == 1 ~ 1,             # pensait voter libéral\n",
+         "  df_raw$cps25_votechoice %in% c(2:6, 8) ~ 0    # un autre parti (8 : le PPC)\n",
+         "  # 7 (ne sait pas) : NA\n",
+         ")"),
+  "modele4 <- lm(apres ~ gagnant_campagne + avant, data = df_clean)",
+  "round(coef(modele4), 3)"
+)
+stopifnot(nobs(modele4) == 9764, abs(coef(modele4)[["gagnant_campagne"]] - 0.137) < 0.003)
+
 # Si on a le temps : les perdants sont-ils tous pareils ? (le tableau 4 de
 # l'article : les perdants qui pouvaient gouverner, PC et Réforme, contre
 # les autres).
@@ -265,8 +320,8 @@ ATELIER$perdants <- console(
          "  df_raw$pes25_votechoice2025 == 2 ~ \"2. Conservateur\",\n",
          "  df_raw$pes25_votechoice2025 %in% 3:7 ~ \"3. Autre parti\"\n",
          ")"),
-  "modele3 <- lm(apres ~ camp + avant, data = df_clean)",
-  "round(coef(modele3), 3)"
+  "modele5 <- lm(apres ~ camp + avant, data = df_clean)",
+  "round(coef(modele5), 3)"
 )
 options(OutDec = ".")
 
@@ -282,12 +337,14 @@ groupe <- function(g) list(avant = r(mean(g$avant), 3), apres = r(mean(g$apres),
 AVANT_APRES <- list(gagnants = groupe(k[k$gagnant == 1, ]), perdants = groupe(k[k$gagnant == 0, ]), abstention = groupe(abst))
 
 COEFS <- list(modele1 = coefs(modele1), modele2 = coefs(modele2), modele3 = coefs(modele3),
+              modele2_meme = coefs(modele2_meme), modele4 = coefs(modele4), modele5 = coefs(modele5),
               n_ces = nrow(df_raw),
-              n = list(modele1 = nobs(modele1), modele2 = nobs(modele2), modele3 = nobs(modele3)))
+              n = list(modele1 = nobs(modele1), modele2 = nobs(modele2), modele3 = nobs(modele3),
+                       modele2_meme = nobs(modele2_meme), modele4 = nobs(modele4), modele5 = nobs(modele5)))
 setwd(ancien)
 
 # ---- Le script complet de la salle : tout le code affiché, dans l'ordre, en
-# quatre morceaux (une diapo chacun). Il doit tourner seul, dans une session R
+# cinq morceaux (une diapo chacun). Il doit tourner seul, dans une session R
 # vierge (Rscript --vanilla), dans un dossier qui ne contient que
 # ces2025.rds : c'est ce que la salle fera.
 ins <- function(cle) paste(sapply(ATELIER[[cle]], `[[`, "in"), collapse = "\n")
@@ -297,7 +354,10 @@ SCRIPT <- c(
          ins("charger"), "\n\n", ins("question"), "\n", ins("apres")),
   paste(ins("vote"), ins("gagnant"), ins("avant"), sep = "\n\n"),
   paste(ins("moyennes"), ins("modeles"), TABLEAU$code, WORD$code, sep = "\n\n"),
-  paste0("# Si on a le temps : les perdants sont-ils tous pareils ?\n", ins("perdants"))
+  paste0("# Faire mieux : leur note 1, l'élection de 2021\n",
+         paste(ins("vote2021"), ins("gagnant2021"), ins("modele3"), TABLEAU3$code, sep = "\n\n")),
+  paste0("# Si on a le temps : X mesuré avant le résultat\n", ins("intention"), "\n", ins("campagne"), "\n\n",
+         "# Si on a le temps : les perdants sont-ils tous pareils ?\n", ins("perdants"))
 )
 vierge <- tempfile("s8-vierge-"); dir.create(vierge)
 saveRDS(d, file.path(vierge, "ces2025.rds"))
@@ -327,15 +387,17 @@ writeLines(c(
   "/* Le tableau à deux colonnes (image) et le même tableau dans Word. */",
   paste0("export const TABLEAU = ", J(TABLEAU), ";"),
   paste0("export const WORD = ", J(WORD), ";"),
+  "/* Faire mieux : le tableau à trois colonnes (+ gagnant en 2021). */",
+  paste0("export const TABLEAU3 = ", J(TABLEAU3), ";"),
   "/* La satisfaction avant et après, par groupe, en 2025. */",
   paste0("export const AVANT_APRES = ", J(AVANT_APRES), ";"),
   "/* Les coefficients des modèles et N. */",
   paste0("export const COEFS = ", J(COEFS), ";"),
-  "/* Le script complet, en quatre morceaux : vérifié dans une session R vierge. */",
+  "/* Le script complet, en cinq morceaux : vérifié dans une session R vierge. */",
   paste0("export const SCRIPT = ", J(SCRIPT), ";")
 ), file.path(ici, "..", "src", "lib", "data", "seance8.js"))
 
 cat("ESCALIER :", sapply(ESCALIER$modeles, `[[`, "b"), "\n")
-for (m in c("modele1", "modele2", "modele3")) cat(m, "n =", COEFS$n[[m]], ":", sapply(COEFS[[m]], function(c) paste0(c$terme, " ", c$b, c$etoiles, " [", c$bas, "; ", c$haut, "]")), "\n")
+for (m in c("modele1", "modele2", "modele3", "modele2_meme", "modele4", "modele5")) cat(m, "n =", COEFS$n[[m]], ":", sapply(COEFS[[m]], function(c) paste0(c$terme, " ", c$b, c$etoiles, " [", c$bas, "; ", c$haut, "]")), "\n")
 str(AVANT_APRES)
 cat("tableau", TABLEAU$l, "x", TABLEAU$h, "\n")

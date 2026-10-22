@@ -39,7 +39,7 @@
 
   // Ceux qui sortent du nuage : leur place dans le nuage, leur place dans le modèle.
   const MOBILES = [
-    { nom: 'le genre', de: { x: 528, y: 398 }, vers: { x: BXC, y: SLOT[1] }, entre: 1 },
+    { nom: 'le sexe', de: { x: 528, y: 398 }, vers: { x: BXC, y: SLOT[1] }, entre: 1 },
     { nom: 'l’âge', de: { x: 600, y: 444 }, vers: { x: BXC, y: SLOT[2] }, entre: 2 }
   ];
   const RESTE = [
@@ -57,7 +57,7 @@
 </script>
 
 <div class="visuel m8b" bind:this={hote}>
-  <svg viewBox="0 0 1000 490" role="img" aria-label="Schéma. Le modèle ne contient que la scolarité, qui pointe vers l'intérêt pour la politique. Tout le reste, le genre, l'âge, le revenu, la région, est dans le bruit. Le genre, puis l'âge, sortent du bruit et entrent dans le modèle, chacun avec sa flèche. Le bruit rapetisse.">
+  <svg viewBox="0 0 1000 490" role="img" aria-label="Schéma. Le modèle ne contient que la scolarité, qui pointe vers l'intérêt pour la politique. Tout le reste, le sexe, l'âge, le revenu, la région, est dans le bruit. Le sexe, puis l'âge, sortent du bruit et entrent dans le modèle, chacun avec sa flèche. Le bruit rapetisse.">
     <!-- Le modèle -->
     <rect x={CAD.x} y={CAD.y} width={CAD.w} height={CAD.h} class="b-cadre" />
     <text x={CAD.x} y={CAD.y - 14} class="b-titre">le modèle</text>

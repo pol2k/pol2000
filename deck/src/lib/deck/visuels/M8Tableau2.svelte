@@ -14,7 +14,9 @@
    *      qui fait dire « à satisfaction égale avant »;
    *   3  le bas : 1 922 répondants, et la légende des étoiles.
    *
-   * Une barre à droite montre où l'on est dans le tableau.
+   * Une barre à droite montre où l'on est dans le tableau. Après le
+   * défilement, le tableau se promène librement à la molette ou au doigt
+   * (libre.js); le temps suivant le ramène à sa place.
    *
    * Leur modèle est un probit ordonné (leur note 7), pas une régression
    * linéaire : on ne lit pas la taille du coefficient, seulement le signe
@@ -28,6 +30,7 @@
    */
   import { base } from '$app/paths';
   import { brancherTemps } from '../temps.js';
+  import { defilementLibre } from '../libre.js';
   let e = $state(0);
   let hote = $state(null);
   $effect(() => {
@@ -41,7 +44,27 @@
   let hPage = $state(0);
   // Le haut de la fenêtre, en % de l'image, à chaque temps (3 = tout en bas).
   const HAUT = [0, 5.4, 5.4, 100];
-  const decalage = $derived(Math.max(0, Math.min((HAUT[e] / 100) * hPage, hPage - hVue)));
+  const borne = (y) => Math.max(0, Math.min(y, hPage - hVue));
+  const cible = $derived(borne((HAUT[e] / 100) * hPage));
+
+  // Le défilement libre : un écart à la cible, remis à zéro à chaque temps.
+  let libre = $state(0);
+  let glisse = $state(false);
+  let minuterie;
+  $effect(() => { e; libre = 0; glisse = false; });
+  const decalage = $derived(borne(cible + libre));
+  let vue = $state(null);
+  $effect(() => {
+    if (!vue) return;
+    return defilementLibre(vue, {
+      deplacer: (dy) => {
+        libre = borne(cible + libre + dy) - cible;
+        glisse = true;
+        clearTimeout(minuterie);
+        minuterie = setTimeout(() => (glisse = false), 200);
+      }
+    });
+  });
   const pouce = $derived(hPage ? { y: (decalage / hPage) * 100, h: Math.min(100, (hVue / hPage) * 100) } : { y: 0, h: 100 });
 
   // [haut, bas] en % de la hauteur de l'image.
@@ -54,8 +77,8 @@
 
 <div class="visuel m8t2" bind:this={hote}>
   <div class="m8t2-scene">
-    <div class="m8t2-vue" bind:clientHeight={hVue}>
-      <div class="m8t2-page" bind:clientHeight={hPage} style="transform: translateY({-decalage}px)">
+    <div class="m8t2-vue" bind:this={vue} bind:clientHeight={hVue}>
+      <div class="m8t2-page" class:m8t2-glisse={glisse} bind:clientHeight={hPage} style="transform: translateY({-decalage}px)">
         <img src="{base}/img/s8-bg-tableau2.png" alt="Le tableau 2 de l’article, en anglais : deux modèles, une vingtaine de variables et leurs coefficients. Dans le modèle 2, perdre au pays et dans sa circonscription : −0,447, trois étoiles. 1 922 répondants." />
 
         <!-- temps 0 : les deux modèles -->
@@ -106,8 +129,9 @@
 
   .m8t2 { flex: 1 1 auto; min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 0.35em; }
   .m8t2-scene { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 0.4em; gap: 0.4em; }
-  .m8t2-vue { position: relative; min-height: 0; overflow: hidden; border: 2px solid var(--dk-filet); background: #fff; }
+  .m8t2-vue { position: relative; min-height: 0; overflow: hidden; border: 2px solid var(--dk-filet); background: #fff; touch-action: none; cursor: grab; }
   .m8t2-page { position: absolute; left: 0; right: 0; top: 0; transition: transform 1.3s cubic-bezier(0.65, 0, 0.35, 1); }
+  .m8t2-page.m8t2-glisse { transition: transform 0.15s ease-out; }
   .m8t2-page img { display: block; width: 100%; height: auto; }
 
   .m8t2-voile { position: absolute; left: 0; right: 0; background: rgba(255, 255, 255, 0.88); opacity: 0; transition: opacity 0.4s; }
