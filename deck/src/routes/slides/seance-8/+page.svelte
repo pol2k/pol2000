@@ -63,6 +63,7 @@
   import M8Note1 from '$lib/deck/visuels/M8Note1.svelte';
   import M8Lecture3 from '$lib/deck/visuels/M8Lecture3.svelte';
   import M8TroisModeles from '$lib/deck/visuels/M8TroisModeles.svelte';
+  import M8DagModeles from '$lib/deck/visuels/M8DagModeles.svelte';
   import M8LeurTP from '$lib/deck/visuels/M8LeurTP.svelte';
   import TmParcours from '$lib/deck/visuels/TmParcours.svelte';
   import M8Etapes from '$lib/deck/visuels/M8Etapes.svelte';
@@ -72,7 +73,7 @@
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
   import { BG, ATELIER, TABLEAU, TABLEAU3, WORD, SAUVER, COEFS } from '$lib/data/seance8.js';
 
-  const TOTAL = 55;
+  const TOTAL = 56;
   // Le bandeau de la diapo de l'article (M8Fil) : il suit la marche.
   let bandeauArt = $state('Pratique dans R');
   // Le plan du code : des commentaires d'abord (la diapo « Planifions notre code »).
@@ -272,6 +273,11 @@
     <Slide bandeau="Blais et Gélineau, en 2025 · trois modèles" droite={D}>
       <h2 class="e">Trois modèles</h2>
       <M8TroisModeles />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · trois modèles" droite={D}>
+      <h2 class="e">Du modèle 1 au modèle 3</h2>
+      <M8DagModeles />
     </Slide>
 
     <Slide bandeau="Blais et Gélineau, en 2025 · le plan" droite={D}>
