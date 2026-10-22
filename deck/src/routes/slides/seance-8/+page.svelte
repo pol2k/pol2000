@@ -59,6 +59,9 @@
   import M8Tableau2 from '$lib/deck/visuels/M8Tableau2.svelte';
   import M8Fil from '$lib/deck/visuels/M8Fil.svelte';
   import M8Nouvelles from '$lib/deck/visuels/M8Nouvelles.svelte';
+  import M8DeuxVoies from '$lib/deck/visuels/M8DeuxVoies.svelte';
+  import M8Note1 from '$lib/deck/visuels/M8Note1.svelte';
+  import M8Lecture3 from '$lib/deck/visuels/M8Lecture3.svelte';
   import M8LeurTP from '$lib/deck/visuels/M8LeurTP.svelte';
   import TmParcours from '$lib/deck/visuels/TmParcours.svelte';
   import M8Etapes from '$lib/deck/visuels/M8Etapes.svelte';
@@ -66,9 +69,9 @@
   import M8AvantApres from '$lib/deck/visuels/M8AvantApres.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
-  import { BG, ATELIER, TABLEAU, WORD, SAUVER, COEFS } from '$lib/data/seance8.js';
+  import { BG, ATELIER, TABLEAU, TABLEAU3, WORD, SAUVER, COEFS } from '$lib/data/seance8.js';
 
-  const TOTAL = 43;
+  const TOTAL = 53;
   // Le bandeau de la diapo de l'article (M8Fil) : il suit la marche.
   let bandeauArt = $state('Pratique dans R');
   // Le plan du code : des commentaires d'abord (la diapo « Planifions notre code »).
@@ -87,6 +90,11 @@
   const c_gagnant = avec('gagnant', ['', 'NA : n’a pas voté, vote annulé, ne sait pas']);
   const c_avant = avec('avant', ['cps25 : la même question, pendant la campagne', '']);
   const c_moyennes = avec('moyennes', ['le tableau 1 de l’article, en 2025']);
+  const c_vote2021 = avec('vote2021', ['cps25 : demandé pendant la campagne, avant le résultat de 2025. Les libéraux avaient aussi gagné en 2021']);
+  const c_gagnant2021 = avec('gagnant2021', ['', 'NA : n’a pas voté en 2021, n’avait pas l’âge, ne sait pas']);
+  const c_modele3 = avec('modele3', ['une seule variable de plus', `vous devriez voir ${nb(N.modele3)} : moins de monde`]);
+  const c_intention = avec('intention', ['cps25 : pendant la campagne. Attention, d’autres codes : 7 = ne sait pas, 8 = PPC']);
+  const c_campagne = avec('campagne', ['', 'à la place de gagnant : une seule chose change', 'gagnant_campagne : presque la même chose que gagnant']);
   const c_modeles = avec('modeles', ['', 'à satisfaction égale avant l’élection', `vous devriez voir ${nb(N.modele1)}`, '']);
 
 
@@ -238,6 +246,11 @@
     </Slide>
 
     <Slide bandeau="Blais et Gélineau, en 2025" droite={D}>
+      <h2 class="e">Deux façons de contribuer</h2>
+      <M8DeuxVoies />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025" droite={D}>
       <h2 class="e">Notre question</h2>
       <p class="grande-q e">Après l’élection du 28 avril 2025, les gagnants sont-ils plus satisfaits de la démocratie que les perdants ?</p>
       <div class="hyp">
@@ -335,6 +348,55 @@
         <p class="e petit-dit">Si R se plaint de pandoc : <code>pandoc::pandoc_install()</code>, une seule fois.</p>
         <Code src={'# 10. Sauvegarder df_clean, pour ne pas tout refaire\n' + SAUVER.code} titre="seance8.R" />
       </div>
+    </Slide>
+
+    <!-- ================= FAIRE MIEUX : LEUR NOTE 1 ================= -->
+    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
+      <h2 class="e">Vérifié. Maintenant, faire mieux</h2>
+      <M8DeuxVoies ici={2} />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
+      <h2 class="e">Ils y avaient pensé</h2>
+      <M8Note1 />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
+      <M8Etapes ici={7} />
+      <h2 class="e">Pour qui avez-vous voté en 2021 ?</h2>
+      <Console lignes={c_vote2021} />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
+      <M8Etapes ici={7} />
+      <h2 class="e">gagnant_2021 : gagnant (1) ou perdant (0) en 2021</h2>
+      <Console lignes={c_gagnant2021} />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
+      <M8Etapes ici={7} />
+      <h2 class="e">Leur modèle, plus le vote de 2021</h2>
+      <Console lignes={c_modele3} />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
+      <M8Etapes ici={7} />
+      <M8Image code={TABLEAU3.code} img={TABLEAU3.img} l={TABLEAU3.l} h={TABLEAU3.h} px={100} nouveau={[0, 1]} dit="leur modèle, puis le nôtre" alt="Le tableau de modelsummary : leur modèle et le même avec le vote de 2021, côte à côte, avec Num.Obs. et R2." />
+    </Slide>
+
+    <Slide bandeau="Blais et Gélineau, en 2025 · faire mieux" droite={D}>
+      <h2 class="e">Lire le tableau : Gagnant, encore</h2>
+      <M8Lecture3 />
+    </Slide>
+
+    <Slide bandeau="Si on a le temps · X mesuré avant" droite={D}>
+      <h2 class="e">Et si X était mesuré avant le résultat ?</h2>
+      <Console lignes={c_intention} />
+    </Slide>
+
+    <Slide bandeau="Si on a le temps · X mesuré avant" droite={D}>
+      <h2 class="e">gagnant_campagne : l’intention de vote</h2>
+      <Console lignes={c_campagne} />
     </Slide>
 
     <Slide bandeau="Avant le 5 novembre" droite={D}>
