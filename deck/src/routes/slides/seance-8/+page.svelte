@@ -58,7 +58,6 @@
   import M8Gelineau from '$lib/deck/visuels/M8Gelineau.svelte';
   import M8Tableau2 from '$lib/deck/visuels/M8Tableau2.svelte';
   import M8Fil from '$lib/deck/visuels/M8Fil.svelte';
-  import M8Savoir from '$lib/deck/visuels/M8Savoir.svelte';
   import M8DeuxVoies from '$lib/deck/visuels/M8DeuxVoies.svelte';
   import M8Note1 from '$lib/deck/visuels/M8Note1.svelte';
   import M8Lecture3 from '$lib/deck/visuels/M8Lecture3.svelte';
@@ -73,7 +72,7 @@
   import AvantS9 from '$lib/deck/visuels/AvantS9.svelte';
   import { BG, ATELIER, TABLEAU, TABLEAU3, WORD, SAUVER, COEFS } from '$lib/data/seance8.js';
 
-  const TOTAL = 56;
+  const TOTAL = 55;
   // Le bandeau de la diapo de l'article (M8Fil) : il suit la marche.
   let bandeauArt = $state('Pratique dans R');
   // Le plan du code : des commentaires d'abord (la diapo « Planifions notre code »).
@@ -193,11 +192,6 @@
     <Slide bandeau="Ajouter des variables · l’âge" droite={D}>
       <h2 class="e">L’âge entre dans le modèle</h2>
       <M8Pente />
-    </Slide>
-
-    <Slide bandeau="Ajouter des variables · un piège" droite={D}>
-      <h2 class="e">Une variable qui change beaucoup la pente</h2>
-      <M8Savoir />
     </Slide>
 
     <Slide bandeau="Ajouter des variables · à âge égal" droite={D}>
