@@ -43,7 +43,7 @@
 <div class="visuel m8gl" bind:this={hote}>
   <figure>
     <div class="feuille">
-      <img src="{base}/img/s8-bg-tableau1.png" alt="Le tableau 1 de l’article, en anglais : la satisfaction moyenne avant l’élection, après l’élection, la différence et le nombre de personnes, pour cinq groupes. Gagnants partout : 0,645 avant, 0,738 après. Perdants partout : 0,526 avant, 0,579 après. N’a pas voté : 0,493 avant, 0,577 après. Tous les groupes augmentent." />
+      <img src="{base}/img/s8-bg-tableau1.png" alt="Le tableau 1 de l’article, en anglais : la satisfaction moyenne avant l’élection, après l’élection, la différence et le nombre de personnes, pour cinq groupes. Gagnants partout : 0,645 avant, 0,738 après. Perdants partout : 0,526 avant, 0,579 après. N’a pas voté : 0,493 avant, 0,577 après. Tous les groupes augmentent." />
       {#each CADRES as c, i}
         <span class="m8-cadre" class:on={e === i + 1} style="left: {c.x}%; top: {c.y}%; width: {c.l}%; height: {c.h}%"></span>
       {/each}

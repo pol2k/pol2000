@@ -21,6 +21,7 @@
    * l'atelier (outils/seance8_data.R).
    */
   import { brancherTemps } from '../temps.js';
+  import { BG } from '$lib/data/seance8.js';
   let { etape = 0 } = $props();
 
   const TEMPS = { 2: 1, 3: 1 };
@@ -55,7 +56,7 @@
   <div class="eux">
     {#if etape === 0}
       <div class="ref">
-        <p>Blais, A. et Gélineau, F. (2007). Winning, losing and satisfaction with democracy. <em>Political Studies</em>, <em>55</em>(2), 425-441.</p>
+        <p>Blais, A. et Gélineau, F. (2007). Winning, losing and satisfaction with democracy. <em>Political Studies</em>, <em>55</em>(2), 425-441. <span class="doi">https://doi.org/{BG.doi}</span></p>
       </div>
       <div class="pages">
         <div class="pg"><span class="nb">17</span><span>pages, leur article</span></div>
@@ -107,8 +108,8 @@
       <span class="eti">Blais et Gélineau</span>
       <div class="vars">
         <div class="var"><span class="tag y">Y</span><div><strong>La satisfaction envers la démocratie</strong><span class="gris">4 choix, de «&#8239;pas du tout&#8239;» à «&#8239;très satisfait&#8239;»</span></div><span class="ok">ordinale ✓</span></div>
-        <div class="var"><span class="tag x">X</span><div><strong>A voté pour le parti gagnant</strong><span class="gris">les libéraux, en 1997 comme en 2025</span></div><span class="ok">binaire, pour un X ✓</span></div>
-        <div class="var"><span class="tag c">+</span><div><strong>La même question, avant l’élection</strong><span class="gris">les mêmes personnes, interrogées deux fois</span></div></div>
+        <div class="var"><span class="tag x">X</span><div><strong>Gagner ou perdre, au pays et dans sa circonscription</strong><span class="gris">vous, en 2025 : au pays seulement (a voté libéral)</span></div><span class="ok">binaire, pour un X ✓</span></div>
+        <div class="var"><span class="tag c">+</span><div><strong>Leur contrôle principal : la même question, avant l’élection</strong><span class="gris">les mêmes personnes, interrogées deux fois</span></div></div>
       </div>
       <p class="donnees">Eux&#8239;: la CES 1997 (3 949 personnes, 3 170 réinterrogées après). Vous&#8239;: la CES 2025.</p>
       <p class="src">p. 428, 437</p>
@@ -139,9 +140,10 @@
     {:else if etape === 8}
       <div class="final">
         <div class="f"><strong>Statistiques descriptives</strong><span>leur tableau 1</span></div>
-        <div class="f"><strong>Régression et tableau</strong><span>leur tableau 2</span></div>
+        <div class="f"><strong>Un GOA</strong><span class="gris">à vous</span></div>
+        <div class="f"><strong>Une régression linéaire et son tableau</strong><span>leur tableau 2, en plus simple</span></div>
         <div class="f"><strong>Interpréter</strong><span>leur conclusion</span></div>
-        <div class="f"><strong>Biais et limites</strong><span>à vous</span></div>
+        <div class="f"><strong>Biais et limites</strong><span class="gris">à vous</span></div>
       </div>
       <p class="dit">Le TP 1 s’arrête aux données. Positron n’y est pas obligatoire.</p>
     {/if}
@@ -161,6 +163,7 @@
   .gris { color: var(--dk-gris); }
   .rouge { color: var(--dk-accent); }
   .nowrap { white-space: nowrap; }
+  .doi { overflow-wrap: anywhere; }
   .question { font-size: 1.75em; font-weight: 700; line-height: 1.35; }
   .tag { display: inline-block; min-width: 1.5em; padding: 0 0.3em; text-align: center; font-size: 0.6em; vertical-align: 0.25em; font-weight: 700; color: var(--dk-fond); background: var(--dk-encre); }
   .tag.y { background: var(--dk-accent); }
@@ -197,10 +200,10 @@
   .pg .nb { font-size: 2.6em; font-weight: 700; line-height: 1; }
   .pg.rouge { border-color: var(--dk-accent); }
   .pg.rouge .nb { color: var(--dk-accent); }
-  .final { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8em; }
+  .final { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8em; }
   .f { border-top: 4px solid var(--dk-encre); padding-top: 0.5em; display: flex; flex-direction: column; gap: 0.3em; }
   .f strong { font-size: 1.05em; line-height: 1.3; }
   .f span { color: var(--dk-accent); font-weight: 600; font-size: 0.85em; }
-  .f:last-child span { color: var(--dk-gris); }
+  .f span.gris { color: var(--dk-gris); }
   @media (prefers-reduced-motion: reduce) { .boite.trou, .autres { transition: none; } }
 </style>

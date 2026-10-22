@@ -36,7 +36,7 @@
 <div class="visuel m8t2" bind:this={hote}>
   <figure>
     <div class="feuille">
-      <img src="{base}/img/s8-bg-tableau2.png" alt="Le tableau 2 de l’article, en anglais : deux modèles, une vingtaine de variables et leurs coefficients. Dans le modèle 2, perdre au pays et dans sa circonscription : −0,447, trois étoiles." />
+      <img src="{base}/img/s8-bg-tableau2.png" alt="Le tableau 2 de l’article, en anglais : deux modèles, une vingtaine de variables et leurs coefficients. Dans le modèle 2, perdre au pays et dans sa circonscription : −0,447, trois étoiles." />
       {#each CADRES as c, i}
         <span class="m8-cadre" class:on={e === i + 1} class:pale={i === 0 && e === 2} style="left: {c.x}%; top: {c.y}%; width: {c.l}%; height: {c.h}%"></span>
       {/each}
@@ -49,15 +49,15 @@
       <p class="q">19 variables.<br />Combien se lisent&#8239;?</p>
     {:else if e === 1}
       <div class="bloc">
-        <p class="gros"><span class="rouge">Leur X</span>&#8239;: gagner ou perdre, en quatre groupes</p>
-        <p class="moyen">comparés aux gagnants partout</p>
+        <p class="gros"><span class="rouge">Leur X</span>&#8239;: quatre lignes (dont l’abstention)</p>
+        <p class="moyen">comparées aux gagnants partout</p>
       </div>
       <div class="bloc gris">
         <p class="moyen">Tout le reste&#8239;: des contrôles.<br /><strong>On ne les lit pas.</strong></p>
       </div>
     {:else}
-      <div class="zoom"><img src="{base}/img/s8-bg-ligne.png" alt="La ligne agrandie : Lose federal/lose constituency, −0,447, trois étoiles, erreur type 0,120." /></div>
-      <p class="gros">Perdre au pays et chez soi&#8239;: <span class="rouge">moins satisfait</span> après l’élection, à satisfaction égale avant.</p>
+      <div class="zoom"><img src="{base}/img/s8-bg-ligne.png" alt="La ligne agrandie : Lose federal/lose constituency, −0,447, trois étoiles, erreur type 0,120." /></div>
+      <p class="gros">Perdre au pays et chez soi&#8239;: <span class="rouge">moins satisfait</span> que les gagnants partout, après l’élection, à satisfaction égale avant.</p>
       <p class="moyen gris">Pas une régression linéaire&#8239;: on lit le signe (−) et les étoiles (***).</p>
     {/if}
   </div>
