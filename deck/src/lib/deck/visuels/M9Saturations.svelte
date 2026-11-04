@@ -1,13 +1,12 @@
 <script>
   /**
-   * Les coefficients de saturation des huit énoncés, puis des six qu'on
+   * Les coefficients de saturation des dix institutions, puis des neuf qu'on
    * garde : les vrais chiffres de sondr::topdown_fa() (SATURATIONS,
-   * outils/seance9_data.R), redessinés pour qu'on voie aussi la barre
-   * négative que ggplot a laissée tomber.
+   * outils/seance9_data.R), redessinés dans la langue du deck.
    *
-   *   0  les huit, rangés du plus fort au plus faible; le seuil 0,3 en
-   *      pointillé; les deux sous le seuil en rouge;
-   *   1  les deux s'effacent, les six remontent; alpha passe de 0,74 à 0,83.
+   *   0  les dix, rangées de la plus forte à la plus faible; le seuil 0,3 en
+   *      pointillé; celle sous le seuil en rouge;
+   *   1  elle s'efface, les neuf remontent; alpha et valeur propre suivent.
    */
   import { brancherTemps } from '../temps.js';
   import { SATURATIONS as S } from '$lib/data/seance9.js';
@@ -20,9 +19,9 @@
   });
 
   const COURT = {
-    1: 'je comprends les enjeux', 2: 'compromis = trahison', 3: 'ne se soucient pas des gens',
-    4: 'dignes de confiance (retourné)', 5: 'le principal problème', 6: 'un leader fort',
-    7: 'le peuple décide', 8: 'les riches et puissants'
+    fed: 'gouvernement fédéral', prov: 'gouv. provincial', medias: 'les médias', elections: 'Élections Canada',
+    tribunaux: 'les tribunaux', religion: 'la religion organisée', armee: 'les forces armées',
+    ecoles: 'les écoles publiques', fonction: 'la fonction publique', police: 'la police'
   };
   const SEUIL = 0.3;
   const run = (r) => r.items.map((n, i) => ({ n, l: r.loadings[i] }));
@@ -37,7 +36,8 @@
     return { n: u.n, garde, l: e >= 1 && garde ? d.l : u.l, rang: e >= 1 && garde ? ordre2.indexOf(u.n) : i };
   }));
 
-  const W = 1000, H = 470, X0 = 330, LX = 540, PAS = 50, Y0 = 20, HB = 34;
+  const NB = S.un.items.length;
+  const W = 1000, X0 = 330, LX = 540, PAS = 44, Y0 = 20, HB = 30, H = Y0 + NB * PAS + 50;
   const x = (v) => X0 + v * LX;
   const f = (v) => v.toFixed(2).replace('.', ',');
   const alpha = $derived(e >= 1 ? S.deux.alpha : S.un.alpha);
@@ -45,13 +45,13 @@
 </script>
 
 <div class="visuel m9s" bind:this={hote}>
-  <svg viewBox="0 0 {W} {H}" role="img" aria-label="Les coefficients de saturation des huit énoncés, en barres. Deux sont sous le seuil de 0,3 : je comprends les enjeux et un leader fort. Quand on les retire, les six autres restent au-dessus et l'alpha monte.">
-    <line x1={x(SEUIL)} y1={Y0 - 6} x2={x(SEUIL)} y2={Y0 + 8 * PAS} class="m9s-seuil" />
-    <text x={x(SEUIL)} y={Y0 + 8 * PAS + 24} class="m9s-seuil-t">seuil 0,3</text>
-    <line x1={x(0)} y1={Y0 - 6} x2={x(0)} y2={Y0 + 8 * PAS} class="m9s-zero" />
+  <svg viewBox="0 0 {W} {H}" role="img" aria-label="Les coefficients de saturation des dix institutions, en barres. Une seule est sous le seuil de 0,3 : la religion organisée. Quand on la retire, les neuf autres restent au-dessus.">
+    <line x1={x(SEUIL)} y1={Y0 - 6} x2={x(SEUIL)} y2={Y0 + NB * PAS} class="m9s-seuil" />
+    <text x={x(SEUIL)} y={Y0 + NB * PAS + 24} class="m9s-seuil-t">seuil 0,3</text>
+    <line x1={x(0)} y1={Y0 - 6} x2={x(0)} y2={Y0 + NB * PAS} class="m9s-zero" />
     {#each barres as b (b.n)}
       <g class="m9s-barre" class:faible={b.l < SEUIL} class:parti={e >= 1 && !b.garde} style="transform: translateY({b.rang * PAS}px)">
-        <text x={X0 - 44} y={Y0 + HB / 2 + 7} class="m9s-nom">pop{b.n} · {COURT[b.n]}</text>
+        <text x={X0 - 44} y={Y0 + HB / 2 + 7} class="m9s-nom">conf_{b.n} · {COURT[b.n]}</text>
         <rect x={b.l >= 0 ? x(0) : x(b.l)} y={Y0} width={Math.abs(b.l) * LX} height={HB} class="m9s-rect" />
         <text x={b.l >= 0 ? x(b.l) + 12 : x(0) + 12} y={Y0 + HB / 2 + 7} class="m9s-val">{f(b.l)}</text>
       </g>
@@ -61,7 +61,7 @@
     {#key e}
       <span class="m9s-chiffre"><b>alpha</b> {f(alpha)}</span>
       <span class="m9s-chiffre"><b>1re valeur propre</b> {f(eigen)}</span>
-      <span class="m9s-dit">{e >= 1 ? 'Six énoncés, tous au-dessus du seuil.' : 'Deux énoncés sous le seuil : ils ne parlent pas de la même chose.'}</span>
+      <span class="m9s-dit">{e >= 1 ? 'Neuf institutions, toutes au-dessus du seuil.' : 'Une institution sous le seuil : elle ne parle pas de la même chose.'}</span>
     {/key}
   </div>
 </div>

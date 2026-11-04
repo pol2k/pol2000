@@ -1,13 +1,14 @@
 # Exporte tout ce que la séance 9 montre de l'Étude électorale canadienne 2025
-# vers src/lib/data/seance9.js et static/img/s9-*.png : la batterie de
-# populisme du sondage postélectoral (huit énoncés, pes25_populism_1 à _8),
-# ses corrélations, les deux analyses factorielles de sondr::topdown_fa()
-# (tous les items, puis sans les deux qui détonnent), l'échelle et son
-# histogramme, et une régression de l'échelle sur la scolarité.
+# vers src/lib/data/seance9.js et static/img/s9-*.png : la confiance envers
+# dix institutions (sondage postélectoral, pes25_conf_inst1_1 à _4 et
+# pes25_conf_inst2_1 à _6, posées à la moitié des répondant.e.s), les deux
+# analyses factorielles de sondr::topdown_fa() (les dix, puis sans celle qui
+# détonne), l'échelle et son histogramme, et une régression de l'échelle sur
+# la scolarité.
 #
-#   CES2025_RDS=~/ces2025.rds Rscript outils/seance9_data.R
+#   CES2025_DTA=~/ces2025_project/ces2025.dta Rscript outils/seance9_data.R
 #
-# Sans CES2025_RDS : CES2025_DTA (le .dta de la CES), sinon ces::get_ces("2025").
+# Sans CES2025_DTA : CES2025_RDS (une copie saveRDS), sinon ces::get_ces("2025").
 # Aucune pondération. Les sorties de la console sont capturées telles que R
 # les imprime (options(width = 100)), messages et avertissements compris :
 # rien n'est tapé à la main.
@@ -23,19 +24,20 @@ d <- if (nzchar(rds) && file.exists(rds)) readRDS(rds) else
 IMG <- normalizePath(file.path(ici, "..", "static", "img"))
 r <- function(x, k = 2) round(x, k)
 
-# ---- Les huit énoncés, tels que la CES les libelle (étiquettes Stata, 80
-# caractères). Les versions françaises sont dans la diapo (M9Items).
-ITEMS <- lapply(1:8, function(i) {
-  v <- paste0("pes25_populism_", i)
-  list(n = i, var = v, label = trimws(attr(d[[v]], "label")))
-})
-ECHELLE <- lapply(names(attr(d$pes25_populism_3, "labels")), function(x) x)
+# ---- Les dix institutions, telles que la CES les libelle (étiquettes Stata).
+# Les libellés français du questionnaire sont dans la diapo (M9Items).
+V <- c(fed = "pes25_conf_inst1_1", prov = "pes25_conf_inst1_2", medias = "pes25_conf_inst1_3",
+       elections = "pes25_conf_inst1_4", tribunaux = "pes25_conf_inst2_1", religion = "pes25_conf_inst2_2",
+       armee = "pes25_conf_inst2_3", ecoles = "pes25_conf_inst2_4", fonction = "pes25_conf_inst2_5",
+       police = "pes25_conf_inst2_6")
+ITEMS <- lapply(names(V), function(k) list(cle = k, var = unname(V[k]), label = trimws(attr(d[[V[k]]], "label"))))
+ECHELLE <- lapply(names(attr(d$pes25_conf_inst1_1, "labels")), function(x) x)
 
 # ---- La salle travaille dans un dossier qui contient ces2025.rds (séance 2).
 tmp <- tempfile("s9-"); dir.create(tmp)
 saveRDS(d, file.path(tmp, "ces2025.rds"))
 ancien <- setwd(tmp)
-rm(list = intersect(ls(), c("df_raw", "df_clean", "df_fa", "df_fa2", "modele")))
+rm(list = intersect(ls(), c("df_raw", "df_clean", "df_fa", "df_fa2", "modele", "confiance")))
 
 # Capture ce que R imprime : la valeur visible, les messages (sondr parle par
 # message()) et les avertissements, dans l'ordre où Positron les montre.
@@ -73,74 +75,73 @@ ATELIER$charger <- console(
   "df_raw <- readRDS(\"ces2025.rds\")",
   "df_clean <- data.frame(id = 1:nrow(df_raw))"
 )
-# Un énoncé, tel que la CES le code : 1 à 5, et 6 = ne sait pas.
+# Une institution, telle que la CES la code : 1 = beaucoup … 4 = pas du tout, 5 = ne sait pas.
 ATELIER$item <- console(
-  "table(as_factor(df_raw$pes25_populism_3))"
+  "table(as_factor(df_raw$pes25_conf_inst1_1))"
 )
-# De 1-5 à 0-1, et 6 devient NA. Une fonction, huit fois.
+# De 1-4 à 1-0 (beaucoup = 1), et 5 devient NA. Une fonction, dix fois.
 ATELIER$echelle <- console(
-  "echelle <- function(x) ifelse(x %in% 1:5, (x - 1) / 4, NA)",
-  "df_clean$pop1 <- echelle(df_raw$pes25_populism_1)",
-  "df_clean$pop2 <- echelle(df_raw$pes25_populism_2)",
-  "df_clean$pop3 <- echelle(df_raw$pes25_populism_3)",
-  "df_clean$pop4 <- echelle(df_raw$pes25_populism_4)",
-  "df_clean$pop5 <- echelle(df_raw$pes25_populism_5)",
-  "df_clean$pop6 <- echelle(df_raw$pes25_populism_6)",
-  "df_clean$pop7 <- echelle(df_raw$pes25_populism_7)",
-  "df_clean$pop8 <- echelle(df_raw$pes25_populism_8)",
-  "table(df_clean$pop3, useNA = \"ifany\")"
+  "confiance <- function(x) ifelse(x %in% 1:4, (4 - x) / 3, NA)",
+  "df_clean$conf_fed <- confiance(df_raw$pes25_conf_inst1_1)",
+  "df_clean$conf_prov <- confiance(df_raw$pes25_conf_inst1_2)",
+  "df_clean$conf_medias <- confiance(df_raw$pes25_conf_inst1_3)",
+  "df_clean$conf_elections <- confiance(df_raw$pes25_conf_inst1_4)",
+  "df_clean$conf_tribunaux <- confiance(df_raw$pes25_conf_inst2_1)",
+  "df_clean$conf_religion <- confiance(df_raw$pes25_conf_inst2_2)",
+  "df_clean$conf_armee <- confiance(df_raw$pes25_conf_inst2_3)",
+  "df_clean$conf_ecoles <- confiance(df_raw$pes25_conf_inst2_4)",
+  "df_clean$conf_fonction <- confiance(df_raw$pes25_conf_inst2_5)",
+  "df_clean$conf_police <- confiance(df_raw$pes25_conf_inst2_6)",
+  "table(df_clean$conf_fed, useNA = \"ifany\")"
 )
-# L'énoncé 4 dit le contraire des autres : on le retourne.
-ATELIER$inverser <- console(
-  "cor(df_clean$pop3, df_clean$pop4, use = \"complete.obs\")",
-  "df_clean$pop4 <- 1 - df_clean$pop4",
-  "cor(df_clean$pop3, df_clean$pop4, use = \"complete.obs\")"
+# Le sens : deux institutions, la même direction.
+ATELIER$sens <- console(
+  "cor(df_clean$conf_fed, df_clean$conf_tribunaux, use = \"complete.obs\")"
 )
-# Les corrélations entre les huit (après le retournement), pour la figure.
-items <- paste0("pop", 1:8)
+items <- paste0("conf_", names(V))
 CORR <- round(cor(df_clean[, items], use = "pairwise.complete.obs"), 2)
-CORR <- lapply(1:8, function(i) unname(CORR[i, ]))
+CORR <- lapply(seq_along(items), function(i) unname(CORR[i, ]))
 
 ATELIER$installer <- list(list(`in` = "install.packages(\"remotes\")                 # une seule fois", out = ""),
                           list(`in` = "remotes::install_github(\"clessnverse/sondr\")   # une seule fois", out = ""))
 ATELIER$preparer <- console(
   "library(sondr)",
-  "df_fa <- na.omit(df_clean[, c(\"pop1\", \"pop2\", \"pop3\", \"pop4\", \"pop5\", \"pop6\", \"pop7\", \"pop8\")])",
+  "df_fa <- na.omit(select(df_clean, starts_with(\"conf_\")))",
   "nrow(df_fa)"
 )
 FA1 <- rendre_png("topdown_fa(df_fa)", "s9-fa1.png")
 res1 <- suppressWarnings(suppressMessages(sondr::topdown_fa(df_fa)))
-FA2 <- rendre_png("df_fa2 <- df_fa[, c(\"pop2\", \"pop3\", \"pop4\", \"pop5\", \"pop7\", \"pop8\")]\ntopdown_fa(df_fa2)", "s9-fa2.png")
+FA2 <- rendre_png("df_fa2 <- select(df_fa, -conf_religion)\ntopdown_fa(df_fa2)", "s9-fa2.png")
 res2 <- suppressWarnings(suppressMessages(sondr::topdown_fa(df_fa2)))
 SATURATIONS <- list(
   n = nrow(df_fa),
-  un = list(alpha = res1$cronbachAlpha, eigen = res1$factor1stEigen, items = 1:8, loadings = r(res1$factorLoadings)),
-  deux = list(alpha = res2$cronbachAlpha, eigen = res2$factor1stEigen, items = c(2, 3, 4, 5, 7, 8), loadings = r(res2$factorLoadings))
+  un = list(alpha = res1$cronbachAlpha, eigen = res1$factor1stEigen, items = names(V), loadings = r(res1$factorLoadings)),
+  deux = list(alpha = res2$cronbachAlpha, eigen = res2$factor1stEigen, items = setdiff(names(V), "religion"), loadings = r(res2$factorLoadings))
 )
 
-# L'échelle : la moyenne des six, de 0 à 1.
+# L'échelle : la moyenne des neuf, de 0 à 1.
 ATELIER$construire <- console(
-  "df_clean$populisme <- (df_clean$pop2 + df_clean$pop3 + df_clean$pop4 +\n                       df_clean$pop5 + df_clean$pop7 + df_clean$pop8) / 6",
-  "summary(df_clean$populisme)"
+  "df_clean$confiance <- rowMeans(select(df_clean, starts_with(\"conf_\"), -conf_religion))",
+  "summary(df_clean$confiance)"
 )
-HIST <- rendre_png("hist(df_clean$populisme, main = \"\", xlab = \"Populisme (0 à 1)\", ylab = \"Personnes\")", "s9-hist.png", 1600, 1000)
-h <- hist(df_clean$populisme, plot = FALSE)
-HISTO <- list(bornes = h$breaks, comptes = h$counts, moyenne = r(mean(df_clean$populisme, na.rm = TRUE), 3),
-              n = sum(!is.na(df_clean$populisme)))
+HIST <- rendre_png("hist(df_clean$confiance, main = \"\", xlab = \"Confiance envers les institutions (0 à 1)\", ylab = \"Personnes\")", "s9-hist.png", 1600, 1000)
+h <- hist(df_clean$confiance, plot = FALSE)
+HISTO <- list(bornes = h$breaks, comptes = h$counts, moyenne = r(mean(df_clean$confiance, na.rm = TRUE), 3),
+              n = sum(!is.na(df_clean$confiance)))
 
-# L'application : la scolarité réduit-elle le populisme ? Universitaire (8 à
-# 11) ou non (1 à 7); 12 = ne sait pas, NA.
+# L'application : la scolarité augmente-t-elle la confiance ? Universitaire
+# (8 à 11) ou non (1 à 7); 12 = ne sait pas, NA.
 ATELIER$regression <- console(
   "df_clean$universitaire <- case_when(\n  df_raw$cps25_education %in% 8:11 ~ 1,\n  df_raw$cps25_education %in% 1:7 ~ 0\n)",
-  "modele <- lm(populisme ~ universitaire, data = df_clean)",
+  "modele <- lm(confiance ~ universitaire, data = df_clean)",
   "modele"
 )
-m <- lm(populisme ~ universitaire, data = df_clean)
+m <- lm(confiance ~ universitaire, data = df_clean)
 s <- coef(summary(m))
 REG <- list(constante = r(s[1, 1], 3), pente = r(s[2, 1], 3), se = r(s[2, 2], 3), p = signif(s[2, 4], 2),
             n = nobs(m), r2 = r(summary(m)$r.squared, 3),
-            moy_non = r(mean(df_clean$populisme[df_clean$universitaire == 0], na.rm = TRUE), 3),
-            moy_uni = r(mean(df_clean$populisme[df_clean$universitaire == 1], na.rm = TRUE), 3))
+            moy_non = r(mean(df_clean$confiance[df_clean$universitaire == 0], na.rm = TRUE), 3),
+            moy_uni = r(mean(df_clean$confiance[df_clean$universitaire == 1], na.rm = TRUE), 3))
 ATELIER$sauver <- console("saveRDS(df_clean, \"df_clean.rds\")")
 
 setwd(ancien)
@@ -148,14 +149,14 @@ setwd(ancien)
 # ---- Le script entier, tel que la salle le tape (seance9.R).
 ins <- function(cle) paste(sapply(ATELIER[[cle]], `[[`, "in"), collapse = "\n")
 SCRIPT <- paste(c(
-  "# Séance 9 · mesurer un concept : le populisme dans la CES 2025",
+  "# Séance 9 · mesurer un concept : la confiance envers les institutions, CES 2025",
   "# 1. Charger", ins("charger"),
-  "# 2. Regarder un énoncé", ins("item"),
-  "# 3. De 1-5 à 0-1, ne sait pas devient NA", ins("echelle"),
-  "# 4. Retourner l'énoncé 4", ins("inverser"),
+  "# 2. Regarder une institution", ins("item"),
+  "# 3. De 1-4 à 0-1 (1 = beaucoup), ne sait pas devient NA", ins("echelle"),
+  "# 4. Le sens : deux institutions, la même direction", ins("sens"),
   "# 5. sondr, une seule fois", ins("installer"),
-  "# 6. L'analyse factorielle : tous les énoncés", ins("preparer"), FA1$code,
-  "# 7. Sans les deux qui détonnent", FA2$code,
+  "# 6. L'analyse factorielle : les dix institutions", ins("preparer"), FA1$code,
+  "# 7. Sans celle qui détonne", FA2$code,
   "# 8. L'échelle", ins("construire"), HIST$code,
   "# 9. L'appliquer", ins("regression"),
   "# 10. Sauvegarder", ins("sauver")), collapse = "\n")
@@ -163,18 +164,18 @@ SCRIPT <- paste(c(
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
 writeLines(c(
   "/* Généré par outils/seance9_data.R. Source : Étude électorale canadienne 2025,",
-  "   sondage postélectoral (pes25_populism_1 à _8), sans pondération. Ne pas modifier à la main. */",
+  "   sondage postélectoral (pes25_conf_inst1_1 à _4, pes25_conf_inst2_1 à _6), sans pondération. Ne pas modifier à la main. */",
   "",
-  "/* Les huit énoncés, libellés anglais de la CES (80 caractères), et l'échelle de réponse. */",
+  "/* Les dix institutions (clé, variable, libellé anglais de la CES) et l'échelle de réponse. */",
   paste0("export const ITEMS = ", J(ITEMS), ";"),
   paste0("export const ECHELLE = ", J(ECHELLE), ";"),
-  "/* Corrélations entre pop1 et pop8, après le retournement de pop4 (ligne i, colonne j). */",
+  "/* Corrélations entre les dix (ligne i, colonne j), dans l'ordre de ITEMS. */",
   paste0("export const CORR = ", J(CORR), ";"),
-  "/* sondr::topdown_fa : alpha de Cronbach, première valeur propre, saturations. */",
+  "/* sondr::topdown_fa : alpha de Cronbach, première valeur propre, saturations (items = clés). */",
   paste0("export const SATURATIONS = ", J(SATURATIONS), ";"),
   "/* L'histogramme de l'échelle, tel que hist() le découpe. */",
   paste0("export const HISTO = ", J(HISTO), ";"),
-  "/* lm(populisme ~ universitaire). */",
+  "/* lm(confiance ~ universitaire). */",
   paste0("export const REG = ", J(REG), ";"),
   "/* La console : [{ in, out }] par étape, sorties capturées de R. */",
   paste0("export const ATELIER = ", J(ATELIER), ";"),

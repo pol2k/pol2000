@@ -92,7 +92,8 @@ whole pipeline by hand (Blais et Gélineau in 2025), so repeating it would be
 a replay, and the instructor judged a full AI-agent demo too early: students
 would use it to bypass the coding they are still learning for the travail
 final. Séance 9 therefore becomes **« Les variables latentes »**: measurement of a latent concept on the CES 2025
-populism battery, following the arc of FAS1001 cours 5 (latent variable,
+confidence-in-institutions battery (ten items, post-election wave; the
+populism battery was tried first and dropped by the instructor), following the arc of FAS1001 cours 5 (latent variable,
 scale, fidélité/validité, the history-exam analogy, alpha / first eigenvalue
 / loadings with `sondr::topdown_fa()`), then eight slides on what an LLM is,
 ported from the instructor's EIOM 2026 deck « L'IA en recherche ». Agentic

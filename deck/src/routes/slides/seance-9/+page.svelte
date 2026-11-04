@@ -13,9 +13,9 @@
    * 1. Mesurer un concept qu'on ne voit pas, d'après le cours 5 de FAS1001
    * (variable latente, échelle, fidélité et validité, l'examen d'histoire,
    * les trois chiffres de l'analyse factorielle), puis pour vrai sur la
-   * batterie de populisme de la CES 2025 avec sondr::topdown_fa() : deux
-   * énoncés détonnent, on les retire, on construit l'échelle, on la met dans
-   * une régression. 2. Ce qu'est un modèle de langue, huit diapos reprises
+   * confiance envers dix institutions (CES 2025) avec sondr::topdown_fa() :
+   * la religion organisée détonne, on la retire, on construit l'échelle, on
+   * la met dans une régression. 2. Ce qu'est un modèle de langue, huit diapos reprises
    * de « L'IA en recherche » (EIOM 2026, Foisy) : prédire le jeton suivant,
    * les jetons, pas une base de connaissances, l'hallucination, les biais,
    * la formule d'un prompt, la confidentialité. On termine sur la règle du
@@ -59,7 +59,7 @@
   import Donnees from '$lib/deck/demos/Donnees.svelte';
   import { ATELIER, FA1, FA2, HIST, REG, SATURATIONS, SCRIPT } from '$lib/data/seance9.js';
 
-  const TOTAL = 51;
+  const TOTAL = 50;
   const D = 'POL-2000 · séance 9 · jeu 5 nov';
   const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
   const f = (v, k = 2) => v.toFixed(k).replace('.', ',');
@@ -82,19 +82,19 @@
   };
 
   // Le plan du code : des commentaires d'abord (comme à la séance 8).
-  const PLAN = "# 1. Charger ces2025.rds, créer df_clean\n# 2. Regarder un énoncé\n# 3. Les huit énoncés, de 1-5 à 0-1 ; ne sait pas devient NA\n# 4. Retourner l'énoncé qui dit le contraire\n# 5. Installer sondr, une seule fois\n# 6. L'analyse factorielle : tous les énoncés\n# 7. Sans ceux qui détonnent\n# 8. L'échelle : la moyenne\n# 9. L'appliquer : lm(populisme ~ scolarité)\n# 10. Sauvegarder df_clean";
+  const PLAN = "# 1. Charger ces2025.rds, créer df_clean\n# 2. Regarder une institution\n# 3. Les dix institutions, de 1-4 à 1-0 ; ne sait pas devient NA\n# 4. Vérifier le sens\n# 5. Installer sondr, une seule fois\n# 6. L'analyse factorielle : les dix\n# 7. Sans celle qui détonne\n# 8. L'échelle : la moyenne\n# 9. L'appliquer : lm(confiance ~ scolarité)\n# 10. Sauvegarder df_clean";
   const [SCRIPT_A, SCRIPT_B, SCRIPT_C] = (() => { const i = SCRIPT.indexOf('# 4.'), j = SCRIPT.indexOf('# 7.'); return [SCRIPT.slice(0, i).trimEnd(), SCRIPT.slice(i, j).trimEnd(), SCRIPT.slice(j)]; })();
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
   const avec = (cle, notes = []) => ATELIER[cle].map((l, i) => ({ ...l, note: notes[i] || '' }));
   const c_charger = avec('charger', ['', 'haven : pour lire les codes de la CES', 'ces2025.rds, sauvegardé à la séance 2', 'df_raw ne change jamais']);
-  const c_item = avec('item', ['pes25 : le sondage après l’élection. Un code de 1 à 5, et 6 = ne sait pas']);
-  const c_echelle = avec('echelle', ['une fonction : de 1-5 à 0-1, tout le reste devient NA', 'la même recette, huit fois', '', '', '', '', '', '', '', 'NA : pas de réponse après l’élection, ou ne sait pas']);
-  const c_echelle_a = c_echelle.slice(0, 5), c_echelle_b = c_echelle.slice(5);
-  const c_inverser = avec('inverser', ['négatif : pop4 va dans l’autre sens que pop3', '1 devient 0, 0 devient 1', 'le même lien, dans le bon sens']);
-  const c_sondr = [...avec('installer', ['', 'sondr n’est pas sur CRAN : on l’installe depuis GitHub']), ...avec('preparer', ['', 'na.omit : seulement les gens qui ont répondu aux huit', `${nb(SATURATIONS.n)} personnes`])];
-  const c_construire = avec('construire', ['la moyenne des six qu’on garde', 'de 0 à 1 ; NA : au moins un énoncé sans réponse']);
-  const c_regression = avec('regression', ['universitaire : a fréquenté l’université (8 à 11) ou non (1 à 7)', '', `${f(REG.pente, 3)} : sur une échelle de 0 à 1, les universitaires sont ${f(Math.abs(REG.pente), 2)} plus bas`]);
+  const c_item = avec('item', ['pes25 : après l’élection, à la moitié des répondant.e.s. 1 = beaucoup … 4 = pas du tout, 5 = ne sait pas']);
+  const c_echelle = avec('echelle', ['une fonction : 1 (beaucoup) devient 1, 4 (pas du tout) devient 0, le reste NA', 'la même recette, dix fois', '', '', '', '', '', '', '', '', '', 'NA : pas de réponse après l’élection, l’autre moitié du sondage, ou ne sait pas']);
+  const c_echelle_a = c_echelle.slice(0, 6), c_echelle_b = c_echelle.slice(6);
+  const c_sens = avec('sens', ['positif : qui fait confiance au fédéral fait confiance aux tribunaux. Même direction, pas de retournement']);
+  const c_sondr = [...avec('installer', ['', 'sondr n’est pas sur CRAN : on l’installe depuis GitHub']), ...avec('preparer', ['', 'na.omit : seulement les gens qui ont répondu aux dix', `${nb(SATURATIONS.n)} personnes : la moitié du sondage postélectoral`])];
+  const c_construire = avec('construire', ['la moyenne des neuf qu’on garde, ligne par ligne', 'de 0 à 1 ; NA : au moins une institution sans réponse']);
+  const c_regression = avec('regression', ['universitaire : a fréquenté l’université (8 à 11) ou non (1 à 7)', '', `${f(REG.pente, 3)} : sur une échelle de 0 à 1, les universitaires sont ${f(Math.abs(REG.pente), 2)} plus ${REG.pente >= 0 ? 'haut' : 'bas'}`]);
 </script>
 
 <svelte:head>
@@ -141,7 +141,7 @@
     <Slide bandeau="Mesurer un concept · le problème" droite={D}>
       <p class="grande-q e">Comment mesurer ce qu’on ne peut pas voir ?</p>
       <div class="exemples e">
-        <span>l’idéologie</span><span>le populisme</span><span>la confiance</span><span>l’intelligence</span>
+        <span>l’idéologie</span><span>la confiance</span><span>l’intérêt politique</span><span>l’intelligence</span>
       </div>
       <p class="petit-dit e">Aucune de ces choses n’est une colonne dans un sondage.</p>
     </Slide>
@@ -171,16 +171,16 @@
     </Slide>
 
     <Slide bandeau="Mesurer un concept · notre concept" droite={D}>
-      <h2 class="e">Notre concept : le populisme</h2>
-      <p class="grande-q e">La scolarité réduit-elle le populisme ?</p>
+      <h2 class="e">Notre concept : la confiance envers les institutions</h2>
+      <p class="grande-q e">La scolarité augmente-t-elle la confiance envers les institutions ?</p>
       <div class="hyp">
-        <p class="e">Personne ne répond à la question « êtes-vous populiste ? ».</p>
-        <p class="e"><strong>Mais la CES 2025 pose huit énoncés</strong>, après l’élection, aux mêmes personnes.</p>
+        <p class="e">Personne ne répond à la question « faites-vous confiance aux institutions ? ».</p>
+        <p class="e"><strong>Mais la CES 2025 demande la confiance envers dix institutions</strong>, une à la fois, après l’élection.</p>
       </div>
     </Slide>
 
-    <Slide bandeau="Mesurer un concept · huit énoncés" droite={D}>
-      <h2 class="e">Les huit énoncés de la CES 2025</h2>
+    <Slide bandeau="Mesurer un concept · dix institutions" droite={D}>
+      <h2 class="e">Dix institutions, une seule question</h2>
       <M9Items />
     </Slide>
 
@@ -205,7 +205,7 @@
 
     <Slide bandeau="L’examen d’histoire · ce que fait l’analyse factorielle" droite={D}>
       <p class="grande-q e">L’analyse factorielle compare toutes les questions et repère celle qui ne bouge pas avec les autres.</p>
-      <p class="petit-dit e">Pour un examen comme pour un concept : les énoncés qui mesurent la même chose répondent ensemble.</p>
+      <p class="petit-dit e">Pour un examen comme pour un concept : les questions qui mesurent la même chose répondent ensemble.</p>
     </Slide>
 
     <Slide bandeau="L’examen d’histoire · trois chiffres" droite={D}>
@@ -216,9 +216,9 @@
     <!-- ================= SUR LES DONNÉES, POUR VRAI ================= -->
 
     <Slide fond="encre" bandeau="Pratique dans R" droite={D}>
-      <h1 class="e">Le populisme, pour vrai</h1>
+      <h1 class="e">La confiance, pour vrai</h1>
       <hr class="filet" />
-      <p class="lead e">Huit énoncés de la CES 2025, une échelle, une régression.</p>
+      <p class="lead e">Dix institutions de la CES 2025, une échelle, une régression.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · le plan" droite={D}>
@@ -230,77 +230,73 @@
     </Slide>
 
     <Slide bandeau="Pratique dans R · regarder" droite={D}>
-      <h2 class="e">Un énoncé, tel que la CES le code</h2>
+      <h2 class="e">Une institution, telle que la CES la code</h2>
       <Console lignes={c_item} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · recoder" droite={D}>
-      <h2 class="e">De 1 à 5 vers 0 à 1. Ne sait pas devient NA</h2>
+      <h2 class="e">De 1 à 4 vers 1 à 0 : beaucoup = 1. Ne sait pas devient NA</h2>
       <Console lignes={c_echelle_a} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · recoder" droite={D}>
-      <h2 class="e">Les quatre autres, puis regarder</h2>
+      <h2 class="e">Les cinq autres, puis regarder</h2>
       <Console lignes={c_echelle_b} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · le sens" droite={D}>
-      <h2 class="e">Lequel dit le contraire des autres ?</h2>
-      <M9Items marquer={[4]} raisons={{ 4: 'd’accord = moins populiste. Tous les autres : d’accord = plus populiste.' }} echelle={false} />
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · retourner" droite={D}>
-      <h2 class="e">Retourner l’énoncé 4</h2>
-      <Console lignes={c_inverser} />
+      <h2 class="e">Le sens : deux institutions, la même direction</h2>
+      <Console lignes={c_sens} />
+      <p class="petit-dit e">Si une question avait dit le contraire des autres, il aurait fallu la retourner : 1 − x.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · sondr" droite={D}>
-      <h2 class="e">sondr, puis les gens qui ont répondu aux huit</h2>
+      <h2 class="e">sondr, puis les gens qui ont répondu aux dix</h2>
       <Console lignes={c_sondr} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’analyse factorielle" droite={D}>
-      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : les coefficients de saturation des huit énoncés en barres, pop3 en tête à 0,83, pop6 à 0,16 sous le seuil de 0,3, et pop1 sans barre. Alpha de Cronbach 0,74, première valeur propre 3,28." />
+      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : les coefficients de saturation des dix institutions en barres, de 0,73 pour le gouvernement fédéral à 0,23 pour la religion organisée, seule sous le seuil de 0,3. Alpha de Cronbach 0,85, première valeur propre 4,43." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · lire" droite={D}>
-      <h2 class="e">Deux énoncés détonnent</h2>
+      <h2 class="e">Une institution détonne</h2>
       <M9Saturations />
     </Slide>
 
     <Slide bandeau="Pratique dans R · lire" droite={D}>
-      <h2 class="e">Les cigares de Churchill de la CES</h2>
-      <M9Items marquer={[1, 6]} raisons={{ 1: 'se sentir compétent en politique : l’efficacité, pas le populisme', 6: 'un chef qui contourne les règles : l’autoritarisme, un autre concept' }} echelle={false} />
+      <h2 class="e">Le cigare de Churchill de la CES</h2>
+      <M9Items marquer={['religion']} raisons={{ religion: 'faire confiance à une Église, ce n’est pas faire confiance à l’État' }} echelle={false} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · recommencer" droite={D}>
-      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={110} nouveau={[0]} dit="sans pop1 ni pop6 : alpha 0,83, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans pop1 ni pop6 : six barres, toutes au-dessus de 0,3, de 0,52 à 0,83. Alpha de Cronbach 0,83, première valeur propre 3,25." />
+      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={110} nouveau={[0]} dit="sans la religion organisée : alpha 0,86, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans la religion organisée : neuf barres, toutes au-dessus de 0,3, de 0,48 à 0,73. Alpha de Cronbach 0,86, première valeur propre 4,36." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · la validité" droite={D}>
       <h2 class="e">Fidèle, oui. Valide ?</h2>
       <Deux ratio="1fr 1fr">
         <Carte ton="ciel" titre="Concordance avec la théorie">
-          <p>Les six énoncés parlent-ils bien du populisme tel que la littérature le définit ? Le peuple contre les élites, oui. L’autoritarisme, non.</p>
+          <p>Les neuf institutions sont-elles bien celles dont parle la littérature sur la confiance politique ? L’État, les tribunaux, la police, oui. Une Église, non.</p>
         </Carte>
         <Carte ton="vert" titre="Concordance avec d’autres mesures">
-          <p>L’échelle se comporte-t-elle comme on s’y attend ? Plus de populisme chez qui vote pour un parti populiste, moins chez qui fait confiance aux institutions.</p>
+          <p>L’échelle se comporte-t-elle comme on s’y attend ? Plus de confiance chez qui est satisfait de la démocratie (séance 8), moins chez qui a voté pour un parti perdant.</p>
         </Carte>
       </Deux>
       <p class="petit-dit e">Les chiffres vérifient la fidélité. La validité, c’est vous qui la défendez.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
-      <h2 class="e">L’échelle : la moyenne des six</h2>
+      <h2 class="e">L’échelle : la moyenne des neuf</h2>
       <Console lignes={c_construire} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
-      <M8Image code={HIST.code} img={HIST.img} l={HIST.l} h={HIST.h} px={100} dit="une variable comme une autre, de 0 à 1" alt="L'histogramme de l'échelle de populisme, de 0 à 1 : une bosse autour de 0,5, une queue vers 0, un pic vers 0,7." />
+      <M8Image code={HIST.code} img={HIST.img} l={HIST.l} h={HIST.h} px={100} dit="une variable comme une autre, de 0 à 1" alt="L'histogramme de l'échelle de confiance envers les institutions, de 0 à 1." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’appliquer" droite={D}>
-      <h2 class="e">La scolarité réduit-elle le populisme ?</h2>
+      <h2 class="e">La scolarité augmente-t-elle la confiance ?</h2>
       <Console lignes={c_regression} />
     </Slide>
 
@@ -308,7 +304,7 @@
       <h2 class="e">Retenir</h2>
       <ol class="retenir e">
         <li><span>Un concept ne se voit pas. On le mesure par ses indicateurs.</span></li>
-        <li><span>Plusieurs énoncés valent mieux qu’un, s’ils répondent ensemble.</span></li>
+        <li><span>Plusieurs questions valent mieux qu’une, si elles répondent ensemble.</span></li>
         <li><span>Même sens, même échelle, pas de « ne sait pas » caché dans un chiffre.</span></li>
         <li><span>Les chiffres vérifient la fidélité. La validité, c’est votre argument.</span></li>
       </ol>
@@ -433,7 +429,7 @@
     <Slide fond="encre" bandeau="Annexe" droite={D}>
       <h1 class="e">Annexe : tout le code</h1>
       <hr class="filet" />
-      <p class="lead e">Le populisme dans la CES 2025, étape par étape. À refaire chez vous.</p>
+      <p class="lead e">La confiance envers les institutions dans la CES 2025, étape par étape. À refaire chez vous.</p>
     </Slide>
 
     <Slide bandeau="Annexe · charger" droite={D}>

@@ -6,7 +6,7 @@
    * questions) et une entrée qui devient une sortie, un jeton à la fois.
    */
   const BLOCS = [
-    { n: '1', titre: 'Mesurer un concept qu’on ne voit pas', sous: 'Le populisme dans la CES 2025' },
+    { n: '1', titre: 'Mesurer un concept qu’on ne voit pas', sous: 'La confiance envers les institutions, dans la CES 2025' },
     { n: '2', titre: 'Ce qu’est un modèle de langue', sous: 'Et comment s’en servir sans se faire avoir' }
   ];
 </script>
