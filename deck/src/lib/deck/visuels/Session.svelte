@@ -8,6 +8,7 @@
    */
   import { brancherTemps } from '../temps.js';
   import Glyphe from './Glyphe.svelte';
+  import { EVALUATIONS } from '$lib/data/cours.js';
   // ici = numéro de la séance en cours. Au temps 0, la ligne s'arrête à
   // cette séance, une flèche « vous êtes ici » la désigne et sa fiche est
   // affichée, au lieu de la vue d’ensemble de la séance 1. La diapo ne se
@@ -39,16 +40,37 @@
   });
   // géométrie: 15 cases (la semaine de lecture entre 8 et 9)
   const W = 1200, X0 = 40, X1 = W - 40;
+  // 15 cases de séances, plus une case et quart pour la remise du travail
+  // final (vendredi 18 décembre), après la dernière séance.
+  const NS = 16;
   const slot = (i) => (i >= 8 ? i + 1 : i);                 // index de case, 0..14
-  const x = (i) => X0 + (slot(i) / 14) * (X1 - X0);
-  const xLecture = X0 + (8 / 14) * (X1 - X0);
+  const x = (i) => X0 + (slot(i) / NS) * (X1 - X0);
+  const xLecture = X0 + (8 / NS) * (X1 - X0);
+  // Une date quelconque, en cases fractionnaires depuis le jeudi 3 septembre.
+  const J0 = new Date('2026-09-03T12:00:00');
+  const xDate = (iso) => X0 + ((new Date(iso + 'T12:00:00') - J0) / 864e5 / 7 / NS) * (X1 - X0);
+  // Les évaluations (cours.js) : une rangée sous les parties. Les étiquettes
+  // alternent sur deux lignes pour ne pas se chevaucher.
+  const jour = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-CA', { day: 'numeric', month: 'short' }).replace('.', '');
+  // Même date, même étiquette (travail final et Datacamp 2); deux étiquettes
+  // à moins de 110 px l'une de l'autre vont sur des lignes différentes.
+  const EVALS = (() => {
+    const g = [];
+    for (const v of EVALUATIONS) {
+      const d = g.find((e) => e.date === v.date);
+      if (d) { d.items.push(v); continue; }
+      g.push({ date: v.date, x: xDate(v.date), xo: v.ouvre ? xDate(v.ouvre) : null, groupe: v.groupe, items: [v], rang: 0 });
+    }
+    for (let i = 1; i < g.length; i++) g[i].rang = g[i].x - g[i - 1].x < 110 ? 1 - g[i - 1].rang : 0;
+    return g.map((e) => ({ ...e, nom: e.items.map((v) => `${v.court} · ${v.poids} %`).join(' + ') }));
+  })();
   // Le temps « affiché »: le clic, sinon la séance en cours si on l'a donnée.
   const a = $derived(e > 0 ? e : ici);
   const cur = $derived(a > 0 ? S[a - 1] : null);
 </script>
 
 <div class="visuel session" bind:this={hote}>
-  <svg viewBox="0 0 {W} 168" class="ligne" role="img" aria-label="Ligne du temps des quatorze séances, de septembre à décembre.">
+  <svg viewBox="0 0 {W} 272" class="ligne" role="img" aria-label="Ligne du temps des quatorze séances, de septembre à décembre.">
     <line x1={X0} y1="70" x2={X1} y2="70" class="rail" />
     <rect x={X0} y="67" height="6" rx="3" width={a > 0 ? x(a - 1) - X0 : 0} class="progres" />
     <!-- semaine de lecture -->
@@ -62,6 +84,11 @@
         <path d="M 0 22 L 0 40 M -9 31 L 0 40 L 9 31" class="ici-f" />
       </g>
     {/if}
+    <!-- grève annoncée le 12 novembre (séance 10) : le mot au-dessus du nœud -->
+    <g class="greve" style="transform: translate({x(9)}px, 70px)">
+      <text y="-30" class="greve-t">grève ?</text>
+      <path d="M 0 -20 L 0 -16" class="greve-f" />
+    </g>
     {#each S as s, i}
       {@const on = a === i + 1}
       {@const fait = a > i + 1}
@@ -76,6 +103,19 @@
       <line x1={x(0)} y1="130" x2={x(4)} y2="130" class="p1" /><text x={(x(0) + x(4)) / 2} y="154" class="pl">1 · Concepts de base</text>
       <line x1={x(6)} y1="130" x2={x(8)} y2="130" class="p2" /><text x={(x(6) + x(8)) / 2} y="154" class="pl">2 · Régression</text>
       <line x1={x(9)} y1="130" x2={x(13)} y2="130" class="p3" /><text x={(x(9) + x(13)) / 2} y="154" class="pl">3 · Inférence causale</text>
+    </g>
+    <!-- évaluations -->
+    <g class="evals">
+      <line x1={X0} y1="196" x2={X1} y2="196" class="rail2" />
+      <text x={X0} y="180" class="evals-t">évaluations</text>
+      {#each EVALS as v}
+        {#if v.xo !== null}<line x1={v.xo} y1="196" x2={v.x} y2="196" class="ouvre" />{/if}
+        <g class="eval {v.groupe}" style="transform: translate({v.x}px, 196px)">
+          <path d="M 0 -8 L 8 0 L 0 8 L -8 0 Z" class="los" />
+          <text y={v.rang ? 56 : 26} class="ev-nom">{v.nom}</text>
+          <text y={v.rang ? 70 : 40} class="ev-date">{jour(v.date)}</text>
+        </g>
+      {/each}
     </g>
   </svg>
 
@@ -111,6 +151,17 @@
   .progres { fill: var(--dk-accent); transition: width 0.7s cubic-bezier(0.65, 0, 0.25, 1); }
   .lecture rect { fill: var(--dk-fond-2); stroke: var(--dk-filet); stroke-width: 2; }
   .lecture .lib { font-family: var(--dk-mono); font-size: 12px; letter-spacing: 0.12em; text-anchor: middle; fill: var(--dk-gris-2); }
+  .greve-t { font-family: var(--dk-mono); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-anchor: middle; fill: var(--dk-accent); }
+  .greve-f { stroke: var(--dk-accent); stroke-width: 3; }
+  .rail2 { stroke: var(--dk-filet); stroke-width: 3; stroke-linecap: round; }
+  .evals-t { font-family: var(--dk-mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; fill: var(--dk-gris-2); }
+  .ouvre { stroke: var(--dk-accent); stroke-width: 5; stroke-linecap: round; opacity: 0.35; }
+  .los { fill: var(--dk-accent); }
+  .eval.dc .los { fill: var(--dk-gris-2); }
+  .eval.tr .los { fill: var(--dk-encre); }
+  .ev-nom { font-family: var(--dk-mono); font-size: 13px; font-weight: 700; text-anchor: middle; fill: var(--dk-encre); }
+  .eval.dc .ev-nom { fill: var(--dk-gris); font-weight: 600; }
+  .ev-date { font-family: var(--dk-mono); font-size: 12px; text-anchor: middle; fill: var(--dk-gris); }
   .ici-t { font-family: var(--dk-mono); font-size: 15px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-anchor: middle; fill: var(--dk-accent); }
   .ici-f { fill: none; stroke: var(--dk-accent); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; animation: saute 1.2s ease-in-out infinite; }
   @keyframes saute { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
