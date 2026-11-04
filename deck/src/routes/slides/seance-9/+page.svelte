@@ -41,6 +41,7 @@
   import Session from '$lib/deck/visuels/Session.svelte';
   import Aujourdhui9 from '$lib/deck/visuels/Aujourdhui9.svelte';
   import M9Arbre from '$lib/deck/visuels/M9Arbre.svelte';
+  import M9Instruments from '$lib/deck/visuels/M9Instruments.svelte';
   import M9Items from '$lib/deck/visuels/M9Items.svelte';
   import M9Cible from '$lib/deck/visuels/M9Cible.svelte';
   import M9Examen from '$lib/deck/visuels/M9Examen.svelte';
@@ -59,7 +60,7 @@
   import Donnees from '$lib/deck/demos/Donnees.svelte';
   import { ATELIER, FA1, FA2, HIST, REG, SATURATIONS, SCRIPT } from '$lib/data/seance9.js';
 
-  const TOTAL = 50;
+  const TOTAL = 53;
   const D = 'POL-2000 · séance 9 · jeu 5 nov';
   const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
   const f = (v, k = 2) => v.toFixed(k).replace('.', ',');
@@ -136,6 +137,35 @@
       <h1 class="e">Mesurer un concept</h1>
       <hr class="filet" />
       <p class="lead e">On veut étudier des choses qu’on ne voit pas.</p>
+    </Slide>
+
+    <Slide bandeau="Mesurer un concept · vos questions" droite={D}>
+      <h2 class="e">Vos questions de recherche</h2>
+      <ul class="dqm e">
+        <li><em>Dans quelle mesure</em> la scolarité influence-t-elle l’intérêt pour la politique ?</li>
+        <li><em>Dans quelle mesure</em> gagner une élection rend-il plus satisfait de la démocratie ?</li>
+        <li><em>Dans quelle mesure</em> la scolarité augmente-t-elle la confiance envers les institutions ?</li>
+      </ul>
+      <p class="grande-q e dqm-q">Mesure ? Pourquoi ce mot-là ?</p>
+    </Slide>
+
+    <Slide bandeau="Mesurer un concept · mesurer" droite={D}>
+      <h2 class="e">Mesurer, ça veut dire quoi ?</h2>
+      <M9Instruments />
+    </Slide>
+
+    <Slide bandeau="Mesurer un concept · mesurer" droite={D}>
+      <h2 class="e">Mesurer un concept</h2>
+      <div class="chemin e">
+        <div class="etape"><span class="n">1</span><strong>Une chose</strong><span>Une longueur. Un poids. La confiance.</span></div>
+        <span class="fl">→</span>
+        <div class="etape"><span class="n">2</span><strong>Un instrument</strong><span>Une règle. Une balance. Une question de sondage.</span></div>
+        <span class="fl">→</span>
+        <div class="etape"><span class="n">3</span><strong>Un nombre</strong><span>14 cm. 68 kg. 0,72 sur une échelle de 0 à 1.</span></div>
+        <span class="fl">→</span>
+        <div class="etape rouge"><span class="n">4</span><strong>Calculer</strong><span>Une moyenne, un écart, une régression.</span></div>
+      </div>
+      <p class="petit-dit e chemin-dit">Les données, ce sont des nombres mis sur des concepts. Tout le reste du cours calcule avec.</p>
     </Slide>
 
     <Slide bandeau="Mesurer un concept · le problème" droite={D}>
@@ -471,6 +501,10 @@
 .plan { max-width: 46em; margin: 1em auto 0; display: flex; flex-direction: column; gap: 0.8em; }
 .petit-dit { margin: 0; color: var(--dk-gris); font-size: 0.85em; }
 .grande-q { font-size: 2em; line-height: 1.3; max-width: 22em; margin-top: 1.2em; }
+.dqm { list-style: none; margin: 1.2em 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.9em; font-size: 1.25em; line-height: 1.35; max-width: 30em; }
+.dqm em { font-style: normal; font-weight: 700; color: var(--dk-accent); }
+.dqm-q { margin-top: 1.4em; }
+.chemin-dit { text-align: center; margin-top: 1.4em; font-size: 1em; }
 .exemples { display: flex; flex-wrap: wrap; gap: 0.8em 1.6em; margin: 1.2em 0 1em; font-size: 1.4em; font-weight: 600; color: var(--dk-accent); }
 .hyp { margin-top: 1.6em; display: flex; flex-direction: column; gap: 0.5em; font-size: 1.25em; }
 .hyp p { margin: 0; }
