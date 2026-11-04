@@ -40,7 +40,7 @@
 | 7 | Thu 15 Oct 2026 | La régression linéaire simple |
 | 8 | Thu 22 Oct 2026 | La régression linéaire multiple |
 | — | Thu 29 Oct 2026 | Reading week — no class |
-| 9 | Thu 5 Nov 2026 | Mesurer l'invisible |
+| 9 | Thu 5 Nov 2026 | Les variables latentes |
 | 10 | Thu 12 Nov 2026 | Le problème fondamental de l'inférence causale (1 h 35), break, then Examen 2 (17h20–18h20) |
 | 11 | Thu 19 Nov 2026 | Les graphes orientés acycliques (GOA) |
 | 12 | Thu 26 Nov 2026 | Rencontres individuelles (whole week, no lecture; examen 2 debrief and the travail final) |
@@ -91,7 +91,7 @@ Decided 4 Nov 2026 (séance 9 deck, pol-83j): séance 8 had already run the
 whole pipeline by hand (Blais et Gélineau in 2025), so repeating it would be
 a replay, and the instructor judged a full AI-agent demo too early: students
 would use it to bypass the coding they are still learning for the travail
-final. Séance 9 therefore becomes **« Mesurer l'invisible »**: measurement of a latent concept on the CES 2025
+final. Séance 9 therefore becomes **« Les variables latentes »**: measurement of a latent concept on the CES 2025
 populism battery, following the arc of FAS1001 cours 5 (latent variable,
 scale, fidélité/validité, the history-exam analogy, alpha / first eigenvalue
 / loadings with `sondr::topdown_fa()`), then eight slides on what an LLM is,

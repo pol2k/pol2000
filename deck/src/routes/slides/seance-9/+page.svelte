@@ -1,6 +1,6 @@
 <script>
   /**
-   * POL-2000 — Séance 9 · Mesurer l'invisible
+   * POL-2000 — Séance 9 · Les variables latentes
    * Jeudi 5 novembre 2026, 15h30–18h20, DKN-3159.
    *
    * Doctrine : moins de texte, plus de figure. Une idée par diapo, une phrase
@@ -98,7 +98,7 @@
 </script>
 
 <svelte:head>
-  <title>POL-2000 · Séance 9 · Mesurer l’invisible</title>
+  <title>POL-2000 · Séance 9 · Les variables latentes</title>
 </svelte:head>
 
 <Deck total={TOTAL} logo="{base}/img/ulaval-logo.png">
@@ -109,7 +109,7 @@
     <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
       <div class="titre">
         <p class="surtitre e">POL-2000 · Méthodologie quantitative</p>
-        <h1 class="e">Mesurer l’invisible</h1>
+        <h1 class="e">Les variables latentes</h1>
         <hr class="filet" />
         <p class="lead e">Séance 9 · jeudi 5 novembre 2026</p>
       </div>

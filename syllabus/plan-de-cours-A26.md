@@ -207,7 +207,7 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 | 7 | jeudi 15 octobre 2026 | La régression linéaire simple |
 | 8 | jeudi 22 octobre 2026 | La régression linéaire multiple |
 | — | jeudi 29 octobre 2026 | **Semaine de lecture — aucun cours** (26 au 30 octobre) |
-| 9 | jeudi 5 novembre 2026 | Mesurer l'invisible |
+| 9 | jeudi 5 novembre 2026 | Les variables latentes |
 | 10 | jeudi 12 novembre 2026 | Le problème fondamental de l'inférence causale, puis **Examen 2** (17h20 à 18h20) |
 | 11 | jeudi 19 novembre 2026 | Les graphes orientés acycliques (GOA) |
 | 12 | jeudi 26 novembre 2026 | Rencontres individuelles — aucun cours (retour sur l'examen 2, travail final) |
