@@ -16,7 +16,7 @@
     <span class="poids">{ex.poids}&#8239;%</span>
     <strong>{ex.nom}</strong>
     <em>{jour(ex.date)}, {ex.heure}</em>
-    <span>En classe, après le cours. Sur papier.</span>
+    <span>En classe, après le cours. Sur papier. Sous réserve de la grève.</span>
   </div>
   <div class="tuile">
     <svg class="feuille" viewBox="0 0 40 48" aria-hidden="true"><rect x="3" y="3" width="34" height="42" fill="none" stroke="currentColor" stroke-width="3" /><line x1="10" y1="14" x2="30" y2="14" stroke="currentColor" stroke-width="3" /><line x1="10" y1="23" x2="30" y2="23" stroke="currentColor" stroke-width="3" /><line x1="10" y1="32" x2="22" y2="32" stroke="currentColor" stroke-width="3" /></svg>

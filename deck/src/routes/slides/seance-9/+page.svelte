@@ -1,6 +1,6 @@
 <script>
   /**
-   * POL-2000 — Séance 9 · Mesurer un concept, puis ce qu'est un modèle de langue
+   * POL-2000 — Séance 9 · Mesurer l'invisible
    * Jeudi 5 novembre 2026, 15h30–18h20, DKN-3159.
    *
    * Doctrine : moins de texte, plus de figure. Une idée par diapo, une phrase
@@ -98,7 +98,7 @@
 </script>
 
 <svelte:head>
-  <title>POL-2000 · Séance 9 · Mesurer un concept, puis ce qu’est un modèle de langue</title>
+  <title>POL-2000 · Séance 9 · Mesurer l’invisible</title>
 </svelte:head>
 
 <Deck total={TOTAL} logo="{base}/img/ulaval-logo.png">
@@ -109,7 +109,7 @@
     <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
       <div class="titre">
         <p class="surtitre e">POL-2000 · Méthodologie quantitative</p>
-        <h1 class="e">Mesurer un concept, puis ce qu’est un modèle de langue</h1>
+        <h1 class="e">Mesurer l’invisible</h1>
         <hr class="filet" />
         <p class="lead e">Séance 9 · jeudi 5 novembre 2026</p>
       </div>
@@ -405,12 +405,14 @@
     <Slide bandeau="Avant le 12 novembre" droite={D}>
       <h2 class="e">Trois choses</h2>
       <AvantS10 />
+      <p class="greve e"><strong>Grève le 12 novembre.</strong> Je serai sur place. S’il y a piquetage, le cours et l’examen 2 pourraient être reportés. Surveillez votre courriel.</p>
     </Slide>
 
     <Slide fond="encre" bandeau="Avant le 12 novembre" droite={D}>
       <h1 class="e">Jeudi 12 novembre</h1>
       <hr class="filet" />
       <p class="lead e">Le problème fondamental de l’inférence causale. Puis l’examen 2.</p>
+      <p class="lead e greve-encre">Sous réserve de la grève : s’il y a piquetage, je vous écris.</p>
     </Slide>
 
     <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
@@ -488,4 +490,7 @@
 
 .retenir { margin: 1.4em 0 0; padding-left: 1.6em; font-size: 1.3em; line-height: 1.4; display: flex; flex-direction: column; gap: 0.6em; max-width: 30em; }
 .retenir li::marker { color: var(--dk-accent); font-weight: 700; }
+.greve { max-width: 64em; margin: 1.2em auto 0; font-size: 0.95em; border-left: 8px solid var(--dk-accent); padding-left: 0.9em; }
+.greve strong { color: var(--dk-accent); }
+.greve-encre { margin-top: 1em; color: var(--dk-accent-clair); font-size: 1.05em; }
 </style>
