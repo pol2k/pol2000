@@ -1,0 +1,1 @@
+import{A as e,H as t,O as n,i as r,p as i,q as a,ut as o,x as s}from"./JeBV_Xns.js";import"./xihTtKlq.js";var c=e(`<div class="deux"><!></div>`);function l(e,l){let u=r(l,`ratio`,3,`1fr 1fr`);var d=c(),f=a(d);s(f,()=>l.children),o(d),t(()=>i(d,`grid-template-columns: ${u()??``}`)),n(e,d)}export{l as t};

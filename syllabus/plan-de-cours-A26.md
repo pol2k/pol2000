@@ -177,9 +177,10 @@ correctement.
 - **Les examens 2 et 3 se font sur papier, à livre ouvert**, précisément pour cette
   raison : vos notes sont permises, aucun appareil ne l'est.
 
-Deux séances abordent directement ces outils : la séance 2 (utiliser un assistant
-d'IA pour apprendre R) et la séance 9 (produire, puis vérifier, une analyse complète
-réalisée par un agent d'IA). La règle de base tient en une question : *l'aurais-je
+Trois séances abordent directement ces outils : la séance 2 (utiliser un assistant
+d'IA pour apprendre R), la séance 9 (ce qu'est un modèle de langue, et comment s'en
+servir sans se faire avoir) et la séance 14 (un aperçu des agents d'IA, et comment
+vérifier leur travail). La règle de base tient en une question : *l'aurais-je
 accepté d'un assistant humain sans vérifier son travail ?*
 
 ### Politique de retard
@@ -206,7 +207,7 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 | 7 | jeudi 15 octobre 2026 | La régression linéaire simple |
 | 8 | jeudi 22 octobre 2026 | La régression linéaire multiple |
 | — | jeudi 29 octobre 2026 | **Semaine de lecture — aucun cours** (26 au 30 octobre) |
-| 9 | jeudi 5 novembre 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
+| 9 | jeudi 5 novembre 2026 | Mesurer un concept, puis ce qu'est un modèle de langue |
 | 10 | jeudi 12 novembre 2026 | Le problème fondamental de l'inférence causale, puis **Examen 2** (17h20 à 18h20) |
 | 11 | jeudi 19 novembre 2026 | Les graphes orientés acycliques (GOA) |
 | 12 | jeudi 26 novembre 2026 | Rencontres individuelles — aucun cours (retour sur l'examen 2, travail final) |
@@ -433,7 +434,7 @@ en présentiel :
 | Nombre de séances | 15 semaines | 14 séances (aucune ne tombe sur un jour férié) |
 | Introduction à R | Semaine 4 | **Semaine 2**, suivie d'une seconde séance sur la préparation des données (semaine 4) |
 | Livre | Obligatoire | Ouvrage de référence, non obligatoire |
-| Intelligence artificielle générative | — | Abordée aux séances 2 et 9; consignes précisées pour chaque évaluation |
+| Intelligence artificielle générative | — | Abordée aux séances 2, 9 et 14; consignes précisées pour chaque évaluation |
 
 La structure des évaluations, leurs pondérations et les exercices Datacamp demeurent
 inchangés.

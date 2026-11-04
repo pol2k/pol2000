@@ -1,0 +1,68 @@
+{
+  "encodage": "cl100k_base",
+  "note_encodage": "l'encodage de gpt-3.5-turbo-instruct, vérifié: il reproduit exactement les jetons émis à la diapositive précédente",
+  "surcout": 56,
+  "fr": {
+    "texte": "L'hiver à Québec est froid et enneigé.",
+    "jetons": [
+      "L",
+      "'h",
+      "iver",
+      " à",
+      " Québec",
+      " est",
+      " f",
+      "roid",
+      " et",
+      " en",
+      "ne",
+      "ig",
+      "é",
+      "."
+    ],
+    "n": 14,
+    "ids": [
+      43,
+      39982,
+      1553,
+      3869,
+      80288,
+      1826,
+      282,
+      1607,
+      1880,
+      665,
+      818,
+      343,
+      978,
+      13
+    ]
+  },
+  "en": {
+    "texte": "Winter in Quebec City is cold and snowy.",
+    "jetons": [
+      "Winter",
+      " in",
+      " Quebec",
+      " City",
+      " is",
+      " cold",
+      " and",
+      " snowy",
+      "."
+    ],
+    "n": 9,
+    "ids": [
+      67288,
+      304,
+      35195,
+      4409,
+      374,
+      9439,
+      323,
+      90873,
+      13
+    ]
+  },
+  "note_ids": "identifiants réels de l'encodage cl100k_base: c'est ce nombre, et rien d'autre, qui entre dans le modèle"
+}

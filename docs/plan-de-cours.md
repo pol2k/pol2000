@@ -40,7 +40,7 @@
 | 7 | Thu 15 Oct 2026 | La régression linéaire simple |
 | 8 | Thu 22 Oct 2026 | La régression linéaire multiple |
 | — | Thu 29 Oct 2026 | Reading week — no class |
-| 9 | Thu 5 Nov 2026 | De la question au tableau de régression : à la main, puis avec l'IA |
+| 9 | Thu 5 Nov 2026 | Mesurer un concept, puis ce qu'est un modèle de langue |
 | 10 | Thu 12 Nov 2026 | Le problème fondamental de l'inférence causale (1 h 35), break, then Examen 2 (17h20–18h20) |
 | 11 | Thu 19 Nov 2026 | Les graphes orientés acycliques (GOA) |
 | 12 | Thu 26 Nov 2026 | Rencontres individuelles (whole week, no lecture; examen 2 debrief and the travail final) |
@@ -64,7 +64,7 @@ person, Examens 2 and 3 are written during class instead of at a booked exam
 centre, **R moves from
 séance 4 to séance 2** (with a second data-preparation session at séance 4),
 the fundamentals of research merge into séance 1, séance 3 adds visualisation,
-séance 9 becomes the end-to-end pipeline done by hand and then by an AI agent,
+séance 9 was planned as the end-to-end pipeline done by hand and then by an AI agent (changed 4 Nov 2026, see below),
 **the textbook is now a non-mandatory reference**, and the plan de cours carries
 an explicit generative-AI policy (allowed for R code with disclosure; not for
 interpretation or writing; per-evaluation rules). Decided 2 Sept 2026 with the
@@ -86,6 +86,19 @@ wrote an exam. Examen 2 therefore moves to 12 Nov, after the PFIC lecture
 on 15/22 Oct at full length; the AI session is séance 9 (5 Nov); no
 "atelier de mi-session" anywhere. Also decided: no em dashes in any
 student-facing text (Brio, plan de cours, slides).
+
+Decided 4 Nov 2026 (séance 9 deck, pol-83j): séance 8 had already run the
+whole pipeline by hand (Blais et Gélineau in 2025), so repeating it would be
+a replay, and the instructor judged a full AI-agent demo too early: students
+would use it to bypass the coding they are still learning for the travail
+final. Séance 9 therefore becomes **« Mesurer un concept, puis ce qu'est un
+modèle de langue »**: measurement of a latent concept on the CES 2025
+populism battery, following the arc of FAS1001 cours 5 (latent variable,
+scale, fidélité/validité, the history-exam analogy, alpha / first eigenvalue
+/ loadings with `sondr::topdown_fa()`), then eight slides on what an LLM is,
+ported from the instructor's EIOM 2026 deck « L'IA en recherche ». Agentic
+workflows move to the last séance (14, 10 Dec), as a short segment before
+the révision; the plan de cours AI paragraph now names séances 2, 9 and 14.
 
 Decided 22 Sept 2026 (séance 4 deck): the « banque de données fournie » for
 the travail de mi-session and the travail final is the **Canadian Election

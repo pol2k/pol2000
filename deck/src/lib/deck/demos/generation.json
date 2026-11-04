@@ -1,0 +1,246 @@
+{
+  "modele": "gpt-3.5-turbo-instruct",
+  "entree": "Décris l'hiver à Québec en une phrase courte.",
+  "gabarit": "Décris l'hiver à Québec en une phrase courte.\n",
+  "sortie": "L'hiver à Québec est froid et enneigé.",
+  "etapes": [
+    {
+      "i": 0,
+      "choisi": "L",
+      "candidats": [
+        {
+          "t": "L",
+          "p": 35.31
+        },
+        {
+          "t": "\n",
+          "p": 12.49
+        },
+        {
+          "t": "Un",
+          "p": 9.73
+        },
+        {
+          "t": "F",
+          "p": 8.85
+        },
+        {
+          "t": "\"",
+          "p": 7.35
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "choisi": "'h",
+      "candidats": [
+        {
+          "t": "'h",
+          "p": 99.32
+        },
+        {
+          "t": "'",
+          "p": 0.36
+        },
+        {
+          "t": "'H",
+          "p": 0.21
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "choisi": "iver",
+      "candidats": [
+        {
+          "t": "iver",
+          "p": 99.99
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "choisi": " à",
+      "candidats": [
+        {
+          "t": " à",
+          "p": 99.85
+        },
+        {
+          "t": " qué",
+          "p": 0.07
+        }
+      ]
+    },
+    {
+      "i": 4,
+      "choisi": " Québec",
+      "candidats": [
+        {
+          "t": " Québec",
+          "p": 99.92
+        }
+      ]
+    },
+    {
+      "i": 5,
+      "choisi": " est",
+      "candidats": [
+        {
+          "t": " est",
+          "p": 68.51
+        },
+        {
+          "t": ",",
+          "p": 18.24
+        },
+        {
+          "t": " :",
+          "p": 9.63
+        },
+        {
+          "t": ":",
+          "p": 1.65
+        },
+        {
+          "t": " c",
+          "p": 1.59
+        }
+      ]
+    },
+    {
+      "i": 6,
+      "choisi": " f",
+      "candidats": [
+        {
+          "t": " f",
+          "p": 90.97
+        },
+        {
+          "t": " gl",
+          "p": 2.73
+        },
+        {
+          "t": " long",
+          "p": 2.7
+        },
+        {
+          "t": " un",
+          "p": 1.1
+        },
+        {
+          "t": " blanc",
+          "p": 0.83
+        }
+      ]
+    },
+    {
+      "i": 7,
+      "choisi": "roid",
+      "candidats": [
+        {
+          "t": "roid",
+          "p": 99.95
+        }
+      ]
+    },
+    {
+      "i": 8,
+      "choisi": " et",
+      "candidats": [
+        {
+          "t": " et",
+          "p": 64.71
+        },
+        {
+          "t": ",",
+          "p": 34.45
+        },
+        {
+          "t": " mais",
+          "p": 0.52
+        },
+        {
+          "t": " avec",
+          "p": 0.32
+        }
+      ]
+    },
+    {
+      "i": 9,
+      "choisi": " en",
+      "candidats": [
+        {
+          "t": " en",
+          "p": 99.18
+        },
+        {
+          "t": " ne",
+          "p": 0.51
+        },
+        {
+          "t": " blanc",
+          "p": 0.17
+        }
+      ]
+    },
+    {
+      "i": 10,
+      "choisi": "ne",
+      "candidats": [
+        {
+          "t": "ne",
+          "p": 99.99
+        }
+      ]
+    },
+    {
+      "i": 11,
+      "choisi": "ig",
+      "candidats": [
+        {
+          "t": "ig",
+          "p": 99.99
+        }
+      ]
+    },
+    {
+      "i": 12,
+      "choisi": "é",
+      "candidats": [
+        {
+          "t": "é",
+          "p": 100.0
+        }
+      ]
+    },
+    {
+      "i": 13,
+      "choisi": ".",
+      "candidats": [
+        {
+          "t": ".",
+          "p": 67.51
+        },
+        {
+          "t": ",",
+          "p": 26.42
+        },
+        {
+          "t": " mais",
+          "p": 3.51
+        },
+        {
+          "t": " avec",
+          "p": 1.62
+        },
+        {
+          "t": ".\n",
+          "p": 0.88
+        }
+      ]
+    }
+  ],
+  "mesure": "logprobs réels, top 5, temperature 0, 23 août 2026",
+  "methode": "un appel par jeton, max_tokens=1, le préfixe complet à chaque fois"
+}

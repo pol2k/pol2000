@@ -63,14 +63,20 @@
       <circle cx="80" cy="240" r="26" class="c" /><text x="80" y="247" class="lettre">X₃</text>
       <path d="M 108 88 L 288 150" class="fleche" marker-end="url(#fl)" /><path d="M 108 160 L 288 160" class="fleche" marker-end="url(#fl)" /><path d="M 108 232 L 288 170" class="fleche" marker-end="url(#fl)" />
     {:else if n === 10}
-      <text x="110" y="120" class="code grand-code">lm()</text>
-      <path d="M 60 140 q 40 30 100 0" class="l" />
-      <text x="110" y="200" class="lib centre">à la main</text>
-      <rect x="240" y="70" width="130" height="90" rx="8" class="fen" />
-      <circle cx="285" cy="110" r="9" class="pt" /><circle cx="325" cy="110" r="9" class="pt" />
-      <path d="M 280 135 q 25 18 50 0" class="l" />
-      <text x="305" y="200" class="lib centre">puis avec l'IA</text>
-      <text x="305" y="224" class="lib centre pale-t">et on vérifie</text>
+      <rect x="60" y="50" width="110" height="44" class="fen" stroke-dasharray="9 6" />
+      <text x="115" y="82" class="lettre">?</text>
+      {#each [40, 115, 190] as cx}
+        <path d="M 115 94 L {cx} 134" class="l" />
+        <rect x={cx - 26} y="134" width="52" height="30" class="fen" />
+        <path d="M {cx} 164 L {cx} 184" class="l" />
+        <circle cx={cx} cy="192" r="7" class="pt" />
+      {/each}
+      <text x="115" y="228" class="lib centre">mesurer un concept</text>
+      <rect x="232" y="70" width="146" height="90" rx="8" class="fen" />
+      <text x="246" y="112" class="code" style="font-size: 18px">Le chat est</text>
+      <text x="246" y="140" class="code" style="font-size: 18px">sur le <tspan class="sortie">tap</tspan><tspan class="curseur sortie">▍</tspan></text>
+      <text x="305" y="200" class="lib centre">puis un modèle</text>
+      <text x="305" y="224" class="lib centre pale-t">de langue</text>
     {:else if n === 11}
       <circle cx="90" cy="230" r="30" class="c" /><text x="90" y="237" class="lettre">X</text>
       <circle cx="310" cy="230" r="30" class="c" /><text x="310" y="237" class="lettre">Y</text>
