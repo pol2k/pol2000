@@ -11,27 +11,27 @@
     { cle: 'paris', t: 'Nos paris' }
   ];
   export const ENONCES = [
-    { g: 'economie', v: 'ideo_niveau_vie', court: 'L’État garantit un niveau de vie', gauche: true, t: 'Le gouvernement devrait : voir à ce que tout le monde ait un niveau de vie décent, ou laisser les gens avancer par eux-mêmes.' },
-    { g: 'economie', v: 'ideo_inegalites', court: 'Réduire les écarts de revenus', gauche: true, t: 'Le gouvernement devrait prendre des mesures pour réduire les écarts entre les niveaux de revenus.' },
-    { g: 'economie', v: 'ideo_prive', court: 'Le privé crée les emplois', t: 'Le gouvernement devrait laisser au secteur privé l’entière responsabilité de créer des emplois.' },
-    { g: 'economie', v: 'ideo_merite', court: 'Échouer, c’est sa faute', t: 'Ceux qui ne réussissent pas dans la vie devraient se blâmer eux-mêmes, pas le système.' },
-    { g: 'economie', v: 'ideo_prog_sociaux', court: 'Les programmes sociaux déresponsabilisent', t: 'Les programmes sociaux incitent les gens à moins se débrouiller par eux-mêmes.' },
-    { g: 'societe', v: 'ideo_egalite', court: 'Trop loin pour les droits égaux', t: 'Nous sommes allés trop loin dans la promotion des droits égaux dans ce pays.' },
-    { g: 'societe', v: 'ideo_femmes', court: 'Moins de femmes au travail', t: 'La société se porterait mieux si moins de femmes travaillaient à l’extérieur du foyer.' },
-    { g: 'societe', v: 'ideo_integration', court: 'Les immigrants ne s’intègrent pas', t: 'Un trop grand nombre d’immigrants récents ne veut tout simplement pas s’intégrer.' },
-    { g: 'societe', v: 'ideo_immig_emplois', court: 'Les immigrants enlèvent des emplois', t: 'Les immigrants enlèvent des emplois aux autres Canadiens.' },
-    { g: 'societe', v: 'ideo_modes_vie', court: 'Les nouveaux modes de vie dégradent', t: 'Les nouveaux modes de vie contribuent à la dégradation de notre société.' },
-    { g: 'societe', v: 'ideo_autochtones', court: 'Les Autochtones ont reçu moins', gauche: true, t: 'Les Peuples autochtones ont reçu moins que ce qu’ils méritent au cours des dernières années.' },
-    { g: 'paris', v: 'ideo_commerce', court: 'Le commerce crée des emplois', pari: 'pro-marché, donc à droite ?', t: 'Le commerce international crée plus d’emplois au Canada qu’il n’en détruit.' },
-    { g: 'paris', v: 'ideo_defense', court: 'Dépenser plus en défense', pari: 'l’armée, donc à droite ?', t: 'Combien le gouvernement fédéral devrait-il dépenser en défense ? (moins, autant, plus)' },
-    { g: 'paris', v: 'ideo_francais_qc', court: 'Le français n’est pas menacé', pari: 'au Québec, un autre axe ?', t: 'Selon vous, la langue française est-elle menacée au Québec ? (oui, non)' }
+    { g: 'economie', v: 'ideo_niveau_vie', ces: 'pes25_stdofliving', court: 'L’État garantit un niveau de vie', gauche: true, t: 'Le gouvernement devrait : voir à ce que tout le monde ait un niveau de vie décent, ou laisser les gens avancer par eux-mêmes.' },
+    { g: 'economie', v: 'ideo_inegalites', ces: 'pes25_govt_act_ineq', court: 'Réduire les écarts de revenus', gauche: true, t: 'Le gouvernement devrait prendre des mesures pour réduire les écarts entre les niveaux de revenus.' },
+    { g: 'economie', v: 'ideo_prive', ces: 'pes25_privjobs', court: 'Le privé crée les emplois', t: 'Le gouvernement devrait laisser au secteur privé l’entière responsabilité de créer des emplois.' },
+    { g: 'economie', v: 'ideo_merite', ces: 'pes25_blame', court: 'Échouer, c’est sa faute', t: 'Ceux qui ne réussissent pas dans la vie devraient se blâmer eux-mêmes, pas le système.' },
+    { g: 'economie', v: 'ideo_prog_sociaux', ces: 'pes25_deserve2', court: 'Les programmes sociaux déresponsabilisent', t: 'Les programmes sociaux incitent les gens à moins se débrouiller par eux-mêmes.' },
+    { g: 'societe', v: 'ideo_egalite', ces: 'pes25_equalrights', court: 'Trop loin pour les droits égaux', t: 'Nous sommes allés trop loin dans la promotion des droits égaux dans ce pays.' },
+    { g: 'societe', v: 'ideo_femmes', ces: 'pes25_womenhome', court: 'Moins de femmes au travail', t: 'La société se porterait mieux si moins de femmes travaillaient à l’extérieur du foyer.' },
+    { g: 'societe', v: 'ideo_integration', ces: 'pes25_fitin', court: 'Les immigrants ne s’intègrent pas', t: 'Un trop grand nombre d’immigrants récents ne veut tout simplement pas s’intégrer.' },
+    { g: 'societe', v: 'ideo_immig_emplois', ces: 'pes25_immigjobs', court: 'Les immigrants enlèvent des emplois', t: 'Les immigrants enlèvent des emplois aux autres Canadiens.' },
+    { g: 'societe', v: 'ideo_modes_vie', ces: 'pes25_newerlife', court: 'Les nouveaux modes de vie dégradent', t: 'Les nouveaux modes de vie contribuent à la dégradation de notre société.' },
+    { g: 'societe', v: 'ideo_autochtones', ces: 'pes25_indig_deserve', court: 'Les Autochtones ont reçu moins', gauche: true, t: 'Les Peuples autochtones ont reçu moins que ce qu’ils méritent au cours des dernières années.' },
+    { g: 'paris', v: 'ideo_commerce', ces: 'pes25_trade', court: 'Le commerce crée des emplois', pari: 'pro-marché, donc à droite ?', t: 'Le commerce international crée plus d’emplois au Canada qu’il n’en détruit.' },
+    { g: 'paris', v: 'ideo_defense', ces: 'cps25_spend_defence', court: 'Dépenser plus en défense', pari: 'l’armée, donc à droite ?', t: 'Combien le gouvernement fédéral devrait-il dépenser en défense ? (moins, autant, plus)' },
+    { g: 'paris', v: 'ideo_francais_qc', ces: 'pes25_langQC', court: 'Le français n’est pas menacé', pari: 'au Québec, un autre axe ?', t: 'Selon vous, la langue française est-elle menacée au Québec ? (oui, non)' }
   ];
 </script>
 
 <script>
   /**
    * Les quatorze questions, en trois groupes de pastilles. Une pastille : quelques
-   * mots, le nom de la variable, et « ⇄ » si être d'accord, c'est être à gauche.
+   * mots, le nom de la variable dans la CES, et « ⇄ » si être d'accord, c'est être à gauche.
    * « exact » : le libellé mot pour mot (annexe), pour les groupes demandés.
    */
   let { exact = null } = $props();
@@ -40,7 +40,7 @@
 {#if exact}
   <ol class="visuel m9i-exact">
     {#each ENONCES.filter((x) => exact.includes(x.g)) as it}
-      <li><b>{it.v}</b><span>« {it.t} »{#if it.gauche}<small>d’accord = gauche : 1 − x</small>{/if}</span></li>
+      <li><b>{it.ces}<small class="m9i-recode">→ {it.v}</small></b><span>« {it.t} »{#if it.gauche}<small>d’accord = gauche : 1 − x</small>{/if}</span></li>
     {/each}
   </ol>
 {:else}
@@ -51,14 +51,14 @@
         {#each ENONCES.filter((x) => x.g === g.cle) as it}
           <div class="m9i-pastille">
             <strong>{it.court}</strong>
-            <span class="m9i-v">{it.v}{#if it.gauche}<em class="m9i-tag">⇄ d’accord = gauche</em>{/if}</span>
+            <span class="m9i-v">{it.ces}{#if it.gauche}<em class="m9i-tag">⇄ d’accord = gauche</em>{/if}</span>
             {#if it.pari}<span class="m9i-pari">{it.pari}</span>{/if}
           </div>
         {/each}
       </div>
     {/each}
   </div>
-  <p class="m9i-pied">De 0 (gauche) à 1 (droite), comme l’auto-positionnement de la diapo 9.</p>
+  <p class="m9i-pied">De 0 (gauche) à 1 (droite), comme l’auto-positionnement de 0 à 10.</p>
 {/if}
 
 <style>
@@ -76,6 +76,7 @@
   .m9i-exact { list-style: none; margin: 0.4em auto 0; padding: 0; max-width: 62em; display: flex; flex-direction: column; }
   .m9i-exact li { display: grid; grid-template-columns: 10em 1fr; gap: 1em; padding: 0.35em 0; border-bottom: 2px solid var(--dk-filet); font-size: 0.85em; line-height: 1.3; }
   .m9i-exact b { color: var(--dk-gris); font-size: 0.85em; }
+  .m9i-exact .m9i-recode { color: var(--dk-gris); font-weight: 600; margin-top: 0.2em; }
   .m9i-exact small { display: block; color: var(--dk-accent); font-size: 0.8em; margin-top: 0.1em; font-weight: 700; }
   @keyframes m9i-fondu { from { opacity: 0; transform: translateY(0.4em); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .m9i-groupe { animation: none; } }

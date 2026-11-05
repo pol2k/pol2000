@@ -50,6 +50,7 @@
   import M9Echelles from '$lib/deck/visuels/M9Echelles.svelte';
   import M9Qualite from '$lib/deck/visuels/M9Qualite.svelte';
   import M9Items from '$lib/deck/visuels/M9Items.svelte';
+  import M9ExamenIntro from '$lib/deck/visuels/M9ExamenIntro.svelte';
   import M9Examen from '$lib/deck/visuels/M9Examen.svelte';
   import M9TroisChiffres from '$lib/deck/visuels/M9TroisChiffres.svelte';
   import M9Saturations from '$lib/deck/visuels/M9Saturations.svelte';
@@ -93,7 +94,7 @@
   import { FOURNISSEUR, FOURNISSEUR_SECOURS } from '$lib/data/config.js';
   import { ATELIER, FA1, FA2, HIST, REG, SATURATIONS, SCRIPT, VALID_SOI } from '$lib/data/seance9.js';
 
-  const TOTAL = 88;
+  const TOTAL = 89;
   const D = 'POL-2000 · séance 9 · jeu 5 nov';
   const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
   const f = (v, k = 2) => v.toFixed(k).replace('.', ',');
@@ -268,6 +269,12 @@ OPENROUTER_API_KEY=votre_cle_ici
       <p class="lead e">Comment montrer, avec des chiffres, que des questions mesurent la même chose ?</p>
     </Slide>
 
+    <Slide bandeau="Prouver la fiabilité · la classe" droite={D}>
+      <h2 class="e">Un examen, une classe</h2>
+      <M9ExamenIntro />
+      <p class="credits e">Données fictives : un schéma.</p>
+    </Slide>
+
     <Slide bandeau="Prouver la fiabilité · l’examen d’histoire" droite={D}>
       <h2 class="e">Un examen d’histoire au secondaire</h2>
       <M9Examen />
@@ -289,7 +296,7 @@ OPENROUTER_API_KEY=votre_cle_ici
 
     <Slide bandeau="L’échelle gauche-droite · notre concept" droite={D}>
       <p class="grande-q e">La scolarité rend-elle plus à gauche ?</p>
-      <p class="petit-dit e">Un seul chiffre de 0 à 10 ne suffit pas (diapo 9). On lance beaucoup de questions, on garde celles qui collent.</p>
+      <p class="petit-dit e">Un seul chiffre de 0 à 10 ne suffit pas. On lance beaucoup de questions, on garde celles qui collent.</p>
     </Slide>
 
     <Slide bandeau="L’échelle gauche-droite · quatorze questions" droite={D}>
@@ -309,7 +316,7 @@ OPENROUTER_API_KEY=votre_cle_ici
     <Slide bandeau="L’échelle gauche-droite · la validité" droite={D}>
       <h2 class="e">Fiable, oui. Valide ? Les partis, de gauche à droite</h2>
       <M9Validite />
-      <p class="petit-dit e">Avec l’auto-positionnement de 0 à 10 (diapo 9) : corrélation de {f(VALID_SOI)}. Imparfait, mais dans le même sens.</p>
+      <p class="petit-dit e">Avec l’auto-positionnement de 0 à 10 : corrélation de {f(VALID_SOI)}. Imparfait, mais dans le même sens.</p>
     </Slide>
 
     <Slide bandeau="L’échelle gauche-droite · l’échelle" droite={D}>

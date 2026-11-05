@@ -6,8 +6,7 @@
    * (TWh par an). Échelles linéaires.
    *
    *   0  les deux panneaux;
-   *   1  l'eau sans l'irrigation, pour lire les petites barres; la prévision
-   *      de l'AIE pour les centres de données en 2030.
+   *   1  la prévision de l'AIE pour les centres de données en 2030.
    */
   import { brancherTemps } from '../temps.js';
   import { EAU, ENERGIE } from '$lib/data/ia_environnement.js';
@@ -20,9 +19,8 @@
   });
   const W = 700, X0 = 360, LX = 230, PAS = 62;
   const nb = (v) => (v < 100 ? (Math.round(v * 10) / 10).toLocaleString('fr-CA') : Math.round(v).toLocaleString('fr-CA')).replace(/\s/g, ' ');
-  const maxE = $derived(e >= 1 ? EAU[1].gL : EAU[0].gL);
+  const maxE = EAU[0].gL;
   const maxN = Math.max(...ENERGIE.map((d) => d.en2030 ?? d.twh));
-  const eau = $derived(e >= 1 ? EAU.slice(1) : EAU);
 </script>
 
 <div class="visuel m9p" bind:this={hote}>
@@ -30,7 +28,7 @@
     <strong class="m9p-t">L’eau</strong>
     <span class="m9p-u">consommée aux États-Unis · milliards de litres par an</span>
     <svg viewBox="0 0 {W} {EAU.length * PAS + 6}" role="img" aria-label="Eau consommée aux États-Unis, en milliards de litres par an : {EAU.map((d) => `${d.nom} ${nb(d.gL)}`).join(', ')}.">
-      {#each eau as d, i (d.cle)}
+      {#each EAU as d, i (d.cle)}
         <g class:ia={d.ia} transform="translate(0 {i * PAS})">
           <text x={X0 - 12} y="28" class="m9p-nom">{d.nom}{d.note ? ' *' : ''}</text>
           <text x={X0 - 12} y="47" class="m9p-an">{d.an}</text>
@@ -57,7 +55,7 @@
       {/each}
     </svg>
   </div>
-  <p class="credits m9p-src">* Eau : USGS (2020, 48 États, irrigation des cultures), GCSAA (2024, eau d’arrosage appliquée), LBNL (2023; l’eau « de l’électricité » comprend l’évaporation des barrages et chevauche les centrales). Électricité : AIE (2022, 2025; 2030 prévu), Hydro-Québec (2025), Cambridge (Bitcoin, rythme annualisé fin 2024). Centres de données : tous usages, pas seulement l’IA.</p>
+  <p class="credits m9p-src">* Eau : USGS (2020, 48 États, irrigation agricole), GCSAA (2024, eau d’arrosage appliquée), LBNL (2023; l’eau « de l’électricité » comprend l’évaporation des barrages et chevauche les centrales). Électricité : AIE (2022, 2025; 2030 prévu), Hydro-Québec (2025), Cambridge (Bitcoin, rythme annualisé fin 2024). Centres de données : tous usages, pas seulement l’IA.</p>
 </div>
 
 <style>

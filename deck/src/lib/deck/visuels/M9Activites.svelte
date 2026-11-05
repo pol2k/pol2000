@@ -20,7 +20,7 @@
   });
   const ECHELLES = [{ max: 1000, pas: 250 }, { max: 20, pas: 5 }, { max: 1, pas: 0.25 }];
   const E = $derived(ECHELLES[e]);
-  const W = 1000, X0 = 380, LX = 470, PAS = 42, Y0 = 34;
+  const W = 1000, X0 = 420, LX = 440, PAS = 42, Y0 = 34;
   const x = (v) => X0 + (Math.min(v, E.max) / E.max) * LX;
   const f = (v) => (v < 1 ? v.toFixed(2) : v < 10 ? v.toFixed(1) : Math.round(v).toLocaleString('fr-CA').replace(/\s/g, ' ')).replace('.', ',');
   const traits = $derived(Array.from({ length: E.max / E.pas + 1 }, (_, k) => k * E.pas));
@@ -45,7 +45,7 @@
     {/each}
   </svg>
   <p class="m9a-pied"><b class="rouge">IA</b> : centre de données seulement. <b>Vidéo</b> : surtout l’écran et le réseau (le centre de données ≈ 5 %).</p>
-  <p class="credits">Google (2025, médiane), Epoch AI (2025, estimation), OpenAI (2025, méthode non publiée), Microsoft Research (2026, requête 15 fois plus longue, modélisé); image et vidéo générées : mesures de labo, MIT Technology Review (2025). Vidéo : AIE (2020), moyenne de 2019.</p>
+  <p class="credits">Google : requête médiane, mai 2025. OpenAI : moyenne annoncée en 2025, méthode non publiée (Epoch AI estime environ 0,3 Wh). Microsoft Research (2026) : requête 15 fois plus longue que la normale, modélisée. MIT Technology Review (2025) : modèles ouverts mesurés sur ses propres serveurs. AIE (2020) : moyenne de 2019.</p>
 </div>
 
 <style>
