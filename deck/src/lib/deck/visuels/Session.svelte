@@ -23,7 +23,7 @@
     { n: 6, d: 'jeudi 8 octobre', c: '8 oct', p: 0, t: 'Rencontres individuelles', q: 'Pas de cours magistral : on se voit, un.e à la fois, avec les auxiliaires et le tuteur.' },
     { n: 7, d: 'jeudi 15 octobre', c: '15 oct', p: 2, t: 'La régression linéaire simple', q: 'Une droite qui résume une relation entre deux variables, et comment l’interpréter.' },
     { n: 8, g: 9, d: 'jeudi 22 octobre', c: '22 oct', p: 2, t: 'La régression linéaire multiple', q: 'Plusieurs variables explicatives à la fois.', note: 'Travail de mi-session à remettre mercredi 28 octobre.' },
-    { n: 9, g: 10, d: 'jeudi 5 novembre', c: '5 nov', p: 2, t: "Les variables latentes", q: 'Mesurer un concept qu’on ne voit pas. Puis ce qu’est un modèle de langue.' },
+    { n: 9, g: 10, d: 'jeudi 5 novembre', c: '5 nov', p: 2, t: "Les variables latentes", q: 'Mesurer un concept latent et introduction aux grands modèles de langue.' },
     { n: 10, g: 12, d: 'jeudi 12 novembre', c: '12 nov', p: 3, t: "Le problème fondamental de l'inférence causale", q: 'On ne voit jamais les deux mondes à la fois. Tout part de là.', note: 'Examen 2 en classe, de 17h20 à 18h20, après le cours. Grève annoncée : s’il y a piquetage, le cours et l’examen pourraient être reportés. Surveillez votre courriel.' },
     { n: 11, d: 'jeudi 19 novembre', c: '19 nov', p: 3, t: 'Les graphes orientés acycliques (GOA)', q: 'Dessiner ses hypothèses causales. Décider quoi contrôler, ou pas.' },
     { n: 12, g: 6, d: 'jeudi 26 novembre', c: '26 nov', p: 0, t: 'Rencontres individuelles', q: "Pas de cours : on revient sur l'examen 2 et on avance votre travail final, un.e à la fois." },
