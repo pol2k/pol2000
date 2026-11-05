@@ -1,22 +1,22 @@
 <script>
   /**
    * La validité, vérifiée sur une autre mesure : la moyenne de l'échelle
-   * d'appui à l'environnement selon l'intention de vote (VALIDITE,
-   * outils/seance9_data.R). La théorie dit où les partis devraient tomber;
-   * les barres poussent une à une, de la plus haute à la plus basse.
+   * gauche-droite selon l'intention de vote (VALIDITE, outils/seance9_data.R),
+   * du parti le plus à gauche au plus à droite. La théorie dit où les partis
+   * devraient tomber; les barres poussent une à une.
    */
   import { VALIDITE as V } from '$lib/data/seance9.js';
   const W = 1000, X0 = 150, LX = 700, PAS = 56, H = V.length * PAS + 50;
   const x = (v) => X0 + v * LX;
   const f = (v) => v.toFixed(2).replace('.', ',');
-  const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
+  const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, '\u202f');
 </script>
 
 <div class="visuel m9val">
-  <svg viewBox="0 0 {W} {H}" role="img" aria-label="Moyenne de l’échelle d’appui à l’environnement selon l’intention de vote : {V.map((p) => `${p.parti} ${f(p.moyenne)}`).join(', ')}.">
+  <svg viewBox="0 0 {W} {H}" role="img" aria-label="Moyenne de l’échelle gauche-droite selon l’intention de vote : {V.map((p) => `${p.parti} ${f(p.moyenne)}`).join(', ')}.">
     {#each [0, 0.25, 0.5, 0.75, 1] as t}
       <line x1={x(t)} y1="4" x2={x(t)} y2={V.length * PAS} class="m9val-grille" />
-      <text x={x(t)} y={V.length * PAS + 30} class="m9val-t">{f(t)}</text>
+      <text x={x(t)} y={V.length * PAS + 30} class="m9val-t">{t === 0 ? '0 gauche' : t === 1 ? '1 droite' : f(t)}</text>
     {/each}
     {#each V as p, i}
       <g style="--i: {i}">
@@ -26,7 +26,7 @@
       </g>
     {/each}
   </svg>
-  <p class="credits">CES 2025, sondage de campagne, sans pondération. Intention de vote; partis avec au moins 50 personnes dans l’échelle ({V.map((p) => `${p.parti} ${nb(p.n)}`).join(' · ')}).</p>
+  <p class="credits">CES 2025, sondage de campagne, sans pondération. Intention de vote; partis avec au moins 50 personnes dans l’échelle ({V.map((p) => `${p.parti}\u00a0${nb(p.n)}`).join(' · ')}).</p>
 </div>
 
 <style>

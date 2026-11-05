@@ -13,11 +13,12 @@
    * 1. Mesurer un concept qu'on ne voit pas : l'âge et l'idéologie, se placer
    * de 0 à 10 (vrais chiffres de la CES), construire une échelle, des échelles
    * de tous les jours, fiabilité (statistique) et validité (théorique),
-   * l'examen d'histoire, les trois chiffres. Puis pour vrai sur l'appui à
-   * l'environnement (CES 2025, quatre questions) avec sondr::topdown_fa() :
-   * recodées sans réfléchir, deux vont à l'envers; on les retourne, on
-   * construit l'échelle, on vérifie sa validité selon le vote, on la met dans
-   * une régression. Trois diapos sur l'empreinte environnementale de l'IA. 2. Ce qu'est un modèle de langue : les diapositives 6 à 45 de
+   * l'examen d'histoire, les trois chiffres. Puis pour vrai : une échelle
+   * gauche-droite (CES 2025) avec sondr::topdown_fa(). Quatorze questions qu'on
+   * croit de gauche ou de droite; trois ne collent pas (commerce, défense,
+   * français au Québec), on les retire, on recommence, on valide avec les
+   * partis et l'auto-positionnement, on met l'échelle dans une régression.
+   * Deux diapos sur l'empreinte environnementale de l'IA. 2. Ce qu'est un modèle de langue : les diapositives 6 à 45 de
    * « L'IA en recherche » (EIOM 2026, Foisy). On termine sur la règle du
    * cours. Les agents d'IA attendent la dernière séance.
    *
@@ -51,9 +52,8 @@
   import M9TroisChiffres from '$lib/deck/visuels/M9TroisChiffres.svelte';
   import M9Saturations from '$lib/deck/visuels/M9Saturations.svelte';
   import M9Validite from '$lib/deck/visuels/M9Validite.svelte';
-  import M9Eau from '$lib/deck/visuels/M9Eau.svelte';
-  import M9Energie from '$lib/deck/visuels/M9Energie.svelte';
-  import M9Requete from '$lib/deck/visuels/M9Requete.svelte';
+  import M9Empreinte from '$lib/deck/visuels/M9Empreinte.svelte';
+  import M9Activites from '$lib/deck/visuels/M9Activites.svelte';
   import M9Regle from '$lib/deck/visuels/M9Regle.svelte';
   import M8Image from '$lib/deck/visuels/M8Image.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
@@ -88,9 +88,9 @@
   import { REFERENCES, ORDRE_BIBLIO } from '$lib/data/references.js';
   import { CREDITS_IMAGES } from '$lib/data/credits-images.js';
   import { FOURNISSEUR, FOURNISSEUR_SECOURS } from '$lib/data/config.js';
-  import { ATELIER, FA1, FA2, HIST, REG, SATURATIONS, SCRIPT } from '$lib/data/seance9.js';
+  import { ATELIER, FA1, FA2, HIST, REG, SATURATIONS, SCRIPT, VALID_SOI } from '$lib/data/seance9.js';
 
-  const TOTAL = 86;
+  const TOTAL = 88;
   const D = 'POL-2000 · séance 9 · jeu 5 nov';
   const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
   const f = (v, k = 2) => v.toFixed(k).replace('.', ',');
@@ -104,8 +104,8 @@
   };
 
   // Le plan du code : des commentaires d'abord (comme à la séance 8).
-  const PLAN = "# 1. Charger ces2025.rds, créer df_clean\n# 2. Regarder une question\n# 3. De 0 à 1 ; ne sait pas devient NA\n# 4. Installer sondr, une seule fois\n# 5. L'analyse factorielle\n# 6. Le sens : retourner les questions à l'envers\n# 7. L'analyse factorielle, encore\n# 8. L'échelle : la moyenne\n# 9. L'appliquer : lm(environnement ~ scolarité)\n# 10. Sauvegarder df_clean";
-  const [SCRIPT_A, SCRIPT_B, SCRIPT_C] = (() => { const i = SCRIPT.indexOf('# 4.'), j = SCRIPT.indexOf('# 7.'); return [SCRIPT.slice(0, i).trimEnd(), SCRIPT.slice(i, j).trimEnd(), SCRIPT.slice(j)]; })();
+  const PLAN = "# 1. Charger ces2025.rds, créer df_clean\n# 2. Regarder une question\n# 3. De 0 (gauche) à 1 (droite) : l'économie, la société, nos paris\n# 4. Installer sondr, une seule fois\n# 5. L'analyse factorielle : les quatorze\n# 6. Sans celles qui ne collent pas\n# 7. L'échelle : la moyenne\n# 8. La validité : les partis, l'auto-positionnement\n# 9. L'appliquer : lm(ideologie ~ scolarité)\n# 10. Sauvegarder df_clean";
+  const [SCRIPT_A, SCRIPT_B, SCRIPT_C, SCRIPT_D] = (() => { const c = ['df_clean$ideo_egalite', '# 4.', '# 7.'].map((m) => SCRIPT.indexOf(m)); return [SCRIPT.slice(0, c[0]).trimEnd(), SCRIPT.slice(c[0], c[1]).trimEnd(), SCRIPT.slice(c[1], c[2]).trimEnd(), SCRIPT.slice(c[2])]; })();
 
   // Les trois blocs de code de la partie IA, repris tels quels du deck EIOM 2026.
   const c_capitale = `library(ellmer)
@@ -154,12 +154,13 @@ OPENROUTER_API_KEY=votre_cle_ici
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
   const avec = (cle, notes = []) => ATELIER[cle].map((l, i) => ({ ...l, note: notes[i] || '' }));
   const c_charger = avec('charger', ['', 'haven : pour lire les codes de la CES', 'ces2025.rds, sauvegardé à la séance 2', 'df_raw ne change jamais']);
-  const c_item = avec('item', ['cps25 : pendant la campagne. 1 = fortement en désaccord … 5 = fortement d’accord, 6 = ne sait pas. NA : pas posée (deux tiers des gens)']);
-  const c_echelle = avec('echelle', ['trois réponses : moins (0), autant (0,5), plus (1)', 'une fonction : 1 à 5 devient 0 à 1, le reste NA', 'd’accord pour garder la taxe : pour l’environnement', 'la même recette…', '… quatre fois']);
-  const c_sondr = [...avec('installer', ['', 'sondr n’est pas sur CRAN : on l’installe depuis GitHub']), ...avec('preparer', ['', 'na.omit : seulement les gens qui ont répondu aux quatre', `${nb(SATURATIONS.n)} personnes : le bloc c1, un tiers du sondage de campagne`])];
-  const c_sens = avec('sens', ['négatif : qui veut garder la taxe ne veut pas d’oléoducs', '1 − x : d’accord devient 0, en désaccord devient 1', 'la même chose pour les emplois', 'positif : les deux vont maintenant dans le même sens']);
-  const c_construire = avec('construire', ['la moyenne des quatre questions env_, ligne par ligne', 'de 0 à 1 ; NA : une question sans réponse, ou hors du bloc c1']);
-  const c_regression = avec('regression', ['universitaire : a fréquenté l’université (8 à 11) ou non (1 à 7)', '', `${f(REG.pente, 3)} : sur une échelle de 0 à 1, les universitaires sont ${f(Math.abs(REG.pente), 2)} plus ${REG.pente >= 0 ? 'haut' : 'bas'}`]);
+  const c_item = avec('item', ['pes25 : après l’élection. 1 = fortement en désaccord … 5 = fortement d’accord, 6 = ne sait pas. NA : pas au sondage postélectoral']);
+  const c_economie = avec('economie', ['une fonction : 1 à 5 devient 0 à 1, le reste NA', 'voir à un niveau de vie décent (0), laisser faire (1)', 'd’accord = gauche : on retourne, 1 − x', 'd’accord = droite', '', '']);
+  const c_societe = avec('societe', ['d’accord = droite', '', '', '', '', 'd’accord = gauche : 1 − x']);
+  const c_paris = avec('paris', ['pro-marché, donc à droite ?', 'plus d’armée, donc à droite ?', 'le français pas menacé, donc à droite ? On verra']);
+  const c_sondr = [...avec('installer', ['', 'sondr n’est pas sur CRAN : on l’installe depuis GitHub']), ...avec('preparer', ['', 'na.omit : seulement les gens qui ont répondu aux quatorze', `${nb(SATURATIONS.n)} personnes`])];
+  const c_construire = avec('construire', ['on retire les trois qui ne collent pas', 'la moyenne des onze, ligne par ligne', `de 0 (gauche) à 1 (droite)`]);
+  const c_regression = avec('regression', ['universitaire : a fréquenté l’université (8 à 11) ou non (1 à 7)', '', `${f(REG.pente, 3)} : sur une échelle de 0 à 1, les universitaires sont ${f(Math.abs(REG.pente), 2)} plus ${REG.pente >= 0 ? 'à droite' : 'à gauche'}`]);
   const S1 = SATURATIONS.un, S2 = SATURATIONS.deux;
   const sat = (r, k) => f(r.loadings[r.items.indexOf(k)]);
 </script>
@@ -210,7 +211,7 @@ OPENROUTER_API_KEY=votre_cle_ici
       <ul class="dqm e">
         <li><em>Dans quelle mesure</em> la scolarité influence-t-elle l’intérêt pour la politique ?</li>
         <li><em>Dans quelle mesure</em> gagner une élection rend-il plus satisfait de la démocratie ?</li>
-        <li><em>Dans quelle mesure</em> la scolarité augmente-t-elle l’appui à l’environnement ?</li>
+        <li><em>Dans quelle mesure</em> la scolarité rend-elle plus à gauche ?</li>
       </ul>
       <p class="grande-q e dqm-q">Mesure ? Pourquoi ce mot-là ?</p>
     </Slide>
@@ -223,7 +224,7 @@ OPENROUTER_API_KEY=votre_cle_ici
     <Slide bandeau="Mesurer un concept · mesurer" droite={D}>
       <h2 class="e">Mesurer un concept</h2>
       <div class="chemin e">
-        <div class="etape"><span class="n">1</span><strong>Une chose</strong><span>Une longueur. Un poids. L’appui à l’environnement.</span></div>
+        <div class="etape"><span class="n">1</span><strong>Une chose</strong><span>Une longueur. Un poids. L’idéologie.</span></div>
         <span class="fl">→</span>
         <div class="etape"><span class="n">2</span><strong>Un instrument</strong><span>Une règle. Une balance. Une question de sondage.</span></div>
         <span class="fl">→</span>
@@ -290,16 +291,16 @@ OPENROUTER_API_KEY=votre_cle_ici
     <Slide fond="encre" bandeau="Pratique dans R" droite={D}>
       <h1 class="e">Pratique dans R</h1>
       <hr class="filet" />
-      <p class="lead e">L’appui à l’environnement, dans la CES 2025.</p>
+      <p class="lead e">Construire une échelle gauche-droite avec la CES 2025.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · notre concept" droite={D}>
-      <p class="grande-q e">La scolarité augmente-t-elle l’appui à l’environnement ?</p>
-      <p class="petit-dit e">Personne ne répond à « êtes-vous pro-environnement ? ». La CES pose plutôt quatre questions.</p>
+      <p class="grande-q e">La scolarité rend-elle plus à gauche ?</p>
+      <p class="petit-dit e">Un seul chiffre de 0 à 10 ne suffit pas (diapo 9). On lance beaucoup de questions, on garde celles qui collent.</p>
     </Slide>
 
-    <Slide bandeau="Pratique dans R · quatre questions" droite={D}>
-      <h2 class="e">Quatre questions sur l’environnement</h2>
+    <Slide bandeau="Pratique dans R · quatorze questions" droite={D}>
+      <h2 class="e">Quatorze questions qu’on croit de gauche ou de droite</h2>
       <M9Items />
     </Slide>
 
@@ -317,49 +318,55 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Pratique dans R · recoder" droite={D}>
-      <h2 class="e">De 0 à 1, la même recette pour les quatre</h2>
-      <Console lignes={c_echelle} />
+      <h2 class="e">L’économie : de 0 (gauche) à 1 (droite)</h2>
+      <Console lignes={c_economie} />
+    </Slide>
+
+    <Slide bandeau="Pratique dans R · recoder" droite={D}>
+      <h2 class="e">La société, la même recette</h2>
+      <Console lignes={c_societe} />
+    </Slide>
+
+    <Slide bandeau="Pratique dans R · nos paris" droite={D}>
+      <h2 class="e">Nos paris</h2>
+      <Console lignes={c_paris} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · sondr" droite={D}>
-      <h2 class="e">sondr, puis les gens qui ont répondu aux quatre</h2>
+      <h2 class="e">sondr, puis les gens qui ont répondu aux quatorze</h2>
       <Console lignes={c_sondr} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’analyse factorielle" droite={D}>
-      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : env_depenses {sat(S1, 'depenses')}, env_carbone {sat(S1, 'carbone')}, env_pipelines {sat(S1, 'pipelines')}, env_emplois {sat(S1, 'emplois')}. Alpha de Cronbach {f(S1.alpha)}." />
+      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : quatorze lignes. Onze questions entre {f(Math.min(...S2.loadings))} et {f(Math.max(...S2.loadings))}; le commerce à {sat(S1, 'commerce')}, la défense à {sat(S1, 'defense')}, le français au Québec à {sat(S1, 'francais_qc')}, sous le seuil de 0,3. Alpha de Cronbach {f(S1.alpha)}." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · lire" droite={D}>
-      <h2 class="e">Deux questions vont à l’envers</h2>
+      <h2 class="e">Trois questions ne collent pas</h2>
       <M9Saturations />
     </Slide>
 
-    <Slide bandeau="Pratique dans R · le sens" droite={D}>
-      <h2 class="e">Les retourner : 1 − x</h2>
-      <Console lignes={c_sens} />
-    </Slide>
-
     <Slide bandeau="Pratique dans R · recommencer" droite={D}>
-      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={110} nouveau={[0]} dit="retournées : alpha {f(S2.alpha)}, tout au-dessus du seuil" alt="Le graphique de topdown_fa une fois les deux questions retournées : quatre points, tous au-dessus de 0,3. Alpha de Cronbach {f(S2.alpha)}, première valeur propre {f(S2.eigen)}." />
+      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={100} nouveau={[0]} dit="sans les trois : alpha {f(S2.alpha)}, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans les trois : onze lignes, toutes au-dessus de 0,3. Alpha de Cronbach {f(S2.alpha)}, première valeur propre {f(S2.eigen)}." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · la validité" droite={D}>
-      <h2 class="e">Fiable, oui. Valide ? L’échelle selon le vote</h2>
+      <h2 class="e">Fiable, oui. Valide ? Les partis, de gauche à droite</h2>
       <M9Validite />
+      <p class="petit-dit e">Avec l’auto-positionnement de 0 à 10 (diapo 9) : corrélation de {f(VALID_SOI)}. Imparfait, mais dans le même sens.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
-      <h2 class="e">L’échelle : la moyenne des quatre</h2>
+      <h2 class="e">L’échelle : la moyenne des onze</h2>
       <Console lignes={c_construire} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
-      <M8Image code={HIST.code} img={HIST.img} l={HIST.l} h={HIST.h} px={100} dit="une variable comme une autre, de 0 à 1" alt="L’histogramme de l’échelle d’appui à l’environnement, de 0 à 1." />
+      <M8Image code={HIST.code} img={HIST.img} l={HIST.l} h={HIST.h} px={100} dit="une variable comme une autre, de 0 à 1" alt="L’histogramme de l’échelle gauche-droite, de 0 à 1." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’appliquer" droite={D}>
-      <h2 class="e">La scolarité augmente-t-elle l’appui à l’environnement ?</h2>
+      <h2 class="e">La scolarité rend-elle plus à gauche ?</h2>
       <Console lignes={c_regression} />
     </Slide>
 
@@ -530,19 +537,14 @@ OPENROUTER_API_KEY=votre_cle_ici
       </p>
     </Slide>
 
-    <Slide bandeau="L’IA et l’environnement · l’eau" droite={D}>
-      <h2 class="e">Qui consomme le plus d’eau ?</h2>
-      <M9Eau />
+    <Slide bandeau="L’IA et l’environnement" droite={D}>
+      <h2 class="e">L’eau et l’électricité des centres de données</h2>
+      <M9Empreinte />
     </Slide>
 
-    <Slide bandeau="L’IA et l’environnement · l’électricité" droite={D}>
-      <h2 class="e">Qui consomme le plus d’électricité ?</h2>
-      <M9Energie />
-    </Slide>
-
-    <Slide bandeau="L’IA et l’environnement · une requête" droite={D}>
-      <h2 class="e">Une requête, presque rien. Le problème est ailleurs</h2>
-      <M9Requete />
+    <Slide bandeau="L’IA et l’environnement · par usage" droite={D}>
+      <h2 class="e">Une requête d’IA, à côté d’autres usages du numérique</h2>
+      <M9Activites />
     </Slide>
 
     <Slide bandeau="Le contexte" droite={D}>
@@ -773,7 +775,7 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
     <Slide fond="encre" bandeau="Annexe" droite={D}>
       <h1 class="e">Annexe : tout le code</h1>
       <hr class="filet" />
-      <p class="lead e">L’appui à l’environnement dans la CES 2025, étape par étape. À refaire chez vous.</p>
+      <p class="lead e">Une échelle gauche-droite avec la CES 2025, étape par étape. À refaire chez vous.</p>
     </Slide>
 
     <Slide bandeau="Annexe · charger" droite={D}>
@@ -781,26 +783,37 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
       <Console lignes={c_charger} />
     </Slide>
 
-    <Slide bandeau="Annexe · les quatre questions" droite={D}>
-      <h2 class="e">Les quatre questions, mot pour mot</h2>
-      <M9Items exact />
+    <Slide bandeau="Annexe · les quatorze questions" droite={D}>
+      <h2 class="e">L’économie et nos paris, mot pour mot</h2>
+      <M9Items exact={['economie', 'paris']} />
     </Slide>
 
-    <Slide bandeau="Annexe · le script 1/3" droite={D}>
+    <Slide bandeau="Annexe · les quatorze questions" droite={D}>
+      <h2 class="e">La société, mot pour mot</h2>
+      <M9Items exact={['societe']} />
+    </Slide>
+
+    <Slide bandeau="Annexe · le script 1/4" droite={D}>
       <div class="plan">
         <Code src={SCRIPT_A} titre="seance9.R" />
       </div>
     </Slide>
 
-    <Slide bandeau="Annexe · le script 2/3" droite={D}>
+    <Slide bandeau="Annexe · le script 2/4" droite={D}>
       <div class="plan">
         <Code src={SCRIPT_B} titre="seance9.R" />
       </div>
     </Slide>
 
-    <Slide bandeau="Annexe · le script 3/3" droite={D}>
+    <Slide bandeau="Annexe · le script 3/4" droite={D}>
       <div class="plan">
         <Code src={SCRIPT_C} titre="seance9.R" />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Annexe · le script 4/4" droite={D}>
+      <div class="plan">
+        <Code src={SCRIPT_D} titre="seance9.R" />
       </div>
     </Slide>
 
