@@ -1,66 +1,65 @@
 /* L'empreinte environnementale de l'IA, pour la séance 9. Chaque chiffre garde
    sa source, son année et son unité d'origine; les conversions sont faites ici.
-   Vérifié le 5 novembre 2026. Ne rien ajouter de mémoire.
+   Vérifié deux fois, de façon indépendante, aux sources primaires le 5 novembre
+   2026 (résumés dans docs/plan-de-cours.md).
+   Ne rien ajouter de mémoire.
 
-   Les centres de données ne sont pas que l'IA : ni le LBNL ni l'AIE ne donnent
-   la part de l'IA. Les diapos disent « centres de données ». */
+   Les centres de données ne sont pas que l'IA : ils servent aussi le web, le
+   nuage, la vidéo. Les diapos disent « centres de données ». */
 
 const GALLON = 3.785411784; // litres
-const ACRE_PIED = 325851; // gallons
-const parJour = (gallonsParAn) => gallonsParAn / 365;
-const gL = (gallonsParJour) => (gallonsParJour * GALLON) / 1e9; // milliards de litres par jour
+const ACRE_PIED = 1233.48184; // m³
+const annuel = (mgalParJour) => (mgalParJour * 1e6 * 365 * GALLON) / 1e9; // milliards de litres par an
 
-/* L'eau consommée aux États-Unis (pas prélevée : une centrale thermique rend
-   presque tout ce qu'elle prélève). Milliards de litres par jour. */
+/* L'eau consommée aux États-Unis, en milliards de litres par an. */
 export const EAU = [
-  { cle: 'irrigation', nom: 'Irrigation agricole', an: 2015, gLj: gL(73.2e9),
-    source: 'USGS, Estimated use of water in the United States in 2015 (consommation : 73,2 milliards de gallons par jour)' },
-  { cle: 'thermique', nom: 'Centrales thermiques', an: 2015, gLj: gL(4.31e9),
-    source: 'USGS, 2015 (consommation : 4,31 milliards de gallons par jour)' },
-  { cle: 'golf', nom: 'Terrains de golf', an: 2024, gLj: gL(parJour(1.63e6 * ACRE_PIED)),
-    source: 'GCSAA, enquête 2024 : 1,63 million d’acres-pieds d’arrosage par an' },
-  { cle: 'cd_total', nom: 'Centres de données (+ électricité)', an: 2023, gLj: gL(parJour(17.4e9 + 211e9)), ia: true,
-    source: 'LBNL 2024 : 17,4 milliards de gallons sur place + environ 211 milliards par l’électricité (inclut l’évaporation des réservoirs hydroélectriques)' },
-  { cle: 'cd_direct', nom: 'Centres de données (sur place)', an: 2023, gLj: gL(parJour(17.4e9)), ia: true,
-    source: 'LBNL, 2024 United States Data Center Energy Usage Report : 17,4 milliards de gallons en 2023' }
+  { cle: 'irrigation', nom: 'Irrigation des cultures', an: 2020, gL: annuel(78400),
+    source: 'USGS, Professional Paper 1894-D (2020, 48 États contigus) : 78 400 millions de gallons par jour consommés par l’irrigation des cultures (le golf est estimé à part)' },
+  { cle: 'thermique', nom: 'Centrales thermiques', an: 2020, gL: annuel(2382),
+    source: 'USGS, Professional Paper 1894-D (2020) : 2 382 millions de gallons par jour consommés' },
+  { cle: 'golf', nom: 'Terrains de golf (arrosage)', an: 2024, gL: (1.63e6 * ACRE_PIED * 1000) / 1e9, note: 'eau d’arrosage appliquée, pas mesurée comme consommée',
+    source: 'GCSAA, enquête 2024 : 1,63 million d’acres-pieds d’eau d’arrosage' },
+  { cle: 'cd_elec', nom: 'Électricité des centres de données', an: 2023, gL: 800, ia: true, note: 'comprend l’évaporation des barrages, chevauche les centrales',
+    source: 'LBNL, 2024 United States Data Center Energy Usage Report, p. 57 : « nearly 800 billion liters »' },
+  { cle: 'cd', nom: 'Centres de données', an: 2023, gL: 66, ia: true,
+    source: 'LBNL, 2024 United States Data Center Energy Usage Report, p. 55 : 66 milliards de litres sur place' }
 ];
 
-/* L'électricité consommée dans le monde, en TWh par an. */
+/* L'électricité consommée, en TWh par an. */
 export const ENERGIE = [
-  { cle: 'clim', nom: 'Climatisation', an: 2022, twh: 2100, approx: false,
-    source: 'AIE, citée par Our World in Data : environ 2 100 TWh en 2022, 7 % de l’électricité mondiale' },
-  { cle: 'alu', nom: 'Production d’aluminium', an: 2023, twh: 900, approx: true,
-    source: 'Estimations de l’industrie : plus de 900 TWh en 2023, environ 4 % de l’électricité mondiale' },
-  { cle: 'cd', nom: 'Centres de données', an: 2024, twh: 415, en2030: 945, ia: true,
-    source: 'AIE, Energy and AI (2025) : 415 TWh en 2024, 1,5 % de l’électricité mondiale; 945 TWh prévus en 2030' },
-  { cle: 'btc', nom: 'Bitcoin', an: 2025, twh: 138, approx: false,
-    source: 'Cambridge Bitcoin Electricity Consumption Index : 138 TWh par an' }
+  { cle: 'clim', nom: 'Climatisation (monde)', an: 2022, twh: 2111,
+    source: 'AIE, données reprises par Our World in Data : 2 111 TWh en 2022' },
+  { cle: 'cd', nom: 'Centres de données (monde)', an: 2025, twh: 485, en2030: 945, ia: true,
+    source: 'AIE, Key Questions on Energy and AI (2026) : 485 TWh en 2025; Energy and AI (2025) : 945 TWh prévus en 2030' },
+  { cle: 'qc', nom: 'Le Québec, tout entier', an: 2025, twh: 184.9,
+    source: 'Hydro-Québec, rapport annuel 2025 : ventes d’électricité au Québec, 184,9 TWh' },
+  { cle: 'btc', nom: 'Bitcoin (monde)', an: 2024, twh: 183, note: 'rythme annualisé, fin 2024',
+    source: 'Cambridge Centre for Alternative Finance, Cambridge Digital Mining Industry Report (avril 2025) : 183 TWh annualisés au 31 décembre 2024' }
 ];
 
-/* L'électricité de quelques usages du numérique, en Wh. Deux familles de
-   mesures qui ne comptent pas la même chose : l'IA, le centre de données
-   seulement; le streaming, l'écran (72 %), le réseau (23 %) et le centre de
-   données (5 %). */
+/* L'électricité de quelques usages du numérique, en Wh. Deux familles qui ne
+   comptent pas la même chose : l'IA, le centre de données seulement; la vidéo
+   en ligne, l'écran (72 %), le réseau (23 %) et le centre de données (5 %). */
 const J = (joules) => joules / 3600; // Wh
-const STREAM_H = 77; // Wh par heure, moyenne 2019 (AIE)
-const STREAM_TEL_H = 37; // Wh par heure, téléphone, SD, wifi (AIE)
+const VIDEO_H = 77; // Wh par heure, moyenne 2019 (AIE)
+const VIDEO_TEL_H = 37; // Wh par heure, téléphone, définition standard, wifi (AIE)
 export const ACTIVITES = [
-  { cle: 'llama8', nom: 'Réponse texte, petit modèle', wh: J(114), ia: true,
-    source: 'MIT Technology Review (mai 2025) : Llama 3.1 8B, 114 joules par réponse' },
-  { cle: 'gemini', nom: 'Requête texte à Gemini', wh: 0.24, ia: true,
-    source: 'Google (août 2025) : requête texte médiane, 0,24 Wh' },
-  { cle: 'reel', nom: 'Reel de 30 s sur un téléphone', wh: STREAM_TEL_H / 120,
-    source: 'AIE (2020) : 37 Wh par heure de vidéo sur un téléphone, ramené à 30 secondes' },
-  { cle: 'chatgpt', nom: 'Requête à ChatGPT', wh: 0.34, ia: true,
-    source: 'OpenAI, Sam Altman (juin 2025) : 0,34 Wh en moyenne, sans méthode publiée' },
-  { cle: 'image', nom: 'Image générée par IA', wh: J(2282), ia: true,
+  { cle: 'gemini', nom: 'Requête Gemini', wh: 0.24, ia: true,
+    source: 'Google, arXiv 2508.15734 (août 2025) : requête texte médiane, mai 2025' },
+  { cle: 'epoch', nom: 'Requête GPT-4o (estimation)', wh: 0.3, ia: true,
+    source: 'Epoch AI (février 2025) : environ 0,3 Wh, estimation indépendante' },
+  { cle: 'reel', nom: 'Reel de 30 s (téléphone, wifi)', wh: VIDEO_TEL_H / 120,
+    source: 'AIE (2020) : 37 Wh par heure de vidéo sur téléphone, ramené à 30 secondes' },
+  { cle: 'chatgpt', nom: 'Requête ChatGPT', wh: 0.34, ia: true,
+    source: 'OpenAI, Sam Altman (juin 2025) : 0,34 Wh en moyenne, méthode non publiée' },
+  { cle: 'image', nom: 'Image générée (labo)', wh: J(2282), ia: true,
     source: 'MIT Technology Review (mai 2025) : Stable Diffusion 3 Medium, 2 282 joules' },
-  { cle: 'llama405', nom: 'Réponse texte, gros modèle', wh: J(6706), ia: true,
-    source: 'MIT Technology Review (mai 2025) : Llama 3.1 405B, 6 706 joules par réponse' },
-  { cle: 'video10', nom: 'Vidéo de 10 min (YouTube…)', wh: STREAM_H / 6,
+  { cle: 'raison', nom: 'Requête longue (raisonnement)', wh: 3.91, ia: true,
+    source: 'Microsoft Research, arXiv 2509.20241 v2 (juin 2026) : 3,91 Wh pour des requêtes 15 fois plus longues que la normale (0,31 Wh pour une requête typique), modélisé' },
+  { cle: 'video10', nom: 'Vidéo en ligne, 10 min', wh: VIDEO_H / 6,
     source: 'AIE (2020) : 77 Wh par heure de streaming en 2019, ramené à 10 minutes' },
-  { cle: 'film', nom: 'Film de 2 h sur Netflix', wh: STREAM_H * 2,
+  { cle: 'film', nom: 'Film de 2 h en streaming', wh: VIDEO_H * 2,
     source: 'AIE (2020) : 77 Wh par heure de streaming en 2019, deux heures' },
-  { cle: 'video_ia', nom: 'Vidéo de 5 s générée par IA', wh: J(3.4e6), ia: true,
+  { cle: 'video_ia', nom: 'Vidéo générée de 5 s (labo)', wh: J(3.4e6), ia: true,
     source: 'MIT Technology Review (mai 2025) : CogVideoX, 3,4 millions de joules' }
 ];
