@@ -21,7 +21,7 @@
   <figure class="q">
     <span class="q-src">Étude électorale canadienne 2025 · <code>{d.variable}</code></span>
     <blockquote>« {d.question} »</blockquote>
-    <span class="q-note">Question ouverte : chacun répond dans ses propres mots.</span>
+    <span class="q-note">Question ouverte : chacun répond dans ses propres mots.</span>
   </figure>
   <div class="prov-col">
     <span class="gros">{milliers(d.total)}</span>
@@ -46,7 +46,7 @@
 </div>
 
 <div class="cats">
-  <span class="cats-t">Le but : chaque réponse dans une de ces {d.categories.length} catégories</span>
+  <span class="cats-t">Le but : chaque réponse dans une de ces {d.categories.length} catégories</span>
   <ul>
     {#each d.categories as c}<li>{c}</li>{/each}
   </ul>

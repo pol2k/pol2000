@@ -139,7 +139,7 @@
       "id": "17567",
       "langue": "EN",
       "texte": "Tarriffs",
-      "jetons": "tarriffs",
+      "jetons": ["tarriffs"],
       "touche": [
         null
       ],

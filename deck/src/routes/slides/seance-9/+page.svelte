@@ -79,10 +79,10 @@
   import Fiches from '$lib/deck/demos/Fiches.svelte';
   import Temperature from '$lib/deck/demos/Temperature.svelte';
   import Minuterie from '$lib/deck/demos/Minuterie.svelte';
-  import MurAvis from '$lib/deck/demos/MurAvis.svelte';
-  import Dictionnaire from '$lib/deck/demos/Dictionnaire.svelte';
-  import Classifieur from '$lib/deck/demos/Classifieur.svelte';
-  import Extractions from '$lib/deck/demos/Extractions.svelte';
+  import EnjeuxMur from '$lib/deck/demos/EnjeuxMur.svelte';
+  import EnjeuxDictionnaire from '$lib/deck/demos/EnjeuxDictionnaire.svelte';
+  import EnjeuxClassifieur from '$lib/deck/demos/EnjeuxClassifieur.svelte';
+  import EnjeuxExtractions from '$lib/deck/demos/EnjeuxExtractions.svelte';
   import Modeles from '$lib/deck/demos/Modeles.svelte';
   import Prix from '$lib/deck/demos/Prix.svelte';
   import Arena from '$lib/deck/demos/Arena.svelte';
@@ -525,26 +525,27 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Le corpus" droite={D}>
-      <h2 class="e">La Ligne Rouge</h2>
-      <MurAvis />
+      <h2 class="e">L’enjeu le plus important, en texte libre</h2>
+      <EnjeuxMur />
+      <p class="e credits">Étude électorale canadienne 2025, sondage préélectoral, variable cps25_imp_iss.</p>
     </Slide>
 
     <Slide bandeau="L’ancienne façon" droite={D}>
       <h2 class="e">Avant : Utilisation de dictionnaires</h2>
-      <Dictionnaire />
+      <EnjeuxDictionnaire />
+      <p class="e credits">Dictionnaire de 396 mots-clés écrit pour la démonstration, appliqué en R à 300 réponses tirées au hasard (set.seed(2025)).</p>
     </Slide>
 
     <Slide bandeau="La nouvelle façon" droite={D}>
       <h2 class="e">Maintenant : Utilisation de LLMs</h2>
-      <Classifieur />
+      <EnjeuxClassifieur />
+      <p class="e credits">Classement par Claude (Anthropic) dans Claude Code, le 5 novembre 2026 : les 300 réponses dans une même session, pas un appel d’API par ligne.</p>
     </Slide>
 
     <Slide bandeau="La même donnée, d’autres questions" droite={D}>
       <h2 class="e">On ne change pas la donnée, on change la consigne</h2>
-      <Extractions />
-      <p class="e credits">
-        Six appels réels à <code>gemini-3.5-flash-lite</code>, température 0, sortie JSON imposée.
-      </p>
+      <EnjeuxExtractions />
+      <p class="e credits">Six consignes soumises à Claude (Anthropic) dans Claude Code, le 5 novembre 2026, sortie en JSON.</p>
     </Slide>
 
     <Slide bandeau="Outillage" droite={D}>
