@@ -58,6 +58,8 @@
   import M9Moyenne from '$lib/deck/visuels/M9Moyenne.svelte';
   import M9Empreinte from '$lib/deck/visuels/M9Empreinte.svelte';
   import M9Activites from '$lib/deck/visuels/M9Activites.svelte';
+  import M9Risques from '$lib/deck/visuels/M9Risques.svelte';
+  import M9Risque from '$lib/deck/visuels/M9Risque.svelte';
   import M9Regle from '$lib/deck/visuels/M9Regle.svelte';
   import M8Image from '$lib/deck/visuels/M8Image.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
@@ -94,7 +96,7 @@
   import { FOURNISSEUR, FOURNISSEUR_SECOURS } from '$lib/data/config.js';
   import { ATELIER, FA1, FA2, HIST, REG, SATURATIONS, SCRIPT, VALID_SOI } from '$lib/data/seance9.js';
 
-  const TOTAL = 89;
+  const TOTAL = 95;
   const D = 'POL-2000 · séance 9 · jeu 5 nov';
   const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
   const f = (v, k = 2) => v.toFixed(k).replace('.', ',');
@@ -508,6 +510,37 @@ OPENROUTER_API_KEY=votre_cle_ici
     <Slide bandeau="L’IA et l’environnement · par usage" droite={D}>
       <h2 class="e">Une requête d’IA, à côté d’autres usages du numérique</h2>
       <M9Activites />
+    </Slide>
+
+    <Slide fond="encre" bandeau="Les côtés sombres de l’IA" droite={D}>
+      <h1 class="e">Les côtés sombres de l’IA</h1>
+      <hr class="filet" />
+      <M9Risques />
+    </Slide>
+
+    <Slide bandeau="Les côtés sombres de l’IA" droite={D}>
+      <h2 class="e">Entraîné sur des livres piratés</h2>
+      <M9Risque cle="livres" />
+    </Slide>
+
+    <Slide bandeau="Les côtés sombres de l’IA" droite={D}>
+      <h2 class="e">Des millions de livres détruits pour les numériser</h2>
+      <M9Risque cle="detruits" />
+    </Slide>
+
+    <Slide bandeau="Les côtés sombres de l’IA" droite={D}>
+      <h2 class="e">L’IA, un risque pour l’humanité ?</h2>
+      <M9Risque cle="existentiel" />
+    </Slide>
+
+    <Slide bandeau="Les côtés sombres de l’IA" droite={D}>
+      <h2 class="e">L’IA sur le champ de bataille</h2>
+      <M9Risque cle="militaire" />
+    </Slide>
+
+    <Slide bandeau="Les côtés sombres de l’IA" droite={D}>
+      <h2 class="e">La surveillance de masse</h2>
+      <M9Risque cle="surveillance" />
     </Slide>
 
     <Slide bandeau="Le contexte" droite={D}>
