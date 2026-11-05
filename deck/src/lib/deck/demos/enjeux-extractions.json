@@ -1,0 +1,46 @@
+{
+  "source": "Étude électorale canadienne 2025 · sondage préélectoral · cps25_imp_iss",
+  "ligne": 6499,
+  "langue": "FR-CA",
+  "texte": "La relation avec les États-Unis, la diversification de nos alliances commerciales avec les autres pays. Nous nous devons de ne plus être dépendant des États-Unis",
+  "modele": "Claude (Anthropic)",
+  "mesure": "Claude Code, 5 novembre 2026 · six consignes, sortie en JSON",
+  "taches": [
+    {
+      "cle": "categorie",
+      "titre": "La catégorie",
+      "consigne": "La consigne de la diapositive précédente (12 catégories ou Aucune, premier enjeu nommé).",
+      "reponse": "{\"categorie\": \"Affaires internationales et défense\"}"
+    },
+    {
+      "cle": "enjeux",
+      "titre": "Tous les enjeux",
+      "consigne": "Tous les enjeux évoqués, dans l'ordre, en quelques mots chacun.",
+      "reponse": "{\"enjeux\": [\"relation avec les États-Unis\", \"diversification commerciale\", \"dépendance envers les États-Unis\"]}"
+    },
+    {
+      "cle": "ton",
+      "titre": "Le ton",
+      "consigne": "Le ton, parmi : calme, inquiet, en colère, déterminé. Et son intensité, de 1 à 5.",
+      "reponse": "{\"ton\": \"déterminé\", \"intensite\": 3}"
+    },
+    {
+      "cle": "pays",
+      "titre": "Les pays nommés",
+      "consigne": "Les pays nommés, et combien de fois chacun.",
+      "reponse": "{\"pays\": [{\"nom\": \"États-Unis\", \"mentions\": 2}]}"
+    },
+    {
+      "cle": "palier",
+      "titre": "Le palier visé",
+      "consigne": "Le palier de gouvernement visé : municipal, provincial, fédéral ou international.",
+      "reponse": "{\"palier\": \"fédéral\"}"
+    },
+    {
+      "cle": "langue",
+      "titre": "La langue et le registre",
+      "consigne": "La langue de la réponse, et son registre : familier, courant ou soutenu.",
+      "reponse": "{\"langue\": \"fr\", \"registre\": \"soutenu\"}"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "source": "Étude électorale canadienne 2025 · sondage préélectoral · cps25_imp_iss",
+  "variable": "cps25_imp_iss",
+  "question": "Pour vous personnellement, quel est l'enjeu le plus important de cette élection fédérale ?",
+  "total": 17453,
+  "repondants": 20180,
+  "langues": {
+    "en": 14059,
+    "fr": 3394
+  },
+  "exemples": [
+    {
+      "ligne": 1510,
+      "langue": "FR-CA",
+      "texte": "Les tarifs de Trump"
+    },
+    {
+      "ligne": 6247,
+      "langue": "EN",
+      "texte": "Cost of living"
+    },
+    {
+      "ligne": 6790,
+      "langue": "FR-CA",
+      "texte": "Le système de santé et logements"
+    },
+    {
+      "ligne": 11407,
+      "langue": "EN",
+      "texte": "Not becoming the 51 state or anything Trump decides to pull"
+    },
+    {
+      "ligne": 8812,
+      "langue": "FR-CA",
+      "texte": "L'environnement et la lutte aux changements climatiques"
+    },
+    {
+      "ligne": 17245,
+      "langue": "EN",
+      "texte": "Idk"
+    }
+  ],
+  "categories": ["Affaires internationales et défense", "Économie et travail", "Loi et crime", "Gouvernements et gouvernance", "Santé et politiques sociales", "Terres publiques et agriculture", "Environnement et énergie", "Technologie", "Immigration", "Droits, libertés, minorités et discrimination", "Culture et nationalisme", "Éducation"]
+}

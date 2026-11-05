@@ -43,7 +43,9 @@
   import Aujourdhui9 from '$lib/deck/visuels/Aujourdhui9.svelte';
   import M9Arbre from '$lib/deck/visuels/M9Arbre.svelte';
   import M9Instruments from '$lib/deck/visuels/M9Instruments.svelte';
+  import M9Chemin from '$lib/deck/visuels/M9Chemin.svelte';
   import M9Visible from '$lib/deck/visuels/M9Visible.svelte';
+  import M9Latentes from '$lib/deck/visuels/M9Latentes.svelte';
   import M9Gauche from '$lib/deck/visuels/M9Gauche.svelte';
   import M9Echelles from '$lib/deck/visuels/M9Echelles.svelte';
   import M9Qualite from '$lib/deck/visuels/M9Qualite.svelte';
@@ -52,6 +54,7 @@
   import M9TroisChiffres from '$lib/deck/visuels/M9TroisChiffres.svelte';
   import M9Saturations from '$lib/deck/visuels/M9Saturations.svelte';
   import M9Validite from '$lib/deck/visuels/M9Validite.svelte';
+  import M9Moyenne from '$lib/deck/visuels/M9Moyenne.svelte';
   import M9Empreinte from '$lib/deck/visuels/M9Empreinte.svelte';
   import M9Activites from '$lib/deck/visuels/M9Activites.svelte';
   import M9Regle from '$lib/deck/visuels/M9Regle.svelte';
@@ -223,21 +226,17 @@ OPENROUTER_API_KEY=votre_cle_ici
 
     <Slide bandeau="Mesurer un concept · mesurer" droite={D}>
       <h2 class="e">Mesurer un concept</h2>
-      <div class="chemin e">
-        <div class="etape"><span class="n">1</span><strong>Une chose</strong><span>Une longueur. Un poids. L’idéologie.</span></div>
-        <span class="fl">→</span>
-        <div class="etape"><span class="n">2</span><strong>Un instrument</strong><span>Une règle. Une balance. Une question de sondage.</span></div>
-        <span class="fl">→</span>
-        <div class="etape"><span class="n">3</span><strong>Un nombre</strong><span>14 cm. 68 kg. 0,72 sur une échelle de 0 à 1.</span></div>
-        <span class="fl">→</span>
-        <div class="etape rouge"><span class="n">4</span><strong>Calculer</strong><span>Une moyenne, un écart, une régression.</span></div>
-      </div>
-      <p class="petit-dit e chemin-dit">Les données, ce sont des nombres mis sur des concepts. Tout le reste du cours calcule avec.</p>
+      <M9Chemin />
     </Slide>
 
     <Slide bandeau="Mesurer un concept · le défi" droite={D}>
       <h2 class="e">Facile à mesurer, impossible à observer</h2>
       <M9Visible />
+    </Slide>
+
+    <Slide bandeau="Mesurer un concept · des concepts latents" droite={D}>
+      <h2 class="e">Des concepts qu’on ne voit jamais</h2>
+      <M9Latentes />
     </Slide>
 
     <Slide bandeau="Mesurer un concept · demander" droite={D}>
@@ -288,84 +287,41 @@ OPENROUTER_API_KEY=votre_cle_ici
 
     <!-- ================= SUR LES DONNÉES, POUR VRAI ================= -->
 
-    <Slide fond="encre" bandeau="Pratique dans R" droite={D}>
-      <h1 class="e">Pratique dans R</h1>
-      <hr class="filet" />
-      <p class="lead e">Construire une échelle gauche-droite avec la CES 2025.</p>
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · notre concept" droite={D}>
+    <Slide bandeau="L’échelle gauche-droite · notre concept" droite={D}>
       <p class="grande-q e">La scolarité rend-elle plus à gauche ?</p>
       <p class="petit-dit e">Un seul chiffre de 0 à 10 ne suffit pas (diapo 9). On lance beaucoup de questions, on garde celles qui collent.</p>
     </Slide>
 
-    <Slide bandeau="Pratique dans R · quatorze questions" droite={D}>
+    <Slide bandeau="L’échelle gauche-droite · quatorze questions" droite={D}>
       <h2 class="e">Quatorze questions qu’on croit de gauche ou de droite</h2>
       <M9Items />
     </Slide>
 
-    <Slide bandeau="Pratique dans R · le plan" droite={D}>
-      <h2 class="e">Planifions notre code</h2>
-      <div class="plan">
-        <Code src={PLAN} titre="seance9.R" />
-        <p class="e petit-dit">D’abord les commentaires. Le code vient ensuite, sous chacun.</p>
-      </div>
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · regarder" droite={D}>
-      <h2 class="e">Une question, telle que la CES la code</h2>
-      <Console lignes={c_item} />
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · recoder" droite={D}>
-      <h2 class="e">L’économie : de 0 (gauche) à 1 (droite)</h2>
-      <Console lignes={c_economie} />
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · recoder" droite={D}>
-      <h2 class="e">La société, la même recette</h2>
-      <Console lignes={c_societe} />
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · nos paris" droite={D}>
-      <h2 class="e">Nos paris</h2>
-      <Console lignes={c_paris} />
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · sondr" droite={D}>
-      <h2 class="e">sondr, puis les gens qui ont répondu aux quatorze</h2>
-      <Console lignes={c_sondr} />
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · l’analyse factorielle" droite={D}>
+    <Slide bandeau="L’échelle gauche-droite · l’analyse factorielle" droite={D}>
       <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : quatorze lignes. Onze questions entre {f(Math.min(...S2.loadings))} et {f(Math.max(...S2.loadings))}; le commerce à {sat(S1, 'commerce')}, la défense à {sat(S1, 'defense')}, le français au Québec à {sat(S1, 'francais_qc')}, sous le seuil de 0,3. Alpha de Cronbach {f(S1.alpha)}." />
     </Slide>
 
-    <Slide bandeau="Pratique dans R · lire" droite={D}>
+    <Slide bandeau="L’échelle gauche-droite · lire" droite={D}>
       <h2 class="e">Trois questions ne collent pas</h2>
       <M9Saturations />
     </Slide>
 
-    <Slide bandeau="Pratique dans R · recommencer" droite={D}>
-      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={100} nouveau={[0]} dit="sans les trois : alpha {f(S2.alpha)}, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans les trois : onze lignes, toutes au-dessus de 0,3. Alpha de Cronbach {f(S2.alpha)}, première valeur propre {f(S2.eigen)}." />
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · la validité" droite={D}>
+    <Slide bandeau="L’échelle gauche-droite · la validité" droite={D}>
       <h2 class="e">Fiable, oui. Valide ? Les partis, de gauche à droite</h2>
       <M9Validite />
       <p class="petit-dit e">Avec l’auto-positionnement de 0 à 10 (diapo 9) : corrélation de {f(VALID_SOI)}. Imparfait, mais dans le même sens.</p>
     </Slide>
 
-    <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
+    <Slide bandeau="L’échelle gauche-droite · l’échelle" droite={D}>
       <h2 class="e">L’échelle : la moyenne des onze</h2>
-      <Console lignes={c_construire} />
+      <M9Moyenne />
     </Slide>
 
-    <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
+    <Slide bandeau="L’échelle gauche-droite · l’échelle" droite={D}>
       <M8Image code={HIST.code} img={HIST.img} l={HIST.l} h={HIST.h} px={100} dit="une variable comme une autre, de 0 à 1" alt="L’histogramme de l’échelle gauche-droite, de 0 à 1." />
     </Slide>
 
-    <Slide bandeau="Pratique dans R · l’appliquer" droite={D}>
+    <Slide bandeau="L’échelle gauche-droite · l’appliquer" droite={D}>
       <h2 class="e">La scolarité rend-elle plus à gauche ?</h2>
       <Console lignes={c_regression} />
     </Slide>
@@ -560,16 +516,6 @@ OPENROUTER_API_KEY=votre_cle_ici
     <Slide bandeau="Le paramètre qui compte" droite={D}>
       <h2 class="e">La température</h2>
       <Temperature />
-    </Slide>
-
-    <Slide fond="encre" bandeau="Pause" droite={D}>
-      <h1 class="e">Pause</h1>
-      <hr class="filet" />
-      <Minuterie minutes={15} />
-      <p class="lead e">Pendant la pause, allez chercher votre clé.</p>
-      <ul class="cmd-liste e">
-        <li>aistudio.google.com/apikey<span class="lieu">un compte Google suffit · aucune carte de crédit</span></li>
-      </ul>
     </Slide>
 
     <Slide fond="encre" bandeau="Troisième temps" droite={D}>
@@ -778,9 +724,51 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
       <p class="lead e">Une échelle gauche-droite avec la CES 2025, étape par étape. À refaire chez vous.</p>
     </Slide>
 
+    <Slide bandeau="Annexe · le plan" droite={D}>
+      <h2 class="e">Planifions notre code</h2>
+      <div class="plan">
+        <Code src={PLAN} titre="seance9.R" />
+        <p class="e petit-dit">D’abord les commentaires. Le code vient ensuite, sous chacun.</p>
+      </div>
+    </Slide>
+
     <Slide bandeau="Annexe · charger" droite={D}>
       <h2 class="e">Avant de commencer, dans Positron</h2>
       <Console lignes={c_charger} />
+    </Slide>
+
+    <Slide bandeau="Annexe · regarder" droite={D}>
+      <h2 class="e">Une question, telle que la CES la code</h2>
+      <Console lignes={c_item} />
+    </Slide>
+
+    <Slide bandeau="Annexe · recoder" droite={D}>
+      <h2 class="e">L’économie : de 0 (gauche) à 1 (droite)</h2>
+      <Console lignes={c_economie} />
+    </Slide>
+
+    <Slide bandeau="Annexe · recoder" droite={D}>
+      <h2 class="e">La société, la même recette</h2>
+      <Console lignes={c_societe} />
+    </Slide>
+
+    <Slide bandeau="Annexe · nos paris" droite={D}>
+      <h2 class="e">Nos paris</h2>
+      <Console lignes={c_paris} />
+    </Slide>
+
+    <Slide bandeau="Annexe · sondr" droite={D}>
+      <h2 class="e">sondr, puis les gens qui ont répondu aux quatorze</h2>
+      <Console lignes={c_sondr} />
+    </Slide>
+
+    <Slide bandeau="Annexe · recommencer" droite={D}>
+      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={100} nouveau={[0]} dit="sans les trois : alpha {f(S2.alpha)}, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans les trois : onze lignes, toutes au-dessus de 0,3. Alpha de Cronbach {f(S2.alpha)}, première valeur propre {f(S2.eigen)}." />
+    </Slide>
+
+    <Slide bandeau="Annexe · l’échelle" droite={D}>
+      <h2 class="e">L’échelle : la moyenne des onze</h2>
+      <Console lignes={c_construire} />
     </Slide>
 
     <Slide bandeau="Annexe · les quatorze questions" droite={D}>
@@ -857,18 +845,9 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
 .dqm em { font-style: normal; font-weight: 700; color: var(--dk-accent); }
 .dqm-q { margin-top: 1.4em; }
 .ligne-code { width: 22em; margin: 1.4em auto 0; }
-.chemin-dit { text-align: center; margin-top: 1.4em; font-size: 1em; }
 .hyp { margin-top: 1.6em; display: flex; flex-direction: column; gap: 0.5em; font-size: 1.25em; }
 .hyp p { margin: 0; }
 
-.chemin { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: 0.8em; align-items: center; max-width: 64em; margin: 1.6em auto 0; }
-.etape { border: 3px solid var(--dk-encre); padding: 1em 1.1em 1.1em; display: flex; flex-direction: column; gap: 0.3em; min-height: 9em; }
-.etape.rouge { border-color: var(--dk-accent); }
-.etape .n { font-size: 0.7em; letter-spacing: 0.14em; color: var(--dk-gris); font-weight: 600; }
-.etape strong { font-size: 1.2em; line-height: 1.2; }
-.etape.rouge strong { color: var(--dk-accent); }
-.etape span:last-child { font-size: 0.8em; color: var(--dk-gris); line-height: 1.35; }
-.chemin .fl { font-size: 1.6em; font-weight: 700; color: var(--dk-gris-2); }
 
 .retenir { margin: 1.4em 0 0; padding-left: 1.6em; font-size: 1.3em; line-height: 1.4; display: flex; flex-direction: column; gap: 0.6em; max-width: 30em; }
 .retenir li::marker { color: var(--dk-accent); font-weight: 700; }

@@ -1,0 +1,104 @@
+{
+  "source": "Étude électorale canadienne 2025 · sondage préélectoral · cps25_imp_iss",
+  "fichier": "ces2025",
+  "total": 300,
+  "colonnes": ["ligne", "cps25_imp_iss", "langue"],
+  "lignes": [
+    {
+      "id": "327",
+      "langue": "EN",
+      "texte": "Imagration taking our jobs is a issue",
+      "categorie": "Immigration"
+    },
+    {
+      "id": "9388",
+      "langue": "FR-CA",
+      "texte": "Droits des femmes, économie",
+      "categorie": "Droits, libertés, minorités et discrimination"
+    },
+    {
+      "id": "17567",
+      "langue": "EN",
+      "texte": "Tarriffs",
+      "categorie": "Affaires internationales et défense"
+    }
+  ],
+  "modele": "Claude (Anthropic)",
+  "mesure": "Claude Code, 5 novembre 2026 · les 300 réponses dans une même session, pas un appel d'API par ligne",
+  "consigne": {
+    "question": "Pour vous personnellement, quel est l'enjeu le plus important de cette élection fédérale ?",
+    "tache": "Classe cette réponse dans une seule des 12 catégories, ou Aucune.",
+    "multiple": "Plusieurs enjeux : garde le premier nommé.",
+    "regles": [
+      ["Trump, États-Unis, tarifs, commerce extérieur, souveraineté, annexion", "Affaires internationales et défense"],
+      ["Coût de la vie, inflation, impôts, dette, dépenses publiques, emploi", "Économie et travail"],
+      ["Logement, pauvreté, inégalités, aînés, pensions", "Santé et politiques sociales"],
+      ["Partis, chefs, honnêteté, démocratie, mode de scrutin, fédéralisme", "Gouvernements et gouvernance"],
+      ["Identité, fierté, unité du pays, langue", "Culture et nationalisme"],
+      ["Oui, rien, je ne sais pas, réponse trop vague", "Aucune"]
+    ],
+    "format": "Réponds en JSON : {\"categorie\": \"…\"}"
+  },
+  "consigne_texte": "Réponse à la question « Pour vous personnellement, quel est l'enjeu le plus important de cette élection fédérale ? ».\nClasse cette réponse dans une seule des 12 catégories, ou Aucune.\nCatégories : Affaires internationales et défense · Économie et travail · Loi et crime · Gouvernements et gouvernance · Santé et politiques sociales · Terres publiques et agriculture · Environnement et énergie · Technologie · Immigration · Droits, libertés, minorités et discrimination · Culture et nationalisme · Éducation.\nPlusieurs enjeux : garde le premier nommé.\nTrump, États-Unis, tarifs, commerce extérieur, souveraineté, annexion → Affaires internationales et défense\nCoût de la vie, inflation, impôts, dette, dépenses publiques, emploi → Économie et travail\nLogement, pauvreté, inégalités, aînés, pensions → Santé et politiques sociales\nPartis, chefs, honnêteté, démocratie, mode de scrutin, fédéralisme → Gouvernements et gouvernance\nIdentité, fierté, unité du pays, langue → Culture et nationalisme\nOui, rien, je ne sais pas, réponse trop vague → Aucune\nRéponds en JSON : {\"categorie\": \"…\"}",
+  "categories": ["Affaires internationales et défense", "Économie et travail", "Loi et crime", "Gouvernements et gouvernance", "Santé et politiques sociales", "Terres publiques et agriculture", "Environnement et énergie", "Technologie", "Immigration", "Droits, libertés, minorités et discrimination", "Culture et nationalisme", "Éducation"],
+  "distribution": [
+    {
+      "categorie": "Économie et travail",
+      "n": 99
+    },
+    {
+      "categorie": "Affaires internationales et défense",
+      "n": 84
+    },
+    {
+      "categorie": "Santé et politiques sociales",
+      "n": 40
+    },
+    {
+      "categorie": "Gouvernements et gouvernance",
+      "n": 35
+    },
+    {
+      "categorie": "Aucune",
+      "n": 12
+    },
+    {
+      "categorie": "Environnement et énergie",
+      "n": 9
+    },
+    {
+      "categorie": "Immigration",
+      "n": 8
+    },
+    {
+      "categorie": "Droits, libertés, minorités et discrimination",
+      "n": 5
+    },
+    {
+      "categorie": "Loi et crime",
+      "n": 3
+    },
+    {
+      "categorie": "Culture et nationalisme",
+      "n": 3
+    },
+    {
+      "categorie": "Éducation",
+      "n": 2
+    },
+    {
+      "categorie": "Terres publiques et agriculture",
+      "n": 0
+    },
+    {
+      "categorie": "Technologie",
+      "n": 0
+    }
+  ],
+  "accord": {
+    "n": 239,
+    "total": 300,
+    "classees": 227,
+    "sur": 231
+  }
+}

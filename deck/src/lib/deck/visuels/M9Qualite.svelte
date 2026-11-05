@@ -4,8 +4,7 @@
    * de les prouver. Au clic :
    *
    *   1  la fiabilité : les questions vont-elles ensemble ? Statistique;
-   *   2  la validité : mesure-t-on le bon concept ? Théorique;
-   *   3  il faut les deux.
+   *   2  la validité : mesure-t-on le bon concept ? Théorique.
    */
   import { brancherTemps } from '../temps.js';
   let e = $state(0);
@@ -13,7 +12,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 3, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
   });
 </script>
 
@@ -46,7 +45,6 @@
       <span class="m9q-preuve">On la prouve avec la <b>théorie</b>.</span>
     </div>
   </div>
-  <p class="m9q-phrase" class:vu={e >= 3}>Pour un concept difficile à mesurer, il faut <strong>les deux</strong>.</p>
 </div>
 
 <style>
@@ -64,8 +62,5 @@
   .m9q-ligne { stroke: var(--dk-gris); stroke-width: 4; stroke-linecap: round; }
   .m9q-preuve { font-size: 1.05em; }
   .m9q-preuve b { color: var(--dk-accent); }
-  .m9q-phrase { margin: 0; text-align: center; font-size: 1.4em; opacity: 0; transition: opacity 0.5s; }
-  .m9q-phrase strong { color: var(--dk-accent); }
-  .m9q-phrase.vu { opacity: 1; }
-  @media (prefers-reduced-motion: reduce) { .m9q-col, .m9q-phrase { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .m9q-col { transition: none; } }
 </style>

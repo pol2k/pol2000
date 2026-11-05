@@ -9,7 +9,7 @@
    *   0  la question et la règle de 0 à 10;
    *   1  la question qui dérange;
    *   2  le PLC, vu des deux côtés;
-   *   3  le PCC, et la phrase.
+   *   3  le PCC.
    */
   import { brancherTemps } from '../temps.js';
   import { GAUCHE as G } from '$lib/data/seance9.js';
@@ -65,7 +65,6 @@
       {/each}
     </svg>
   </div>
-  <p class="m9g-dit" class:vu={e >= 3}>Le même parti, un autre nombre, selon qui répond.</p>
   <p class="credits m9g-src">CES 2025, sondage de campagne, pondéré. Moyennes de 0 à 10. Gauche : se placent de 0 à 2, n = {nb(G.gauche.n)}. Droite : de 8 à 10, n = {nb(G.droite.n)}.</p>
 </div>
 
@@ -83,7 +82,7 @@
   .m9g-bout { font-size: 20px; fill: var(--dk-gris); font-weight: 600; }
   .m9g-bout.fin { text-anchor: end; }
   .m9g-doute { margin: 0.1em 0 0; font-size: 1.35em; font-weight: 700; text-align: center; opacity: 0; transition: opacity 0.4s; }
-  .m9g-doute.vu, .m9g-bas.vu, .m9g-dit.vu, .m9g-rang.vu { opacity: 1; }
+  .m9g-doute.vu, .m9g-bas.vu, .m9g-rang.vu { opacity: 1; }
   .m9g-bas { opacity: 0; transition: opacity 0.4s; }
   .m9g-legende { margin: 0.2em 0 0; display: flex; gap: 2.4em; justify-content: center; font-size: 0.85em; }
   .m9g-legende span { display: inline-flex; align-items: center; gap: 0.5em; }
@@ -95,7 +94,6 @@
   .m9g-pt.plein { fill: var(--dk-encre); stroke: var(--dk-encre); stroke-width: 3; }
   .m9g-pt.vide { fill: var(--dk-fond, #f6f6f3); stroke: var(--dk-encre); stroke-width: 4; }
   .m9g-v { font-size: 24px; font-weight: 700; text-anchor: middle; }
-  .m9g-dit { margin: 0; font-size: 1.25em; font-weight: 700; color: var(--dk-accent); text-align: center; opacity: 0; transition: opacity 0.4s; }
   .m9g-src { margin: 0; }
-  @media (prefers-reduced-motion: reduce) { .m9g-doute, .m9g-bas, .m9g-dit, .m9g-rang { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .m9g-doute, .m9g-bas, .m9g-rang { transition: none; } }
 </style>

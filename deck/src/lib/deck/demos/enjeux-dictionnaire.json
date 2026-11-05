@@ -1,0 +1,160 @@
+{
+  "source": "Étude électorale canadienne 2025 · sondage préélectoral · cps25_imp_iss",
+  "echantillon": 300,
+  "graine": 2025,
+  "mots_cles": 396,
+  "par_categorie": [
+    {
+      "categorie": "Affaires internationales et défense",
+      "n": 40,
+      "extrait": ["trump*", "tarif*", "souverain*", "americ*", "usa"]
+    },
+    {
+      "categorie": "Économie et travail",
+      "n": 48,
+      "extrait": ["econom*", "inflation*", "cost of liv*", "living cost*", "cout de la vie"]
+    },
+    {
+      "categorie": "Loi et crime",
+      "n": 28,
+      "extrait": ["crim*", "drug*", "drogue*", "fentanyl", "police"]
+    },
+    {
+      "categorie": "Gouvernements et gouvernance",
+      "n": 53,
+      "extrait": ["govern*", "gouvern*", "corrupt*", "transparen*", "accountab*"]
+    },
+    {
+      "categorie": "Santé et politiques sociales",
+      "n": 51,
+      "extrait": ["health*", "sante", "hospital*", "hopita*", "doctor*"]
+    },
+    {
+      "categorie": "Terres publiques et agriculture",
+      "n": 25,
+      "extrait": ["agricult*", "farm*", "fermier*", "dairy", "laitier*"]
+    },
+    {
+      "categorie": "Environnement et énergie",
+      "n": 26,
+      "extrait": ["environ*", "climat*", "carbon*", "pollut*", "emission*"]
+    },
+    {
+      "categorie": "Technologie",
+      "n": 23,
+      "extrait": ["technolog*", "tech", "internet", "digital*", "numerique*"]
+    },
+    {
+      "categorie": "Immigration",
+      "n": 20,
+      "extrait": ["immigr*", "migra*", "refugee*", "refugi*", "asylum"]
+    },
+    {
+      "categorie": "Droits, libertés, minorités et discrimination",
+      "n": 41,
+      "extrait": ["right", "rights", "droit", "droits", "freedom*"]
+    },
+    {
+      "categorie": "Culture et nationalisme",
+      "n": 26,
+      "extrait": ["cultur*", "multicultur*", "nationalis*", "patriot*", "identit*"]
+    },
+    {
+      "categorie": "Éducation",
+      "n": 15,
+      "extrait": ["educat*", "school*", "ecole*", "universit*", "college*"]
+    }
+  ],
+  "lignes": [
+    {
+      "id": "327",
+      "langue": "EN",
+      "texte": "Imagration taking our jobs is a issue",
+      "jetons": ["imagration", "taking", "our", "jobs", "is", "a", "issue"],
+      "touche": [
+        null,
+        null,
+        null,
+        {
+          "motif": "job*",
+          "categorie": "Économie et travail"
+        },
+        null,
+        null,
+        null
+      ],
+      "trouves": [
+        {
+          "mot": "jobs",
+          "motif": "job*",
+          "categorie": "Économie et travail"
+        }
+      ],
+      "cats": ["Économie et travail"],
+      "statut": "classée",
+      "valeur": "Économie et travail"
+    },
+    {
+      "id": "9388",
+      "langue": "FR-CA",
+      "texte": "Droits des femmes, économie",
+      "jetons": ["droits", "des", "femmes", "economie"],
+      "touche": [
+        {
+          "motif": "droits",
+          "categorie": "Droits, libertés, minorités et discrimination"
+        },
+        null,
+        {
+          "motif": "femme*",
+          "categorie": "Droits, libertés, minorités et discrimination"
+        },
+        {
+          "motif": "econom*",
+          "categorie": "Économie et travail"
+        }
+      ],
+      "trouves": [
+        {
+          "mot": "droits",
+          "motif": "droits",
+          "categorie": "Droits, libertés, minorités et discrimination"
+        },
+        {
+          "mot": "femmes",
+          "motif": "femme*",
+          "categorie": "Droits, libertés, minorités et discrimination"
+        },
+        {
+          "mot": "economie",
+          "motif": "econom*",
+          "categorie": "Économie et travail"
+        }
+      ],
+      "cats": ["Droits, libertés, minorités et discrimination", "Économie et travail"],
+      "statut": "ambiguë",
+      "valeur": null
+    },
+    {
+      "id": "17567",
+      "langue": "EN",
+      "texte": "Tarriffs",
+      "jetons": "tarriffs",
+      "touche": [
+        null
+      ],
+      "trouves": [],
+      "cats": [],
+      "statut": "aucun mot",
+      "valeur": null
+    }
+  ],
+  "bilan": {
+    "classees": 231,
+    "ambigues": 46,
+    "aucun": 23,
+    "p_classees": 77,
+    "p_ambigues": 15,
+    "p_aucun": 8
+  }
+}
