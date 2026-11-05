@@ -1,7 +1,7 @@
 <script>
   /**
    * Mesurer, ça veut dire quoi ? Trois instruments que tout le monde
-   * connaît : une règle, une balance, un thermomètre. Chacun prend une chose
+   * connaît : une règle, un pèse-personne, un thermomètre. Chacun prend une chose
    * (une longueur, un poids, une température) et rend un nombre. Au clic :
    *
    *   0  les trois instruments et la chose qu'ils mesurent;
@@ -45,17 +45,16 @@
             <line x1="20" y1="28" x2="20" y2="60" class="m9in-mes" class:vu={e >= 1} />
             <line x1="160" y1="28" x2="160" y2="60" class="m9in-mes" class:vu={e >= 1} />
           {:else if i === 1}
-            <!-- la balance : un plateau, un cadran, une aiguille -->
-            <rect x="60" y="100" width="120" height="14" class="m9in-tr" />
-            <rect x="80" y="54" width="80" height="46" class="m9in-tr" />
-            <path d="M 95 54 A 25 25 0 0 1 145 54" class="m9in-cadran" />
-            {#each [-60, -30, 0, 30, 60] as a}
-              <line x1={120 + 22 * Math.sin((a * Math.PI) / 180)} y1={54 - 22 * Math.cos((a * Math.PI) / 180)} x2={120 + 26 * Math.sin((a * Math.PI) / 180)} y2={54 - 26 * Math.cos((a * Math.PI) / 180)} class="m9in-tick" />
+            <!-- le pèse-personne, vu de haut : un cadran, deux pieds -->
+            <rect x="62" y="6" width="116" height="138" rx="20" class="m9in-tr" />
+            <rect x="86" y="16" width="68" height="38" rx="6" class="m9in-fen" />
+            {#each [-50, -25, 0, 25, 50] as a}
+              <line x1={120 + 22 * Math.sin((a * Math.PI) / 180)} y1={50 - 22 * Math.cos((a * Math.PI) / 180)} x2={120 + 28 * Math.sin((a * Math.PI) / 180)} y2={50 - 28 * Math.cos((a * Math.PI) / 180)} class="m9in-tick" />
             {/each}
-            <line x1="120" y1="54" x2={120 + 20 * Math.sin((38 * Math.PI) / 180)} y2={54 - 20 * Math.cos((38 * Math.PI) / 180)} class="m9in-aig" class:vu={e >= 1} />
-            <circle cx="120" cy="54" r="3" class="m9in-objet" />
-            <ellipse cx="120" cy="40" rx="28" ry="7" class="m9in-objet" />
-            <rect x="110" y="18" width="20" height="22" rx="3" class="m9in-objet" />
+            <line x1="120" y1="50" x2={120 + 24 * Math.sin((-50 * Math.PI) / 180)} y2={50 - 24 * Math.cos((-50 * Math.PI) / 180)} class="m9in-repos" class:cache={e >= 1} />
+            <line x1="120" y1="50" x2={120 + 24 * Math.sin((22 * Math.PI) / 180)} y2={50 - 24 * Math.cos((22 * Math.PI) / 180)} class="m9in-aig" class:vu={e >= 1} />
+            <ellipse cx="100" cy="102" rx="13" ry="25" class="m9in-objet" />
+            <ellipse cx="140" cy="102" rx="13" ry="25" class="m9in-objet" />
           {:else}
             <!-- le thermomètre : un tube, une colonne, une boule -->
             <rect x="108" y="14" width="24" height="96" rx="12" class="m9in-tr" />
@@ -86,7 +85,9 @@
   .m9in-gauche { text-anchor: start; }
   .m9in-tr { fill: var(--dk-fond-2); stroke: var(--dk-encre); stroke-width: 3; }
   .m9in-tick { stroke: var(--dk-encre); stroke-width: 2; }
-  .m9in-cadran { fill: none; stroke: var(--dk-encre); stroke-width: 3; }
+  .m9in-fen { fill: #fff; stroke: var(--dk-encre); stroke-width: 3; }
+  .m9in-repos { stroke: var(--dk-gris); stroke-width: 3; stroke-linecap: round; transition: opacity 0.3s; }
+  .m9in-repos.cache { opacity: 0; }
   .m9in-objet { fill: var(--dk-encre); }
   .m9in-boule { fill: var(--dk-accent); stroke: var(--dk-encre); stroke-width: 3; }
   .m9in-mes { stroke: var(--dk-accent); stroke-width: 4; opacity: 0; transition: opacity 0.4s; }
