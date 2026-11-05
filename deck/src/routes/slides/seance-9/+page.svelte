@@ -58,9 +58,32 @@
   import Biais from '$lib/deck/demos/Biais.svelte';
   import Anatomie from '$lib/deck/demos/Anatomie.svelte';
   import Donnees from '$lib/deck/demos/Donnees.svelte';
+  import Cite from '$lib/deck/Cite.svelte';
+  import Frise from '$lib/deck/demos/Frise.svelte';
+  import Arbre from '$lib/deck/demos/Arbre.svelte';
+  import Corpus from '$lib/deck/demos/Corpus.svelte';
+  import Poids from '$lib/deck/demos/Poids.svelte';
+  import Api from '$lib/deck/demos/Api.svelte';
+  import Centre from '$lib/deck/demos/Centre.svelte';
+  import Contexte from '$lib/deck/demos/Contexte.svelte';
+  import Fiches from '$lib/deck/demos/Fiches.svelte';
+  import Temperature from '$lib/deck/demos/Temperature.svelte';
+  import Minuterie from '$lib/deck/demos/Minuterie.svelte';
+  import MurAvis from '$lib/deck/demos/MurAvis.svelte';
+  import Dictionnaire from '$lib/deck/demos/Dictionnaire.svelte';
+  import Classifieur from '$lib/deck/demos/Classifieur.svelte';
+  import Extractions from '$lib/deck/demos/Extractions.svelte';
+  import Modeles from '$lib/deck/demos/Modeles.svelte';
+  import Prix from '$lib/deck/demos/Prix.svelte';
+  import Arena from '$lib/deck/demos/Arena.svelte';
+  import Echantillon from '$lib/deck/demos/Echantillon.svelte';
+  import Mesures from '$lib/deck/demos/Mesures.svelte';
+  import { REFERENCES, ORDRE_BIBLIO } from '$lib/data/references.js';
+  import { CREDITS_IMAGES } from '$lib/data/credits-images.js';
+  import { FOURNISSEUR, FOURNISSEUR_SECOURS } from '$lib/data/config.js';
   import { ATELIER, FA1, FA2, HIST, REG, SATURATIONS, SCRIPT } from '$lib/data/seance9.js';
 
-  const TOTAL = 53;
+  const TOTAL = 84;
   const D = 'POL-2000 · séance 9 · jeu 5 nov';
   const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
   const f = (v, k = 2) => v.toFixed(k).replace('.', ',');
@@ -85,6 +108,50 @@
   // Le plan du code : des commentaires d'abord (comme à la séance 8).
   const PLAN = "# 1. Charger ces2025.rds, créer df_clean\n# 2. Regarder une institution\n# 3. Les dix institutions, de 1-4 à 1-0 ; ne sait pas devient NA\n# 4. Vérifier le sens\n# 5. Installer sondr, une seule fois\n# 6. L'analyse factorielle : les dix\n# 7. Sans celle qui détonne\n# 8. L'échelle : la moyenne\n# 9. L'appliquer : lm(confiance ~ scolarité)\n# 10. Sauvegarder df_clean";
   const [SCRIPT_A, SCRIPT_B, SCRIPT_C] = (() => { const i = SCRIPT.indexOf('# 4.'), j = SCRIPT.indexOf('# 7.'); return [SCRIPT.slice(0, i).trimEnd(), SCRIPT.slice(i, j).trimEnd(), SCRIPT.slice(j)]; })();
+
+  // Les trois blocs de code de la partie IA, repris tels quels du deck EIOM 2026.
+  const c_capitale = `library(ellmer)
+
+chat <- chat_openrouter(
+  model = "google/gemini-3.5-flash-lite",
+  echo  = "none"
+)
+
+chat$chat("Quelle est la capitale de la France ?")
+#> La capitale de la France est **Paris**.`;
+
+  const c_boucle = `library(ellmer)
+library(jsonlite)
+
+pays      <- c("France", "Japon", "Bresil")
+capitales <- character(length(pays))
+
+for (i in seq_along(pays)) {
+  prompt <- paste0(
+    "Quelle est la capitale de ", pays[i], " ? ",
+    'Reponds uniquement par {"capitale": "..."}'
+  )
+  chat <- chat_openrouter(model = "google/gemini-3.5-flash-lite", echo = "none")
+  reponse <- chat$chat(prompt)
+  capitales[i] <- fromJSON(reponse)$capitale
+}
+
+data.frame(pays, capitales)
+#>     pays capitales
+#> 1 France     Paris
+#> 2  Japon     Tokyo
+#> 3 Bresil  Brasilia`;
+
+  const c_renviron = `# Dans la console R
+usethis::edit_r_environ()
+
+# Le fichier s'ouvre. On y ajoute UNE des deux lignes:
+GEMINI_API_KEY=votre_cle_ici
+# OU
+OPENROUTER_API_KEY=votre_cle_ici
+
+# Puis: Session > Restart R
+# Sans redemarrage, R ne verra rien.`;
 
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
   const avec = (cle, notes = []) => ATELIER[cle].map((l, i) => ({ ...l, note: notes[i] || '' }));
@@ -340,12 +407,83 @@
       </ol>
     </Slide>
 
-    <!-- ================= CE QU'EST UN MODÈLE DE LANGUE ================= -->
+    <!-- ================= CE QU'EST UN MODÈLE DE LANGUE =================
+         Diapositives 6 à 45 du deck EIOM 2026 « L'IA en recherche », reprises
+         telles quelles. Seuls le bandeau de droite et deux renvois à la semaine
+         de l'École d'été ont changé. -->
 
-    <Slide fond="encre" bandeau="Ce qu’est un modèle de langue" droite={D}>
-      <h1 class="e">Ce qu’est un modèle de langue</h1>
+    <Slide fond="encre" bandeau="Définir l’IA" droite={D}>
+      <h1 class="e">Qu’est-ce que l’IA ?</h1>
       <hr class="filet" />
-      <p class="lead e">ChatGPT, Claude, Gemini, Copilot : une seule mécanique.</p>
+    </Slide>
+
+    <Slide bandeau="Définir l’IA" droite={D}>
+      <h2 class="e">Il y a plusieurs définitions de l’IA</h2>
+      <hr class="filet" />
+      <ul class="defs e">
+        <li class="retenue">
+          <span class="lettre">A</span>
+          <span class="q">Est-ce que le système peut décider et agir ? <Cite k="russell2020" /></span>
+        </li>
+        <li>
+          <span class="lettre">B</span>
+          <span class="q">Est-ce que le système peut passer pour un humain ? <Cite k="turing1950" /></span>
+        </li>
+        <li>
+          <span class="lettre">C</span>
+          <span class="q">Est-ce que le système décide par la logique ? <Cite k="jordan2015" /></span>
+        </li>
+      </ul>
+      <p class="e">
+        Aucun consensus : beaucoup plus de définitions recensées.
+        <Cite k="legg2007" /> <Cite k="wang2019" />
+      </p>
+    </Slide>
+
+    <Slide fond="encre" bandeau="Définir l’IA" droite={D}>
+      <h2 class="e">Les grands modèles de langue répondent aux trois</h2>
+      <hr class="filet" />
+      <ul class="defs e">
+        <li class="retenue">
+          <span class="lettre">A</span>
+          <span class="q">Ils décident et agissent</span>
+        </li>
+        <li class="retenue">
+          <span class="lettre">B</span>
+          <span class="q">Ils passent pour des humains <Cite k="jones2025" /></span>
+        </li>
+        <li class="retenue">
+          <span class="lettre">C</span>
+          <span class="q">Ils prédisent le prochain jeton par la statistique</span>
+        </li>
+      </ul>
+    </Slide>
+
+    <Slide bandeau="Une histoire de l’IA" droite={D}>
+      <h2 class="e">Histoire de l’IA</h2>
+      <Frise />
+    </Slide>
+
+    <Slide bandeau="Situer les familles" droite={D}>
+      <h2 class="e">Arbre généalogique de l’IA</h2>
+      <Arbre />
+      <p class="e credits">
+        Schéma original, inspiré de l’arbre évolutif des LLM de <Cite k="yang2023" />.
+      </p>
+    </Slide>
+
+    <Slide fond="encre" bandeau="Les modèles de langage" droite={D}>
+      <h1 class="e">Comment fonctionne<br />un modèle de langage</h1>
+      <hr class="filet" />
+    </Slide>
+
+    <Slide bandeau="Les données d’entraînement" droite={D}>
+      <h2 class="e">Les données d’entraînement</h2>
+      <Corpus />
+      <p class="e credits">
+        Parts et époques : corpus d’entraînement de LLaMA, tableau 1 <Cite k="touvron2023" />.
+        Sites les plus représentés de C4 <Cite k="dodge2021" />.
+      </p>
     </Slide>
 
     <Slide bandeau="Mécanique" droite={D}>
@@ -357,71 +495,266 @@
       <h2 class="e">Le modèle ne voit pas des mots</h2>
       <p class="e">La phrase qu’il vient d’écrire, telle qu’il l’a vue :</p>
       <Tokeniseur />
-      <p class="e credits">Le surcoût vaut pour toutes les langues éloignées de l’anglais, et la qualité y baisse aussi (Ahia et al., 2023).</p>
+      <p class="e credits">
+        Le surcoût vaut pour toutes les langues éloignées de l’anglais, et la qualité y baisse
+        aussi <Cite k="ahia2023" />.
+      </p>
     </Slide>
 
-    <Slide bandeau="Ce qu’un modèle n’est pas" droite={D}>
+    <Slide bandeau="Ce qu’un LLM n’est pas" droite={D}>
       <h2 class="e">Ce n’est pas une base de connaissances</h2>
       <Connaissances />
       <Citation source="Le principe à retenir">
-        Une référence bibliographique produite par un modèle est une <em>hypothèse de référence</em> jusqu’à ce que vous l’ayez vérifiée dans un catalogue.
+        Une référence bibliographique produite par un modèle est une <em>hypothèse de référence</em>
+        jusqu’à ce que vous l’ayez vérifiée dans un catalogue.
       </Citation>
     </Slide>
 
-    <Slide bandeau="L’hallucination" droite={D}>
+    <Slide bandeau="Poids ouverts" droite={D}>
+      <h2 class="e">Un poids, c’est la force d’un lien</h2>
+      <Poids />
+      <p class="e credits">
+        Poids réels de <code>q_proj</code>, couche 0, lus dans le fichier <code>model.safetensors</code>
+        de Qwen2.5-0.5B. Modèle ouvert : on peut le télécharger et tout lister.
+      </p>
+    </Slide>
+
+    <Slide bandeau="Reformulation" droite={D}>
       <h2 class="e">L’hallucination n’est pas un bug</h2>
       <Hallucination />
-      <p class="e credits">C’est la mécanique normale. D’où la règle : vérifier, toujours.</p>
+      <p class="e credits">
+        Sortie contrainte · vérification externe · validation sur vérité terrain : les trois parades.
+      </p>
     </Slide>
 
-    <Slide bandeau="Les biais" droite={D}>
+    <Slide fond="encre" bandeau="Les biais" droite={D}>
+      <h1 class="e">Les biais</h1>
+      <hr class="filet" />
+    </Slide>
+
+    <Slide bandeau="Trois entrées, une seule chaîne" droite={D}>
       <h2 class="e">Le biais entre à trois endroits</h2>
       <Biais />
-      <p class="e credits">Composition du corpus d’entraînement de LLaMA (Touvron et al., 2023).</p>
+      <p class="e credits">
+        Composition du corpus d’entraînement de LLaMA <Cite k="touvron2023" />.
+      </p>
     </Slide>
 
-    <Slide bandeau="S’en servir · la formule" droite={D}>
-      <h2 class="e">Rôle → Tâche → Contraintes → Format</h2>
-      <Anatomie />
+    <Slide fond="encre" bandeau="Deuxième temps" droite={D}>
+      <h1 class="e">Pourquoi ne pas utiliser le chat classique<br />mais l’API ?</h1>
+      <hr class="filet" />
     </Slide>
 
-    <Slide bandeau="S’en servir · avant, après" droite={D}>
-      <h2 class="e">Le même besoin, deux prompts</h2>
-      <div class="compare-p e">
-        <div class="p faible">
-          <span class="et">FAIBLE</span>
-          <p class="txt">Mon code marche pas, corrige-le.</p>
-          <p class="pourquoi">Aucun contexte, aucune limite. Il réécrit tout, et vous ne savez plus ce qui a changé.</p>
-        </div>
-        <div class="p solide">
-          <span class="et">SOLIDE</span>
-          <p class="txt">
-            Je suis étudiant.e en science politique et je débute en R, dans Positron. Voici mon code et le message d’erreur. Explique-moi la cause de l’erreur en une phrase, puis propose la correction en changeant le moins de lignes possible. Ne réécris pas le reste.
-          </p>
-          <p class="pourquoi">Rôle, tâche, contraintes, format. Les quatre y sont. Et vous restez l’auteur.e du code.</p>
+    <Slide bandeau="Situer la chose" droite={D}>
+      <h2 class="e">Un API, c’est une adresse à qui on écrit</h2>
+      <Api />
+      <p class="e">
+        Le modèle ne s’installe pas sur votre poste. Votre script lui envoie du texte&nbsp;; il en
+        renvoie. Un API, c’est ce point d’entrée&nbsp;: une adresse à qui on écrit, et qui répond.
+      </p>
+    </Slide>
+
+    <Slide bandeau="Où c’est, physiquement" droite={D}>
+      <h2 class="e">Les LLMs sont tangibles</h2>
+      <Centre />
+      <p class="e credits">
+        Colossus, à Memphis : nombre de GPU <Cite k="nvidia2024" />, turbines
+        <Cite k="techcrunch2025" />. Équivalent en foyers calculé d’après la fiche technique du
+        H100 SXM et la consommation résidentielle moyenne d’Hydro-Québec. Eau <Cite k="li2023" />.
+      </p>
+    </Slide>
+
+    <Slide bandeau="Le contexte" droite={D}>
+      <h2 class="e">Chat vs API</h2>
+      <Contexte />
+    </Slide>
+
+    <Slide bandeau="La fiche de méthode" droite={D}>
+      <h2 class="e">Ce que l’API rend possible</h2>
+      <Fiches />
+    </Slide>
+
+    <Slide bandeau="Le paramètre qui compte" droite={D}>
+      <h2 class="e">La température</h2>
+      <Temperature />
+    </Slide>
+
+    <Slide fond="encre" bandeau="Pause" droite={D}>
+      <h1 class="e">Pause</h1>
+      <hr class="filet" />
+      <Minuterie minutes={15} />
+      <p class="lead e">Pendant la pause, allez chercher votre clé.</p>
+      <ul class="cmd-liste e">
+        <li>aistudio.google.com/apikey<span class="lieu">un compte Google suffit · aucune carte de crédit</span></li>
+      </ul>
+    </Slide>
+
+    <Slide fond="encre" bandeau="Troisième temps" droite={D}>
+      <h1 class="e">Premier appel,<br />sur de vraies données</h1>
+      <hr class="filet" />
+      <p class="lead e">De la réponse en texte libre à la variable exploitable.</p>
+    </Slide>
+
+    <Slide bandeau="Le corpus" droite={D}>
+      <h2 class="e">La Ligne Rouge</h2>
+      <MurAvis />
+    </Slide>
+
+    <Slide bandeau="L’ancienne façon" droite={D}>
+      <h2 class="e">Avant : Utilisation de dictionnaires</h2>
+      <Dictionnaire />
+    </Slide>
+
+    <Slide bandeau="La nouvelle façon" droite={D}>
+      <h2 class="e">Maintenant : Utilisation de LLMs</h2>
+      <Classifieur />
+    </Slide>
+
+    <Slide bandeau="La même donnée, d’autres questions" droite={D}>
+      <h2 class="e">On ne change pas la donnée, on change la consigne</h2>
+      <Extractions />
+      <p class="e credits">
+        Six appels réels à <code>gemini-3.5-flash-lite</code>, température 0, sortie JSON imposée.
+      </p>
+    </Slide>
+
+    <Slide bandeau="Outillage" droite={D}>
+      <div class="ell e">
+        <figure class="ell-logo">
+          <img src="{base}/img/ellmer.png" alt="Logo du package R ellmer" />
+        </figure>
+        <div class="ell-txt">
+          <h2 class="e">ellmer</h2>
+          <p class="ell-sous">Un package R pour parler aux modèles de langage.</p>
+          <ul class="ell-pts">
+            <li><strong>Vingt-trois fournisseurs</strong>, une seule syntaxe</li>
+            <li>Changer de modèle tient sur une ligne</li>
+            <li>Maintenu par l’équipe de tidyverse</li>
+          </ul>
+          <p class="ell-cmd">install.packages("ellmer")</p>
         </div>
       </div>
+      <Code
+        petit
+        src={`chat_openrouter(model = "${FOURNISSEUR_SECOURS.modele}")
+chat_google_gemini(model = "${FOURNISSEUR.modele}")
+chat_openai(model  = "gpt-4o-mini")
+chat_anthropic(model = "claude-sonnet-5")
+chat_ollama(model = "gemma3")     # sur VOTRE machine`}
+      />
     </Slide>
 
-    <Slide bandeau="S’en servir · un conseil qui surprend" droite={D}>
-      <h2 class="e">Demandez à l’IA d’écrire le prompt</h2>
-      <Deux ratio="1fr 1fr">
-        <Carte ton="ciel" titre="Ce que vous écrivez">
-          <p>« Je veux comprendre ce que fait chaque ligne d’un script R que je n’ai pas écrit. Écris-moi le prompt qui te fera l’expliquer ligne par ligne, sans le modifier. »</p>
-        </Carte>
-        <Carte ton="vert" titre="Ce que vous obtenez">
-          <p>Un prompt mieux structuré que le vôtre, en quelques secondes. Vous le lisez, vous le corrigez, vous le gardez.</p>
+    <Slide bandeau="Le plus petit appel possible" droite={D}>
+      <h2 class="e">Poser une question, obtenir du texte</h2>
+      <Code src={c_capitale} />
+    </Slide>
+
+    <Slide d={0.86} bandeau="La boucle" droite={D}>
+      <h2 class="e">Le même geste, sur un vecteur</h2>
+      <Code src={c_boucle} />
+    </Slide>
+
+    <Slide bandeau="Le catalogue" droite={D}>
+      <h2 class="e">Comment choisir son modèle ?</h2>
+      <Modeles />
+      <p class="e credits">Catalogue OpenRouter relevé le 24 août 2026.</p>
+    </Slide>
+
+    <Slide bandeau="Le prix, en vrai" droite={D}>
+      <h2 class="e">Comment interpréter le coût</h2>
+      <Prix />
+      <p class="e credits">
+        Tarifs relevés sur anthropic.com/pricing le 24 août 2026. Jetons comptés sur les 551 avis
+        réels du corpus; les prix d’Anthropic s’appliquent à leur propre tokeniseur, l’ordre de
+        grandeur tient.
+      </p>
+    </Slide>
+
+    <Slide bandeau="Un classement par duels" droite={D}>
+      <h2 class="e">LM Arena</h2>
+      <Arena />
+      <p class="e credits">
+        Méthode et volume de votes <Cite k="chiang2024" />.
+      </p>
+    </Slide>
+
+    <Slide bandeau="Sécurité" droite={D}>
+      <h2 class="e">La clé se dépose dans .Renviron</h2>
+      <Code src={c_renviron} />
+      <Deux>
+        <Carte ton="rose" titre="Jamais">
+          <p>Jamais dans un script. Jamais dans un dépôt Git. Jamais dans une capture d’écran de diapositive.</p>
         </Carte>
       </Deux>
     </Slide>
 
-    <Slide bandeau="S’en servir · confidentialité" droite={D}>
-      <h2 class="e">Ce qui sort de chez vous</h2>
-      <Donnees />
-      <p class="e credits">Règles relevées dans la documentation d’OpenAI le 24 août 2026. Vos données de la CES sont publiques. Votre travail, lui, ne l’est pas.</p>
+    <Slide bandeau="La marche à suivre" droite={D}>
+      <h2 class="e">D’abord un échantillon, ensuite tout le corpus</h2>
+      <Echantillon />
     </Slide>
 
-    <Slide bandeau="S’en servir · la règle du cours" droite={D}>
+    <Slide fond="encre" bandeau="Quatrième temps" droite={D}>
+      <h1 class="e">Concevoir un prompt</h1>
+      <hr class="filet" />
+    </Slide>
+
+    <Slide bandeau="La formule" droite={D}>
+      <h2 class="e">Rôle → Tâche → Contraintes → Format</h2>
+      <Anatomie />
+    </Slide>
+
+    <Slide bandeau="Avant / après" droite={D}>
+      <h2 class="e">Le même besoin, deux prompts</h2>
+      <div class="compare-p e">
+        <div class="p faible">
+          <span class="et">FAIBLE</span>
+          <p class="txt">Analyse ce texte et dis-moi ce que tu en penses.</p>
+          <p class="pourquoi">Aucun critère, aucun format. La sortie change à chaque appel.</p>
+        </div>
+        <div class="p solide">
+          <span class="et">SOLIDE</span>
+          <p class="txt">
+            Tu codes des avis de restaurant pour une recherche en sciences sociales. Attribue la note
+            en étoiles que l’auteur a le plus vraisemblablement laissée. Fonde-toi sur le jugement
+            global, pas sur le nombre de mots positifs. Réponds selon le schéma fourni.
+          </p>
+          <p class="pourquoi">Rôle, tâche, critère de décision, format. Les quatre y sont.</p>
+        </div>
+      </div>
+    </Slide>
+
+    <Slide bandeau="Un conseil qui surprend" droite={D}>
+      <h2 class="e">Demandez à l’IA d’écrire le prompt</h2>
+      <Deux ratio="1fr 1fr">
+        <Carte ton="ciel" titre="Ce que vous écrivez">
+          <p>
+            « Je veux classer des avis de restaurant sur une échelle de −1 à +1. Écris-moi le prompt
+            système qui fera ça, avec un format de sortie strict. »
+          </p>
+        </Carte>
+        <Carte ton="vert" titre="Ce que vous obtenez">
+          <p>
+            Un prompt mieux structuré que le vôtre, en quelques secondes. Vous le lisez, vous le
+            corrigez, vous le gardez dans votre script.
+          </p>
+        </Carte>
+      </Deux>
+    </Slide>
+
+    <Slide bandeau="Mesurer" droite={D}>
+      <h2 class="e">La précision du modèle n’est pas toujours la bonne mesure</h2>
+      <Mesures />
+    </Slide>
+
+    <Slide bandeau="Confidentialité" droite={D}>
+      <h2 class="e">Confidentialité des données</h2>
+      <Donnees />
+      <p class="e credits">
+        Règles de l’API relevées dans la documentation d’OpenAI le 24 août 2026.
+      </p>
+    </Slide>
+
+    <Slide bandeau="La règle du cours" droite={D}>
       <h2 class="e">La règle du cours</h2>
       <M9Regle />
     </Slide>
@@ -483,6 +816,26 @@
       <div class="plan">
         <Code src={SCRIPT_C} titre="seance9.R" />
       </div>
+    </Slide>
+
+    <Slide bandeau="Annexe · sources" droite={D}>
+      <h2 class="e">Sources de la partie IA</h2>
+      <hr class="filet" />
+      <div class="biblio-boite e">
+        <ul class="biblio">
+        {#each ORDRE_BIBLIO as k}
+          <li>
+            <span class="b-auteurs">{REFERENCES[k].auteurs}</span>,
+            <span class="b-titre">{REFERENCES[k].titre}</span>.
+            <span class="b-detail">{REFERENCES[k].detail}</span>
+          </li>
+        {/each}
+        </ul>
+      </div>
+      <p class="e credits">
+        Images d’archives, Wikimedia Commons :
+        {#each Object.values(CREDITS_IMAGES) as c, i}{i > 0 ? ' · ' : ''}{c.auteur} ({c.licence}){/each}
+      </p>
     </Slide>
 
   {/snippet}

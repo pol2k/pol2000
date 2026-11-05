@@ -1,0 +1,92 @@
+{
+  "source": "ligne_rouge_cleaned.rds · 551 avis Google · La Ligne Rouge, Montréal",
+  "dictionnaire": "Lexicoder Sentiment Dictionary 2015",
+  "entrees": {
+    "positive": 1709,
+    "negative": 2858
+  },
+  "part_jokers": 71,
+  "mesure": "quanteda 4.x · tokens(remove_punct = TRUE) · tokens_lookup",
+  "lignes": [
+    {
+      "id": "7",
+      "note": 5,
+      "langue": "fr",
+      "texte": "Très bon la poutine viande!",
+      "jetons": [
+        "Très",
+        "bon",
+        "la",
+        "poutine",
+        "viande"
+      ],
+      "trouves": {
+        "poutine": {
+          "p": "neg",
+          "via": "pout*"
+        }
+      },
+      "pos": 0,
+      "neg": 1,
+      "score": -1.0
+    },
+    {
+      "id": "442",
+      "note": 2,
+      "langue": "en",
+      "texte": "The poutine is awful....thanks god it was a small portion.",
+      "jetons": [
+        "The",
+        "poutine",
+        "is",
+        "awful",
+        "thanks",
+        "god",
+        "it",
+        "was",
+        "a",
+        "small",
+        "portion"
+      ],
+      "trouves": {
+        "poutine": {
+          "p": "neg",
+          "via": "pout*"
+        },
+        "awful": {
+          "p": "neg",
+          "via": "awful*"
+        },
+        "thanks": {
+          "p": "pos",
+          "via": "thanks"
+        }
+      },
+      "pos": 1,
+      "neg": 2,
+      "score": -0.33
+    },
+    {
+      "id": "259",
+      "note": 3,
+      "langue": "fr",
+      "texte": "Bonne nourriture. Mais le staff n'est pas toujours accueillant.",
+      "jetons": [
+        "Bonne",
+        "nourriture",
+        "Mais",
+        "le",
+        "staff",
+        "n'est",
+        "pas",
+        "toujours",
+        "accueillant"
+      ],
+      "trouves": {},
+      "pos": 0,
+      "neg": 0,
+      "score": null
+    }
+  ],
+  "note_poutine": "Aucune entrée « poutine » dans LSD2015. Le joker « pout* », posé pour le verbe anglais to pout (bouder), l'attrape."
+}

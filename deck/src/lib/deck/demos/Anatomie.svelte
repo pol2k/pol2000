@@ -8,10 +8,19 @@
    * à quoi ressemble le résultat.
    */
   const PARTIES = [
-    { n: 'RÔLE', t: 'Tu aides un.e étudiant.e de premier cycle qui débute en R, dans Positron.' },
-    { n: 'TÂCHE', t: 'Voici mon code et le message d’erreur. Explique la cause, puis corrige.' },
-    { n: 'CONTRAINTES', t: 'Change le moins de lignes possible. Ne réécris pas le reste.' },
-    { n: 'FORMAT', t: 'La cause en une phrase, puis le code corrigé, seul.' }
+    {
+      n: 'RÔLE',
+      t: 'Tu codes des avis de restaurant pour une recherche en sciences sociales.'
+    },
+    {
+      n: 'TÂCHE',
+      t: "Attribue la note en étoiles que l'auteur a le plus vraisemblablement laissée."
+    },
+    {
+      n: 'CONTRAINTES',
+      t: 'Fonde-toi sur le jugement global, pas sur le nombre de mots positifs.'
+    },
+    { n: 'FORMAT', t: 'Réponds selon le schéma fourni.' }
   ];
 </script>
 

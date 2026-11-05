@@ -1,0 +1,36 @@
+{
+  "source": "anthropic.com/pricing, relevé le 24 août 2026",
+  "corpus": {
+    "avis": 551,
+    "jetons_avis": 17235,
+    "jetons_consigne_total": 25346,
+    "entree": 42581,
+    "sortie": 6612
+  },
+  "modeles": [
+    {
+      "nom": "Haiku 4.5",
+      "e": 1,
+      "s": 5,
+      "cout": 0.076
+    },
+    {
+      "nom": "Sonnet 5",
+      "e": 2,
+      "s": 10,
+      "cout": 0.151
+    },
+    {
+      "nom": "Opus 5",
+      "e": 5,
+      "s": 25,
+      "cout": 0.378
+    },
+    {
+      "nom": "Fable 5",
+      "e": 10,
+      "s": 50,
+      "cout": 0.756
+    }
+  ]
+}

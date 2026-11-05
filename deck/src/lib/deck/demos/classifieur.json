@@ -1,0 +1,32 @@
+{
+  "source": "ligne_rouge_cleaned.rds · 551 avis Google · La Ligne Rouge, Montréal",
+  "fichier": "ligne_rouge_cleaned.rds",
+  "total": 551,
+  "colonnes": [
+    "ligne",
+    "review_text",
+    "review_rating"
+  ],
+  "lignes": [
+    {
+      "id": "7",
+      "texte": "Très bon la poutine viande!",
+      "note": 5,
+      "score": 0.85
+    },
+    {
+      "id": "442",
+      "texte": "The poutine is awful....thanks god it was a small portion.",
+      "note": 2,
+      "score": -0.85
+    },
+    {
+      "id": "259",
+      "texte": "Bonne nourriture. Mais le staff n'est pas toujours accueillant.",
+      "note": 3,
+      "score": 0.2
+    }
+  ],
+  "modele": "google/gemini-3.5-flash-lite",
+  "mesure": "appel réel, temperature 0, sortie JSON, 23 août 2026"
+}

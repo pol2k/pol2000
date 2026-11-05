@@ -100,6 +100,8 @@ ported from the instructor's EIOM 2026 deck « L'IA en recherche ». Agentic
 workflows move to the last séance (14, 10 Dec), as a short segment before
 the révision; the plan de cours AI paragraph now names séances 2, 9 and 14.
 
+Decided 5 Nov 2026 (pol-83j follow-up): the AI part of séance 9 is a faithful replication of slides 6 to 45 of the instructor's EIOM 2026 deck « L'IA en recherche » (Qu'est-ce que l'IA ? through Confidentialité des données), with their demos, data and images copied into `deck/src/lib/deck/demos/`, `deck/src/lib/data/` and `deck/static/img/`. The earlier eight-slide summary and its R-debugging prompt examples were dropped. Only references to the EIOM week (Antoine, « plus tard cette semaine ») were removed.
+
 Decided 22 Sept 2026 (séance 4 deck): the « banque de données fournie » for
 the travail de mi-session and the travail final is the **Canadian Election
 Study 2025** (`ces::get_ces("2025")`), the same data the decks use from

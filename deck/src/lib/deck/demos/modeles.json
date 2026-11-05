@@ -1,0 +1,51 @@
+{
+  "source": "catalogue OpenRouter",
+  "releve": "24 août 2026",
+  "total": 422,
+  "fournisseurs": 60,
+  "gratuits": 18,
+  "prix_min": 0.01,
+  "prix_max": 150.0,
+  "top": [
+    {
+      "nom": "openai",
+      "n": 93
+    },
+    {
+      "nom": "qwen",
+      "n": 51
+    },
+    {
+      "nom": "google",
+      "n": 41
+    },
+    {
+      "nom": "anthropic",
+      "n": 28
+    },
+    {
+      "nom": "mistralai",
+      "n": 19
+    },
+    {
+      "nom": "z-ai",
+      "n": 15
+    },
+    {
+      "nom": "deepseek",
+      "n": 14
+    },
+    {
+      "nom": "nvidia",
+      "n": 13
+    },
+    {
+      "nom": "minimax",
+      "n": 9
+    },
+    {
+      "nom": "moonshotai",
+      "n": 8
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "source": "Touvron et al. 2023, tableau 1 — données de pré-entraînement de LLaMA",
+  "groupes": [
+    {
+      "nom": "WEB",
+      "sources": [
+        {
+          "nom": "CommonCrawl",
+          "part": 67.0,
+          "epoques": 1.1,
+          "disque": "3,3 To",
+          "quoi": "Cinq balayages du web, de 2017 à 2020",
+          "dedans": [
+            "Le web entier est multilingue; LLaMA n'en garde que les pages anglaises",
+            "Filtré par un modèle qui garde ce qui ressemble aux pages citées par Wikipédia",
+            "Déduplication ligne par ligne"
+          ],
+          "src": "Touvron et al. 2023, §2.1",
+          "court": "cinq balayages du web, 2017-2020, filtrés pour ne garder que l’anglais"
+        },
+        {
+          "nom": "C4",
+          "part": 15.0,
+          "epoques": 1.06,
+          "disque": "783 Go",
+          "quoi": "Un autre balayage du web, nettoyé par heuristiques",
+          "dedans": [
+            "Site le plus représenté : patents.google.com",
+            "Puis en.wikipedia.org, nytimes.com, latimes.com, theguardian.com",
+            "Beaucoup de brevets et de sites gouvernementaux américains"
+          ],
+          "src": "Dodge et al. 2021, figure 2",
+          "court": "en tête : patents.google.com, devant Wikipédia"
+        }
+      ],
+      "part": 82.0
+    },
+    {
+      "nom": "RÉFÉRENCE",
+      "sources": [
+        {
+          "nom": "Wikipédia",
+          "part": 4.5,
+          "epoques": 2.45,
+          "disque": "83 Go",
+          "quoi": "Les versions de juin à août 2022",
+          "dedans": [
+            "Vingt langues, alphabets latin et cyrillique seulement",
+            "bg ca cs da de en es fr hr hu it nl pl pt ro ru sl sr sv uk",
+            "Relu 2,45 fois : le plus repassé de tout le mélange"
+          ],
+          "src": "Touvron et al. 2023, §2.1",
+          "court": "vingt langues · relu 2,45 fois, le plus repassé"
+        },
+        {
+          "nom": "Livres",
+          "part": 4.5,
+          "epoques": 2.23,
+          "disque": "85 Go",
+          "quoi": "Deux corpus de livres",
+          "dedans": [
+            "Projet Gutenberg : domaine public",
+            "Books3, tiré de ThePile",
+            "Livres retirés s’ils se recouvrent à plus de 90 %"
+          ],
+          "src": "Touvron et al. 2023, §2.1",
+          "court": "Gutenberg (domaine public) et Books3"
+        }
+      ],
+      "part": 9.0
+    },
+    {
+      "nom": "CODE",
+      "sources": [
+        {
+          "nom": "GitHub",
+          "part": 4.5,
+          "epoques": 0.64,
+          "disque": "328 Go",
+          "quoi": "Du code source public",
+          "dedans": [
+            "Uniquement les licences Apache, BSD et MIT",
+            "En-têtes et passe-partout retirés",
+            "Vu 0,64 fois : le modèle n’en a même pas fait le tour"
+          ],
+          "src": "Touvron et al. 2023, §2.1",
+          "court": "licences Apache, BSD, MIT · vu 0,64 fois seulement"
+        }
+      ],
+      "part": 4.5
+    },
+    {
+      "nom": "ACADÉMIQUE",
+      "sources": [
+        {
+          "nom": "ArXiv",
+          "part": 2.5,
+          "epoques": 1.06,
+          "disque": "92 Go",
+          "quoi": "Des prépublications scientifiques",
+          "dedans": [
+            "Sources LaTeX, pas des PDF",
+            "Tout ce qui précède la première section est retiré",
+            "Bibliographies et commentaires retirés"
+          ],
+          "src": "Touvron et al. 2023, §2.1",
+          "court": "prépublications, en sources LaTeX"
+        },
+        {
+          "nom": "StackExchange",
+          "part": 2.0,
+          "epoques": 1.03,
+          "disque": "78 Go",
+          "quoi": "Questions et réponses techniques",
+          "dedans": [
+            "Les 28 plus gros sites du réseau",
+            "Réponses triées par score, la mieux notée en premier",
+            "Balises HTML retirées"
+          ],
+          "src": "Touvron et al. 2023, §2.1",
+          "court": "les 28 plus gros sites, réponses triées par score"
+        }
+      ],
+      "part": 4.5
+    }
+  ],
+  "note": "Les sous-ensembles ne sont pas dessinés à l'échelle: aucune des deux sources ne publie les proportions internes de chaque jeu."
+}

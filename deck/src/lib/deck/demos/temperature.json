@@ -1,0 +1,86 @@
+{
+  "jeton": 1,
+  "amorce": "Décris l'hiver à Québec en une phrase courte.",
+  "modele": "gpt-3.5-turbo-instruct",
+  "mesure": "distribution mesurée à temperature 0; les autres sont obtenues par p^(1/T) renormalisé",
+  "temperatures": [
+    {
+      "t": 0,
+      "usage": "Codage, mesure",
+      "candidats": [
+        {
+          "t": "L",
+          "p": 100.0
+        },
+        {
+          "t": "\n",
+          "p": 0.0
+        },
+        {
+          "t": "Un",
+          "p": 0.0
+        },
+        {
+          "t": "F",
+          "p": 0.0
+        },
+        {
+          "t": "\"",
+          "p": 0.0
+        }
+      ]
+    },
+    {
+      "t": 0.7,
+      "usage": "Rédaction",
+      "candidats": [
+        {
+          "t": "L",
+          "p": 61.4
+        },
+        {
+          "t": "\n",
+          "p": 13.9
+        },
+        {
+          "t": "Un",
+          "p": 9.7
+        },
+        {
+          "t": "F",
+          "p": 8.5
+        },
+        {
+          "t": "\"",
+          "p": 6.5
+        }
+      ]
+    },
+    {
+      "t": 1.5,
+      "usage": "Créativité",
+      "candidats": [
+        {
+          "t": "L",
+          "p": 37.4
+        },
+        {
+          "t": "\n",
+          "p": 18.7
+        },
+        {
+          "t": "Un",
+          "p": 15.8
+        },
+        {
+          "t": "F",
+          "p": 14.9
+        },
+        {
+          "t": "\"",
+          "p": 13.1
+        }
+      ]
+    }
+  ]
+}
