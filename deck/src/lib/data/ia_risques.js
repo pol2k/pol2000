@@ -131,7 +131,7 @@ export const RISQUES = [
   {
     cle: 'militaire',
     titre: 'L’IA à la guerre',
-    grand: { nombre: '164 contre 6', legende: 'ONU, armes autonomes, déc. 2025 (non contraignant)' },
+    grand: { nombre: '164 pays', legende: 'votent à l’ONU pour encadrer les armes autonomes (2025)' },
     frise: [
       { date: '2024-04', texte: 'Selon +972, « Lavender » a marqué jusqu’à 37 000 suspects à Gaza' },
       { date: '2025-02', texte: 'Google retire sa promesse de ne pas utiliser son IA pour des armes' },

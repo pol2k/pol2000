@@ -25,7 +25,7 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 1, lire: () => e, ecrire: (v) => (e = v) });
   });
   $effect(() => {
     if (!hote || typeof IntersectionObserver === 'undefined') return;
@@ -67,11 +67,6 @@
         </li>
       {/each}
     </ol>
-
-    <div class="m9r-debat" class:vu={e >= 2}>
-      <span class="m9r-etiq">L’autre côté</span>
-      <p class="m9r-phrase">{r.debat}</p>
-    </div>
 
     {#if r.sources?.length}
       <p class="credits m9r-src">Sources&#8239;: {r.sources.join(' · ')}</p>

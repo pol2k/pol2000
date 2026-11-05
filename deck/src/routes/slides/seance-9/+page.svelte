@@ -58,7 +58,6 @@
   import M9Moyenne from '$lib/deck/visuels/M9Moyenne.svelte';
   import M9Empreinte from '$lib/deck/visuels/M9Empreinte.svelte';
   import M9Activites from '$lib/deck/visuels/M9Activites.svelte';
-  import M9Risques from '$lib/deck/visuels/M9Risques.svelte';
   import M9Risque from '$lib/deck/visuels/M9Risque.svelte';
   import M9Regle from '$lib/deck/visuels/M9Regle.svelte';
   import M8Image from '$lib/deck/visuels/M8Image.svelte';
@@ -515,7 +514,13 @@ OPENROUTER_API_KEY=votre_cle_ici
     <Slide fond="encre" bandeau="Les côtés sombres de l’IA" droite={D}>
       <h1 class="e">Les côtés sombres de l’IA</h1>
       <hr class="filet" />
-      <M9Risques />
+      <ul class="cmd-liste e">
+        <li>Des livres piratés</li>
+        <li>Des livres détruits</li>
+        <li>Un risque pour l’humanité ?</li>
+        <li>L’IA sur le champ de bataille</li>
+        <li>La surveillance de masse</li>
+      </ul>
     </Slide>
 
     <Slide bandeau="Les côtés sombres de l’IA" droite={D}>
