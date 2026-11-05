@@ -1,18 +1,16 @@
 <script>
   /**
-   * L'examen d'histoire du secondaire. Vingt élèves, rangés selon leur
-   * moyenne en histoire cette année, du plus faible au plus fort. Une bonne
-   * question est réussie par les forts et ratée par les faibles. La question
-   * sur le hockey ne suit pas : elle mesure autre chose. C'est l'intuition de
-   * la fiabilité : chaque question doit aller avec chaque autre.
+   * L'examen d'histoire du secondaire, une question à la fois. Douze élèves,
+   * rangés selon leur moyenne en histoire. Une carte montre la question; les
+   * élèves qui la réussissent se remplissent et sautent. Sous chacun, une
+   * petite trace garde les questions précédentes. Au clic :
    *
-   *   0  les élèves et leur moyenne;
-   *   1  la première question se remplit, de gauche à droite;
-   *   2  les quatre suivantes : même motif;
-   *   3  Léa, forte, réussit tout;
-   *   4  Noah, faible, rate tout;
-   *   5  la question sur le hockey;
-   *   6  elle passe au rouge : Noah la réussit, Léa la rate.
+   *   0  les élèves, du plus faible au plus fort;
+   *   1  Q1 : les forts réussissent, les faibles ratent;
+   *   2  Q2 : même motif;
+   *   3  Q3 : encore;
+   *   4  la question sur le hockey : ça s'éparpille, en rouge;
+   *   5  Noah la réussit, Léa la rate.
    *
    * Réussites : un motif fixe, pas un tirage. Données fictives.
    */
@@ -22,108 +20,94 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 6, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 5, lire: () => e, ecrire: (v) => (e = v) });
   });
 
-  const MOY = [48, 52, 55, 57, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 85, 88, 91, 95];
-  const N = MOY.length;
-  const FORT = 19, FAIBLE = 2;   // Léa et Noah, rang 1 = le plus faible
-  const HOCKEY = [1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1];
+  const MOY = [48, 52, 57, 61, 64, 68, 72, 75, 79, 83, 88, 93];
+  const NOAH = 1, LEA = 10;   // indices 0 = le plus faible
   const QS = [
-    { t: 'La fondation de Québec', seuil: 6, temps: 1 },
-    { t: 'La Conquête', seuil: 8, temps: 2 },
-    { t: 'Les Patriotes', seuil: 11, temps: 2 },
-    { t: 'La Confédération', seuil: 9, temps: 2 },
-    { t: 'La Révolution tranquille', seuil: 7, temps: 2 },
-    { t: 'Les Coupes Stanley du Canadien', hockey: true, temps: 5 }
+    { t: 'La fondation de Québec', r: [0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1] },
+    { t: 'La Conquête', r: [0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1] },
+    { t: 'La Révolution tranquille', r: [0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1] },
+    { t: 'Les Coupes Stanley du Canadien', r: [1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1], hockey: true }
   ];
-  // Un petit décalage propre à l'élève et à la question : du bruit, toujours le même.
-  const bruit = (i, q) => ((i * 7 + q * 5) % 5) - 2;
-  const reussi = (i, q) => (QS[q].hockey ? HOCKEY[i - 1] === 1 : i > QS[q].seuil + bruit(i, q));
-  const score = (q) => Array.from({ length: N }, (_, k) => reussi(k + 1, q)).filter(Boolean).length;
-  const ELEVES = Array.from({ length: N }, (_, k) => k + 1);
   const NOTES = [
-    'Vingt élèves, rangés selon leur moyenne en histoire cette année.',
+    'Douze élèves, rangés selon leur moyenne en histoire.',
     'Les forts réussissent. Les faibles ratent.',
-    'Même motif, question après question.',
-    'Léa, 91 % de moyenne : réussit les cinq.',
-    'Noah, 52 % de moyenne : rate les cinq.',
-    'Et cette question-là ?',
-    'Noah la réussit, Léa la rate. Les forts ne font pas mieux que les faibles : elle mesure le hockey, pas l’histoire.'
+    'Même motif.',
+    'Encore le même motif : les questions vont ensemble.',
+    'Les forts ne font pas mieux que les faibles.',
+    'Noah la réussit, Léa la rate : elle mesure le hockey, pas l’histoire.'
   ];
-  const rouge = $derived(e >= 6);
+  const q = $derived(e >= 1 ? Math.min(e, 4) - 1 : -1);
+  const Q = $derived(q >= 0 ? QS[q] : null);
 </script>
 
 <div class="visuel m9e" bind:this={hote}>
-  <div class="m9e-grille" style="--n: {N}">
-    <span class="m9e-tete">moyenne en histoire</span>
-    <div class="m9e-rang m9e-moys">
-      {#each ELEVES as i}
-        <span class="m9e-moy" class:fort={e >= 3 && i === FORT} class:faible={e >= 4 && i === FAIBLE}>{MOY[i - 1]}</span>
-      {/each}
-    </div>
-    <span class="m9e-tete m9e-sc">réussi</span>
-
-    {#each QS as q, k}
-      {@const vu = e >= q.temps}
-      <span class="m9e-q" class:vu class:rouge={rouge && q.hockey}>Q{k + 1} · {q.t}</span>
-      <div class="m9e-rang" class:vu class:hockey={q.hockey} class:rouge={rouge && q.hockey}>
-        {#each ELEVES as i}
-          <span
-            class="m9e-cell"
-            class:ok={reussi(i, k)}
-            class:col-fort={vu && e >= 3 && i === FORT}
-            class:col-faible={vu && e >= 4 && i === FAIBLE}
-            class:cerne={rouge && q.hockey && (i === FORT || i === FAIBLE)}
-            style="--d: {(q.temps === 2 ? (k - 1) * 160 : 0) + i * 28}ms"
-          ></span>
-        {/each}
-      </div>
-      <span class="m9e-score" class:vu class:rouge={rouge && q.hockey}>{score(k)}/{N}</span>
-    {/each}
-
-    <span></span>
-    <div class="m9e-rang m9e-noms">
-      {#each ELEVES as i}
-        <span class="m9e-nom">
-          {#if i === FORT}<b class:vu={e >= 3}>Léa</b>{/if}
-          {#if i === FAIBLE}<b class:vu={e >= 4}>Noah</b>{/if}
-        </span>
-      {/each}
-    </div>
-    <span></span>
+  <div class="m9e-carte" class:vide={!Q} class:rouge={Q?.hockey}>
+    {#key q}
+      {#if Q}<span class="m9e-num">Q{q + 1}</span><span class="m9e-titre">{Q.t}</span>{:else}<span class="m9e-titre pale">L’examen d’histoire</span>{/if}
+    {/key}
   </div>
+
+  <div class="m9e-rang">
+    {#each MOY as m, i}
+      {@const ok = Q ? Q.r[i] === 1 : false}
+      <div class="m9e-eleve" class:ok class:rouge={Q?.hockey} class:cerne={e >= 5 && (i === NOAH || i === LEA)} style="--i: {i}">
+        <span class="m9e-coche">{ok ? '✓' : ''}</span>
+        <svg viewBox="0 0 60 90" aria-hidden="true">
+          <circle cx="30" cy="18" r="13" />
+          <path d="M 7 88 Q 7 40 30 40 Q 53 40 53 88 Z" />
+        </svg>
+        <span class="m9e-moy">{m}</span>
+        <span class="m9e-trace">
+          {#each QS as qq, k}
+            <i class:fait={e >= k + 1} class:ok={qq.r[i] === 1} class:h={qq.hockey}></i>
+          {/each}
+        </span>
+        <span class="m9e-nom">{#if e >= 5 && i === NOAH}Noah{:else if e >= 5 && i === LEA}Léa{/if}</span>
+      </div>
+    {/each}
+  </div>
+  <div class="m9e-axe"><span>moyenne en histoire : du plus faible</span><span class="m9e-fl"></span><span>au plus fort</span></div>
+
   {#key e}
-    <p class="m9e-note" class:rouge>{NOTES[e]}</p>
+    <p class="m9e-note" class:rouge={e >= 4}>{NOTES[e]}</p>
   {/key}
 </div>
 
 <style>
-  .m9e { display: flex; flex-direction: column; gap: 0.7em; max-width: 64em; margin: 0.2em auto 0; }
-  .m9e-grille { display: grid; grid-template-columns: 15em 1fr 3.4em; gap: 0.45em 0.9em; align-items: center; }
-  .m9e-tete { font-size: 0.66em; color: var(--dk-gris); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
-  .m9e-sc { text-align: right; }
-  .m9e-rang { display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: 0.3em; }
-  .m9e-moys { border-bottom: 2px solid var(--dk-encre); padding-bottom: 0.25em; }
-  .m9e-moy { font-size: 0.72em; font-weight: 600; text-align: center; color: var(--dk-gris); transition: color 0.3s; }
-  .m9e-moy.fort, .m9e-moy.faible { color: var(--dk-accent); font-weight: 800; }
-  .m9e-q { font-size: 0.82em; font-weight: 600; opacity: 0.15; transition: opacity 0.4s, color 0.4s; }
-  .m9e-q.vu { opacity: 1; }
-  .m9e-cell { aspect-ratio: 1; border: 2px solid var(--dk-filet); background: transparent; transition: background 0.25s, border-color 0.25s, outline-color 0.3s; transition-delay: 0ms; outline: 3px solid transparent; outline-offset: 2px; }
-  .m9e-rang.vu .m9e-cell { border-color: var(--dk-encre); transition-delay: var(--d); }
-  .m9e-rang.vu .m9e-cell.ok { background: var(--dk-encre); }
-  .m9e-cell.col-fort, .m9e-cell.col-faible { outline-color: var(--dk-accent); transition-delay: 0ms; }
-  .m9e-rang.rouge .m9e-cell { border-color: var(--dk-accent); transition-delay: 0ms; }
-  .m9e-rang.rouge .m9e-cell.ok { background: var(--dk-accent); }
-  .m9e-cell.cerne { outline: 4px solid var(--dk-encre); outline-offset: 3px; }
-  .m9e-score { font-size: 0.85em; font-weight: 700; text-align: right; opacity: 0; transition: opacity 0.4s, color 0.4s; }
-  .m9e-score.vu { opacity: 1; }
-  .m9e-q.rouge, .m9e-score.rouge { color: var(--dk-accent); }
-  .m9e-nom { text-align: center; font-size: 0.78em; min-height: 1.2em; }
-  .m9e-nom b { color: var(--dk-accent); opacity: 0; transition: opacity 0.3s; }
-  .m9e-nom b.vu { opacity: 1; }
-  .m9e-note { margin: 0; font-size: 1.05em; font-weight: 600; min-height: 2.7em; animation: m9e-fondu 0.4s both; }
+  .m9e { display: flex; flex-direction: column; gap: 0.7em; max-width: 60em; margin: 0 auto; }
+  .m9e-carte { align-self: center; min-width: 26em; border: 3px solid var(--dk-encre); padding: 0.45em 1.2em; display: flex; gap: 0.8em; align-items: baseline; justify-content: center; transition: border-color 0.3s; }
+  .m9e-carte.rouge { border-color: var(--dk-accent); color: var(--dk-accent); }
+  .m9e-carte.vide { border-style: dashed; border-color: var(--dk-filet); }
+  .m9e-num { font-size: 1.1em; font-weight: 700; color: var(--dk-accent); animation: m9e-entre 0.35s both; }
+  .m9e-titre { font-size: 1.35em; font-weight: 700; animation: m9e-entre 0.35s both; }
+  .m9e-titre.pale { color: var(--dk-gris); font-weight: 600; }
+  .m9e-rang { display: grid; grid-template-columns: repeat(12, 1fr); gap: 0.4em; align-items: end; margin-top: 0.4em; }
+  .m9e-eleve { display: flex; flex-direction: column; align-items: center; gap: 0.15em; }
+  .m9e-coche { height: 1.2em; font-size: 1.2em; font-weight: 800; line-height: 1; color: var(--dk-encre); }
+  .m9e-eleve.rouge .m9e-coche { color: var(--dk-accent); }
+  .m9e-eleve svg { width: 72%; height: auto; overflow: visible; transition: transform 0.35s; transition-delay: calc(var(--i) * 45ms); }
+  .m9e-eleve svg circle, .m9e-eleve svg path { fill: transparent; stroke: var(--dk-encre); stroke-width: 4; transition: fill 0.3s, stroke 0.3s; transition-delay: calc(var(--i) * 45ms); }
+  .m9e-eleve.ok svg { transform: translateY(-10px); }
+  .m9e-eleve.ok svg circle, .m9e-eleve.ok svg path { fill: var(--dk-encre); }
+  .m9e-eleve.rouge svg circle, .m9e-eleve.rouge svg path { stroke: var(--dk-accent); }
+  .m9e-eleve.rouge.ok svg circle, .m9e-eleve.rouge.ok svg path { fill: var(--dk-accent); }
+  .m9e-eleve.cerne svg { outline: 4px solid var(--dk-encre); outline-offset: 6px; }
+  .m9e-moy { font-size: 0.85em; font-weight: 700; }
+  .m9e-trace { display: flex; gap: 3px; margin-top: 0.15em; }
+  .m9e-trace i { width: 0.6em; height: 0.6em; border: 2px solid var(--dk-filet); }
+  .m9e-trace i.fait { border-color: var(--dk-encre); }
+  .m9e-trace i.fait.ok { background: var(--dk-encre); }
+  .m9e-trace i.fait.h { border-color: var(--dk-accent); }
+  .m9e-trace i.fait.h.ok { background: var(--dk-accent); }
+  .m9e-nom { min-height: 1.2em; font-size: 0.85em; font-weight: 800; color: var(--dk-accent); }
+  .m9e-axe { display: flex; align-items: center; gap: 0.6em; font-size: 0.7em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dk-gris); font-weight: 600; }
+  .m9e-fl { flex: 1; height: 2px; background: var(--dk-gris); position: relative; }
+  .m9e-fl::after { content: ''; position: absolute; right: -2px; top: -5px; border-left: 10px solid var(--dk-gris); border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
+  .m9e-note { margin: 0.2em 0 0; text-align: center; font-size: 1.2em; font-weight: 700; min-height: 1.4em; animation: m9e-entre 0.4s both; }
   .m9e-note.rouge { color: var(--dk-accent); }
-  @keyframes m9e-fondu { from { opacity: 0; } to { opacity: 1; } }
-  @media (prefers-reduced-motion: reduce) { .m9e-q, .m9e-cell, .m9e-score, .m9e-nom b { transition: none; } .m9e-note { animation: none; } }
+  @keyframes m9e-entre { from { opacity: 0; transform: translateY(0.3em); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .m9e-eleve svg, .m9e-eleve svg circle, .m9e-eleve svg path { transition: none; } .m9e-num, .m9e-titre, .m9e-note { animation: none; } }
 </style>

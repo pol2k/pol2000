@@ -14,10 +14,10 @@
    * de 0 à 10 (vrais chiffres de la CES), construire une échelle, des échelles
    * de tous les jours, fiabilité (statistique) et validité (théorique),
    * l'examen d'histoire, les trois chiffres. Puis pour vrai sur l'appui à
-   * l'environnement (CES 2025, quatre questions et le libre-échange glissé
-   * comme question piège) avec sondr::topdown_fa() : le libre-échange
-   * détonne, on le retire, on construit l'échelle, on la met dans une
-   * régression. 2. Ce qu'est un modèle de langue : les diapositives 6 à 45 de
+   * l'environnement (CES 2025, quatre questions) avec sondr::topdown_fa() :
+   * recodées sans réfléchir, deux vont à l'envers; on les retourne, on
+   * construit l'échelle, on vérifie sa validité selon le vote, on la met dans
+   * une régression. Trois diapos sur l'empreinte environnementale de l'IA. 2. Ce qu'est un modèle de langue : les diapositives 6 à 45 de
    * « L'IA en recherche » (EIOM 2026, Foisy). On termine sur la règle du
    * cours. Les agents d'IA attendent la dernière séance.
    *
@@ -47,10 +47,13 @@
   import M9Echelles from '$lib/deck/visuels/M9Echelles.svelte';
   import M9Qualite from '$lib/deck/visuels/M9Qualite.svelte';
   import M9Items from '$lib/deck/visuels/M9Items.svelte';
-  import M9Cible from '$lib/deck/visuels/M9Cible.svelte';
   import M9Examen from '$lib/deck/visuels/M9Examen.svelte';
   import M9TroisChiffres from '$lib/deck/visuels/M9TroisChiffres.svelte';
   import M9Saturations from '$lib/deck/visuels/M9Saturations.svelte';
+  import M9Validite from '$lib/deck/visuels/M9Validite.svelte';
+  import M9Eau from '$lib/deck/visuels/M9Eau.svelte';
+  import M9Energie from '$lib/deck/visuels/M9Energie.svelte';
+  import M9Requete from '$lib/deck/visuels/M9Requete.svelte';
   import M9Regle from '$lib/deck/visuels/M9Regle.svelte';
   import M8Image from '$lib/deck/visuels/M8Image.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
@@ -87,7 +90,7 @@
   import { FOURNISSEUR, FOURNISSEUR_SECOURS } from '$lib/data/config.js';
   import { ATELIER, FA1, FA2, HIST, REG, SATURATIONS, SCRIPT } from '$lib/data/seance9.js';
 
-  const TOTAL = 85;
+  const TOTAL = 86;
   const D = 'POL-2000 · séance 9 · jeu 5 nov';
   const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
   const f = (v, k = 2) => v.toFixed(k).replace('.', ',');
@@ -101,7 +104,7 @@
   };
 
   // Le plan du code : des commentaires d'abord (comme à la séance 8).
-  const PLAN = "# 1. Charger ces2025.rds, créer df_clean\n# 2. Regarder une question\n# 3. De 0 à 1, 1 = pour l'environnement ; ne sait pas devient NA\n# 4. Le sens : retourner les questions à l'envers\n# 5. Une question piège : le libre-échange\n# 6. Installer sondr, une seule fois\n# 7. L'analyse factorielle : les cinq\n# 8. Sans celle qui détonne\n# 9. L'échelle : la moyenne\n# 10. L'appliquer : lm(environnement ~ scolarité)\n# 11. Sauvegarder df_clean";
+  const PLAN = "# 1. Charger ces2025.rds, créer df_clean\n# 2. Regarder une question\n# 3. De 0 à 1 ; ne sait pas devient NA\n# 4. Installer sondr, une seule fois\n# 5. L'analyse factorielle\n# 6. Le sens : retourner les questions à l'envers\n# 7. L'analyse factorielle, encore\n# 8. L'échelle : la moyenne\n# 9. L'appliquer : lm(environnement ~ scolarité)\n# 10. Sauvegarder df_clean";
   const [SCRIPT_A, SCRIPT_B, SCRIPT_C] = (() => { const i = SCRIPT.indexOf('# 4.'), j = SCRIPT.indexOf('# 7.'); return [SCRIPT.slice(0, i).trimEnd(), SCRIPT.slice(i, j).trimEnd(), SCRIPT.slice(j)]; })();
 
   // Les trois blocs de code de la partie IA, repris tels quels du deck EIOM 2026.
@@ -152,10 +155,9 @@ OPENROUTER_API_KEY=votre_cle_ici
   const avec = (cle, notes = []) => ATELIER[cle].map((l, i) => ({ ...l, note: notes[i] || '' }));
   const c_charger = avec('charger', ['', 'haven : pour lire les codes de la CES', 'ces2025.rds, sauvegardé à la séance 2', 'df_raw ne change jamais']);
   const c_item = avec('item', ['cps25 : pendant la campagne. 1 = fortement en désaccord … 5 = fortement d’accord, 6 = ne sait pas. NA : pas posée (deux tiers des gens)']);
-  const c_echelle = avec('echelle', ['trois réponses : moins (0), autant (0,5), plus (1)', 'une fonction : 1 à 5 devient 0 à 1, le reste NA', 'd’accord pour garder la taxe : pour l’environnement', '']);
-  const c_sens = avec('sens', ['négatif : qui veut garder la taxe ne veut pas d’oléoducs', '1 − x : d’accord devient 0, en désaccord devient 1', 'la même recette', 'positif : les deux vont maintenant dans le même sens']);
-  const c_intrus = avec('intrus', ['plus de libre-échange : rien à voir avec l’environnement']);
-  const c_sondr = [...avec('installer', ['', 'sondr n’est pas sur CRAN : on l’installe depuis GitHub']), ...avec('preparer', ['', 'na.omit : seulement les gens qui ont répondu aux cinq', `${nb(SATURATIONS.n)} personnes : le bloc c1, un tiers du sondage de campagne`])];
+  const c_echelle = avec('echelle', ['trois réponses : moins (0), autant (0,5), plus (1)', 'une fonction : 1 à 5 devient 0 à 1, le reste NA', 'd’accord pour garder la taxe : pour l’environnement', 'la même recette…', '… quatre fois']);
+  const c_sondr = [...avec('installer', ['', 'sondr n’est pas sur CRAN : on l’installe depuis GitHub']), ...avec('preparer', ['', 'na.omit : seulement les gens qui ont répondu aux quatre', `${nb(SATURATIONS.n)} personnes : le bloc c1, un tiers du sondage de campagne`])];
+  const c_sens = avec('sens', ['négatif : qui veut garder la taxe ne veut pas d’oléoducs', '1 − x : d’accord devient 0, en désaccord devient 1', 'la même chose pour les emplois', 'positif : les deux vont maintenant dans le même sens']);
   const c_construire = avec('construire', ['la moyenne des quatre questions env_, ligne par ligne', 'de 0 à 1 ; NA : une question sans réponse, ou hors du bloc c1']);
   const c_regression = avec('regression', ['universitaire : a fréquenté l’université (8 à 11) ou non (1 à 7)', '', `${f(REG.pente, 3)} : sur une échelle de 0 à 1, les universitaires sont ${f(Math.abs(REG.pente), 2)} plus ${REG.pente >= 0 ? 'haut' : 'bas'}`]);
   const S1 = SATURATIONS.un, S2 = SATURATIONS.deux;
@@ -258,11 +260,6 @@ OPENROUTER_API_KEY=votre_cle_ici
       <M9Qualite />
     </Slide>
 
-    <Slide bandeau="Mesurer un concept · la qualité" droite={D}>
-      <h2 class="e">Fiabilité, validité</h2>
-      <M9Cible />
-    </Slide>
-
     <!-- ================= PROUVER LA FIABILITÉ ================= -->
 
     <Slide fond="encre" bandeau="Prouver la fiabilité" droite={D}>
@@ -285,27 +282,24 @@ OPENROUTER_API_KEY=votre_cle_ici
     <Slide bandeau="Prouver la fiabilité · trois chiffres" droite={D}>
       <h2 class="e">Trois chiffres, trois seuils</h2>
       <M9TroisChiffres />
+      <div class="ligne-code e"><Code src="topdown_fa(df)" /></div>
     </Slide>
 
     <!-- ================= SUR LES DONNÉES, POUR VRAI ================= -->
 
     <Slide fond="encre" bandeau="Pratique dans R" droite={D}>
-      <h1 class="e">L’environnement, pour vrai</h1>
+      <h1 class="e">Pratique dans R</h1>
       <hr class="filet" />
-      <p class="lead e">Quatre questions de la CES 2025, une échelle, une régression.</p>
+      <p class="lead e">L’appui à l’environnement, dans la CES 2025.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · notre concept" droite={D}>
-      <h2 class="e">Notre concept : l’appui à l’environnement</h2>
       <p class="grande-q e">La scolarité augmente-t-elle l’appui à l’environnement ?</p>
-      <div class="hyp">
-        <p class="e">Personne ne répond à la question « êtes-vous pro-environnement ? ».</p>
-        <p class="e"><strong>Mais la CES 2025 pose quatre questions sur l’environnement</strong>, pendant la campagne. Et une cinquième, sur un autre sujet.</p>
-      </div>
+      <p class="petit-dit e">Personne ne répond à « êtes-vous pro-environnement ? ». La CES pose plutôt quatre questions.</p>
     </Slide>
 
-    <Slide bandeau="Pratique dans R · cinq questions" droite={D}>
-      <h2 class="e">Quatre questions, et une question piège</h2>
+    <Slide bandeau="Pratique dans R · quatre questions" droite={D}>
+      <h2 class="e">Quatre questions sur l’environnement</h2>
       <M9Items />
     </Slide>
 
@@ -323,55 +317,36 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Pratique dans R · recoder" droite={D}>
-      <h2 class="e">De 0 à 1 : 1 = pour l’environnement. Ne sait pas devient NA</h2>
+      <h2 class="e">De 0 à 1, la même recette pour les quatre</h2>
       <Console lignes={c_echelle} />
     </Slide>
 
-    <Slide bandeau="Pratique dans R · le sens" droite={D}>
-      <h2 class="e">Le sens : retourner les questions à l’envers</h2>
-      <Console lignes={c_sens} />
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · la question piège" droite={D}>
-      <h2 class="e">Une question piège : le libre-échange</h2>
-      <Console lignes={c_intrus} />
-      <p class="petit-dit e">Un autre sujet, posé dans le même bloc. L’analyse factorielle va-t-elle la repérer ?</p>
-    </Slide>
-
     <Slide bandeau="Pratique dans R · sondr" droite={D}>
-      <h2 class="e">sondr, puis les gens qui ont répondu aux cinq</h2>
+      <h2 class="e">sondr, puis les gens qui ont répondu aux quatre</h2>
       <Console lignes={c_sondr} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’analyse factorielle" droite={D}>
-      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : un point par question. Les quatre questions sur l’environnement entre {sat(S1, 'pipelines')} et {sat(S1, 'depenses')}, le libre-échange à {sat(S1, 'libre_echange')}, seul sous le seuil de 0,3. Alpha de Cronbach {f(S1.alpha)}, première valeur propre {f(S1.eigen)}." />
+      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : env_depenses {sat(S1, 'depenses')}, env_carbone {sat(S1, 'carbone')}, env_pipelines {sat(S1, 'pipelines')}, env_emplois {sat(S1, 'emplois')}. Alpha de Cronbach {f(S1.alpha)}." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · lire" droite={D}>
-      <h2 class="e">Une question détonne</h2>
+      <h2 class="e">Deux questions vont à l’envers</h2>
       <M9Saturations />
     </Slide>
 
-    <Slide bandeau="Pratique dans R · lire" droite={D}>
-      <h2 class="e">La question de hockey de la CES</h2>
-      <M9Items marquer={['libre_echange']} raisons={{ libre_echange: 'le commerce, pas l’environnement : elle ne va pas avec les autres' }} />
+    <Slide bandeau="Pratique dans R · le sens" droite={D}>
+      <h2 class="e">Les retourner : 1 − x</h2>
+      <Console lignes={c_sens} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · recommencer" droite={D}>
-      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={110} nouveau={[0]} dit="sans le libre-échange : alpha {f(S2.alpha)}, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans le libre-échange : quatre points, tous au-dessus de 0,3. Alpha de Cronbach {f(S2.alpha)}, première valeur propre {f(S2.eigen)}." />
+      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={110} nouveau={[0]} dit="retournées : alpha {f(S2.alpha)}, tout au-dessus du seuil" alt="Le graphique de topdown_fa une fois les deux questions retournées : quatre points, tous au-dessus de 0,3. Alpha de Cronbach {f(S2.alpha)}, première valeur propre {f(S2.eigen)}." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · la validité" droite={D}>
-      <h2 class="e">La fiabilité, oui. La validité ?</h2>
-      <Deux ratio="1fr 1fr">
-        <Carte ton="ciel" titre="Concordance avec la théorie">
-          <p>Les quatre questions touchent-elles ce que la littérature appelle l’appui à l’environnement ? Dépenser, taxer le carbone, freiner les oléoducs, passer avant les emplois : oui. Le libre-échange : non.</p>
-        </Carte>
-        <Carte ton="vert" titre="Concordance avec d’autres mesures">
-          <p>L’échelle devrait être plus haute chez qui vote pour le Parti vert, et chez qui pense que les changements climatiques viennent de l’activité humaine.</p>
-        </Carte>
-      </Deux>
-      <p class="petit-dit e">La fiabilité est statistique : les chiffres la vérifient. La validité est théorique : c’est vous qui la défendez.</p>
+      <h2 class="e">Fiable, oui. Valide ? L’échelle selon le vote</h2>
+      <M9Validite />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
@@ -394,7 +369,7 @@ OPENROUTER_API_KEY=votre_cle_ici
         <li><span>Mesurer, c’est mettre un nombre sur une chose, même une chose qu’on ne peut pas observer.</span></li>
         <li><span>Une seule question ne suffit pas. On construit une échelle.</span></li>
         <li><span>Une bonne échelle est fiable et valide. La fiabilité est statistique, la validité est théorique.</span></li>
-        <li><span>Des questions fiables vont ensemble : qui réussit l’une réussit les autres.</span></li>
+        <li><span>Une question qui ne suit pas : elle mesure autre chose (on la retire) ou elle va à l’envers (on la retourne).</span></li>
       </ol>
     </Slide>
 
@@ -553,6 +528,21 @@ OPENROUTER_API_KEY=votre_cle_ici
         <Cite k="techcrunch2025" />. Équivalent en foyers calculé d’après la fiche technique du
         H100 SXM et la consommation résidentielle moyenne d’Hydro-Québec. Eau <Cite k="li2023" />.
       </p>
+    </Slide>
+
+    <Slide bandeau="L’IA et l’environnement · l’eau" droite={D}>
+      <h2 class="e">Qui consomme le plus d’eau ?</h2>
+      <M9Eau />
+    </Slide>
+
+    <Slide bandeau="L’IA et l’environnement · l’électricité" droite={D}>
+      <h2 class="e">Qui consomme le plus d’électricité ?</h2>
+      <M9Energie />
+    </Slide>
+
+    <Slide bandeau="L’IA et l’environnement · une requête" droite={D}>
+      <h2 class="e">Une requête, presque rien. Le problème est ailleurs</h2>
+      <M9Requete />
     </Slide>
 
     <Slide bandeau="Le contexte" droite={D}>
@@ -791,6 +781,11 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
       <Console lignes={c_charger} />
     </Slide>
 
+    <Slide bandeau="Annexe · les quatre questions" droite={D}>
+      <h2 class="e">Les quatre questions, mot pour mot</h2>
+      <M9Items exact />
+    </Slide>
+
     <Slide bandeau="Annexe · le script 1/3" droite={D}>
       <div class="plan">
         <Code src={SCRIPT_A} titre="seance9.R" />
@@ -848,6 +843,7 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
 .dqm { list-style: none; margin: 1.2em 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.9em; font-size: 1.25em; line-height: 1.35; max-width: 30em; }
 .dqm em { font-style: normal; font-weight: 700; color: var(--dk-accent); }
 .dqm-q { margin-top: 1.4em; }
+.ligne-code { width: 22em; margin: 1.4em auto 0; }
 .chemin-dit { text-align: center; margin-top: 1.4em; font-size: 1em; }
 .hyp { margin-top: 1.6em; display: flex; flex-direction: column; gap: 0.5em; font-size: 1.25em; }
 .hyp p { margin: 0; }
