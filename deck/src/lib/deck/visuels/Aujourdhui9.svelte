@@ -1,13 +1,13 @@
 <script>
   /**
    * Le plan de la séance 9, en deux blocs : mesurer un concept qu'on ne voit
-   * pas (le populisme dans la CES 2025), puis ce qu'est un modèle de langue.
+   * pas (l'appui à l'environnement dans la CES 2025), puis ce qu'est un modèle de langue.
    * Chaque bloc a son petit schéma : un arbre (concept, dimensions,
    * questions) et une entrée qui devient une sortie, un jeton à la fois (la phrase
    * réelle de la démo Generation : « L'hiver à Québec est froid et enneigé. »).
    */
   const BLOCS = [
-    { n: '1', titre: 'Mesurer un concept qu’on ne voit pas', sous: 'La confiance envers les institutions, dans la CES 2025' },
+    { n: '1', titre: 'Mesurer un concept qu’on ne voit pas', sous: 'L’appui à l’environnement, dans la CES 2025' },
     { n: '2', titre: 'Ce qu’est un modèle de langue', sous: 'Et comment s’en servir sans se faire avoir' }
   ];
 </script>

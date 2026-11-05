@@ -10,15 +10,15 @@
    * tableau de régression, à la main, avec des variables prises toutes
    * faites dans un article. Ce qu'elle a sauté, c'est le pas que le travail
    * final exige : du concept dans l'hypothèse à la colonne dans df_clean.
-   * 1. Mesurer un concept qu'on ne voit pas, d'après le cours 5 de FAS1001
-   * (variable latente, échelle, fiabilité et validité, l'examen d'histoire,
-   * les trois chiffres de l'analyse factorielle), puis pour vrai sur la
-   * confiance envers dix institutions (CES 2025) avec sondr::topdown_fa() :
-   * la religion organisée détonne, on la retire, on construit l'échelle, on
-   * la met dans une régression. 2. Ce qu'est un modèle de langue, huit diapos reprises
-   * de « L'IA en recherche » (EIOM 2026, Foisy) : prédire le jeton suivant,
-   * les jetons, pas une base de connaissances, l'hallucination, les biais,
-   * la formule d'un prompt, la confidentialité. On termine sur la règle du
+   * 1. Mesurer un concept qu'on ne voit pas : l'âge et l'idéologie, se placer
+   * de 0 à 10 (vrais chiffres de la CES), construire une échelle, des échelles
+   * de tous les jours, fiabilité (statistique) et validité (théorique),
+   * l'examen d'histoire, les trois chiffres. Puis pour vrai sur l'appui à
+   * l'environnement (CES 2025, quatre questions et le libre-échange glissé
+   * comme question piège) avec sondr::topdown_fa() : le libre-échange
+   * détonne, on le retire, on construit l'échelle, on la met dans une
+   * régression. 2. Ce qu'est un modèle de langue : les diapositives 6 à 45 de
+   * « L'IA en recherche » (EIOM 2026, Foisy). On termine sur la règle du
    * cours. Les agents d'IA attendent la dernière séance.
    *
    * Sources. FAS1001, cours 5 (Foisy, Université de Montréal). Merkley, E.
@@ -101,7 +101,7 @@
   };
 
   // Le plan du code : des commentaires d'abord (comme à la séance 8).
-  const PLAN = "# 1. Charger ces2025.rds, créer df_clean\n# 2. Regarder une institution\n# 3. Les dix institutions, de 1-4 à 1-0 ; ne sait pas devient NA\n# 4. Vérifier le sens\n# 5. Installer sondr, une seule fois\n# 6. L'analyse factorielle : les dix\n# 7. Sans celle qui détonne\n# 8. L'échelle : la moyenne\n# 9. L'appliquer : lm(confiance ~ scolarité)\n# 10. Sauvegarder df_clean";
+  const PLAN = "# 1. Charger ces2025.rds, créer df_clean\n# 2. Regarder une question\n# 3. De 0 à 1, 1 = pour l'environnement ; ne sait pas devient NA\n# 4. Le sens : retourner les questions à l'envers\n# 5. Une question piège : le libre-échange\n# 6. Installer sondr, une seule fois\n# 7. L'analyse factorielle : les cinq\n# 8. Sans celle qui détonne\n# 9. L'échelle : la moyenne\n# 10. L'appliquer : lm(environnement ~ scolarité)\n# 11. Sauvegarder df_clean";
   const [SCRIPT_A, SCRIPT_B, SCRIPT_C] = (() => { const i = SCRIPT.indexOf('# 4.'), j = SCRIPT.indexOf('# 7.'); return [SCRIPT.slice(0, i).trimEnd(), SCRIPT.slice(i, j).trimEnd(), SCRIPT.slice(j)]; })();
 
   // Les trois blocs de code de la partie IA, repris tels quels du deck EIOM 2026.
@@ -151,13 +151,15 @@ OPENROUTER_API_KEY=votre_cle_ici
   // Les consoles viennent de R telles quelles; seules les notes sont d'ici.
   const avec = (cle, notes = []) => ATELIER[cle].map((l, i) => ({ ...l, note: notes[i] || '' }));
   const c_charger = avec('charger', ['', 'haven : pour lire les codes de la CES', 'ces2025.rds, sauvegardé à la séance 2', 'df_raw ne change jamais']);
-  const c_item = avec('item', ['pes25 : après l’élection, à la moitié des répondant.e.s. 1 = beaucoup … 4 = pas du tout, 5 = ne sait pas']);
-  const c_echelle = avec('echelle', ['une fonction : 1 (beaucoup) devient 1, 4 (pas du tout) devient 0, le reste NA', 'la même recette, dix fois', '', '', '', '', '', '', '', '', '', 'NA : pas de réponse après l’élection, l’autre moitié du sondage, ou ne sait pas']);
-  const c_echelle_a = c_echelle.slice(0, 6), c_echelle_b = c_echelle.slice(6);
-  const c_sens = avec('sens', ['positif : qui fait confiance au fédéral fait confiance aux tribunaux. Même direction, pas de retournement']);
-  const c_sondr = [...avec('installer', ['', 'sondr n’est pas sur CRAN : on l’installe depuis GitHub']), ...avec('preparer', ['', 'na.omit : seulement les gens qui ont répondu aux dix', `${nb(SATURATIONS.n)} personnes : la moitié du sondage postélectoral`])];
-  const c_construire = avec('construire', ['la moyenne des neuf qu’on garde, ligne par ligne', 'de 0 à 1 ; NA : au moins une institution sans réponse']);
-  const c_regression = avec('regression', ['universitaire : a fréquenté l’université (8 à 11) ou non (1 à 7)', '', `${f(REG.pente, 3)} : sur une échelle de 0 à 1, les universitaires sont ${f(Math.abs(REG.pente), 2)} plus ${REG.pente >= 0 ? 'haut' : 'bas'}`]);
+  const c_item = avec('item', ['cps25 : pendant la campagne. 1 = fortement en désaccord … 5 = fortement d’accord, 6 = ne sait pas. NA : pas posée (deux tiers des gens)']);
+  const c_echelle = avec('echelle', ['trois réponses : moins (0), autant (0,5), plus (1)', 'une fonction : 1 à 5 devient 0 à 1, le reste NA', 'd’accord pour garder la taxe : pour l’environnement', '']);
+  const c_sens = avec('sens', ['négatif : qui veut garder la taxe ne veut pas d’oléoducs', '1 − x : d’accord devient 0, en désaccord devient 1', 'la même recette', 'positif : les deux vont maintenant dans le même sens']);
+  const c_intrus = avec('intrus', ['plus de libre-échange : rien à voir avec l’environnement']);
+  const c_sondr = [...avec('installer', ['', 'sondr n’est pas sur CRAN : on l’installe depuis GitHub']), ...avec('preparer', ['', 'na.omit : seulement les gens qui ont répondu aux cinq', `${nb(SATURATIONS.n)} personnes : le bloc c1, un tiers du sondage de campagne`])];
+  const c_construire = avec('construire', ['la moyenne des quatre questions env_, ligne par ligne', 'de 0 à 1 ; NA : une question sans réponse, ou hors du bloc c1']);
+  const c_regression = avec('regression', ['universitaire : a fréquenté l’université (8 à 11) ou non (1 à 7)', '', `${f(REG.pente, 3)} : sur une échelle de 0 à 1, les universitaires sont ${f(Math.abs(REG.pente), 2)} plus ${REG.pente >= 0 ? 'haut' : 'bas'}`]);
+  const S1 = SATURATIONS.un, S2 = SATURATIONS.deux;
+  const sat = (r, k) => f(r.loadings[r.items.indexOf(k)]);
 </script>
 
 <svelte:head>
@@ -206,7 +208,7 @@ OPENROUTER_API_KEY=votre_cle_ici
       <ul class="dqm e">
         <li><em>Dans quelle mesure</em> la scolarité influence-t-elle l’intérêt pour la politique ?</li>
         <li><em>Dans quelle mesure</em> gagner une élection rend-il plus satisfait de la démocratie ?</li>
-        <li><em>Dans quelle mesure</em> la scolarité augmente-t-elle la confiance envers les institutions ?</li>
+        <li><em>Dans quelle mesure</em> la scolarité augmente-t-elle l’appui à l’environnement ?</li>
       </ul>
       <p class="grande-q e dqm-q">Mesure ? Pourquoi ce mot-là ?</p>
     </Slide>
@@ -219,7 +221,7 @@ OPENROUTER_API_KEY=votre_cle_ici
     <Slide bandeau="Mesurer un concept · mesurer" droite={D}>
       <h2 class="e">Mesurer un concept</h2>
       <div class="chemin e">
-        <div class="etape"><span class="n">1</span><strong>Une chose</strong><span>Une longueur. Un poids. La confiance.</span></div>
+        <div class="etape"><span class="n">1</span><strong>Une chose</strong><span>Une longueur. Un poids. L’appui à l’environnement.</span></div>
         <span class="fl">→</span>
         <div class="etape"><span class="n">2</span><strong>Un instrument</strong><span>Une règle. Une balance. Une question de sondage.</span></div>
         <span class="fl">→</span>
@@ -288,22 +290,22 @@ OPENROUTER_API_KEY=votre_cle_ici
     <!-- ================= SUR LES DONNÉES, POUR VRAI ================= -->
 
     <Slide fond="encre" bandeau="Pratique dans R" droite={D}>
-      <h1 class="e">La confiance, pour vrai</h1>
+      <h1 class="e">L’environnement, pour vrai</h1>
       <hr class="filet" />
-      <p class="lead e">Dix institutions de la CES 2025, une échelle, une régression.</p>
+      <p class="lead e">Quatre questions de la CES 2025, une échelle, une régression.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · notre concept" droite={D}>
-      <h2 class="e">Notre concept : la confiance envers les institutions</h2>
-      <p class="grande-q e">La scolarité augmente-t-elle la confiance envers les institutions ?</p>
+      <h2 class="e">Notre concept : l’appui à l’environnement</h2>
+      <p class="grande-q e">La scolarité augmente-t-elle l’appui à l’environnement ?</p>
       <div class="hyp">
-        <p class="e">Personne ne répond à la question « faites-vous confiance aux institutions ? ».</p>
-        <p class="e"><strong>Mais la CES 2025 demande la confiance envers dix institutions</strong>, une à la fois, après l’élection.</p>
+        <p class="e">Personne ne répond à la question « êtes-vous pro-environnement ? ».</p>
+        <p class="e"><strong>Mais la CES 2025 pose quatre questions sur l’environnement</strong>, pendant la campagne. Et une cinquième, sur un autre sujet.</p>
       </div>
     </Slide>
 
-    <Slide bandeau="Pratique dans R · dix institutions" droite={D}>
-      <h2 class="e">Dix institutions, une seule question</h2>
+    <Slide bandeau="Pratique dans R · cinq questions" droite={D}>
+      <h2 class="e">Quatre questions, et une question piège</h2>
       <M9Items />
     </Slide>
 
@@ -316,73 +318,73 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Pratique dans R · regarder" droite={D}>
-      <h2 class="e">Une institution, telle que la CES la code</h2>
+      <h2 class="e">Une question, telle que la CES la code</h2>
       <Console lignes={c_item} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · recoder" droite={D}>
-      <h2 class="e">De 1 à 4 vers 1 à 0 : beaucoup = 1. Ne sait pas devient NA</h2>
-      <Console lignes={c_echelle_a} />
-    </Slide>
-
-    <Slide bandeau="Pratique dans R · recoder" droite={D}>
-      <h2 class="e">Les cinq autres, puis regarder</h2>
-      <Console lignes={c_echelle_b} />
+      <h2 class="e">De 0 à 1 : 1 = pour l’environnement. Ne sait pas devient NA</h2>
+      <Console lignes={c_echelle} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · le sens" droite={D}>
-      <h2 class="e">Le sens : deux institutions, la même direction</h2>
+      <h2 class="e">Le sens : retourner les questions à l’envers</h2>
       <Console lignes={c_sens} />
-      <p class="petit-dit e">Si une question avait dit le contraire des autres, il aurait fallu la retourner : 1 − x.</p>
+    </Slide>
+
+    <Slide bandeau="Pratique dans R · la question piège" droite={D}>
+      <h2 class="e">Une question piège : le libre-échange</h2>
+      <Console lignes={c_intrus} />
+      <p class="petit-dit e">Un autre sujet, posé dans le même bloc. L’analyse factorielle va-t-elle la repérer ?</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · sondr" droite={D}>
-      <h2 class="e">sondr, puis les gens qui ont répondu aux dix</h2>
+      <h2 class="e">sondr, puis les gens qui ont répondu aux cinq</h2>
       <Console lignes={c_sondr} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’analyse factorielle" droite={D}>
-      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : les coefficients de saturation des dix institutions en barres, de 0,73 pour le gouvernement fédéral à 0,23 pour la religion organisée, seule sous le seuil de 0,3. Alpha de Cronbach 0,85, première valeur propre 4,43." />
+      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : un point par question. Les quatre questions sur l’environnement entre {sat(S1, 'pipelines')} et {sat(S1, 'depenses')}, le libre-échange à {sat(S1, 'libre_echange')}, seul sous le seuil de 0,3. Alpha de Cronbach {f(S1.alpha)}, première valeur propre {f(S1.eigen)}." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · lire" droite={D}>
-      <h2 class="e">Une institution détonne</h2>
+      <h2 class="e">Une question détonne</h2>
       <M9Saturations />
     </Slide>
 
     <Slide bandeau="Pratique dans R · lire" droite={D}>
       <h2 class="e">La question de hockey de la CES</h2>
-      <M9Items marquer={['religion']} raisons={{ religion: 'faire confiance à une Église, ce n’est pas faire confiance à l’État' }} echelle={false} />
+      <M9Items marquer={['libre_echange']} raisons={{ libre_echange: 'le commerce, pas l’environnement : elle ne va pas avec les autres' }} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · recommencer" droite={D}>
-      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={110} nouveau={[0]} dit="sans la religion organisée : alpha 0,86, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans la religion organisée : neuf barres, toutes au-dessus de 0,3, de 0,48 à 0,73. Alpha de Cronbach 0,86, première valeur propre 4,36." />
+      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={110} nouveau={[0]} dit="sans le libre-échange : alpha {f(S2.alpha)}, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans le libre-échange : quatre points, tous au-dessus de 0,3. Alpha de Cronbach {f(S2.alpha)}, première valeur propre {f(S2.eigen)}." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · la validité" droite={D}>
       <h2 class="e">La fiabilité, oui. La validité ?</h2>
       <Deux ratio="1fr 1fr">
         <Carte ton="ciel" titre="Concordance avec la théorie">
-          <p>Les neuf institutions sont-elles bien celles dont parle la littérature sur la confiance politique ? L’État, les tribunaux, la police, oui. Une Église, non.</p>
+          <p>Les quatre questions touchent-elles ce que la littérature appelle l’appui à l’environnement ? Dépenser, taxer le carbone, freiner les oléoducs, passer avant les emplois : oui. Le libre-échange : non.</p>
         </Carte>
         <Carte ton="vert" titre="Concordance avec d’autres mesures">
-          <p>L’échelle se comporte-t-elle comme on s’y attend ? Plus de confiance chez qui est satisfait de la démocratie (séance 8), moins chez qui a voté pour un parti perdant.</p>
+          <p>L’échelle devrait être plus haute chez qui vote pour le Parti vert, et chez qui pense que les changements climatiques viennent de l’activité humaine.</p>
         </Carte>
       </Deux>
       <p class="petit-dit e">La fiabilité est statistique : les chiffres la vérifient. La validité est théorique : c’est vous qui la défendez.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
-      <h2 class="e">L’échelle : la moyenne des neuf</h2>
+      <h2 class="e">L’échelle : la moyenne des quatre</h2>
       <Console lignes={c_construire} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
-      <M8Image code={HIST.code} img={HIST.img} l={HIST.l} h={HIST.h} px={100} dit="une variable comme une autre, de 0 à 1" alt="L'histogramme de l'échelle de confiance envers les institutions, de 0 à 1." />
+      <M8Image code={HIST.code} img={HIST.img} l={HIST.l} h={HIST.h} px={100} dit="une variable comme une autre, de 0 à 1" alt="L’histogramme de l’échelle d’appui à l’environnement, de 0 à 1." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’appliquer" droite={D}>
-      <h2 class="e">La scolarité augmente-t-elle la confiance ?</h2>
+      <h2 class="e">La scolarité augmente-t-elle l’appui à l’environnement ?</h2>
       <Console lignes={c_regression} />
     </Slide>
 
@@ -781,7 +783,7 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
     <Slide fond="encre" bandeau="Annexe" droite={D}>
       <h1 class="e">Annexe : tout le code</h1>
       <hr class="filet" />
-      <p class="lead e">La confiance envers les institutions dans la CES 2025, étape par étape. À refaire chez vous.</p>
+      <p class="lead e">L’appui à l’environnement dans la CES 2025, étape par étape. À refaire chez vous.</p>
     </Slide>
 
     <Slide bandeau="Annexe · charger" droite={D}>
