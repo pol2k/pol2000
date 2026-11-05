@@ -72,9 +72,9 @@
         <circle cx={cx} cy="192" r="7" class="pt" />
       {/each}
       <text x="115" y="228" class="lib centre">mesurer un concept</text>
-      <rect x="232" y="70" width="146" height="90" rx="8" class="fen" />
-      <text x="246" y="112" class="code" style="font-size: 18px">Le chat est</text>
-      <text x="246" y="140" class="code" style="font-size: 18px">sur le <tspan class="sortie">tap</tspan><tspan class="curseur sortie">▍</tspan></text>
+      <rect x="222" y="70" width="166" height="90" rx="8" class="fen" />
+      <text x="234" y="112" class="code" style="font-size: 15px">L’hiver à Québec</text>
+      <text x="234" y="140" class="code" style="font-size: 15px">est <tspan class="sortie">froid</tspan><tspan class="curseur sortie">▍</tspan></text>
       <text x="305" y="200" class="lib centre">puis un modèle</text>
       <text x="305" y="224" class="lib centre pale-t">de langue</text>
     {:else if n === 11}

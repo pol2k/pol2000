@@ -3,7 +3,8 @@
    * Le plan de la séance 9, en deux blocs : mesurer un concept qu'on ne voit
    * pas (le populisme dans la CES 2025), puis ce qu'est un modèle de langue.
    * Chaque bloc a son petit schéma : un arbre (concept, dimensions,
-   * questions) et une entrée qui devient une sortie, un jeton à la fois.
+   * questions) et une entrée qui devient une sortie, un jeton à la fois (la phrase
+   * réelle de la démo Generation : « L'hiver à Québec est froid et enneigé. »).
    */
   const BLOCS = [
     { n: '1', titre: 'Mesurer un concept qu’on ne voit pas', sous: 'La confiance envers les institutions, dans la CES 2025' },
@@ -28,13 +29,13 @@
             {/each}
           </svg>
         {:else}
-          <svg viewBox="0 0 220 120">
-            <rect x="10" y="14" width="200" height="34" class="a9-b" />
-            <text x="22" y="37" class="a9-g">Le chat est sur le</text>
-            <line x1="110" y1="48" x2="110" y2="70" class="a9-l" />
-            <polygon points="104,66 116,66 110,76" class="a9-pl" />
-            <rect x="10" y="80" width="200" height="34" class="a9-b a9-r" />
-            <text x="22" y="103" class="a9-g">Le chat est sur le <tspan class="a9-rt">tapis</tspan></text>
+          <svg viewBox="0 0 280 120">
+            <rect x="10" y="14" width="260" height="34" class="a9-b" />
+            <text x="22" y="37" class="a9-g">L’hiver à Québec est</text>
+            <line x1="140" y1="48" x2="140" y2="70" class="a9-l" />
+            <polygon points="134,66 146,66 140,76" class="a9-pl" />
+            <rect x="10" y="80" width="260" height="34" class="a9-b a9-r" />
+            <text x="22" y="103" class="a9-g">L’hiver à Québec est <tspan class="a9-rt">froid</tspan></text>
           </svg>
         {/if}
       </div>
