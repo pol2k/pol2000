@@ -176,7 +176,8 @@ SCRIPT <- paste(c(
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, na = "null", digits = NA)
 writeLines(c(
   "/* Généré par outils/seance9_data.R. Source : Étude électorale canadienne 2025,",
-  "   sondage postélectoral (pes25_conf_inst1_1 à _4, pes25_conf_inst2_1 à _6), sans pondération. Ne pas modifier à la main. */",
+  "   sondage postélectoral (pes25_conf_inst1_1 à _4, pes25_conf_inst2_1 à _6), sans pondération. GAUCHE : sondage de campagne,",
+  "   pondéré (cps25_weight_general_all). Ne pas modifier à la main. */",
   "",
   "/* Les dix institutions (clé, variable, libellé anglais de la CES) et l'échelle de réponse. */",
   paste0("export const ITEMS = ", J(ITEMS), ";"),

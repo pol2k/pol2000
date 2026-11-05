@@ -36,7 +36,7 @@
         <line x1="116" y1="90" x2="186" y2="90" class="m9v-ligne" />
       </svg>
       <strong class="m9v-nom">L’âge</strong>
-      <span class="m9v-q">« En quelle année êtes-vous né.e ? »</span>
+      <span class="m9v-q">« Quel âge avez-vous ? »</span>
       <span class="m9v-nb" class:vu={e >= 1}>34 ans</span>
     </div>
     <div class="m9v-col m9v-invisible">
