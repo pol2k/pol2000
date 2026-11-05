@@ -11,7 +11,7 @@
    * faites dans un article. Ce qu'elle a sauté, c'est le pas que le travail
    * final exige : du concept dans l'hypothèse à la colonne dans df_clean.
    * 1. Mesurer un concept qu'on ne voit pas, d'après le cours 5 de FAS1001
-   * (variable latente, échelle, fidélité et validité, l'examen d'histoire,
+   * (variable latente, échelle, fiabilité et validité, l'examen d'histoire,
    * les trois chiffres de l'analyse factorielle), puis pour vrai sur la
    * confiance envers dix institutions (CES 2025) avec sondr::topdown_fa() :
    * la religion organisée détonne, on la retire, on construit l'échelle, on
@@ -263,7 +263,7 @@ OPENROUTER_API_KEY=votre_cle_ici
         <span class="fl">→</span>
         <div class="etape"><span class="n">3</span><strong>L’échelle</strong><span>Les réponses combinées en un score.</span></div>
         <span class="fl">→</span>
-        <div class="etape rouge"><span class="n">4</span><strong>Vérifier</strong><span>Fidèle ? Valide ?</span></div>
+        <div class="etape rouge"><span class="n">4</span><strong>Vérifier</strong><span>Fiabilité ? Validité ?</span></div>
       </div>
     </Slide>
 
@@ -282,7 +282,7 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Mesurer un concept · la qualité" droite={D}>
-      <h2 class="e">Fidèle ? Valide ?</h2>
+      <h2 class="e">Fiabilité, validité</h2>
       <M9Cible />
     </Slide>
 
@@ -371,7 +371,7 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Pratique dans R · la validité" droite={D}>
-      <h2 class="e">Fidèle, oui. Valide ?</h2>
+      <h2 class="e">La fiabilité, oui. La validité ?</h2>
       <Deux ratio="1fr 1fr">
         <Carte ton="ciel" titre="Concordance avec la théorie">
           <p>Les neuf institutions sont-elles bien celles dont parle la littérature sur la confiance politique ? L’État, les tribunaux, la police, oui. Une Église, non.</p>
@@ -380,7 +380,7 @@ OPENROUTER_API_KEY=votre_cle_ici
           <p>L’échelle se comporte-t-elle comme on s’y attend ? Plus de confiance chez qui est satisfait de la démocratie (séance 8), moins chez qui a voté pour un parti perdant.</p>
         </Carte>
       </Deux>
-      <p class="petit-dit e">Les chiffres vérifient la fidélité. La validité, c’est vous qui la défendez.</p>
+      <p class="petit-dit e">La fiabilité est statistique : les chiffres la vérifient. La validité est théorique : c’est vous qui la défendez.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
@@ -403,7 +403,7 @@ OPENROUTER_API_KEY=votre_cle_ici
         <li><span>Un concept ne se voit pas. On le mesure par ses indicateurs.</span></li>
         <li><span>Plusieurs questions valent mieux qu’une, si elles répondent ensemble.</span></li>
         <li><span>Même sens, même échelle, pas de « ne sait pas » caché dans un chiffre.</span></li>
-        <li><span>Les chiffres vérifient la fidélité. La validité, c’est votre argument.</span></li>
+        <li><span>La fiabilité est statistique, les chiffres la vérifient. La validité est théorique, c’est votre argument.</span></li>
       </ol>
     </Slide>
 

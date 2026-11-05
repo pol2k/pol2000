@@ -1,6 +1,6 @@
 <script>
   /**
-   * Fidélité et validité, sur quatre cibles. Une mesure fidèle tombe toujours
+   * Fiabilité et validité, sur quatre cibles. Une mesure fiable tombe toujours
    * au même endroit; une mesure valide tombe au bon endroit. Les quatre cas
    * apparaissent au clic, de la pire à la meilleure. Les impacts sont des
    * points fixes, pas tirés au hasard : c'est un schéma.
@@ -15,10 +15,10 @@
   });
 
   const CAS = [
-    { titre: 'Ni fidèle, ni valide', dit: 'Dispersé, et à côté.', pts: [[-52, -30], [40, -58], [-20, 48], [58, 22], [10, -10]] },
-    { titre: 'Fidèle, pas valide', dit: 'Toujours au même endroit, mais pas le bon.', pts: [[44, -46], [52, -38], [40, -34], [50, -50], [46, -40]] },
-    { titre: 'Valide, pas fidèle', dit: 'Autour du bon endroit, mais dispersé.', pts: [[-40, -22], [36, -30], [-24, 34], [30, 28], [2, -4]] },
-    { titre: 'Fidèle et valide', dit: 'Au bon endroit, à chaque fois.', pts: [[-6, -4], [5, -7], [-3, 6], [7, 4], [0, 0]] }
+    { titre: 'Ni fiable, ni valide', dit: 'Dispersé, et à côté.', pts: [[-52, -30], [40, -58], [-20, 48], [58, 22], [10, -10]] },
+    { titre: 'Fiable, pas valide', dit: 'Toujours au même endroit, mais pas le bon.', pts: [[44, -46], [52, -38], [40, -34], [50, -50], [46, -40]] },
+    { titre: 'Valide, pas fiable', dit: 'Autour du bon endroit, mais dispersé.', pts: [[-40, -22], [36, -30], [-24, 34], [30, 28], [2, -4]] },
+    { titre: 'Fiable et valide', dit: 'Au bon endroit, à chaque fois.', pts: [[-6, -4], [5, -7], [-3, 6], [7, 4], [0, 0]] }
   ];
   const R = [80, 56, 32, 12];
 </script>
@@ -39,8 +39,8 @@
     </div>
   {/each}
   <p class="m9c-legende">
-    <span><b>Fidèle</b> : la même chose, à chaque mesure.</span>
-    <span><b>Valide</b> : la bonne chose.</span>
+    <span><b>Fiabilité</b> : la même chose, à chaque mesure. Statistique : les chiffres la vérifient.</span>
+    <span><b>Validité</b> : la bonne chose. Théorique : c’est un argument.</span>
   </p>
 </div>
 
