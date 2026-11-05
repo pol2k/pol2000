@@ -5,11 +5,10 @@
    * ingrédients. Au clic :
    *
    *   0  le nom, ce qu'elle mesure, son nombre : ce que tout le monde connaît;
-   *   1  ce qu'il y a dedans : plusieurs indicateurs;
-   *   2  la phrase.
+   *   1  ce qu'il y a dedans : plusieurs indicateurs.
    *
    * Composantes vérifiées à la source : PNUD (IDH), EIU (60 indicateurs,
-   * 5 catégories, 0 à 10), Statistique Canada (IPC, 2002 = 100), BCI (cote R).
+   * 5 catégories, 0 à 10).
    */
   import { brancherTemps } from '../temps.js';
   let e = $state(0);
@@ -17,14 +16,12 @@
   $effect(() => {
     if (!hote) return;
     e = 0;
-    return brancherTemps(hote, { total: 2, lire: () => e, ecrire: (v) => (e = v) });
+    return brancherTemps(hote, { total: 1, lire: () => e, ecrire: (v) => (e = v) });
   });
   const E = [
     { nom: 'IDH', long: 'Indice de développement humain', quoi: 'le développement d’un pays', nb: 'de 0 à 1', dedans: ['espérance de vie', 'années d’études', 'revenu par habitant'] },
     { nom: 'QI', long: 'Quotient intellectuel', quoi: 'l’intelligence', nb: '100 = la moyenne', dedans: ['vocabulaire', 'mémoire', 'raisonnement', 'vitesse'] },
-    { nom: 'Cote R', long: 'Admission à l’université', quoi: 'la réussite au cégep', nb: 'de 0 à 50', dedans: ['vos notes', 'la moyenne du groupe', 'la force du groupe'] },
     { nom: 'Démocratie', long: 'Indice de The Economist', quoi: 'la démocratie', nb: 'de 0 à 10', dedans: ['60 indicateurs', 'élections', 'libertés civiles', 'participation'] },
-    { nom: 'IPC', long: 'Indice des prix à la consommation', quoi: 'le coût de la vie', nb: '100 en 2002', dedans: ['loyer', 'épicerie', 'essence', 'un panier entier'] },
     { nom: 'Crédit', long: 'Cote d’Equifax et TransUnion', quoi: 'le risque de ne pas rembourser', nb: 'de 300 à 900', dedans: ['paiements à temps', 'dettes', 'âge du crédit'] }
   ];
 </script>
@@ -45,12 +42,11 @@
       </div>
     {/each}
   </div>
-  <p class="m9h-phrase" class:vu={e >= 2}>Plusieurs indicateurs, <strong>un seul nombre</strong>. Vous les utilisez sans y penser.</p>
 </div>
 
 <style>
   .m9h { display: flex; flex-direction: column; gap: 0.7em; max-width: 64em; margin: 0.2em auto 0; }
-  .m9h-grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7em 1em; }
+  .m9h-grille { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.7em 1em; }
   .m9h-tuile { border: 3px solid var(--dk-encre); padding: 0.55em 0.8em; display: flex; flex-direction: column; gap: 0.15em; animation: m9h-fondu 0.45s both; animation-delay: calc(var(--i) * 0.12s); }
   .m9h-haut { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6em; }
   .m9h-haut strong { font-size: 1.15em; line-height: 1.1; }
@@ -61,9 +57,6 @@
   .m9h-dedans { display: flex; flex-wrap: wrap; gap: 0.3em; margin-top: 0.2em; padding-top: 0.35em; border-top: 2px solid var(--dk-filet); opacity: 0; transform: translateY(0.3em); transition: opacity 0.4s, transform 0.4s; }
   .m9h-dedans.vu { opacity: 1; transform: none; }
   .m9h-dedans span { font-size: 0.68em; border: 2px solid var(--dk-encre); padding: 0.1em 0.45em; }
-  .m9h-phrase { margin: 0; text-align: center; font-size: 1.2em; opacity: 0; transition: opacity 0.5s; }
-  .m9h-phrase strong { color: var(--dk-accent); }
-  .m9h-phrase.vu { opacity: 1; }
   @keyframes m9h-fondu { from { opacity: 0; transform: translateY(0.4em); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .m9h-tuile { animation: none; } .m9h-dedans, .m9h-phrase { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .m9h-tuile { animation: none; } .m9h-dedans { transition: none; } }
 </style>
