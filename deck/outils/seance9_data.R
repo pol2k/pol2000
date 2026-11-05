@@ -146,6 +146,18 @@ ATELIER$sauver <- console("saveRDS(df_clean, \"df_clean.rds\")")
 
 setwd(ancien)
 
+# ---- Gauche-droite : le même parti, placé par deux camps (sondage de campagne).
+# Se placer soi-même de 0 (gauche) à 10 (droite), puis placer les partis.
+# -99 = pas certain.e ou sans réponse : NA. Pondéré (cps25_weight_general_all),
+# sans les poids manquants. Camps : 0 à 2 et 8 à 10.
+g <- d %>% select(soi = cps25_lr_scale_bef_1, lib = cps25_lr_parties_1, con = cps25_lr_parties_2,
+                  w = cps25_weight_general_all) %>% zap_labels() %>%
+  mutate(across(c(soi, lib, con), ~ ifelse(.x %in% 0:10, .x, NA))) %>% filter(!is.na(w), !is.na(soi))
+wm <- function(x, w) { k <- !is.na(x); sum(x[k] * w[k]) / sum(w[k]) }
+camp <- function(k) { x <- g[k, ]; list(n = nrow(x), lib = r(wm(x$lib, x$w), 1), con = r(wm(x$con, x$w), 1),
+                                        n_lib = sum(!is.na(x$lib)), n_con = sum(!is.na(x$con))) }
+GAUCHE <- list(gauche = camp(g$soi <= 2), droite = camp(g$soi >= 8))
+
 # ---- Le script entier, tel que la salle le tape (seance9.R).
 ins <- function(cle) paste(sapply(ATELIER[[cle]], `[[`, "in"), collapse = "\n")
 SCRIPT <- paste(c(
@@ -177,6 +189,8 @@ writeLines(c(
   paste0("export const HISTO = ", J(HISTO), ";"),
   "/* lm(confiance ~ universitaire). */",
   paste0("export const REG = ", J(REG), ";"),
+  "/* Gauche-droite (cps25_lr_scale_bef_1, cps25_lr_parties_1 et _2), pondéré : où chaque camp place le PLC et le PCC. */",
+  paste0("export const GAUCHE = ", J(GAUCHE), ";"),
   "/* La console : [{ in, out }] par étape, sorties capturées de R. */",
   paste0("export const ATELIER = ", J(ATELIER), ";"),
   paste0("export const FA1 = ", J(FA1), ";"),
@@ -188,5 +202,6 @@ writeLines(c(
 cat("n (fa) :", nrow(df_fa), "\n")
 cat("run 1 : alpha", res1$cronbachAlpha, "eigen", res1$factor1stEigen, ":", r(res1$factorLoadings), "\n")
 cat("run 2 : alpha", res2$cronbachAlpha, "eigen", res2$factor1stEigen, ":", r(res2$factorLoadings), "\n")
+cat("gauche-droite :", unlist(GAUCHE), "\n")
 cat("régression :", REG$constante, REG$pente, "n", REG$n, "\n")
 cat("png :", pngs, "\n")

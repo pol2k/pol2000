@@ -42,6 +42,10 @@
   import Aujourdhui9 from '$lib/deck/visuels/Aujourdhui9.svelte';
   import M9Arbre from '$lib/deck/visuels/M9Arbre.svelte';
   import M9Instruments from '$lib/deck/visuels/M9Instruments.svelte';
+  import M9Visible from '$lib/deck/visuels/M9Visible.svelte';
+  import M9Gauche from '$lib/deck/visuels/M9Gauche.svelte';
+  import M9Echelles from '$lib/deck/visuels/M9Echelles.svelte';
+  import M9Qualite from '$lib/deck/visuels/M9Qualite.svelte';
   import M9Items from '$lib/deck/visuels/M9Items.svelte';
   import M9Cible from '$lib/deck/visuels/M9Cible.svelte';
   import M9Examen from '$lib/deck/visuels/M9Examen.svelte';
@@ -83,20 +87,11 @@
   import { FOURNISSEUR, FOURNISSEUR_SECOURS } from '$lib/data/config.js';
   import { ATELIER, FA1, FA2, HIST, REG, SATURATIONS, SCRIPT } from '$lib/data/seance9.js';
 
-  const TOTAL = 84;
+  const TOTAL = 85;
   const D = 'POL-2000 · séance 9 · jeu 5 nov';
   const nb = (v) => v.toLocaleString('fr-CA').replace(/\s/g, ' ');
   const f = (v, k = 2) => v.toFixed(k).replace('.', ',');
 
-  // L'arbre de l'attitude politique (figures du cours 5 de FAS1001).
-  const ATTITUDE = {
-    racine: 'Attitude politique', sous: 'le concept',
-    dims: [
-      { nom: 'Immigration', qs: [{ q: 'Politique\nmigratoire', r: 'en accueillir +' }, { q: 'Intégration', r: 'favorable' }] },
-      { nom: 'Économie', qs: [{ q: 'Impôts', r: 'les hausser' }, { q: 'Rôle de\nl’État', r: 'plus d’État' }] },
-      { nom: 'Environnement', qs: [{ q: 'Climat', r: 'enjeu majeur' }, { q: 'Réglementation', r: 'plus de règles' }] }
-    ]
-  };
   const MERKLEY = {
     racine: 'Idéologie', sous: 'Merkley (2022)',
     dims: [
@@ -209,15 +204,15 @@ OPENROUTER_API_KEY=votre_cle_ici
     <Slide bandeau="Mesurer un concept · vos questions" droite={D}>
       <h2 class="e">Vos questions de recherche</h2>
       <ul class="dqm e">
-        <li><em>Dans quelle mesure</em> la scolarité influence-t-elle l’intérêt pour la politique ?</li>
-        <li><em>Dans quelle mesure</em> gagner une élection rend-il plus satisfait de la démocratie ?</li>
-        <li><em>Dans quelle mesure</em> la scolarité augmente-t-elle la confiance envers les institutions ?</li>
+        <li><em>Dans quelle mesure</em> la scolarité influence-t-elle l’intérêt pour la politique ?</li>
+        <li><em>Dans quelle mesure</em> gagner une élection rend-il plus satisfait de la démocratie ?</li>
+        <li><em>Dans quelle mesure</em> la scolarité augmente-t-elle la confiance envers les institutions ?</li>
       </ul>
-      <p class="grande-q e dqm-q">Mesure ? Pourquoi ce mot-là ?</p>
+      <p class="grande-q e dqm-q">Mesure ? Pourquoi ce mot-là ?</p>
     </Slide>
 
     <Slide bandeau="Mesurer un concept · mesurer" droite={D}>
-      <h2 class="e">Mesurer, ça veut dire quoi ?</h2>
+      <h2 class="e">Mesurer, ça veut dire quoi ?</h2>
       <M9Instruments />
     </Slide>
 
@@ -235,50 +230,30 @@ OPENROUTER_API_KEY=votre_cle_ici
       <p class="petit-dit e chemin-dit">Les données, ce sont des nombres mis sur des concepts. Tout le reste du cours calcule avec.</p>
     </Slide>
 
-    <Slide bandeau="Mesurer un concept · le problème" droite={D}>
-      <p class="grande-q e">Comment mesurer ce qu’on ne peut pas voir ?</p>
-      <div class="exemples e">
-        <span>l’idéologie</span><span>la confiance</span><span>l’intérêt politique</span><span>l’intelligence</span>
-      </div>
-      <p class="petit-dit e">Aucune de ces choses n’est une colonne dans un sondage.</p>
+    <Slide bandeau="Mesurer un concept · le défi" droite={D}>
+      <h2 class="e">Facile à mesurer, impossible à observer</h2>
+      <M9Visible />
     </Slide>
 
-    <Slide bandeau="Mesurer un concept · la variable latente" droite={D}>
-      <h2 class="e">Un concept, des facettes, des questions, des réponses</h2>
-      <M9Arbre arbre={ATTITUDE} />
+    <Slide bandeau="Mesurer un concept · demander" droite={D}>
+      <h2 class="e">Pourquoi ne pas simplement demander ?</h2>
+      <M9Gauche />
     </Slide>
 
-    <Slide bandeau="Mesurer un concept · un exemple publié" droite={D}>
-      <h2 class="e">L’échelle d’idéologie de Merkley (2022)</h2>
+    <Slide bandeau="Mesurer un concept · une échelle" droite={D}>
+      <h2 class="e">Alors, on construit une échelle</h2>
       <M9Arbre arbre={MERKLEY} reponses={false} />
-      <p class="credits e">Merkley, E. (2022). Polarization Eh? Ideological Divergence and Partisan Sorting in the Canadian Mass Public. <em>Public Opinion Quarterly</em>, 86(4). Huit questions de la CES, deux dimensions, un score.</p>
+      <p class="credits e">Merkley, E. (2022). Polarization Eh? Ideological Divergence and Partisan Sorting in the Canadian Mass Public. <em>Public Opinion Quarterly</em>, 86(4). Huit questions de la CES, deux dimensions, un seul score d’idéologie.</p>
     </Slide>
 
-    <Slide bandeau="Mesurer un concept · la marche à suivre" droite={D}>
-      <h2 class="e">Comment procéder</h2>
-      <div class="chemin e">
-        <div class="etape"><span class="n">1</span><strong>Le concept</strong><span>Ce qu’on veut mesurer. Invisible.</span></div>
-        <span class="fl">→</span>
-        <div class="etape"><span class="n">2</span><strong>Les indicateurs</strong><span>Des questions précises, une par facette.</span></div>
-        <span class="fl">→</span>
-        <div class="etape"><span class="n">3</span><strong>L’échelle</strong><span>Les réponses combinées en un score.</span></div>
-        <span class="fl">→</span>
-        <div class="etape rouge"><span class="n">4</span><strong>Vérifier</strong><span>Fiabilité ? Validité ?</span></div>
-      </div>
+    <Slide bandeau="Mesurer un concept · des échelles partout" droite={D}>
+      <h2 class="e">Des échelles, vous en utilisez tous les jours</h2>
+      <M9Echelles />
     </Slide>
 
-    <Slide bandeau="Mesurer un concept · notre concept" droite={D}>
-      <h2 class="e">Notre concept : la confiance envers les institutions</h2>
-      <p class="grande-q e">La scolarité augmente-t-elle la confiance envers les institutions ?</p>
-      <div class="hyp">
-        <p class="e">Personne ne répond à la question « faites-vous confiance aux institutions ? ».</p>
-        <p class="e"><strong>Mais la CES 2025 demande la confiance envers dix institutions</strong>, une à la fois, après l’élection.</p>
-      </div>
-    </Slide>
-
-    <Slide bandeau="Mesurer un concept · dix institutions" droite={D}>
-      <h2 class="e">Dix institutions, une seule question</h2>
-      <M9Items />
+    <Slide bandeau="Mesurer un concept · la qualité" droite={D}>
+      <h2 class="e">Comment savoir si une échelle est bonne ?</h2>
+      <M9Qualite />
     </Slide>
 
     <Slide bandeau="Mesurer un concept · la qualité" droite={D}>
@@ -286,26 +261,26 @@ OPENROUTER_API_KEY=votre_cle_ici
       <M9Cible />
     </Slide>
 
-    <!-- ================= L'EXAMEN D'HISTOIRE ================= -->
+    <!-- ================= PROUVER LA FIABILITÉ ================= -->
 
-    <Slide fond="encre" bandeau="L’examen d’histoire" droite={D}>
-      <h1 class="e">L’examen d’histoire</h1>
+    <Slide fond="encre" bandeau="Prouver la fiabilité" droite={D}>
+      <h1 class="e">Prouver la fiabilité</h1>
       <hr class="filet" />
-      <p class="lead e">Comment savoir si une question mesure ce qu’elle prétend mesurer ?</p>
+      <p class="lead e">Comment montrer, avec des chiffres, que des questions mesurent la même chose ?</p>
     </Slide>
 
-    <Slide bandeau="L’examen d’histoire · cinq questions" droite={D}>
-      <h2 class="e">Cinq questions, vingt-quatre élèves</h2>
+    <Slide bandeau="Prouver la fiabilité · l’examen d’histoire" droite={D}>
+      <h2 class="e">Un examen d’histoire au secondaire</h2>
       <M9Examen />
-      <p class="credits e">Données fictives : un schéma.</p>
+      <p class="credits e">Données fictives : un schéma.</p>
     </Slide>
 
-    <Slide bandeau="L’examen d’histoire · ce que fait l’analyse factorielle" droite={D}>
-      <p class="grande-q e">L’analyse factorielle compare toutes les questions et repère celle qui ne bouge pas avec les autres.</p>
-      <p class="petit-dit e">Pour un examen comme pour un concept : les questions qui mesurent la même chose répondent ensemble.</p>
+    <Slide bandeau="Prouver la fiabilité · l’intuition" droite={D}>
+      <p class="grande-q e">Chaque question d’une échelle doit aller avec chaque autre.</p>
+      <p class="petit-dit e">L’analyse factorielle fait cette vérification pour toutes les questions à la fois, et repère celle qui ne suit pas.</p>
     </Slide>
 
-    <Slide bandeau="L’examen d’histoire · trois chiffres" droite={D}>
+    <Slide bandeau="Prouver la fiabilité · trois chiffres" droite={D}>
       <h2 class="e">Trois chiffres, trois seuils</h2>
       <M9TroisChiffres />
     </Slide>
@@ -316,6 +291,20 @@ OPENROUTER_API_KEY=votre_cle_ici
       <h1 class="e">La confiance, pour vrai</h1>
       <hr class="filet" />
       <p class="lead e">Dix institutions de la CES 2025, une échelle, une régression.</p>
+    </Slide>
+
+    <Slide bandeau="Pratique dans R · notre concept" droite={D}>
+      <h2 class="e">Notre concept : la confiance envers les institutions</h2>
+      <p class="grande-q e">La scolarité augmente-t-elle la confiance envers les institutions ?</p>
+      <div class="hyp">
+        <p class="e">Personne ne répond à la question « faites-vous confiance aux institutions ? ».</p>
+        <p class="e"><strong>Mais la CES 2025 demande la confiance envers dix institutions</strong>, une à la fois, après l’élection.</p>
+      </div>
+    </Slide>
+
+    <Slide bandeau="Pratique dans R · dix institutions" droite={D}>
+      <h2 class="e">Dix institutions, une seule question</h2>
+      <M9Items />
     </Slide>
 
     <Slide bandeau="Pratique dans R · le plan" droite={D}>
@@ -332,7 +321,7 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Pratique dans R · recoder" droite={D}>
-      <h2 class="e">De 1 à 4 vers 1 à 0 : beaucoup = 1. Ne sait pas devient NA</h2>
+      <h2 class="e">De 1 à 4 vers 1 à 0 : beaucoup = 1. Ne sait pas devient NA</h2>
       <Console lignes={c_echelle_a} />
     </Slide>
 
@@ -342,9 +331,9 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Pratique dans R · le sens" droite={D}>
-      <h2 class="e">Le sens : deux institutions, la même direction</h2>
+      <h2 class="e">Le sens : deux institutions, la même direction</h2>
       <Console lignes={c_sens} />
-      <p class="petit-dit e">Si une question avait dit le contraire des autres, il aurait fallu la retourner : 1 − x.</p>
+      <p class="petit-dit e">Si une question avait dit le contraire des autres, il aurait fallu la retourner : 1 − x.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · sondr" droite={D}>
@@ -353,7 +342,7 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’analyse factorielle" droite={D}>
-      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : les coefficients de saturation des dix institutions en barres, de 0,73 pour le gouvernement fédéral à 0,23 pour la religion organisée, seule sous le seuil de 0,3. Alpha de Cronbach 0,85, première valeur propre 4,43." />
+      <M8Image code={FA1.code} img={FA1.img} l={FA1.l} h={FA1.h} px={110} dit="une ligne : alpha, valeur propre, saturations" alt="Le graphique de topdown_fa : les coefficients de saturation des dix institutions en barres, de 0,73 pour le gouvernement fédéral à 0,23 pour la religion organisée, seule sous le seuil de 0,3. Alpha de Cronbach 0,85, première valeur propre 4,43." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · lire" droite={D}>
@@ -362,29 +351,29 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Pratique dans R · lire" droite={D}>
-      <h2 class="e">Le cigare de Churchill de la CES</h2>
+      <h2 class="e">La question de hockey de la CES</h2>
       <M9Items marquer={['religion']} raisons={{ religion: 'faire confiance à une Église, ce n’est pas faire confiance à l’État' }} echelle={false} />
     </Slide>
 
     <Slide bandeau="Pratique dans R · recommencer" droite={D}>
-      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={110} nouveau={[0]} dit="sans la religion organisée : alpha 0,86, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans la religion organisée : neuf barres, toutes au-dessus de 0,3, de 0,48 à 0,73. Alpha de Cronbach 0,86, première valeur propre 4,36." />
+      <M8Image code={FA2.code} img={FA2.img} l={FA2.l} h={FA2.h} px={110} nouveau={[0]} dit="sans la religion organisée : alpha 0,86, tout au-dessus du seuil" alt="Le graphique de topdown_fa sans la religion organisée : neuf barres, toutes au-dessus de 0,3, de 0,48 à 0,73. Alpha de Cronbach 0,86, première valeur propre 4,36." />
     </Slide>
 
     <Slide bandeau="Pratique dans R · la validité" droite={D}>
-      <h2 class="e">La fiabilité, oui. La validité ?</h2>
+      <h2 class="e">La fiabilité, oui. La validité ?</h2>
       <Deux ratio="1fr 1fr">
         <Carte ton="ciel" titre="Concordance avec la théorie">
-          <p>Les neuf institutions sont-elles bien celles dont parle la littérature sur la confiance politique ? L’État, les tribunaux, la police, oui. Une Église, non.</p>
+          <p>Les neuf institutions sont-elles bien celles dont parle la littérature sur la confiance politique ? L’État, les tribunaux, la police, oui. Une Église, non.</p>
         </Carte>
         <Carte ton="vert" titre="Concordance avec d’autres mesures">
-          <p>L’échelle se comporte-t-elle comme on s’y attend ? Plus de confiance chez qui est satisfait de la démocratie (séance 8), moins chez qui a voté pour un parti perdant.</p>
+          <p>L’échelle se comporte-t-elle comme on s’y attend ? Plus de confiance chez qui est satisfait de la démocratie (séance 8), moins chez qui a voté pour un parti perdant.</p>
         </Carte>
       </Deux>
-      <p class="petit-dit e">La fiabilité est statistique : les chiffres la vérifient. La validité est théorique : c’est vous qui la défendez.</p>
+      <p class="petit-dit e">La fiabilité est statistique : les chiffres la vérifient. La validité est théorique : c’est vous qui la défendez.</p>
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’échelle" droite={D}>
-      <h2 class="e">L’échelle : la moyenne des neuf</h2>
+      <h2 class="e">L’échelle : la moyenne des neuf</h2>
       <Console lignes={c_construire} />
     </Slide>
 
@@ -393,17 +382,17 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="Pratique dans R · l’appliquer" droite={D}>
-      <h2 class="e">La scolarité augmente-t-elle la confiance ?</h2>
+      <h2 class="e">La scolarité augmente-t-elle la confiance ?</h2>
       <Console lignes={c_regression} />
     </Slide>
 
     <Slide bandeau="Mesurer un concept · retenir" droite={D}>
       <h2 class="e">Retenir</h2>
       <ol class="retenir e">
-        <li><span>Un concept ne se voit pas. On le mesure par ses indicateurs.</span></li>
-        <li><span>Plusieurs questions valent mieux qu’une, si elles répondent ensemble.</span></li>
-        <li><span>Même sens, même échelle, pas de « ne sait pas » caché dans un chiffre.</span></li>
-        <li><span>La fiabilité est statistique, les chiffres la vérifient. La validité est théorique, c’est votre argument.</span></li>
+        <li><span>Mesurer, c’est mettre un nombre sur une chose, même une chose qu’on ne peut pas observer.</span></li>
+        <li><span>Une seule question ne suffit pas. On construit une échelle.</span></li>
+        <li><span>Une bonne échelle est fiable et valide. La fiabilité est statistique, la validité est théorique.</span></li>
+        <li><span>Des questions fiables vont ensemble : qui réussit l’une réussit les autres.</span></li>
       </ol>
     </Slide>
 
@@ -413,7 +402,7 @@ OPENROUTER_API_KEY=votre_cle_ici
          de l'École d'été ont changé. -->
 
     <Slide fond="encre" bandeau="Définir l’IA" droite={D}>
-      <h1 class="e">Qu’est-ce que l’IA ?</h1>
+      <h1 class="e">Qu’est-ce que l’IA ?</h1>
       <hr class="filet" />
     </Slide>
 
@@ -423,19 +412,19 @@ OPENROUTER_API_KEY=votre_cle_ici
       <ul class="defs e">
         <li class="retenue">
           <span class="lettre">A</span>
-          <span class="q">Est-ce que le système peut décider et agir ? <Cite k="russell2020" /></span>
+          <span class="q">Est-ce que le système peut décider et agir ? <Cite k="russell2020" /></span>
         </li>
         <li>
           <span class="lettre">B</span>
-          <span class="q">Est-ce que le système peut passer pour un humain ? <Cite k="turing1950" /></span>
+          <span class="q">Est-ce que le système peut passer pour un humain ? <Cite k="turing1950" /></span>
         </li>
         <li>
           <span class="lettre">C</span>
-          <span class="q">Est-ce que le système décide par la logique ? <Cite k="jordan2015" /></span>
+          <span class="q">Est-ce que le système décide par la logique ? <Cite k="jordan2015" /></span>
         </li>
       </ul>
       <p class="e">
-        Aucun consensus : beaucoup plus de définitions recensées.
+        Aucun consensus : beaucoup plus de définitions recensées.
         <Cite k="legg2007" /> <Cite k="wang2019" />
       </p>
     </Slide>
@@ -481,7 +470,7 @@ OPENROUTER_API_KEY=votre_cle_ici
       <h2 class="e">Les données d’entraînement</h2>
       <Corpus />
       <p class="e credits">
-        Parts et époques : corpus d’entraînement de LLaMA, tableau 1 <Cite k="touvron2023" />.
+        Parts et époques : corpus d’entraînement de LLaMA, tableau 1 <Cite k="touvron2023" />.
         Sites les plus représentés de C4 <Cite k="dodge2021" />.
       </p>
     </Slide>
@@ -493,7 +482,7 @@ OPENROUTER_API_KEY=votre_cle_ici
 
     <Slide bandeau="Mécanique" droite={D}>
       <h2 class="e">Le modèle ne voit pas des mots</h2>
-      <p class="e">La phrase qu’il vient d’écrire, telle qu’il l’a vue :</p>
+      <p class="e">La phrase qu’il vient d’écrire, telle qu’il l’a vue :</p>
       <Tokeniseur />
       <p class="e credits">
         Le surcoût vaut pour toutes les langues éloignées de l’anglais, et la qualité y baisse
@@ -515,7 +504,7 @@ OPENROUTER_API_KEY=votre_cle_ici
       <Poids />
       <p class="e credits">
         Poids réels de <code>q_proj</code>, couche 0, lus dans le fichier <code>model.safetensors</code>
-        de Qwen2.5-0.5B. Modèle ouvert : on peut le télécharger et tout lister.
+        de Qwen2.5-0.5B. Modèle ouvert : on peut le télécharger et tout lister.
       </p>
     </Slide>
 
@@ -523,7 +512,7 @@ OPENROUTER_API_KEY=votre_cle_ici
       <h2 class="e">L’hallucination n’est pas un bug</h2>
       <Hallucination />
       <p class="e credits">
-        Sortie contrainte · vérification externe · validation sur vérité terrain : les trois parades.
+        Sortie contrainte · vérification externe · validation sur vérité terrain : les trois parades.
       </p>
     </Slide>
 
@@ -541,7 +530,7 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide fond="encre" bandeau="Deuxième temps" droite={D}>
-      <h1 class="e">Pourquoi ne pas utiliser le chat classique<br />mais l’API ?</h1>
+      <h1 class="e">Pourquoi ne pas utiliser le chat classique<br />mais l’API ?</h1>
       <hr class="filet" />
     </Slide>
 
@@ -558,7 +547,7 @@ OPENROUTER_API_KEY=votre_cle_ici
       <h2 class="e">Les LLMs sont tangibles</h2>
       <Centre />
       <p class="e credits">
-        Colossus, à Memphis : nombre de GPU <Cite k="nvidia2024" />, turbines
+        Colossus, à Memphis : nombre de GPU <Cite k="nvidia2024" />, turbines
         <Cite k="techcrunch2025" />. Équivalent en foyers calculé d’après la fiche technique du
         H100 SXM et la consommation résidentielle moyenne d’Hydro-Québec. Eau <Cite k="li2023" />.
       </p>
@@ -601,12 +590,12 @@ OPENROUTER_API_KEY=votre_cle_ici
     </Slide>
 
     <Slide bandeau="L’ancienne façon" droite={D}>
-      <h2 class="e">Avant : Utilisation de dictionnaires</h2>
+      <h2 class="e">Avant : Utilisation de dictionnaires</h2>
       <Dictionnaire />
     </Slide>
 
     <Slide bandeau="La nouvelle façon" droite={D}>
-      <h2 class="e">Maintenant : Utilisation de LLMs</h2>
+      <h2 class="e">Maintenant : Utilisation de LLMs</h2>
       <Classifieur />
     </Slide>
 
@@ -655,7 +644,7 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
     </Slide>
 
     <Slide bandeau="Le catalogue" droite={D}>
-      <h2 class="e">Comment choisir son modèle ?</h2>
+      <h2 class="e">Comment choisir son modèle ?</h2>
       <Modeles />
       <p class="e credits">Catalogue OpenRouter relevé le 24 août 2026.</p>
     </Slide>
@@ -771,7 +760,7 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
       <h1 class="e">Jeudi 12 novembre</h1>
       <hr class="filet" />
       <p class="lead e">Le problème fondamental de l’inférence causale. Puis l’examen 2.</p>
-      <p class="lead e greve-encre">Sous réserve de la grève : s’il y a piquetage, je vous écris.</p>
+      <p class="lead e greve-encre">Sous réserve de la grève : s’il y a piquetage, je vous écris.</p>
     </Slide>
 
     <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
@@ -787,10 +776,10 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
       </div>
     </Slide>
 
-    <!-- ================= ANNEXE : TOUT LE CODE ================= -->
+    <!-- ================= ANNEXE : TOUT LE CODE ================= -->
 
     <Slide fond="encre" bandeau="Annexe" droite={D}>
-      <h1 class="e">Annexe : tout le code</h1>
+      <h1 class="e">Annexe : tout le code</h1>
       <hr class="filet" />
       <p class="lead e">La confiance envers les institutions dans la CES 2025, étape par étape. À refaire chez vous.</p>
     </Slide>
@@ -833,7 +822,7 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
         </ul>
       </div>
       <p class="e credits">
-        Images d’archives, Wikimedia Commons :
+        Images d’archives, Wikimedia Commons :
         {#each Object.values(CREDITS_IMAGES) as c, i}{i > 0 ? ' · ' : ''}{c.auteur} ({c.licence}){/each}
       </p>
     </Slide>
@@ -858,7 +847,6 @@ chat_ollama(model = "gemma3")     # sur VOTRE machine`}
 .dqm em { font-style: normal; font-weight: 700; color: var(--dk-accent); }
 .dqm-q { margin-top: 1.4em; }
 .chemin-dit { text-align: center; margin-top: 1.4em; font-size: 1em; }
-.exemples { display: flex; flex-wrap: wrap; gap: 0.8em 1.6em; margin: 1.2em 0 1em; font-size: 1.4em; font-weight: 600; color: var(--dk-accent); }
 .hyp { margin-top: 1.6em; display: flex; flex-direction: column; gap: 0.5em; font-size: 1.25em; }
 .hyp p { margin: 0; }
 
