@@ -84,7 +84,7 @@ export const EVALUATIONS = [
     fichier: 'travaux/POL-2000_A26_travail_mi-session.pdf', bouton: 'Télécharger les consignes (PDF)' },
   { id: 'examen2', nom: 'Examen 2 · Les statistiques descriptives', court: 'Examen 2', groupe: 'ex', poids: 15, date: '2026-11-12', heure: '17h20 à 18h20', mode: 'En classe, après le cours · sur papier, à livre ouvert · aucun appareil' },
   { id: 'examen3', nom: 'Examen 3 · Régressions linéaires simple et multiple', court: 'Examen 3', groupe: 'ex', poids: 15, date: '2026-12-10', heure: '17h20 à 18h20', mode: 'En classe, après le cours · sur papier, à livre ouvert · aucun appareil' },
-  { id: 'final', nom: 'Travail final', court: 'Final', groupe: 'tr', poids: 25, date: '2026-12-18', heure: '23h59', mode: 'Individuel · PDF, boîte de dépôt · Positron obligatoire',
+  { id: 'final', nom: 'Travail final', court: 'Final', groupe: 'tr', poids: 25, date: '2026-12-18', heure: '23h59', mode: 'Individuel · PDF et dossier pol2000 en .zip, boîte de dépôt · Positron obligatoire',
     fichier: 'travaux/POL-2000_A26_travail_final.pdf', bouton: 'Télécharger les consignes (PDF)' },
   { id: 'datacamp2', nom: 'Datacamp · 1re et 2e parties', court: 'DC 2', groupe: 'dc', poids: 5, date: '2026-12-18', heure: '23h59', mode: 'Tous les devoirs de la session' }
 ];
