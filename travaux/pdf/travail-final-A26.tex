@@ -1,0 +1,154 @@
+% POL-2000 · Travail final (A26) · consignes aux étudiant.e.s
+% H24 travailFinSession by Adrien Cloutier, kept nearly verbatim. Build: ./build.sh (xelatex, twice)
+\documentclass[11pt]{article}
+\usepackage{fontspec}
+\usepackage[letterpaper,top=0.6in,bottom=0.75in,left=0.8in,right=0.8in,footskip=0.4in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{newunicodechar}
+\usepackage{needspace}
+\usepackage{ragged2e}
+% Espace fine insécable : XeTeX coupait la ligne dessus.
+\newunicodechar{ }{\nobreak\hspace{0.16em}\nobreak}
+
+\definecolor{rouge}{HTML}{C6102E}
+\definecolor{encre}{HTML}{121314}
+\definecolor{papier}{HTML}{F4F4F0}
+\definecolor{gris}{HTML}{6B6B6B}
+
+\setmainfont{IBMPlexSans}[Extension=.otf,UprightFont=*-Regular,BoldFont=*-SemiBold,ItalicFont=*-Italic]
+\setmonofont{IBMPlexMono}[Extension=.otf,UprightFont=*-Regular,BoldFont=*-SemiBold,ItalicFont=*-Italic]
+\newfontfamily\titre{IBMPlexMono}[Extension=.otf,UprightFont=*-SemiBold,BoldFont=*-Bold]
+
+\hypersetup{pdftitle={POL-2000 · Travail final · Consignes},pdfauthor={Laurence-Olivier M. Foisy}}
+\color{encre}
+\frenchspacing
+\setlength{\parskip}{4pt}
+\linespread{1.04}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\small\ttfamily\color{gris}POL-2000 · Travail final · Automne 2026}
+\fancyfoot[R]{\small\ttfamily\color{gris}\thepage{} / \pageref*{LastPage}}
+
+% Titre de section : mono, filet de 2 pt
+\newcommand{\etape}[2]{%
+  \par\vspace{10pt}\Needspace{4\baselineskip}%
+  {\titre\small\color{rouge}#1}\par\vspace{-2pt}%
+  {\titre\Large #2}\par\vspace{3pt}%
+  {\color{encre}\hrule height 2pt}\vspace{6pt}}
+
+% Encadrés : coins carrés, sans ombre
+\newtcolorbox{regle}{enhanced,before upper=\raggedright,sharp corners,boxrule=0pt,leftrule=4pt,colback=papier,colframe=rouge,left=10pt,right=8pt,top=6pt,bottom=6pt}
+\newtcolorbox{cadre}{enhanced,sharp corners,boxrule=2pt,colback=white,colframe=encre,left=10pt,right=10pt,top=8pt,bottom=8pt}
+
+\setlist[itemize]{leftmargin=1.3em,topsep=2pt,itemsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.6em,topsep=2pt,itemsep=3pt,parsep=0pt}
+\definecolor{codefond}{HTML}{EEEEE9}
+% Code en ligne : fond gris pâle, comme `code` dans les diapos.
+\newcommand{\code}[1]{{\setlength{\fboxsep}{1.6pt}\colorbox{codefond}{\ttfamily\small #1}}}
+% Bloc de code : fond gris pâle, cadre encre, filet rouge à gauche (bloc-code des diapos).
+\newtcolorbox{codebloc}{enhanced,sharp corners,colback=codefond,colframe=encre,boxrule=1pt,left=10pt,right=8pt,top=4pt,bottom=4pt,before skip=4pt,after skip=6pt,fontupper=\ttfamily\small,overlay={\fill[rouge] (frame.south west) rectangle ([xshift=3.5pt]frame.north west);}}
+\newcommand{\bloc}[1]{\begin{codebloc}#1\end{codebloc}}
+% Partie du travail : numéro rouge, puis titre
+\newcommand{\partie}[2]{\par\vspace{7pt}\Needspace{4\baselineskip}{\titre\large\color{rouge}#1}\hspace{0.6em}{\titre\large #2}\par\vspace{1pt}}
+
+\begin{document}
+\raggedright
+% Pas de césure : les motifs anglais coupaient mal le français (capa-ble).
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\setlength{\parindent}{0pt}
+
+% Texte : consignes H24 d'Adrien Cloutier (travailFinSession.tex), reprises telles quelles.
+% Changements A26 seulement : banque de données (CES 2025), Positron, tableau modelsummary
+% exporté comme en séance 7, monPortail, date, points-virgules retirés, coquilles corrigées,
+% règle sur l'IA (plan de cours) au lieu de la phrase sur ChatGPT.
+
+% ---------------------------------------------------------------- en-tête
+\noindent\begin{minipage}[b]{0.7\textwidth}
+{\titre\small\color{gris}POL-2000 · MÉTHODOLOGIE QUANTITATIVE · AUTOMNE 2026}\par\vspace{4pt}
+{\titre\fontsize{24}{28}\selectfont Travail final}\par\vspace{2pt}
+{\titre\large Consignes}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.25\textwidth}\raggedleft
+\includegraphics[height=0.55in]{ulaval-logo.png}
+\end{minipage}
+\par\vspace{6pt}{\color{rouge}\hrule height 2pt}\vspace{8pt}
+
+\noindent\begin{tabularx}{\textwidth}{@{}*{4}{>{\raggedright\arraybackslash}X}@{}}
+{\titre\small\color{gris}PONDÉRATION} & {\titre\small\color{gris}MODE} & {\titre\small\color{gris}REMISE} & {\titre\small\color{rouge}À REMETTRE}\\
+{\titre\Large\color{rouge}25 \%} & Individuel & Format PDF, sur monPortail & \textbf{Vendredi 18 décembre, 23h59}\\
+\end{tabularx}
+
+% ---------------------------------------------------------------- description
+\etape{DESCRIPTION}{Description}
+
+Le travail final est une version longue et améliorée de votre travail de mi-session. Il doit ainsi présenter un peaufinement de votre premier travail, en considération des commentaires que vous avez reçus, ainsi qu'une bonification grâce à de nouvelles sections.
+
+\textbf{En partant de votre travail de mi-session et en considérant les commentaires que nous vous avons offerts, vous devez :}
+\begin{enumerate}
+\item Concevoir une question de recherche mettant en relation une variable dépendante et une variable indépendante.
+\item Présenter une revue de la littérature \textbf{bonifiée} avec des théories permettant de dériver des hypothèses testables empiriquement.
+\item Formuler une hypothèse (et une hypothèse nulle) sur la relation entre vos deux variables.
+\item Présenter la base de données et les variables sélectionnées pour tester les hypothèses.
+\item Inclure un graphe orienté acyclique (GOA).
+\item Présenter des statistiques descriptives.
+\item Exécuter une régression linéaire pour estimer la relation entre les variables et présenter le tableau de régression.
+\item Interpréter les résultats.
+\item Considérer les biais potentiels, discuter des limites de votre analyse et réfléchir à une méthode alternative (dans une recherche future) pour estimer l'effet causal qui vous intéresse.
+\end{enumerate}
+
+Ceci est un travail individuel et aucune collaboration n'est permise. \textbf{Tou.te.s les étudiant.e.s doivent travailler avec la banque de données de l'Étude électorale canadienne 2025 (la CES)}, la même qu'au travail de mi-session. Cette banque de données et son codebook sont déjà dans votre dossier \code{pol2000/data}. Sinon, vous pouvez les télécharger dans la console de Positron :
+\bloc{ces::download\_ces\_dataset("2025")\\ces::download\_pdf\_codebook("2025")}
+
+Le travail est à remettre en \textbf{format PDF} sur monPortail au plus tard le vendredi 18 décembre 2026, à 23h59. Veuillez prendre note \textbf{qu'il est nécessaire d'utiliser R et Positron pour ce travail}.
+
+La présentation et la citation des sources seront prises en compte dans votre note. Consultez et respectez le guide de présentation des travaux du Département de science politique de l'Université Laval.
+
+% ---------------------------------------------------------------- contenu
+\etape{CONTENU}{Contenu}
+
+En plus des éléments nécessaires qui ont été inclus dans votre travail de mi-session (\textbf{retournez lire les consignes du travail de mi-session au besoin !}), vous devez produire un travail qui ajoute les éléments suivants :
+
+\partie{1}{Deux nouvelles sources scientifiques}
+Bonifiez légèrement votre travail en retournant fouiller dans la littérature scientifique. Ajoutez 2 nouvelles sources, pour un total de 6. Votre revue de littérature doit désormais faire 3 paragraphes. Retravaillez cette section pour présenter clairement l'état des connaissances. Ces références doivent bien sûr se retrouver dans la bibliographie du travail. Assurez-vous que, grâce à votre revue de littérature, il soit simple de dériver votre hypothèse, et simple pour le lecteur de comprendre votre logique théorique.
+
+\partie{2}{Considérer les biais potentiels}
+Cette partie inclut l'usage des graphes orientés acycliques (GOA). Vous devez illustrer la relation entre vos deux variables à l'aide d'un GOA. En plus des deux variables d'intérêt (votre X et votre Y), votre GOA doit inclure trois autres variables qui risquent d'être associées à la variable dépendante. Autrement dit, votre GOA devrait inclure cinq variables en tout. Il n'est pas nécessaire que ces variables existent dans la banque de données, mais \textbf{assurez-vous qu'au moins une s'y trouve}. L'objectif est de réfléchir aux autres causes potentielles de cette relation et d'identifier lesquelles de ces variables risquent de biaiser l'estimation de la relation entre votre variable indépendante et la variable dépendante. Expliquez, en mots, en quoi chacune de ces variables peut affecter la relation (de quels types de biais s'agit-il ?). Dites pour quelles variables vous devriez contrôler et encadrez ces variables dans votre GOA. Il se peut que vous ayez à effectuer une recherche supplémentaire pour compléter cette section. Ces références doivent se retrouver dans la bibliographie du travail.
+
+\partie{3}{Présenter des statistiques descriptives des variables d’intérêt}
+Nommez les variables de la banque de données que vous avez choisies pour répondre à la question. Comment les variables dépendante et indépendante sont-elles codées dans la banque de données ? Comment sont codées les variables de contrôle ? Présentez la distribution de vos variables d'intérêt sous forme de graphique ou de tableau.
+
+\partie{4}{Exécuter une régression linéaire}
+Comment la régression linéaire vous permet-elle de répondre à votre question de recherche ? Expliquez le fonctionnement de cette méthode. Référez-vous aux notes de cours et au manuel pour cette section. Ensuite, exécutez cette méthode et présentez les résultats sous forme de tableau de régression grâce au package \code{modelsummary}. Exportez le tableau en ajoutant l'argument \code{output} à l'appel, comme vu en classe, puis ajoutez-le à votre travail :
+\bloc{modelsummary(modele, stars = TRUE, output = "tableau.docx")}
+N'oubliez pas que votre GOA dictera le nombre de variables dans votre modèle de régression. Si, une fois que vous avez schématisé votre GOA et fait la justification à l'aide des recherches existantes, il n'y a pas de variables pour lesquelles vous devez contrôler, vous aurez un modèle linéaire simple et non un modèle linéaire multiple.
+
+\partie{5}{Interprétation des résultats}
+Vos hypothèses se sont-elles avérées ? Si oui, expliquez. Si non, pourquoi ? Discutez de la substance et du niveau de signification statistique de vos résultats de régression. Ce n'est pas un problème si votre modèle n'atteint pas le seuil de signification statistique. Autrement, vous serez en train de commettre la faute de manipuler les données. Vous devez tout de même être en mesure d'interpréter le modèle.
+
+\partie{6}{Une discussion des limites de l’analyse et de la causalité}
+Quelles sont les limites de votre analyse ? Quelle autre méthode de recherche quantitative (ou qualitative, pourquoi pas !) nous permettrait de mesurer l'effet causal entre votre variable indépendante et votre variable dépendante ?
+
+% ---------------------------------------------------------------- format
+\etape{FORMAT}{Format}
+
+Le format du travail : \textbf{format PDF} (un fichier .docx ne sera pas accepté), longueur maximale de 8 pages (la page couverture et la bibliographie ne sont pas comprises, mais les graphiques le sont), taille de police 12 pt, Times New Roman à 1,5 interligne. Le travail devra respecter le guide de présentation des travaux du Département de science politique de l'Université Laval. Les normes de citations et de références devront respecter le format APA (auteur-date).
+
+\begin{regle}
+\textbf{Intelligence artificielle.} Permis, à condition de le déclarer : obtenir de l'aide pour écrire, comprendre ou déboguer du code R. Non permis : l'interprétation des résultats et la rédaction des travaux. Ce que vous affirmez, vous devez pouvoir le défendre. À la fin du travail, après la bibliographie, déclarez si vous avez utilisé un outil d'IA. Si oui, lequel, comment et pourquoi ?
+\end{regle}
+
+\textbf{Relisez-vous, faites attention à la qualité de la langue et de la mise en page, et assurez-vous que votre travail reflète votre personnalité ! Bonne fin de session !}
+
+\end{document}
