@@ -81,9 +81,9 @@ export const GOA = {
   },
 
   // ---------- les trois types de chemins
-  fourchetteABC: { noeuds: ligne(['A', 'B', 'C'], 260), aretes: [['B', 'A'], ['B', 'C']] },
-  chaineABC: { noeuds: ligne(['A', 'B', 'C'], 260), aretes: [['A', 'B'], ['B', 'C']] },
-  collisionABC: { noeuds: ligne(['A', 'B', 'C'], 260), aretes: [['A', 'B'], ['C', 'B']] },
+  fourchetteABC: { noeuds: ligne(['A', 'B', 'C'], 190), aretes: [['B', 'A'], ['B', 'C']] },
+  chaineABC: { noeuds: ligne(['A', 'B', 'C'], 190), aretes: [['A', 'B'], ['B', 'C']] },
+  collisionABC: { noeuds: ligne(['A', 'B', 'C'], 190), aretes: [['A', 'B'], ['C', 'B']] },
   sucre: {
     noeuds: [
       { id: 'sucre', label: 'Consommation\nde sucre', x: 0, y: 0 },

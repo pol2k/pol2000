@@ -29,6 +29,7 @@
    *              chemin    ids, d'une extrémité à l'autre : le chemin lu;
    *              types     true : sous chaque maillon du chemin, son type;
    *              verdict   false : pas de verdict sous le graphe;
+   *              court     true : le verdict sans sa glose;
    *              note      quelques mots après le verdict;
    *              flux      true (toutes) ou index des flèches avec le flux;
    *              coefs     true : les coefficients sur les flèches;
@@ -223,7 +224,7 @@
   {#if lecture && s.verdict !== false}
     <p class="goa-verdict" class:ouvert={lecture.ouvert}>
       <span class="goa-v-ligne"><span class="goa-v-mot">{lecture.ouvert ? 'Ouvert' : 'Fermé'}</span>
-      <span class="goa-v-glose">{lecture.ouvert ? 'l’information circule' : 'l’information ne circule pas'}</span></span>
+      {#if !s.court}<span class="goa-v-glose">{lecture.ouvert ? 'l’information circule' : 'l’information ne circule pas'}</span>{/if}</span>
       {#if s.note}<span class="goa-v-note">{s.note}</span>{/if}
     </p>
   {:else if s.note}
@@ -233,7 +234,7 @@
 </div>
 
 <style>
-  .goa { display: flex; flex-direction: column; align-items: center; gap: 0.35em; }
+  .goa { display: flex; flex-direction: column; align-items: center; gap: 0.35em; width: 100%; }
   svg { display: block; max-width: 100%; height: auto; overflow: visible; }
   text { font-family: var(--dk-mono); }
 

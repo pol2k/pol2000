@@ -37,9 +37,12 @@
   import M11DeuxMondes from '$lib/deck/visuels/M11DeuxMondes.svelte';
   import M11Liste from '$lib/deck/visuels/M11Liste.svelte';
   import Goa from '$lib/deck/visuels/Goa.svelte';
+  import M11Grille from '$lib/deck/visuels/M11Grille.svelte';
+  import M11Escalier from '$lib/deck/visuels/M11Escalier.svelte';
   import { GOA } from '$lib/data/seance11-goa.js';
 
-  const TOTAL = 17;
+  const TOTAL = 35;
+  const ABC = ['A', 'B', 'C'];
   const D = 'POL-2000 · séance 11 · jeu 19 nov';
   const SCHEMA = 'Schéma, aucune donnée';
 </script>
@@ -165,7 +168,7 @@
 
     <Slide bandeau="Acyclique" droite={D}>
       <h2 class="e">Acyclique : jamais de retour au point de départ</h2>
-      <div class="cote-a-cote">
+      <div class="visuel cote-a-cote">
         <div class="cote">
           <Goa graphe={GOA.acycliqueBon} taille={1.2} />
           <p class="verdict-oui e">Un GOA</p>
@@ -179,7 +182,7 @@
 
     <Slide bandeau="Effet ou information" droite={D}>
       <h2 class="e">Deux choses circulent dans un GOA</h2>
-      <div class="deux-cartes">
+      <div class="visuel deux-cartes">
         <div class="carte-ei e">
           <svg viewBox="0 0 300 60" aria-hidden="true"><line x1="20" y1="30" x2="250" y2="30" class="ei-l" /><polygon points="280,30 250,16 250,44" class="ei-p" /><circle cx="90" cy="30" r="9" class="ei-pt" /><circle cx="180" cy="30" r="9" class="ei-pt" /></svg>
           <strong>L’effet causal</strong>
@@ -201,6 +204,151 @@
       ]} />
     </Slide>
 
+
+    <!-- ================= 4. TROIS TYPES DE CHEMINS ================= -->
+
+    <Slide fond="encre" bandeau="Trois chemins" droite={D}>
+      <h1 class="e">Ouvert ou fermé ?</h1>
+      <hr class="filet" />
+      <p class="lead e">Trois types de chemins. Une seule question : l’information circule-t-elle ?</p>
+    </Slide>
+
+    <Slide bandeau="Trois chemins" droite={D}>
+      <h2 class="e">Trois types de chemins</h2>
+      <div class="visuel trois">
+        <div class="cote"><p class="nom-ch e">Fourchette</p><Goa graphe={GOA.fourchetteABC} taille={0.8} temps={[{ chemin: ABC, court: true }]} /></div>
+        <div class="cote"><p class="nom-ch e">Chaîne</p><Goa graphe={GOA.chaineABC} taille={0.8} temps={[{ chemin: ABC, court: true }]} /></div>
+        <div class="cote"><p class="nom-ch e">Collision</p><Goa graphe={GOA.collisionABC} taille={0.8} temps={[{ chemin: ABC, court: true }]} /></div>
+      </div>
+    </Slide>
+
+    <Slide bandeau="Contrôler" droite={D}>
+      <h2 class="e">Contrôler une variable, c’est l’encadrer</h2>
+      <Goa graphe={GOA.chaineABC} taille={1.5} legende={SCHEMA} temps={[
+        { note: 'B varie' },
+        { controles: ['B'], note: 'On contrôle B : on le fixe à une seule valeur' }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="Ouvert ou fermé" droite={D}>
+      <h2 class="e">Contrôler le maillon central renverse tout</h2>
+      <Goa graphe={GOA.ceinture} legende={SCHEMA} temps={[
+        { chemin: ['risque', 'ceinture', 'blessure'], note: 'Le comportement annonce la blessure, et l’inverse' },
+        { chemin: ['risque', 'ceinture', 'blessure'], controles: ['ceinture'], note: 'On sait si la ceinture était portée : le comportement n’annonce plus rien' }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="Fourchette" droite={D}>
+      <h2 class="e">Fourchette : une cause, deux effets</h2>
+      <Goa graphe={GOA.glace} legende={SCHEMA} temps={[
+        { chemin: ['mercure', 'temperature', 'glace'], types: true, note: 'Le mercure annonce les ventes' },
+        { chemin: ['mercure', 'temperature', 'glace'], types: true, controles: ['temperature'], note: 'Il fait 35 °C : le mercure n’ajoute plus rien' }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="Chaîne" droite={D}>
+      <h2 class="e">Chaîne : une cause, puis une autre</h2>
+      <Goa graphe={GOA.sucre} legende={SCHEMA} temps={[
+        { chemin: ['sucre', 'diabete', 'coeur'], types: true, note: 'Le sucre annonce la maladie, et l’inverse' },
+        { chemin: ['sucre', 'diabete', 'coeur'], types: true, controles: ['diabete'], note: 'Pas de diabète : la maladie ne dit plus rien du sucre' }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="Collision" droite={D}>
+      <h2 class="e">Collision : deux causes, un effet</h2>
+      <Goa graphe={GOA.arbitre} legende={SCHEMA} temps={[
+        { chemin: ['performance', 'victoire', 'biais'], types: true, note: 'Un arbitre biaisé ne dit rien du jeu de l’équipe' },
+        { chemin: ['performance', 'victoire', 'biais'], types: true, controles: ['victoire'], note: 'Elle a gagné en jouant mal ? L’arbitre était peut-être biaisé' }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="Collision" droite={D}>
+      <h2 class="e">Contrôler un descendant de la collision l’ouvre aussi</h2>
+      <Goa graphe={GOA.collisionDescendant} taille={1.4} legende="Arel-Bundock (2021), p. 123 · schéma, aucune donnée" temps={[
+        { chemin: ABC },
+        { chemin: ABC, controles: ['D'] }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="En résumé" droite={D}>
+      <h2 class="e">Contrôler le maillon central renverse le flot</h2>
+      <M11Grille />
+    </Slide>
+
+    <Slide bandeau="Combinaisons" droite={D}>
+      <h2 class="e">Un seul maillon fermé suffit</h2>
+      <div class="visuel pile">
+        <Goa graphe={GOA.combinaisonOuverte} taille={0.95} temps={[{ chemin: ['A', 'B', 'C', 'D', 'E'], types: true, court: true }]} />
+        <Goa graphe={GOA.combinaisonFermee} taille={0.95} temps={[{ chemin: ['A', 'B', 'C', 'D', 'E'], types: true, court: true }]} />
+      </div>
+    </Slide>
+
+    <!-- ================= 5. LES CONTRÔLES ================= -->
+
+    <Slide fond="encre" bandeau="Les contrôles" droite={D}>
+      <h1 class="e">Quoi contrôler ?</h1>
+      <hr class="filet" />
+      <p class="lead e">Les deux règles de la séance 8, avec les mots du GOA.</p>
+    </Slide>
+
+    <Slide bandeau="Les contrôles" droite={D}>
+      <h2 class="e">Deux conditions pour estimer l’effet de X sur Y</h2>
+      <M11Liste items={[
+        { t: 'Ne pas contrôler un descendant de X', g: 'Elle dit quelles variables laisser dehors.' },
+        { t: 'Fermer tous les chemins par la porte arrière', g: 'Les causes de la cause. Elle dit quelles variables inclure.' }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="Condition 1" droite={D}>
+      <h2 class="e">Ne pas contrôler un descendant de X</h2>
+      <Goa graphe={GOA.salaire} legende={SCHEMA} temps={[
+        { flux: true, note: 'Le sexe agit sur le salaire par deux chemins' },
+        { flux: true, controles: ['occupation'], barres: ['occupation'], note: '« À occupation égale » : on perd une partie de l’effet' }
+      ]} />
+      <p class="source e">D’après Arel-Bundock (2021), p. 125</p>
+    </Slide>
+
+    <Slide bandeau="Condition 2" droite={D}>
+      <h2 class="e">Fermer les chemins par la porte arrière</h2>
+      <Goa graphe={GOA.itinerance} legende={SCHEMA} temps={[
+        { flux: true },
+        { chemin: ['eclatement', 'sante', 'itinerance'], note: 'Une porte arrière : sa flèche pointe vers la cause' },
+        { chemin: ['eclatement', 'sante', 'itinerance'], controles: ['sante'], note: 'On contrôle la santé mentale : la porte est fermée' }
+      ]} />
+      <p class="source e">D’après Arel-Bundock (2021), p. 126</p>
+    </Slide>
+
+    <Slide bandeau="À vous" droite={D}>
+      <h2 class="e">L’effet de l’éducation sur l’idéologie : quoi contrôler ?</h2>
+      <Goa graphe={GOA.education} legende={SCHEMA} temps={[{ accent: ['education', 'ideologie'] }]} />
+    </Slide>
+
+    <Slide bandeau="Réponse" droite={D}>
+      <h2 class="e">L’effet de l’éducation sur l’idéologie : quoi contrôler ?</h2>
+      <Goa graphe={GOA.education} legende={SCHEMA} temps={[
+        { accent: ['education', 'ideologie'], barres: ['revenu_ind'], note: 'Le revenu individuel : un descendant. On ne le contrôle pas' },
+        { accent: ['education', 'ideologie'], barres: ['revenu_ind'], chemin: ['education', 'revenu_parents', 'revenu_ind', 'ideologie'], note: 'Une porte arrière, par le revenu des parents' },
+        { accent: ['education', 'ideologie'], barres: ['revenu_ind'], chemin: ['education', 'revenu_parents', 'revenu_ind', 'ideologie'], controles: ['revenu_parents'], note: 'On contrôle le revenu des parents. Seulement lui' }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="Retour sur la séance 8" droite={D}>
+      <h2 class="e">Avait-on le droit de contrôler le revenu ?</h2>
+      <div class="visuel escalier">
+        <M11Escalier marque />
+        <Goa graphe={GOA.escalier8} taille={0.9} legende={SCHEMA} temps={[
+          { flux: true, controles: ['age'] },
+          { flux: true, controles: ['age', 'revenu'], barres: ['revenu'], note: 'Non : le revenu est un descendant de la scolarité' }
+        ]} />
+      </div>
+    </Slide>
+
+    <Slide fond="encre" bandeau="Pause" droite={D}>
+      <h1 class="e">Pause</h1>
+      <hr class="filet" />
+      <p class="lead e">Ensuite : à vous de jouer, puis R.</p>
+    </Slide>
+
   {/snippet}
 </Deck>
 
@@ -218,7 +366,7 @@
 .slogan-e { font-size: 2.6em; line-height: 1.25; font-weight: 600; margin: 0 0 0.4em; }
 .source { margin-top: 1em; font-size: 0.62em; color: var(--dk-gris); }
 
-.cote-a-cote { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4em; margin-top: 1.4em; align-items: end; }
+.cote-a-cote { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 2.4em; margin-top: 1.4em; align-items: end; }
 .cote { display: flex; flex-direction: column; align-items: center; gap: 0.6em; }
 .verdict-oui, .verdict-non { font-size: 1.2em; font-weight: 700; margin: 0; }
 .verdict-non { color: var(--dk-accent); }
@@ -234,4 +382,8 @@
 .ei-pt { fill: var(--dk-encre); }
 .ei-r { stroke: var(--dk-accent); stroke-width: 8; }
 .ei-rp { fill: var(--dk-accent); }
+.trois { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2em; margin-top: 1.6em; }
+.nom-ch { font-size: 1.3em; font-weight: 700; margin: 0; border-bottom: 2px solid var(--dk-encre); padding-bottom: 0.2em; align-self: stretch; text-align: center; }
+.pile { width: 100%; display: flex; flex-direction: column; gap: 1.4em; align-items: center; margin-top: 1em; }
+.escalier { width: 100%; display: grid; grid-template-columns: auto 1fr; gap: 2.4em; align-items: center; margin-top: 1em; }
 </style>
