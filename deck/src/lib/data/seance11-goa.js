@@ -46,18 +46,18 @@ export const GOA = {
   acycliqueBon: {
     noeuds: [
       { id: 'A', label: 'A', x: 0, y: 0 },
-      { id: 'B', label: 'B', x: 300, y: 0 },
-      { id: 'D', label: 'D', x: 600, y: 0 },
-      { id: 'C', label: 'C', x: 150, y: 220 }
+      { id: 'B', label: 'B', x: 220, y: 0 },
+      { id: 'D', label: 'D', x: 440, y: 0 },
+      { id: 'C', label: 'C', x: 110, y: 190 }
     ],
     aretes: [['A', 'B'], ['B', 'D'], ['B', 'C']]
   },
   acycliqueMauvais: {
     noeuds: [
       { id: 'A', label: 'A', x: 0, y: 0 },
-      { id: 'B', label: 'B', x: 300, y: 0 },
-      { id: 'D', label: 'D', x: 600, y: 0 },
-      { id: 'C', label: 'C', x: 150, y: 220 }
+      { id: 'B', label: 'B', x: 220, y: 0 },
+      { id: 'D', label: 'D', x: 440, y: 0 },
+      { id: 'C', label: 'C', x: 110, y: 190 }
     ],
     aretes: [['A', 'B'], ['B', 'D'], ['B', 'C'], ['C', 'A']]
   },
