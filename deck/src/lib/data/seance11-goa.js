@@ -188,6 +188,19 @@ export const GOA = {
     aretes: [['cholesterol', 'arret'], ['fumer', 'cholesterol'], ['poids', 'cholesterol'], ['vie', 'fumer'], ['vie', 'poids']]
   },
 
+  // ---------- le GOA du travail final : X, Y et trois autres variables
+  travailFinal: {
+    x: 'X', y: 'Y',
+    noeuds: [
+      { id: 'commune', label: 'Une cause\ncommune', x: 450, y: 0 },
+      { id: 'autre', label: 'Une autre\ncause de Y', x: 950, y: 0 },
+      { id: 'X', label: 'Votre X', x: 0, y: 230 },
+      { id: 'Y', label: 'Votre Y', x: 950, y: 230 },
+      { id: 'desc', label: 'Un descendant\nde X', x: 450, y: 450 }
+    ],
+    aretes: [['commune', 'X'], ['commune', 'Y'], ['autre', 'Y'], ['X', 'Y'], ['X', 'desc'], ['desc', 'Y']]
+  },
+
   // ---------- simulations (p. 132-135), avec les coefficients
   sim1: { x: 'X', y: 'Y', noeuds: ligne(['X', 'Y'], 420), aretes: [['X', 'Y', 1.7]] },
   sim2: { x: 'X', y: 'Y', noeuds: ligne(['X', 'Z', 'Y'], 360), aretes: [['X', 'Z', 3], ['Z', 'Y', 0.5]] },

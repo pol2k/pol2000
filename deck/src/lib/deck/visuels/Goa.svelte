@@ -155,7 +155,7 @@
 
   const aria = $derived(
     legende ||
-      'Graphe : ' + graphe.aretes.map(([p, q]) => `${N[p].ls.join(' ').replace(/_/g, '')} cause ${N[q].ls.join(' ').replace(/_/g, '')}`).join(', ') + '.'
+      'Graphe : ' + graphe.aretes.map(([p, q]) => `${N[p].ls.join(' ').replace(/_/g, '')} cause ${N[q].ls.join(' ').replace(/_/g, '')}`).join(', ') + '.'
   );
 </script>
 

@@ -56,7 +56,7 @@ export const SEANCES = [
   { lecture: true, date: '2026-10-29', titre: 'Semaine de lecture', resume: 'Aucun cours du 26 au 30 octobre.' },
   { n: 9, court: 'Mesure et IA', date: '2026-11-05', partie: 2, titre: "Les variables latentes", resume: "Mesurer un concept latent et introduction aux grands modèles de langue.", deck: 'slides/seance-9/' },
   { n: 10, court: 'Causalité', date: '2026-11-12', partie: 3, titre: "Le problème fondamental de l'inférence causale", resume: 'On ne voit jamais les deux mondes à la fois. Tout part de là.', note: 'Examen 2 en classe, de 17h20 à 18h20, après le cours.', examen: true },
-  { n: 11, court: 'GOA', date: '2026-11-19', partie: 3, titre: 'Les graphes orientés acycliques (GOA)', resume: 'Dessiner ses hypothèses causales. Décider quoi contrôler, ou pas.' },
+  { n: 11, court: 'GOA', date: '2026-11-19', partie: 3, titre: 'Les graphes orientés acycliques (GOA)', resume: 'Dessiner ses hypothèses causales. Décider quoi contrôler, ou pas.', deck: 'slides/seance-11/' },
   { n: 12, court: 'Rencontres', date: '2026-11-26', partie: 0, titre: 'Rencontres individuelles', resume: "Pas de cours de la semaine : on revient sur l'examen 2 et on avance votre travail final, un.e à la fois." },
   { n: 13, court: 'Biais', date: '2026-12-03', partie: 3, titre: 'Les biais', resume: 'Variable omise, sélection, mesure, simultanéité : ce qui fausse une régression.' },
   { n: 14, court: 'Expériences', date: '2026-12-10', partie: 3, titre: 'Les expériences, et révision', resume: 'Le hasard comme méthode. Puis on revoit tout.', note: 'Examen 3 en classe, de 17h20 à 18h20, après le cours · travail final vendredi 18 décembre.', examen: true }

@@ -9,7 +9,7 @@
    *   0  Marie;
    *   1  le monde où elle va à l'université : son intérêt, 7 sur 10, observé;
    *   2  le monde où elle n'y va pas : un « ? » gris, jamais observé;
-   *   3  l'effet pour Marie : la différence entre les deux mondes, 7 − ?.
+   *   3  l'effet pour Marie : la différence entre les deux mondes, 7 − ?.
    * mode « deux » (on compare des personnes différentes) :
    *   0  Marie à l'université (7), Julie sans université (4) : un écart de 3;
    *   1  mais Julie n'est pas Marie : d'autres différences apparaissent
@@ -42,7 +42,7 @@
 
 <div class="visuel m11d" bind:this={hote}>
   <svg viewBox="0 0 1400 560" role="img" aria-label={mode === 'un'
-    ? 'Marie, deux mondes. Dans le premier, elle va à l’université et son intérêt pour la politique est de 7 sur 10. Dans le second, elle n’y va pas : on ne le verra jamais. L’effet pour Marie est la différence entre les deux.'
+    ? 'Marie, deux mondes. Dans le premier, elle va à l’université et son intérêt pour la politique est de 7 sur 10. Dans le second, elle n’y va pas : on ne le verra jamais. L’effet pour Marie est la différence entre les deux.'
     : 'Marie va à l’université, intérêt 7. Julie n’y va pas, intérêt 4. Mais Julie diffère aussi par le revenu de ses parents, son âge et sa région.'}>
     {#if mode === 'un'}
       {@render personne(150, 300, 'Marie')}
@@ -54,7 +54,7 @@
         <text x="680" y="142" class="m11d-t">va à l’université</text>
         <line x1="930" y1="130" x2="1020" y2="130" class="m11d-l" />
         <rect x="1030" y="80" width="300" height="100" class="m11d-b" />
-        <text x="1180" y="142" class="m11d-t">intérêt : 7</text>
+        <text x="1180" y="142" class="m11d-t">intérêt : 7</text>
       </g>
 
       <!-- monde 2 -->
@@ -70,7 +70,7 @@
 
       <!-- l'effet -->
       <g class="m11d-etape" class:vu={e >= 3}>
-        <text x="1180" y="290" class="m11d-effet">effet = 7 − ?</text>
+        <text x="1180" y="290" class="m11d-effet">effet = 7 − ?</text>
       </g>
     {:else}
       {@render personne(200, 160, 'Marie')}
@@ -82,11 +82,11 @@
       <rect x="430" y="90" width="500" height="100" class="m11d-b" />
       <text x="680" y="152" class="m11d-t">va à l’université</text>
       <rect x="1030" y="90" width="300" height="100" class="m11d-b" />
-      <text x="1180" y="152" class="m11d-t">intérêt : 7</text>
+      <text x="1180" y="152" class="m11d-t">intérêt : 7</text>
       <rect x="430" y="360" width="500" height="100" class="m11d-b" />
       <text x="680" y="422" class="m11d-t">n’y va pas</text>
       <rect x="1030" y="360" width="300" height="100" class="m11d-b" />
-      <text x="1180" y="422" class="m11d-t">intérêt : 4</text>
+      <text x="1180" y="422" class="m11d-t">intérêt : 4</text>
       <text x="1180" y="290" class="m11d-effet" class:barre={e >= 1}>écart = 3</text>
 
       <g class="m11d-etape" class:vu={e >= 1}>

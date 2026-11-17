@@ -3,19 +3,19 @@
    * POL-2000 — Séance 11 · Les graphes orientés acycliques (GOA)
    * Jeudi 19 novembre 2026, 15h30–18h20.
    *
-   * Doctrine : moins de texte, plus de figure. Une idée par diapo, une phrase
+   * Doctrine : moins de texte, plus de figure. Une idée par diapo, une phrase
    * parlée au plus; le reste se dessine et bouge.
    *
-   * Le fil. La grève du 12 novembre a reporté la séance 10 : on ouvre donc
+   * Le fil. La grève du 12 novembre a reporté la séance 10 : on ouvre donc
    * sur le problème fondamental de l'inférence causale (deux mondes, on n'en
-   * voit qu'un), comme le faisait le cours 11 de 2024. Puis le GOA : pourquoi
+   * voit qu'un), comme le faisait le cours 11 de 2024. Puis le GOA : pourquoi
    * et comment le dessiner, sa grammaire (orienté, acyclique, effet causal
    * contre information statistique), les trois types de chemins, les deux
    * conditions de l'identification (déjà vues à la séance 8, sans les mots
-   * des graphes), et un retour honnête sur la séance 8 : on y avait contrôlé
-   * le revenu, un descendant de la scolarité. Pause. Pratique : ouvert ou
+   * des graphes), et un retour honnête sur la séance 8 : on y avait contrôlé
+   * le revenu, un descendant de la scolarité. Pause. Pratique : ouvert ou
    * fermé, trois exercices. Puis les simulations du livre dans R, qu'on
-   * roule en direct : on fabrique le monde, on connaît le vrai effet.
+   * roule en direct : on fabrique le monde, on connaît le vrai effet.
    *
    * Sources. Le cours 11 « Les graphes orientés acycliques (GOA) » de
    * L.-O. M. Foisy et Adrien Cloutier (hiver 2024), qui donne l'ordre et
@@ -25,7 +25,7 @@
    * simulations), et chapitre 7 pour le pont.
    *
    * Tous les graphes sont dans src/lib/data/seance11-goa.js; ouvert ou fermé
-   * est calculé par src/lib/deck/goa.js (testé : goa.test.js), jamais écrit
+   * est calculé par src/lib/deck/goa.js (testé : goa.test.js), jamais écrit
    * à la main. Les sorties de R viennent de src/lib/data/seance11.js
    * (outils/seance11_data.R).
    */
@@ -39,10 +39,26 @@
   import Goa from '$lib/deck/visuels/Goa.svelte';
   import M11Grille from '$lib/deck/visuels/M11Grille.svelte';
   import M11Escalier from '$lib/deck/visuels/M11Escalier.svelte';
+  import M11Exercice from '$lib/deck/visuels/M11Exercice.svelte';
+  import M11Modeles from '$lib/deck/visuels/M11Modeles.svelte';
+  import Console from '$lib/deck/visuels/Console.svelte';
+  import { SIMS } from '$lib/data/seance11.js';
+  import { DEVOIRS } from '$lib/data/cours.js';
   import { GOA } from '$lib/data/seance11-goa.js';
 
-  const TOTAL = 35;
+  const TOTAL = 60;
   const ABC = ['A', 'B', 'C'];
+  const CINQ = ['X', 'Z1', 'Z2', 'Z3', 'Y'];
+  const QUESTIONS = [
+    { t: 'Y a-t-il des descendants de X ?' },
+    { t: 'Y a-t-il des chemins par la porte arrière ?' },
+    { t: 'Sont-ils ouverts ?' },
+    { t: 'Peut-on les bloquer ?' },
+    { t: 'L’effet de X sur Y est-il identifiable ?' }
+  ];
+  // Les consoles viennent de R telles quelles (seance11.js); seules les notes sont d'ici.
+  const avec = (cle, notes = [], de = 0, a = undefined) => SIMS[cle].map((l, i) => ({ ...l, note: notes[i] || '' })).slice(de, a);
+  const dc = DEVOIRS.find((d) => d.seance === 11);
   const D = 'POL-2000 · séance 11 · jeu 19 nov';
   const SCHEMA = 'Schéma, aucune donnée';
 </script>
@@ -89,7 +105,7 @@
     </Slide>
 
     <Slide bandeau="Deux mondes" droite={D}>
-      <h2 class="e">L’université rend-elle Marie plus intéressée par la politique ?</h2>
+      <h2 class="e">L’université rend-elle Marie plus intéressée par la politique ?</h2>
       <M11DeuxMondes />
     </Slide>
 
@@ -121,13 +137,13 @@
       <h2 class="e">Un GOA sert à trois choses</h2>
       <M11Liste items={[
         { t: 'Rendre nos hypothèses visibles', g: 'Toute analyse causale repose sur des postulats. On les montre.' },
-        { t: 'Savoir si l’effet de la VI sur la VD est identifiable', g: 'Est-ce possible, avec ces données ?' },
+        { t: 'Savoir si l’effet de la VI sur la VD est identifiable', g: 'Est-ce possible, avec ces données ?' },
         { t: 'Choisir les variables de contrôle', g: 'Celles à inclure, et celles à laisser dehors.' }
       ]} />
     </Slide>
 
     <Slide bandeau="Dessiner un GOA" droite={D}>
-      <h2 class="e">L’éducation rend-elle plus à droite ?</h2>
+      <h2 class="e">L’éducation rend-elle plus à droite ?</h2>
       <M11Liste items={[
         { t: 'L’éducation augmente le revenu individuel' },
         { t: 'Le revenu augmente l’appui aux partis qui promettent des baisses d’impôt' },
@@ -151,9 +167,9 @@
     <!-- ================= 3. LA GRAMMAIRE ================= -->
 
     <Slide bandeau="Orienté" droite={D}>
-      <h2 class="e">Orienté : la flèche va de la cause vers l’effet</h2>
+      <h2 class="e">Orienté : la flèche va de la cause vers l’effet</h2>
       <Goa graphe={GOA.orienteCause} taille={1.7} legende={SCHEMA} temps={[
-        { flux: true, note: 'A cause B, B cause C : un chemin' },
+        { flux: true, note: 'A cause B, B cause C : un chemin' },
         { flux: true, accent: ['A', 'B'], note: 'A et B sont les ancêtres de C' },
         { flux: true, accent: ['B', 'C'], note: 'B et C sont les descendants de A' }
       ]} />
@@ -167,7 +183,7 @@
     </Slide>
 
     <Slide bandeau="Acyclique" droite={D}>
-      <h2 class="e">Acyclique : jamais de retour au point de départ</h2>
+      <h2 class="e">Acyclique : jamais de retour au point de départ</h2>
       <div class="visuel cote-a-cote">
         <div class="cote">
           <Goa graphe={GOA.acycliqueBon} taille={1.2} />
@@ -175,7 +191,7 @@
         </div>
         <div class="cote">
           <Goa graphe={GOA.acycliqueMauvais} taille={1.2} temps={[{ rouges: [0, 2, 3], accent: ['A', 'B', 'C'] }]} />
-          <p class="verdict-non e">Pas un GOA : un cycle</p>
+          <p class="verdict-non e">Pas un GOA : un cycle</p>
         </div>
       </div>
     </Slide>
@@ -186,12 +202,12 @@
         <div class="carte-ei e">
           <svg viewBox="0 0 300 60" aria-hidden="true"><line x1="20" y1="30" x2="250" y2="30" class="ei-l" /><polygon points="280,30 250,16 250,44" class="ei-p" /><circle cx="90" cy="30" r="9" class="ei-pt" /><circle cx="180" cy="30" r="9" class="ei-pt" /></svg>
           <strong>L’effet causal</strong>
-          <span>Dans un seul sens : de la cause vers l’effet.</span>
+          <span>Dans un seul sens : de la cause vers l’effet.</span>
         </div>
         <div class="carte-ei rouge-b e">
           <svg viewBox="0 0 300 60" aria-hidden="true"><line x1="50" y1="30" x2="250" y2="30" class="ei-l ei-r" /><polygon points="280,30 250,16 250,44" class="ei-p ei-rp" /><polygon points="20,30 50,16 50,44" class="ei-p ei-rp" /></svg>
           <strong>L’information statistique</strong>
-          <span>Dans les deux sens : connaître l’un nous renseigne sur l’autre.</span>
+          <span>Dans les deux sens : connaître l’un nous renseigne sur l’autre.</span>
         </div>
       </div>
     </Slide>
@@ -208,9 +224,9 @@
     <!-- ================= 4. TROIS TYPES DE CHEMINS ================= -->
 
     <Slide fond="encre" bandeau="Trois chemins" droite={D}>
-      <h1 class="e">Ouvert ou fermé ?</h1>
+      <h1 class="e">Ouvert ou fermé ?</h1>
       <hr class="filet" />
-      <p class="lead e">Trois types de chemins. Une seule question : l’information circule-t-elle ?</p>
+      <p class="lead e">Trois types de chemins. Une seule question : l’information circule-t-elle ?</p>
     </Slide>
 
     <Slide bandeau="Trois chemins" droite={D}>
@@ -226,7 +242,7 @@
       <h2 class="e">Contrôler une variable, c’est l’encadrer</h2>
       <Goa graphe={GOA.chaineABC} taille={1.5} legende={SCHEMA} temps={[
         { note: 'B varie' },
-        { controles: ['B'], note: 'On contrôle B : on le fixe à une seule valeur' }
+        { controles: ['B'], note: 'On contrôle B : on le fixe à une seule valeur' }
       ]} />
     </Slide>
 
@@ -234,31 +250,31 @@
       <h2 class="e">Contrôler le maillon central renverse tout</h2>
       <Goa graphe={GOA.ceinture} legende={SCHEMA} temps={[
         { chemin: ['risque', 'ceinture', 'blessure'], note: 'Le comportement annonce la blessure, et l’inverse' },
-        { chemin: ['risque', 'ceinture', 'blessure'], controles: ['ceinture'], note: 'On sait si la ceinture était portée : le comportement n’annonce plus rien' }
+        { chemin: ['risque', 'ceinture', 'blessure'], controles: ['ceinture'], note: 'On sait si la ceinture était portée : le comportement n’annonce plus rien' }
       ]} />
     </Slide>
 
     <Slide bandeau="Fourchette" droite={D}>
-      <h2 class="e">Fourchette : une cause, deux effets</h2>
+      <h2 class="e">Fourchette : une cause, deux effets</h2>
       <Goa graphe={GOA.glace} legende={SCHEMA} temps={[
         { chemin: ['mercure', 'temperature', 'glace'], types: true, note: 'Le mercure annonce les ventes' },
-        { chemin: ['mercure', 'temperature', 'glace'], types: true, controles: ['temperature'], note: 'Il fait 35 °C : le mercure n’ajoute plus rien' }
+        { chemin: ['mercure', 'temperature', 'glace'], types: true, controles: ['temperature'], note: 'Il fait 35 °C : le mercure n’ajoute plus rien' }
       ]} />
     </Slide>
 
     <Slide bandeau="Chaîne" droite={D}>
-      <h2 class="e">Chaîne : une cause, puis une autre</h2>
+      <h2 class="e">Chaîne : une cause, puis une autre</h2>
       <Goa graphe={GOA.sucre} legende={SCHEMA} temps={[
         { chemin: ['sucre', 'diabete', 'coeur'], types: true, note: 'Le sucre annonce la maladie, et l’inverse' },
-        { chemin: ['sucre', 'diabete', 'coeur'], types: true, controles: ['diabete'], note: 'Pas de diabète : la maladie ne dit plus rien du sucre' }
+        { chemin: ['sucre', 'diabete', 'coeur'], types: true, controles: ['diabete'], note: 'Pas de diabète : la maladie ne dit plus rien du sucre' }
       ]} />
     </Slide>
 
     <Slide bandeau="Collision" droite={D}>
-      <h2 class="e">Collision : deux causes, un effet</h2>
+      <h2 class="e">Collision : deux causes, un effet</h2>
       <Goa graphe={GOA.arbitre} legende={SCHEMA} temps={[
         { chemin: ['performance', 'victoire', 'biais'], types: true, note: 'Un arbitre biaisé ne dit rien du jeu de l’équipe' },
-        { chemin: ['performance', 'victoire', 'biais'], types: true, controles: ['victoire'], note: 'Elle a gagné en jouant mal ? L’arbitre était peut-être biaisé' }
+        { chemin: ['performance', 'victoire', 'biais'], types: true, controles: ['victoire'], note: 'Elle a gagné en jouant mal ? L’arbitre était peut-être biaisé' }
       ]} />
     </Slide>
 
@@ -286,7 +302,7 @@
     <!-- ================= 5. LES CONTRÔLES ================= -->
 
     <Slide fond="encre" bandeau="Les contrôles" droite={D}>
-      <h1 class="e">Quoi contrôler ?</h1>
+      <h1 class="e">Quoi contrôler ?</h1>
       <hr class="filet" />
       <p class="lead e">Les deux règles de la séance 8, avec les mots du GOA.</p>
     </Slide>
@@ -303,7 +319,7 @@
       <h2 class="e">Ne pas contrôler un descendant de X</h2>
       <Goa graphe={GOA.salaire} legende={SCHEMA} temps={[
         { flux: true, note: 'Le sexe agit sur le salaire par deux chemins' },
-        { flux: true, controles: ['occupation'], barres: ['occupation'], note: '« À occupation égale » : on perd une partie de l’effet' }
+        { flux: true, controles: ['occupation'], barres: ['occupation'], note: '« À occupation égale » : on perd une partie de l’effet' }
       ]} />
       <p class="source e">D’après Arel-Bundock (2021), p. 125</p>
     </Slide>
@@ -312,33 +328,33 @@
       <h2 class="e">Fermer les chemins par la porte arrière</h2>
       <Goa graphe={GOA.itinerance} legende={SCHEMA} temps={[
         { flux: true },
-        { chemin: ['eclatement', 'sante', 'itinerance'], note: 'Une porte arrière : sa flèche pointe vers la cause' },
-        { chemin: ['eclatement', 'sante', 'itinerance'], controles: ['sante'], note: 'On contrôle la santé mentale : la porte est fermée' }
+        { chemin: ['eclatement', 'sante', 'itinerance'], note: 'Une porte arrière : sa flèche pointe vers la cause' },
+        { chemin: ['eclatement', 'sante', 'itinerance'], controles: ['sante'], note: 'On contrôle la santé mentale : la porte est fermée' }
       ]} />
       <p class="source e">D’après Arel-Bundock (2021), p. 126</p>
     </Slide>
 
     <Slide bandeau="À vous" droite={D}>
-      <h2 class="e">L’effet de l’éducation sur l’idéologie : quoi contrôler ?</h2>
+      <h2 class="e">L’effet de l’éducation sur l’idéologie : quoi contrôler ?</h2>
       <Goa graphe={GOA.education} legende={SCHEMA} temps={[{ accent: ['education', 'ideologie'] }]} />
     </Slide>
 
     <Slide bandeau="Réponse" droite={D}>
-      <h2 class="e">L’effet de l’éducation sur l’idéologie : quoi contrôler ?</h2>
+      <h2 class="e">L’effet de l’éducation sur l’idéologie : quoi contrôler ?</h2>
       <Goa graphe={GOA.education} legende={SCHEMA} temps={[
-        { accent: ['education', 'ideologie'], barres: ['revenu_ind'], note: 'Le revenu individuel : un descendant. On ne le contrôle pas' },
+        { accent: ['education', 'ideologie'], barres: ['revenu_ind'], note: 'Le revenu individuel : un descendant. On ne le contrôle pas' },
         { accent: ['education', 'ideologie'], barres: ['revenu_ind'], chemin: ['education', 'revenu_parents', 'revenu_ind', 'ideologie'], note: 'Une porte arrière, par le revenu des parents' },
         { accent: ['education', 'ideologie'], barres: ['revenu_ind'], chemin: ['education', 'revenu_parents', 'revenu_ind', 'ideologie'], controles: ['revenu_parents'], note: 'On contrôle le revenu des parents. Seulement lui' }
       ]} />
     </Slide>
 
     <Slide bandeau="Retour sur la séance 8" droite={D}>
-      <h2 class="e">Avait-on le droit de contrôler le revenu ?</h2>
+      <h2 class="e">Avait-on le droit de contrôler le revenu ?</h2>
       <div class="visuel escalier">
         <M11Escalier marque />
         <Goa graphe={GOA.escalier8} taille={0.9} legende={SCHEMA} temps={[
           { flux: true, controles: ['age'] },
-          { flux: true, controles: ['age', 'revenu'], barres: ['revenu'], note: 'Non : le revenu est un descendant de la scolarité' }
+          { flux: true, controles: ['age', 'revenu'], barres: ['revenu'], note: 'Non : le revenu est un descendant de la scolarité' }
         ]} />
       </div>
     </Slide>
@@ -346,7 +362,211 @@
     <Slide fond="encre" bandeau="Pause" droite={D}>
       <h1 class="e">Pause</h1>
       <hr class="filet" />
-      <p class="lead e">Ensuite : à vous de jouer, puis R.</p>
+      <p class="lead e">Ensuite : à vous de jouer, puis R.</p>
+    </Slide>
+
+    <!-- ================= 6. PRATIQUE : OUVERT OU FERMÉ ================= -->
+
+    <Slide bandeau="Ouvert ou fermé" droite={D}>
+      <h2 class="e">Pour lire un chemin</h2>
+      <M11Liste tout items={[
+        { t: 'Chaînes et fourchettes : ouvertes' },
+        { t: 'Collisions : fermées' },
+        { t: 'Contrôler le maillon central renverse tout' },
+        { t: 'Un seul maillon fermé ferme tout le chemin' }
+      ]} />
+    </Slide>
+
+    {#each ['drill1', 'drill2', 'drill3', 'drill4'] as g, i (g)}
+      <Slide bandeau="Ouvert ou fermé · {i + 1} de 4" droite={D}>
+        <h2 class="e">Ouvert ou fermé ?</h2>
+        <Goa graphe={GOA[g]} taille={1.15} temps={[{}, { chemin: CINQ, types: true }]} />
+      </Slide>
+    {/each}
+
+    <Slide bandeau="Rappelez-vous" droite={D}>
+      <h2 class="e">Contrôler une collision ouvre le chemin</h2>
+      <Goa graphe={GOA.drill2} taille={1.15} temps={[{ chemin: CINQ, types: true }, { chemin: CINQ, types: true, controles: ['Z1'] }]} />
+    </Slide>
+
+    <Slide bandeau="Rappelez-vous" droite={D}>
+      <h2 class="e">Contrôler une fourchette ferme le chemin</h2>
+      <Goa graphe={GOA.drill3} taille={1.15} temps={[{ chemin: CINQ, types: true }, { chemin: CINQ, types: true, controles: ['Z2'] }]} />
+    </Slide>
+
+    <Slide bandeau="Contrôler ou pas" droite={D}>
+      <h2 class="e">Contrôler ou pas : cinq questions</h2>
+      <M11Liste tout items={QUESTIONS} />
+    </Slide>
+
+    <Slide bandeau="Exercice 1 de 3" droite={D}>
+      <M11Exercice graphe={GOA.exercice1}
+        reponses={['Oui : Z1, Z2, Z4 et Z5', 'Oui, deux, par Z3', 'Une : X ← Z3 → Z2 → Y. L’autre bute sur une collision', 'Oui : contrôler Z3', 'Oui, si on contrôle Z3']}
+        etats={[
+          {},
+          { barres: ['Z1', 'Z2', 'Z4', 'Z5'] },
+          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], accent: ['Z3'] },
+          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], chemin: ['X', 'Z3', 'Z2', 'Y'], court: true },
+          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], chemin: ['X', 'Z3', 'Z2', 'Y'], controles: ['Z3'], court: true },
+          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], controles: ['Z3'] }
+        ]} />
+    </Slide>
+
+    <Slide bandeau="Exercice 2 de 3" droite={D}>
+      <M11Exercice graphe={GOA.exercice2}
+        reponses={['Oui : Z1, Z2 et Z3', 'Oui : X ← Z4 → Z3 → Y', 'Oui, il est ouvert', 'Oui : contrôler Z4', 'Oui, si on contrôle Z4']}
+        etats={[
+          {},
+          { barres: ['Z1', 'Z2', 'Z3'] },
+          { barres: ['Z1', 'Z2', 'Z3'], accent: ['Z4'] },
+          { barres: ['Z1', 'Z2', 'Z3'], chemin: ['X', 'Z4', 'Z3', 'Y'], court: true },
+          { barres: ['Z1', 'Z2', 'Z3'], chemin: ['X', 'Z4', 'Z3', 'Y'], controles: ['Z4'], court: true },
+          { barres: ['Z1', 'Z2', 'Z3'], controles: ['Z4'] }
+        ]} />
+    </Slide>
+
+    <Slide bandeau="Exercice 3 de 3" droite={D}>
+      <M11Exercice graphe={GOA.exercice3}
+        reponses={['Oui : le cholestérol (Z1)', 'Oui : par la vie malsaine et le poids', 'Oui, il est ouvert', 'Oui : contrôler Z3, ou Z2', 'Oui, si on contrôle Z3 ou Z2']}
+        etats={[
+          {},
+          { barres: ['cholesterol'] },
+          { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], verdict: false },
+          { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], court: true },
+          { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], controles: ['vie'], court: true },
+          { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], controles: ['poids'], court: true, note: 'Le poids ferme aussi la porte' }
+        ]} />
+    </Slide>
+
+    <!-- ================= 7. SIMULER DANS R ================= -->
+
+    <Slide fond="encre" bandeau="Simuler dans R" droite={D}>
+      <h1 class="e">Simuler dans R</h1>
+      <hr class="filet" />
+      <p class="lead e">On fabrique le monde nous-mêmes. On connaît donc le vrai effet. Le bon modèle doit le retrouver.</p>
+    </Slide>
+
+    <Slide bandeau="Simuler · une flèche" droite={D}>
+      <h2 class="e">Le vrai effet de X sur Y : 1,7</h2>
+      <div class="visuel sim">
+        <Goa graphe={GOA.sim1} taille={1.1} temps={[{ coefs: true }]} legende="Données simulées" />
+        <Console lignes={avec('simple', ['on écrit le vrai effet : 1,7', 'R retrouve 1,7'])} />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Simuler · une chaîne" droite={D}>
+      <h2 class="e">Une chaîne : 3 × 0,5 = 1,5</h2>
+      <div class="visuel sim">
+        <Goa graphe={GOA.sim2} taille={0.9} temps={[{ coefs: true }]} legende="Données simulées" />
+        <Console lignes={avec('chaine', ['', 'R retrouve 1,5, sans contrôle'])} />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Simuler · une collision" droite={D}>
+      <h2 class="e">Contrôler Z, un descendant de X : le piège</h2>
+      <div class="visuel sim">
+        <Goa graphe={GOA.sim3} taille={0.9} temps={[{ coefs: true }]} legende="Données simulées" />
+        <Console lignes={avec('collision', ['', 'sans contrôle : 1,7, juste', 'avec Z : 0,45, faux'])} />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Simuler · une fourchette" droite={D}>
+      <h2 class="e">Fermer la porte arrière, pas plus</h2>
+      <div class="visuel sim">
+        <Goa graphe={GOA.sim4} taille={0.9} temps={[{ coefs: true }]} legende="Données simulées" />
+        <Console lignes={avec('fourchette', ['vrai effet : 2 × 0,25 = 0,5', 'contrôler Z2 : 0,5, juste'], 0, 2)} />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Simuler · une fourchette" droite={D}>
+      <h2 class="e">Et sans contrôler Z2 ?</h2>
+      <div class="visuel sim">
+        <Goa graphe={GOA.sim4} taille={0.9} temps={[{ coefs: true, chemin: ['X', 'Z2', 'Y'], court: true }]} legende="Données simulées" />
+        <Console lignes={avec('fourchette', ['', '', 'sans contrôle : 1,0, faux. La porte arrière est ouverte'], 2)} />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Simuler · le modèle complet" droite={D}>
+      <M11Exercice graphe={GOA.sim5}
+        reponses={['Oui : Z2 et Z3', 'Oui : X ← Z1 → Y', 'Oui, il est ouvert', 'Oui : contrôler Z1', 'Oui, avec Z1, sans Z2 ni Z3']}
+        etats={[
+          { coefs: true },
+          { coefs: true, barres: ['Z2', 'Z3'] },
+          { coefs: true, barres: ['Z2', 'Z3'], accent: ['Z1'] },
+          { coefs: true, barres: ['Z2', 'Z3'], chemin: ['X', 'Z1', 'Y'], court: true },
+          { coefs: true, barres: ['Z2', 'Z3'], chemin: ['X', 'Z1', 'Y'], controles: ['Z1'], court: true },
+          { coefs: true, barres: ['Z2', 'Z3'], controles: ['Z1'] }
+        ]} />
+    </Slide>
+
+    <Slide bandeau="Simuler · la preuve" droite={D}>
+      <h2 class="e">Le vrai effet : 2 × 0,5 = 1</h2>
+      <div class="visuel sim">
+        <Goa graphe={GOA.sim5} taille={0.75} temps={[{ coefs: true, controles: ['Z1'] }]} legende="Données simulées" />
+        <Console lignes={avec('complexe', ['', 'contrôler Z1 : 1,0, juste'], 0, 2)} />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Simuler · la preuve" droite={D}>
+      <h2 class="e">Et sans contrôler Z1 ?</h2>
+      <div class="visuel sim">
+        <Goa graphe={GOA.sim5} taille={0.75} temps={[{ coefs: true, chemin: ['X', 'Z1', 'Y'], court: true }]} legende="Données simulées" />
+        <Console lignes={avec('complexe', ['', '', 'sans contrôle : 1,5, faux'], 2)} />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Simuler · huit modèles" droite={D}>
+      <h2 class="e">Huit modèles, un seul juste</h2>
+      <M11Modeles />
+    </Slide>
+
+    <Slide fond="encre" bandeau="Simuler dans R" droite={D}>
+      <p class="slogan-e e">Le bon modèle n’est pas celui qui a le plus de contrôles.</p>
+      <hr class="filet" />
+      <p class="lead e">C’est celui que le GOA dicte.</p>
+    </Slide>
+
+    <!-- ================= CLÔTURE ================= -->
+
+    <Slide bandeau="Travail final" droite={D}>
+      <h2 class="e">Votre travail final : un GOA</h2>
+      <div class="visuel tf">
+        <Goa graphe={GOA.travailFinal} taille={0.8} temps={[{ controles: ['commune'], barres: ['desc'] }]} legende={SCHEMA} />
+        <M11Liste tout items={[
+          { t: 'Cinq variables', g: 'Votre X, votre Y, et trois autres liées à Y.' },
+          { t: 'Au moins une dans la CES' },
+          { t: 'Encadrez vos contrôles', g: 'Et dites pourquoi, avec la littérature.' },
+          { t: 'Le GOA dicte le modèle', g: 'Aucun contrôle nécessaire ? Une régression simple.' }
+        ]} />
+      </div>
+    </Slide>
+
+    <Slide bandeau="Avant la prochaine séance" droite={D}>
+      <h2 class="e">Avant la prochaine séance</h2>
+      <div class="visuel avant">
+        <a class="tuile" href={dc.url} target="_blank" rel="noopener">
+          <img src="{base}/img/datacamp.png" alt="Datacamp" />
+          <strong>Datacamp</strong>
+          <span>{dc.cours} · {dc.chapitre}</span>
+        </a>
+        <div class="tuile rouge-b">
+          <strong>Votre GOA</strong>
+          <span>Dessinez-le pour votre travail final : X, Y, et trois autres variables.</span>
+        </div>
+      </div>
+    </Slide>
+
+    <Slide fond="encre" bandeau="Laurence-Olivier M. Foisy" droite={D}>
+      <div class="titre merci">
+        <h1 class="e">Merci.</h1>
+        <hr class="filet" />
+      </div>
+      <div class="entete-ul e">
+        <img src="{base}/img/ulaval-logo.png" alt="Université Laval" />
+        <span class="sep"></span>
+        <span class="dept">Département de science politique<br />Faculté des sciences sociales</span>
+        <span class="session">POL-2000 · Automne 2026</span>
+      </div>
     </Slide>
 
   {/snippet}
@@ -386,4 +606,14 @@
 .nom-ch { font-size: 1.3em; font-weight: 700; margin: 0; border-bottom: 2px solid var(--dk-encre); padding-bottom: 0.2em; align-self: stretch; text-align: center; }
 .pile { width: 100%; display: flex; flex-direction: column; gap: 1.4em; align-items: center; margin-top: 1em; }
 .escalier { width: 100%; display: grid; grid-template-columns: auto 1fr; gap: 2.4em; align-items: center; margin-top: 1em; }
+.merci h1 { font-size: 3.4em; }
+.sim { width: 100%; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 2em; align-items: center; margin-top: 0.4em; }
+.tf { width: 100%; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 2em; align-items: center; }
+.tf :global(.m11l) { margin-top: 0; }
+.avant { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 1.6em; max-width: 50em; margin: 1.2em auto 0; }
+.tuile { border: 3px solid var(--dk-encre); padding: 1.2em 1.3em; display: flex; flex-direction: column; gap: 0.5em; color: inherit; text-decoration: none; }
+.tuile.rouge-b { border-color: var(--dk-accent); }
+.tuile img { height: 2.4em; width: auto; align-self: flex-start; }
+.tuile strong { font-size: 1.3em; }
+.tuile span { font-size: 0.9em; color: var(--dk-gris); }
 </style>
