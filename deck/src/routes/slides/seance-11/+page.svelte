@@ -34,10 +34,13 @@
   import Slide from '$lib/deck/Slide.svelte';
   import Session from '$lib/deck/visuels/Session.svelte';
   import Aujourdhui11 from '$lib/deck/visuels/Aujourdhui11.svelte';
-  import M11DeuxMondes from '$lib/deck/visuels/M11DeuxMondes.svelte';
+  import M11Carrefour from '$lib/deck/visuels/M11Carrefour.svelte';
+  import M11Dominos from '$lib/deck/visuels/M11Dominos.svelte';
+  import M11Thermometre from '$lib/deck/visuels/M11Thermometre.svelte';
   import M11Liste from '$lib/deck/visuels/M11Liste.svelte';
   import Goa from '$lib/deck/visuels/Goa.svelte';
-  import M11Grille from '$lib/deck/visuels/M11Grille.svelte';
+  import M11Guirlande from '$lib/deck/visuels/M11Guirlande.svelte';
+  import M11Arbitre from '$lib/deck/visuels/M11Arbitre.svelte';
   import M11Escalier from '$lib/deck/visuels/M11Escalier.svelte';
   import M11Exercice from '$lib/deck/visuels/M11Exercice.svelte';
   import M11Modeles from '$lib/deck/visuels/M11Modeles.svelte';
@@ -46,7 +49,7 @@
   import { DEVOIRS } from '$lib/data/cours.js';
   import { GOA } from '$lib/data/seance11-goa.js';
 
-  const TOTAL = 60;
+  const TOTAL = 53;
   const ABC = ['A', 'B', 'C'];
   const CINQ = ['X', 'Z1', 'Z2', 'Z3', 'Y'];
   const QUESTIONS = [
@@ -106,17 +109,7 @@
 
     <Slide bandeau="Deux mondes" droite={D}>
       <h2 class="e">L’université rend-elle Marie plus intéressée par la politique ?</h2>
-      <M11DeuxMondes />
-    </Slide>
-
-    <Slide bandeau="Deux mondes" droite={D}>
-      <h2 class="e">On ne voit jamais les deux mondes à la fois</h2>
-      <p class="grande-q e">Alors on compare des personnes <span class="rouge">différentes</span>.</p>
-    </Slide>
-
-    <Slide bandeau="Deux mondes" droite={D}>
-      <h2 class="e">Comparer Marie et Julie</h2>
-      <M11DeuxMondes mode="deux" />
+      <M11Carrefour />
     </Slide>
 
     <Slide fond="encre" bandeau="Deux mondes" droite={D}>
@@ -167,59 +160,14 @@
     <!-- ================= 3. LA GRAMMAIRE ================= -->
 
     <Slide bandeau="Orienté" droite={D}>
-      <h2 class="e">Orienté : la flèche va de la cause vers l’effet</h2>
-      <Goa graphe={GOA.orienteCause} taille={1.7} legende={SCHEMA} temps={[
-        { flux: true, note: 'A cause B, B cause C : un chemin' },
-        { flux: true, accent: ['A', 'B'], note: 'A et B sont les ancêtres de C' },
-        { flux: true, accent: ['B', 'C'], note: 'B et C sont les descendants de A' }
-      ]} />
-    </Slide>
-
-    <Slide bandeau="Orienté" droite={D}>
-      <h2 class="e">Ici, A ne cause pas C</h2>
-      <Goa graphe={GOA.orientePasCause} taille={1.7} legende={SCHEMA} temps={[
-        { flux: true, note: 'Aucune suite de flèches ne mène de A à C' }
-      ]} />
-    </Slide>
-
-    <Slide bandeau="Acyclique" droite={D}>
-      <h2 class="e">Acyclique : jamais de retour au point de départ</h2>
-      <div class="visuel cote-a-cote">
-        <div class="cote">
-          <Goa graphe={GOA.acycliqueBon} taille={1.2} />
-          <p class="verdict-oui e">Un GOA</p>
-        </div>
-        <div class="cote">
-          <Goa graphe={GOA.acycliqueMauvais} taille={1.2} temps={[{ rouges: [0, 2, 3], accent: ['A', 'B', 'C'] }]} />
-          <p class="verdict-non e">Pas un GOA : un cycle</p>
-        </div>
-      </div>
+      <h2 class="e">Orienté, acyclique : des dominos</h2>
+      <M11Dominos />
     </Slide>
 
     <Slide bandeau="Effet ou information" droite={D}>
-      <h2 class="e">Deux choses circulent dans un GOA</h2>
-      <div class="visuel deux-cartes">
-        <div class="carte-ei e">
-          <svg viewBox="0 0 300 60" aria-hidden="true"><line x1="20" y1="30" x2="250" y2="30" class="ei-l" /><polygon points="280,30 250,16 250,44" class="ei-p" /><circle cx="90" cy="30" r="9" class="ei-pt" /><circle cx="180" cy="30" r="9" class="ei-pt" /></svg>
-          <strong>L’effet causal</strong>
-          <span>Dans un seul sens : de la cause vers l’effet.</span>
-        </div>
-        <div class="carte-ei rouge-b e">
-          <svg viewBox="0 0 300 60" aria-hidden="true"><line x1="50" y1="30" x2="250" y2="30" class="ei-l ei-r" /><polygon points="280,30 250,16 250,44" class="ei-p ei-rp" /><polygon points="20,30 50,16 50,44" class="ei-p ei-rp" /></svg>
-          <strong>L’information statistique</strong>
-          <span>Dans les deux sens : connaître l’un nous renseigne sur l’autre.</span>
-        </div>
-      </div>
+      <h2 class="e">Le mercure fait-il vendre de la crème glacée ?</h2>
+      <M11Thermometre />
     </Slide>
-
-    <Slide bandeau="Effet ou information" droite={D}>
-      <h2 class="e">Le mercure ne fait pas vendre de crème glacée</h2>
-      <Goa graphe={GOA.glace} legende={SCHEMA} temps={[
-        { flux: true, note: 'La température cause les deux' },
-        { chemin: ['mercure', 'temperature', 'glace'], note: 'Mais le mercure annonce les ventes' }
-      ]} />
-    </Slide>
-
 
     <!-- ================= 4. TROIS TYPES DE CHEMINS ================= -->
 
@@ -229,53 +177,40 @@
       <p class="lead e">Trois types de chemins. Une seule question : l’information circule-t-elle ?</p>
     </Slide>
 
-    <Slide bandeau="Trois chemins" droite={D}>
-      <h2 class="e">Trois types de chemins</h2>
-      <div class="visuel trois">
-        <div class="cote"><p class="nom-ch e">Fourchette</p><Goa graphe={GOA.fourchetteABC} taille={0.8} temps={[{ chemin: ABC, court: true }]} /></div>
-        <div class="cote"><p class="nom-ch e">Chaîne</p><Goa graphe={GOA.chaineABC} taille={0.8} temps={[{ chemin: ABC, court: true }]} /></div>
-        <div class="cote"><p class="nom-ch e">Collision</p><Goa graphe={GOA.collisionABC} taille={0.8} temps={[{ chemin: ABC, court: true }]} /></div>
+    <Slide fond="encre" bandeau="Trois chemins" droite={D}>
+      <h2 class="e">Chaque maillon a son interrupteur</h2>
+      <div class="visuel trois-g">
+        <div><p class="nom-g e">Fourchette</p><M11Guirlande chemin="A ← B → C" temps={[{}, { controles: ['B'] }]} /></div>
+        <div><p class="nom-g e">Chaîne</p><M11Guirlande chemin="A → B → C" temps={[{}, { controles: ['B'] }]} /></div>
+        <div><p class="nom-g e">Collision</p><M11Guirlande chemin="A → B ← C" temps={[{}, { controles: ['B'] }]} /></div>
       </div>
-    </Slide>
-
-    <Slide bandeau="Contrôler" droite={D}>
-      <h2 class="e">Contrôler une variable, c’est l’encadrer</h2>
-      <Goa graphe={GOA.chaineABC} taille={1.5} legende={SCHEMA} temps={[
-        { note: 'B varie' },
-        { controles: ['B'], note: 'On contrôle B : on le fixe à une seule valeur' }
-      ]} />
-    </Slide>
-
-    <Slide bandeau="Ouvert ou fermé" droite={D}>
-      <h2 class="e">Contrôler le maillon central renverse tout</h2>
-      <Goa graphe={GOA.ceinture} legende={SCHEMA} temps={[
-        { chemin: ['risque', 'ceinture', 'blessure'], note: 'Le comportement annonce la blessure, et l’inverse' },
-        { chemin: ['risque', 'ceinture', 'blessure'], controles: ['ceinture'], note: 'On sait si la ceinture était portée : le comportement n’annonce plus rien' }
-      ]} />
-    </Slide>
-
-    <Slide bandeau="Fourchette" droite={D}>
-      <h2 class="e">Fourchette : une cause, deux effets</h2>
-      <Goa graphe={GOA.glace} legende={SCHEMA} temps={[
-        { chemin: ['mercure', 'temperature', 'glace'], types: true, note: 'Le mercure annonce les ventes' },
-        { chemin: ['mercure', 'temperature', 'glace'], types: true, controles: ['temperature'], note: 'Il fait 35 °C : le mercure n’ajoute plus rien' }
-      ]} />
+      <p class="sous-g e">Contrôler le maillon central, c’est retourner son interrupteur.</p>
     </Slide>
 
     <Slide bandeau="Chaîne" droite={D}>
-      <h2 class="e">Chaîne : une cause, puis une autre</h2>
-      <Goa graphe={GOA.sucre} legende={SCHEMA} temps={[
-        { chemin: ['sucre', 'diabete', 'coeur'], types: true, note: 'Le sucre annonce la maladie, et l’inverse' },
-        { chemin: ['sucre', 'diabete', 'coeur'], types: true, controles: ['diabete'], note: 'Pas de diabète : la maladie ne dit plus rien du sucre' }
+      <h2 class="e">Contrôler une chaîne : tenir le domino du milieu</h2>
+      <M11Dominos mode="controle" />
+    </Slide>
+
+    <Slide fond="encre" bandeau="Fourchette" droite={D}>
+      <h2 class="e">Fourchette : une cause, deux effets</h2>
+      <M11Guirlande chemin="Mercure ← Température → Crème glacée" temps={[
+        { note: 'Le mercure annonce les ventes.' },
+        { controles: ['Température'], note: 'Il fait 35 °C, c’est connu : le mercure n’annonce plus rien.' }
+      ]} />
+    </Slide>
+
+    <Slide fond="encre" bandeau="Collision" droite={D}>
+      <h2 class="e">Collision : deux causes, un effet</h2>
+      <M11Guirlande chemin="Jeu → Victoire ← Arbitre" temps={[
+        { note: 'Un arbitre biaisé ne dit rien du jeu de l’équipe.' },
+        { controles: ['Victoire'], note: 'On ne regarde que les victoires : le jeu et l’arbitre se mettent à parler.' }
       ]} />
     </Slide>
 
     <Slide bandeau="Collision" droite={D}>
-      <h2 class="e">Collision : deux causes, un effet</h2>
-      <Goa graphe={GOA.arbitre} legende={SCHEMA} temps={[
-        { chemin: ['performance', 'victoire', 'biais'], types: true, note: 'Un arbitre biaisé ne dit rien du jeu de l’équipe' },
-        { chemin: ['performance', 'victoire', 'biais'], types: true, controles: ['victoire'], note: 'Elle a gagné en jouant mal ? L’arbitre était peut-être biaisé' }
-      ]} />
+      <h2 class="e">Ne regarder que les victoires</h2>
+      <M11Arbitre />
     </Slide>
 
     <Slide bandeau="Collision" droite={D}>
@@ -286,16 +221,11 @@
       ]} />
     </Slide>
 
-    <Slide bandeau="En résumé" droite={D}>
-      <h2 class="e">Contrôler le maillon central renverse le flot</h2>
-      <M11Grille />
-    </Slide>
-
-    <Slide bandeau="Combinaisons" droite={D}>
-      <h2 class="e">Un seul maillon fermé suffit</h2>
-      <div class="visuel pile">
-        <Goa graphe={GOA.combinaisonOuverte} taille={0.95} temps={[{ chemin: ['A', 'B', 'C', 'D', 'E'], types: true, court: true }]} />
-        <Goa graphe={GOA.combinaisonFermee} taille={0.95} temps={[{ chemin: ['A', 'B', 'C', 'D', 'E'], types: true, court: true }]} />
+    <Slide fond="encre" bandeau="Combinaisons" droite={D}>
+      <h2 class="e">Une seule ampoule qui bloque, et tout s’éteint</h2>
+      <div class="visuel pile-g">
+        <M11Guirlande chemin="A ← B ← C ← D → E" haut="25vh" />
+        <M11Guirlande chemin="A → B ← C → D → E" haut="25vh" temps={[{}, { controles: ['B'], note: 'On contrôle B : la guirlande se rallume.' }]} />
       </div>
     </Slide>
 
@@ -372,26 +302,26 @@
       <M11Liste tout items={[
         { t: 'Chaînes et fourchettes : ouvertes' },
         { t: 'Collisions : fermées' },
-        { t: 'Contrôler le maillon central renverse tout' },
+        { t: 'Contrôler un maillon retourne son interrupteur' },
+        { t: 'Contrôler un descendant d’une collision l’ouvre aussi' },
         { t: 'Un seul maillon fermé ferme tout le chemin' }
       ]} />
     </Slide>
 
-    {#each ['drill1', 'drill2', 'drill3', 'drill4'] as g, i (g)}
-      <Slide bandeau="Ouvert ou fermé · {i + 1} de 4" droite={D}>
-        <h2 class="e">Ouvert ou fermé ?</h2>
-        <Goa graphe={GOA[g]} taille={1.15} temps={[{}, { chemin: CINQ, types: true }]} />
+    {#each ['X → Z1 → Z2 → Z3 → Y', 'X → Z1 ← Z2 → Z3 → Y', 'X ← Z1 ← Z2 → Z3 → Y', 'X → Z1 ← Z2 → Z3 ← Y'] as ch, i (ch)}
+      <Slide fond="encre" bandeau="Ouvert ou fermé · {i + 1} de 4" droite={D}>
+        <M11Guirlande chemin={ch} temps={[{ cache: true }, {}]} />
       </Slide>
     {/each}
 
-    <Slide bandeau="Rappelez-vous" droite={D}>
-      <h2 class="e">Contrôler une collision ouvre le chemin</h2>
-      <Goa graphe={GOA.drill2} taille={1.15} temps={[{ chemin: CINQ, types: true }, { chemin: CINQ, types: true, controles: ['Z1'] }]} />
+    <Slide fond="encre" bandeau="Rappelez-vous" droite={D}>
+      <h2 class="e">Contrôler une collision la rallume</h2>
+      <M11Guirlande chemin="X → Z1 ← Z2 → Z3 → Y" temps={[{}, { controles: ['Z1'] }]} />
     </Slide>
 
-    <Slide bandeau="Rappelez-vous" droite={D}>
-      <h2 class="e">Contrôler une fourchette ferme le chemin</h2>
-      <Goa graphe={GOA.drill3} taille={1.15} temps={[{ chemin: CINQ, types: true }, { chemin: CINQ, types: true, controles: ['Z2'] }]} />
+    <Slide fond="encre" bandeau="Rappelez-vous" droite={D}>
+      <h2 class="e">Contrôler une fourchette l’éteint</h2>
+      <M11Guirlande chemin="X ← Z1 ← Z2 → Z3 → Y" temps={[{}, { controles: ['Z2'] }]} />
     </Slide>
 
     <Slide bandeau="Contrôler ou pas" droite={D}>
@@ -616,4 +546,8 @@
 .tuile img { height: 2.4em; width: auto; align-self: flex-start; }
 .tuile strong { font-size: 1.3em; }
 .tuile span { font-size: 0.9em; color: var(--dk-gris); }
+.trois-g { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6em; margin-top: 0.6em; }
+.nom-g { font-size: 1.2em; font-weight: 700; margin: 0; text-align: center; border-bottom: 2px solid var(--dk-fond); padding-bottom: 0.2em; }
+.sous-g { margin-top: 0.8em; text-align: center; font-weight: 600; }
+.pile-g { width: 100%; display: flex; flex-direction: column; gap: 0.2em; align-items: center; }
 </style>
