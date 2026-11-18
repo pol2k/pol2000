@@ -33,9 +33,15 @@
   import { brancherTemps } from '../temps.js';
   import { trouver } from '../article.js';
   import { defilementLibre } from '../libre.js';
-  import { PAGES, MOTS } from '$lib/data/seance8_article.js';
+  import { PAGES as PAGES8, MOTS as MOTS8 } from '$lib/data/seance8_article.js';
 
-  let { etats, note, e = $bindable(0) } = $props();
+  // Par défaut, Blais et Gélineau (séance 8). La séance 11 passe un autre
+  // document : pages, mots, le numéro de sa première page, son nom (texte
+  // de remplacement des images) et la référence sous la vue (snippet qui
+  // reçoit le numéro de la page au milieu de la fenêtre).
+  let { etats, note, e = $bindable(0), pages = PAGES8, mots = MOTS8, premiere = 425, nom = 'Blais et Gélineau (2007)', source = null } = $props();
+  const PAGES = pages;
+  const MOTS = mots;
 
   // Chaque passage, retrouvé dans l'article une fois pour toutes.
   const RES = etats.map((et) => ({ ...et, passages: (et.passages || []).map((p) => ({ ton: 'rouge', ...p, ...trouver(MOTS, p.phrase) })) }));
@@ -113,7 +119,7 @@
     <div class="m8a-doc" class:m8a-glisse={glisse} bind:clientWidth={larg} style="transform: {transforme}">
       {#each PAGES as p, i}
         <div class="m8a-page" style="aspect-ratio: {p.l} / {p.h}; margin-bottom: {i < PAGES.length - 1 ? larg * ECART : 0}px">
-          <img src="{base}/img/{p.img}" alt="Blais et Gélineau (2007), page {425 + i}" />
+          <img src="{base}/img/{p.img}" alt="{nom}, page {premiere + i}" />
           {#each etat.passages as pa, k (e + '-' + k)}
             {#each pa.rects.filter((r) => r.page === i) as r, j}
               <span class="m8a-surl m8a-{pa.ton}" style="left: {r.x - 0.4}%; top: {r.y - 0.25}%; width: {r.l + 0.8}%; height: {r.h + 0.5}%; --d: {0.9 + (k * 3 + j) * 0.12}s"></span>
@@ -135,10 +141,10 @@
     {/if}
 
     <div class="m8a-rail" aria-hidden="true">
-      {#each PAGES as _, i}<span class:on={i === pageVue}>p. {425 + i}</span>{/each}
+      {#each PAGES as _, i}<span class:on={i === pageVue}>p. {premiere + i}</span>{/each}
     </div>
   </div>
-  <p class="m8a-src">Blais et Gélineau (2007), <em>Political Studies</em>, 55(2), p. {425 + pageVue}</p>
+  <p class="m8a-src">{#if source}{@render source(premiere + pageVue)}{:else}Blais et Gélineau (2007), <em>Political Studies</em>, 55(2), p. {425 + pageVue}{/if}</p>
 </div>
 
 <style>

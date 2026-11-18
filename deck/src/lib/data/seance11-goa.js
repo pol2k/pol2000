@@ -234,5 +234,28 @@ export const GOA = {
       { id: 'Z3', label: 'Z_3', x: 540, y: 430 }
     ],
     aretes: [['Z1', 'X', 1], ['X', 'Z2', 2], ['Z2', 'Y', 0.5], ['Z1', 'Y', 1], ['Z2', 'Z3', 1], ['Y', 'Z3', 1]]
+  },
+
+  // ---------- l'article du début (Richard et Régimbal 2026) : l'effet de
+  // l'insécurité alimentaire sur la satisfaction dans les études. Chaque
+  // variable du haut est liée aux deux bouts dans leurs propres résultats :
+  // tableau 3 (p. 78, vers l'insécurité) et les tests F de la p. 79 (vers
+  // la satisfaction). Ils ne les ont jamais mises dans un même modèle.
+  // Arêtes : 0 l'effet, puis 1-2 l'âge, 3-4 les enfants, 5-6 la naissance.
+  faim: {
+    x: 'insecurite', y: 'satisfaction',
+    noeuds: [
+      { id: 'age', label: 'Âge', x: 0, y: 0 },
+      { id: 'enfants', label: 'Enfants\nà charge', x: 450, y: 0 },
+      { id: 'naissance', label: 'Né hors\ndu Canada', x: 900, y: 0 },
+      { id: 'insecurite', label: 'Insécurité\nalimentaire', x: 120, y: 330 },
+      { id: 'satisfaction', label: 'Satisfaction\ndans les études', x: 780, y: 330 }
+    ],
+    aretes: [
+      ['insecurite', 'satisfaction'],
+      ['age', 'insecurite'], ['age', 'satisfaction'],
+      ['enfants', 'insecurite'], ['enfants', 'satisfaction'],
+      ['naissance', 'insecurite'], ['naissance', 'satisfaction']
+    ]
   }
 };

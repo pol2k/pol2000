@@ -177,3 +177,15 @@ test('propagation : le bout d’arrivée bouge si et seulement si le chemin est 
     }
   }
 });
+
+test('l’article du début (faim) : trois portes arrière, ouvertes puis fermées', () => {
+  const a = A('faim');
+  const portes = portesArriere(a, 'insecurite', 'satisfaction').map(cle).sort();
+  assert.deepEqual(portes, ['insecurite-age-satisfaction', 'insecurite-enfants-satisfaction', 'insecurite-naissance-satisfaction']);
+  for (const z of ['age', 'enfants', 'naissance']) {
+    assert.equal(etatChemin(a, ['insecurite', z, 'satisfaction'], []).ouvert, true);
+    assert.equal(etatChemin(a, ['insecurite', z, 'satisfaction'], ['age', 'enfants', 'naissance']).ouvert, false);
+  }
+  assert.equal(identifiable(a, 'insecurite', 'satisfaction', []).condition2, false);
+  assert.equal(identifiable(a, 'insecurite', 'satisfaction', ['age', 'enfants', 'naissance']).condition2, true);
+});

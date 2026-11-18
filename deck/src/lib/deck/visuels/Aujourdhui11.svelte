@@ -1,31 +1,35 @@
 <script>
   /**
-   * Le plan de la séance 11, en quatre blocs, chacun avec l'image qui
-   * l'attend : le carrefour dans le brouillard (deux mondes, reporté de la
+   * Le plan de la séance 11, en cinq blocs, chacun avec l'image qui
+   * l'attend : la pile de journaux (une manchette, puis l'article qui la
+   * porte), le carrefour dans le brouillard (deux mondes, reporté de la
    * séance 10), les dominos (dessiner un GOA), les cadrans (ouvert ou
    * fermé : l'aiguille du bout suit-elle ?), la cible (simuler dans R).
    * Même facture qu'Aujourdhui9.
    */
   const BLOCS = [
-    { n: '1', titre: 'Deux mondes', sous: 'Le problème fondamental de l’inférence causale' },
-    { n: '2', titre: 'Dessiner un GOA', sous: 'Des boîtes, des flèches, nos hypothèses' },
-    { n: '3', titre: 'Ouvert ou fermé', sous: 'Quoi contrôler, et quoi laisser tranquille' },
-    { n: '4', titre: 'Simuler dans R', sous: 'On fabrique le monde, on connaît la vérité' }
+    { n: '1', titre: 'Une manchette', sous: 'Repérer les signes d’une étude qui ne tient pas' },
+    { n: '2', titre: 'Deux mondes', sous: 'Le problème fondamental de l’inférence causale' },
+    { n: '3', titre: 'Dessiner un GOA', sous: 'Des boîtes, des flèches, nos hypothèses' },
+    { n: '4', titre: 'Ouvert ou fermé', sous: 'Quoi contrôler, et quoi laisser tranquille' },
+    { n: '5', titre: 'Simuler dans R', sous: 'On fabrique le monde, on connaît la vérité' }
   ];
 </script>
 
 <div class="visuel auj11">
   {#each BLOCS as m, i (m.n)}
-    <div class="a11-bloc" class:a11-r={i === 2} style="--i: {i}">
+    <div class="a11-bloc" class:a11-r={i === 3} style="--i: {i}">
       <div class="a11-image" aria-hidden="true">
         <svg viewBox="0 0 240 90">
           {#if i === 0}
+            {#each [0, 1, 2] as k (k)}<g transform="translate({62 + k * 14} {14 + k * 6}) rotate({-6 + k * 6})"><rect width="96" height="66" class="a11-journal" /><line x1="10" y1="16" x2="86" y2="16" class="a11-rr" /><line x1="10" y1="34" x2="66" y2="34" class="a11-l" /><line x1="10" y1="48" x2="78" y2="48" class="a11-l" /></g>{/each}
+          {:else if i === 1}
             <path d="M 10 60 L 100 60 L 220 14" class="a11-l a11-route" />
             <path d="M 100 60 L 220 84" class="a11-l a11-route" />
             <ellipse cx="180" cy="76" rx="58" ry="16" class="a11-brume" />
-          {:else if i === 1}
-            {#each [30, 90, 150] as x, k (x)}<rect x={x} y="12" width="16" height="70" class="a11-dom" transform="rotate({k < 2 ? 32 : 0} {x + 16} 82)" />{/each}
           {:else if i === 2}
+            {#each [30, 90, 150] as x, k (x)}<rect x={x} y="12" width="16" height="70" class="a11-dom" transform="rotate({k < 2 ? 32 : 0} {x + 16} 82)" />{/each}
+          {:else if i === 3}
             {#each [40, 120, 200] as x, k (x)}<path d="M {x - 34} 66 A 34 34 0 0 1 {x + 34} 66" class="a11-l" /><line x1={x} y1="66" x2={x + (k === 2 ? 0 : 22)} y2={k === 2 ? 38 : 42} class="a11-l a11-aig" class:a11-rouge={k === 0} />{/each}
             <rect x="80" y="24" width="80" height="52" class="a11-pince" />
           {:else}
@@ -42,7 +46,7 @@
 </div>
 
 <style>
-  .auj11 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2em; max-width: 62em; margin: 1.2em auto 0; }
+  .auj11 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.9em; max-width: 100%; font-size: 0.86em; margin: 1.2em auto 0; }
   .a11-bloc { border: 3px solid var(--dk-encre); padding: 1.1em 1.1em; display: flex; flex-direction: column; gap: 0.45em; animation: a11-fondu 0.5s both; animation-delay: calc(var(--i) * 0.15s); }
   .a11-bloc.a11-r { border-color: var(--dk-accent); }
   .a11-image { height: 4.6em; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5em; border-bottom: 2px solid var(--dk-filet); padding-bottom: 0.7em; }
@@ -55,6 +59,7 @@
   .a11-route { stroke: var(--dk-filet); stroke-width: 14; fill: none; stroke-linejoin: round; }
   .a11-brume { fill: var(--dk-gris-2); opacity: 0.6; }
   .a11-dom { fill: var(--dk-encre); }
+  .a11-journal { fill: var(--dk-fond); stroke: var(--dk-encre); stroke-width: 3; }
   .a11-aig { stroke-width: 5; stroke-linecap: round; }
   .a11-rouge { stroke: var(--dk-accent); }
   .a11-pince { fill: none; stroke: var(--dk-accent); stroke-width: 4; }

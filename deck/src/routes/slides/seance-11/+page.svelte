@@ -48,12 +48,15 @@
   import M11Echelle from '$lib/deck/visuels/M11Echelle.svelte';
   import M11Maison from '$lib/deck/visuels/M11Maison.svelte';
   import M11Hypotheses from '$lib/deck/visuels/M11Hypotheses.svelte';
+  import M11Article from '$lib/deck/visuels/M11Article.svelte';
+  import M11Recompte from '$lib/deck/visuels/M11Recompte.svelte';
+  import M11Chrono from '$lib/deck/visuels/M11Chrono.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import { SIMS } from '$lib/data/seance11.js';
   import { DEVOIRS, EVALUATIONS } from '$lib/data/cours.js';
   import { GOA } from '$lib/data/seance11-goa.js';
 
-  const TOTAL = 53;
+  const TOTAL = 59;
   const ABC = ['A', 'B', 'C'];
   const CINQ = ['X', 'Z1', 'Z2', 'Z3', 'Y'];
   const QUESTIONS = [
@@ -70,6 +73,7 @@
   const jour = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-CA', { weekday: 'long', day: 'numeric', month: 'long' });
   const D = 'POL-2000 · séance 11 · jeu 19 nov';
   const SCHEMA = 'Schéma, aucune donnée';
+  const FAIM = 'Liens tirés de l’article : tableau 3 (p. 78) et tests F (p. 79)';
 </script>
 
 <svelte:head>
@@ -103,6 +107,56 @@
     <Slide bandeau="Aujourd’hui" droite={D}>
       <h2 class="e">Aujourd’hui</h2>
       <Aujourdhui11 />
+    </Slide>
+
+    <!-- ================= 0. UNE MANCHETTE ================= -->
+
+    <Slide fond="encre" bandeau="Une manchette" droite={D}>
+      <h1 class="e">Près d’un cégépien sur deux</h1>
+      <hr class="filet" />
+      <p class="lead e">Une étude, toutes les manchettes. Regardons-la de près.</p>
+    </Slide>
+
+    <Slide bandeau="Une manchette" droite={D}>
+      <h2 class="e">La manchette arrive avant l’article</h2>
+      <M11Chrono />
+    </Slide>
+
+    <Slide bandeau="L’article" droite={D}>
+      <M11Article partie="a" />
+    </Slide>
+
+    <Slide bandeau="Le mode d’emploi" droite={D}>
+      <M11Article partie="usda" />
+    </Slide>
+
+    <Slide bandeau="Le recompte" droite={D}>
+      <h2 class="e">Le même tableau, lu avec le mode d’emploi</h2>
+      <M11Recompte />
+    </Slide>
+
+    <Slide bandeau="L’article" droite={D}>
+      <M11Article partie="b" />
+    </Slide>
+
+    <Slide bandeau="L’article" droite={D}>
+      <h2 class="e">« Influence » : et les autres chemins ?</h2>
+      <Goa graphe={GOA.faim} taille={1.1} legende={FAIM} temps={[
+        { voir: ['insecurite', 'satisfaction'], aretes: [0], accent: ['insecurite', 'satisfaction'], verdict: false, note: 'Ce que l’article affirme' },
+        { voir: ['insecurite', 'satisfaction', 'age'], aretes: [0, 1, 2], accent: ['insecurite', 'satisfaction'], chemin: ['insecurite', 'age', 'satisfaction'], court: true, note: '24 ans et plus : 73 % en insécurité. 17 ans et moins : 32 %' },
+        { accent: ['insecurite', 'satisfaction'], chemin: ['insecurite', 'enfants', 'satisfaction'], court: true, note: 'Leurs propres tableaux : chacune est liée aux deux bouts' }
+      ]} />
+    </Slide>
+
+    <Slide bandeau="Les signes" droite={D}>
+      <h2 class="e">Les signes à repérer</h2>
+      <div class="serre"><M11Liste items={[
+        { t: 'La manchette arrive avant l’article', g: 'Six mois avant, personne ne l’avait relue.' },
+        { t: 'Un échantillon qui s’est choisi lui-même', g: 'Des cégeps et des étudiants volontaires.' },
+        { t: 'Un instrument lu sans son mode d’emploi', g: '43,9 % devient 27,7 %.' },
+        { t: 'Un lien présenté comme un effet', g: 'Aucun contrôle. C’est le sujet d’aujourd’hui.' },
+        { t: 'Beaucoup de tests, peu de résultats', g: '20 tests, 2 sous 0,05.' }
+      ]} /></div>
     </Slide>
 
     <!-- ================= 1. DEUX MONDES ================= -->
@@ -249,6 +303,14 @@
     <Slide bandeau="Condition 2" droite={D}>
       <h2 class="e">Fermer les chemins par la porte arrière</h2>
       <M11Maison />
+    </Slide>
+
+    <Slide bandeau="Retour à l’article" droite={D}>
+      <h2 class="e">Ce qu’il aurait fallu contrôler</h2>
+      <Goa graphe={GOA.faim} taille={1.1} legende={FAIM} temps={[
+        { accent: ['insecurite', 'satisfaction'], chemin: ['insecurite', 'age', 'satisfaction'], court: true, note: 'Trois portes arrière, ouvertes' },
+        { accent: ['insecurite', 'satisfaction'], chemin: ['insecurite', 'age', 'satisfaction'], controles: ['age', 'enfants', 'naissance'], court: true, note: 'Dans un même modèle, on les ferme' }
+      ]} />
     </Slide>
 
     <Slide bandeau="À vous" droite={D}>
@@ -549,4 +611,5 @@
 .nom-g { font-size: 1.2em; font-weight: 700; margin: 0; text-align: center; border-bottom: 2px solid var(--dk-encre); padding-bottom: 0.2em; }
 .sous-g { margin-top: 0.8em; text-align: center; font-weight: 600; }
 .pile-g { width: 100%; display: flex; flex-direction: column; gap: 0.2em; align-items: center; }
+  .serre { font-size: 0.82em; width: 100%; }
 </style>
