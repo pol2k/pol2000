@@ -114,7 +114,7 @@
     <Slide fond="encre" bandeau="Une manchette" droite={D}>
       <h1 class="e">Près d’un cégépien sur deux</h1>
       <hr class="filet" />
-      <p class="lead e">Une étude, toutes les manchettes. Regardons-la de près.</p>
+      <p class="lead e">Richard et Régimbal (2026), <em>Revue canadienne d’enseignement supérieur</em></p>
     </Slide>
 
     <Slide bandeau="Les manchettes" droite={D}>
@@ -134,7 +134,7 @@
     </Slide>
 
     <Slide bandeau="Les manchettes" droite={D}>
-      <h2 class="e">Le chiffre grossit, l’article arrive après</h2>
+      <h2 class="e">De l’article aux médias</h2>
       <M11Rumeur />
     </Slide>
 
@@ -167,11 +167,10 @@
     <Slide bandeau="Les signes" droite={D}>
       <h2 class="e">Les signes à repérer</h2>
       <div class="serre"><M11Liste items={[
-        { t: 'La manchette arrive avant l’article', g: 'La manchette d’abord, l’article six mois plus tard.' },
-        { t: 'Un échantillon qui s’est choisi lui-même', g: 'Des cégeps et des étudiants volontaires.' },
-        { t: 'Un instrument lu sans son mode d’emploi', g: '43,9 % devient 27,7 %.' },
-        { t: 'Un lien présenté comme un effet', g: 'Aucun contrôle. C’est le sujet d’aujourd’hui.' },
-        { t: 'Beaucoup de tests, peu de résultats', g: '20 tests, 2 sous 0,05.' }
+        { t: 'Un échantillon de volontaires', g: 'Six cégeps choisis selon l’intérêt de leur direction, aucun taux de réponse.' },
+        { t: 'Un instrument mal appliqué', g: 'Avec la règle de l’instrument, 43,9 % devient 27,7 %.' },
+        { t: 'Un lien présenté comme un effet', g: 'Aucune variable de contrôle.' },
+        { t: 'Des tests multiples', g: '20 tests, 2 sous 0,05.' }
       ]} /></div>
     </Slide>
 
@@ -189,9 +188,9 @@
     </Slide>
 
     <Slide fond="encre" bandeau="Deux mondes" droite={D}>
-      <p class="slogan-e e">On ne peut pas tout voir.<br />Il faut dire ce qu’on croit.</p>
+      <p class="slogan-e e">On n’observe jamais les deux mondes pour la même personne.</p>
       <hr class="filet" />
-      <p class="lead e">C’est le rôle du GOA.</p>
+      <p class="lead e">Un GOA rend explicites nos hypothèses causales.</p>
     </Slide>
 
     <!-- ================= 2. DESSINER UN GOA ================= -->
@@ -199,7 +198,7 @@
     <Slide fond="encre" bandeau="Dessiner un GOA" droite={D}>
       <h1 class="e">Dessiner un GOA</h1>
       <hr class="filet" />
-      <p class="lead e">Des boîtes, des flèches, nos hypothèses.</p>
+      <p class="lead e">Des variables, reliées par des flèches causales.</p>
     </Slide>
 
     <Slide bandeau="Pourquoi un GOA" droite={D}>
@@ -212,7 +211,7 @@
     </Slide>
 
     <Slide bandeau="Dessiner un GOA" droite={D}>
-      <h2 class="e">L’éducation rend-elle plus à droite ? Une phrase, une flèche</h2>
+      <h2 class="e">L’éducation rend-elle plus à droite ?</h2>
       <M11Hypotheses />
       <p class="source e">D’après Arel-Bundock (2021), p. 116</p>
     </Slide>
@@ -291,7 +290,7 @@
     <Slide fond="encre" bandeau="Pause" droite={D}>
       <h1 class="e">Pause</h1>
       <hr class="filet" />
-      <p class="lead e">Ensuite : à vous de jouer, puis R.</p>
+      <p class="lead e">Ensuite : deux exercices, puis R.</p>
     </Slide>
 
     <!-- ================= 5. PRATIQUE ================= -->
@@ -332,7 +331,7 @@
     <Slide fond="encre" bandeau="Simuler dans R" droite={D}>
       <h1 class="e">Simuler dans R</h1>
       <hr class="filet" />
-      <p class="lead e">On fabrique le monde nous-mêmes. On connaît donc le vrai effet. Le bon modèle doit le retrouver.</p>
+      <p class="lead e">On crée les données nous-mêmes : le vrai effet est connu, et on vérifie quel modèle le retrouve.</p>
     </Slide>
 
     <Slide bandeau="Simuler · une flèche" droite={D}>
@@ -410,14 +409,14 @@
     </Slide>
 
     <Slide bandeau="Simuler · huit modèles" droite={D}>
-      <h2 class="e">Huit modèles, un seul dans le mille</h2>
+      <h2 class="e">Huit modèles, un seul retrouve le vrai effet</h2>
       <M11Cible />
     </Slide>
 
     <Slide fond="encre" bandeau="Simuler dans R" droite={D}>
-      <p class="slogan-e e">Le bon modèle n’est pas celui qui a le plus de contrôles.</p>
+      <p class="slogan-e e">Ajouter des contrôles n’améliore pas toujours l’estimation.</p>
       <hr class="filet" />
-      <p class="lead e">C’est celui que le GOA dicte.</p>
+      <p class="lead e">On choisit les contrôles à partir du GOA.</p>
     </Slide>
 
     <!-- ================= CLÔTURE ================= -->

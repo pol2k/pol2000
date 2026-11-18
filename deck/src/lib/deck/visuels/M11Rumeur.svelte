@@ -1,25 +1,23 @@
 <script>
   /**
-   * Le chiffre qui grossit (séance 11). Les cinq textes qu'on vient de
-   * lire, dans l'ordre où ils ont paru, en escalier : chaque marche monte,
-   * chaque phrase est plus grosse. L'article scientifique, la source, reste
-   * au sol, et il arrive en troisième, après deux manchettes.
-   *
-   *   un clic par texte, dans l'ordre des dates.
+   * De l'article aux médias (séance 11) : la phrase de l'article, puis
+   * quatre reprises dans les médias, en escalier. Chaque marche est plus
+   * haute et chaque phrase plus grosse : le même 43,9 % devient « le
+   * ventre vide ». Un clic par texte.
    *
    * Toutes les phrases sont citées mot pour mot des pages montrées juste
-   * avant (M11Presse, M11Article).
+   * avant (M11Presse) ou après (M11Article).
    */
   import { brancherTemps } from '../temps.js';
 
   let e = $state(0);
   let hote = $state(null);
   const T = [
-    { d: 'février 2025', qui: 'La Presse', t: 'Près d’un élève sur deux touché', h: 1 },
-    { d: 'juin 2025', qui: 'Le Devoir, lettre', t: 'un étudiant sur deux doute de pouvoir manger à sa faim chaque jour', h: 2 },
-    { d: 'août 2025', qui: 'L’article', t: '43,9 % des participants vivent une forme d’insécurité alimentaire', h: 0, source: true },
-    { d: 'octobre 2025', qui: 'Radio-Canada, le chercheur', t: 'Ce sont des personnes qui ont faim', h: 3 },
-    { d: 'octobre 2025', qui: 'Le Devoir, éditorial', t: 'Près d’un jeune Québécois sur deux vogue au cégep le ventre vide', h: 4 }
+    { qui: 'L’article', t: '43,9 % des participants vivent une forme d’insécurité alimentaire', h: 0, source: true },
+    { qui: 'La Presse', t: 'Près d’un élève sur deux touché', h: 1 },
+    { qui: 'Le Devoir, lettre', t: 'un étudiant sur deux doute de pouvoir manger à sa faim chaque jour', h: 2 },
+    { qui: 'Radio-Canada, le chercheur', t: 'Ce sont des personnes qui ont faim', h: 3 },
+    { qui: 'Le Devoir, éditorial', t: 'Près d’un jeune Québécois sur deux vogue au cégep le ventre vide', h: 4 }
   ];
   $effect(() => {
     if (!hote) return;
@@ -28,7 +26,7 @@
   });
 </script>
 
-<div class="visuel m11u" bind:this={hote} role="img" aria-label="Cinq textes, dans l’ordre où ils ont paru. Février 2025, La Presse : près d’un élève sur deux touché. Juin 2025, une lettre au Devoir : un étudiant sur deux doute de pouvoir manger à sa faim chaque jour. Août 2025, l’article : 43,9&#8239;% des participants vivent une forme d’insécurité alimentaire. Octobre 2025, Radio-Canada : des personnes qui ont faim. Octobre 2025, éditorial du Devoir : près d’un jeune Québécois sur deux vogue au cégep le ventre vide.">
+<div class="visuel m11u" bind:this={hote} role="img" aria-label="La phrase de l’article, puis quatre reprises dans les médias, de plus en plus grosses. L’article : 43,9 % des participants vivent une forme d’insécurité alimentaire. La Presse : près d’un élève sur deux touché. Une lettre au Devoir : un étudiant sur deux doute de pouvoir manger à sa faim chaque jour. Le chercheur, à Radio-Canada : ce sont des personnes qui ont faim. L’éditorial du Devoir : près d’un jeune Québécois sur deux vogue au cégep le ventre vide.">
   {#each T as x, i (i)}
     <div class="m11u-col" class:m11u-vu={e >= i} style="--h: {x.h}">
       <div class="m11u-carte" class:m11u-source={x.source}>
@@ -36,7 +34,6 @@
         <p class="m11u-t">«&#8239;{x.t}&#8239;»</p>
       </div>
       <div class="m11u-marche" class:m11u-sol={x.source}></div>
-      <span class="m11u-d">{x.d}</span>
     </div>
   {/each}
 </div>
@@ -52,6 +49,6 @@
   .m11u-source .m11u-t { color: var(--dk-encre); }
   .m11u-marche { height: calc(0.4em + var(--h) * 1.9em); background: var(--dk-accent); opacity: 0.85; }
   .m11u-marche.m11u-sol { background: var(--dk-encre); }
-  .m11u-d { font-size: 0.7em; color: var(--dk-gris); text-align: center; border-top: 3px solid var(--dk-encre); padding-top: 0.3em; }
+  .m11u { border-bottom: 3px solid var(--dk-encre); padding-bottom: 0; }
   @media (prefers-reduced-motion: reduce) { .m11u-col { transition: none; transform: none; } }
 </style>

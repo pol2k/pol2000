@@ -77,69 +77,63 @@
       {#if e === 0}
         <span class="m11a-eti">L’article</span>
         <p class="m11a-ref">Richard, É., et Régimbal, F. (2026). L’insécurité alimentaire chez les cégépiens. <em>Revue canadienne d’enseignement supérieur</em>, <em>56</em>(1), 71-92.</p>
-        <p class="m11a-gris">Une revue avec comité de lecture.</p>
+        <p class="m11a-gris">Revue avec comité de lecture.</p>
       {:else if e === 1}
-        <span class="m11a-eti">Le chiffre des manchettes</span>
+        <span class="m11a-eti">Le chiffre repris par les médias</span>
         <p class="m11a-grand">43,9&#8239;%</p>
-        <p class="m11a-gris">D’où vient-il&#8239;? On cherche dans le texte.</p>
       {:else if e === 2}
-        <span class="m11a-eti">Signe 1 · Qui a choisi les cégeps&#8239;?</span>
-        <p class="m11a-grand">Les directions qui voulaient participer.</p>
-        <p class="m11a-gris">Six cégeps sur 48. Pas un tirage au sort.</p>
+        <span class="m11a-eti">Signe 1 · Le choix des cégeps</span>
+        <p class="m11a-grand">Six cégeps sur 48, choisis selon l’intérêt de leur direction</p>
       {:else if e === 3}
-        <span class="m11a-eti">Signe 2 · Qui a choisi les étudiants&#8239;?</span>
-        <p class="m11a-grand">Eux-mêmes.</p>
-        <p class="m11a-gris">Qui répond à un sondage sur l’alimentation&#8239;? Ceux que le sujet touche.</p>
-        <p class="m11a-gris">Le taux de réponse n’est donné nulle part.</p>
+        <span class="m11a-eti">Signe 2 · Le choix des étudiants</span>
+        <p class="m11a-grand">Des volontaires</p>
+        <p class="m11a-gris">Aucun taux de réponse n’est rapporté.</p>
       {:else if e === 4}
-        <span class="m11a-eti">Signe 3 · L’échantillon ressemble-t-il aux cégeps&#8239;?</span>
-        <p class="m11a-grand">69&#8239;% de femmes.</p>
-        <p class="m11a-gris">Est-ce le portrait des cégeps&#8239;? L’article ne compare jamais, et ne pondère pas.</p>
+        <span class="m11a-eti">Signe 3 · La composition de l’échantillon</span>
+        <p class="m11a-grand">69&#8239;% de femmes</p>
+        <p class="m11a-gris">Aucune comparaison avec la population des cégeps, aucune pondération.</p>
       {:else if e === 5}
-        <span class="m11a-eti">Signe 4 · Un autre cégep, un autre chiffre</span>
-        <p class="m11a-grand">De 34&#8239;% à 58&#8239;%, selon le cégep.</p>
-        <p class="m11a-gris">Six autres cégeps auraient donné un autre total.</p>
+        <span class="m11a-eti">Signe 4 · Les écarts entre cégeps</span>
+        <p class="m11a-grand">De 34&#8239;% à 58&#8239;% selon le cégep</p>
+        <p class="m11a-gris">Le total dépend des cégeps retenus.</p>
       {:else if e === 6}
         <span class="m11a-eti">Signe 5 · L’instrument</span>
-        <p class="m11a-grand">Six questions.</p>
-        <p class="m11a-gris">Un instrument américain, avec son mode d’emploi.</p>
+        <p class="m11a-grand">La version abrégée en six questions du USDA</p>
       {:else}
         <span class="m11a-eti">Signe 5 · L’instrument</span>
-        <p class="m11a-grand">Un seul «&#8239;oui&#8239;» sur six&#8239;: «&#8239;insécurité marginale&#8239;».</p>
-        <p class="m11a-gris">16,2&#8239;% des répondants. Comptés dans le 43,9&#8239;%.</p>
+        <p class="m11a-grand">Un score de 1 classé «&#8239;insécurité marginale&#8239;»</p>
+        <p class="m11a-gris">16,2&#8239;% des répondants, inclus dans le 43,9&#8239;%.</p>
       {/if}
     {:else if usda}
       {#if e === 0}
         <span class="m11a-eti">Le mode d’emploi · une des six questions</span>
         <p class="m11a-grand">«&#8239;Je n’avais pas les moyens de manger des repas équilibrés.&#8239;»</p>
-        <p class="m11a-gris">Répondre «&#8239;parfois&#8239;» à cette seule question&#8239;: score 1.</p>
+        <p class="m11a-gris">Répondre «&#8239;parfois&#8239;» donne un score de 1.</p>
       {:else}
-        <span class="m11a-eti">Le mode d’emploi · le classement</span>
-        <p class="m11a-grand">Score 0 ou 1&#8239;: sécurité alimentaire.</p>
+        <span class="m11a-eti">Le mode d’emploi · la règle de classement</span>
+        <p class="m11a-grand">Score 0 ou 1&#8239;: sécurité alimentaire</p>
         <p class="m11a-gris">L’insécurité commence à 2.</p>
       {/if}
     {:else}
       {#if e === 0}
-        <span class="m11a-eti">Signe 6 · Comparer ce qui se compare</span>
+        <span class="m11a-eti">Signe 6 · La comparaison</span>
         <p class="m11a-ligne"><strong>15,7&#8239;%</strong><span>Statistique Canada&#8239;: 18 questions, des ménages, un échantillon représentatif</span></p>
         <p class="m11a-ligne"><strong class="m11a-r">43,9&#8239;%</strong><span>6 questions, un classement maison, des volontaires</span></p>
       {:else if e === 1}
-        <span class="m11a-eti">Signe 7 · Un lien devient un effet</span>
+        <span class="m11a-eti">Signe 7 · Le vocabulaire causal</span>
         <p class="m11a-grand">«&#8239;influence&#8239;»</p>
-        <p class="m11a-gris">Un seul sondage, à un seul moment. On voit un lien, pas un effet.</p>
+        <p class="m11a-gris">Un sondage à un seul moment montre un lien, pas un effet.</p>
       {:else if e === 2}
-        <span class="m11a-eti">Signe 7 · Un lien devient un effet</span>
-        <p class="m11a-grand">Aucune variable de contrôle.</p>
-        <p class="m11a-gris">Une variable à la fois. Une régression multiple, comme à la séance 8, aurait tout mis dans un même modèle.</p>
+        <span class="m11a-eti">Signe 7 · Le vocabulaire causal</span>
+        <p class="m11a-grand">Aucune variable de contrôle</p>
+        <p class="m11a-gris">Chaque variable est testée seule. Une régression multiple, comme à la séance 8, les aurait incluses ensemble.</p>
       {:else if e === 3}
-        <span class="m11a-eti">Signe 8 · Vingt tests</span>
-        <p class="m11a-grand">20 tests, 2 «&#8239;découvertes&#8239;».</p>
-        <p class="m11a-gris">Au seuil de 5&#8239;%, le hasard en donne environ 1 sur 20. Ici&#8239;: p = 0,044 et p = 0,022.</p>
-        <p class="m11a-gris">Et pourtant&#8239;: «&#8239;il apparaît évident&#8239;».</p>
+        <span class="m11a-eti">Signe 8 · Les tests multiples</span>
+        <p class="m11a-grand">20 tests, 2 sous 0,05</p>
+        <p class="m11a-gris">Au seuil de 5&#8239;%, on en attend environ 1 par hasard. La recommandation sur l’aide financière repose sur l’un d’eux (p = 0,022).</p>
       {:else}
-        <span class="m11a-eti">Signe 9 · Rien trouvé, donc rien&#8239;?</span>
-        <p class="m11a-grand">Non significatif ≠ aucune différence.</p>
-        <p class="m11a-gris">Ne rien trouver ne prouve pas qu’il n’y a rien.</p>
+        <span class="m11a-eti">Signe 9 · L’absence de résultat</span>
+        <p class="m11a-grand">Non significatif ≠ aucune différence</p>
       {/if}
     {/if}
   {/snippet}

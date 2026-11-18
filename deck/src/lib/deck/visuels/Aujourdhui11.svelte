@@ -8,11 +8,11 @@
    * Même facture qu'Aujourdhui9.
    */
   const BLOCS = [
-    { n: '1', titre: 'Une manchette', sous: 'Repérer les signes d’une étude qui ne tient pas' },
+    { n: '1', titre: 'Une manchette', sous: 'Une étude reprise par les médias, et ses failles' },
     { n: '2', titre: 'Deux mondes', sous: 'Le problème fondamental de l’inférence causale' },
-    { n: '3', titre: 'Dessiner un GOA', sous: 'Des boîtes, des flèches, nos hypothèses' },
-    { n: '4', titre: 'Deux règles', sous: 'Quoi contrôler, et quoi laisser tranquille' },
-    { n: '5', titre: 'Simuler dans R', sous: 'On fabrique le monde, on connaît la vérité' }
+    { n: '3', titre: 'Dessiner un GOA', sous: 'Représenter nos hypothèses causales' },
+    { n: '4', titre: 'Deux règles', sous: 'Quelles variables contrôler' },
+    { n: '5', titre: 'Simuler dans R', sous: 'Des données dont on connaît le vrai effet' }
   ];
 </script>
 
