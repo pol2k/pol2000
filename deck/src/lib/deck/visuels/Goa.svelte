@@ -92,7 +92,7 @@
       const px = bx - ux * POINTE, py = by - uy * POINTE;
       const nx = -uy * POINTE * 0.5, ny = ux * POINTE * 0.5;
       const long = Math.hypot(px - ax, py - ay);
-      // La coupure d'un maillon fermé : près du nœud d'arrivée ou de départ.
+      // La coupure d'un maillon fermé : près du nœud d'arrivée ou de départ.
       const coupe = (t) => {
         const cx = ax + (bx - ax) * t, cy = ay + (by - ay) * t;
         return { x1: cx - uy * 22, y1: cy + ux * 22, x2: cx + uy * 22, y2: cy - ux * 22 };
@@ -154,8 +154,7 @@
   const TYPES = { fourchette: 'fourchette', chaine: 'chaîne', collision: 'collision' };
 
   const aria = $derived(
-    legende ||
-      'Graphe : ' + graphe.aretes.map(([p, q]) => `${N[p].ls.join(' ').replace(/_/g, '')} cause ${N[q].ls.join(' ').replace(/_/g, '')}`).join(', ') + '.'
+    'Graphe : ' + graphe.aretes.map(([p, q]) => `${N[p].ls.join(' ').replace(/_/g, '')} cause ${N[q].ls.join(' ').replace(/_/g, '')}`).join(', ') + '.'
   );
 </script>
 

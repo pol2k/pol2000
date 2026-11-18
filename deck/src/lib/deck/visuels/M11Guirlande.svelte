@@ -47,7 +47,7 @@
   const fleches = $derived(toks.filter((_, i) => i % 2 === 1));
 
   const Y0 = 150, SAG = 46;
-  // Largeur d'un bout : une lettre tient dans un carré, un mot s'allonge.
+  // Largeur d'un bout : une lettre tient dans un carré, un mot s'allonge.
   const largeur = (t) => Math.max(68, t.replace(/\d$/, '').length * 23 + 34);
   const PAS = $derived(noeuds.some((n) => n.length > 2) ? 360 : 300);
   const xs = $derived.by(() => {
@@ -79,7 +79,7 @@
 </script>
 
 <div class="visuel m11g" class:ouvert class:cache bind:this={hote}>
-  <svg viewBox="0 {Y0 - 110} {W} 440" style="max-width: {50 * taille}em; max-height: {haut}" role="img" aria-label="Le chemin {chemin} : {ouvert ? 'ouvert, l’information passe' : 'fermé, rien ne passe'}.">
+  <svg viewBox="0 {Y0 - 110} {W} 440" style="max-width: {50 * taille}em; max-height: {haut}" role="img" aria-label="Le chemin {chemin} : {ouvert ? 'ouvert, l’information passe' : 'fermé, rien ne passe'}.">
     <defs>
       <filter id="m11g-halo" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="14" /></filter>
     </defs>
@@ -124,7 +124,7 @@
     {/each}
   </svg>
   {#if cache}
-    <p class="verdict"><strong>Ouvert ou fermé ?</strong></p>
+    <p class="verdict"><strong>Ouvert ou fermé ?</strong></p>
   {:else}
     <p class="verdict"><strong>{ouvert ? 'Ouvert' : 'Fermé'}</strong><span>{ouvert ? 'l’information passe d’un bout à l’autre' : 'rien ne passe'}</span></p>
   {/if}

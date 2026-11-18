@@ -28,15 +28,15 @@
   });
   const LEG = [
     'Juillet, jour après jour.',
-    'Observer : je lis le mercure, je devine les ventes. L’information circule.',
-    'Intervenir : chauffer le thermomètre ne vend pas un cornet de plus.',
-    'La température cause les deux : une fourchette.'
+    'Observer : je lis le mercure, je devine les ventes. L’information circule.',
+    'Intervenir : chauffer le thermomètre ne vend pas un cornet de plus.',
+    'La température cause les deux : une fourchette.'
   ];
   const fige = $derived(e >= 2);
 </script>
 
 <div class="visuel m11t" bind:this={hote}>
-  <svg viewBox="0 0 1200 580" role="img" aria-label="Le soleil fait monter le mercure et les ventes de crème glacée ensemble. Lire le mercure permet de deviner les ventes. Mais chauffer le thermomètre au briquet ne change pas les ventes : le mercure ne les cause pas. La température cause les deux.">
+  <svg viewBox="0 0 1200 580" role="img" aria-label="Le soleil fait monter le mercure et les ventes de crème glacée ensemble. Lire le mercure permet de deviner les ventes. Mais chauffer le thermomètre au briquet ne change pas les ventes : le mercure ne les cause pas. La température cause les deux.">
     <!-- le soleil -->
     <g class="soleil" class:anim={!fige}>
       <circle cx="180" cy="170" r="70" />

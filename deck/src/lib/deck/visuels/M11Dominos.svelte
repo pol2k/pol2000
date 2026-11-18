@@ -48,19 +48,19 @@
   });
   const LEG = $derived(
     mode === 'controle'
-      ? ['On tient B.', 'A pousse, B ne bouge pas : C reste debout. La chaîne est coupée.'][e]
+      ? ['On tient B.', 'A pousse, B ne bouge pas : C reste debout. La chaîne est coupée.'][e]
       : [
           'Trois dominos.',
-          'On pousse A : A cause B, B cause C. Donc A cause C.',
-          'On pousse C : rien ne tombe derrière. La flèche a un sens.',
+          'On pousse A : A cause B, B cause C. Donc A cause C.',
+          'On pousse C : rien ne tombe derrière. La flèche a un sens.',
           'B et C sont les descendants de A. A et B sont les ancêtres de C.',
-          'Et si C faisait tomber A ? A est déjà par terre. Pas de boucle.'
+          'Et si C faisait tomber A ? A est déjà par terre. Pas de boucle.'
         ][e]
   );
 </script>
 
 <div class="visuel m11o" bind:this={hote}>
-  <svg viewBox="0 0 1000 560" role="img" aria-label="Trois dominos, A, B et C. On pousse A : A fait tomber B, qui fait tomber C. Pousser C ne fait rien tomber derrière lui.">
+  <svg viewBox="0 0 1000 560" role="img" aria-label="Trois dominos, A, B et C. On pousse A : A fait tomber B, qui fait tomber C. Pousser C ne fait rien tomber derrière lui.">
     <line x1="80" y1={SOL} x2="960" y2={SOL} class="sol" />
 
     <!-- la poussée -->
@@ -72,7 +72,7 @@
 
     {#each ['A', 'B', 'C'] as d (d + e)}
       {@const c = chute[d]}
-      <g class="domino" class:tombe={!!c} style="--x: {X[d]}px; --a: {c ? c[0] : 0}deg; --d: {c ? c[1] : 0}s">
+      <g class="domino" class:tombe={!!c} style="--x: {X[d]}px; --a: {c ? c[0] : 0}deg; --d: {c ? c[1] : 0}s">
         <rect x={X[d]} y={SOL - H} width={W} height={H} class="corps" class:accent={mode === 'oriente' && e === 3 && d !== 'A'} />
         <circle cx={X[d] + W / 2} cy={SOL - H + 50} r="7" class="point" />
         <circle cx={X[d] + W / 2} cy={SOL - 50} r="7" class="point" />

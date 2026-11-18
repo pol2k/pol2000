@@ -59,15 +59,15 @@
   const DV = droite(VICT, -1.6, 2.6);
 
   const LEG = [
-    '150 matchs. Le jeu de l’équipe et l’arbitre : aucun lien.',
-    'Les victoires : bien jouer, ou un arbitre favorable.',
-    'On ne regarde que les victoires : un lien apparaît.',
-    'Gagner en jouant mal ? L’arbitre a dû aider.'
+    '150 matchs. Le jeu de l’équipe et l’arbitre : aucun lien.',
+    'Les victoires : bien jouer, ou un arbitre favorable.',
+    'On ne regarde que les victoires : un lien apparaît.',
+    'Gagner en jouant mal ? L’arbitre a dû aider.'
   ];
 </script>
 
 <div class="visuel m11a" bind:this={hote}>
-  <svg viewBox="0 0 1100 600" role="img" aria-label="Un nuage de 150 matchs fictifs : le jeu de l’équipe et le biais de l’arbitre ne sont pas liés. Parmi les victoires seulement, une droite descendante apparaît : moins l’équipe a bien joué, plus l’arbitre l’a aidée.">
+  <svg viewBox="0 0 1100 600" role="img" aria-label="Un nuage de 150 matchs fictifs : le jeu de l’équipe et le biais de l’arbitre ne sont pas liés. Parmi les victoires seulement, une droite descendante apparaît : moins l’équipe a bien joué, plus l’arbitre l’a aidée.">
     <line x1={G} y1={B} x2={D} y2={B} class="axe" />
     <line x1={G} y1={B} x2={G} y2={H} class="axe" />
     <text x={(G + D) / 2} y={B + 50} class="titre-axe">jeu de l’équipe →</text>

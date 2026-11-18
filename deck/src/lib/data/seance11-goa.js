@@ -139,9 +139,10 @@ export const GOA = {
       { id: 'revenu', label: 'Revenu', x: 450, y: 0 },
       { id: 'scolarite', label: 'Scolarité', x: 0, y: 220 },
       { id: 'interet', label: 'Intérêt pour\nla politique', x: 900, y: 220 },
-      { id: 'age', label: 'Âge', x: 450, y: 440 }
+      { id: 'age', label: 'Âge', x: 300, y: 440 },
+      { id: 'sexe', label: 'Sexe', x: 620, y: 440 }
     ],
-    aretes: [['scolarite', 'revenu'], ['revenu', 'interet'], ['scolarite', 'interet'], ['age', 'scolarite'], ['age', 'interet']]
+    aretes: [['scolarite', 'revenu'], ['revenu', 'interet'], ['scolarite', 'interet'], ['age', 'scolarite'], ['age', 'interet'], ['sexe', 'interet'], ['sexe', 'revenu']]
   },
 
   // ---------- pratique : quatre chaînes (goa17, 19, 21, 23) et deux rappels (goa25, 26)
@@ -192,13 +193,13 @@ export const GOA = {
   travailFinal: {
     x: 'X', y: 'Y',
     noeuds: [
-      { id: 'commune', label: 'Une cause\ncommune', x: 450, y: 0 },
-      { id: 'autre', label: 'Une autre\ncause de Y', x: 950, y: 0 },
-      { id: 'X', label: 'Votre X', x: 0, y: 230 },
-      { id: 'Y', label: 'Votre Y', x: 950, y: 230 },
-      { id: 'desc', label: 'Un descendant\nde X', x: 450, y: 450 }
+      { id: 'v1', label: 'Variable 1\n(dans la CES)', x: 500, y: 0 },
+      { id: 'v2', label: 'Variable 2\n(dans la CES)', x: 500, y: 190 },
+      { id: 'X', label: 'Votre X', x: 0, y: 380 },
+      { id: 'Y', label: 'Votre Y', x: 1000, y: 380 },
+      { id: 'v3', label: 'Variable 3\n(absente)', x: 500, y: 600 }
     ],
-    aretes: [['commune', 'X'], ['commune', 'Y'], ['autre', 'Y'], ['X', 'Y'], ['X', 'desc'], ['desc', 'Y']]
+    aretes: [['v1', 'X'], ['v1', 'Y'], ['v2', 'X'], ['v2', 'Y'], ['v3', 'X'], ['v3', 'Y'], ['X', 'Y']]
   },
 
   // ---------- simulations (p. 132-135), avec les coefficients

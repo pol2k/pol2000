@@ -63,6 +63,18 @@ MODELES <- lapply(names(FORMULES), function(m) {
   list(nom = m, formule = FORMULES[[m]], x = round(b, 2))
 })
 
+# Les points de la collision, pour la figure des tranches (M11Tranches) :
+# les 400 premières lignes des mêmes données (set.seed(2026)), et les deux
+# droites estimées sur les 100 000 lignes.
+dc <- ENVS$collision
+m1 <- coef(lm(Y ~ X, data = data.frame(X = dc$X, Y = dc$Y)))
+m2 <- coef(lm(Y ~ X + Z, data = data.frame(X = dc$X, Y = dc$Y, Z = dc$Z)))
+TRANCHES <- list(
+  points = lapply(1:400, function(i) list(x = round(dc$X[i], 3), y = round(dc$Y[i], 3), z = round(dc$Z[i], 3))),
+  simple = list(a = unname(m1[1]), b = unname(m1[2])),
+  controle = list(a = unname(m2[1]), b = unname(m2[2]), bz = unname(m2[3]))
+)
+
 VRAI <- list(simple = 1.7, chaine = 1.5, collision = 1.7, fourchette = 0.5, complexe = 1)
 
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, digits = NA)
@@ -72,7 +84,8 @@ writeLines(c(
   "// Simulations d'Arel-Bundock (2021), chapitre 6, avec set.seed(2026).",
   paste0("export const SIMS = ", J(SIMS), ";"),
   paste0("export const MODELES = ", J(MODELES), ";"),
-  paste0("export const VRAI = ", J(VRAI), ";")
+  paste0("export const VRAI = ", J(VRAI), ";"),
+  paste0("export const TRANCHES = ", J(TRANCHES), ";")
 ), sortie)
 
 for (nom in names(SIMS)) {

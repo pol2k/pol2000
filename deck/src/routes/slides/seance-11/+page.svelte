@@ -43,7 +43,11 @@
   import M11Arbitre from '$lib/deck/visuels/M11Arbitre.svelte';
   import M11Escalier from '$lib/deck/visuels/M11Escalier.svelte';
   import M11Exercice from '$lib/deck/visuels/M11Exercice.svelte';
-  import M11Modeles from '$lib/deck/visuels/M11Modeles.svelte';
+  import M11Tranches from '$lib/deck/visuels/M11Tranches.svelte';
+  import M11Cible from '$lib/deck/visuels/M11Cible.svelte';
+  import M11Echelle from '$lib/deck/visuels/M11Echelle.svelte';
+  import M11Maison from '$lib/deck/visuels/M11Maison.svelte';
+  import M11Hypotheses from '$lib/deck/visuels/M11Hypotheses.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import { SIMS } from '$lib/data/seance11.js';
   import { DEVOIRS } from '$lib/data/cours.js';
@@ -136,31 +140,15 @@
     </Slide>
 
     <Slide bandeau="Dessiner un GOA" droite={D}>
-      <h2 class="e">L’éducation rend-elle plus à droite ?</h2>
-      <M11Liste items={[
-        { t: 'L’éducation augmente le revenu individuel' },
-        { t: 'Le revenu augmente l’appui aux partis qui promettent des baisses d’impôt' },
-        { t: 'Le revenu des parents augmente l’éducation des enfants' },
-        { t: 'Le revenu des parents augmente le revenu des enfants' }
-      ]} />
+      <h2 class="e">L’éducation rend-elle plus à droite ? Une phrase, une flèche</h2>
+      <M11Hypotheses />
       <p class="source e">D’après Arel-Bundock (2021), p. 116</p>
-    </Slide>
-
-    <Slide bandeau="Dessiner un GOA" droite={D}>
-      <h2 class="e">Une flèche par hypothèse</h2>
-      <Goa graphe={GOA.education} legende={SCHEMA} temps={[
-        { voir: ['education', 'ideologie'], aretes: [4], note: 'L’effet qu’on veut connaître' },
-        { voir: ['education', 'ideologie', 'revenu_ind'], aretes: [4, 0] },
-        { voir: ['education', 'ideologie', 'revenu_ind'], aretes: [4, 0, 1] },
-        { aretes: [4, 0, 1, 2] },
-        {}
-      ]} />
     </Slide>
 
     <!-- ================= 3. LA GRAMMAIRE ================= -->
 
     <Slide bandeau="Orienté" droite={D}>
-      <h2 class="e">Orienté, acyclique : des dominos</h2>
+      <h2 class="e">Orienté, acyclique : des dominos</h2>
       <M11Dominos />
     </Slide>
 
@@ -188,23 +176,23 @@
     </Slide>
 
     <Slide bandeau="Chaîne" droite={D}>
-      <h2 class="e">Contrôler une chaîne : tenir le domino du milieu</h2>
+      <h2 class="e">Contrôler une chaîne : tenir le domino du milieu</h2>
       <M11Dominos mode="controle" />
     </Slide>
 
     <Slide fond="encre" bandeau="Fourchette" droite={D}>
-      <h2 class="e">Fourchette : une cause, deux effets</h2>
+      <h2 class="e">Fourchette : une cause, deux effets</h2>
       <M11Guirlande chemin="Mercure ← Température → Crème glacée" temps={[
         { note: 'Le mercure annonce les ventes.' },
-        { controles: ['Température'], note: 'Il fait 35 °C, c’est connu : le mercure n’annonce plus rien.' }
+        { controles: ['Température'], note: 'Il fait 35 °C, c’est connu : le mercure n’annonce plus rien.' }
       ]} />
     </Slide>
 
     <Slide fond="encre" bandeau="Collision" droite={D}>
-      <h2 class="e">Collision : deux causes, un effet</h2>
+      <h2 class="e">Collision : deux causes, un effet</h2>
       <M11Guirlande chemin="Jeu → Victoire ← Arbitre" temps={[
         { note: 'Un arbitre biaisé ne dit rien du jeu de l’équipe.' },
-        { controles: ['Victoire'], note: 'On ne regarde que les victoires : le jeu et l’arbitre se mettent à parler.' }
+        { controles: ['Victoire'], note: 'On ne regarde que les victoires : le jeu et l’arbitre se mettent à parler.' }
       ]} />
     </Slide>
 
@@ -225,7 +213,7 @@
       <h2 class="e">Une seule ampoule qui bloque, et tout s’éteint</h2>
       <div class="visuel pile-g">
         <M11Guirlande chemin="A ← B ← C ← D → E" haut="25vh" />
-        <M11Guirlande chemin="A → B ← C → D → E" haut="25vh" temps={[{}, { controles: ['B'], note: 'On contrôle B : la guirlande se rallume.' }]} />
+        <M11Guirlande chemin="A → B ← C → D → E" haut="25vh" temps={[{}, { controles: ['B'], note: 'On contrôle B : la guirlande se rallume.' }]} />
       </div>
     </Slide>
 
@@ -247,21 +235,12 @@
 
     <Slide bandeau="Condition 1" droite={D}>
       <h2 class="e">Ne pas contrôler un descendant de X</h2>
-      <Goa graphe={GOA.salaire} legende={SCHEMA} temps={[
-        { flux: true, note: 'Le sexe agit sur le salaire par deux chemins' },
-        { flux: true, controles: ['occupation'], barres: ['occupation'], note: '« À occupation égale » : on perd une partie de l’effet' }
-      ]} />
-      <p class="source e">D’après Arel-Bundock (2021), p. 125</p>
+      <M11Echelle />
     </Slide>
 
     <Slide bandeau="Condition 2" droite={D}>
       <h2 class="e">Fermer les chemins par la porte arrière</h2>
-      <Goa graphe={GOA.itinerance} legende={SCHEMA} temps={[
-        { flux: true },
-        { chemin: ['eclatement', 'sante', 'itinerance'], note: 'Une porte arrière : sa flèche pointe vers la cause' },
-        { chemin: ['eclatement', 'sante', 'itinerance'], controles: ['sante'], note: 'On contrôle la santé mentale : la porte est fermée' }
-      ]} />
-      <p class="source e">D’après Arel-Bundock (2021), p. 126</p>
+      <M11Maison />
     </Slide>
 
     <Slide bandeau="À vous" droite={D}>
@@ -283,8 +262,8 @@
       <div class="visuel escalier">
         <M11Escalier marque />
         <Goa graphe={GOA.escalier8} taille={0.9} legende={SCHEMA} temps={[
-          { flux: true, controles: ['age'] },
-          { flux: true, controles: ['age', 'revenu'], barres: ['revenu'], note: 'Non : le revenu est un descendant de la scolarité' }
+          { flux: true, controles: ['age', 'sexe'] },
+          { flux: true, controles: ['age', 'sexe', 'revenu'], barres: ['revenu'], note: 'Non : le revenu est un descendant de la scolarité' }
         ]} />
       </div>
     </Slide>
@@ -335,7 +314,7 @@
         etats={[
           {},
           { barres: ['Z1', 'Z2', 'Z4', 'Z5'] },
-          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], accent: ['Z3'] },
+          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], chemin: ['X', 'Z3', 'Z2', 'Z4', 'Z5', 'Y'], court: true, note: 'Celle-ci bute sur une collision en Z₂' },
           { barres: ['Z1', 'Z2', 'Z4', 'Z5'], chemin: ['X', 'Z3', 'Z2', 'Y'], court: true },
           { barres: ['Z1', 'Z2', 'Z4', 'Z5'], chemin: ['X', 'Z3', 'Z2', 'Y'], controles: ['Z3'], court: true },
           { barres: ['Z1', 'Z2', 'Z4', 'Z5'], controles: ['Z3'] }
@@ -361,7 +340,7 @@
         etats={[
           {},
           { barres: ['cholesterol'] },
-          { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], verdict: false },
+          { barres: ['cholesterol'], accent: ['vie', 'poids'] },
           { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], court: true },
           { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], controles: ['vie'], court: true },
           { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], controles: ['poids'], court: true, note: 'Le poids ferme aussi la porte' }
@@ -398,6 +377,11 @@
         <Goa graphe={GOA.sim3} taille={0.9} temps={[{ coefs: true }]} legende="Données simulées" />
         <Console lignes={avec('collision', ['', 'sans contrôle : 1,7, juste', 'avec Z : 0,45, faux'])} />
       </div>
+    </Slide>
+
+    <Slide bandeau="Simuler · une collision" droite={D}>
+      <h2 class="e">Contrôler Z, c’est regarder une tranche à la fois</h2>
+      <M11Tranches />
     </Slide>
 
     <Slide bandeau="Simuler · une fourchette" droite={D}>
@@ -446,8 +430,8 @@
     </Slide>
 
     <Slide bandeau="Simuler · huit modèles" droite={D}>
-      <h2 class="e">Huit modèles, un seul juste</h2>
-      <M11Modeles />
+      <h2 class="e">Huit modèles, un seul dans le mille</h2>
+      <M11Cible />
     </Slide>
 
     <Slide fond="encre" bandeau="Simuler dans R" droite={D}>
@@ -461,12 +445,12 @@
     <Slide bandeau="Travail final" droite={D}>
       <h2 class="e">Votre travail final : un GOA</h2>
       <div class="visuel tf">
-        <Goa graphe={GOA.travailFinal} taille={0.8} temps={[{ controles: ['commune'], barres: ['desc'] }]} legende={SCHEMA} />
+        <Goa graphe={GOA.travailFinal} taille={0.75} haut="40vh" temps={[{ controles: ['v1', 'v2'] }]} legende={SCHEMA} />
         <M11Liste tout items={[
-          { t: 'Cinq variables', g: 'Votre X, votre Y, et trois autres liées à Y.' },
-          { t: 'Au moins une dans la CES' },
-          { t: 'Encadrez vos contrôles', g: 'Et dites pourquoi, avec la littérature.' },
-          { t: 'Le GOA dicte le modèle', g: 'Aucun contrôle nécessaire ? Une régression simple.' }
+          { t: 'X, Y et au moins trois autres variables' },
+          { t: 'Pour chacune, son mécanisme', g: 'Comment elle agit sur X, et comment elle agit sur Y.' },
+          { t: 'Contrôlez celles qui sont dans la CES', g: 'Les autres vont dans vos limites.' },
+          { t: 'Jamais un descendant de X' }
         ]} />
       </div>
     </Slide>

@@ -32,9 +32,9 @@
   const LEG = [
     'Marie arrive au carrefour.',
     'Elle va à l’université.',
-    'L’autre route : personne ne la verra jamais.',
-    'L’effet pour Marie : la différence entre les deux routes.',
-    'Alors on regarde quelqu’un d’autre : Julie.',
+    'L’autre route : personne ne la verra jamais.',
+    'L’effet pour Marie : la différence entre les deux routes.',
+    'Alors on regarde quelqu’un d’autre : Julie.',
     'Mais Julie arrive avec ses bagages.'
   ];
   const BAGAGES = [
@@ -52,7 +52,7 @@
 {/snippet}
 
 <div class="visuel m11c" bind:this={hote}>
-  <svg viewBox="0 0 1400 640" role="img" aria-label="Marie arrive à un carrefour. Elle prend la route de l’université : son intérêt pour la politique vaut 7 sur 10. L’autre route est dans le brouillard : on ne saura jamais ce qu’elle serait devenue sans l’université. Julie, sur l’autre route, vaut 4, mais elle arrive avec d’autres parents, un autre âge, une autre région.">
+  <svg viewBox="0 0 1400 640" role="img" aria-label="Marie arrive à un carrefour. Elle prend la route de l’université : son intérêt pour la politique vaut 7 sur 10. L’autre route est dans le brouillard : on ne saura jamais ce qu’elle serait devenue sans l’université. Julie, sur l’autre route, vaut 4, mais elle arrive avec d’autres parents, un autre âge, une autre région.">
     <defs>
       <filter id="m11c-flou" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="16" /></filter>
     </defs>
@@ -127,8 +127,8 @@
 
     <!-- l'effet -->
     <g class="effet" class:vu={e >= 3}>
-      <text x="1270" y="410" class="eff">{e >= 4 ? '7 − 4 = 3' : '7 − ?'}</text>
-      <text x="1270" y="452" class="eff-sous">{e >= 5 ? 'l’université, ou les bagages ?' : e >= 4 ? 'un écart' : 'l’effet pour Marie'}</text>
+      <text x="1270" y="410" class="eff">{e >= 4 ? '7 − 4 = 3' : '7 − ?'}</text>
+      <text x="1270" y="452" class="eff-sous">{e >= 5 ? 'l’université, ou les bagages ?' : e >= 4 ? 'un écart' : 'l’effet pour Marie'}</text>
     </g>
   </svg>
   <p class="legende"><b>{e + 1}</b>{LEG[e]}</p>
