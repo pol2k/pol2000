@@ -6,16 +6,18 @@
    * Doctrine : moins de texte, plus de figure. Une idée par diapo, une phrase
    * parlée au plus; le reste se dessine et bouge.
    *
-   * Le fil. La grève du 12 novembre a reporté la séance 10 : on ouvre donc
-   * sur le problème fondamental de l'inférence causale (deux mondes, on n'en
-   * voit qu'un), comme le faisait le cours 11 de 2024. Puis le GOA : pourquoi
-   * et comment le dessiner, sa grammaire (orienté, acyclique, effet causal
-   * contre information statistique), les trois types de chemins, les deux
-   * conditions de l'identification (déjà vues à la séance 8, sans les mots
-   * des graphes), et un retour honnête sur la séance 8 : on y avait contrôlé
-   * le revenu, un descendant de la scolarité. Pause. Pratique : ouvert ou
-   * fermé, trois exercices. Puis les simulations du livre dans R, qu'on
-   * roule en direct : on fabrique le monde, on connaît le vrai effet.
+   * Le fil. On ouvre sur une étude qui a fait toutes les manchettes
+   * (Richard et Régimbal 2026, l'insécurité alimentaire au cégep), lue
+   * comme Blais et Gélineau à la séance 8, mais pour en repérer les signes :
+   * échantillon volontaire, instrument lu sans son mode d'emploi, un lien
+   * présenté comme un effet, sans contrôle. La grève du 12 novembre a
+   * reporté la séance 10 : on enchaîne donc sur le problème fondamental de
+   * l'inférence causale (deux mondes). Puis le GOA, ramené à l'essentiel
+   * (demande du professeur) : le dessiner, puis deux règles pour choisir
+   * les contrôles, ne pas contrôler un descendant de X et fermer les portes
+   * arrière; l'article y revient. Retour honnête sur la séance 8 (le revenu,
+   * un descendant de la scolarité). Pause. Deux exercices, puis les
+   * simulations du livre dans R : on voit les contrôles déplacer l'estimé.
    *
    * Sources. Le cours 11 « Les graphes orientés acycliques (GOA) » de
    * L.-O. M. Foisy et Adrien Cloutier (hiver 2024), qui donne l'ordre et
@@ -39,7 +41,6 @@
   import M11Thermometre from '$lib/deck/visuels/M11Thermometre.svelte';
   import M11Liste from '$lib/deck/visuels/M11Liste.svelte';
   import Goa from '$lib/deck/visuels/Goa.svelte';
-  import M11Cadrans from '$lib/deck/visuels/M11Cadrans.svelte';
   import M11Arbitre from '$lib/deck/visuels/M11Arbitre.svelte';
   import M11Escalier from '$lib/deck/visuels/M11Escalier.svelte';
   import M11Exercice from '$lib/deck/visuels/M11Exercice.svelte';
@@ -56,9 +57,7 @@
   import { DEVOIRS, EVALUATIONS } from '$lib/data/cours.js';
   import { GOA } from '$lib/data/seance11-goa.js';
 
-  const TOTAL = 59;
-  const ABC = ['A', 'B', 'C'];
-  const CINQ = ['X', 'Z1', 'Z2', 'Z3', 'Y'];
+  const TOTAL = 46;
   const QUESTIONS = [
     { t: 'Y a-t-il des descendants de X ?' },
     { t: 'Y a-t-il des chemins par la porte arrière ?' },
@@ -213,73 +212,7 @@
       <M11Thermometre />
     </Slide>
 
-    <!-- ================= 4. TROIS TYPES DE CHEMINS ================= -->
-
-    <Slide fond="encre" bandeau="Trois chemins" droite={D}>
-      <h1 class="e">Ouvert ou fermé ?</h1>
-      <hr class="filet" />
-      <p class="lead e">Une seule question : si on observe un bout, notre estimé de l’autre bout change-t-il ?</p>
-    </Slide>
-
-    <Slide bandeau="Trois chemins" droite={D}>
-      <h2 class="e">On fait bouger A. L’aiguille de C suit-elle ?</h2>
-      <div class="visuel trois-g">
-        <div><p class="nom-g e">Fourchette</p><M11Cadrans chemin="A ← B → C" types={false} temps={[{}, { controles: ['B'] }]} /></div>
-        <div><p class="nom-g e">Chaîne</p><M11Cadrans chemin="A → B → C" types={false} temps={[{}, { controles: ['B'] }]} /></div>
-        <div><p class="nom-g e">Collision</p><M11Cadrans chemin="A → B ← C" types={false} temps={[{}, { controles: ['B'] }]} /></div>
-      </div>
-      <p class="sous-g e">Contrôler B, c’est le fixer à une valeur connue. Ça renverse tout.</p>
-    </Slide>
-
-    <Slide bandeau="Fourchette" droite={D}>
-      <h2 class="e">Fourchette : une cause, deux effets</h2>
-      <M11Cadrans chemin="Mercure ← Température → Crème glacée" types={false} temps={[
-        { note: 'Le mercure monte : on prédit plus de ventes.' },
-        { controles: ['Température'], valeurs: { 'Température': '35 °C' }, note: 'Il fait 35 °C, on le sait : le mercure n’ajoute plus rien.' }
-      ]} />
-      <p class="source e">D’après Arel-Bundock (2021), p. 120 · schéma, aucune donnée</p>
-    </Slide>
-
-    <Slide bandeau="Chaîne" droite={D}>
-      <h2 class="e">Chaîne : une cause, puis sa conséquence</h2>
-      <M11Cadrans chemin="Comportement à risque → Infection → Brûlure" types={false} temps={[
-        { note: 'Un comportement à risque annonce une brûlure.' },
-        { controles: ['Infection'], valeurs: { 'Infection': 'test négatif' }, note: 'Le test sanguin est négatif : le comportement n’annonce plus rien.' }
-      ]} />
-      <p class="source e">D’après Arel-Bundock (2021), p. 119 et 121 · schéma, aucune donnée</p>
-    </Slide>
-
-    <Slide bandeau="Collision" droite={D}>
-      <h2 class="e">Collision : deux causes, un effet</h2>
-      <M11Cadrans chemin="Performance de l’équipe → Victoire ← Biais de l’arbitre" types={false} temps={[
-        { note: 'Savoir comment l’équipe a joué ne dit rien de l’arbitre.' },
-        { controles: ['Victoire'], valeurs: { 'Victoire': 'elle a gagné' }, note: 'Elle a gagné en jouant mal ? L’arbitre était sans doute biaisé.' }
-      ]} />
-      <p class="source e">D’après Arel-Bundock (2021), p. 122 · schéma, aucune donnée</p>
-    </Slide>
-
-    <Slide bandeau="Collision" droite={D}>
-      <h2 class="e">Ne regarder que les victoires</h2>
-      <M11Arbitre />
-    </Slide>
-
-    <Slide bandeau="Collision" droite={D}>
-      <h2 class="e">Contrôler un descendant de la collision l’ouvre aussi</h2>
-      <Goa graphe={GOA.collisionDescendant} taille={1.4} legende="Arel-Bundock (2021), p. 123 · schéma, aucune donnée" temps={[
-        { chemin: ABC },
-        { chemin: ABC, controles: ['D'] }
-      ]} />
-    </Slide>
-
-    <Slide bandeau="Combinaisons" droite={D}>
-      <h2 class="e">Un seul maillon fermé, et l’autre bout ne bouge plus</h2>
-      <div class="visuel pile-g">
-        <M11Cadrans chemin="A ← B ← C ← D → E" haut="25vh" />
-        <M11Cadrans chemin="A → B ← C → D → E" haut="25vh" temps={[{}, { controles: ['B'], note: 'On contrôle B : E se remet à bouger.' }]} />
-      </div>
-    </Slide>
-
-    <!-- ================= 5. LES CONTRÔLES ================= -->
+    <!-- ================= 4. LES CONTRÔLES ================= -->
 
     <Slide fond="encre" bandeau="Les contrôles" droite={D}>
       <h1 class="e">Quoi contrôler ?</h1>
@@ -344,54 +277,14 @@
       <p class="lead e">Ensuite : à vous de jouer, puis R.</p>
     </Slide>
 
-    <!-- ================= 6. PRATIQUE : OUVERT OU FERMÉ ================= -->
-
-    <Slide bandeau="Ouvert ou fermé" droite={D}>
-      <h2 class="e">Pour lire un chemin</h2>
-      <M11Liste tout items={[
-        { t: 'Chaînes et fourchettes : ouvertes' },
-        { t: 'Collisions : fermées' },
-        { t: 'Contrôler un maillon, c’est le fixer : ça renverse son état' },
-        { t: 'Contrôler un descendant d’une collision l’ouvre aussi' },
-        { t: 'Un seul maillon fermé ferme tout le chemin' }
-      ]} />
-    </Slide>
-
-    {#each ['X → Z1 → Z2 → Z3 → Y', 'X → Z1 ← Z2 → Z3 → Y', 'X ← Z1 ← Z2 → Z3 → Y', 'X → Z1 ← Z2 → Z3 ← Y'] as ch, i (ch)}
-      <Slide bandeau="Ouvert ou fermé · {i + 1} de 4" droite={D}>
-        <M11Cadrans chemin={ch} temps={[{ cache: true }, {}]} />
-      </Slide>
-    {/each}
-
-    <Slide bandeau="Rappelez-vous" droite={D}>
-      <h2 class="e">Contrôler une collision l’ouvre</h2>
-      <M11Cadrans chemin="X → Z1 ← Z2 → Z3 → Y" temps={[{}, { controles: ['Z1'] }]} />
-    </Slide>
-
-    <Slide bandeau="Rappelez-vous" droite={D}>
-      <h2 class="e">Contrôler une fourchette la ferme</h2>
-      <M11Cadrans chemin="X ← Z1 ← Z2 → Z3 → Y" temps={[{}, { controles: ['Z2'] }]} />
-    </Slide>
+    <!-- ================= 5. PRATIQUE ================= -->
 
     <Slide bandeau="Contrôler ou pas" droite={D}>
       <h2 class="e">Contrôler ou pas : cinq questions</h2>
       <M11Liste tout items={QUESTIONS} />
     </Slide>
 
-    <Slide bandeau="Exercice 1 de 3" droite={D}>
-      <M11Exercice graphe={GOA.exercice1}
-        reponses={['Oui : Z1, Z2, Z4 et Z5', 'Oui, deux, par Z3', 'Une : X ← Z3 → Z2 → Y. L’autre bute sur une collision', 'Oui : contrôler Z3', 'Oui, si on contrôle Z3']}
-        etats={[
-          {},
-          { barres: ['Z1', 'Z2', 'Z4', 'Z5'] },
-          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], chemin: ['X', 'Z3', 'Z2', 'Z4', 'Z5', 'Y'], court: true, note: 'Celle-ci bute sur une collision en Z₂' },
-          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], chemin: ['X', 'Z3', 'Z2', 'Y'], court: true },
-          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], chemin: ['X', 'Z3', 'Z2', 'Y'], controles: ['Z3'], court: true },
-          { barres: ['Z1', 'Z2', 'Z4', 'Z5'], controles: ['Z3'] }
-        ]} />
-    </Slide>
-
-    <Slide bandeau="Exercice 2 de 3" droite={D}>
+    <Slide bandeau="Exercice 1 de 2" droite={D}>
       <M11Exercice graphe={GOA.exercice2}
         reponses={['Oui : Z1, Z2 et Z3', 'Oui : X ← Z4 → Z3 → Y', 'Oui, il est ouvert', 'Oui : contrôler Z4', 'Oui, si on contrôle Z4']}
         etats={[
@@ -404,7 +297,7 @@
         ]} />
     </Slide>
 
-    <Slide bandeau="Exercice 3 de 3" droite={D}>
+    <Slide bandeau="Exercice 2 de 2" droite={D}>
       <M11Exercice graphe={GOA.exercice3}
         reponses={['Oui : le cholestérol (Z1)', 'Oui : par la vie malsaine et le poids', 'Oui, il est ouvert', 'Oui : contrôler Z3, ou Z2', 'Oui, si on contrôle Z3 ou Z2']}
         etats={[
@@ -417,7 +310,7 @@
         ]} />
     </Slide>
 
-    <!-- ================= 7. SIMULER DANS R ================= -->
+    <!-- ================= 6. SIMULER DANS R ================= -->
 
     <Slide fond="encre" bandeau="Simuler dans R" droite={D}>
       <h1 class="e">Simuler dans R</h1>

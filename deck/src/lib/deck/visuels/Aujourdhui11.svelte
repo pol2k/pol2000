@@ -3,15 +3,15 @@
    * Le plan de la séance 11, en cinq blocs, chacun avec l'image qui
    * l'attend : la pile de journaux (une manchette, puis l'article qui la
    * porte), le carrefour dans le brouillard (deux mondes, reporté de la
-   * séance 10), les dominos (dessiner un GOA), les cadrans (ouvert ou
-   * fermé : l'aiguille du bout suit-elle ?), la cible (simuler dans R).
+   * séance 10), les dominos (dessiner un GOA), deux boîtes (les deux règles : une
+   * variable barrée, une variable encadrée), la cible (simuler dans R).
    * Même facture qu'Aujourdhui9.
    */
   const BLOCS = [
     { n: '1', titre: 'Une manchette', sous: 'Repérer les signes d’une étude qui ne tient pas' },
     { n: '2', titre: 'Deux mondes', sous: 'Le problème fondamental de l’inférence causale' },
     { n: '3', titre: 'Dessiner un GOA', sous: 'Des boîtes, des flèches, nos hypothèses' },
-    { n: '4', titre: 'Ouvert ou fermé', sous: 'Quoi contrôler, et quoi laisser tranquille' },
+    { n: '4', titre: 'Deux règles', sous: 'Quoi contrôler, et quoi laisser tranquille' },
     { n: '5', titre: 'Simuler dans R', sous: 'On fabrique le monde, on connaît la vérité' }
   ];
 </script>
@@ -30,8 +30,8 @@
           {:else if i === 2}
             {#each [30, 90, 150] as x, k (x)}<rect x={x} y="12" width="16" height="70" class="a11-dom" transform="rotate({k < 2 ? 32 : 0} {x + 16} 82)" />{/each}
           {:else if i === 3}
-            {#each [40, 120, 200] as x, k (x)}<path d="M {x - 34} 66 A 34 34 0 0 1 {x + 34} 66" class="a11-l" /><line x1={x} y1="66" x2={x + (k === 2 ? 0 : 22)} y2={k === 2 ? 38 : 42} class="a11-l a11-aig" class:a11-rouge={k === 0} />{/each}
-            <rect x="80" y="24" width="80" height="52" class="a11-pince" />
+            <rect x="34" y="22" width="70" height="48" class="a11-b" /><line x1="30" y1="18" x2="108" y2="74" class="a11-rr" /><line x1="108" y1="18" x2="30" y2="74" class="a11-rr" />
+            <rect x="136" y="22" width="70" height="48" class="a11-b" /><rect x="126" y="12" width="90" height="68" class="a11-pince" />
           {:else}
             <circle cx="120" cy="46" r="40" class="a11-b" /><circle cx="120" cy="46" r="24" class="a11-b" /><circle cx="120" cy="46" r="8" class="a11-pl a11-r-f" />
             <line x1="122" y1="44" x2="176" y2="8" class="a11-l a11-fleche" />
