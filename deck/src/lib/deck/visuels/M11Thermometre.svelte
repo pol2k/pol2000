@@ -44,7 +44,7 @@
         <line x1="180" y1="70" x2="180" y2="40" transform="rotate({i * 30} 180 170)" />
       {/each}
     </g>
-    <text x="180" y="300" class="lib">température</text>
+    <text x="180" y="336" class="lib">température</text>
 
     <!-- le thermomètre -->
     <g class="thermo">

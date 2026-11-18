@@ -1,8 +1,9 @@
 <script>
   /**
-   * Le plan de la séance 11, en quatre blocs, chacun avec son petit schéma :
-   * deux mondes (le problème fondamental, reporté de la séance 10), dessiner
-   * un GOA, ouvert ou fermé, simuler dans R. Même facture qu'Aujourdhui9.
+   * Le plan de la séance 11, en quatre blocs, chacun avec l'image qui
+   * l'attend : le carrefour dans le brouillard (deux mondes, reporté de la
+   * séance 10), les dominos (dessiner un GOA), la guirlande (ouvert ou
+   * fermé), la cible (simuler dans R). Même facture qu'Aujourdhui9.
    */
   const BLOCS = [
     { n: '1', titre: 'Deux mondes', sous: 'Le problème fondamental de l’inférence causale' },
@@ -18,25 +19,17 @@
       <div class="a11-image" aria-hidden="true">
         <svg viewBox="0 0 240 90">
           {#if i === 0}
-            <rect x="20" y="8" width="90" height="30" class="a11-b" />
-            <rect x="20" y="52" width="90" height="30" class="a11-b a11-p" />
-            <text x="175" y="31">7</text>
-            <text x="175" y="76" class="a11-gr">?</text>
+            <path d="M 10 60 L 100 60 L 220 14" class="a11-l a11-route" />
+            <path d="M 100 60 L 220 84" class="a11-l a11-route" />
+            <ellipse cx="180" cy="76" rx="58" ry="16" class="a11-brume" />
           {:else if i === 1}
-            <rect x="6" y="30" width="44" height="30" class="a11-b" />
-            <rect x="98" y="30" width="44" height="30" class="a11-b" />
-            <rect x="190" y="30" width="44" height="30" class="a11-b" />
-            <line x1="50" y1="45" x2="88" y2="45" class="a11-l" /><polygon points="98,45 86,39 86,51" class="a11-pl" />
-            <line x1="142" y1="45" x2="180" y2="45" class="a11-l" /><polygon points="190,45 178,39 178,51" class="a11-pl" />
+            {#each [30, 90, 150] as x, k (x)}<rect x={x} y="12" width="16" height="70" class="a11-dom" transform="rotate({k < 2 ? 32 : 0} {x + 16} 82)" />{/each}
           {:else if i === 2}
-            <rect x="6" y="30" width="44" height="30" class="a11-b" />
-            <rect x="98" y="30" width="44" height="30" class="a11-b" />
-            <rect x="90" y="22" width="60" height="46" class="a11-b a11-rr" />
-            <rect x="190" y="30" width="44" height="30" class="a11-b" />
-            <line x1="50" y1="45" x2="80" y2="45" class="a11-l a11-p" />
-            <line x1="160" y1="45" x2="190" y2="45" class="a11-l a11-p" />
+            <path d="M 6 20 Q 63 50 120 20 Q 177 50 234 20" class="a11-l" />
+            {#each [63, 120, 177] as x (x)}<path d="M {x - 9} {x === 120 ? 22 : 36} C {x - 22} {x === 120 ? 44 : 58} {x - 18} {x === 120 ? 74 : 88} {x} {x === 120 ? 76 : 88} C {x + 18} {x === 120 ? 74 : 88} {x + 22} {x === 120 ? 44 : 58} {x + 9} {x === 120 ? 22 : 36} Z" class="a11-ampoule" />{/each}
           {:else}
-            <text x="120" y="54" class="a11-code">lm(Y ~ X)</text>
+            <circle cx="120" cy="46" r="40" class="a11-b" /><circle cx="120" cy="46" r="24" class="a11-b" /><circle cx="120" cy="46" r="8" class="a11-pl a11-r-f" />
+            <line x1="122" y1="44" x2="176" y2="8" class="a11-l a11-fleche" />
           {/if}
         </svg>
       </div>
@@ -58,6 +51,13 @@
   .a11-rr { stroke: var(--dk-accent); stroke-width: 4; }
   .a11-l { stroke: var(--dk-encre); stroke-width: 3; }
   .a11-pl { fill: var(--dk-encre); }
+  .a11-route { stroke: var(--dk-filet); stroke-width: 14; fill: none; stroke-linejoin: round; }
+  .a11-brume { fill: var(--dk-gris-2); opacity: 0.6; }
+  .a11-dom { fill: var(--dk-encre); }
+  .a11-ampoule { fill: var(--dk-accent); }
+  .a11-r-f { fill: var(--dk-accent); }
+  .a11-fleche { stroke-width: 5; }
+  .a11-l { fill: none; }
   svg text { font-family: var(--dk-mono); font-size: 30px; font-weight: 700; text-anchor: middle; fill: var(--dk-encre); }
   svg text.a11-gr { fill: var(--dk-gris-2); }
   svg text.a11-code { font-size: 28px; fill: var(--dk-accent); }
