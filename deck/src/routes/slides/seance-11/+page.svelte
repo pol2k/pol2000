@@ -50,7 +50,7 @@
   import M11Hypotheses from '$lib/deck/visuels/M11Hypotheses.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import { SIMS } from '$lib/data/seance11.js';
-  import { DEVOIRS } from '$lib/data/cours.js';
+  import { DEVOIRS, EVALUATIONS } from '$lib/data/cours.js';
   import { GOA } from '$lib/data/seance11-goa.js';
 
   const TOTAL = 53;
@@ -66,6 +66,8 @@
   // Les consoles viennent de R telles quelles (seance11.js); seules les notes sont d'ici.
   const avec = (cle, notes = [], de = 0, a = undefined) => SIMS[cle].map((l, i) => ({ ...l, note: notes[i] || '' })).slice(de, a);
   const dc = DEVOIRS.find((d) => d.seance === 11);
+  const ex2 = EVALUATIONS.find((v) => v.id === 'examen2');
+  const jour = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-CA', { weekday: 'long', day: 'numeric', month: 'long' });
   const D = 'POL-2000 · séance 11 · jeu 19 nov';
   const SCHEMA = 'Schéma, aucune donnée';
 </script>
@@ -458,14 +460,20 @@
     <Slide bandeau="Avant la prochaine séance" droite={D}>
       <h2 class="e">Avant la prochaine séance</h2>
       <div class="visuel avant">
+        <div class="tuile rouge-b">
+          <span class="poids">{ex2.poids} %</span>
+          <strong>{ex2.court}</strong>
+          <span>À remettre {jour(ex2.date)}, {ex2.heure}</span>
+          <span>{ex2.mode}</span>
+        </div>
         <a class="tuile" href={dc.url} target="_blank" rel="noopener">
           <img src="{base}/img/datacamp.png" alt="Datacamp" />
           <strong>Datacamp</strong>
           <span>{dc.cours} · {dc.chapitre}</span>
         </a>
-        <div class="tuile rouge-b">
+        <div class="tuile">
           <strong>Votre GOA</strong>
-          <span>Dessinez-le pour votre travail final : X, Y, et trois autres variables.</span>
+          <span>Dessinez-le pour votre travail final, et apportez-le aux rencontres individuelles.</span>
         </div>
       </div>
     </Slide>
@@ -524,7 +532,8 @@
 .sim { width: 100%; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 2em; align-items: center; margin-top: 0.4em; }
 .tf { width: 100%; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 2em; align-items: center; }
 .tf :global(.m11l) { margin-top: 0; }
-.avant { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 1.6em; max-width: 50em; margin: 1.2em auto 0; }
+.avant { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4em; max-width: 62em; margin: 1.2em auto 0; }
+.tuile .poids { font-size: 2.2em; font-weight: 700; line-height: 1; color: var(--dk-accent); }
 .tuile { border: 3px solid var(--dk-encre); padding: 1.2em 1.3em; display: flex; flex-direction: column; gap: 0.5em; color: inherit; text-decoration: none; }
 .tuile.rouge-b { border-color: var(--dk-accent); }
 .tuile img { height: 2.4em; width: auto; align-self: flex-start; }
