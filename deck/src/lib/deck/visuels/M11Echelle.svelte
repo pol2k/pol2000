@@ -35,7 +35,7 @@
     'Une femme, un homme. L’effet du sexe sur le salaire ?',
     'Elle monte moins haut. Écart total : promotions et paie.',
     '« À occupation égale » : on ne compare qu’au même étage.',
-    'L’écart des promotions a disparu : on a coupé une partie de l’effet.'
+    'L’écart des promotions a disparu : un biais post-traitement.'
   ];
 </script>
 

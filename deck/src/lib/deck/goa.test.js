@@ -3,7 +3,7 @@
 //   cd deck && node --test src/lib/deck/goa.test.js
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { descendants, typeMaillon, etatChemin, chemins, portesArriere, identifiable } from './goa.js';
+import { descendants, typeMaillon, etatChemin, chemins, portesArriere, identifiable, propagation } from './goa.js';
 import { GOA } from '../data/seance11-goa.js';
 
 const A = (g) => GOA[g].aretes;
@@ -121,5 +121,59 @@ test('chaque graphe : arêtes entre nœuds déclarés, aucun cycle', () => {
     for (const [a, b] of g.aretes) assert.ok(ids.has(a) && ids.has(b), `${nom} : ${a}→${b}`);
     if (nom === 'acycliqueMauvais') continue;
     for (const n of ids) assert.equal(descendants(g.aretes, n).has(n), false, `${nom} : cycle par ${n}`);
+  }
+});
+
+// Les cadrans (M11Cadrans) : on fait bouger le premier bout, qui suit ?
+// 1 = même sens, -1 = sens contraire, 0 = immobile.
+const sens = (aretes, chemin, controles = []) => propagation(aretes, chemin, controles).map((n) => n.sens);
+const fl = (txt) => {
+  const t = txt.split(/\s*([←→])\s*/);
+  const n = t.filter((_, i) => i % 2 === 0);
+  const ar = t.filter((_, i) => i % 2 === 1).map((f, i) => (f === '→' ? [n[i], n[i + 1]] : [n[i + 1], n[i]]));
+  return [ar, n];
+};
+
+test('propagation : fourchette et chaîne, le milieu suit, puis le bout', () => {
+  assert.deepEqual(sens(...fl('A ← B → C')), [1, 1, 1]);
+  assert.deepEqual(sens(...fl('A → B → C')), [1, 1, 1]);
+});
+
+test('propagation : fourchette et chaîne fixées, rien ne passe le milieu', () => {
+  assert.deepEqual(sens(...fl('A ← B → C'), ['B']), [1, 0, 0]);
+  assert.deepEqual(sens(...fl('A → B → C'), ['B']), [1, 0, 0]);
+  const p = propagation(...fl('A → B → C'), ['B']);
+  assert.deepEqual(p.map((n) => n.fixe), [false, true, false]);
+});
+
+test('propagation : collision, le milieu bouge, l’autre bout non', () => {
+  assert.deepEqual(sens(...fl('A → B ← C')), [1, 1, 0]);
+});
+
+test('propagation : collision fixée, l’autre bout bouge en sens contraire (p. 122)', () => {
+  assert.deepEqual(sens(...fl('A → B ← C'), ['B']), [1, 0, -1]);
+});
+
+test('propagation : un descendant contrôlé ouvre la collision sans la fixer', () => {
+  const ar = A('collisionDescendant');
+  assert.deepEqual(sens(ar, ['A', 'B', 'C'], []), [1, 1, 0]);
+  assert.deepEqual(sens(ar, ['A', 'B', 'C'], ['D']), [1, 1, -1]);
+});
+
+test('propagation : les quatre chemins de l’exercice', () => {
+  assert.deepEqual(sens(...fl('X → Z1 → Z2 → Z3 → Y')), [1, 1, 1, 1, 1]);
+  assert.deepEqual(sens(...fl('X → Z1 ← Z2 → Z3 → Y')), [1, 1, 0, 0, 0]);
+  assert.deepEqual(sens(...fl('X ← Z1 ← Z2 → Z3 → Y')), [1, 1, 1, 1, 1]);
+  assert.deepEqual(sens(...fl('X → Z1 ← Z2 → Z3 ← Y')), [1, 1, 0, 0, 0]);
+  assert.deepEqual(sens(...fl('X → Z1 ← Z2 → Z3 → Y'), ['Z1']), [1, 0, -1, -1, -1]);
+  assert.deepEqual(sens(...fl('X ← Z1 ← Z2 → Z3 → Y'), ['Z2']), [1, 1, 0, 0, 0]);
+});
+
+test('propagation : le bout d’arrivée bouge si et seulement si le chemin est ouvert', () => {
+  for (const ch of ['A ← B ← C ← D → E', 'A → B ← C → D → E']) {
+    for (const c of [[], ['B'], ['C'], ['B', 'D']]) {
+      const [ar, n] = fl(ch);
+      assert.equal(propagation(ar, n, c).at(-1).sens !== 0, etatChemin(ar, n, c).ouvert, `${ch} ${c}`);
+    }
   }
 });

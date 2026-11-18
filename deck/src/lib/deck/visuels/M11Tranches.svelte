@@ -51,7 +51,7 @@
     `Sans contrôle : ${virg(S.b)}. Le vrai effet.`,
     `Contrôler Z : ne comparer que des points au même Z. Dans la tranche : ${virg(C.b)}.`,
     `Une autre tranche, la même pente : ${virg(C.b)}. C’est lm(Y ~ X + Z).`,
-    'Z est un descendant de X : le contrôler coupe une partie de l’effet.'
+    'Contrôler Z, un descendant de X, coupe une partie de l’effet : un biais post-traitement.'
   ];
 </script>
 

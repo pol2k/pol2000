@@ -2,8 +2,9 @@
   /**
    * Le plan de la séance 11, en quatre blocs, chacun avec l'image qui
    * l'attend : le carrefour dans le brouillard (deux mondes, reporté de la
-   * séance 10), les dominos (dessiner un GOA), la guirlande (ouvert ou
-   * fermé), la cible (simuler dans R). Même facture qu'Aujourdhui9.
+   * séance 10), les dominos (dessiner un GOA), les cadrans (ouvert ou
+   * fermé : l'aiguille du bout suit-elle ?), la cible (simuler dans R).
+   * Même facture qu'Aujourdhui9.
    */
   const BLOCS = [
     { n: '1', titre: 'Deux mondes', sous: 'Le problème fondamental de l’inférence causale' },
@@ -25,8 +26,8 @@
           {:else if i === 1}
             {#each [30, 90, 150] as x, k (x)}<rect x={x} y="12" width="16" height="70" class="a11-dom" transform="rotate({k < 2 ? 32 : 0} {x + 16} 82)" />{/each}
           {:else if i === 2}
-            <path d="M 6 20 Q 63 50 120 20 Q 177 50 234 20" class="a11-l" />
-            {#each [63, 120, 177] as x (x)}<path d="M {x - 9} {x === 120 ? 22 : 36} C {x - 22} {x === 120 ? 44 : 58} {x - 18} {x === 120 ? 74 : 88} {x} {x === 120 ? 76 : 88} C {x + 18} {x === 120 ? 74 : 88} {x + 22} {x === 120 ? 44 : 58} {x + 9} {x === 120 ? 22 : 36} Z" class="a11-ampoule" />{/each}
+            {#each [40, 120, 200] as x, k (x)}<path d="M {x - 34} 66 A 34 34 0 0 1 {x + 34} 66" class="a11-l" /><line x1={x} y1="66" x2={x + (k === 2 ? 0 : 22)} y2={k === 2 ? 38 : 42} class="a11-l a11-aig" class:a11-rouge={k === 0} />{/each}
+            <rect x="80" y="24" width="80" height="52" class="a11-pince" />
           {:else}
             <circle cx="120" cy="46" r="40" class="a11-b" /><circle cx="120" cy="46" r="24" class="a11-b" /><circle cx="120" cy="46" r="8" class="a11-pl a11-r-f" />
             <line x1="122" y1="44" x2="176" y2="8" class="a11-l a11-fleche" />
@@ -54,7 +55,9 @@
   .a11-route { stroke: var(--dk-filet); stroke-width: 14; fill: none; stroke-linejoin: round; }
   .a11-brume { fill: var(--dk-gris-2); opacity: 0.6; }
   .a11-dom { fill: var(--dk-encre); }
-  .a11-ampoule { fill: var(--dk-accent); }
+  .a11-aig { stroke-width: 5; stroke-linecap: round; }
+  .a11-rouge { stroke: var(--dk-accent); }
+  .a11-pince { fill: none; stroke: var(--dk-accent); stroke-width: 4; }
   .a11-r-f { fill: var(--dk-accent); }
   .a11-fleche { stroke-width: 5; }
   .a11-l { fill: none; }

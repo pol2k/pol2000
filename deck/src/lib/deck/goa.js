@@ -68,6 +68,35 @@ export function etatChemin(aretes, chemin, controles = []) {
   return { ouvert: maillons.every((m) => m.ouvert), maillons };
 }
 
+/**
+ * Ce que montrent les cadrans de M11Cadrans : on fait bouger le premier
+ * bout du chemin (on l'observe), et notre estimé de chaque nœud suit ou
+ * non (p. 118, note 2 : l'information circule entre A et C si observer A
+ * change notre estimé de C).
+ *
+ * Pour chaque nœud : { id, fixe, sens }. sens vaut 1 (il suit, dans le
+ * même sens), -1 (il suit en sens contraire) ou 0 (immobile). Un nœud
+ * bouge si le bout de chemin qui le relie au premier est ouvert et qu'on
+ * ne l'a pas fixé. Une collision ouverte par un contrôle renverse le sens :
+ * « elle a gagné en jouant mal, l'arbitre était sans doute biaisé »
+ * (p. 122).
+ */
+export function propagation(aretes, chemin, controles = []) {
+  const c = new Set(controles);
+  const { maillons } = etatChemin(aretes, chemin, controles);
+  let signe = 1;
+  let ouvert = true;
+  return chemin.map((id, i) => {
+    if (i > 1) {
+      const m = maillons[i - 2];
+      if (!m.ouvert) ouvert = false;
+      else if (m.type === 'collision') signe = -signe;
+    }
+    const fixe = i > 0 && c.has(id);
+    return { id, fixe, sens: i === 0 ? 1 : ouvert && !fixe ? signe : 0 };
+  });
+}
+
 /** Tous les chemins simples entre x et y, sans égard au sens des flèches. */
 export function chemins(aretes, x, y) {
   const voisins = (n) => aretes.flatMap(([p, q]) => (p === n ? [q] : q === n ? [p] : []));

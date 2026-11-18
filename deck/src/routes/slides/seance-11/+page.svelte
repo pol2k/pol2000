@@ -39,7 +39,7 @@
   import M11Thermometre from '$lib/deck/visuels/M11Thermometre.svelte';
   import M11Liste from '$lib/deck/visuels/M11Liste.svelte';
   import Goa from '$lib/deck/visuels/Goa.svelte';
-  import M11Guirlande from '$lib/deck/visuels/M11Guirlande.svelte';
+  import M11Cadrans from '$lib/deck/visuels/M11Cadrans.svelte';
   import M11Arbitre from '$lib/deck/visuels/M11Arbitre.svelte';
   import M11Escalier from '$lib/deck/visuels/M11Escalier.svelte';
   import M11Exercice from '$lib/deck/visuels/M11Exercice.svelte';
@@ -164,38 +164,44 @@
     <Slide fond="encre" bandeau="Trois chemins" droite={D}>
       <h1 class="e">Ouvert ou fermé ?</h1>
       <hr class="filet" />
-      <p class="lead e">Trois types de chemins. Une seule question : l’information circule-t-elle ?</p>
+      <p class="lead e">Une seule question : si on observe un bout, notre estimé de l’autre bout change-t-il ?</p>
     </Slide>
 
-    <Slide fond="encre" bandeau="Trois chemins" droite={D}>
-      <h2 class="e">Chaque maillon a son interrupteur</h2>
+    <Slide bandeau="Trois chemins" droite={D}>
+      <h2 class="e">On fait bouger A. L’aiguille de C suit-elle ?</h2>
       <div class="visuel trois-g">
-        <div><p class="nom-g e">Fourchette</p><M11Guirlande chemin="A ← B → C" temps={[{}, { controles: ['B'] }]} /></div>
-        <div><p class="nom-g e">Chaîne</p><M11Guirlande chemin="A → B → C" temps={[{}, { controles: ['B'] }]} /></div>
-        <div><p class="nom-g e">Collision</p><M11Guirlande chemin="A → B ← C" temps={[{}, { controles: ['B'] }]} /></div>
+        <div><p class="nom-g e">Fourchette</p><M11Cadrans chemin="A ← B → C" types={false} temps={[{}, { controles: ['B'] }]} /></div>
+        <div><p class="nom-g e">Chaîne</p><M11Cadrans chemin="A → B → C" types={false} temps={[{}, { controles: ['B'] }]} /></div>
+        <div><p class="nom-g e">Collision</p><M11Cadrans chemin="A → B ← C" types={false} temps={[{}, { controles: ['B'] }]} /></div>
       </div>
-      <p class="sous-g e">Contrôler le maillon central, c’est retourner son interrupteur.</p>
+      <p class="sous-g e">Contrôler B, c’est le fixer à une valeur connue. Ça renverse tout.</p>
+    </Slide>
+
+    <Slide bandeau="Fourchette" droite={D}>
+      <h2 class="e">Fourchette : une cause, deux effets</h2>
+      <M11Cadrans chemin="Mercure ← Température → Crème glacée" types={false} temps={[
+        { note: 'Le mercure monte : on prédit plus de ventes.' },
+        { controles: ['Température'], valeurs: { 'Température': '35 °C' }, note: 'Il fait 35 °C, on le sait : le mercure n’ajoute plus rien.' }
+      ]} />
+      <p class="source e">D’après Arel-Bundock (2021), p. 120 · schéma, aucune donnée</p>
     </Slide>
 
     <Slide bandeau="Chaîne" droite={D}>
-      <h2 class="e">Contrôler une chaîne : tenir le domino du milieu</h2>
-      <M11Dominos mode="controle" />
-    </Slide>
-
-    <Slide fond="encre" bandeau="Fourchette" droite={D}>
-      <h2 class="e">Fourchette : une cause, deux effets</h2>
-      <M11Guirlande chemin="Mercure ← Température → Crème glacée" temps={[
-        { note: 'Le mercure annonce les ventes.' },
-        { controles: ['Température'], note: 'Il fait 35 °C, c’est connu : le mercure n’annonce plus rien.' }
+      <h2 class="e">Chaîne : une cause, puis sa conséquence</h2>
+      <M11Cadrans chemin="Comportement à risque → Infection → Brûlure" types={false} temps={[
+        { note: 'Un comportement à risque annonce une brûlure.' },
+        { controles: ['Infection'], valeurs: { 'Infection': 'test négatif' }, note: 'Le test sanguin est négatif : le comportement n’annonce plus rien.' }
       ]} />
+      <p class="source e">D’après Arel-Bundock (2021), p. 119 et 121 · schéma, aucune donnée</p>
     </Slide>
 
-    <Slide fond="encre" bandeau="Collision" droite={D}>
+    <Slide bandeau="Collision" droite={D}>
       <h2 class="e">Collision : deux causes, un effet</h2>
-      <M11Guirlande chemin="Jeu → Victoire ← Arbitre" temps={[
-        { note: 'Un arbitre biaisé ne dit rien du jeu de l’équipe.' },
-        { controles: ['Victoire'], note: 'On ne regarde que les victoires : le jeu et l’arbitre se mettent à parler.' }
+      <M11Cadrans chemin="Performance de l’équipe → Victoire ← Biais de l’arbitre" types={false} temps={[
+        { note: 'Savoir comment l’équipe a joué ne dit rien de l’arbitre.' },
+        { controles: ['Victoire'], valeurs: { 'Victoire': 'elle a gagné' }, note: 'Elle a gagné en jouant mal ? L’arbitre était sans doute biaisé.' }
       ]} />
+      <p class="source e">D’après Arel-Bundock (2021), p. 122 · schéma, aucune donnée</p>
     </Slide>
 
     <Slide bandeau="Collision" droite={D}>
@@ -211,11 +217,11 @@
       ]} />
     </Slide>
 
-    <Slide fond="encre" bandeau="Combinaisons" droite={D}>
-      <h2 class="e">Une seule ampoule qui bloque, et tout s’éteint</h2>
+    <Slide bandeau="Combinaisons" droite={D}>
+      <h2 class="e">Un seul maillon fermé, et l’autre bout ne bouge plus</h2>
       <div class="visuel pile-g">
-        <M11Guirlande chemin="A ← B ← C ← D → E" haut="25vh" />
-        <M11Guirlande chemin="A → B ← C → D → E" haut="25vh" temps={[{}, { controles: ['B'], note: 'On contrôle B : la guirlande se rallume.' }]} />
+        <M11Cadrans chemin="A ← B ← C ← D → E" haut="25vh" />
+        <M11Cadrans chemin="A → B ← C → D → E" haut="25vh" temps={[{}, { controles: ['B'], note: 'On contrôle B : E se remet à bouger.' }]} />
       </div>
     </Slide>
 
@@ -283,26 +289,26 @@
       <M11Liste tout items={[
         { t: 'Chaînes et fourchettes : ouvertes' },
         { t: 'Collisions : fermées' },
-        { t: 'Contrôler un maillon retourne son interrupteur' },
+        { t: 'Contrôler un maillon, c’est le fixer : ça renverse son état' },
         { t: 'Contrôler un descendant d’une collision l’ouvre aussi' },
         { t: 'Un seul maillon fermé ferme tout le chemin' }
       ]} />
     </Slide>
 
     {#each ['X → Z1 → Z2 → Z3 → Y', 'X → Z1 ← Z2 → Z3 → Y', 'X ← Z1 ← Z2 → Z3 → Y', 'X → Z1 ← Z2 → Z3 ← Y'] as ch, i (ch)}
-      <Slide fond="encre" bandeau="Ouvert ou fermé · {i + 1} de 4" droite={D}>
-        <M11Guirlande chemin={ch} temps={[{ cache: true }, {}]} />
+      <Slide bandeau="Ouvert ou fermé · {i + 1} de 4" droite={D}>
+        <M11Cadrans chemin={ch} temps={[{ cache: true }, {}]} />
       </Slide>
     {/each}
 
-    <Slide fond="encre" bandeau="Rappelez-vous" droite={D}>
-      <h2 class="e">Contrôler une collision la rallume</h2>
-      <M11Guirlande chemin="X → Z1 ← Z2 → Z3 → Y" temps={[{}, { controles: ['Z1'] }]} />
+    <Slide bandeau="Rappelez-vous" droite={D}>
+      <h2 class="e">Contrôler une collision l’ouvre</h2>
+      <M11Cadrans chemin="X → Z1 ← Z2 → Z3 → Y" temps={[{}, { controles: ['Z1'] }]} />
     </Slide>
 
-    <Slide fond="encre" bandeau="Rappelez-vous" droite={D}>
-      <h2 class="e">Contrôler une fourchette l’éteint</h2>
-      <M11Guirlande chemin="X ← Z1 ← Z2 → Z3 → Y" temps={[{}, { controles: ['Z2'] }]} />
+    <Slide bandeau="Rappelez-vous" droite={D}>
+      <h2 class="e">Contrôler une fourchette la ferme</h2>
+      <M11Cadrans chemin="X ← Z1 ← Z2 → Z3 → Y" temps={[{}, { controles: ['Z2'] }]} />
     </Slide>
 
     <Slide bandeau="Contrôler ou pas" droite={D}>
@@ -374,7 +380,7 @@
     </Slide>
 
     <Slide bandeau="Simuler · une collision" droite={D}>
-      <h2 class="e">Contrôler Z, un descendant de X : le piège</h2>
+      <h2 class="e">Contrôler Z, un descendant de X : le biais post-traitement</h2>
       <div class="visuel sim">
         <Goa graphe={GOA.sim3} taille={0.9} temps={[{ coefs: true }]} legende="Données simulées" />
         <Console lignes={avec('collision', ['', 'sans contrôle : 1,7, juste', 'avec Z : 0,45, faux'])} />
@@ -540,7 +546,7 @@
 .tuile strong { font-size: 1.3em; }
 .tuile span { font-size: 0.9em; color: var(--dk-gris); }
 .trois-g { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6em; margin-top: 0.6em; }
-.nom-g { font-size: 1.2em; font-weight: 700; margin: 0; text-align: center; border-bottom: 2px solid var(--dk-fond); padding-bottom: 0.2em; }
+.nom-g { font-size: 1.2em; font-weight: 700; margin: 0; text-align: center; border-bottom: 2px solid var(--dk-encre); padding-bottom: 0.2em; }
 .sous-g { margin-top: 0.8em; text-align: center; font-weight: 600; }
 .pile-g { width: 100%; display: flex; flex-direction: column; gap: 0.2em; align-items: center; }
 </style>
