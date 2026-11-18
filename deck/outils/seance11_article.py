@@ -29,10 +29,50 @@ DOCS = {
                     titre='Richard et Régimbal (2026), Canadian Journal of Higher Education 56(1), p. 71-83'),
     'usda': dict(pages=(2, 4), box=(60, 50, 552, 742), r=200, prefix='s11-usda-p', js='seance11_usda.js',
                  titre='USDA ERS (2024), Six-Item Short Form, p. 2-4'),
+    # Press pages, printed from the browser to PDF by the instructor on
+    # 2026-11-18 (the browser's URL header and page footer are cropped out).
+    'lapresse': dict(pages=(1, 5), box=(24, 16, 588, 776), r=150, prefix='s11-lapresse-p', js='seance11_lapresse.js',
+                     titre='La Presse, 18 février 2025, « Près d’un élève sur deux touché »'),
+    'devoir': dict(pages=(1, 1), box=(24, 16, 588, 776), r=150, prefix='s11-devoir-p', js='seance11_devoir.js',
+                   titre='Le Devoir, 14 octobre 2025, éditorial « Les ventres vides au cégep »'),
+    'lettre': dict(pages=(1, 1), box=(24, 16, 588, 776), r=150, prefix='s11-lettre-p', js='seance11_lettre.js',
+                   titre='Le Devoir, 18 juin 2025, lettre « Faim et compressions »'),
+    # Radio-Canada: two screenshots (PNG, no text layer). Word boxes come
+    # from tesseract (fra) on an inverted, enlarged copy; pass both PNGs.
+    'radcan': dict(png=True, prefix='s11-radcan-p', js='seance11_radcan.js',
+                   titre='Radio-Canada, 8 octobre 2025, « De plus en plus d’étudiants ont le ventre vide »'),
 }
 
 quel, PDF = sys.argv[1], sys.argv[2]
 D = DOCS[quel]
+if D.get('png'):
+    ICI = os.path.dirname(os.path.abspath(__file__))
+    IMG = os.path.join(ICI, '..', 'static', 'img')
+    JS = os.path.join(ICI, '..', 'src', 'lib', 'data', D['js'])
+    pages, mots = [], []
+    with tempfile.TemporaryDirectory() as tmp:
+        for k, png in enumerate(sys.argv[2:]):
+            out = os.path.join(IMG, f"{D['prefix']}{k + 1}.png")
+            subprocess.run(['magick', png, '-strip', '-colors', '64', out], check=True)
+            l, h = map(int, subprocess.run(['identify', '-format', '%w %h', png], check=True, capture_output=True, text=True).stdout.split())
+            pages.append({'img': f"{D['prefix']}{k + 1}.png", 'l': l, 'h': h})
+            big = os.path.join(tmp, 'ocr.png')
+            subprocess.run(['magick', png, '-colorspace', 'gray', '-negate', '-resize', '300%', big], check=True)
+            tsv = subprocess.run(['tesseract', big, '-', '-l', 'fra', 'tsv'], check=True, capture_output=True, text=True).stdout
+            for ligne in tsv.splitlines()[1:]:
+                c = ligne.split('\t')
+                if len(c) < 12 or c[0] != '5' or not c[11].strip() or float(c[10]) < 30:
+                    continue
+                x, y, w, hh = (int(v) / 3 for v in c[6:10])
+                mots.append([k, round(x / l * 100, 2), round(y / h * 100, 2), round(w / l * 100, 2), round(hh / h * 100, 2), c[11]])
+    with open(JS, 'w') as f:
+        f.write(f"/* Généré par outils/seance11_article.py ({quel}). {D['titre']} :\n"
+                '   les captures et la boîte de chaque mot (OCR), en % de la capture.\n'
+                '   [page, x, y, largeur, hauteur, mot]. Ne pas modifier à la main. */\n')
+        f.write('export const PAGES = ' + json.dumps(pages) + ';\n')
+        f.write('export const MOTS = ' + json.dumps(mots, ensure_ascii=False, separators=(',', ':')) + ';\n')
+    print(len(pages), 'pages,', len(mots), 'mots ->', os.path.relpath(JS))
+    sys.exit(0)
 ICI = os.path.dirname(os.path.abspath(__file__))
 IMG = os.path.join(ICI, '..', 'static', 'img')
 JS = os.path.join(ICI, '..', 'src', 'lib', 'data', D['js'])

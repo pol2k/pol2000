@@ -39,7 +39,7 @@
   // document : pages, mots, le numéro de sa première page, son nom (texte
   // de remplacement des images) et la référence sous la vue (snippet qui
   // reçoit le numéro de la page au milieu de la fenêtre).
-  let { etats, note, e = $bindable(0), pages = PAGES8, mots = MOTS8, premiere = 425, nom = 'Blais et Gélineau (2007)', source = null } = $props();
+  let { etats, note, e = $bindable(0), pages = PAGES8, mots = MOTS8, premiere = 425, nom = 'Blais et Gélineau (2007)', source = null, sombre = false, rail = true } = $props();
   const PAGES = pages;
   const MOTS = mots;
 
@@ -114,7 +114,7 @@
   const transforme = $derived(reduit ? `translate(${reduit.x}px, ${reduit.y}px) scale(${reduit.s})` : `translateY(${-y}px)`);
 </script>
 
-<div class="visuel m8a" bind:this={hote}>
+<div class="visuel m8a" class:m8a-sombre={sombre} bind:this={hote}>
   <div class="m8a-vue" class:m8a-pleine={pleine} bind:this={vue} bind:clientHeight={haut} bind:clientWidth={largVue}>
     <div class="m8a-doc" class:m8a-glisse={glisse} bind:clientWidth={larg} style="transform: {transforme}">
       {#each PAGES as p, i}
@@ -140,7 +140,7 @@
       </div>
     {/if}
 
-    <div class="m8a-rail" aria-hidden="true">
+    <div class="m8a-rail" class:m8a-cache={!rail} aria-hidden="true">
       {#each PAGES as _, i}<span class:on={i === pageVue}>p. {premiere + i}</span>{/each}
     </div>
   </div>
@@ -181,6 +181,12 @@
   .m8a-rail span { font-size: 0.55em; color: var(--dk-gris); border-left: 3px solid var(--dk-filet); padding-left: 0.4em; transition: color 0.4s, border-color 0.4s; }
   .m8a-rail span.on { color: var(--dk-accent); border-color: var(--dk-accent); font-weight: 700; }
 
+  .m8a-cache { display: none; }
+  /* une page sombre (capture d'un site en mode sombre) : le surligneur ne peut pas multiplier */
+  .m8a-sombre .m8a-surl { mix-blend-mode: normal; }
+  .m8a-sombre .m8a-rouge { background: rgba(198, 16, 46, 0.5); }
+  .m8a-sombre .m8a-encre { background: rgba(255, 255, 255, 0.22); }
+  .m8a-sombre .m8a-page { background: #111; }
   .m8a-src { margin: 0; font-size: 0.6em; color: var(--dk-gris); }
 
   @media (prefers-reduced-motion: reduce) {

@@ -51,13 +51,14 @@
   import M11Hypotheses from '$lib/deck/visuels/M11Hypotheses.svelte';
   import M11Article from '$lib/deck/visuels/M11Article.svelte';
   import M11Recompte from '$lib/deck/visuels/M11Recompte.svelte';
-  import M11Chrono from '$lib/deck/visuels/M11Chrono.svelte';
+  import M11Presse from '$lib/deck/visuels/M11Presse.svelte';
+  import M11Rumeur from '$lib/deck/visuels/M11Rumeur.svelte';
   import Console from '$lib/deck/visuels/Console.svelte';
   import { SIMS } from '$lib/data/seance11.js';
   import { DEVOIRS, EVALUATIONS } from '$lib/data/cours.js';
   import { GOA } from '$lib/data/seance11-goa.js';
 
-  const TOTAL = 46;
+  const TOTAL = 50;
   const QUESTIONS = [
     { t: 'Y a-t-il des descendants de X ?' },
     { t: 'Y a-t-il des chemins par la porte arrière ?' },
@@ -116,9 +117,25 @@
       <p class="lead e">Une étude, toutes les manchettes. Regardons-la de près.</p>
     </Slide>
 
-    <Slide bandeau="Une manchette" droite={D}>
-      <h2 class="e">La manchette arrive avant l’article</h2>
-      <M11Chrono />
+    <Slide bandeau="Les manchettes" droite={D}>
+      <M11Presse qui="lapresse" />
+    </Slide>
+
+    <Slide bandeau="Les manchettes" droite={D}>
+      <M11Presse qui="lettre" />
+    </Slide>
+
+    <Slide bandeau="Les manchettes" droite={D}>
+      <M11Presse qui="radcan" />
+    </Slide>
+
+    <Slide bandeau="Les manchettes" droite={D}>
+      <M11Presse qui="devoir" />
+    </Slide>
+
+    <Slide bandeau="Les manchettes" droite={D}>
+      <h2 class="e">Le chiffre grossit, l’article arrive après</h2>
+      <M11Rumeur />
     </Slide>
 
     <Slide bandeau="L’article" droite={D}>
@@ -150,7 +167,7 @@
     <Slide bandeau="Les signes" droite={D}>
       <h2 class="e">Les signes à repérer</h2>
       <div class="serre"><M11Liste items={[
-        { t: 'La manchette arrive avant l’article', g: 'Six mois avant, personne ne l’avait relue.' },
+        { t: 'La manchette arrive avant l’article', g: 'La manchette d’abord, l’article six mois plus tard.' },
         { t: 'Un échantillon qui s’est choisi lui-même', g: 'Des cégeps et des étudiants volontaires.' },
         { t: 'Un instrument lu sans son mode d’emploi', g: '43,9 % devient 27,7 %.' },
         { t: 'Un lien présenté comme un effet', g: 'Aucun contrôle. C’est le sujet d’aujourd’hui.' },

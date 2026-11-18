@@ -80,7 +80,7 @@
         <p class="m11a-gris">Une revue avec comité de lecture.</p>
       {:else if e === 1}
         <span class="m11a-eti">Le chiffre des manchettes</span>
-        <p class="m11a-grand">43,9 %</p>
+        <p class="m11a-grand">43,9&#8239;%</p>
         <p class="m11a-gris">D’où vient-il&#8239;? On cherche dans le texte.</p>
       {:else if e === 2}
         <span class="m11a-eti">Signe 1 · Qui a choisi les cégeps&#8239;?</span>
@@ -93,11 +93,11 @@
         <p class="m11a-gris">Le taux de réponse n’est donné nulle part.</p>
       {:else if e === 4}
         <span class="m11a-eti">Signe 3 · L’échantillon ressemble-t-il aux cégeps&#8239;?</span>
-        <p class="m11a-grand">69 % de femmes.</p>
+        <p class="m11a-grand">69&#8239;% de femmes.</p>
         <p class="m11a-gris">Est-ce le portrait des cégeps&#8239;? L’article ne compare jamais, et ne pondère pas.</p>
       {:else if e === 5}
         <span class="m11a-eti">Signe 4 · Un autre cégep, un autre chiffre</span>
-        <p class="m11a-grand">De 34 % à 58 %, selon le cégep.</p>
+        <p class="m11a-grand">De 34&#8239;% à 58&#8239;%, selon le cégep.</p>
         <p class="m11a-gris">Six autres cégeps auraient donné un autre total.</p>
       {:else if e === 6}
         <span class="m11a-eti">Signe 5 · L’instrument</span>
@@ -106,7 +106,7 @@
       {:else}
         <span class="m11a-eti">Signe 5 · L’instrument</span>
         <p class="m11a-grand">Un seul «&#8239;oui&#8239;» sur six&#8239;: «&#8239;insécurité marginale&#8239;».</p>
-        <p class="m11a-gris">16,2 % des répondants. Comptés dans le 43,9 %.</p>
+        <p class="m11a-gris">16,2&#8239;% des répondants. Comptés dans le 43,9&#8239;%.</p>
       {/if}
     {:else if usda}
       {#if e === 0}
@@ -121,8 +121,8 @@
     {:else}
       {#if e === 0}
         <span class="m11a-eti">Signe 6 · Comparer ce qui se compare</span>
-        <p class="m11a-ligne"><strong>15,7 %</strong><span>Statistique Canada&#8239;: 18 questions, des ménages, un échantillon représentatif</span></p>
-        <p class="m11a-ligne"><strong class="m11a-r">43,9 %</strong><span>6 questions, un classement maison, des volontaires</span></p>
+        <p class="m11a-ligne"><strong>15,7&#8239;%</strong><span>Statistique Canada&#8239;: 18 questions, des ménages, un échantillon représentatif</span></p>
+        <p class="m11a-ligne"><strong class="m11a-r">43,9&#8239;%</strong><span>6 questions, un classement maison, des volontaires</span></p>
       {:else if e === 1}
         <span class="m11a-eti">Signe 7 · Un lien devient un effet</span>
         <p class="m11a-grand">«&#8239;influence&#8239;»</p>
@@ -134,7 +134,7 @@
       {:else if e === 3}
         <span class="m11a-eti">Signe 8 · Vingt tests</span>
         <p class="m11a-grand">20 tests, 2 «&#8239;découvertes&#8239;».</p>
-        <p class="m11a-gris">Au seuil de 5 %, le hasard en donne environ 1 sur 20. Ici&#8239;: p = 0,044 et p = 0,022.</p>
+        <p class="m11a-gris">Au seuil de 5&#8239;%, le hasard en donne environ 1 sur 20. Ici&#8239;: p = 0,044 et p = 0,022.</p>
         <p class="m11a-gris">Et pourtant&#8239;: «&#8239;il apparaît évident&#8239;».</p>
       {:else}
         <span class="m11a-eti">Signe 9 · Rien trouvé, donc rien&#8239;?</span>
