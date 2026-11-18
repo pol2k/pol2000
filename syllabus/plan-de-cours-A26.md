@@ -174,8 +174,10 @@ correctement.
   vous affirmez, vous devez pouvoir le défendre.
 - **Chaque évaluation précise ses propres consignes** quant à l'utilisation permise de
   ces outils.
-- **Les examens 2 et 3 se font sur papier, à livre ouvert**, précisément pour cette
-  raison : vos notes sont permises, aucun appareil ne l'est.
+- **L'examen 3 se fait sur papier, à livre ouvert**, précisément pour cette
+  raison : vos notes sont permises, aucun appareil ne l'est. L'examen 2, prévu lui
+  aussi sur papier, se fait finalement à distance, à la suite de la grève et du vote
+  des étudiant.e.s : ses consignes précisent ce qui est permis.
 
 Trois séances abordent directement ces outils : la séance 2 (utiliser un assistant
 d'IA pour apprendre R), la séance 9 (ce qu'est un modèle de langue, et comment s'en
@@ -208,8 +210,8 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 | 8 | jeudi 22 octobre 2026 | La régression linéaire multiple |
 | — | jeudi 29 octobre 2026 | **Semaine de lecture — aucun cours** (26 au 30 octobre) |
 | 9 | jeudi 5 novembre 2026 | Les variables latentes |
-| 10 | jeudi 12 novembre 2026 | Le problème fondamental de l'inférence causale, puis **Examen 2** (17h20 à 18h20) |
-| 11 | jeudi 19 novembre 2026 | Les graphes orientés acycliques (GOA) |
+| 10 | jeudi 12 novembre 2026 | Le problème fondamental de l'inférence causale |
+| 11 | jeudi 19 novembre 2026 | Les graphes orientés acycliques (GOA), puis **Examen 2** à distance (ouvre à 15h30, 72 heures) |
 | 12 | jeudi 26 novembre 2026 | Rencontres individuelles — aucun cours (retour sur l'examen 2, travail final) |
 | 13 | jeudi 3 décembre 2026 | Les biais |
 | 14 | jeudi 10 décembre 2026 | Les expériences et révision, puis **Examen 3** (17h20 à 18h20) |
@@ -240,7 +242,7 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 |---|---|---|---|---|
 | **Examens** | | | | **45 %** |
 | | Examen 1 — Analyser des données avec R | du 24 sept. au 4 oct. 2026, 23h59 | Individuel | 15 % |
-| | Examen 2 — Les statistiques descriptives | jeudi 12 nov. 2026, 17h20–18h20 | Individuel | 15 % |
+| | Examen 2 — Les statistiques descriptives | du 19 nov., 15h30, au 22 nov. 2026, 15h30 | Individuel, à distance | 15 % |
 | | Examen 3 — Régressions linéaires simple et multiple | jeudi 10 déc. 2026, 17h20–18h20 | Individuel | 15 % |
 | **Travaux** | | | | **45 %** |
 | | Travail de mi-session | mer. 28 oct. 2026, 23h59 | Individuel | 20 % |
@@ -251,7 +253,7 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 
 Ce cours comporte quatre types d'évaluations :
 
-1. **deux examens en classe et un à distance** (45 %);
+1. **un examen en classe et deux à distance** (45 %);
 2. **travail de mi-session** (20 %);
 3. **travail final** (25 %);
 4. **devoirs sur Datacamp** (10 %).
@@ -277,15 +279,17 @@ données avec R et Positron.
 
 | | |
 |---|---|
-| **Date** | Jeudi 12 novembre 2026, de 17h20 à 18h20 |
+| **Date** | Du jeudi 19 novembre 2026 à 15h30 au dimanche 22 novembre 2026 à 15h30 (72 heures) |
 | **Mode de travail** | Individuel |
-| **Lieu** | **En classe, au local du cours** |
-| **Matériel autorisé** | Papier, crayon et vos notes personnelles — l'examen est à livre ouvert. Aucun appareil électronique. |
+| **Remise** | Boîte de dépôt sur monPortail |
 
-Examen d'une heure écrit **pendant la période de cours habituelle**. Aucune
-inscription à un centre d'examen n'est requise : le cours étant donné en présentiel,
-l'examen se déroule directement en classe. La séance commence par le cours
-(15h30 à 17h05), suivi d'une pause de 15 minutes; l'examen occupe la dernière heure.
+Prévu en classe et sur papier le 12 novembre, l'examen 2 se fait finalement à
+distance, à la suite de la grève et du vote des étudiant.e.s. C'est un examen
+pratique à faire chez vous, sur ordinateur, dans le même format que l'examen 1 : un
+PDF de consignes, un script R et un fichier de réponses, remis dans votre dossier
+pol2000 compressé. Il porte sur la matière des séances 1 à 8. Comptez environ trois
+heures. L'intelligence artificielle est permise pour vous aider avec le code R, à
+condition de le déclarer, mais pas pour vos réponses écrites.
 
 #### Examen 3 — Régressions linéaires simple et multiple (15 %)
 
@@ -428,7 +432,7 @@ en présentiel :
 |---|---|---|
 | Formule | À distance, classe virtuelle synchrone | **En présentiel** |
 | Horaire | Mercredi 15h30–18h20 | **Jeudi 15h30–18h20** |
-| Examens 2 et 3 | En soirée, dans un centre d'examen à réserver | **En classe, pendant la période de cours** |
+| Examens 2 et 3 | En soirée, dans un centre d'examen à réserver | **Examen 3 en classe, pendant la période de cours. Examen 2 à distance (72 heures), à la suite de la grève** |
 | Rencontres individuelles | Deux semaines dédiées | Deux semaines dédiées (semaines 6 et 12) + disponibilités sur rendez-vous |
 | Semaines d'examen | — | Le cours d'abord (1 h 35), une pause, puis l'examen (1 h) |
 | Nombre de séances | 15 semaines | 14 séances (aucune ne tombe sur un jour férié) |
