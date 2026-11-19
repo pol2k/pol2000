@@ -16,9 +16,12 @@
    */
   import { base } from '$app/paths';
   import * as TP from '$lib/data/seance11_tpfinal.js';
+  import * as EX from '$lib/data/seance11_examen2.js';
 
   let { doc = 'tpfinal' } = $props();
-  const D = { d: TP, nom: 'Travail final, consignes', source: 'Travail final · consignes · POL-2000, automne 2026' };
+  const D = doc === 'examen2'
+    ? { d: EX, nom: 'Examen 2, consignes', source: 'Examen 2 · consignes · POL-2000, automne 2026' }
+    : { d: TP, nom: 'Travail final, consignes', source: 'Travail final · consignes · POL-2000, automne 2026' };
 
   // Les lignes : les mots d'une même page à la même hauteur, côte à côte.
   const LIGNES = [];

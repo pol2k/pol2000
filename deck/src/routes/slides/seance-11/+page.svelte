@@ -59,7 +59,7 @@
   import { DEVOIRS, EVALUATIONS } from '$lib/data/cours.js';
   import { GOA } from '$lib/data/seance11-goa.js';
 
-  const TOTAL = 45;
+  const TOTAL = 46;
   const QUESTIONS = [
     { t: 'Sur quelles variables X a-t-il un effet ?', g: 'On ne les contrôle jamais.' },
     { t: 'Quelles variables ont un effet sur X et sur Y ?', g: 'On les contrôle.' },
@@ -377,6 +377,10 @@
     </Slide>
 
     <!-- ================= CLÔTURE ================= -->
+
+    <Slide bandeau="Examen 2" droite={D}>
+      <M11Consignes doc="examen2" />
+    </Slide>
 
 <Slide bandeau="Avant la prochaine séance" droite={D}>
       <h2 class="e">Avant la prochaine séance</h2>
