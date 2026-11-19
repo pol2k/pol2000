@@ -72,8 +72,9 @@ const ok = (g, x, y, c) => {
 };
 
 test('éducation : contrôler le revenu des parents, pas le revenu individuel', () => {
-  assert.equal(ok('education', 'education', 'ideologie', ['revenu_parents']), true);
-  assert.equal(ok('education', 'education', 'ideologie', ['revenu_ind']), false);
+  assert.equal(ok('education', 'education', 'ideologie', ['revenu_parents', 'region', 'age']), true);
+  assert.equal(ok('education', 'education', 'ideologie', ['revenu_parents']), false);
+  assert.equal(ok('education', 'education', 'ideologie', ['revenu_parents', 'region', 'age', 'revenu_ind']), false);
   assert.equal(ok('education', 'education', 'ideologie', []), false);
 });
 

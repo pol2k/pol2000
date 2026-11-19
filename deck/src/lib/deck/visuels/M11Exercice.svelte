@@ -1,13 +1,13 @@
 <script>
   /**
    * Un exercice « contrôler ou pas » (le cours 11 de 2024, images goa27 à
-   * goa31) : le graphe à droite, les cinq questions à gauche, une réponse
+   * goa31) : le graphe à droite, les trois questions à gauche, une réponse
    * par clic. Un seul compteur pilote les deux : le graphe reçoit l'état
    * correspondant au nombre de réponses montrées (Goa sans temps propre).
    *
    *   graphe    une entrée de GOA;
-   *   reponses  cinq réponses courtes (« Z3 » s'écrit Z₃ à l'écran);
-   *   etats     six états de Goa : avant toute réponse, puis après chacune.
+   *   reponses  trois réponses courtes (« Z3 » s'écrit Z₃ à l'écran);
+   *   etats     quatre états de Goa : avant toute réponse, puis après chacune.
    *
    * Les clés sont vérifiées par src/lib/deck/goa.test.js sur les mêmes
    * graphes.
@@ -17,12 +17,12 @@
 
   let { graphe, reponses = [], etats = [] } = $props();
 
+  // Les deux règles, dites simplement (demande du professeur), puis la
+  // conclusion.
   const QUESTIONS = [
-    'Y a-t-il des descendants de X ?',
-    'Y a-t-il des chemins par la porte arrière ?',
-    'Sont-ils ouverts ?',
-    'Peut-on les bloquer ?',
-    'L’effet de X sur Y est-il identifiable ?'
+    'Sur quelles variables X a-t-il un effet ?',
+    'Quelles variables ont un effet sur X et sur Y ?',
+    'Peut-on estimer l’effet de X sur Y ?'
   ];
   const indices = (t) => t.replace(/Z(\d)/g, 'Z<sub>$1</sub>');
 

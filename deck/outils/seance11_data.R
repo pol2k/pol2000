@@ -37,6 +37,26 @@ BLOCS <- list(
     "set.seed(2026)\nn <- 100000\nZ1 <- rnorm(n)\nX <- Z1 + rnorm(n)\nZ2 <- 2 * X + rnorm(n)\nY <- 0.5 * Z2 + Z1 + rnorm(n)\nZ3 <- Z2 + Y + rnorm(n)",
     "mod <- lm(Y ~ X + Z1)\ncoef(mod)",
     "mod <- lm(Y ~ X)\ncoef(mod)"
+  ),
+  # Les deux règles, avec les variables du cours (M11Regle, un clic par
+  # bloc). Règle 1 : l'éducation agit sur l'idéologie directement (1) et par
+  # le revenu (2 × 0,5 = 1) : le vrai effet total vaut 2. Règle 2 : le
+  # revenu des parents agit sur l'éducation et sur l'idéologie; le vrai
+  # effet de l'éducation vaut 1.
+  regle1 = c(
+    "set.seed(2026)\nn <- 100000\neducation <- rnorm(n)",
+    "revenu <- 2 * education + rnorm(n)",
+    "ideologie <- 1 * education +\n  0.5 * revenu + rnorm(n)",
+    "coef(lm(ideologie ~ education))",
+    "coef(lm(ideologie ~ education + revenu))"
+  ),
+  regle2 = c(
+    "set.seed(2026)\nn <- 100000\nrevenu_parents <- rnorm(n)",
+    "education <- revenu_parents + rnorm(n)",
+    "ideologie <- 2 * education +\n  3 * revenu_parents + rnorm(n)",
+    "coef(lm(education ~ revenu_parents))",
+    "coef(lm(ideologie ~ education))",
+    "coef(lm(ideologie ~ education +\n          revenu_parents))"
   )
 )
 
@@ -77,6 +97,20 @@ TRANCHES <- list(
 
 VRAI <- list(simple = 1.7, chaine = 1.5, collision = 1.7, fourchette = 0.5, complexe = 1)
 
+# Les coefficients de l'éducation dans les deux règles, sans et avec le
+# contrôle, pour le réservoir de M11Regle (mêmes données que les consoles).
+REGLES <- list(
+  regle1 = list(vrai = 2,
+                sans = unname(coef(lm(ideologie ~ education, data = as.list(ENVS$regle1)))["education"]),
+                avec = unname(coef(lm(ideologie ~ education + revenu, data = as.list(ENVS$regle1)))["education"]),
+                z = unname(coef(lm(ideologie ~ education + revenu, data = as.list(ENVS$regle1)))["revenu"])),
+  regle2 = list(vrai = 2,
+                lien = unname(coef(lm(education ~ revenu_parents, data = as.list(ENVS$regle2)))["revenu_parents"]),
+                sans = unname(coef(lm(ideologie ~ education, data = as.list(ENVS$regle2)))["education"]),
+                avec = unname(coef(lm(ideologie ~ education + revenu_parents, data = as.list(ENVS$regle2)))["education"]),
+                z = unname(coef(lm(ideologie ~ education + revenu_parents, data = as.list(ENVS$regle2)))["revenu_parents"]))
+)
+
 J <- function(x) jsonlite::toJSON(x, auto_unbox = TRUE, digits = NA)
 sortie <- file.path("src", "lib", "data", "seance11.js")
 writeLines(c(
@@ -85,7 +119,8 @@ writeLines(c(
   paste0("export const SIMS = ", J(SIMS), ";"),
   paste0("export const MODELES = ", J(MODELES), ";"),
   paste0("export const VRAI = ", J(VRAI), ";"),
-  paste0("export const TRANCHES = ", J(TRANCHES), ";")
+  paste0("export const TRANCHES = ", J(TRANCHES), ";"),
+  paste0("export const REGLES = ", J(REGLES), ";")
 ), sortie)
 
 for (nom in names(SIMS)) {
@@ -93,3 +128,4 @@ for (nom in names(SIMS)) {
   for (l in SIMS[[nom]]) if (nzchar(l$out)) cat(l$out, "\n")
 }
 cat("\n== MODELES\n"); for (m in MODELES) cat(m$nom, m$formule, m$x, "\n")
+cat("\n== REGLES\n"); str(REGLES)

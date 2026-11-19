@@ -24,20 +24,59 @@ const ligne = (ids, pas = 250) => ids.map((id, i) => ({ id, label: id.replace(/(
 export const GOA = {
   // ---------- dessiner un GOA (p. 116)
   education: {
+    // Le GOA du livre (p. 116), poussé plus loin à la demande du professeur :
+    // le revenu des parents agit aussi sur l'idéologie de l'enfant, la
+    // région et l'âge agissent sur l'éducation et sur l'idéologie. On
+    // contrôle la région, l'âge et le revenu des parents; jamais le revenu
+    // individuel, sur lequel l'éducation a un effet.
+    // Arêtes : 0 l'effet, 1-2 par le revenu individuel, 3-5 le revenu des
+    // parents, 6-7 la région, 8-9 l'âge.
     x: 'education', y: 'ideologie',
     noeuds: [
       { id: 'revenu_parents', label: 'Revenu\ndes parents', x: 0, y: 0 },
-      { id: 'revenu_ind', label: 'Revenu\nindividuel', x: 450, y: 0 },
-      { id: 'education', label: 'Éducation', x: 0, y: 260 },
-      { id: 'ideologie', label: 'Idéologie\npolitique', x: 900, y: 260 }
+      { id: 'region', label: 'Région', x: 520, y: 0 },
+      { id: 'age', label: 'Âge', x: 1000, y: 0 },
+      { id: 'education', label: 'Éducation', x: 0, y: 330 },
+      { id: 'ideologie', label: 'Idéologie\npolitique', x: 1000, y: 330 },
+      { id: 'revenu_ind', label: 'Revenu\nindividuel', x: 520, y: 600 }
     ],
     aretes: [
+      ['education', 'ideologie'],
       ['education', 'revenu_ind'],
       ['revenu_ind', 'ideologie'],
       ['revenu_parents', 'education'],
+      ['revenu_parents', 'ideologie'],
       ['revenu_parents', 'revenu_ind'],
-      ['education', 'ideologie']
+      ['region', 'education'],
+      ['region', 'ideologie'],
+      ['age', 'education'],
+      ['age', 'ideologie']
     ]
+  },
+
+  // ---------- comment dessiner : une boîte par variable, une flèche par
+  // effet, un cadre pour une variable contrôlée.
+  dessin: {
+    x: 'education', y: 'ideologie',
+    noeuds: [
+      { id: 'revenu_parents', label: 'Revenu\ndes parents', x: 420, y: 0 },
+      { id: 'education', label: 'Éducation', x: 0, y: 280 },
+      { id: 'ideologie', label: 'Idéologie', x: 840, y: 280 }
+    ],
+    aretes: [['education', 'ideologie'], ['revenu_parents', 'education'], ['revenu_parents', 'ideologie']]
+  },
+
+  // ---------- acyclique : l'effet ne revient jamais à son point de départ.
+  // Arêtes : 0 éducation → intérêt, 1 intérêt → nouvelles, 2 nouvelles →
+  // discussions, 3 discussions → intérêt (la flèche qui ferme le cycle).
+  cycle: {
+    noeuds: [
+      { id: 'education', label: 'Éducation', x: 0, y: 160 },
+      { id: 'interet', label: 'Intérêt pour\nla politique', x: 420, y: 160 },
+      { id: 'nouvelles', label: 'Lecture des\nnouvelles', x: 860, y: 0 },
+      { id: 'discussions', label: 'Discussions\npolitiques', x: 860, y: 330 }
+    ],
+    aretes: [['education', 'interet'], ['interet', 'nouvelles'], ['nouvelles', 'discussions'], ['discussions', 'interet']]
   },
 
   // ---------- orienté, acyclique

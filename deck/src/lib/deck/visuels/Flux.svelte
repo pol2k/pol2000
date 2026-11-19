@@ -13,6 +13,8 @@
    *            (un contrôle mal mesuré ne bloque qu'en partie). Les autres
    *            s'éteignent à « arret »;
    *   rouge    la couleur du point (accent) plutôt que l'encre;
+   *   couleur  une couleur CSS quelconque (prime sur rouge), qui change en
+   *            douceur (séance 11 : le bleu de X, le violet du mélange);
    *   n        nombre de points sur le tracé à la fois;
    *   duree    secondes pour parcourir le tracé entier;
    *   r        rayon des points (unités du viewBox).
@@ -22,7 +24,7 @@
    * apparaissent après le chargement de la page. Sous
    * prefers-reduced-motion, les points disparaissent : la flèche reste.
    */
-  let { d, actif = true, arret = 1, passe = 0, rouge = false, n = 4, duree = 2.4, r = 7 } = $props();
+  let { d, actif = true, arret = 1, passe = 0, rouge = false, couleur = null, n = 4, duree = 2.4, r = 7 } = $props();
   const pts = $derived(Array.from({ length: n }, (_, i) => i));
   // Qui passe, qui s'arrête : la suite de van der Corput (0, ½, ¼, ¾…)
   // alterne les deux sortes de points le long du tracé. Déterministe.
@@ -36,7 +38,7 @@
 </script>
 
 {#if actif}
-  <g class="flux" class:flux-rouge={rouge} aria-hidden="true">
+  <g class="flux" class:flux-rouge={rouge} style={couleur ? `--flux-c: ${couleur}` : undefined} aria-hidden="true">
     {#each pts as i (i)}
       {@const b = bloque(i)}
       {@const fin = b ? arret : 1}
@@ -51,7 +53,7 @@
 {/if}
 
 <style>
-  .flux-pt { fill: var(--dk-encre); stroke: var(--dk-fond); stroke-width: 2; }
+  .flux-pt { fill: var(--flux-c, var(--dk-encre)); stroke: var(--dk-fond); stroke-width: 2; transition: fill 0.8s; }
   .flux-rouge .flux-pt { fill: var(--dk-accent); }
   @media (prefers-reduced-motion: reduce) { .flux { display: none; } }
 </style>

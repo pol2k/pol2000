@@ -9,11 +9,13 @@
    *   lignes  — [{ in: 'commande', out: 'réponse' | '' , note: 'aparté' }]
    *   tout    — true : tout est visible d'emblée, sans temps (diapo de rappel)
    *   legende — texte sous la console, facultatif
+   *   pilote  — nombre de lignes à montrer, fixé par un parent qui tient le
+   *             compteur (M11Regle : la console et le dessin avancent ensemble)
    */
   import { brancherTemps } from '../temps.js';
   import { surlignerR } from '../surligner.js';
   import Copier from '../Copier.svelte';
-  let { lignes = [], tout = false, legende = '', petit = false } = $props();
+  let { lignes = [], tout = false, legende = '', petit = false, pilote = null } = $props();
 
   // Le bouton « copier » donne toutes les commandes de la console, révélées
   // ou non : la salle les colle dans Positron et rejoue la diapo entière.
@@ -21,9 +23,9 @@
 
   let e = $state(0);
   let hote = $state(null);
-  const visibles = $derived(tout ? lignes.length : e);
+  const visibles = $derived(pilote !== null ? pilote : tout ? lignes.length : e);
   $effect(() => {
-    if (!hote || tout) return;
+    if (!hote || tout || pilote !== null) return;
     e = 0;
     return brancherTemps(hote, { total: lignes.length, lire: () => e, ecrire: (v) => (e = v) });
   });

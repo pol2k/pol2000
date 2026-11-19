@@ -14,8 +14,9 @@
    * reporté la séance 10 : on enchaîne donc sur le problème fondamental de
    * l'inférence causale (deux mondes). Puis le GOA, ramené à l'essentiel
    * (demande du professeur) : le dessiner, puis deux règles pour choisir
-   * les contrôles, ne pas contrôler un descendant de X et fermer les portes
-   * arrière; l'article y revient. Retour honnête sur la séance 8 (le revenu,
+   * les contrôles, dites simplement : ne jamais contrôler une variable sur
+   * laquelle X a un effet, contrôler les variables qui ont un effet sur X et
+   * sur Y; l'article y revient. Retour honnête sur la séance 8 (le revenu,
    * un descendant de la scolarité). Pause. Deux exercices, puis les
    * simulations du livre dans R : on voit les contrôles déplacer l'estimé.
    *
@@ -35,21 +36,21 @@
   import Deck from '$lib/deck/Deck.svelte';
   import Slide from '$lib/deck/Slide.svelte';
   import Session from '$lib/deck/visuels/Session.svelte';
-  import Aujourdhui11 from '$lib/deck/visuels/Aujourdhui11.svelte';
   import M11Carrefour from '$lib/deck/visuels/M11Carrefour.svelte';
-  import M11Dominos from '$lib/deck/visuels/M11Dominos.svelte';
-  import M11Thermometre from '$lib/deck/visuels/M11Thermometre.svelte';
   import M11Liste from '$lib/deck/visuels/M11Liste.svelte';
   import Goa from '$lib/deck/visuels/Goa.svelte';
   import M11Arbitre from '$lib/deck/visuels/M11Arbitre.svelte';
-  import M11Escalier from '$lib/deck/visuels/M11Escalier.svelte';
   import M11Exercice from '$lib/deck/visuels/M11Exercice.svelte';
   import M11Tranches from '$lib/deck/visuels/M11Tranches.svelte';
   import M11Cible from '$lib/deck/visuels/M11Cible.svelte';
-  import M11Echelle from '$lib/deck/visuels/M11Echelle.svelte';
-  import M11Maison from '$lib/deck/visuels/M11Maison.svelte';
-  import M11Hypotheses from '$lib/deck/visuels/M11Hypotheses.svelte';
+  import M11Melange from '$lib/deck/visuels/M11Melange.svelte';
+  import M11Regle from '$lib/deck/visuels/M11Regle.svelte';
+  import M11Education from '$lib/deck/visuels/M11Education.svelte';
+  import M11Cycle from '$lib/deck/visuels/M11Cycle.svelte';
+  import M11Consignes from '$lib/deck/visuels/M11Consignes.svelte';
   import M11Article from '$lib/deck/visuels/M11Article.svelte';
+  import M11Experience from '$lib/deck/visuels/M11Experience.svelte';
+  import M11Debit from '$lib/deck/visuels/M11Debit.svelte';
   import M11Recompte from '$lib/deck/visuels/M11Recompte.svelte';
   import M11Presse from '$lib/deck/visuels/M11Presse.svelte';
   import M11Rumeur from '$lib/deck/visuels/M11Rumeur.svelte';
@@ -58,13 +59,11 @@
   import { DEVOIRS, EVALUATIONS } from '$lib/data/cours.js';
   import { GOA } from '$lib/data/seance11-goa.js';
 
-  const TOTAL = 50;
+  const TOTAL = 45;
   const QUESTIONS = [
-    { t: 'Y a-t-il des descendants de X ?' },
-    { t: 'Y a-t-il des chemins par la porte arrière ?' },
-    { t: 'Sont-ils ouverts ?' },
-    { t: 'Peut-on les bloquer ?' },
-    { t: 'L’effet de X sur Y est-il identifiable ?' }
+    { t: 'Sur quelles variables X a-t-il un effet ?', g: 'On ne les contrôle jamais.' },
+    { t: 'Quelles variables ont un effet sur X et sur Y ?', g: 'On les contrôle.' },
+    { t: 'Peut-on estimer l’effet de X sur Y ?' }
   ];
   // Les consoles viennent de R telles quelles (seance11.js); seules les notes sont d'ici.
   const avec = (cle, notes = [], de = 0, a = undefined) => SIMS[cle].map((l, i) => ({ ...l, note: notes[i] || '' })).slice(de, a);
@@ -73,7 +72,6 @@
   const jour = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-CA', { weekday: 'long', day: 'numeric', month: 'long' });
   const D = 'POL-2000 · séance 11 · jeu 19 nov';
   const SCHEMA = 'Schéma, aucune donnée';
-  const FAIM = 'Liens tirés de l’article : tableau 3 (p. 78) et tests F (p. 79)';
 </script>
 
 <svelte:head>
@@ -104,9 +102,8 @@
       <Session ici={11} />
     </Slide>
 
-    <Slide bandeau="Aujourd’hui" droite={D}>
-      <h2 class="e">Aujourd’hui</h2>
-      <Aujourdhui11 />
+    <Slide bandeau="Travail final" droite={D}>
+      <M11Consignes doc="tpfinal" />
     </Slide>
 
     <!-- ================= 0. UNE MANCHETTE ================= -->
@@ -155,22 +152,13 @@
       <M11Article partie="b" />
     </Slide>
 
-    <Slide bandeau="L’article" droite={D}>
-      <h2 class="e">« Influence » : et les autres chemins ?</h2>
-      <Goa graphe={GOA.faim} taille={1.1} legende={FAIM} temps={[
-        { voir: ['insecurite', 'satisfaction'], aretes: [0], accent: ['insecurite', 'satisfaction'], verdict: false, note: 'Ce que l’article affirme' },
-        { voir: ['insecurite', 'satisfaction', 'age'], aretes: [0, 1, 2], accent: ['insecurite', 'satisfaction'], chemin: ['insecurite', 'age', 'satisfaction'], court: true, note: '24 ans et plus : 73 % en insécurité. 17 ans et moins : 32 %' },
-        { accent: ['insecurite', 'satisfaction'], chemin: ['insecurite', 'enfants', 'satisfaction'], court: true, note: 'Leurs propres tableaux : chacune est liée aux deux bouts' }
-      ]} />
-    </Slide>
-
     <Slide bandeau="Les signes" droite={D}>
       <h2 class="e">Les signes à repérer</h2>
       <div class="serre"><M11Liste items={[
         { t: 'Un échantillon de volontaires', g: 'Six cégeps choisis selon l’intérêt de leur direction, aucun taux de réponse.' },
         { t: 'Un instrument mal appliqué', g: 'Avec la règle de l’instrument, 43,9 % devient 27,7 %.' },
-        { t: 'Un lien présenté comme un effet', g: 'Aucune variable de contrôle.' },
-        { t: 'Des tests multiples', g: '20 tests, 2 sous 0,05.' }
+        { t: 'Des données manquantes et aucun code', g: 'On ne sait pas combien de questionnaires sont incomplets, et personne ne peut refaire l’analyse.' },
+        { t: 'Un lien présenté comme un effet', g: 'Un sondage à un seul moment.' }
       ]} /></div>
     </Slide>
 
@@ -193,6 +181,11 @@
       <p class="lead e">Un GOA rend explicites nos hypothèses causales.</p>
     </Slide>
 
+    <Slide bandeau="Une expérience" droite={D}>
+      <h2 class="e">Une expérience : le hasard choisit la route</h2>
+      <M11Experience />
+    </Slide>
+
     <!-- ================= 2. DESSINER UN GOA ================= -->
 
     <Slide fond="encre" bandeau="Dessiner un GOA" droite={D}>
@@ -212,20 +205,14 @@
 
     <Slide bandeau="Dessiner un GOA" droite={D}>
       <h2 class="e">L’éducation rend-elle plus à droite ?</h2>
-      <M11Hypotheses />
-      <p class="source e">D’après Arel-Bundock (2021), p. 116</p>
+      <M11Education />
     </Slide>
 
     <!-- ================= 3. LA GRAMMAIRE ================= -->
 
-    <Slide bandeau="Orienté" droite={D}>
-      <h2 class="e">Orienté, acyclique : des dominos</h2>
-      <M11Dominos />
-    </Slide>
-
-    <Slide bandeau="Effet ou information" droite={D}>
-      <h2 class="e">Le mercure fait-il vendre de la crème glacée ?</h2>
-      <M11Thermometre />
+    <Slide bandeau="Acyclique" droite={D}>
+      <h2 class="e">Acyclique : l’effet ne revient jamais sur ses pas</h2>
+      <M11Cycle />
     </Slide>
 
     <!-- ================= 4. LES CONTRÔLES ================= -->
@@ -237,54 +224,40 @@
     </Slide>
 
     <Slide bandeau="Les contrôles" droite={D}>
-      <h2 class="e">Deux conditions pour estimer l’effet de X sur Y</h2>
+      <h2 class="e">Deux règles pour estimer l’effet de X sur Y</h2>
       <M11Liste items={[
-        { t: 'Ne pas contrôler un descendant de X', g: 'Elle dit quelles variables laisser dehors.' },
-        { t: 'Fermer tous les chemins par la porte arrière', g: 'Les causes de la cause. Elle dit quelles variables inclure.' }
+        { t: 'Ne jamais contrôler une variable sur laquelle X a un effet' },
+        { t: 'Contrôler les variables qui ont un effet sur X et sur Y' }
       ]} />
     </Slide>
 
-    <Slide bandeau="Condition 1" droite={D}>
-      <h2 class="e">Ne pas contrôler un descendant de X</h2>
-      <M11Echelle />
+    <Slide bandeau="Règle 1" droite={D}>
+      <h2 class="e">Ne jamais contrôler une variable sur laquelle X a un effet</h2>
+      <M11Debit />
     </Slide>
 
-    <Slide bandeau="Condition 2" droite={D}>
-      <h2 class="e">Fermer les chemins par la porte arrière</h2>
-      <M11Maison />
+    <Slide bandeau="Règle 1 · dans R" droite={D}>
+      <h2 class="e">Dans R : contrôler une variable sur laquelle X a un effet</h2>
+      <M11Regle regle={1} />
     </Slide>
 
-    <Slide bandeau="Retour à l’article" droite={D}>
-      <h2 class="e">Ce qu’il aurait fallu contrôler</h2>
-      <Goa graphe={GOA.faim} taille={1.1} legende={FAIM} temps={[
-        { accent: ['insecurite', 'satisfaction'], chemin: ['insecurite', 'age', 'satisfaction'], court: true, note: 'Trois portes arrière, ouvertes' },
-        { accent: ['insecurite', 'satisfaction'], chemin: ['insecurite', 'age', 'satisfaction'], controles: ['age', 'enfants', 'naissance'], court: true, note: 'Dans un même modèle, on les ferme' }
+    <Slide bandeau="Règle 2" droite={D}>
+      <h2 class="e">Contrôler les variables qui ont un effet sur X et sur Y</h2>
+      <M11Melange />
+    </Slide>
+
+    <Slide bandeau="Règle 2 · dans R" droite={D}>
+      <h2 class="e">Dans R : contrôler une variable qui agit sur X et sur Y</h2>
+      <M11Regle regle={2} />
+    </Slide>
+
+<Slide bandeau="Dessiner un GOA" droite={D}>
+      <h2 class="e">Dessiner un GOA</h2>
+      <Goa graphe={GOA.dessin} taille={1.2} legende={SCHEMA} temps={[
+        { aretes: [], verdict: false, note: 'Une boîte par variable' },
+        { verdict: false, note: 'Une flèche par effet, dans le sens de l’effet' },
+        { controles: ['revenu_parents'], verdict: false, note: 'Encadrer une variable, c’est la contrôler' }
       ]} />
-    </Slide>
-
-    <Slide bandeau="À vous" droite={D}>
-      <h2 class="e">L’effet de l’éducation sur l’idéologie : quoi contrôler ?</h2>
-      <Goa graphe={GOA.education} legende={SCHEMA} temps={[{ accent: ['education', 'ideologie'] }]} />
-    </Slide>
-
-    <Slide bandeau="Réponse" droite={D}>
-      <h2 class="e">L’effet de l’éducation sur l’idéologie : quoi contrôler ?</h2>
-      <Goa graphe={GOA.education} legende={SCHEMA} temps={[
-        { accent: ['education', 'ideologie'], barres: ['revenu_ind'], note: 'Le revenu individuel : un descendant. On ne le contrôle pas' },
-        { accent: ['education', 'ideologie'], barres: ['revenu_ind'], chemin: ['education', 'revenu_parents', 'revenu_ind', 'ideologie'], note: 'Une porte arrière, par le revenu des parents' },
-        { accent: ['education', 'ideologie'], barres: ['revenu_ind'], chemin: ['education', 'revenu_parents', 'revenu_ind', 'ideologie'], controles: ['revenu_parents'], note: 'On contrôle le revenu des parents. Seulement lui' }
-      ]} />
-    </Slide>
-
-    <Slide bandeau="Retour sur la séance 8" droite={D}>
-      <h2 class="e">Avait-on le droit de contrôler le revenu ?</h2>
-      <div class="visuel escalier">
-        <M11Escalier marque />
-        <Goa graphe={GOA.escalier8} taille={0.9} legende={SCHEMA} temps={[
-          { flux: true, controles: ['age', 'sexe'] },
-          { flux: true, controles: ['age', 'sexe', 'revenu'], barres: ['revenu'], note: 'Non : le revenu est un descendant de la scolarité' }
-        ]} />
-      </div>
     </Slide>
 
     <Slide fond="encre" bandeau="Pause" droite={D}>
@@ -296,33 +269,29 @@
     <!-- ================= 5. PRATIQUE ================= -->
 
     <Slide bandeau="Contrôler ou pas" droite={D}>
-      <h2 class="e">Contrôler ou pas : cinq questions</h2>
+      <h2 class="e">Contrôler ou pas : trois questions</h2>
       <M11Liste tout items={QUESTIONS} />
     </Slide>
 
     <Slide bandeau="Exercice 1 de 2" droite={D}>
       <M11Exercice graphe={GOA.exercice2}
-        reponses={['Oui : Z1, Z2 et Z3', 'Oui : X ← Z4 → Z3 → Y', 'Oui, il est ouvert', 'Oui : contrôler Z4', 'Oui, si on contrôle Z4']}
+        reponses={['Z1, Z2 et Z3 : on ne les contrôle pas', 'Z4 : on la contrôle', 'Oui, en contrôlant Z4']}
         etats={[
           {},
-          { barres: ['Z1', 'Z2', 'Z3'] },
-          { barres: ['Z1', 'Z2', 'Z3'], accent: ['Z4'] },
-          { barres: ['Z1', 'Z2', 'Z3'], chemin: ['X', 'Z4', 'Z3', 'Y'], court: true },
-          { barres: ['Z1', 'Z2', 'Z3'], chemin: ['X', 'Z4', 'Z3', 'Y'], controles: ['Z4'], court: true },
-          { barres: ['Z1', 'Z2', 'Z3'], controles: ['Z4'] }
+          {},
+          { accent: ['Z4'] },
+          { controles: ['Z4'] }
         ]} />
     </Slide>
 
     <Slide bandeau="Exercice 2 de 2" droite={D}>
       <M11Exercice graphe={GOA.exercice3}
-        reponses={['Oui : le cholestérol (Z1)', 'Oui : par la vie malsaine et le poids', 'Oui, il est ouvert', 'Oui : contrôler Z3, ou Z2', 'Oui, si on contrôle Z3 ou Z2']}
+        reponses={['Le cholestérol (Z1) : on ne le contrôle pas', 'La vie malsaine (Z3) : on la contrôle', 'Oui, en contrôlant Z3']}
         etats={[
           {},
-          { barres: ['cholesterol'] },
-          { barres: ['cholesterol'], accent: ['vie', 'poids'] },
-          { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], court: true },
-          { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], controles: ['vie'], court: true },
-          { barres: ['cholesterol'], chemin: ['fumer', 'vie', 'poids', 'cholesterol', 'arret'], controles: ['poids'], court: true, note: 'Le poids ferme aussi la porte' }
+          {},
+          { accent: ['vie'] },
+          { controles: ['vie'] }
         ]} />
     </Slide>
 
@@ -351,20 +320,15 @@
     </Slide>
 
     <Slide bandeau="Simuler · une collision" droite={D}>
-      <h2 class="e">Contrôler Z, un descendant de X : le biais post-traitement</h2>
+      <h2 class="e">Contrôler Z, sur lequel X a un effet</h2>
       <div class="visuel sim">
         <Goa graphe={GOA.sim3} taille={0.9} temps={[{ coefs: true }]} legende="Données simulées" />
         <Console lignes={avec('collision', ['', 'sans contrôle : 1,7, juste', 'avec Z : 0,45, faux'])} />
       </div>
     </Slide>
 
-    <Slide bandeau="Simuler · une collision" droite={D}>
-      <h2 class="e">Contrôler Z, c’est regarder une tranche à la fois</h2>
-      <M11Tranches />
-    </Slide>
-
-    <Slide bandeau="Simuler · une fourchette" droite={D}>
-      <h2 class="e">Fermer la porte arrière, pas plus</h2>
+<Slide bandeau="Simuler · une fourchette" droite={D}>
+      <h2 class="e">Contrôler Z2, qui a un effet sur X et sur Y</h2>
       <div class="visuel sim">
         <Goa graphe={GOA.sim4} taille={0.9} temps={[{ coefs: true }]} legende="Données simulées" />
         <Console lignes={avec('fourchette', ['vrai effet : 2 × 0,25 = 0,5', 'contrôler Z2 : 0,5, juste'], 0, 2)} />
@@ -375,20 +339,18 @@
       <h2 class="e">Et sans contrôler Z2 ?</h2>
       <div class="visuel sim">
         <Goa graphe={GOA.sim4} taille={0.9} temps={[{ coefs: true, chemin: ['X', 'Z2', 'Y'], court: true }]} legende="Données simulées" />
-        <Console lignes={avec('fourchette', ['', '', 'sans contrôle : 1,0, faux. La porte arrière est ouverte'], 2)} />
+        <Console lignes={avec('fourchette', ['', '', 'sans contrôle : 1,0, faux. Z2 n’est pas contrôlé'], 2)} />
       </div>
     </Slide>
 
     <Slide bandeau="Simuler · le modèle complet" droite={D}>
       <M11Exercice graphe={GOA.sim5}
-        reponses={['Oui : Z2 et Z3', 'Oui : X ← Z1 → Y', 'Oui, il est ouvert', 'Oui : contrôler Z1', 'Oui, avec Z1, sans Z2 ni Z3']}
+        reponses={['Z2 et Z3 : on ne les contrôle pas', 'Z1 : on la contrôle', 'Oui, avec Z1, sans Z2 ni Z3']}
         etats={[
           { coefs: true },
-          { coefs: true, barres: ['Z2', 'Z3'] },
-          { coefs: true, barres: ['Z2', 'Z3'], accent: ['Z1'] },
-          { coefs: true, barres: ['Z2', 'Z3'], chemin: ['X', 'Z1', 'Y'], court: true },
-          { coefs: true, barres: ['Z2', 'Z3'], chemin: ['X', 'Z1', 'Y'], controles: ['Z1'], court: true },
-          { coefs: true, barres: ['Z2', 'Z3'], controles: ['Z1'] }
+          { coefs: true },
+          { coefs: true, accent: ['Z1'] },
+          { coefs: true, controles: ['Z1'] }
         ]} />
     </Slide>
 
@@ -408,12 +370,7 @@
       </div>
     </Slide>
 
-    <Slide bandeau="Simuler · huit modèles" droite={D}>
-      <h2 class="e">Huit modèles, un seul retrouve le vrai effet</h2>
-      <M11Cible />
-    </Slide>
-
-    <Slide fond="encre" bandeau="Simuler dans R" droite={D}>
+<Slide fond="encre" bandeau="Simuler dans R" droite={D}>
       <p class="slogan-e e">Ajouter des contrôles n’améliore pas toujours l’estimation.</p>
       <hr class="filet" />
       <p class="lead e">On choisit les contrôles à partir du GOA.</p>
@@ -421,20 +378,7 @@
 
     <!-- ================= CLÔTURE ================= -->
 
-    <Slide bandeau="Travail final" droite={D}>
-      <h2 class="e">Votre travail final : un GOA</h2>
-      <div class="visuel tf">
-        <Goa graphe={GOA.travailFinal} taille={0.75} haut="40vh" temps={[{ controles: ['v1', 'v2'] }]} legende={SCHEMA} />
-        <M11Liste tout items={[
-          { t: 'X, Y et au moins trois autres variables' },
-          { t: 'Pour chacune, son mécanisme', g: 'Comment elle agit sur X, et comment elle agit sur Y.' },
-          { t: 'Contrôlez celles qui sont dans la CES', g: 'Les autres vont dans vos limites.' },
-          { t: 'Jamais un descendant de X' }
-        ]} />
-      </div>
-    </Slide>
-
-    <Slide bandeau="Avant la prochaine séance" droite={D}>
+<Slide bandeau="Avant la prochaine séance" droite={D}>
       <h2 class="e">Avant la prochaine séance</h2>
       <div class="visuel avant">
         <div class="tuile rouge-b">

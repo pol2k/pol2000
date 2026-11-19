@@ -12,9 +12,9 @@
    *          'usda'  le mode d'emploi de l'instrument (USDA ERS 2024,
    *                  Six-Item Short Form, p. 2-4) : la question des repas
    *                  équilibrés, puis la règle de classement;
-   *          'b'     Richard et Régimbal, p. 77-83 : la comparaison avec
-   *                  le Québec, « influence », aucun contrôle, vingt tests,
-   *                  et « pas significatif » lu comme « pas de différence ».
+   *          'b'     Richard et Régimbal, p. 77-82 : les données manquantes,
+   *                  SPSS sans code publié, la comparaison avec le Québec,
+   *                  et « influence ».
    *
    * Chaque passage est le texte exact du document (article.js le retrouve;
    * un passage absent fait échouer la page). Pages et mots :
@@ -50,17 +50,13 @@
   ];
 
   const B = [
-    { passages: [{ phrase: 'Une part importante des populations étudiantes cégépiennes québécoises, nettement plus grande que celle de la population générale québécoise (15,7 %), apparaît donc comme vulnérable sur le plan alimentaire', tag: '6' }] },
-    { passages: [{ phrase: 'Enfin, les résultats sur le sentiment d’auto-efficacité et sur la satisfaction dans les études montrent que l’insécurité alimentaire influence ces deux variables', tag: '7' }] },
     { passages: [
-      { phrase: 'Les tests utilisés sont le test du khi-carré lorsque les variables sont catégorisées, et le t de Student et l’analyse de variance univariée (ANOVA) lorsqu’il s’agit de variables continues.', ton: 'encre' },
-      { phrase: 'Ainsi, nous avons analysé les interactions séparément pour chacune des caractéristiques démographiques et la variable de l’insécurité alimentaire.', tag: '7' }
-    ], focus: 1 },
-    { passages: [
-      { phrase: 'Deux interactions sont significatives.', tag: '8' },
-      { phrase: 'il apparaît évident que l’Aide financière aux études gagnerait à prendre en compte les indicateurs d’insécurité alimentaire' }
+      { phrase: 'Notons que sur les 2 127 questionnaires recueillis et exploitables pour analyse, certains sont incomplets, et des données manquent.', tag: '6' },
+      { phrase: 'Le lecteur observera donc que les analyses ne portent pas toujours sur un échantillon de 2 127 participants.', ton: 'encre' }
     ] },
-    { passages: [{ phrase: 'nos résultats suggèrent également que la réponse et les interventions liées à l’insécurité alimentaire dans les établissements d’enseignement supérieur peuvent être destinées à tous les étudiants et n’ont pas à cibler spécifiquement certains groupes', tag: '9' }] }
+    { passages: [{ phrase: 'Toutes les analyses statistiques sont réalisées à l’aide du logiciel SPSS Statistics 28.', tag: '7' }] },
+    { passages: [{ phrase: 'Une part importante des populations étudiantes cégépiennes québécoises, nettement plus grande que celle de la population générale québécoise (15,7 %), apparaît donc comme vulnérable sur le plan alimentaire', tag: '8' }] },
+    { passages: [{ phrase: 'Enfin, les résultats sur le sentiment d’auto-efficacité et sur la satisfaction dans les études montrent que l’insécurité alimentaire influence ces deux variables', tag: '9' }] }
   ];
 
   const usda = partie === 'usda';
@@ -116,24 +112,21 @@
       {/if}
     {:else}
       {#if e === 0}
-        <span class="m11a-eti">Signe 6 · La comparaison</span>
-        <p class="m11a-ligne"><strong>15,7&#8239;%</strong><span>Statistique Canada&#8239;: 18 questions, des ménages, un échantillon représentatif</span></p>
-        <p class="m11a-ligne"><strong class="m11a-r">43,9&#8239;%</strong><span>6 questions, un classement maison, des volontaires</span></p>
+        <span class="m11a-eti">Signe 6 · Les données manquantes</span>
+        <p class="m11a-grand">Des questionnaires incomplets, sans chiffre</p>
+        <p class="m11a-gris">L’article ne dit ni combien il en manque, ni pour quelles questions, ni comment ils ont été traités.</p>
       {:else if e === 1}
-        <span class="m11a-eti">Signe 7 · Le vocabulaire causal</span>
+        <span class="m11a-eti">Signe 7 · Le code</span>
+        <p class="m11a-grand">SPSS, aucun code ni aucune donnée publiés</p>
+        <p class="m11a-gris">Personne ne peut refaire leurs analyses ni vérifier leur classement des scores.</p>
+      {:else if e === 2}
+        <span class="m11a-eti">Signe 8 · La comparaison</span>
+        <div class="m11a-comp"><strong>15,7&#8239;%</strong><span>Statistique Canada&#8239;: 18 questions, des ménages, un échantillon représentatif</span></div>
+        <div class="m11a-comp"><strong class="m11a-r">43,9&#8239;%</strong><span>6 questions, un classement maison, des volontaires</span></div>
+      {:else}
+        <span class="m11a-eti">Signe 9 · Le vocabulaire causal</span>
         <p class="m11a-grand">«&#8239;influence&#8239;»</p>
         <p class="m11a-gris">Un sondage à un seul moment montre un lien, pas un effet.</p>
-      {:else if e === 2}
-        <span class="m11a-eti">Signe 7 · Le vocabulaire causal</span>
-        <p class="m11a-grand">Aucune variable de contrôle</p>
-        <p class="m11a-gris">Chaque variable est testée seule. Une régression multiple, comme à la séance 8, les aurait incluses ensemble.</p>
-      {:else if e === 3}
-        <span class="m11a-eti">Signe 8 · Les tests multiples</span>
-        <p class="m11a-grand">20 tests, 2 sous 0,05</p>
-        <p class="m11a-gris">Au seuil de 5&#8239;%, on en attend environ 1 par hasard. La recommandation sur l’aide financière repose sur l’un d’eux (p = 0,022).</p>
-      {:else}
-        <span class="m11a-eti">Signe 9 · L’absence de résultat</span>
-        <p class="m11a-grand">Non significatif ≠ aucune différence</p>
       {/if}
     {/if}
   {/snippet}
@@ -144,7 +137,8 @@
   .m11a-ref { margin: 0; font-size: 0.9em; line-height: 1.45; }
   .m11a-grand { margin: 0; font-size: 1.35em; font-weight: 700; line-height: 1.3; }
   .m11a-gris { margin: 0; font-size: 0.9em; color: var(--dk-gris); line-height: 1.4; }
-  .m11a-ligne { margin: 0; display: grid; grid-template-columns: 4.2em 1fr; gap: 0.6em; align-items: baseline; font-size: 0.9em; }
-  .m11a-ligne strong { font-size: 1.4em; }
+  .m11a-comp { display: flex; flex-direction: column; gap: 0.1em; font-size: 0.9em; }
+  .m11a-comp strong { font-size: 1.6em; line-height: 1.1; }
+  .m11a-comp span { color: var(--dk-gris); line-height: 1.35; }
   .m11a-r { color: var(--dk-accent); }
 </style>

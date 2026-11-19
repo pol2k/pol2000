@@ -37,6 +37,13 @@ DOCS = {
                    titre='Le Devoir, 14 octobre 2025, éditorial « Les ventres vides au cégep »'),
     'lettre': dict(pages=(1, 1), box=(24, 16, 588, 776), r=150, prefix='s11-lettre-p', js='seance11_lettre.js',
                    titre='Le Devoir, 18 juin 2025, lettre « Faim et compressions »'),
+    # The final paper instructions (travaux/POL-2000_A26_travail_final.pdf)
+    # and the Examen 2 instructions (opens Thu 19 Nov 2026, 18h30: do not
+    # publish before then).
+    'tpfinal': dict(pages=(1, 1), box=(40, 30, 572, 782), r=200, prefix='s11-tpf-p', js='seance11_tpfinal.js',
+                    titre='Travail final, consignes, POL-2000 A26'),
+    'examen2': dict(pages=(1, 5), box=(40, 30, 572, 782), r=200, prefix='s11-ex2-p', js='seance11_examen2.js',
+                    titre='Examen 2, consignes, POL-2000 A26'),
     # Radio-Canada: two screenshots (PNG, no text layer). Word boxes come
     # from tesseract (fra) on an inverted, enlarged copy; pass both PNGs.
     'radcan': dict(png=True, prefix='s11-radcan-p', js='seance11_radcan.js',
