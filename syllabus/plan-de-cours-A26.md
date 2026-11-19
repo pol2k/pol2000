@@ -211,7 +211,7 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 | — | jeudi 29 octobre 2026 | **Semaine de lecture — aucun cours** (26 au 30 octobre) |
 | 9 | jeudi 5 novembre 2026 | Les variables latentes |
 | 10 | jeudi 12 novembre 2026 | Le problème fondamental de l'inférence causale |
-| 11 | jeudi 19 novembre 2026 | Les graphes orientés acycliques (GOA), puis **Examen 2** à distance (ouvre à 15h30, 72 heures) |
+| 11 | jeudi 19 novembre 2026 | Les graphes orientés acycliques (GOA), puis **Examen 2** à distance (ouvre à 18h30, 72 heures) |
 | 12 | jeudi 26 novembre 2026 | Rencontres individuelles — aucun cours (retour sur l'examen 2, travail final) |
 | 13 | jeudi 3 décembre 2026 | Les biais |
 | 14 | jeudi 10 décembre 2026 | Les expériences et révision, puis **Examen 3** (17h20 à 18h20) |
@@ -242,7 +242,7 @@ d'automne 2026 compte **14 séances** le jeudi, aucune ne tombant sur un jour f�
 |---|---|---|---|---|
 | **Examens** | | | | **45 %** |
 | | Examen 1 — Analyser des données avec R | du 24 sept. au 4 oct. 2026, 23h59 | Individuel | 15 % |
-| | Examen 2 — Les statistiques descriptives | du 19 nov., 15h30, au 22 nov. 2026, 15h30 | Individuel, à distance | 15 % |
+| | Examen 2 — Les statistiques descriptives | du 19 nov., 18h30, au 22 nov. 2026, 18h30 | Individuel, à distance | 15 % |
 | | Examen 3 — Régressions linéaires simple et multiple | jeudi 10 déc. 2026, 17h20–18h20 | Individuel | 15 % |
 | **Travaux** | | | | **45 %** |
 | | Travail de mi-session | mer. 28 oct. 2026, 23h59 | Individuel | 20 % |
@@ -279,7 +279,7 @@ données avec R et Positron.
 
 | | |
 |---|---|
-| **Date** | Du jeudi 19 novembre 2026 à 15h30 au dimanche 22 novembre 2026 à 15h30 (72 heures) |
+| **Date** | Du jeudi 19 novembre 2026 à 18h30 au dimanche 22 novembre 2026 à 18h30 (72 heures) |
 | **Mode de travail** | Individuel |
 | **Remise** | Boîte de dépôt sur monPortail |
 

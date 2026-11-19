@@ -56,7 +56,7 @@ export const SEANCES = [
   { lecture: true, date: '2026-10-29', titre: 'Semaine de lecture', resume: 'Aucun cours du 26 au 30 octobre.' },
   { n: 9, court: 'Mesure et IA', date: '2026-11-05', partie: 2, titre: "Les variables latentes", resume: "Mesurer un concept latent et introduction aux grands modèles de langue.", deck: 'slides/seance-9/' },
   { n: 10, court: 'Causalité', date: '2026-11-12', partie: 3, titre: "Le problème fondamental de l'inférence causale", resume: 'On ne voit jamais les deux mondes à la fois. Tout part de là.', note: "L'examen 2 n'a pas lieu en classe : après la grève, il se fait à distance, du 19 au 22 novembre." },
-  { n: 11, court: 'GOA', date: '2026-11-19', partie: 3, titre: 'Les graphes orientés acycliques (GOA)', resume: 'Dessiner ses hypothèses causales. Décider quoi contrôler, ou pas.', note: "L'examen 2 ouvre à 15h30 : à faire chez vous après le cours, à remettre dimanche 22 novembre à 15h30.", deck: 'slides/seance-11/' },
+  { n: 11, court: 'GOA', date: '2026-11-19', partie: 3, titre: 'Les graphes orientés acycliques (GOA)', resume: 'Dessiner ses hypothèses causales. Décider quoi contrôler, ou pas.', note: "L'examen 2 ouvre à 18h30 : à faire chez vous après le cours, à remettre dimanche 22 novembre à 18h30.", deck: 'slides/seance-11/' },
   { n: 12, court: 'Rencontres', date: '2026-11-26', partie: 0, titre: 'Rencontres individuelles', resume: "Pas de cours de la semaine : on revient sur l'examen 2 et on avance votre travail final, un.e à la fois." },
   { n: 13, court: 'Biais', date: '2026-12-03', partie: 3, titre: 'Les biais', resume: 'Variable omise, sélection, mesure, simultanéité : ce qui fausse une régression.' },
   { n: 14, court: 'Expériences', date: '2026-12-10', partie: 3, titre: 'Les expériences, et révision', resume: 'Le hasard comme méthode. Puis on revoit tout.', note: 'Examen 3 en classe, de 17h20 à 18h20, après le cours · travail final vendredi 18 décembre.', examen: true }
@@ -82,7 +82,7 @@ export const EVALUATIONS = [
   { id: 'datacamp1', nom: 'Datacamp · 1re partie', court: 'DC 1', groupe: 'dc', poids: 5, date: '2026-10-25', heure: '23h59', mode: 'Tous les devoirs de la première moitié' },
   { id: 'misession', nom: 'Travail de mi-session', court: 'Mi-session', groupe: 'tr', poids: 20, date: '2026-10-28', heure: '23h59', mode: 'Individuel · PDF, boîte de dépôt',
     fichier: 'travaux/POL-2000_A26_travail_mi-session.pdf', bouton: 'Télécharger les consignes (PDF)' },
-  { id: 'examen2', nom: 'Examen 2 · Les statistiques descriptives', court: 'Examen 2', groupe: 'ex', poids: 15, ouvre: '2026-11-19', date: '2026-11-22', heure: '15h30', mode: 'À distance, sur ordinateur · 72 heures, du jeudi 15h30 au dimanche 15h30 · boîte de dépôt' },
+  { id: 'examen2', nom: 'Examen 2 · Les statistiques descriptives', court: 'Examen 2', groupe: 'ex', poids: 15, ouvre: '2026-11-19', date: '2026-11-22', heure: '18h30', mode: 'À distance, sur ordinateur · 72 heures, du jeudi 18h30 au dimanche 18h30 · boîte de dépôt' },
   { id: 'examen3', nom: 'Examen 3 · Régressions linéaires simple et multiple', court: 'Examen 3', groupe: 'ex', poids: 15, date: '2026-12-10', heure: '17h20 à 18h20', mode: 'En classe, après le cours · sur papier, à livre ouvert · aucun appareil' },
   { id: 'final', nom: 'Travail final', court: 'Final', groupe: 'tr', poids: 25, date: '2026-12-18', heure: '23h59', mode: 'Individuel · PDF et dossier pol2000 en .zip, boîte de dépôt · Positron obligatoire',
     fichier: 'travaux/POL-2000_A26_travail_final.pdf', bouton: 'Télécharger les consignes (PDF)' },
